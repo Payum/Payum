@@ -62,8 +62,6 @@ abstract class BaseOrmTest extends TestCase
     }
 
     /**
-     * @param Configuration $config
-     *
      * @return MappingDriver
      */
     abstract protected function getMetadataDriverImpl(Configuration $config);

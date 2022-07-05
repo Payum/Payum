@@ -6,8 +6,6 @@ interface DetailsAwareInterface
 {
     /**
      * @param object $details
-     *
-     * @return void
      */
     public function setDetails($details);
 }

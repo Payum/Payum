@@ -16,50 +16,35 @@ class SyncActionTest extends GenericActionTest
 
     protected $requestClass = Sync::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAsModel()
+    public function testShouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();
 
         $this->assertTrue($action->supports(new Sync(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
@@ -67,10 +52,7 @@ class SyncActionTest extends GenericActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
+    public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
         $orderMock = $this->createMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
         $orderMock
@@ -106,10 +88,7 @@ class SyncActionTest extends GenericActionTest
         $this->assertSame('barVal', $model['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfModelHasNotLocationSet()
+    public function testShouldDoNothingIfModelHasNotLocationSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

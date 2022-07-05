@@ -18,17 +18,11 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
      */
     protected $tokenStorage;
 
-    /**
-     * @param StorageInterface $tokenStorage
-     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function verify($httpRequest)
     {
         if (false == $httpRequest instanceof Request) {
@@ -58,9 +52,6 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         return $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function invalidate(TokenInterface $token)
     {
         $this->tokenStorage->delete($token);

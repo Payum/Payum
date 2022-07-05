@@ -9,20 +9,14 @@ use Payum\Payex\Action\PaymentDetailsSyncAction;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -37,30 +31,21 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
@@ -68,10 +53,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCheckOrderApiRequest()
+    public function testShouldDoSubExecuteCheckOrderApiRequest()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

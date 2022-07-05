@@ -21,8 +21,6 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param $request GetTransactionData
      */
     public function execute($request)
@@ -38,9 +36,6 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
         $details->replace($this->api->getTransactionData($details['transaction_id']));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetTransactionData &&

@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class BankAccountTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendBankAccountInterface()
+    public function testShouldExtendBankAccountInterface()
     {
         $rc = new \ReflectionClass(BankAccount::class);
 
         $this->assertTrue($rc->implementsInterface(BankAccountInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetHolderPreviouslySet()
+    public function testShouldAllowGetHolderPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setHolder('theVal');
@@ -29,10 +23,7 @@ class BankAccountTest extends TestCase
         $this->assertSame('theVal', $bankAccount->getHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetNumberPreviouslySet()
+    public function testShouldAllowGetNumberPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setNumber('theVal');
@@ -40,10 +31,7 @@ class BankAccountTest extends TestCase
         $this->assertSame('theVal', $bankAccount->getNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCodePreviouslySet()
+    public function testShouldAllowGetBankCodePreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCode('theVal');
@@ -51,10 +39,7 @@ class BankAccountTest extends TestCase
         $this->assertSame('theVal', $bankAccount->getBankCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCountryCodePreviouslySet()
+    public function testShouldAllowGetBankCountryCodePreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCountryCode('theVal');
@@ -62,10 +47,7 @@ class BankAccountTest extends TestCase
         $this->assertSame('theVal', $bankAccount->getBankCountryCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIbanPreviouslySet()
+    public function testShouldAllowGetIbanPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setIban('theVal');
@@ -73,10 +55,7 @@ class BankAccountTest extends TestCase
         $this->assertSame('theVal', $bankAccount->getIban());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBicPreviouslySet()
+    public function testShouldAllowGetBicPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBic('theVal');

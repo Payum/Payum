@@ -19,25 +19,16 @@ abstract class AbstractStorage implements StorageInterface
         $this->modelClass = $modelClass;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function create()
     {
         return new $this->modelClass();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function support($model)
     {
         return $model instanceof $this->modelClass;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function update($model)
     {
         $this->assertModelSupported($model);
@@ -45,9 +36,6 @@ abstract class AbstractStorage implements StorageInterface
         $this->doUpdateModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function find($id)
     {
         if ($id instanceof IdentityInterface) {
@@ -61,9 +49,6 @@ abstract class AbstractStorage implements StorageInterface
         return $this->doFind($id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function delete($model)
     {
         $this->assertModelSupported($model);
@@ -71,9 +56,6 @@ abstract class AbstractStorage implements StorageInterface
         $this->doDeleteModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function identify($model)
     {
         $this->assertModelSupported($model);
@@ -83,15 +65,11 @@ abstract class AbstractStorage implements StorageInterface
 
     /**
      * @param object $model
-     *
-     * @return void
      */
     abstract protected function doUpdateModel($model);
 
     /**
      * @param object $model
-     *
-     * @return void
      */
     abstract protected function doDeleteModel($model);
 

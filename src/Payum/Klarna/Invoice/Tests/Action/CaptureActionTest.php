@@ -10,50 +10,35 @@ use PHPUnit\Framework\TestCase;
 
 class CaptureActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAsModel()
+    public function testShouldSupportCaptureWithArrayAsModel()
     {
         $action = new CaptureAction();
 
         $this->assertTrue($action->supports(new Capture(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture()
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -61,10 +46,7 @@ class CaptureActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteAuthorizeIfRnoNotSet()
+    public function testShouldSubExecuteAuthorizeIfRnoNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -81,10 +63,7 @@ class CaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteActivateIfRnoSet()
+    public function testShouldSubExecuteActivateIfRnoSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -103,10 +82,7 @@ class CaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfAlreadyReservedAndActivated()
+    public function testShouldDoNothingIfAlreadyReservedAndActivated()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

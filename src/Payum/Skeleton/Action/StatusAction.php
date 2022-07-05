@@ -10,8 +10,6 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -23,13 +21,9 @@ class StatusAction implements ActionInterface
         throw new \LogicException('Not implemented');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

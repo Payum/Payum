@@ -20,9 +20,6 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateBillingAgreement */
@@ -39,9 +36,6 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreateBillingAgreement &&

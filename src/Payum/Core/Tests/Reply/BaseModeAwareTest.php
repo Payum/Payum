@@ -7,50 +7,35 @@ use PHPUnit\Framework\TestCase;
 
 class BaseModeAwareTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\LogicException'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
 
@@ -68,11 +53,9 @@ class BaseModeAwareTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function shouldAllowSetModelAndGetIt($phpType)
+    public function testShouldAllowSetModelAndGetIt($phpType)
     {
         $request = new class(123321) extends BaseModelAware {
         };
@@ -83,11 +66,9 @@ class BaseModeAwareTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function shouldAllowGetModelSetInConstructor($phpType)
+    public function testShouldAllowGetModelSetInConstructor($phpType)
     {
         $request = new class($phpType) extends BaseModelAware {
         };
@@ -95,10 +76,7 @@ class BaseModeAwareTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectInConstructor()
+    public function testShouldConvertArrayToArrayObjectInConstructor()
     {
         $model = array('foo' => 'bar');
 
@@ -108,10 +86,7 @@ class BaseModeAwareTest extends TestCase
         $this->assertEquals($model, (array) $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectSetWithSetter()
+    public function testShouldConvertArrayToArrayObjectSetWithSetter()
     {
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
 

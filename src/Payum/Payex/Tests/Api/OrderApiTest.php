@@ -7,30 +7,21 @@ use Payum\Payex\Api\SoapClientFactory;
 
 class OrderApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\OrderApi');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new OrderApi(new SoapClientFactory(), array());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -42,10 +33,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -59,10 +47,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnInitialize8AndConvertItsResponse()
+    public function testShouldUseSoapClientOnInitialize8AndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->Initialize8Result = '<foo>fooValue</foo>';
@@ -96,10 +81,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCompleteAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCompleteAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->CompleteResult = '<foo>fooValue</foo>';
@@ -133,10 +115,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCheckAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->Check2Result = '<foo>fooValue</foo>';

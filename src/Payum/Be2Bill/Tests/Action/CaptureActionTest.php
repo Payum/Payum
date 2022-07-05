@@ -22,40 +22,28 @@ class CaptureActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureAction();
@@ -63,10 +51,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
+    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
@@ -93,10 +78,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfExeccodeSet()
+    public function testShouldDoNothingIfExeccodeSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -119,10 +101,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCaptureWithCreditCardSetExplicitly()
+    public function testShouldCaptureWithCreditCardSetExplicitly()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -168,10 +147,7 @@ class CaptureActionTest extends GenericActionTest
         $this->assertSame('FOOVAL', $model['FOO']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCaptureWithObtainedCreditCard()
+    public function testShouldCaptureWithObtainedCreditCard()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -227,10 +203,7 @@ class CaptureActionTest extends GenericActionTest
         $this->assertNull($model['CARDCODE']->peek(), 'Already erased');
     }
 
-    /**
-     * @test
-     */
-    public function shouldCaptureWithObtainedCreditCardWhenTokenReturned()
+    public function testShouldCaptureWithObtainedCreditCardWhenTokenReturned()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -282,10 +255,7 @@ class CaptureActionTest extends GenericActionTest
         ], $model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
     {
         $firstModel = new \stdClass();
         $currentModel = new \ArrayObject(array(

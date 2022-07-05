@@ -13,20 +13,14 @@ use PHPUnit\Framework\TestCase;
 
 class GenericTokenFactoryExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\GenericTokenFactoryExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
+    public function testShouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -42,10 +36,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $this->assertSame($tokenFactory, $action->tokenFactory);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUnsetGenericTokenFactoryOnPostExecute()
+    public function testShouldUnsetGenericTokenFactoryOnPostExecute()
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -62,10 +53,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $this->assertNull($action->tokenFactory);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute()
+    public function testShouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute()
     {
         $this->expectNotToPerformAssertions();
 

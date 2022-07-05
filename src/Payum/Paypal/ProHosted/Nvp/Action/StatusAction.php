@@ -11,8 +11,6 @@ use Payum\Paypal\ProHosted\Nvp\Api;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -91,9 +89,6 @@ class StatusAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&

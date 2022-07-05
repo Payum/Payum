@@ -10,30 +10,21 @@ use Payum\Stripe\Request\Api\CreatePlan;
 
 class CreatePlanActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface()
     {
         $rc = new \ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function throwNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CreatePlanAction();
@@ -41,40 +32,28 @@ class CreatePlanActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi('not keys instance');
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreatePlanRequestWithArrayAccessModel()
+    public function testShouldSupportCreatePlanRequestWithArrayAccessModel()
     {
         $action = new CreatePlanAction();
 
         $this->assertTrue($action->supports(new CreatePlan([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreatePlanRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreatePlanRequestWithNotArrayAccessModel()
     {
         $action = new CreatePlanAction();
 
         $this->assertFalse($action->supports(new CreatePlan(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCreatePlanRequest()
+    public function testShouldNotSupportNotCreatePlanRequest()
     {
         $action = new CreatePlanAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreatePlanAction is not supported the request stdClass.');

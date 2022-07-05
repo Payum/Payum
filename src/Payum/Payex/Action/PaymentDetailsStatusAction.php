@@ -12,8 +12,6 @@ use Payum\Payex\Api\RecurringApi;
 class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
     public function execute($request)
@@ -138,9 +136,6 @@ class PaymentDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == (

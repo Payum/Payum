@@ -10,50 +10,35 @@ use Payum\Sofort\Request\Api\RefundTransaction;
 
 class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportRefundTransactionRequestWithArrayAccessAsModel()
+    public function testShouldSupportRefundTransactionRequestWithArrayAccessAsModel()
     {
         $action = new RefundTransactionAction();
 
         $this->assertTrue($action->supports(new RefundTransaction($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingRefundTransactionRequest()
+    public function testShouldNotSupportAnythingRefundTransactionRequest()
     {
         $action = new RefundTransactionAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RefundTransactionAction($this->createApiMock());
@@ -61,10 +46,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdParameterIsNotSet()
+    public function testThrowIfTransactionIdParameterIsNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
@@ -74,10 +56,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmountParameterIsNotSet()
+    public function testThrowIfAmountParameterIsNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('One of the parameters "refund_amount" or "amount" must be set.');
@@ -87,10 +66,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shoulUseAmountAsRefundAmountIfNotSet()
+    public function testShoulUseAmountAsRefundAmountIfNotSet()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -113,10 +89,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shoulUseRefundAmountIfAmountSet()
+    public function testShoulUseRefundAmountIfAmountSet()
     {
         $apiMock = $this->createApiMock();
         $apiMock

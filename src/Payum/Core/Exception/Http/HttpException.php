@@ -18,42 +18,27 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
      */
     protected $response;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRequest()
     {
         return $this->request;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getResponse()
     {
         return $this->response;
     }
 
     /**
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     *
      * @return HttpException
      */
     public static function factory(RequestInterface $request, ResponseInterface $response)

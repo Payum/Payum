@@ -43,8 +43,6 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
     public function execute($request)
@@ -99,9 +97,6 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Authorize &&

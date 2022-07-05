@@ -9,30 +9,21 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(SetExpressCheckoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(SetExpressCheckoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSetExpressCheckoutRequestAndArrayAccessAsModel()
+    public function testShouldSupportSetExpressCheckoutRequestAndArrayAccessAsModel()
     {
         $action = new SetExpressCheckoutAction();
 
@@ -41,20 +32,14 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSetExpressCheckoutRequest()
+    public function testShouldNotSupportAnythingNotSetExpressCheckoutRequest()
     {
         $action = new SetExpressCheckoutAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SetExpressCheckoutAction();
@@ -62,10 +47,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfModelNotHavePaymentAmountSet()
+    public function testThrowIfModelNotHavePaymentAmountSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The PAYMENTREQUEST_0_AMT must be set.');
@@ -76,10 +58,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -107,10 +86,7 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoExpressCheckoutMethodAndUpdateInstructionFromResponseOnSuccess()
+    public function testShouldCallApiDoExpressCheckoutMethodAndUpdateInstructionFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

@@ -16,9 +16,6 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Sync */
@@ -46,9 +43,6 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == $request instanceof Sync) {

@@ -40,9 +40,6 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -51,9 +48,6 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreatePlan */
@@ -80,13 +74,9 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreatePlan &&
+        return $request instanceof CreatePlan &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

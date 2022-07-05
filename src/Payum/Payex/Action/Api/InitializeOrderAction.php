@@ -22,9 +22,6 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request InitializeOrder */
@@ -64,9 +61,6 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof InitializeOrder &&

@@ -9,8 +9,6 @@ use Payum\Klarna\Invoice\Request\Api\CancelReservation;
 class CancelReservationAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CancelReservation $request
      */
     public function execute($request)
@@ -29,9 +27,6 @@ class CancelReservationAction extends BaseApiAwareAction
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CancelReservation &&

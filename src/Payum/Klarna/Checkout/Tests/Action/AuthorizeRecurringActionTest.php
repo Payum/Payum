@@ -59,20 +59,14 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface()
     {
         $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
 

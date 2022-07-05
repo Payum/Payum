@@ -7,40 +7,28 @@ use PHPUnit\Framework\TestCase;
 
 class BaseOrderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryConstructWithNotArrayModel()
+    public function testThrowIfTryConstructWithNotArrayModel()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetOrder()
+    public function testShouldAllowGetPreviouslySetOrder()
     {
         $request = $this->createBaseOrderMock(array());
 

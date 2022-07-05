@@ -13,9 +13,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -26,9 +23,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         //sell code here.
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture;

@@ -37,9 +37,6 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -48,9 +45,6 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateSubscription */
@@ -77,13 +71,9 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateSubscription &&
+        return $request instanceof CreateSubscription &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

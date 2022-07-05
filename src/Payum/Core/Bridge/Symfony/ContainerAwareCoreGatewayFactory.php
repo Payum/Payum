@@ -13,9 +13,6 @@ class ContainerAwareCoreGatewayFactory extends CoreGatewayFactory implements Con
 {
     use ContainerAwareTrait;
 
-    /**
-     * @param ArrayObject $config
-     */
     protected function buildClosures(ArrayObject $config)
     {
         foreach ($config as $name => $value) {

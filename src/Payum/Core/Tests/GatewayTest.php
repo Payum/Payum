@@ -18,20 +18,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class GatewayTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayInterface()
+    public function testShouldImplementGatewayInterface()
     {
         $rc = new \ReflectionClass(Gateway::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddActionAppendByDefault()
+    public function testShouldAllowAddActionAppendByDefault()
     {
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
@@ -49,10 +43,7 @@ class GatewayTest extends TestCase
         $this->assertSame($expectedSecondAction, $actualActions[1]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddActionWithPrependForced()
+    public function testShouldAllowAddActionWithPrependForced()
     {
         $expectedFirstAction = $this->createActionMock();
         $expectedSecondAction = $this->createActionMock();
@@ -70,10 +61,7 @@ class GatewayTest extends TestCase
         $this->assertSame($expectedSecondAction, $actualActions[1]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddApi()
+    public function testShouldAllowAddApi()
     {
         $gateway = new Gateway();
 
@@ -83,10 +71,7 @@ class GatewayTest extends TestCase
         $this->assertCount(2, $this->readAttribute($gateway, 'apis'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddApiWithPrependForced()
+    public function testShouldAllowAddApiWithPrependForced()
     {
         $expectedFirstApi = new \stdClass();
         $expectedSecondApi = new \stdClass();
@@ -104,10 +89,7 @@ class GatewayTest extends TestCase
         $this->assertSame($expectedSecondApi, $actualApis[1]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetFirstApiToActionApiAwareOnExecute()
+    public function testShouldSetFirstApiToActionApiAwareOnExecute()
     {
         $gateway = new Gateway();
 
@@ -131,10 +113,7 @@ class GatewayTest extends TestCase
         $gateway->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetSecondApiToActionApiAwareIfFirstUnsupportedOnExecute()
+    public function testShouldSetSecondApiToActionApiAwareIfFirstUnsupportedOnExecute()
     {
         $gateway = new Gateway();
 
@@ -165,10 +144,7 @@ class GatewayTest extends TestCase
         $gateway->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfGatewayNotHaveApiSupportedByActionOnExecute()
+    public function testThrowIfGatewayNotHaveApiSupportedByActionOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Cannot find right api for the action Mock_ApiAwareAction');
@@ -201,10 +177,7 @@ class GatewayTest extends TestCase
         $gateway->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwRequestNotSupportedIfNoneActionSet()
+    public function testThrowRequestNotSupportedIfNoneActionSet()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $request = new \stdClass();
@@ -214,10 +187,7 @@ class GatewayTest extends TestCase
         $gateway->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldProxyRequestToActionWhichSupportsRequest()
+    public function testShouldProxyRequestToActionWhichSupportsRequest()
     {
         $request = new \stdClass();
 
@@ -240,10 +210,7 @@ class GatewayTest extends TestCase
         $gateway->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchReplyThrownAndReturnIfReplyCatchSetTrue()
+    public function testShouldCatchReplyThrownAndReturnIfReplyCatchSetTrue()
     {
         $expectedReply = $this->createReplyMock();
         $request = new \stdClass();
@@ -268,10 +235,7 @@ class GatewayTest extends TestCase
         $this->assertSame($expectedReply, $actualReply);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotCatchReplyByDefault()
+    public function testShouldNotCatchReplyByDefault()
     {
         $this->expectException(\Payum\Core\Reply\Base::class);
         $firstRequest = new \stdClass();
@@ -293,10 +257,7 @@ class GatewayTest extends TestCase
         $gateway->execute($firstRequest);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetGatewayToActionIfActionAwareOfGatewayOnExecute()
+    public function testShouldSetGatewayToActionIfActionAwareOfGatewayOnExecute()
     {
         $gateway = new Gateway();
 
@@ -317,10 +278,7 @@ class GatewayTest extends TestCase
         $gateway->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallOnPostExecuteWithExceptionWhenExceptionThrown()
+    public function testShouldCallOnPostExecuteWithExceptionWhenExceptionThrown()
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('An error occurred');
@@ -360,10 +318,7 @@ class GatewayTest extends TestCase
         $gateway->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowNewExceptionProvidedByExtensionOnPostExecute()
+    public function testShouldThrowNewExceptionProvidedByExtensionOnPostExecute()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Another error.');
@@ -403,10 +358,7 @@ class GatewayTest extends TestCase
         $gateway->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowNewExceptionIfUnsetByExtensionOnPostExecute()
+    public function testShouldNotThrowNewExceptionIfUnsetByExtensionOnPostExecute()
     {
         $exception = new \LogicException('An error occurred');
 
@@ -443,10 +395,7 @@ class GatewayTest extends TestCase
         $gateway->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReThrowNewExceptionProvidedThrownByExtensionOnPostExecuteIfPreviousOurException()
+    public function testShouldReThrowNewExceptionProvidedThrownByExtensionOnPostExecuteIfPreviousOurException()
     {
         $exception = new \LogicException('An error occurred');
 
@@ -491,10 +440,7 @@ class GatewayTest extends TestCase
         $this->fail('The exception is expected.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowOurExceptionAndIgnoreExceptionThrownFromExtension()
+    public function testShouldThrowOurExceptionAndIgnoreExceptionThrownFromExtension()
     {
         $exception = new \LogicException('An error occurred');
         $newException = new \InvalidArgumentException('Another error.');
@@ -540,10 +486,7 @@ class GatewayTest extends TestCase
         $this->fail('The exception is expected.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteActionSetByExtensionOnExecute()
+    public function testShouldExecuteActionSetByExtensionOnExecute()
     {
         $expectedRequest = new \stdClass();
 
@@ -583,10 +526,7 @@ class GatewayTest extends TestCase
         $gateway->execute($expectedRequest, true);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseActionSetOnPreExecuteByExtensionOnExecute()
+    public function testShouldUseActionSetOnPreExecuteByExtensionOnExecute()
     {
         $expectedRequest = new \stdClass();
 
@@ -620,10 +560,7 @@ class GatewayTest extends TestCase
         $gateway->execute($expectedRequest, true);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallOnPostExecuteWithReplyWhenReplyThrown()
+    public function testShouldCallOnPostExecuteWithReplyWhenReplyThrown()
     {
         $reply = $this->createReplyMock();
         $request = new \stdClass();
@@ -663,10 +600,7 @@ class GatewayTest extends TestCase
         $this->assertSame($reply, $actualReply);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnNewReplyProvidedByExtensionOnPostExecute()
+    public function testShouldReturnNewReplyProvidedByExtensionOnPostExecute()
     {
         $thrownReplyMock = $this->createReplyMock();
         $expectedReplyMock = $this->createReplyMock();
@@ -705,10 +639,7 @@ class GatewayTest extends TestCase
         $this->assertSame($expectedReplyMock, $actualReply);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotReturnReplyIfUnsetOnPostExecute()
+    public function testShouldNotReturnReplyIfUnsetOnPostExecute()
     {
         $thrownReplyMock = $this->createReplyMock();
         $expectedRequest = new \stdClass();
@@ -746,10 +677,7 @@ class GatewayTest extends TestCase
         $this->assertNull($actualReply);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallExtensionOnPreExecute()
+    public function testShouldCallExtensionOnPreExecute()
     {
         $expectedRequest = new \stdClass();
 
@@ -782,10 +710,7 @@ class GatewayTest extends TestCase
         $gateway->execute($expectedRequest);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallExtensionOnExecute()
+    public function testShouldCallExtensionOnExecute()
     {
         $expectedRequest = new \stdClass();
 
@@ -818,10 +743,7 @@ class GatewayTest extends TestCase
         $gateway->execute($expectedRequest);
     }
 
-    /**
-     * @test
-     */
-    public function shouldPopulateContextWithPreviousOnesOnSubExecutes()
+    public function testShouldPopulateContextWithPreviousOnesOnSubExecutes()
     {
         $gateway = new Gateway();
 

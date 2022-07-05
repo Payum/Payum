@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetCreditCardTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetCreditCardToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor()
     {
         $model = new \ArrayObject();
 

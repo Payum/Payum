@@ -11,30 +11,21 @@ use PHPUnit\Framework\TestCase;
 
 class GatewayConfigTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface()
     {
         $rc = new \ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayConfigInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementCryptedInterface()
+    public function testShouldImplementCryptedInterface()
     {
         $rc = new \ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(CryptedInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetFactoryName()
+    public function testShouldAllowGetPreviouslySetFactoryName()
     {
         $config = new GatewayConfig();
 
@@ -43,10 +34,7 @@ class GatewayConfigTest extends TestCase
         $this->assertSame('theName', $config->getFactoryName());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetGatewayName()
+    public function testShouldAllowGetPreviouslySetGatewayName()
     {
         $config = new GatewayConfig();
 
@@ -55,20 +43,14 @@ class GatewayConfigTest extends TestCase
         $this->assertSame('theName', $config->getGatewayName());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultConfigSetInConstructor()
+    public function testShouldAllowGetDefaultConfigSetInConstructor()
     {
         $config = new GatewayConfig();
 
         $this->assertEquals([], $config->getConfig());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetConfig()
+    public function testShouldAllowGetPreviouslySetConfig()
     {
         $config = new GatewayConfig();
 

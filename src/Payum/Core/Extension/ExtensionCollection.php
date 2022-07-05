@@ -10,10 +10,7 @@ class ExtensionCollection implements ExtensionInterface
     protected $extensions = array();
 
     /**
-     * @param ExtensionInterface $extension
      * @param bool               $forcePrepend
-     *
-     * @return void
      */
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
     {
@@ -23,9 +20,6 @@ class ExtensionCollection implements ExtensionInterface
         ;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
         foreach ($this->extensions as $extension) {
@@ -33,9 +27,6 @@ class ExtensionCollection implements ExtensionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
         foreach ($this->extensions as $extension) {
@@ -43,9 +34,6 @@ class ExtensionCollection implements ExtensionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
         foreach ($this->extensions as $extension) {

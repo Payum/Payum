@@ -9,20 +9,14 @@ use Payum\Offline\Constants;
 
 class PayoutActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\PayoutAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportPayoutWithArrayAccessAsModel()
+    public function testShouldSupportPayoutWithArrayAccessAsModel()
     {
         $action = new PayoutAction();
 
@@ -31,10 +25,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotPayout()
+    public function testShouldNotSupportNotPayout()
     {
         $action = new PayoutAction();
 
@@ -43,10 +34,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportPayoutAndNotArrayAccessAsModel()
+    public function testShouldNotSupportPayoutAndNotArrayAccessAsModel()
     {
         $action = new PayoutAction();
 
@@ -55,10 +43,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PayoutAction();
@@ -66,10 +51,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPayoutNotSet()
+    public function testShouldSetStatusPendingIfPayoutNotSet()
     {
         $action = new PayoutAction();
 
@@ -86,10 +68,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPayoutSetToFalse()
+    public function testShouldSetStatusPendingIfPayoutSetToFalse()
     {
         $action = new PayoutAction();
 
@@ -107,10 +86,7 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPayedoutIfPayoutSetToTrue()
+    public function testShouldSetStatusPayedoutIfPayoutSetToTrue()
     {
         $action = new PayoutAction();
 

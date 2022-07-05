@@ -22,30 +22,21 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
         return $fields;
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckOrderAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckOrderAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function throwOnTryingSetNotOrderApiAsApi()
+    public function testThrowOnTryingSetNotOrderApiAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\OrderApi');
@@ -54,40 +45,28 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCheckOrderRequestWithArrayAccessAsModel()
+    public function testShouldSupportCheckOrderRequestWithArrayAccessAsModel()
     {
         $action = new CheckOrderAction();
 
         $this->assertTrue($action->supports(new CheckOrder($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCheckOrderRequest()
+    public function testShouldNotSupportAnythingNotCheckOrderRequest()
     {
         $action = new CheckOrderAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCheckOrderRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderRequestWithNotArrayAccessModel()
     {
         $action = new CheckOrderAction();
 
         $this->assertFalse($action->supports(new CheckOrder(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CheckOrderAction($this->createApiMock());
@@ -96,11 +75,9 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideRequiredFields
      */
-    public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -110,10 +87,7 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CheckOrder($this->requiredFields));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCompletePayment()
+    public function testShouldCompletePayment()
     {
         $apiMock = $this->createApiMock();
         $apiMock

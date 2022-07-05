@@ -7,30 +7,21 @@ use PHPUnit\Framework\TestCase;
 
 class HttpRedirectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldReplyInterface()
+    public function testShouldReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfHttpResponseClass()
+    public function testShouldBeSubClassOfHttpResponseClass()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetUrlSetInConstructor()
+    public function testShouldAllowGetUrlSetInConstructor()
     {
         $expectedUrl = 'theUrl';
 
@@ -39,10 +30,7 @@ class HttpRedirectTest extends TestCase
         $this->assertSame($expectedUrl, $request->getUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContext()
+    public function testShouldAllowGetContext()
     {
         $expectedContent = <<<HTML
 <!DOCTYPE html>
@@ -64,30 +52,21 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
     {
         $request = new HttpRedirect('anUrl');
 
         $this->assertSame(302, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
     {
         $request = new HttpRedirect('anUrl', 301);
 
         $this->assertSame(301, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor()
     {
         $request = new HttpRedirect('anUrl');
 
@@ -96,10 +75,7 @@ HTML;
         ), $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
         $customHeaders = array(
             'foo' => 'fooVal',

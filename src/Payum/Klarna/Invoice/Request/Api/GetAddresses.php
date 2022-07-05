@@ -31,9 +31,6 @@ class GetAddresses
         return $this->pno;
     }
 
-    /**
-     * @param \KlarnaAddr $address
-     */
     public function addAddress(\KlarnaAddr $address)
     {
         $this->addresses[] = $address;

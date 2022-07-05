@@ -21,9 +21,6 @@ class GatewayChoiceType extends AbstractType
         $this->defaultChoices = $defaultChoices;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -32,7 +29,6 @@ class GatewayChoiceType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
      * @return ?string
      */
     public function getParent()

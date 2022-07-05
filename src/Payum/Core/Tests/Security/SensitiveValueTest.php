@@ -7,30 +7,21 @@ use PHPUnit\Framework\TestCase;
 
 class SensitiveValueTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeFinal()
+    public function testShouldBeFinal()
     {
         $rc = new \ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->isFinal());
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface()
     {
         $rc = new \ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->implementsInterface('Serializable'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetValueSetInConstructorAndErase()
+    public function testShouldAllowGetValueSetInConstructorAndErase()
     {
         $expectedValue = 'cardNumber';
 
@@ -40,10 +31,7 @@ class SensitiveValueTest extends TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPeekValueSetInConstructorAndNotErase()
+    public function testShouldAllowPeekValueSetInConstructorAndNotErase()
     {
         $expectedValue = 'cardNumber';
 
@@ -53,10 +41,7 @@ class SensitiveValueTest extends TestCase
         $this->assertSame($expectedValue, $sensitiveValue->peek());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowEraseValue()
+    public function testShouldAllowEraseValue()
     {
         $expectedValue = 'cardNumber';
 
@@ -69,10 +54,7 @@ class SensitiveValueTest extends TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSerializeValue()
+    public function testShouldNotSerializeValue()
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
@@ -88,30 +70,21 @@ class SensitiveValueTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnEmptyStringOnToString()
+    public function testShouldReturnEmptyStringOnToString()
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertSame('', (string) $sensitiveValue);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotExposeValueWhileEncodingToJson()
+    public function testShouldNotExposeValueWhileEncodingToJson()
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertSame('null', json_encode($sensitiveValue));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToCloneValue()
+    public function testThrowIfTryToCloneValue()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('It is not permitted to close this object.');
@@ -120,18 +93,12 @@ class SensitiveValueTest extends TestCase
         clone $sensitiveValue;
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnNewInstanceOfSensitiveValueOnEnsureSensitive()
+    public function testShouldReturnNewInstanceOfSensitiveValueOnEnsureSensitive()
     {
         $this->assertInstanceOf(SensitiveValue::class, SensitiveValue::ensureSensitive('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSameInstanceOfSensitiveValueGivenAsArgumentOnEnsureSensitive()
+    public function testShouldReturnSameInstanceOfSensitiveValueGivenAsArgumentOnEnsureSensitive()
     {
         $foo = new SensitiveValue('foo');
 

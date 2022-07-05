@@ -36,10 +36,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertPayoutToDetails()
+    public function testShouldCorrectlyConvertPayoutToDetails()
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
@@ -79,10 +76,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         ], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock

@@ -7,10 +7,7 @@ use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(CreateCharge::class);
 

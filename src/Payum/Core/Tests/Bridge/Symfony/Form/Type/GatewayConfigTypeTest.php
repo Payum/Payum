@@ -9,30 +9,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayConfigTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType');
 
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendFormType()
+    public function testShouldExtendFormType()
     {
         $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
         $this->assertSame(FormType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions()
     {
         $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 

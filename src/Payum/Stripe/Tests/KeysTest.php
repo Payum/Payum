@@ -6,20 +6,14 @@ use Payum\Stripe\Keys;
 
 class KeysTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function souldAllowGetPublishableKeySetInConstructor()
+    public function testSouldAllowGetPublishableKeySetInConstructor()
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');
 
         $this->assertSame('thePublishableKey', $keys->getPublishableKey());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetSecretKeySetInConstructor()
+    public function testShouldAllowGetSecretKeySetInConstructor()
     {
         $keys = new Keys('aPublishableKey', 'theSecretKey');
 

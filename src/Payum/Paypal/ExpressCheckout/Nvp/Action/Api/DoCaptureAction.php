@@ -23,9 +23,6 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute($request)
     {
         /** @var $request DoCapture */
@@ -72,9 +69,6 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof DoCapture &&

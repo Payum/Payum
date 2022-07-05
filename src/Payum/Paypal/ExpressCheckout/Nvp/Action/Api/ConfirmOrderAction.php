@@ -33,9 +33,6 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request SetExpressCheckout */
@@ -55,9 +52,6 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
         throw new HttpResponse($renderTemplate->getResult());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ConfirmOrder &&

@@ -16,19 +16,12 @@ class FallbackRegistry implements RegistryInterface
      */
     private $fallbackRegistry;
 
-    /**
-     * @param RegistryInterface $registry
-     * @param RegistryInterface $fallbackRegistry
-     */
     public function __construct(RegistryInterface $registry, RegistryInterface $fallbackRegistry)
     {
         $this->registry = $registry;
         $this->fallbackRegistry = $fallbackRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactory($name)
     {
         try {
@@ -38,17 +31,11 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactories()
     {
         return array_replace($this->fallbackRegistry->getGatewayFactories(), $this->registry->getGatewayFactories());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateway($name)
     {
         try {
@@ -58,17 +45,11 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateways()
     {
         return array_replace($this->fallbackRegistry->getGateways(), $this->registry->getGateways());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorage($class)
     {
         try {
@@ -78,9 +59,6 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorages()
     {
         return array_replace($this->fallbackRegistry->getStorages(), $this->registry->getStorages());

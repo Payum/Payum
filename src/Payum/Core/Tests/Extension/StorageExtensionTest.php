@@ -15,20 +15,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class StorageExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\StorageExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingOnPreExecuteIfNoModelRequest()
+    public function testShouldDoNothingOnPreExecuteIfNoModelRequest()
     {
         $neverUsedStorageMock = $this->createStorageMock();
         $neverUsedStorageMock
@@ -48,10 +42,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingOnPreExecuteIfFindModelByIdentityReturnNull()
+    public function testShouldDoNothingOnPreExecuteIfFindModelByIdentityReturnNull()
     {
         $expectedModel = new \stdClass();
         $expectedId = 123;
@@ -82,10 +73,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingOnPreExecuteIfModelNotIdentityAndNotSupported()
+    public function testShouldDoNothingOnPreExecuteIfModelNotIdentityAndNotSupported()
     {
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -115,10 +103,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingOnPreExecuteIfRequestNotModelRequest()
+    public function testShouldDoNothingOnPreExecuteIfRequestNotModelRequest()
     {
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -139,10 +124,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt()
+    public function testShouldSetFoundModelOnRequestIfIdentifierGivenAsModelAndStorageSupportsIt()
     {
         $expectedModel = new \stdClass();
         $expectedId = 123;
@@ -173,10 +155,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnPreExecute()
+    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPreExecute()
     {
         $model = new \stdClass();
 
@@ -205,10 +184,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldScheduleForUpdateRequestModelIfStorageSupportItOnPostExecute()
+    public function testShouldScheduleForUpdateRequestModelIfStorageSupportItOnPostExecute()
     {
         $model = new \stdClass();
 
@@ -244,10 +220,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelOneTimeOnLatestOnPostExecute()
+    public function testShouldUpdateModelOneTimeOnLatestOnPostExecute()
     {
         //when previous is empty
 
@@ -281,10 +254,7 @@ class StorageExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotUpdateModelIfNotLatestOnPostExecute()
+    public function testShouldNotUpdateModelIfNotLatestOnPostExecute()
     {
         //when previous is NOT empty
 

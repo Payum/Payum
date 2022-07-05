@@ -15,7 +15,6 @@ class SoapClientFactory
     protected $soapClientOptions;
 
     /**
-     * @param array  $soapClientOptions
      * @param string $soapClientClass
      */
     public function __construct(array $soapClientOptions = array(), $soapClientClass = null)

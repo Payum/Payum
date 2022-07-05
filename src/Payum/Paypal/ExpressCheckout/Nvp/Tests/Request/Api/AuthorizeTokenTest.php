@@ -7,30 +7,21 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
 class AuthorizeTokenTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken');
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultForceSetToFalseByDefault()
+    public function testShouldAllowGetDefaultForceSetToFalseByDefault()
     {
         $request = new AuthorizeToken(new \stdClass());
 
         $this->assertFalse($request->isForced());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetForceSetInConstructor()
+    public function testShouldAllowGetForceSetInConstructor()
     {
         $request = new AuthorizeToken(new \stdClass(), $force = true);
 

@@ -12,9 +12,6 @@ class ExecuteEvent extends Event
      */
     protected $context;
 
-    /**
-     * @param Context $context
-     */
     public function __construct(Context $context)
     {
         $this->context = $context;

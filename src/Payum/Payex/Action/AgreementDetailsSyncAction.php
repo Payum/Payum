@@ -13,9 +13,6 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Sync */
@@ -24,13 +21,9 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
         $this->gateway->execute(new CheckAgreement($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
+        return $request instanceof Sync &&
             $request->getModel() instanceof \ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&

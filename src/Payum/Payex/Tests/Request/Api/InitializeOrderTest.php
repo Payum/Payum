@@ -4,10 +4,7 @@ namespace Payum\Payex\Tests\Request\Api;
 
 class InitializeOrderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Payex\Request\Api\InitializeOrder');
 

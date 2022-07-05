@@ -9,9 +9,6 @@ trait GatewayAwareTrait
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGateway(GatewayInterface $gateway)
     {
         $this->gateway = $gateway;

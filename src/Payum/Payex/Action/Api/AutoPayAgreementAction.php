@@ -20,9 +20,6 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request AutoPayAgreement */
@@ -45,9 +42,6 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof AutoPayAgreement &&

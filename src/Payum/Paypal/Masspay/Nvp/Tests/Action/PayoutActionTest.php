@@ -16,30 +16,21 @@ class PayoutActionTest extends GenericActionTest
 
     protected $actionClass = PayoutAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoMasspayRequestIfModelNotAcknowledge()
+    public function testShouldDoMasspayRequestIfModelNotAcknowledge()
     {
         $payoutModel = new \ArrayObject([
             'bar' => 'barVal',

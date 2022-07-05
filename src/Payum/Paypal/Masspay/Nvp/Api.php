@@ -8,8 +8,6 @@ use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\HttpClientInterface;
 
-/**
- */
 class Api
 {
     public const VERSION = '2.3';
@@ -42,7 +40,6 @@ class Api
     ];
 
     /**
-     * @param array                    $options
      * @param HttpClientInterface|null $client
      * @param MessageFactory|null      $messageFactory
      */
@@ -66,8 +63,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function massPay(array $fields)
@@ -81,8 +76,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @throws HttpException
      *
      * @return array
@@ -121,9 +114,6 @@ class Api
         ;
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addAuthorizeFields(array &$fields)
     {
         $fields['PWD'] = $this->options['password'];
@@ -131,9 +121,6 @@ class Api
         $fields['SIGNATURE'] = $this->options['signature'];
     }
 
-    /**
-     * @param array $fields
-     */
     protected function addVersionField(array &$fields)
     {
         $fields['VERSION'] = self::VERSION;

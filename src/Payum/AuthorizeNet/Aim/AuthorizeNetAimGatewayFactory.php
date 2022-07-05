@@ -11,9 +11,6 @@ use Payum\Core\GatewayFactory;
 
 class AuthorizeNetAimGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         if (! class_exists(\AuthorizeNetAIM::class)) {

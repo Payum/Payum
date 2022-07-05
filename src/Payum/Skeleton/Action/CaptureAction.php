@@ -13,8 +13,6 @@ class CaptureAction implements ActionInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -26,9 +24,6 @@ class CaptureAction implements ActionInterface
         throw new \LogicException('Not implemented');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

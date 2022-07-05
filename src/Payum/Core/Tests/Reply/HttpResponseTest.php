@@ -7,20 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class HttpResponseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpResponse');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentSetInConstructor()
+    public function testShouldAllowGetContentSetInConstructor()
     {
         $expectedContent = 'html page';
 
@@ -29,40 +23,28 @@ class HttpResponseTest extends TestCase
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
     {
         $request = new HttpResponse('html page');
 
         $this->assertSame(200, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
     {
         $request = new HttpResponse('html page', 301);
 
         $this->assertSame(301, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor()
     {
         $request = new HttpResponse('html page');
 
         $this->assertEquals(array(), $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
         $expectedHeaders = array(
             'foo' => 'fooVal',

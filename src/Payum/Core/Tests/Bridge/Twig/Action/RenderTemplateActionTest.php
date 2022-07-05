@@ -10,40 +10,28 @@ use Twig\Environment;
 
 class RenderTemplateActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Twig\Action\RenderTemplateAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportRenderTemplate()
+    public function testShouldSupportRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $this->assertTrue($action->supports(new RenderTemplate('aTemplate', array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotRenderTemplate()
+    public function testShouldNotSupportAnythingNotRenderTemplate()
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $this->assertFalse($action->supports('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestPassedToExecute()
+    public function testThrowIfNotSupportedRequestPassedToExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action RenderTemplateAction is not supported the request string.');
@@ -52,10 +40,7 @@ class RenderTemplateActionTest extends TestCase
         $action->execute('foo');
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedTemplateAndContext()
+    public function testShouldRenderExpectedTemplateAndContext()
     {
         $expectedTemplate = 'theTemplate';
 
@@ -80,10 +65,7 @@ class RenderTemplateActionTest extends TestCase
         $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedTemplateAndContextWithCustomLayout()
+    public function testShouldRenderExpectedTemplateAndContextWithCustomLayout()
     {
         $expectedTemplate = 'theTemplate';
 

@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class HttpExceptionInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementPayumExceptionInterface()
+    public function testShouldImplementPayumExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpExceptionInterface');
 

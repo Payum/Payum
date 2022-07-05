@@ -11,8 +11,6 @@ use Payum\Sofort\Api;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param $request GetStatusInterface
      */
     public function execute($request)
@@ -21,7 +19,7 @@ class StatusAction implements ActionInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (!isset($details['status'])
+        if (! isset($details['status'])
            && isset($details['transaction_id'])
            && isset($details['expires'])
            && $details['expires'] < time()) {
@@ -30,13 +28,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (!isset($details['transaction_id']) || !strlen($details['transaction_id'])) {
+        if (! isset($details['transaction_id']) || ! strlen($details['transaction_id'])) {
             $request->markNew();
 
             return;
         }
 
-        if (!isset($details['status'])) {
+        if (! isset($details['status'])) {
             $request->markNew();
 
             return;
@@ -81,13 +79,9 @@ class StatusAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

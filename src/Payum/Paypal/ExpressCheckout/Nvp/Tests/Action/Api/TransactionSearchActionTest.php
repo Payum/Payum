@@ -9,50 +9,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\TransactionSearch;
 
 class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
+    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
     {
         $action = new TransactionSearchAction();
 
         $this->assertTrue($action->supports(new TransactionSearch($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotAuthorizeTokenRequest()
+    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
     {
         $action = new TransactionSearchAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredFieldMissing()
+    public function testThrowIfRequiredFieldMissing()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The STARTDATE fields are required.');
@@ -61,10 +46,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new TransactionSearch(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiTransactionSearchWithExpectedRequiredArguments()
+    public function testShouldCallApiTransactionSearchWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -138,10 +120,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiTransactionSearchMethodAndUpdateModelFromResponse()
+    public function testShouldCallApiTransactionSearchMethodAndUpdateModelFromResponse()
     {
         $apiMock = $this->createApiMock();
         $apiMock

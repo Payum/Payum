@@ -137,7 +137,6 @@ class PayumBuilder
 
     /**
      * @param string           $modelClass
-     * @param StorageInterface $storage
      *
      * @return static
      */
@@ -197,7 +196,6 @@ class PayumBuilder
 
     /**
      * @param string $name
-     * @param array  $config
      *
      * @return static
      */
@@ -322,8 +320,6 @@ class PayumBuilder
     }
 
     /**
-     * @param array $config
-     *
      * @return static
      */
     public function addCoreGatewayFactoryConfig(array $config)
@@ -405,7 +401,7 @@ class PayumBuilder
             $this->buildOmnipayV3GatewayFactories($coreGatewayFactory),
             $this->buildAddedGatewayFactories($coreGatewayFactory)
         );
-        
+
         $gatewayFactories['core'] = $coreGatewayFactory;
 
         $registry = $this->buildRegistry($this->gateways, $storages, $gatewayFactories);
@@ -426,9 +422,6 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     *
      * @return TokenFactoryInterface
      */
     protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
@@ -447,11 +440,9 @@ class PayumBuilder
     }
 
     /**
-     * @param TokenFactoryInterface $tokenFactory
      * @param string[]              $paths
      *
      * @return GenericTokenFactoryInterface
-     *
      */
     protected function buildGenericTokenFactory(TokenFactoryInterface $tokenFactory, array $paths)
     {
@@ -469,8 +460,6 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $tokenStorage
-     *
      * @return HttpRequestVerifierInterface
      */
     private function buildHttpRequestVerifier(StorageInterface $tokenStorage)
@@ -489,7 +478,6 @@ class PayumBuilder
     }
 
     /**
-     * @param array $config
      * @return GatewayFactoryInterface
      */
     private function buildCoreGatewayFactory(array $config)
@@ -515,10 +503,6 @@ class PayumBuilder
     }
 
     /**
-     * @param array $gateways
-     * @param array $storages
-     * @param array $gatewayFactories
-     *
      * @return RegistryInterface
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
@@ -541,8 +525,6 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
     protected function buildGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
@@ -580,8 +562,6 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
     protected function buildAddedGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
@@ -602,8 +582,6 @@ class PayumBuilder
 
     /**
      * @deprecated since 1.5 will be removed in 2.0
-     *
-     * @param GatewayFactoryInterface $coreGatewayFactory
      *
      * @return GatewayFactoryInterface[]
      */
@@ -634,8 +612,6 @@ class PayumBuilder
     }
 
     /**
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface[]
      */
     protected function buildOmnipayV3GatewayFactories(GatewayFactoryInterface $coreGatewayFactory)

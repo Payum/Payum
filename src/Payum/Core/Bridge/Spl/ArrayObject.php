@@ -10,9 +10,6 @@ class ArrayObject extends \ArrayObject
 {
     protected $input;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct($input = array(), $flags = 0, $iterator_class = "ArrayIterator")
     {
         if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
@@ -54,8 +51,6 @@ class ArrayObject extends \ArrayObject
      * @param array|\Traversable $input
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     public function replace($input)
     {
@@ -72,8 +67,6 @@ class ArrayObject extends \ArrayObject
      * @param array|\Traversable $input
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     public function defaults($input)
     {

@@ -23,38 +23,26 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditPartAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditPartAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetGateway()
+    public function testShouldAllowSetGateway()
     {
         $this->assertInstanceOf(GatewayAwareInterface::class, new CreditPartAction($this->createKlarnaMock()));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -63,40 +51,28 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreditPartWithArrayAsModel()
+    public function testShouldSupportCreditPartWithArrayAsModel()
     {
         $action = new CreditPartAction();
 
         $this->assertTrue($action->supports(new CreditPart(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreditPart()
+    public function testShouldNotSupportAnythingNotCreditPart()
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreditPartWithNotArrayAccessModel()
+    public function testShouldNotSupportCreditPartWithNotArrayAccessModel()
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new CreditPart(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreditPartAction();
@@ -104,10 +80,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfDetailsDoNotHaveInvoiceNumber()
+    public function testThrowIfDetailsDoNotHaveInvoiceNumber()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The invoice_number fields are required.');
@@ -116,10 +89,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->execute(new CreditPart(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCreditPart()
+    public function testShouldCallKlarnaCreditPart()
     {
         $details = array(
             'invoice_number' => 'theInvNum',
@@ -150,10 +120,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $this->assertStringContainsString('theRefundInvoiceNumber', $actualDetails['refund_invoice_number']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'invoice_number' => 'theInvNum',

@@ -28,9 +28,6 @@ interface GatewayConfigInterface
      */
     public function setFactoryName($name);
 
-    /**
-     * @param array $config
-     */
     public function setConfig(array $config);
 
     /**

@@ -23,38 +23,26 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetGateway()
+    public function testShouldAllowSetGateway()
     {
         $this->assertInstanceOf(GatewayAwareInterface::class, new ReserveAmountAction($this->createKlarnaMock()));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -63,40 +51,28 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportReserveAmountWithArrayAsModel()
+    public function testShouldSupportReserveAmountWithArrayAsModel()
     {
         $action = new ReserveAmountAction();
 
         $this->assertTrue($action->supports(new ReserveAmount(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotReserveAmount()
+    public function testShouldNotSupportAnythingNotReserveAmount()
     {
         $action = new ReserveAmountAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportReserveAmountWithNotArrayAccessModel()
+    public function testShouldNotSupportReserveAmountWithNotArrayAccessModel()
     {
         $action = new ReserveAmountAction();
 
         $this->assertFalse($action->supports(new ReserveAmount(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ReserveAmountAction();
@@ -104,10 +80,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaActivate()
+    public function testShouldCallKlarnaActivate()
     {
         $details = array(
             'pno' => 'thePno',
@@ -147,10 +120,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $this->assertSame('theStatus', $reserved['status']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'pno' => 'thePno',

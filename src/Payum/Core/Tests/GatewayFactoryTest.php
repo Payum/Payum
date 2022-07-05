@@ -6,20 +6,14 @@ use Payum\Core\GatewayFactory;
 
 class GatewayFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
+    public function testShouldAllowCreateGateway()
     {
         $factory = new GatewayFactory();
 
@@ -28,10 +22,7 @@ class GatewayFactoryTest extends TestCase
         $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
+    public function testShouldAllowCreateGatewayConfig()
     {
         $factory = new GatewayFactory();
 

@@ -31,8 +31,6 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
      *
-     * @param array $parameters
-     *
      * @return array
      */
     public function start(array $parameters)
@@ -67,8 +65,6 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
-     * @param array $parameters
-     *
      * @return array
      */
     public function stop(array $parameters)
@@ -86,8 +82,6 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
-     * @param array $parameters
-     *
      * @return array
      */
     public function check(array $parameters)
@@ -102,9 +96,6 @@ class RecurringApi extends BaseApi
         return $this->call('Check', $parameters, $this->getPxRecurringWsdl());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getPxRecurringWsdl()
     {
         return $this->options['sandbox'] ?

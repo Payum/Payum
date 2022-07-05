@@ -7,40 +7,28 @@ use PHPUnit\Framework\TestCase;
 
 class IdentificatorTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface()
     {
         $rc = new \ReflectionClass(Identificator::class);
 
         $this->assertTrue($rc->implementsInterface(\Serializable::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdSetInConstructor()
+    public function testShouldAllowGetIdSetInConstructor()
     {
         $id = new Identificator('theId', new \stdClass());
 
         $this->assertSame('theId', $id->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetClassSetInConstructor()
+    public function testShouldAllowGetClassSetInConstructor()
     {
         $id = new Identificator('theId', new \stdClass());
 
         $this->assertSame('stdClass', $id->getClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeCorrectlySerializedAndUnserialized()
+    public function testShouldBeCorrectlySerializedAndUnserialized()
     {
         $id = new Identificator('theId', new \stdClass());
 

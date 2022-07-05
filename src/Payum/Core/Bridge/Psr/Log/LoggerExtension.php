@@ -29,24 +29,15 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
         $this->logger = $logger ?: $this->nullLogger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPreExecute(Context $context)
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onExecute(Context $context)
     {
         $action = $context->getAction();
@@ -55,9 +46,6 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function onPostExecute(Context $context)
     {
         $action = $context->getAction();

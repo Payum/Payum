@@ -20,7 +20,6 @@ class RenderTemplateAction implements ActionInterface
     protected $layout;
 
     /**
-     * @param Environment $twig
      * @param string      $layout
      */
     public function __construct(Environment $twig, $layout)
@@ -29,9 +28,6 @@ class RenderTemplateAction implements ActionInterface
         $this->layout = $layout;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request RenderTemplate */
@@ -43,9 +39,6 @@ class RenderTemplateAction implements ActionInterface
         )));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof RenderTemplate;

@@ -16,8 +16,6 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
     public function execute($request)
@@ -38,13 +36,9 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
             $request->getTo() == 'array'
         ;

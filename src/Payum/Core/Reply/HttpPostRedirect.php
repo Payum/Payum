@@ -16,7 +16,6 @@ class HttpPostRedirect extends HttpResponse
 
     /**
      * @param string   $url
-     * @param array    $fields
      * @param int      $statusCode
      * @param string[] $headers
      */
@@ -46,7 +45,6 @@ class HttpPostRedirect extends HttpResponse
 
     /**
      * @param string $url
-     * @param array  $fields
      *
      * @return string
      */

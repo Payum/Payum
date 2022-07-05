@@ -12,20 +12,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -38,10 +32,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -54,20 +45,14 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
@@ -75,10 +60,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfTokenNotSet()
+    public function testShouldDoNothingIfTokenNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -96,10 +78,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel()
+    public function testShouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -130,10 +109,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(33, $details['PAYMENTREQUEST_0_AMT']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired()
+    public function testShouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -164,10 +140,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(11, $details['PAYMENTREQUEST_0_AMT']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetTransactionDetailsTwice()
+    public function testShouldRequestGetTransactionDetailsTwice()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

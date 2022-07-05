@@ -20,10 +20,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PayexGatewayFactory(array(
             'foo' => 'fooVal',
@@ -41,10 +38,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new PayexGatewayFactory();
 
@@ -56,10 +50,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertEquals(array('account_number' => '', 'encryption_key' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new PayexGatewayFactory();
 
@@ -74,10 +65,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Payex', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The account_number, encryption_key fields are required.');

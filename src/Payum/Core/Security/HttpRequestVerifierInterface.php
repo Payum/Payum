@@ -16,10 +16,6 @@ interface HttpRequestVerifierInterface
 
     /**
      * This method invalidate token so it could not be used in future.
-     *
-     * @param TokenInterface $token
-     *
-     * @return void
      */
     public function invalidate(TokenInterface $token);
 }

@@ -21,11 +21,6 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     protected $gatewayFactories;
 
-    /**
-     * @param array $gateways
-     * @param array $storages
-     * @param array $gatewayFactories
-     */
     public function __construct(array $gateways = array(), array $storages = array(), array $gatewayFactories = array())
     {
         $this->gateways = $gateways;
@@ -44,9 +39,6 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     abstract protected function getService($id);
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorage($class)
     {
         $class = is_object($class) ? get_class($class) : $class;
@@ -77,9 +69,6 @@ abstract class AbstractRegistry implements RegistryInterface
         return $this->getService($this->storages[$class]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorages()
     {
         $storages = array();
@@ -90,9 +79,6 @@ abstract class AbstractRegistry implements RegistryInterface
         return $storages;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateway($name)
     {
         if (! isset($this->gateways[$name])) {
@@ -102,9 +88,6 @@ abstract class AbstractRegistry implements RegistryInterface
         return $this->getService($this->gateways[$name]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateways()
     {
         $gateways = array();
@@ -115,9 +98,6 @@ abstract class AbstractRegistry implements RegistryInterface
         return $gateways;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactory($name)
     {
         if (! isset($this->gatewayFactories[$name])) {
@@ -127,9 +107,6 @@ abstract class AbstractRegistry implements RegistryInterface
         return $this->getService($this->gatewayFactories[$name]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactories()
     {
         $gatewayFactories = array();

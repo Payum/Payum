@@ -9,20 +9,14 @@ use Payum\Core\Tests\TestCase;
 
 class CreditCardTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface()
     {
         $rc = new \ReflectionClass(CreditCard::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnNullOnNewCreditCard()
+    public function testShouldReturnNullOnNewCreditCard()
     {
         $card = new CreditCard();
 
@@ -36,10 +30,7 @@ class CreditCardTest extends TestCase
         $this->assertNull($card->getExpireAt());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetBrand()
+    public function testShouldAllowGetPreviouslySetBrand()
     {
         $card = new CreditCard();
 
@@ -48,10 +39,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('theBrand', $card->getBrand());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetToken()
+    public function testShouldAllowGetPreviouslySetToken()
     {
         $card = new CreditCard();
 
@@ -60,10 +48,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('theToken', $card->getToken());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetHolder()
+    public function testShouldAllowGetPreviouslySetHolder()
     {
         $card = new CreditCard();
 
@@ -72,10 +57,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('Mahatma Gandhi', $card->getHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreHolderAsSensitiveValue()
+    public function testShouldStoreHolderAsSensitiveValue()
     {
         $card = new CreditCard();
 
@@ -86,10 +68,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('Mahatma Gandhi', $value->peek());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetMaskedHolderWhenSetHolder()
+    public function testShouldAllowGetMaskedHolderWhenSetHolder()
     {
         $card = new CreditCard();
 
@@ -98,10 +77,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('MXXXXXX XXndhi', $card->getMaskedHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowChangeMaskedHolder()
+    public function testShouldAllowChangeMaskedHolder()
     {
         $card = new CreditCard();
 
@@ -112,10 +88,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('theMaskedHolder', $card->getMaskedHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetNumber()
+    public function testShouldAllowGetPreviouslySetNumber()
     {
         $card = new CreditCard();
 
@@ -124,10 +97,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('1234 5678 1234 5678', $card->getNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreNumberAsSensitiveValue()
+    public function testShouldStoreNumberAsSensitiveValue()
     {
         $card = new CreditCard();
 
@@ -138,10 +108,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('1234 5678 1234 5678', $value->peek());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetMaskedNumberWhenSetNumber()
+    public function testShouldAllowGetMaskedNumberWhenSetNumber()
     {
         $card = new CreditCard();
 
@@ -150,10 +117,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('1XXX XXXX XXXX 5678', $card->getMaskedNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowChangeMaskedNumber()
+    public function testShouldAllowChangeMaskedNumber()
     {
         $card = new CreditCard();
 
@@ -165,10 +129,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('theMaskedNumber', $card->getMaskedNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetSecurityCode()
+    public function testShouldAllowGetPreviouslySetSecurityCode()
     {
         $card = new CreditCard();
 
@@ -177,10 +138,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('theCode', $card->getSecurityCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreSecurityCodeAsSensitiveValue()
+    public function testShouldStoreSecurityCodeAsSensitiveValue()
     {
         $card = new CreditCard();
 
@@ -191,10 +149,7 @@ class CreditCardTest extends TestCase
         $this->assertSame('123', $value->peek());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetExpireAt()
+    public function testShouldAllowGetPreviouslySetExpireAt()
     {
         $card = new CreditCard();
 
@@ -205,10 +160,7 @@ class CreditCardTest extends TestCase
         $this->assertSame($expected, $card->getExpireAt());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreExpireAtAsSensitiveValue()
+    public function testShouldStoreExpireAtAsSensitiveValue()
     {
         $card = new CreditCard();
 

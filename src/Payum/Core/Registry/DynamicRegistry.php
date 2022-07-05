@@ -31,19 +31,12 @@ class DynamicRegistry implements RegistryInterface
      */
     private $backwardCompatibility = true;
 
-    /**
-     * @param StorageInterface $gatewayConfigStore
-     * @param GatewayFactoryRegistryInterface $gatewayFactoryRegistry
-     */
     public function __construct(StorageInterface $gatewayConfigStore, GatewayFactoryRegistryInterface $gatewayFactoryRegistry)
     {
         $this->gatewayConfigStore = $gatewayConfigStore;
         $this->gatewayFactoryRegistry = $gatewayFactoryRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactory($name)
     {
         // @deprecated It will throw invalid argument exception in 2.x
@@ -54,9 +47,6 @@ class DynamicRegistry implements RegistryInterface
         throw new InvalidArgumentException(sprintf('Gateway factory "%s" does not exist.', $name));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayFactories()
     {
         // @deprecated It will return empty array here
@@ -67,9 +57,6 @@ class DynamicRegistry implements RegistryInterface
         return [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateway($name)
     {
         if (array_key_exists($name, $this->gateways)) {
@@ -91,9 +78,6 @@ class DynamicRegistry implements RegistryInterface
         throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGateways()
     {
         // @deprecated It will return empty array here
@@ -111,9 +95,6 @@ class DynamicRegistry implements RegistryInterface
         return $gateways;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorage($class)
     {
         // @deprecated It will throw invalid argument exception in 2.x
@@ -127,9 +108,6 @@ class DynamicRegistry implements RegistryInterface
         ));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStorages()
     {
         // @deprecated It will return empty array here
@@ -151,8 +129,6 @@ class DynamicRegistry implements RegistryInterface
     }
 
     /**
-     * @param GatewayConfigInterface $gatewayConfig
-     *
      * @return GatewayInterface
      */
     protected function createGateway(GatewayConfigInterface $gatewayConfig)

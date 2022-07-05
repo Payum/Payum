@@ -21,20 +21,14 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CancelReservationAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -43,40 +37,28 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCancelReservationWithArrayAsModel()
+    public function testShouldSupportCancelReservationWithArrayAsModel()
     {
         $action = new CancelReservationAction();
 
         $this->assertTrue($action->supports(new CancelReservation(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCancelReservation()
+    public function testShouldNotSupportAnythingNotCancelReservation()
     {
         $action = new CancelReservationAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCancelReservationWithNotArrayAccessModel()
+    public function testShouldNotSupportCancelReservationWithNotArrayAccessModel()
     {
         $action = new CancelReservationAction();
 
         $this->assertFalse($action->supports(new CancelReservation(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CancelReservationAction();
@@ -84,10 +66,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -96,10 +75,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $action->execute(new CancelReservation(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCancelReservationMethod()
+    public function testShouldCallKlarnaCancelReservationMethod()
     {
         $details = array(
             'rno' => 'theRno',
@@ -123,10 +99,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
         $this->assertTrue($canceledDetails['canceled']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',
