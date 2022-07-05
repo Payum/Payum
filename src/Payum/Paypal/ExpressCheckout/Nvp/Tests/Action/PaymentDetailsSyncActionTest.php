@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
-use Payum\Core\GatewayInterface;
 
 class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {

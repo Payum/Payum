@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Request;
 
 use Payum\Core\Request\Generic;

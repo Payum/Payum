@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
+use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Action\ConvertPaymentAction;
-use Payum\Core\Model\Payment;
-use Payum\Core\Request\Convert;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {

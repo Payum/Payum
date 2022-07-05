@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe;
 
 class Constants

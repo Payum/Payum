@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
 use Payum\Core\Action\ActionInterface;

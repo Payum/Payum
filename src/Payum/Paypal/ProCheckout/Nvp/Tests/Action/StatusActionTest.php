@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;

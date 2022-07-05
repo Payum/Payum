@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core;
 
 use Payum\Core\Registry\RegistryInterface;

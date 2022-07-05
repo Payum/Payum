@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

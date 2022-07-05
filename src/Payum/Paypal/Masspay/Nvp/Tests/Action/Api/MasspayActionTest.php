@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action\Api;
 
 use Payum\Core\ApiAwareInterface;
@@ -53,7 +54,7 @@ class MasspayActionTest extends GenericActionTest
         $action = new MasspayAction();
         $action->setApi($apiMock);
 
-        $request = new Masspay(['foo' => 'fooVal',]);
+        $request = new Masspay(['foo' => 'fooVal', ]);
 
         $action->execute($request);
     }
@@ -79,7 +80,7 @@ class MasspayActionTest extends GenericActionTest
         $action = new MasspayAction();
         $action->setApi($apiMock);
 
-        $request = new Masspay(['foo' => 'fooVal',]);
+        $request = new Masspay(['foo' => 'fooVal', ]);
 
         $action->execute($request);
 

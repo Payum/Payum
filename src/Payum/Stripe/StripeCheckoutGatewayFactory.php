@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -13,8 +14,8 @@ use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
 use Payum\Stripe\Action\GetCreditCardTokenAction;
-use Payum\Stripe\Extension\CreateCustomerExtension;
 use Payum\Stripe\Action\StatusAction;
+use Payum\Stripe\Extension\CreateCustomerExtension;
 use Stripe\Stripe;
 
 class StripeCheckoutGatewayFactory extends GatewayFactory
@@ -66,7 +67,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
         }
 
         $config['payum.paths'] = array_replace([
-            'PayumStripe' => __DIR__.'/Resources/views',
+            'PayumStripe' => __DIR__ . '/Resources/views',
         ], $config['payum.paths'] ?: []);
     }
 }

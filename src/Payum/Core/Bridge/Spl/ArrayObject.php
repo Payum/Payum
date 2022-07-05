@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Spl;
 
 use Payum\Core\Exception\InvalidArgumentException;

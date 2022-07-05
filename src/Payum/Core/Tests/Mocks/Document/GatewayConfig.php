@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Document;
 
-use Payum\Core\Model\GatewayConfig as BaseGatewayConfig;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
+use Payum\Core\Model\GatewayConfig as BaseGatewayConfig;
 
 /**
  * @Mongo\Document

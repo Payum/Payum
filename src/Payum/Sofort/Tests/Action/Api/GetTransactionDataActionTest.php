@@ -5,8 +5,8 @@ namespace Payum\Sofort\Tests\Action\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Sofort\Action\Api\GetTransactionDataAction;
-use Payum\Sofort\Request\Api\GetTransactionData;
 use Payum\Sofort\Api;
+use Payum\Sofort\Request\Api\GetTransactionData;
 
 class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
 {

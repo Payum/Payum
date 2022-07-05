@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\Refund;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class RefundActionTest extends GenericActionTest
 {

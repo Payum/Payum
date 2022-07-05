@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\ORM\Configuration;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 

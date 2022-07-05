@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase

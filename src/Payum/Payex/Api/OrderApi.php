@@ -1,78 +1,79 @@
 <?php
+
 namespace Payum\Payex\Api;
 
 class OrderApi extends BaseApi
 {
-    const VIEW_CREDITCARD = 'CREDITCARD';
+    public const VIEW_CREDITCARD = 'CREDITCARD';
 
-    const VIEW_MICROACCOUNT = 'MICROACCOUNT';
+    public const VIEW_MICROACCOUNT = 'MICROACCOUNT';
 
-    const VIEW_DIRECTDEBIT = 'DIRECTDEBIT';
+    public const VIEW_DIRECTDEBIT = 'DIRECTDEBIT';
 
     /**
      * Norwegian and Swedish overcharged SMS
      */
-    const VIEW_CPA = 'CPA';
+    public const VIEW_CPA = 'CPA';
 
     /**
      * Overcharged call
      */
-    const VIEW_IVR = 'IVR';
+    public const VIEW_IVR = 'IVR';
 
     /**
      * Value code
      */
-    const VIEW_EVC = 'EVC';
+    public const VIEW_EVC = 'EVC';
 
-    const VIEW_INVOICE = 'INVOICE';
+    public const VIEW_INVOICE = 'INVOICE';
 
-    const VIEW_LOAN = 'LOAN';
+    public const VIEW_LOAN = 'LOAN';
 
     /**
      * Gift card / generic card
      */
-    const VIEW_GC = 'GC';
+    public const VIEW_GC = 'GC';
 
     /**
      * Credit account
      */
-    const VIEW_CA = 'GC';
+    public const VIEW_CA = 'GC';
 
     /**
      * PayPal transactions
      */
-    const VIEW_PAYPAL = 'PAYPAL';
+    public const VIEW_PAYPAL = 'PAYPAL';
 
-    const VIEW_FINANCING = 'FINANCING';
+    public const VIEW_FINANCING = 'FINANCING';
 
-    const TRANSACTIONSTATUS_SALE = 0;
+    public const TRANSACTIONSTATUS_SALE = 0;
 
-    const TRANSACTIONSTATUS_INITIALIZE = 1;
+    public const TRANSACTIONSTATUS_INITIALIZE = 1;
 
-    const TRANSACTIONSTATUS_CREDIT = 2;
+    public const TRANSACTIONSTATUS_CREDIT = 2;
 
-    const TRANSACTIONSTATUS_AUTHORIZE = 3;
+    public const TRANSACTIONSTATUS_AUTHORIZE = 3;
 
-    const TRANSACTIONSTATUS_CANCEL = 4;
+    public const TRANSACTIONSTATUS_CANCEL = 4;
 
-    const TRANSACTIONSTATUS_FAILURE = 5;
+    public const TRANSACTIONSTATUS_FAILURE = 5;
 
-    const TRANSACTIONSTATUS_CAPTURE = 6;
+    public const TRANSACTIONSTATUS_CAPTURE = 6;
 
     /**
      * Returns the Status of the order0 = The order is completed (a purchase has been done, but check the transactionStatus to see the result).
      */
-    const ORDERSTATUS_COMPLETED = 0;
+    public const ORDERSTATUS_COMPLETED = 0;
 
     /**
      * 1 = The order is processing. The customer has not started the purchase. PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
      */
-    const ORDERSTATUS_PROCESSING = 1;
+    public const ORDERSTATUS_PROCESSING = 1;
 
     /**
      * 2 = No order or transaction is found
      */
-    const ORDERSTATUS_NOT_FOUND = 2;
+    public const ORDERSTATUS_NOT_FOUND = 2;
 
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/

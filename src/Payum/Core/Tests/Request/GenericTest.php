@@ -1,9 +1,10 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
-use PHPUnit\Framework\TestCase;
 use Payum\Core\Storage\IdentityInterface;
+use PHPUnit\Framework\TestCase;
 
 class GenericTest extends TestCase
 {
@@ -62,7 +63,8 @@ class GenericTest extends TestCase
      */
     public function testCouldBeConstructedWithModelOfAnyType($phpType)
     {
-        $request = new class($phpType) extends Generic {};
+        $request = new class($phpType) extends Generic {
+        };
 
         $this->assertEquals($phpType, $request->getModel());
     }
@@ -75,7 +77,8 @@ class GenericTest extends TestCase
      */
     public function shouldAllowSetModelAndGetIt($phpType)
     {
-        $request = new class(123321) extends Generic {};
+        $request = new class(123321) extends Generic {
+        };
 
         $request->setModel($phpType);
 
@@ -157,7 +160,7 @@ class GenericTest extends TestCase
      */
     public function shouldNotSetIdentityAsFirstModelOnConstruct()
     {
-        $identity = new class implements IdentityInterface {
+        $identity = new class() implements IdentityInterface {
             public function serialize()
             {
             }
@@ -221,7 +224,7 @@ class GenericTest extends TestCase
      */
     public function shouldNotSetIdentityAsFirstModelOnSetModel()
     {
-        $identity = new class implements IdentityInterface {
+        $identity = new class() implements IdentityInterface {
             public function serialize()
             {
             }

@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
-use Payum\Offline\Constants;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\StatusAction;
+use Payum\Offline\Constants;
 
 class StatusActionTest extends \PHPUnit\Framework\TestCase
 {

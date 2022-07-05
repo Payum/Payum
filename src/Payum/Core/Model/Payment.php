@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Model;
 
 class Payment implements PaymentInterface, DirectDebitPaymentInterface

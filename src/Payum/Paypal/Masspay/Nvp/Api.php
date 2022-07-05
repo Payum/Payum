@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp;
 
 use Http\Message\MessageFactory;
@@ -11,15 +12,15 @@ use Payum\Core\HttpClientInterface;
  */
 class Api
 {
-    const VERSION = '2.3';
+    public const VERSION = '2.3';
 
-    const ACK_SUCCESS = 'Success';
+    public const ACK_SUCCESS = 'Success';
 
-    const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
+    public const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
 
-    const ACK_FAILURE = 'Failure';
+    public const ACK_FAILURE = 'Failure';
 
-    const ACK_FAILURE_WITH_WARNING = 'FailureWithWarning';
+    public const ACK_FAILURE_WITH_WARNING = 'FailureWithWarning';
 
     /**
      * @var HttpClientInterface

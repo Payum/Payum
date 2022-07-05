@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\AuthorizePaymentAction;
@@ -54,15 +55,16 @@ class AuthorizePaymentActionTest extends GenericActionTest
                 $this->returnCallback(function (GetHumanStatus $request) {
                     $request->markNew();
                 }),
-                $this->returnCallback(function (Convert $request) use ($testCase, $payment) {
-                    $testCase->assertSame($payment, $request->getSource());
-                    $testCase->assertSame('array', $request->getTo());
-                    $testCase->assertNull($request->getToken());
+                $this->returnCallback(
+                    function (Convert $request) use ($testCase, $payment) {
+                        $testCase->assertSame($payment, $request->getSource());
+                        $testCase->assertSame('array', $request->getTo());
+                        $testCase->assertNull($request->getToken());
 
-                    $request->setResult([]);
-                }
-            )
-        );
+                        $request->setResult([]);
+                    }
+                )
+            );
 
         $action = new AuthorizePaymentAction();
         $action->setGateway($gatewayMock);
@@ -91,7 +93,6 @@ class AuthorizePaymentActionTest extends GenericActionTest
                     $request->markNew();
                 }),
                 $this->returnCallback(function (Convert $request) {
-
                     $request->setResult(array(
                         'foo' => 'fooVal',
                     ));

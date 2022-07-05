@@ -37,7 +37,8 @@ class RenderTemplateAction implements ActionInterface
 
         $request->setResult(
             $this->templating->render(
-                $request->getTemplateName(), array_replace(
+                $request->getTemplateName(),
+                array_replace(
                     ['layout' => $this->layout],
                     $request->getParameters()
                 )

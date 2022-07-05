@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Ipn;
 
 use Http\Message\MessageFactory;
@@ -14,14 +15,14 @@ class Api
     /**
      * It sends back if the message originated with PayPal.
      */
-    const NOTIFY_VERIFIED = 'VERIFIED';
+    public const NOTIFY_VERIFIED = 'VERIFIED';
 
     /**
      * if there is any discrepancy with what was originally sent
      */
-    const NOTIFY_INVALID = 'INVALID';
+    public const NOTIFY_INVALID = 'INVALID';
 
-    const CMD_NOTIFY_VALIDATE = '_notify-validate';
+    public const CMD_NOTIFY_VALIDATE = '_notify-validate';
 
     /**
      * @var HttpClientInterface

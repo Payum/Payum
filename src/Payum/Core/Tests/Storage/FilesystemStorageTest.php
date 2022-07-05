@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Storage\FilesystemStorage;
@@ -111,7 +112,7 @@ class FilesystemStorageTest extends TestCase
         $model = $storage->create();
         $storage->update($model);
 
-        $this->assertFileExists(sys_get_temp_dir().'/payum-model-'.$model->getId());
+        $this->assertFileExists(sys_get_temp_dir() . '/payum-model-' . $model->getId());
     }
 
     /**

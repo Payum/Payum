@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
+use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Be2Bill\Api;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
@@ -32,7 +33,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Api::EXECCODE_TIME_OUT  === $model['EXECCODE']) {
+        if (Api::EXECCODE_TIME_OUT === $model['EXECCODE']) {
             $request->markUnknown();
 
             return;

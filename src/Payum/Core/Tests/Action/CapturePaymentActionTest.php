@@ -1,7 +1,9 @@
 <?php
+
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\CapturePaymentAction;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
@@ -9,7 +11,6 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\GatewayAwareInterface;
 use function iterator_to_array;
 
 class CapturePaymentActionTest extends GenericActionTest
@@ -90,7 +91,7 @@ class CapturePaymentActionTest extends GenericActionTest
                 $this->returnCallback(function (GetHumanStatus $request) {
                     $request->markNew();
                 }),
-                $this->returnCallback(function (Convert $request){
+                $this->returnCallback(function (Convert $request) {
                     $request->setResult(array(
                         'foo' => 'fooVal',
                     ));

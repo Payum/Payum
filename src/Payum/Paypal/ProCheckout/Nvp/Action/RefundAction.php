@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -7,8 +8,8 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Request\Refund;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class RefundAction implements ActionInterface, ApiAwareInterface
 {

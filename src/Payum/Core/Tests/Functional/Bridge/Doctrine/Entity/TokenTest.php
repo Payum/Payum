@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;

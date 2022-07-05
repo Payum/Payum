@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Twig\Action;
 
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Request\RenderTemplate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
-use PHPUnit\Framework\MockObject\MockObject;
 
 class RenderTemplateActionTest extends TestCase
 {

@@ -1,9 +1,10 @@
 <?php
+
 namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
-use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Request\Capture;
 use PHPUnit\Framework\TestCase;
 
 class HumanifyTest extends TestCase

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
@@ -8,8 +9,8 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class TokenFactoryTest extends TestCase
 {
@@ -85,7 +86,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertSame(
-            'http://example.com/theTargetPath?payum_token='.$token->getHash().'&target=val',
+            'http://example.com/theTargetPath?payum_token=' . $token->getHash() . '&target=val',
             $token->getTargetUrl()
         );
         $this->assertNull($token->getAfterUrl());
@@ -145,7 +146,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertSame(
-            'http://example.com/theTargetPath?payum_token='.$token->getHash().'&target=val',
+            'http://example.com/theTargetPath?payum_token=' . $token->getHash() . '&target=val',
             $token->getTargetUrl()
         );
         $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
@@ -279,7 +280,7 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame(
-            $result.'?payum_token=aHash&target=val',
+            $result . '?payum_token=aHash&target=val',
             $actualToken->getTargetUrl()
         );
     }
@@ -423,7 +424,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertSame(
-            'http://google.com/?foo=fooVal&payum_token='.$token->getHash().'&target=val',
+            'http://google.com/?foo=fooVal&payum_token=' . $token->getHash() . '&target=val',
             $token->getTargetUrl()
         );
         $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
@@ -483,7 +484,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(
@@ -546,7 +547,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(
@@ -609,7 +610,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
+            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(

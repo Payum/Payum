@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
 class StartRecurringPaymentTest extends \PHPUnit\Framework\TestCase

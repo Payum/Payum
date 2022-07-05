@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Registry;
 
 use Doctrine\Persistence\Proxy;
@@ -290,4 +291,3 @@ class DoctrineProxy extends DoctrineModel implements Proxy
     {
     }
 }
-

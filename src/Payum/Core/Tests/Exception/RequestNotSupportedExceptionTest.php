@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Action\ActionInterface;
@@ -6,8 +7,8 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Request\Capture;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
@@ -64,7 +65,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
         $this->assertStringStartsWith(
-            'Action '.$actionClass.' is not supported the request string.',
+            'Action ' . $actionClass . ' is not supported the request string.',
             $exception->getMessage()
         );
 
@@ -86,7 +87,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
         $this->assertStringStartsWith(
-            'Action '.$actionClass.' is not supported the request stdClass.',
+            'Action ' . $actionClass . ' is not supported the request stdClass.',
             $exception->getMessage()
         );
 

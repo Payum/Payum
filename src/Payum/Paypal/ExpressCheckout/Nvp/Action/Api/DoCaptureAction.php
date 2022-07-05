@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -35,7 +36,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
 
         $fields = new ArrayObject([]);
         foreach ($this->getPaymentRequestNFields() as $field) {
-            $fields[$field] = $model['PAYMENTREQUEST_'.$paymentRequestN.'_'.$field];
+            $fields[$field] = $model['PAYMENTREQUEST_' . $paymentRequestN . '_' . $field];
         }
         $fields['AUTHORIZATIONID'] = $fields['TRANSACTIONID'];
 

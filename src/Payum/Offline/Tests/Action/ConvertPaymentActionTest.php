@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
-use Payum\Core\Model\PaymentInterface;
-use Payum\Offline\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Offline\Action\ConvertPaymentAction;
 use Payum\Offline\Constants;
 
 class ConvertPaymentActionTest extends GenericActionTest

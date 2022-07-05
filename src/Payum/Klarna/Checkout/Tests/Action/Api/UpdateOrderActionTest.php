@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Payum\Core\Tests\GenericActionTest;

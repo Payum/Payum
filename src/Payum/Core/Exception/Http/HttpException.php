@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Exception\Http;
 
 use Payum\Core\Exception\RuntimeException;
@@ -67,9 +68,9 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
 
         $message = implode(PHP_EOL, array(
             $label,
-            '[status code] '.$response->getStatusCode(),
-            '[reason phrase] '.$response->getReasonPhrase(),
-            '[url] '.$request->getUri(),
+            '[status code] ' . $response->getStatusCode(),
+            '[reason phrase] ' . $response->getReasonPhrase(),
+            '[url] ' . $request->getUri(),
         ));
 
         $e = new static($message, $response->getStatusCode());

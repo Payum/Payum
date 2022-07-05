@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Twig;
 
 use Twig\Environment;
@@ -48,6 +49,6 @@ class TwigFactory
 
         $rc = new \ReflectionClass($gatewayFactoryOrRootClass);
 
-        return dirname($rc->getFileName()).'/Resources/views';
+        return dirname($rc->getFileName()) . '/Resources/views';
     }
 }

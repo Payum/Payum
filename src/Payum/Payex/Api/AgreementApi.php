@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Payex\Api;
 
 class AgreementApi extends BaseApi
 {
-    const AGREEMENTSTATUS_NOTVERIFIED = 0;
+    public const AGREEMENTSTATUS_NOTVERIFIED = 0;
 
-    const AGREEMENTSTATUS_VERIFIED = 1;
+    public const AGREEMENTSTATUS_VERIFIED = 1;
 
-    const AGREEMENTSTATUS_DELETED = 2;
+    public const AGREEMENTSTATUS_DELETED = 2;
 
     /**
      * @param array $parameters

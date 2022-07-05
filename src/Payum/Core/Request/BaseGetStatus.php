@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Request;
 
 abstract class BaseGetStatus extends Generic implements GetStatusInterface

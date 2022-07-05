@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Be2Bill\Tests\Action;
 
+use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
-use Payum\Be2Bill\Action\CaptureOffsiteAction;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
 

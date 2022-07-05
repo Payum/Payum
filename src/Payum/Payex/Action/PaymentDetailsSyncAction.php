@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Payex\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Payex\Request\Api\CheckOrder;
 use Payum\Core\Request\Sync;
-use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Payex\Request\Api\CheckOrder;
 
 class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {

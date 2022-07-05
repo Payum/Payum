@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Payex\Api\AgreementApi;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
-use Payum\Core\Action\ActionInterface;
+use Payum\Payex\Api\AgreementApi;
 
 class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {

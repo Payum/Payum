@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\RecurringApi;
@@ -178,10 +179,19 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
     }
 }
 
-class RecurringSoapClient extends \SoapClient {
-    public function __construct() {}
+class RecurringSoapClient extends \SoapClient
+{
+    public function __construct()
+    {
+    }
 
-    public function Start() {}
-    public function Stop() {}
-    public function Check() {}
+    public function Start()
+    {
+    }
+    public function Stop()
+    {
+    }
+    public function Check()
+    {
+    }
 };

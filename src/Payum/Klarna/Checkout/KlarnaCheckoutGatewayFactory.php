@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -78,7 +79,7 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
         }
 
         $config['payum.paths'] = array_replace([
-            'PayumKlarnaCheckout' => __DIR__.'/Resources/views',
+            'PayumKlarnaCheckout' => __DIR__ . '/Resources/views',
         ], $config['payum.paths'] ?: []);
     }
 }

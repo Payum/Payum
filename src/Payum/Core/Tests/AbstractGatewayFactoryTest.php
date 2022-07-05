@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\CoreGatewayFactory;
@@ -18,7 +19,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
     public function testFactoryImplementsGatewayFactoryInterface()
     {
         $class = $this->getGatewayFactoryClass();
-        $this->assertInstanceOf(GatewayFactoryInterface::class, new $class);
+        $this->assertInstanceOf(GatewayFactoryInterface::class, new $class());
 
         $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
 
@@ -29,7 +30,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
     {
         $class = $this->getGatewayFactoryClass();
 
-        $factory = new $class;
+        $factory = new $class();
 
         $this->assertInstanceOf(CoreGatewayFactory::class, $this->getPropertyValue($factory, 'coreGatewayFactory'));
     }
@@ -51,7 +52,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
     {
         $class = $this->getGatewayFactoryClass();
 
-        $factory = new $class;
+        $factory = new $class();
 
         $this->assertInstanceOf(GatewayFactoryInterface::class, $factory);
 
@@ -70,7 +71,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
     {
         $class = $this->getGatewayFactoryClass();
 
-        $factory = new $class;
+        $factory = new $class();
 
         $config = $factory->createConfig();
 

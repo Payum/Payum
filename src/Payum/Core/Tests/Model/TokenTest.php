@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
-use Payum\Core\Model\Token;
 use Payum\Core\Model\Identity;
+use Payum\Core\Model\Token;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 

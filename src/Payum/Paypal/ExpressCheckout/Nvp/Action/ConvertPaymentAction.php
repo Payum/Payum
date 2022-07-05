@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;

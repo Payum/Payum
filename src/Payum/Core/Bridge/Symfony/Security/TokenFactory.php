@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Registry\StorageRegistryInterface;

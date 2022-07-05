@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -7,10 +8,10 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProHosted\Nvp\Api;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
-use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 
 class CaptureActionTest extends GenericActionTest
 {
@@ -57,7 +58,7 @@ class CaptureActionTest extends GenericActionTest
 
         $action->execute(new Capture([
             'currency_code' => 'EUR',
-            'subtotal'      => 5,
+            'subtotal' => 5,
         ]));
     }
 

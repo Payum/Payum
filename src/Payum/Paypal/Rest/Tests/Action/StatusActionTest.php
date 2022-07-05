@@ -2,9 +2,9 @@
 
 namespace Payum\Paypal\Rest\Tests\Action;
 
+use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
-use Payum\Core\Request\GetBinaryStatus;
 
 class StatusActionTest extends \PHPUnit\Framework\TestCase
 {

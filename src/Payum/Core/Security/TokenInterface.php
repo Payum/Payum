@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Security;
 
 use Payum\Core\Model\DetailsAggregateInterface;

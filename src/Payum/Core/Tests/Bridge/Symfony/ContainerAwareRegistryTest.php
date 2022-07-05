@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\ContainerAwareRegistry;
@@ -39,7 +40,7 @@ class ContainerAwareRegistryTest extends TestCase
         $gateways = array('fooGateway' => 'fooGatewayServiceId');
         $storages = array();
 
-        $container = new Container;
+        $container = new Container();
         $container->set('fooGatewayServiceId', $this->createMock(GatewayInterface::class));
 
         $registry = new ContainerAwareRegistry($gateways, $storages);
@@ -58,10 +59,10 @@ class ContainerAwareRegistryTest extends TestCase
     {
         $gateways = array();
         $storages = array(
-            'stdClass' =>  'fooStorageServiceId'
+            'stdClass' => 'fooStorageServiceId'
         );
 
-        $container = new Container;
+        $container = new Container();
         $container->set('fooStorageServiceId', $this->createMock(StorageInterface::class));
 
         $registry = new ContainerAwareRegistry($gateways, $storages);
@@ -75,7 +76,7 @@ class ContainerAwareRegistryTest extends TestCase
      */
     public function shouldReturnGatewayFactorySetToContainer()
     {
-        $container = new Container;
+        $container = new Container();
         $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));
 
         $registry = new ContainerAwareRegistry(array(), array(), array(

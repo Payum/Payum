@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -6,9 +7,9 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\RequestTokenVerifier;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
 
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {

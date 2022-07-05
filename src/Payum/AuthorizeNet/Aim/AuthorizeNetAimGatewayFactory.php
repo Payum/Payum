@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim;
 
-use Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
+use Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Bridge\Spl\ArrayObject;

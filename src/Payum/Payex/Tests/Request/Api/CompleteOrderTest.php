@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
 class CompleteOrderTest extends \PHPUnit\Framework\TestCase

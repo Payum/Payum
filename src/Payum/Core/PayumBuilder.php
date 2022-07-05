@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
@@ -497,7 +498,7 @@ class PayumBuilder
 
         $storages = $this->storages;
         foreach ($storages as $modelClass => $storage) {
-            $extensionName = 'payum.extension.storage_'.strtolower(str_replace('\\', '_', $modelClass));
+            $extensionName = 'payum.extension.storage_' . strtolower(str_replace('\\', '_', $modelClass));
 
             $config[$extensionName] = new StorageExtension($storage);
         }
@@ -626,7 +627,7 @@ class PayumBuilder
                 continue;
             }
 
-            $gatewayFactories[strtolower('omnipay_'.$type)] = new OmnipayGatewayFactory($type, $factory, [], $coreGatewayFactory);
+            $gatewayFactories[strtolower('omnipay_' . $type)] = new OmnipayGatewayFactory($type, $factory, [], $coreGatewayFactory);
         }
 
         return $gatewayFactories;

@@ -1,11 +1,12 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Extension;
 
 use Payum\Core\Bridge\Symfony\Event\ExecuteEvent;
+use Payum\Core\Bridge\Symfony\PayumEvents;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Payum\Core\Bridge\Symfony\PayumEvents;
 
 class EventDispatcherExtension implements ExtensionInterface
 {

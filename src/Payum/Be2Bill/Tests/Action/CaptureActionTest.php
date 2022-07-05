@@ -1,16 +1,17 @@
 <?php
+
 namespace Payum\Be2Bill\Tests\Action;
 
+use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\CreditCard;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
-use Payum\Be2Bill\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\GenericActionTest;

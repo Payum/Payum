@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Offline\Tests;
 
 use Payum\Core\Tests\AbstractGatewayFactoryTest;

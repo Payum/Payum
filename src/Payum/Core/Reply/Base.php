@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Reply;
 
 use Payum\Core\Exception\LogicException;

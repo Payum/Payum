@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

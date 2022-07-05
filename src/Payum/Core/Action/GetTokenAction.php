@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Action;
 
 use Payum\Core\Exception\LogicException;

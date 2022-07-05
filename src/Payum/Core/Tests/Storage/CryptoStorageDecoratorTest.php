@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Security\CryptedInterface;

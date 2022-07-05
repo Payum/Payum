@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests\Extension;
 
 use Payum\Core\Extension\Context;
