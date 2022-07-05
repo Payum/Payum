@@ -23,10 +23,10 @@ $gateway = $factory->create();
 
 $gateway->execute($currency = new GetCurrency('USD'));
 
-echo $currency->alpha3;  // USD
-echo $currency->name;    // US Dollar
-echo $currency->exp;     // 2
-echo $currency->country; // US
+echo $currency->getAlpha3();  // USD
+echo $currency->getName();    // US Dollar
+echo $currency->getExp();     // 2
+echo $currency->getCountry(); // US
 
 // and so on...
 ```
@@ -49,10 +49,10 @@ class FooAction implements ActionInterface, GatewayAwareInterface
     {
         $this->gateway->execute($currency = new GetCurrency('USD'));
         
-        echo $currency->alpha3;  // USD
-        echo $currency->name;    // US Dollar
-        echo $currency->exp;     // 2
-        echo $currency->country; // US
+        echo $currency->getAlpha3();  // USD
+        echo $currency->getName();    // US Dollar
+        echo $currency->getExp();     // 2
+        echo $currency->getCountry(); // US
     }
 }
 ```
@@ -62,11 +62,9 @@ Or directly ISO4217 service:
 ```php
 <?php
 
-use Payum\ISO4217\ISO4217;
+use Payum\Core\ISO4217\Currency;
 
-$iso4217 = new ISO4217();
-
-$currency = $iso4217->findByAlpha3('USD');
+$currency = Currency::createFromIso4217Alpha3('USD');
 
 echo $currency->getAlpha3();  // USD
 echo $currency->getName();    // US Dollar
