@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Payum\Core\Tests\GenericApiAwareActionTest;
@@ -133,7 +134,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->createMock('Klarna', array('config', 'returnAmount'));
+        $klarnaMock = $this->createMock('Klarna', array('config', 'returnAmount'));
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

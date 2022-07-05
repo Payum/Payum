@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareTrait;
@@ -10,7 +11,7 @@ class ApiAwareTraitTest extends TestCase
 {
     public function testThrowIfSetApiButApiClassNotConfigured()
     {
-        $object = new ApiAwareClass;
+        $object = new ApiAwareClass();
         $object->setApiClass(null);
 
         $this->expectException(LogicException::class);
@@ -20,7 +21,7 @@ class ApiAwareTraitTest extends TestCase
 
     public function testThrowIfSetApiButApiClassIsNotValidClass()
     {
-        $object = new ApiAwareClass;
+        $object = new ApiAwareClass();
         $object->setApiClass('invalidClass');
 
         $this->expectException(LogicException::class);
@@ -30,12 +31,12 @@ class ApiAwareTraitTest extends TestCase
 
     public function testThrowUnsupportedApi()
     {
-        $object = new ApiAwareClass;
+        $object = new ApiAwareClass();
         $object->setApiClass($this->createMock(\stdClass::class));
 
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('It must be an instance of Mock_stdClass');
-        $object->setApi(new \stdClass);
+        $object->setApi(new \stdClass());
     }
 }
 

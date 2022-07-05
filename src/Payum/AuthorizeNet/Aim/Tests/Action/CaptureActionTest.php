@@ -1,15 +1,16 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
+use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\Capture;
-use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use Omnipay\Dummy\Gateway as OmnipayGateway;
@@ -35,8 +36,8 @@ use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PayumBuilderTest extends TestCase
 {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Klarna\Invoice\Request\Api\EmailInvoice;

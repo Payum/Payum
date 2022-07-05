@@ -6,5 +6,4 @@ use Payum\Core\Request\Generic;
 
 class TransactionSearch extends Generic
 {
-
 }

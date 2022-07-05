@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Invoice;
 
 class Config

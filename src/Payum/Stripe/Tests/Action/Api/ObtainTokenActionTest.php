@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\ApiAwareInterface;
@@ -89,7 +90,6 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(
                 [$this->isInstanceOf(GetHttpRequest::class)],
                 [$this->isInstanceOf(RenderTemplate::class)]
-
             )
             ->willReturnOnConsecutiveCalls(
                 $this->returnCallback(function (GetHttpRequest $request) {

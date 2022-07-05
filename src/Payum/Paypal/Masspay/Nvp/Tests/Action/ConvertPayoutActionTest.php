@@ -1,14 +1,15 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Payum\Core\GatewayInterface;
-use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\Payout;
+use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Request\Convert;
 use Payum\Paypal\Masspay\Nvp\Action\ConvertPayoutAction;
 
 class ConvertPayoutActionTest extends GenericActionTest

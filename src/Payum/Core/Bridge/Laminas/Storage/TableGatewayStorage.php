@@ -2,10 +2,10 @@
 
 namespace Payum\Core\Bridge\Laminas\Storage;
 
+use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
-use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 
 /**
@@ -66,7 +66,7 @@ class TableGatewayStorage extends AbstractStorage
 
         if ($tableGateway instanceof LaminasTableGateway) {
             $this->tableGateway = $tableGateway;
-        } else if ($tableGateway instanceof ZendTableGateway) {
+        } elseif ($tableGateway instanceof ZendTableGateway) {
             @trigger_error(sprintf('Passing an instance of %s as the first argument to %s is deprecated and won\'t be supported in 2.0. Please using Laminas instead.', ZendTableGateway::class, self::class));
             $this->tableGateway = $tableGateway;
         } else {

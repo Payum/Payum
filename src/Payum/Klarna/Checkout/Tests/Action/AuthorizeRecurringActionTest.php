@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\ApiAwareInterface;

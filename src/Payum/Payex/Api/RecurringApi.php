@@ -1,31 +1,32 @@
 <?php
+
 namespace Payum\Payex\Api;
 
 class RecurringApi extends BaseApi
 {
-    const PERIODTYPE_HOURS = 1;
+    public const PERIODTYPE_HOURS = 1;
 
-    const PERIODTYPE_DAILY = 2;
+    public const PERIODTYPE_DAILY = 2;
 
-    const PERIODTYPE_WEEKLY = 3;
+    public const PERIODTYPE_WEEKLY = 3;
 
-    const PERIODTYPE_MONTHLY = 4;
+    public const PERIODTYPE_MONTHLY = 4;
 
-    const PERIODTYPE_QUARTERLY = 5;
+    public const PERIODTYPE_QUARTERLY = 5;
 
-    const PERIODTYPE_YEARLY = 6;
+    public const PERIODTYPE_YEARLY = 6;
 
-    const RECURRINGSTATUS_RECURRING = 1;
+    public const RECURRINGSTATUS_RECURRING = 1;
 
-    const RECURRINGSTATUS_STOPPEDBYMERCHANT = 2;
+    public const RECURRINGSTATUS_STOPPEDBYMERCHANT = 2;
 
-    const RECURRINGSTATUS_STOPPEDBYADMIN = 3;
+    public const RECURRINGSTATUS_STOPPEDBYADMIN = 3;
 
-    const RECURRINGSTATUS_STOPPEDBYCLIENT = 4;
+    public const RECURRINGSTATUS_STOPPEDBYCLIENT = 4;
 
-    const RECURRINGSTATUS_STOPPEDBYSYSTEM = 5;
+    public const RECURRINGSTATUS_STOPPEDBYSYSTEM = 5;
 
-    const RECURRINGSTATUS_FAILED = 6;
+    public const RECURRINGSTATUS_FAILED = 6;
 
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/

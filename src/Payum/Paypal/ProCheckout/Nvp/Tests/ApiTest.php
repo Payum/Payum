@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;

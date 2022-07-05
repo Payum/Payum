@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests;
 
 use Payum\Core\Tests\AbstractGatewayFactoryTest;

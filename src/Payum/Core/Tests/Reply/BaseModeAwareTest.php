@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\BaseModelAware;
@@ -56,7 +57,8 @@ class BaseModeAwareTest extends TestCase
      */
     public function testShouldAllowSetModelAndGetIt($phpType)
     {
-        $request = new class(123321) extends BaseModelAware {};
+        $request = new class(123321) extends BaseModelAware {
+        };
 
         $request->setModel($phpType);
 
@@ -68,7 +70,8 @@ class BaseModeAwareTest extends TestCase
      */
     public function testShouldAllowGetModelSetInConstructor($phpType)
     {
-        $request = new class($phpType) extends BaseModelAware {};
+        $request = new class($phpType) extends BaseModelAware {
+        };
 
         $this->assertEquals($phpType, $request->getModel());
     }

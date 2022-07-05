@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\SoapClientFactory;

@@ -1,14 +1,15 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface;
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayConfigType;
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use Payum\Core\Model\GatewayConfig;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
-use PHPUnit\Framework\MockObject\MockObject;
 
 class GatewayConfigTypeTest extends TestCase
 {

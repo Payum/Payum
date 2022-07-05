@@ -2,11 +2,11 @@
 
 namespace Payum\Sofort\Action;
 
-use Payum\Sofort\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Sofort\Api;
 
 class StatusAction implements ActionInterface
 {

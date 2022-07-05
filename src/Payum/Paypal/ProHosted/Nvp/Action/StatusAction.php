@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -21,7 +22,7 @@ class StatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         foreach (range(0, 9) as $index) {
-            if ($model['L_ERRORCODE'.$index]) {
+            if ($model['L_ERRORCODE' . $index]) {
                 $request->markFailed();
 
                 return;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 interface ExtensionInterface

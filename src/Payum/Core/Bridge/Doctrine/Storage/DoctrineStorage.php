@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Doctrine\Storage;
 
 use Doctrine\Persistence\ObjectManager;

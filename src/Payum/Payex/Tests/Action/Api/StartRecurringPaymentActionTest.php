@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Action\Api;
 
 use Payum\Payex\Action\Api\StartRecurringPaymentAction;

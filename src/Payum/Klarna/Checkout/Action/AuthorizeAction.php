@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
 use Payum\Core\Action\ActionInterface;

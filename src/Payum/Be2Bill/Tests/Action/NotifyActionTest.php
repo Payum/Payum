@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Action\NotifyAction;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

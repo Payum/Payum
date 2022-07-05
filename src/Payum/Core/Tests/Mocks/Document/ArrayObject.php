@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;

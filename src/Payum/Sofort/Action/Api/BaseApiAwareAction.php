@@ -2,10 +2,10 @@
 
 namespace Payum\Sofort\Action\Api;
 
-use Payum\Sofort\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Sofort\Api;
 
 /**
  * @deprecated since 1.4.1 will be removed in 2.x

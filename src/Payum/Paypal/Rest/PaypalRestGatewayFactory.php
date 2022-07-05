@@ -1,15 +1,16 @@
 <?php
+
 namespace Payum\Paypal\Rest;
 
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\Rest\Action\CaptureAction;
+use Payum\Paypal\Rest\Action\ConvertAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Action\SyncAction;
-use Payum\Paypal\Rest\Action\ConvertAction;
-use Payum\Core\Exception\InvalidArgumentException;
 
 class PaypalRestGatewayFactory extends GatewayFactory
 {

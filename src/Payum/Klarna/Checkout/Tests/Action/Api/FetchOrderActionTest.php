@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
-use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
-use Payum\Core\Request\Generic;
 
 class FetchOrderActionTest extends GenericActionTest
 {

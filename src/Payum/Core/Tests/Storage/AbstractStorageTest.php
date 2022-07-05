@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Model\Identity;
@@ -25,11 +26,21 @@ class AbstractStorageTest extends TestCase
     public function testShouldCreateInstanceOfModelClassSetInConstructor()
     {
         $storage = new class('stdClass') extends AbstractStorage {
-            protected function doUpdateModel($model) {}
-            protected function doDeleteModel($model) {}
-            protected function doGetIdentity($model) {}
-            protected function doFind($id) {}
-            public function findBy(array $criteria) {}
+            protected function doUpdateModel($model)
+            {
+            }
+            protected function doDeleteModel($model)
+            {
+            }
+            protected function doGetIdentity($model)
+            {
+            }
+            protected function doFind($id)
+            {
+            }
+            public function findBy(array $criteria)
+            {
+            }
         };
 
         $model = $storage->create();

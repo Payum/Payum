@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
@@ -91,7 +92,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action = new StatusAction();
 
         $request = new GetHumanStatus(array(
-            'AMT'          => 21,
+            'AMT' => 21,
             'L_ERRORCODE0' => 'foo',
         ));
 

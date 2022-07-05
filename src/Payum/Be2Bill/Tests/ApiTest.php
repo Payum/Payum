@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Tests;
 
 use Http\Message\MessageFactory\GuzzleMessageFactory;

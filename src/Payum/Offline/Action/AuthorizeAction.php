@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Authorize;
-use Payum\Offline\Constants;
 use Payum\Core\Request\Capture;
+use Payum\Offline\Constants;
 
 class AuthorizeAction implements ActionInterface
 {

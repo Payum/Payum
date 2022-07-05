@@ -1,29 +1,30 @@
 <?php
+
 namespace Payum\Core\Request;
 
 class GetHumanStatus extends BaseGetStatus
 {
-    const STATUS_CAPTURED = 'captured';
+    public const STATUS_CAPTURED = 'captured';
 
-    const STATUS_AUTHORIZED = 'authorized';
+    public const STATUS_AUTHORIZED = 'authorized';
 
-    const STATUS_PAYEDOUT = 'payedout';
+    public const STATUS_PAYEDOUT = 'payedout';
 
-    const STATUS_REFUNDED = 'refunded';
+    public const STATUS_REFUNDED = 'refunded';
 
-    const STATUS_UNKNOWN = 'unknown';
+    public const STATUS_UNKNOWN = 'unknown';
 
-    const STATUS_FAILED = 'failed';
+    public const STATUS_FAILED = 'failed';
 
-    const STATUS_SUSPENDED = 'suspended';
+    public const STATUS_SUSPENDED = 'suspended';
 
-    const STATUS_EXPIRED = 'expired';
+    public const STATUS_EXPIRED = 'expired';
 
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_CANCELED = 'canceled';
+    public const STATUS_CANCELED = 'canceled';
 
-    const STATUS_NEW = 'new';
+    public const STATUS_NEW = 'new';
 
     /**
      * {@inheritDoc}

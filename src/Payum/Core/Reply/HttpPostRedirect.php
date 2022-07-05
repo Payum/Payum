@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Reply;
 
 class HttpPostRedirect extends HttpResponse
@@ -57,7 +58,7 @@ class HttpPostRedirect extends HttpResponse
                 '<input type="hidden" name="%1$s" value="%2$s" />',
                 htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
                 htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
-            )."\n";
+            ) . "\n";
         }
 
         $content = <<<'HTML'

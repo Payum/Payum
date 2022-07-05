@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Tests;
 
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;

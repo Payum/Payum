@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Paypal\Ipn\Tests;
 
 use GuzzleHttp\Psr7\Response;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
-use Psr\Http\Message\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {

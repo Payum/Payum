@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\AgreementApi;
@@ -191,11 +192,22 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
     }
 }
 
-class AgreementSoapClient extends \SoapClient {
-    public function __construct() {}
+class AgreementSoapClient extends \SoapClient
+{
+    public function __construct()
+    {
+    }
 
-    public function CreateAgreement3() {}
-    public function Check() {}
-    public function DeleteAgreement() {}
-    public function AutoPay3() {}
+    public function CreateAgreement3()
+    {
+    }
+    public function Check()
+    {
+    }
+    public function DeleteAgreement()
+    {
+    }
+    public function AutoPay3()
+    {
+    }
 };

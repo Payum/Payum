@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;

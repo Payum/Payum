@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Core;
 
-use Http\Adapter\Guzzle7\Client as HttpGuzzle7Client;
-use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
-use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
 use Http\Adapter\Buzz\Client as HttpBuzzClient;
+use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
+use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
+use Http\Adapter\Guzzle7\Client as HttpGuzzle7Client;
 use Http\Client\Curl\Client as HttpCurlClient;
 use Http\Client\Socket\Client as HttpSocketClient;
 use Http\Discovery\HttpClientDiscovery;
@@ -74,7 +75,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         $config->defaults($this->defaultConfig);
 
         $config->defaults([
-            'httplug.message_factory'=>function (ArrayObject $config) {
+            'httplug.message_factory' => function (ArrayObject $config) {
                 if (class_exists(MessageFactoryDiscovery::class)) {
                     return MessageFactoryDiscovery::find();
                 }
@@ -93,7 +94,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new \LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
-            'httplug.stream_factory'=>function (ArrayObject $config) {
+            'httplug.stream_factory' => function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
                     return StreamFactoryDiscovery::find();
                 }
@@ -112,7 +113,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new \LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
-            'httplug.client'=>function (ArrayObject $config) {
+            'httplug.client' => function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
                     return HttpClientDiscovery::find();
                 }
@@ -147,7 +148,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new \LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
-            'payum.http_client'=>function (ArrayObject $config) {
+            'payum.http_client' => function (ArrayObject $config) {
                 return new HttplugClient($config['httplug.client']);
             },
             'payum.template.layout' => '@PayumCore/layout.html.twig',
@@ -200,7 +201,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
 
         $config['payum.paths'] = array_replace([
-            'PayumCore' => __DIR__.'/Resources/views',
+            'PayumCore' => __DIR__ . '/Resources/views',
         ], $config['payum.paths'] ?: []);
 
         return (array) $config;
@@ -220,7 +221,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
 
         foreach ($config as $name => $value) {
-            if (is_callable($value) && !(is_string($value) && function_exists('\\'.$value))) {
+            if (is_callable($value) && !(is_string($value) && function_exists('\\' . $value))) {
                 $config[$name] = call_user_func($value, $config);
             }
         }

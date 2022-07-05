@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\GatewayConfig;
-use Payum\Core\Gateway;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use Payum\Core\Registry\RegistryInterface;
@@ -66,7 +67,8 @@ class DynamicRegistryTest extends TestCase
         $factoryName = 'theFactoryName';
 
         $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig(
+            array(
             'factory' => $factoryName,
             'foo' => 'fooVal',
             'bar' => 'barVal')
@@ -152,7 +154,8 @@ class DynamicRegistryTest extends TestCase
         $factoryName = 'theFactoryName';
 
         $gatewayConfig = new GatewayConfig();
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig(
+            array(
             'factory' => $factoryName,
             'foo' => 'fooVal',
             'bar' => 'barVal')
@@ -425,7 +428,7 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $registry->getStorage(new \stdClass);
+        $registry->getStorage(new \stdClass());
     }
 
     /**

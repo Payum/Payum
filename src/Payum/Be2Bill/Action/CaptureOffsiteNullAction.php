@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
-use League\Uri\Http as HttpUri;
 use League\Uri\Components\Query;
+use League\Uri\Http as HttpUri;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;

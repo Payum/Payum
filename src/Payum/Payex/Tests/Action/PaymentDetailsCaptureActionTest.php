@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
@@ -6,9 +7,9 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
-use Payum\Payex\Request\Api\StartRecurringPayment;
 use Payum\Payex\Request\Api\CompleteOrder;
 use Payum\Payex\Request\Api\InitializeOrder;
+use Payum\Payex\Request\Api\StartRecurringPayment;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
 {

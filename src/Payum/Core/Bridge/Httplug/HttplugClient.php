@@ -1,9 +1,10 @@
 <?php
+
 namespace Payum\Core\Bridge\Httplug;
 
+use Http\Client\HttpClient;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
-use Http\Client\HttpClient;
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking

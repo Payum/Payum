@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Storage;
 
-use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\TestModel;
 
 class DoctrineStorageMongoOdmTest extends MongoTest

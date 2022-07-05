@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
-use Payum\Core\Model\Token;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Model\Token;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class HttpRequestVerifierTest extends TestCase
 {

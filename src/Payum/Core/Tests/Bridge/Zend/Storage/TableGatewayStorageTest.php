@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Zend\Storage;
 
+use Laminas\Db\TableGateway\TableGateway;
 use Payum\Core\Bridge\Zend\Storage\TableGatewayStorage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Laminas\Db\TableGateway\TableGateway;
 
 class TableGatewayStorageTest extends TestCase
 {

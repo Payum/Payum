@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
 class InitializeOrderTest extends \PHPUnit\Framework\TestCase

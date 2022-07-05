@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

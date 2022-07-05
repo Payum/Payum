@@ -9,7 +9,7 @@ use Payum\Sofort\Api;
 
 class StatusActionTest extends GenericActionTest
 {
-    const TRANSACTION_ID = '1597-FS16-234D-A324';
+    public const TRANSACTION_ID = '1597-FS16-234D-A324';
 
     protected $requestClass = GetHumanStatus::class;
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpPostRedirect;

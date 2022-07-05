@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 use Payum\Core\Action\ActionInterface;

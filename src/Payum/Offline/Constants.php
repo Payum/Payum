@@ -1,25 +1,26 @@
 <?php
+
 namespace Payum\Offline;
 
 abstract class Constants
 {
-    const FIELD_PAID = 'paid';
+    public const FIELD_PAID = 'paid';
 
-    const FIELD_PAYOUT = 'payout';
+    public const FIELD_PAYOUT = 'payout';
 
-    const FIELD_STATUS = 'status';
+    public const FIELD_STATUS = 'status';
 
-    const STATUS_CAPTURED = 'captured';
+    public const STATUS_CAPTURED = 'captured';
 
-    const STATUS_AUTHORIZED = 'authorized';
+    public const STATUS_AUTHORIZED = 'authorized';
 
-    const STATUS_PAYEDOUT = 'payedout';
+    public const STATUS_PAYEDOUT = 'payedout';
 
-    const STATUS_REFUNDED = 'refunded';
+    public const STATUS_REFUNDED = 'refunded';
 
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
     
-    const STATUS_CANCELED = 'canceled';
+    public const STATUS_CANCELED = 'canceled';
 
     final private function __construct()
     {

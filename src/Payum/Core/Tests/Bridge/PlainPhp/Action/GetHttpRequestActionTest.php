@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Action;
 
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;

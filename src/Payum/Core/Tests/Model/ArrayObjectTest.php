@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\ArrayObject;

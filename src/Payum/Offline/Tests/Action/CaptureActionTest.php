@@ -1,10 +1,11 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Request\Capture;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
-use Payum\Core\Request\Capture;
 
 class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {

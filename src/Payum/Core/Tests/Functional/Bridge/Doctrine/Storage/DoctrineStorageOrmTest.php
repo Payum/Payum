@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Storage;
 
-use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\TestModel;
 
 class DoctrineStorageOrmTest extends OrmTest

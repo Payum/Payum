@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;

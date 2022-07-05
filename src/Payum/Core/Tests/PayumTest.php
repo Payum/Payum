@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -11,8 +12,8 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PayumTest extends TestCase
 {

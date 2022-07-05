@@ -1,18 +1,19 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Extension\Context;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Request\Capture;
-use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Request\Capture;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Payum\Core\Extension\ExtensionInterface;
 use function get_class;
 
 class LogExecutedActionsExtensionTest extends TestCase
@@ -99,8 +100,8 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->expects($this->exactly(2))
             ->method('debug')
             ->withConsecutive(
-                ['[Payum] 1# '.get_class($action).'::execute(string)'],
-                ['[Payum] 1# '.get_class($action).'::execute(array)']
+                ['[Payum] 1# ' . get_class($action) . '::execute(string)'],
+                ['[Payum] 1# ' . get_class($action) . '::execute(array)']
             )
         ;
 
@@ -128,8 +129,8 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->expects($this->exactly(2))
             ->method('debug')
             ->withConsecutive(
-                ['[Payum] 1# '.get_class($action).'::execute(stdClass)'],
-                ['[Payum] 1# '.get_class($action).'::execute(NamespacedRequest)']
+                ['[Payum] 1# ' . get_class($action) . '::execute(stdClass)'],
+                ['[Payum] 1# ' . get_class($action) . '::execute(NamespacedRequest)']
             )
         ;
 
@@ -156,7 +157,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: ArrayObject})')
+            ->with('[Payum] 1# ' . get_class($action) . '::execute(Capture{model: ArrayObject})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -177,7 +178,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# '.get_class($action).'::execute(Capture{model: stdClass})')
+            ->with('[Payum] 1# ' . get_class($action) . '::execute(Capture{model: stdClass})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -199,7 +200,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws reply '.$ro->getShortName())
+            ->with('[Payum] 1# FooAction::execute(string) throws reply ' . $ro->getShortName())
         ;
 
         $context = new Context($this->createGatewayMock(), 'string', array());
@@ -220,7 +221,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# FooAction::execute(string) throws reply HttpRedirect{url: '.$reply->getUrl().'}')
+            ->with('[Payum] 1# FooAction::execute(string) throws reply HttpRedirect{url: ' . $reply->getUrl() . '}')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);

@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 abstract class GenericActionTest extends TestCase
 {

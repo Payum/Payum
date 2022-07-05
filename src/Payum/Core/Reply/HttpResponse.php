@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Reply;
 
 class HttpResponse extends Base

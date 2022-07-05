@@ -5,8 +5,8 @@ namespace Payum\Sofort\Tests\Action\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Sofort\Action\Api\RefundTransactionAction;
-use Payum\Sofort\Request\Api\RefundTransaction;
 use Payum\Sofort\Api;
+use Payum\Sofort\Request\Api\RefundTransaction;
 
 class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 {

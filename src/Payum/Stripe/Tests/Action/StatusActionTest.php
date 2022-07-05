@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;

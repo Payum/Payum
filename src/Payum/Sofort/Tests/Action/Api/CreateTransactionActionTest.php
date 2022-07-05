@@ -4,9 +4,9 @@ namespace Payum\Sofort\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
-use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Sofort\Action\Api\CreateTransactionAction;
 use Payum\Sofort\Api;
+use Payum\Sofort\Request\Api\CreateTransaction;
 
 class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
 {

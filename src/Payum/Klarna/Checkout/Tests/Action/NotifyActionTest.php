@@ -1,14 +1,15 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\NotifyAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
-use Payum\Core\Request\Sync;
 
 class NotifyActionTest extends GenericActionTest
 {

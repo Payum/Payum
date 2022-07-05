@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use League\Uri\Http as HttpUri;
@@ -53,7 +54,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         } else {
             if ($model['cancel_return']) {
                 $cancelUri = HttpUri::createFromString($model['cancel_return']);
-                $cancelUri  = UriModifier::mergeQuery($cancelUri, 'cancelled=1');
+                $cancelUri = UriModifier::mergeQuery($cancelUri, 'cancelled=1');
 
                 $model['cancel_return'] = (string) $cancelUri;
             }

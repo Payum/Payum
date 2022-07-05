@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 class BaseApiAwareActionTest extends \PHPUnit\Framework\TestCase

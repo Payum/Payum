@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Twig\Action;
 
 use Payum\Core\Action\ActionInterface;

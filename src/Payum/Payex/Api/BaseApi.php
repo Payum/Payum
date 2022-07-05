@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -8,16 +9,16 @@ abstract class BaseApi
     /**
      * Returns OK if request is successful.
      */
-    const ERRORCODE_OK = 'OK';
+    public const ERRORCODE_OK = 'OK';
 
-    const TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER = 'OperationCancelledbyCustomer';
+    public const TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER = 'OperationCancelledbyCustomer';
 
-    const PURCHASEOPERATION_SALE = 'SALE';
+    public const PURCHASEOPERATION_SALE = 'SALE';
 
     /**
      * If AUTHORIZATION is submitted, this indicates that the order will be a 2-phased transaction if the payment method supports it.
      */
-    const PURCHASEOPERATION_AUTHORIZATION = 'AUTHORIZATION';
+    public const PURCHASEOPERATION_AUTHORIZATION = 'AUTHORIZATION';
 
     /**
      * @var SoapClientFactory
@@ -66,7 +67,7 @@ abstract class BaseApi
 
         $response = @$client->$operation($parameters);
 
-        $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->{$operation.'Result'}));
+        $result = $this->convertSimpleXmlToArray(new \SimpleXMLElement($response->{$operation . 'Result'}));
 
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
@@ -93,7 +94,7 @@ abstract class BaseApi
             $orderedParameters[$parametersKey] = $parameters[$parametersKey];
         }
 
-        return md5(trim(implode("", $orderedParameters)).$this->options['encryption_key']);
+        return md5(trim(implode("", $orderedParameters)) . $this->options['encryption_key']);
     }
 
     /**

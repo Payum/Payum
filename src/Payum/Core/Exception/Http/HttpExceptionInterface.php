@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Exception\Http;
 
 use Payum\Core\Exception\ExceptionInterface;

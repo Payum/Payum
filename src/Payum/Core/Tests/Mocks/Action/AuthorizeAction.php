@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\ActionInterface;

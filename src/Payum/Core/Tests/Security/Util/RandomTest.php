@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Security\Util;
 
 use Payum\Core\Security\Util\Random;

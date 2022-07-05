@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Payum\AuthorizeNet\Aim\Action\StatusAction;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\BaseGetStatus;

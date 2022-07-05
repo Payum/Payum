@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Event;
 
 use Payum\Core\Extension\Context;

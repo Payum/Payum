@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;

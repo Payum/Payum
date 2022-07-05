@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\PlainPhp\Action;
 
 use Payum\Core\Action\ActionInterface;

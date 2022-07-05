@@ -1,8 +1,9 @@
 <?php
+
 namespace Payum\Be2Bill;
 
-use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Be2Bill\Action\CaptureAction;
+use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Be2Bill\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;

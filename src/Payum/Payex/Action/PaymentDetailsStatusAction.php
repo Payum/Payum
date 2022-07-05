@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Payex\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
-use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\RecurringApi;
 
 class PaymentDetailsStatusAction implements ActionInterface
 {

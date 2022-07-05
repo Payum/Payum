@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Action\ActionInterface;
@@ -107,6 +108,6 @@ class ActionGenericTokenFactoryAware implements ActionInterface, GenericTokenFac
 
     public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
     {
-        $this->tokenFactory  = $genericTokenFactory;
+        $this->tokenFactory = $genericTokenFactory;
     }
 }

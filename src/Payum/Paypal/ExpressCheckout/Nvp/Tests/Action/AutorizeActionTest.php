@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -194,7 +195,7 @@ class AutorizeActionTest extends GenericActionTest
         $testCase = $this;
 
         $cancelUrl = 'http://thecancelurl/';
-        $expectedCancelUrl = $cancelUrl.'?cancelled=1';
+        $expectedCancelUrl = $cancelUrl . '?cancelled=1';
 
         $token = new Token();
         $token->setTargetUrl($cancelUrl);
@@ -232,7 +233,7 @@ class AutorizeActionTest extends GenericActionTest
         $testCase = $this;
 
         $cancelUrl = 'http://thecancelurl/?existingGetParam=testValue';
-        $expectedCancelUrl = $cancelUrl.'&cancelled=1';
+        $expectedCancelUrl = $cancelUrl . '&cancelled=1';
 
         $token = new Token();
         $token->setTargetUrl($cancelUrl);

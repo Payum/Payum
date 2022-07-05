@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -56,7 +57,7 @@ class GetHttpRequestAction implements ActionInterface
                     $mainRequest = $this->httpRequestStack->getMasterRequest();
                 }
 
-                if(null !== $mainRequest) {
+                if (null !== $mainRequest) {
                     $this->updateRequest($request, $mainRequest);
                 }
             }

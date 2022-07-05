@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Model\CreditCard;
@@ -23,7 +24,7 @@ class CreditCardType extends AbstractType
                 CreditCardExpirationDateType::class,
                 array(
                     'input' => 'datetime',
-                    'widget' =>'choice',
+                    'widget' => 'choice',
                     'label' => 'form.credit_card.expire_at',
                 )
             );

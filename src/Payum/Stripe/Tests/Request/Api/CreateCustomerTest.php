@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;

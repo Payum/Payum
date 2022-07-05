@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -21,7 +22,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         foreach (range(0, 9) as $index) {
-            if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED == $model['L_ERRORCODE'.$index]) {
+            if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED == $model['L_ERRORCODE' . $index]) {
                 $request->markCanceled();
 
                 return;
@@ -29,7 +30,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         foreach (range(0, 9) as $index) {
-            if ($model['L_ERRORCODE'.$index]) {
+            if ($model['L_ERRORCODE' . $index]) {
                 $request->markFailed();
 
                 return;
@@ -93,7 +94,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             $voidedCounter = 0;
             $allCounter = 0;
             foreach (range(0, 9) as $index) {
-                if (null === $paymentStatus = $model['PAYMENTINFO_'.$index.'_PAYMENTSTATUS']) {
+                if (null === $paymentStatus = $model['PAYMENTINFO_' . $index . '_PAYMENTSTATUS']) {
                     continue;
                 }
 
@@ -114,7 +115,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PENDING,
                 );
                 if (in_array($paymentStatus, $pendingStatuses)) {
-                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_'.$index.'_PENDINGREASON']) {
+                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $authorizedCounter++;
                     } else {
                         $request->markPending();
@@ -127,7 +128,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_VOIDED,
                 );
                 if (in_array($paymentStatus, $canceledStatuses)) {
-                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_'.$index.'_PENDINGREASON']) {
+                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $voidedCounter++;
                     }
                 }

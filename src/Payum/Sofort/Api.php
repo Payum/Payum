@@ -8,19 +8,19 @@ use Sofort\SofortLib\TransactionData;
 
 class Api
 {
-    const STATUS_LOSS = 'loss';
-    const SUB_LOSS = 'not_credited';
-    const STATUS_PENDING = 'pending';
-    const SUB_PENDING = 'not_credited_yet';
-    const STATUS_RECEIVED = 'received';
-    const SUB_CREDITED = 'credited';
-    const SUB_PARTIALLY = 'partially_credited';
-    const SUB_OVERPAYMENT = 'overpayment';
-    const STATUS_REFUNDED = 'refunded';
-    const SUB_COMPENSATION = 'compensation';
-    const SUB_REFUNDED = 'refunded';
-    const STATUS_UNTRACEABLE = 'untraceable';
-    const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
+    public const STATUS_LOSS = 'loss';
+    public const SUB_LOSS = 'not_credited';
+    public const STATUS_PENDING = 'pending';
+    public const SUB_PENDING = 'not_credited_yet';
+    public const STATUS_RECEIVED = 'received';
+    public const SUB_CREDITED = 'credited';
+    public const SUB_PARTIALLY = 'partially_credited';
+    public const SUB_OVERPAYMENT = 'overpayment';
+    public const STATUS_REFUNDED = 'refunded';
+    public const SUB_COMPENSATION = 'compensation';
+    public const SUB_REFUNDED = 'refunded';
+    public const STATUS_UNTRACEABLE = 'untraceable';
+    public const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
 
     protected $options = [
         'config_key' => null,
@@ -102,7 +102,7 @@ class Api
             'getLanguageCode' => '',
             'getCurrency' => '',
             'getTransaction' => '',
-            'getReason' => array(0,0),
+            'getReason' => array(0, 0),
             'getUserVariable' => 0,
             'getTime' => '',
             'getProjectId' => '',

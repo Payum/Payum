@@ -1,15 +1,16 @@
 <?php
+
 namespace Payum\Skeleton;
 
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayFactory;
 use Payum\Skeleton\Action\AuthorizeAction;
 use Payum\Skeleton\Action\CancelAction;
-use Payum\Skeleton\Action\ConvertPaymentAction;
 use Payum\Skeleton\Action\CaptureAction;
+use Payum\Skeleton\Action\ConvertPaymentAction;
 use Payum\Skeleton\Action\NotifyAction;
 use Payum\Skeleton\Action\RefundAction;
 use Payum\Skeleton\Action\StatusAction;
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayFactory;
 
 class SkeletonGatewayFactory extends GatewayFactory
 {

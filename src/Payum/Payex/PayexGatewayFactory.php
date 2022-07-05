@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -9,18 +10,18 @@ use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Action\Api\CheckOrderAction;
 use Payum\Payex\Action\Api\CheckRecurringPaymentAction;
+use Payum\Payex\Action\Api\CompleteOrderAction;
 use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Action\Api\DeleteAgreementAction;
+use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Action\Api\StartRecurringPaymentAction;
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
-use Payum\Payex\Action\ConvertPaymentAction;
-use Payum\Payex\Action\PaymentDetailsSyncAction;
-use Payum\Payex\Action\Api\CompleteOrderAction;
-use Payum\Payex\Action\Api\InitializeOrderAction;
-use Payum\Payex\Action\PaymentDetailsCaptureAction;
-use Payum\Payex\Action\PaymentDetailsStatusAction;
 use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
+use Payum\Payex\Action\ConvertPaymentAction;
+use Payum\Payex\Action\PaymentDetailsCaptureAction;
+use Payum\Payex\Action\PaymentDetailsStatusAction;
+use Payum\Payex\Action\PaymentDetailsSyncAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;

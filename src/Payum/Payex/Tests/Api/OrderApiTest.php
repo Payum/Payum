@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\OrderApi;
@@ -157,10 +158,19 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
     }
 }
 
-class OrderSoapClient extends \SoapClient {
-    public function __construct() {}
+class OrderSoapClient extends \SoapClient
+{
+    public function __construct()
+    {
+    }
 
-    public function Initialize8() {}
-    public function Complete() {}
-    public function Check2() {}
+    public function Initialize8()
+    {
+    }
+    public function Complete()
+    {
+    }
+    public function Check2()
+    {
+    }
 };

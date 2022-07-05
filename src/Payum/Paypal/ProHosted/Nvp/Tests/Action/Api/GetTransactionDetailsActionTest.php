@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
 
 use Payum\Core\ApiAwareInterface;

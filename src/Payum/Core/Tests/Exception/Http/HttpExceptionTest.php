@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Exception\Http;
 
 use GuzzleHttp\Psr7\Request;

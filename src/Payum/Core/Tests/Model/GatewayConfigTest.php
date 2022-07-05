@@ -1,12 +1,13 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class GatewayConfigTest extends TestCase
 {
@@ -74,11 +75,11 @@ class GatewayConfigTest extends TestCase
         $config = new GatewayConfig();
         $config->setConfig($encryptedConfig);
 
-        $this->assertSame($encryptedConfig,  $config->getConfig());
+        $this->assertSame($encryptedConfig, $config->getConfig());
 
         $config->decrypt($this->createDummyCypher());
 
-        $this->assertSame($expectedDecryptedConfig,  $config->getConfig());
+        $this->assertSame($expectedDecryptedConfig, $config->getConfig());
     }
 
     public function testShouldDoNothingOnDecryptIfConfigIsNotEncrypted()
@@ -92,7 +93,7 @@ class GatewayConfigTest extends TestCase
         $config = new GatewayConfig();
         $config->setConfig($plainConfig);
 
-        $this->assertSame($plainConfig,  $config->getConfig());
+        $this->assertSame($plainConfig, $config->getConfig());
 
         $config->decrypt($this->createDummyCypher());
 
@@ -132,16 +133,16 @@ class GatewayConfigTest extends TestCase
         $mock
             ->method('encrypt')
             ->with($this->anything())
-            ->willReturnCallback(function($value) {
-                return 'encrypted-'.$value;
+            ->willReturnCallback(function ($value) {
+                return 'encrypted-' . $value;
             })
         ;
 
         $mock
             ->method('decrypt')
             ->with($this->anything())
-            ->willReturnCallback(function($value) {
-                return 'decrypted-'.$value;
+            ->willReturnCallback(function ($value) {
+                return 'decrypted-' . $value;
             })
         ;
 

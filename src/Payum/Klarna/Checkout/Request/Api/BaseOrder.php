@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Request\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use Payum\Core\Tests\AbstractGatewayFactoryTest;

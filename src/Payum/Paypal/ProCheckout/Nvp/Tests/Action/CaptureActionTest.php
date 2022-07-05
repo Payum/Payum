@@ -1,15 +1,16 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Tests\GenericActionTest;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Model\CreditCard;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\Capture;
-use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Tests\GenericActionTest;
+use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class CaptureActionTest extends GenericActionTest
 {

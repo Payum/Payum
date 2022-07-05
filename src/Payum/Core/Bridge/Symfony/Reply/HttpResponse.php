@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Reply;
 
 use Payum\Core\Reply\Base;

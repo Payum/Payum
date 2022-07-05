@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\LogicException;
@@ -51,8 +52,8 @@ class FilesystemStorage extends AbstractStorage
             return $this->identityMap[$id];
         }
 
-        if (file_exists($this->storageDir.'/payum-model-'.$id)) {
-            return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir.'/payum-model-'.$id));
+        if (file_exists($this->storageDir . '/payum-model-' . $id)) {
+            return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir . '/payum-model-' . $id));
         }
     }
 
@@ -78,7 +79,7 @@ class FilesystemStorage extends AbstractStorage
         $rp->setAccessible(false);
 
         $this->identityMap[$id] = $model;
-        file_put_contents($this->storageDir.'/payum-model-'.$id, serialize($model));
+        file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
     }
 
     /**
@@ -90,7 +91,7 @@ class FilesystemStorage extends AbstractStorage
         $rp->setAccessible(true);
 
         if ($id = $rp->getValue($model)) {
-            unlink($this->storageDir.'/payum-model-'.$id);
+            unlink($this->storageDir . '/payum-model-' . $id);
             unset($this->identityMap[$id]);
         }
     }
