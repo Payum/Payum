@@ -440,7 +440,6 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-
     /**
      * @test
      */

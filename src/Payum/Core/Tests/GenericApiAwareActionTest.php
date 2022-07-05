@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 abstract class GenericApiAwareActionTest extends TestCase
 {
     abstract protected function getApiClass();
+
     abstract protected function getActionClass(): string;
 
     public function testShouldImplementApiAwareInterface()

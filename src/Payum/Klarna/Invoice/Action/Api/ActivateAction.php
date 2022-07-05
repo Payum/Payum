@@ -37,8 +37,7 @@ class ActivateAction extends BaseApiAwareAction
      */
     public function supports($request)
     {
-        return
-            $request instanceof Activate &&
+        return $request instanceof Activate &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

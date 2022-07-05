@@ -44,8 +44,7 @@ class SetExpressCheckoutAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof SetExpressCheckout &&
+        return             $request instanceof SetExpressCheckout &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

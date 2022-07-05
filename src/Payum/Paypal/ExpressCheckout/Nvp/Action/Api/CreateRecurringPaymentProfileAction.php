@@ -49,8 +49,7 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
      */
     public function supports($request)
     {
-        return
-            $request instanceof CreateRecurringPaymentProfile &&
+        return             $request instanceof CreateRecurringPaymentProfile &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

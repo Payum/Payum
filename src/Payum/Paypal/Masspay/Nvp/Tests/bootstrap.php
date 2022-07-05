@@ -2,7 +2,7 @@
 
 use Payum\Core\GatewayInterface;
 
-if (!$loader = @include __DIR__ . '/../vendor/autoload.php') {
+if (! $loader = @include __DIR__ . '/../vendor/autoload.php') {
     echo <<<EOM
 You must set up the project dependencies by running the following commands:
 

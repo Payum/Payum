@@ -44,8 +44,7 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof DeleteAgreement &&
+        return             $request instanceof DeleteAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

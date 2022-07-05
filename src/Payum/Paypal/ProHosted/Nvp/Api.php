@@ -18,10 +18,15 @@ use Payum\Core\HttpClientInterface;
 class Api
 {
     public const VERSION = '65.2';
+
     public const ACK_SUCCESS = 'Success';
+
     public const ACK_SUCCESS_WITH_WARNING = 'SuccessWithWarning';
+
     public const ACK_FAILURE = 'Failure';
+
     public const ACK_FAILUREWITHWARNING = 'FailureWithWarning';
+
     public const ACK_WARNING = 'Warning';
 
     /**
@@ -87,11 +92,13 @@ class Api
     public const PAYMENTSTATUS_PROCESSED = 'Processed';
 
     public const PAYERSTATUS_VERIFIED = 'verified';
+
     public const PAYERSTATUS_UNVERIFIED = 'unverified';
 
     public const PENDINGREASON_AUTHORIZATION = 'authorization';
 
     public const PAYMENTACTION_SALE = 'sale';
+
     public const FORM_CMD = '_hosted-payment';
 
     /**
@@ -208,7 +215,7 @@ class Api
     {
         return $this->options['sandbox'];
     }
-    
+
     /**
      * @param array $fields
      *

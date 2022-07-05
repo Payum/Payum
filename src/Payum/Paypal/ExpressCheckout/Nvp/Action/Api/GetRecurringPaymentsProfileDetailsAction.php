@@ -42,8 +42,7 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetRecurringPaymentsProfileDetails &&
+        return $request instanceof GetRecurringPaymentsProfileDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

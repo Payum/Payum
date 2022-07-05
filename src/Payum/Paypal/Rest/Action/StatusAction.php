@@ -65,8 +65,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
+        return $request instanceof GetStatusInterface &&
             ($request->getModel() instanceof Payment || $request->getModel() instanceof \ArrayAccess)
         ;
     }

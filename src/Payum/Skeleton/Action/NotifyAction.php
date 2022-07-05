@@ -31,8 +31,7 @@ class NotifyAction implements ActionInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
+        return             $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

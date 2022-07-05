@@ -44,8 +44,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CompleteOrder &&
+        return             $request instanceof CompleteOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -44,8 +44,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CheckOrder &&
+        return $request instanceof CheckOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

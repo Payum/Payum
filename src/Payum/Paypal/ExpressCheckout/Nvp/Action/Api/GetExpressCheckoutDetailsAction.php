@@ -43,8 +43,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
      */
     public function supports($request)
     {
-        return
-            $request instanceof GetExpressCheckoutDetails &&
+        return $request instanceof GetExpressCheckoutDetails &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

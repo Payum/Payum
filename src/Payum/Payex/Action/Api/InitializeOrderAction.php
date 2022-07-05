@@ -69,8 +69,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof InitializeOrder &&
+        return $request instanceof InitializeOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

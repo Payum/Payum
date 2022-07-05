@@ -24,7 +24,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
 {
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     /**
      * {@inheritDoc}
      */

@@ -269,6 +269,7 @@ class Api
         $params['IDENTIFIER'] = $this->options['identifier'];
         $params['HASH'] = $this->calculateHash($params);
     }
+
     /**
      * @return string
      */

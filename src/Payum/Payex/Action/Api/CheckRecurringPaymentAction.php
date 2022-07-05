@@ -44,8 +44,7 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
      */
     public function supports($request)
     {
-        return
-            $request instanceof CheckRecurringPayment &&
+        return             $request instanceof CheckRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

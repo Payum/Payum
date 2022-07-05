@@ -12,7 +12,7 @@ class TwigUtil
      * @var \SplObjectStorage
      */
     protected static $storage;
-    
+
     /**
      * @param Environment $twig
      * @param string[] $paths
@@ -22,7 +22,7 @@ class TwigUtil
         if (false == static::$storage) {
             static::$storage = new \SplObjectStorage();
         }
-        
+
         $storage = static::$storage;
 
         /** @var FilesystemLoader $payumLoader */

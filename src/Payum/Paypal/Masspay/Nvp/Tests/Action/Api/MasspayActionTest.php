@@ -13,6 +13,7 @@ class MasspayActionTest extends GenericActionTest
     protected $requestClass = Masspay::class;
 
     protected $actionClass = MasspayAction::class;
+
     /**
      * @test
      */
@@ -22,7 +23,7 @@ class MasspayActionTest extends GenericActionTest
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
-    
+
     /**
      * @test
      */

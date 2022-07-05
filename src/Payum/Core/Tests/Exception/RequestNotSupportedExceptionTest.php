@@ -60,7 +60,6 @@ class RequestNotSupportedExceptionTest extends TestCase
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
 
-
         $exception = RequestNotSupportedException::createActionNotSupported($action, 'anRequest');
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
