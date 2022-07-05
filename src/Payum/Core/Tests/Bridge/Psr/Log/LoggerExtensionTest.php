@@ -50,7 +50,7 @@ class LoggerExtensionTest extends TestCase
 
         $action = new LoggerAwareAction();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -64,7 +64,7 @@ class LoggerExtensionTest extends TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $action = $this->createMock(LoggerAwareAction::class);
         $action->expects($this->once())
             ->method('setLogger')
@@ -83,7 +83,7 @@ class LoggerExtensionTest extends TestCase
 
         $action = new LoggerAwareAction();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onPostExecute($context);
@@ -97,7 +97,7 @@ class LoggerExtensionTest extends TestCase
 
         $extension = new LoggerExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
 
         $action = $this->createMock(LoggerAwareAction::class);
         $action->expects($this->once())
@@ -117,7 +117,7 @@ class LoggerExtensionTest extends TestCase
 
         $action = new LoggerAwareAction();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onPreExecute($context);

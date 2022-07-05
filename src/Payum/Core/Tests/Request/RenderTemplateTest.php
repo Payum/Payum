@@ -9,21 +9,21 @@ class RenderTemplateTest extends TestCase
 {
     public function testShouldAllowGetTemplateNameSetInConstructor()
     {
-        $request = new RenderTemplate('theTemplate', array());
+        $request = new RenderTemplate('theTemplate', []);
 
         $this->assertSame('theTemplate', $request->getTemplateName());
     }
 
     public function testShouldAllowGetParametersSetInConstructor()
     {
-        $request = new RenderTemplate('aTemplate', array('foo' => 'fooVal', 'bar' => 'barVal'));
+        $request = new RenderTemplate('aTemplate', ['foo' => 'fooVal', 'bar' => 'barVal']);
 
-        $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $request->getParameters());
+        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $request->getParameters());
     }
 
     public function testShouldAllowGetResultPreviouslySet()
     {
-        $request = new RenderTemplate('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', []);
 
         $request->setResult('theResult');
 
@@ -32,8 +32,8 @@ class RenderTemplateTest extends TestCase
 
     public static function provideParameters(): \Iterator
     {
-        yield array('foo', 'fooVal');
-        yield array('bar', 'barVal');
+        yield ['foo', 'fooVal'];
+        yield ['bar', 'barVal'];
     }
 
     /**
@@ -44,7 +44,7 @@ class RenderTemplateTest extends TestCase
      */
     public function testShouldAllowSetParameter($name, $value)
     {
-        $request = new RenderTemplate('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', []);
 
         $this->assertArrayNotHasKey($name, $request->getParameters());
 
@@ -63,7 +63,7 @@ class RenderTemplateTest extends TestCase
      */
     public function testShouldAllowAddParameter($name, $value)
     {
-        $request = new RenderTemplate('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', []);
 
         $this->assertArrayNotHasKey($name, $request->getParameters());
 
@@ -76,7 +76,7 @@ class RenderTemplateTest extends TestCase
 
     public function testShouldAllowOverwriteExistingParameterOnSetParameter()
     {
-        $request = new RenderTemplate('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', []);
 
         $request->setParameter('foo', 'fooVal');
         $request->setParameter('foo', 'barVal');
@@ -88,7 +88,7 @@ class RenderTemplateTest extends TestCase
     public function testShouldThrowExceptionIfParameterExistsOnAddParameter()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $request = new RenderTemplate('aTemplate', array());
+        $request = new RenderTemplate('aTemplate', []);
 
         $request->addParameter('foo', 'fooVal');
         $request->addParameter('foo', 'barVal');

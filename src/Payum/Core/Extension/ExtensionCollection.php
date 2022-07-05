@@ -7,7 +7,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * @var ExtensionInterface[]
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * @param bool               $forcePrepend

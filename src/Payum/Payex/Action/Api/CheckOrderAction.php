@@ -21,14 +21,14 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CheckOrder */
+        /** @var CheckOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'transactionNumber',
-        ));
+        ]);
 
         $result = $this->api->check((array) $model);
 

@@ -7,16 +7,16 @@ use Payum\Payex\Request\Api\CompleteOrder;
 
 class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'orderRef' => 'aRef',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -94,9 +94,9 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('complete')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'transactionRef' => 'theRef',
-            ));
+            ]);
 
         $action = new CompleteOrderAction();
         $action->setApi($apiMock);
@@ -114,6 +114,6 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\OrderApi', [], [], '', false);
     }
 }

@@ -17,10 +17,10 @@ class FetchOrderActionTest extends GenericActionTest
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
@@ -36,14 +36,14 @@ class FetchOrderActionTest extends GenericActionTest
         $this->expectExceptionMessage('Location has to be provided to fetch an order');
         $action = new FetchOrderAction();
 
-        $action->execute(new FetchOrder(array()));
+        $action->execute(new FetchOrder([]));
     }
 
     public function testShouldFetchOrderWhenLocationSetOnExecute()
     {
-        $model = array(
+        $model = [
             'location' => 'theKlarnaOrderLocation',
-        );
+        ];
 
         $request = new FetchOrder($model);
 
@@ -72,15 +72,15 @@ class FetchOrderActionTest extends GenericActionTest
 
     public function testShouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
     {
-        $model = array(
+        $model = [
             'location' => 'theKlarnaOrderLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $request = new FetchOrder($model);
 
@@ -107,15 +107,15 @@ class FetchOrderActionTest extends GenericActionTest
     public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $connector = $this->createConnectorMock();
         $connector
@@ -133,15 +133,15 @@ class FetchOrderActionTest extends GenericActionTest
 
     public function testShouldRecoverAfterTimeout()
     {
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $expectedOrder = null;
 
@@ -171,6 +171,6 @@ class FetchOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_ConnectorInterface', [], [], '', false);
     }
 }

@@ -22,7 +22,7 @@ class DoExpressCheckoutPaymentAction implements ActionInterface, ApiAwareInterfa
 
     public function execute($request)
     {
-        /** @var $request DoExpressCheckoutPayment */
+        /** @var DoExpressCheckoutPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

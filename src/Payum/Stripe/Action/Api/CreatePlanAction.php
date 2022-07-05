@@ -50,7 +50,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
 
     public function execute($request)
     {
-        /** @var $request CreatePlan */
+        /** @var CreatePlan $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

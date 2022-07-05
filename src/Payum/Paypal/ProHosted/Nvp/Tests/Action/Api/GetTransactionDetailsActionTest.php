@@ -45,7 +45,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('TRANSACTIONID must be set.');
         $action = new GetTransactionDetailsAction();
 
-        $request = new GetTransactionDetails(array());
+        $request = new GetTransactionDetails([]);
 
         $action->execute($request);
     }
@@ -57,17 +57,17 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getTransactionDetails')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'PAYMENTSTATUS' => 'theStatus',
-                );
+                ];
             });
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetTransactionDetails(array(
+        $request = new GetTransactionDetails([
             'txn_id' => 'aTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -82,6 +82,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', [], [], '', false);
     }
 }

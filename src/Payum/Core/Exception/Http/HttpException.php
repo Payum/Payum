@@ -51,12 +51,12 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
             $label = 'Unsuccessful response';
         }
 
-        $message = implode(PHP_EOL, array(
+        $message = implode(PHP_EOL, [
             $label,
             '[status code] ' . $response->getStatusCode(),
             '[reason phrase] ' . $response->getReasonPhrase(),
             '[url] ' . $request->getUri(),
-        ));
+        ]);
 
         $e = new static($message, $response->getStatusCode());
         $e->setResponse($response);

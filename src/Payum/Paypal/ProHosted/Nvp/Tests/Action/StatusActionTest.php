@@ -19,9 +19,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $payment = array(
+        $payment = [
            'AMT' => 1,
-        );
+        ];
 
         $request = new GetHumanStatus($payment);
 
@@ -32,7 +32,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $this->assertNotFalse($action->supports($request));
     }
@@ -41,9 +41,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $payment = array(
+        $payment = [
             'AMT' => 0,
-        );
+        ];
 
         $request = new GetHumanStatus($payment);
 
@@ -78,9 +78,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'CANCELLED' => true,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -91,10 +91,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 21,
             'L_ERRORCODE0' => 'foo',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -105,7 +105,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $action->execute($request);
 
@@ -116,11 +116,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 0,
             'PAYERID' => 'thePayerId',
             'PAYMENTSTATUS' => '',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -131,10 +131,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -145,10 +145,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -159,10 +159,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -173,10 +173,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -187,10 +187,10 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -201,12 +201,12 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'AMT' => 12,
             'PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
             'PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
 
-        ));
+        ]);
 
         $action->execute($request);
 

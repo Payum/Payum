@@ -52,7 +52,7 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         $action = new GetTransactionDataAction();
 
-        $request = new GetTransactionData(array());
+        $request = new GetTransactionData([]);
         $action->execute($request);
     }
 
@@ -61,6 +61,6 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

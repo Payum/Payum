@@ -21,7 +21,7 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param $request RefundTransaction
+     * @param RefundTransaction $request
      */
     public function execute($request)
     {

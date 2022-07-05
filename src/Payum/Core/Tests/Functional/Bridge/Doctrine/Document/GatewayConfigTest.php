@@ -12,10 +12,10 @@ class GatewayConfigTest extends MongoTest
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
@@ -28,7 +28,7 @@ class GatewayConfigTest extends MongoTest
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array());
+        $gatewayConfig->setConfig([]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
@@ -50,18 +50,18 @@ class GatewayConfigTest extends MongoTest
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
         $this->dm->refresh($gatewayConfig);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ), $gatewayConfig->getConfig());
+        ], $gatewayConfig->getConfig());
     }
 }

@@ -22,7 +22,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CreateAgreement */
+        /** @var CreateAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -31,20 +31,20 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
             throw new LogicException('The agreement has already been created.');
         }
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'merchantRef',
             'description',
             'purchaseOperation',
             'maxAmount',
             'startDate',
             'stopDate',
-        ));
+        ]);
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'maxAmount',
             'merchantRef',
             'description',
-        ));
+        ]);
 
         $result = $this->api->create((array) $model);
 

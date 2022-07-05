@@ -91,9 +91,9 @@ class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.api' => new \stdClass(),
-        ));
+        ]);
 
         $this->assertInstanceOf(Gateway::class, $gateway);
     }
@@ -224,10 +224,10 @@ class CoreGatewayFactoryTest extends TestCase
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new CoreGatewayFactory(array(
+        $factory = new CoreGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -247,22 +247,22 @@ class CoreGatewayFactoryTest extends TestCase
 
         $factory = new CoreGatewayFactory();
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.action.foo' => $firstAction,
             'payum.action.bar' => $secondAction,
-        ));
+        ]);
 
         $actions = $this->readAttribute($gateway, 'actions');
         $this->assertSame($firstAction, $actions[0]);
         $this->assertSame($secondAction, $actions[1]);
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.action.foo' => $firstAction,
             'payum.action.bar' => $secondAction,
-            'payum.prepend_actions' => array(
+            'payum.prepend_actions' => [
                 'payum.action.bar'
-            )
-        ));
+            ]
+        ]);
 
         $actions = $this->readAttribute($gateway, 'actions');
         $this->assertSame($secondAction, $actions[0]);
@@ -276,22 +276,22 @@ class CoreGatewayFactoryTest extends TestCase
 
         $factory = new CoreGatewayFactory();
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.api.foo' => $firstApi,
             'payum.api.bar' => $secondApi,
-        ));
+        ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
         $this->assertSame($firstApi, $apis[0]);
         $this->assertSame($secondApi, $apis[1]);
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.api.foo' => $firstApi,
             'payum.api.bar' => $secondApi,
-            'payum.prepend_apis' => array(
+            'payum.prepend_apis' => [
                 'payum.api.bar'
-            )
-        ));
+            ]
+        ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
         $this->assertSame($secondApi, $apis[0]);
@@ -305,22 +305,22 @@ class CoreGatewayFactoryTest extends TestCase
 
         $factory = new CoreGatewayFactory();
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.extension.foo' => $firstExtension,
             'payum.extension.bar' => $secondExtension,
-        ));
+        ]);
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');
         $this->assertSame($firstExtension, $extensions[0]);
         $this->assertSame($secondExtension, $extensions[1]);
 
-        $gateway = $factory->create(array(
+        $gateway = $factory->create([
             'payum.extension.foo' => $firstExtension,
             'payum.extension.bar' => $secondExtension,
-            'payum.prepend_extensions' => array(
+            'payum.prepend_extensions' => [
                 'payum.extension.bar'
-            )
-        ));
+            ]
+        ]);
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');
         $this->assertSame($secondExtension, $extensions[0]);
@@ -331,11 +331,11 @@ class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $factory->create(array(
+        $factory->create([
             'hash' => 'sha1',
             'verify' => function ($config) {
                 $this->assertSame('sha1', $config['hash']);
             },
-        ));
+        ]);
     }
 }

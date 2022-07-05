@@ -23,17 +23,17 @@ class CreditCardDateValidator extends ConstraintValidator
 
         if (! ($value instanceof \DateTime)) {
             if (method_exists($this->context, 'buildViolation')) {
-                $this->context->buildViolation($constraint->invalidMessage, array(
+                $this->context->buildViolation($constraint->invalidMessage, [
                              '{{ value }}' => $value,
-                         ))
+                         ])
                     ->addViolation();
 
                 return;
             }
 
-            $this->context->addViolationAt('expireAt', $constraint->invalidMessage, array(
+            $this->context->addViolationAt('expireAt', $constraint->invalidMessage, [
                 '{{ value }}' => $value,
-            ));
+            ]);
         }
 
         /**

@@ -17,9 +17,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => 'not-supported-status',
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -33,7 +33,7 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array());
+        $status = new GetBinaryStatus([]);
 
         //guard
         $status->markUnknown();
@@ -47,7 +47,7 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array());
+        $status = new GetBinaryStatus([]);
 
         //guard
         $status->markUnknown();
@@ -61,9 +61,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -77,9 +77,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -93,9 +93,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'reservation' => 'aNumber',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -109,9 +109,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'invoice_number' => 'aNum',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -125,9 +125,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -141,10 +141,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
             'invoice_number' => 'aNum',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -158,10 +158,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
             'status' => Constants::STATUS_CREATED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();

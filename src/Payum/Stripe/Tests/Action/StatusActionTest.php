@@ -45,9 +45,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'card' => 'aCard',
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -58,9 +58,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_FAILED,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -71,10 +71,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_SUCCEEDED,
             'refunded' => true,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -85,9 +85,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'refunded' => true,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -99,11 +99,11 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_SUCCEEDED,
             'captured' => true,
             'paid' => true,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -114,11 +114,11 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_SUCCEEDED,
             'captured' => true,
             'paid' => false,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -130,11 +130,11 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_PAID,
             'captured' => true,
             'paid' => true,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -145,11 +145,11 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_PAID,
             'captured' => true,
             'paid' => false,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -161,10 +161,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_SUCCEEDED,
             'captured' => false,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -175,10 +175,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => Constants::STATUS_PAID,
             'captured' => false,
-        );
+        ];
 
         $action->execute($status = new GetHumanStatus($model));
 
@@ -189,9 +189,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $model = array(
+        $model = [
             'status' => 'unknown',
-        );
+        ];
 
         $status = new GetHumanStatus($model);
         $status->markPending();

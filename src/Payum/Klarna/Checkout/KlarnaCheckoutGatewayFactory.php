@@ -22,15 +22,15 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             throw new \LogicException('You must install "klarna/checkout" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'klarna_checkout',
             'payum.factory_title' => 'Klarna Checkout',
             'payum.template.authorize' => '@PayumKlarnaCheckout/Action/capture.html.twig',
             'contentType' => Constants::CONTENT_TYPE_AGGREGATED_ORDER_V2,
             'sandbox' => true,
-        ));
+        ]);
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.action.authorize_recurring' => new AuthorizeRecurringAction(),
 
             // must be before authorize.
@@ -44,18 +44,18 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.create_order' => new CreateOrderAction(),
             'payum.action.api.update_order' => new UpdateOrderAction(),
             'payum.action.api.fetch_order' => new FetchOrderAction(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+            $config['payum.default_options'] = [
                 'merchant_id' => '',
                 'secret' => '',
                 'terms_uri' => '',
                 'checkout_uri' => '',
                 'sandbox' => true,
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('merchant_id', 'secret');
+            $config['payum.required_options'] = ['merchant_id', 'secret'];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

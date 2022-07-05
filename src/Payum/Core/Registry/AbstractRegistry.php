@@ -21,7 +21,7 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     protected $gatewayFactories;
 
-    public function __construct(array $gateways = array(), array $storages = array(), array $gatewayFactories = array())
+    public function __construct(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
         $this->gateways = $gateways;
         $this->storages = $storages;
@@ -71,7 +71,7 @@ abstract class AbstractRegistry implements RegistryInterface
 
     public function getStorages()
     {
-        $storages = array();
+        $storages = [];
         foreach ($this->storages as $modelClass => $storageId) {
             $storages[$modelClass] = $this->getService($storageId);
         }
@@ -90,7 +90,7 @@ abstract class AbstractRegistry implements RegistryInterface
 
     public function getGateways()
     {
-        $gateways = array();
+        $gateways = [];
         foreach ($this->gateways as $name => $id) {
             $gateways[$name] = $this->getGateway($name);
         }
@@ -109,7 +109,7 @@ abstract class AbstractRegistry implements RegistryInterface
 
     public function getGatewayFactories()
     {
-        $gatewayFactories = array();
+        $gatewayFactories = [];
         foreach ($this->gatewayFactories as $name => $id) {
             $gatewayFactories[$name] = $this->getGatewayFactory($name);
         }

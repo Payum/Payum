@@ -11,9 +11,9 @@ class CaptureTemplateTest extends TestCase
     {
         $twig = TwigFactory::createGeneric();
 
-        $actualResult = $twig->render('@PayumKlarnaCheckout/Action/capture.html.twig', array(
+        $actualResult = $twig->render('@PayumKlarnaCheckout/Action/capture.html.twig', [
             'snippet' => 'theSnippet',
-        ));
+        ]);
 
         $expectedResult = <<<HTML
 <!DOCTYPE html>

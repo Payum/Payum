@@ -8,16 +8,16 @@ use Payum\Payex\Request\Api\DeleteAgreement;
 
 class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredNotEmptyFields = array(
+    protected $requiredNotEmptyFields = [
         'agreementRef' => 'anAgreementRef',
-    );
+    ];
 
     public function provideRequiredNotEmptyFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredNotEmptyFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -97,9 +97,9 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($this->requiredNotEmptyFields)
-            ->willReturn(array(
+            ->willReturn([
                 'errorCode' => AgreementApi::ERRORCODE_OK,
-            ));
+            ]);
 
         $action = new DeleteAgreementAction();
         $action->setApi($apiMock);
@@ -117,6 +117,6 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', [], [], '', false);
     }
 }

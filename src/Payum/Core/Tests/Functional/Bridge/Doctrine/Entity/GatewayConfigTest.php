@@ -12,10 +12,10 @@ class GatewayConfigTest extends OrmTest
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $this->em->persist($gatewayConfig);
         $this->em->flush();
@@ -28,7 +28,7 @@ class GatewayConfigTest extends OrmTest
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array());
+        $gatewayConfig->setConfig([]);
 
         $this->em->persist($gatewayConfig);
         $this->em->flush();

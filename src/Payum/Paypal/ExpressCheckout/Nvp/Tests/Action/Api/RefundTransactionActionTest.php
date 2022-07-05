@@ -62,7 +62,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 
         $action = new RefundTransactionAction();
 
-        $request = new RefundTransaction(array());
+        $request = new RefundTransaction([]);
 
         $action->execute($request);
     }
@@ -79,16 +79,16 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
                 $testCase->assertSame('theOriginalTransactionId', $fields['TRANSACTIONID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'TRANSACTIONID' => 'theOriginalTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -100,19 +100,19 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('RefundTransaction')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'TRANSACTIONID' => 'theTransactionId',
                     'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
-                );
+                ];
             })
         ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'TRANSACTIONID' => 'theTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -130,6 +130,6 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

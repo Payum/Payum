@@ -8,7 +8,7 @@ use Payum\Payex\Request\Api\AutoPayAgreement;
 
 class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'agreementRef' => 'aRef',
         'price' => 1000,
         'productNumber' => 'aNum',
@@ -16,14 +16,14 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
         'orderId' => 'anId',
         'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
         'currency' => 'NOK',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -101,9 +101,9 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('autoPay')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'transactionStatus' => 'theStatus',
-            ));
+            ]);
 
         $action = new AutoPayAgreementAction();
         $action->setApi($apiMock);
@@ -121,6 +121,6 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\AgreementApi', [], [], '', false);
     }
 }

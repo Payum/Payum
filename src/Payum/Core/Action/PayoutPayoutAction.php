@@ -22,7 +22,7 @@ class PayoutPayoutAction implements ActionInterface, GatewayAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var $payout PayoutInterface */
+        /** @var PayoutInterface $payout */
         $payout = $request->getModel();
 
         $this->gateway->execute($status = new GetHumanStatus($payout));

@@ -20,7 +20,7 @@ class GetAddresses
     public function __construct($pno)
     {
         $this->pno = $pno;
-        $this->addresses = array();
+        $this->addresses = [];
     }
 
     /**

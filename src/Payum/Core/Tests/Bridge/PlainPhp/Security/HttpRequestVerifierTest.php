@@ -31,7 +31,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->expectExceptionMessage('Token parameter `payum_token` was not found in in the http request.');
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
-        $verifier->verify(array());
+        $verifier->verify([]);
     }
 
     public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify()
@@ -50,7 +50,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($storageMock);
 
-        $verifier->verify(array('payum_token' => $invalidHash));
+        $verifier->verify(['payum_token' => $invalidHash]);
     }
 
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
@@ -73,7 +73,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($storageMock);
 
-        $verifier->verify(array('payum_token' => 'theHash'));
+        $verifier->verify(['payum_token' => 'theHash']);
     }
 
     public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify()
@@ -94,7 +94,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($storageMock);
 
-        $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
+        $actualToken = $verifier->verify(['payum_token' => 'theHash']);
 
         $this->assertSame($expectedToken, $actualToken);
     }
@@ -117,7 +117,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($storageMock);
 
-        $actualToken = $verifier->verify(array('payum_token' => 'theHash'));
+        $actualToken = $verifier->verify(['payum_token' => 'theHash']);
 
         $this->assertSame($expectedToken, $actualToken);
     }
@@ -128,7 +128,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($this->createStorageMock());
 
-        $actualToken = $verifier->verify(array('payum_token' => $expectedToken));
+        $actualToken = $verifier->verify(['payum_token' => $expectedToken]);
 
         $this->assertSame($expectedToken, $actualToken);
     }
@@ -139,7 +139,7 @@ class HttpRequestVerifierTest extends TestCase
 
         $verifier = new HttpRequestVerifier($this->createStorageMock(), 'custom_token');
 
-        $actualToken = $verifier->verify(array('custom_token' => $expectedToken));
+        $actualToken = $verifier->verify(['custom_token' => $expectedToken]);
 
         $this->assertSame($expectedToken, $actualToken);
     }

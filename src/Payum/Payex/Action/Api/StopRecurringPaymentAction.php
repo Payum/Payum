@@ -21,14 +21,14 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request StopRecurringPayment */
+        /** @var StopRecurringPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'agreementRef',
-        ));
+        ]);
 
         $result = $this->api->stop((array) $model);
 

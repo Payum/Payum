@@ -17,20 +17,20 @@ class ConvertPayoutActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(new Payout(), 'array'));
-        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array'));
-        yield array(new $this->requestClass(new Payout(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield [new $this->requestClass(new Payout(), 'array')];
+        yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'array')];
+        yield [new $this->requestClass(new Payout(), 'array', $this->createMock('Payum\Core\Security\TokenInterface'))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
-        yield array(new $this->requestClass(new \stdClass(), 'array'));
-        yield array(new $this->requestClass(new Payout(), 'foobar'));
-        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar'));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
+        yield [new $this->requestClass(new \stdClass(), 'array')];
+        yield [new $this->requestClass(new Payout(), 'foobar')];
+        yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')];
     }
 
     public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
@@ -72,9 +72,9 @@ class ConvertPayoutActionTest extends GenericActionTest
     public function testShouldForcePayedoutFalseIfAlreadySet()
     {
         $order = new Payout();
-        $order->setDetails(array(
+        $order->setDetails([
             Constants::FIELD_PAYOUT => false,
-        ));
+        ]);
 
         $action = new ConvertPayoutAction();
 
@@ -94,9 +94,9 @@ class ConvertPayoutActionTest extends GenericActionTest
         $order->setCurrencyCode('USD');
         $order->setTotalAmount(123);
         $order->setDescription('the description');
-        $order->setDetails(array(
+        $order->setDetails([
             'foo' => 'fooVal',
-        ));
+        ]);
 
         $action = new ConvertPayoutAction();
 

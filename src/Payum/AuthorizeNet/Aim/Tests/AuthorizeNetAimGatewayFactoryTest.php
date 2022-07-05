@@ -22,10 +22,10 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new AuthorizeNetAimGatewayFactory(array(
+        $factory = new AuthorizeNetAimGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -47,7 +47,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('login_id' => '', 'transaction_key' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(['login_id' => '', 'transaction_key' => '', 'sandbox' => true], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

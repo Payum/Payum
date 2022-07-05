@@ -40,7 +40,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
     {
         $action = new ActivateAction();
 
-        $this->assertTrue($action->supports(new Activate(array())));
+        $this->assertTrue($action->supports(new Activate([])));
     }
 
     public function testShouldNotSupportAnythingNotActivate()
@@ -71,16 +71,16 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new ActivateAction();
 
-        $action->execute(new Activate(array()));
+        $action->execute(new Activate([]));
     }
 
     public function testShouldCallKlarnaActivate()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
             'osr' => 'theOsr',
             'activation_flags' => 'theFlags',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -91,7 +91,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->willReturn(array('theRisk', 'theInvNumber'))
+            ->willReturn(['theRisk', 'theInvNumber'])
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -106,11 +106,11 @@ class ActivateActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
             'osr' => 'theOsr',
             'activation_flags' => 'theFlags',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -140,7 +140,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

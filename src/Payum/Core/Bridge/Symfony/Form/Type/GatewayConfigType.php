@@ -33,8 +33,8 @@ class GatewayConfigType extends AbstractType
             ->add('factoryName', GatewayFactoriesChoiceType::class)
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'buildCredentials'));
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'buildCredentials'));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'buildCredentials']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'buildCredentials']);
     }
 
     public function buildCredentials(FormEvent $event)
@@ -68,7 +68,7 @@ class GatewayConfigType extends AbstractType
 
             $type = is_bool($value) ? CheckboxType::class : TextType::class;
 
-            $options = array();
+            $options = [];
             $options['required'] = in_array($name, $config['payum.required_options']);
 
             $configForm->add($name, $type, $options);
@@ -79,8 +79,8 @@ class GatewayConfigType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => GatewayConfig::class
-        ));
+        ]);
     }
 }

@@ -21,23 +21,23 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        new Api(array(
+        new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
     public function testShouldAddMethodOnMasspayCall()
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->massPay([]);
 
@@ -47,12 +47,12 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldAddAuthorizeFieldsOnMasspayCall()
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'the_username',
             'password' => 'the_password',
             'signature' => 'the_signature',
             'sandbox' => true,
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->massPay([]);
 
@@ -68,12 +68,12 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldAddVersionOnMasspayCall()
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->massPay([]);
 
@@ -96,12 +96,12 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory());
 
         $api->massPay([]);
     }
@@ -121,12 +121,12 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory());
 
         $api->massPay([]);
     }

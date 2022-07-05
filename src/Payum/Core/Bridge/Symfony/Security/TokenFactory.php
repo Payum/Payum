@@ -26,7 +26,7 @@ class TokenFactory extends AbstractTokenFactory
      *
      * @return string
      */
-    protected function generateUrl($path, array $parameters = array())
+    protected function generateUrl($path, array $parameters = [])
     {
         return $this->urlGenerator->generate($path, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }

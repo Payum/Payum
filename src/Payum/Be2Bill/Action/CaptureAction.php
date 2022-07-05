@@ -53,7 +53,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
-        $cardFields = array('CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME');
+        $cardFields = ['CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'];
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
                 $obtainCreditCard = new ObtainCreditCard($request->getToken());

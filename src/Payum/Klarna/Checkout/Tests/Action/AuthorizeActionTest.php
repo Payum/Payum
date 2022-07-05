@@ -57,7 +57,7 @@ class AuthorizeActionTest extends TestCase
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $this->assertTrue($action->supports(new Authorize(array())));
+        $this->assertTrue($action->supports(new Authorize([])));
     }
 
     public function testShouldNotSupportAnythingNotAuthorize()
@@ -99,7 +99,7 @@ class AuthorizeActionTest extends TestCase
         $action->setGateway($gatewayMock);
         $action->setApi(new Config());
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
             'merchant' => [
@@ -108,7 +108,7 @@ class AuthorizeActionTest extends TestCase
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
             ]
-        )));
+        ]));
     }
 
     public function testShouldSubExecuteCreateOrderRequestIfStatusAndLocationNotSet()
@@ -117,10 +117,10 @@ class AuthorizeActionTest extends TestCase
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array(
+            ->willReturn([
                 'foo' => 'fooVal',
                 'bar' => 'barVal',
-            ))
+            ])
         ;
         $orderMock
             ->expects($this->once())
@@ -168,7 +168,7 @@ class AuthorizeActionTest extends TestCase
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
         $expectedTemplateName = 'theTemplateName';
-        $expectedContext = array('snippet' => $snippet);
+        $expectedContext = ['snippet' => $snippet];
 
         $testCase = $this;
 
@@ -195,17 +195,17 @@ class AuthorizeActionTest extends TestCase
         $action->setGateway($gatewayMock);
 
         try {
-            $action->execute(new Authorize(array(
+            $action->execute(new Authorize([
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-                'gui' => array('snippet' => $snippet),
+                'gui' => ['snippet' => $snippet],
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
                     'push_uri' => 'thePushUri',
                     'checkout_uri' => 'theCheckoutUri',
                     'terms_uri' => 'theTermsUri',
                 ]
-            )));
+            ]));
         } catch (HttpResponse $reply) {
             $this->assertSame($expectedContent, $reply->getContent());
 
@@ -226,7 +226,7 @@ class AuthorizeActionTest extends TestCase
             ->with(
                 new Sync(ArrayObject::ensureArrayObject([
                 'location' => 'aLocation',
-                'gui' => array('snippet' => 'theSnippet'),
+                'gui' => ['snippet' => 'theSnippet'],
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
                     'push_uri' => 'thePushUri',
@@ -236,16 +236,16 @@ class AuthorizeActionTest extends TestCase
             ]))
             );
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'location' => 'aLocation',
-            'gui' => array('snippet' => 'theSnippet'),
+            'gui' => ['snippet' => 'theSnippet'],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
             ]
-        )));
+        ]));
     }
 
     public function testShouldNotThrowReplyWhenStatusCreated()
@@ -261,7 +261,7 @@ class AuthorizeActionTest extends TestCase
                     [
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CREATED,
-                'gui' => array('snippet' => 'theSnippet'),
+                'gui' => ['snippet' => 'theSnippet'],
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
                     'push_uri' => 'thePushUri',
@@ -271,17 +271,17 @@ class AuthorizeActionTest extends TestCase
                 ))
             );
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
-            'gui' => array('snippet' => 'theSnippet'),
+            'gui' => ['snippet' => 'theSnippet'],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
             ]
-        )));
+        ]));
     }
 
     public function testShouldThrowIfPushUriNotSet()

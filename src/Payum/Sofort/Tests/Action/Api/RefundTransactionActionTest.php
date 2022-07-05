@@ -52,7 +52,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         $action = new RefundTransactionAction();
 
-        $request = new RefundTransaction(array());
+        $request = new RefundTransaction([]);
         $action->execute($request);
     }
 
@@ -62,7 +62,7 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('One of the parameters "refund_amount" or "amount" must be set.');
         $action = new RefundTransactionAction();
 
-        $request = new RefundTransaction(array('transaction_id' => 'daTransactionId'));
+        $request = new RefundTransaction(['transaction_id' => 'daTransactionId']);
         $action->execute($request);
     }
 
@@ -75,16 +75,16 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function ($details) {
                 $this->assertSame(100, $details['refund_amount']);
 
-                return array();
+                return [];
             });
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'transaction_id' => 'sweetTransactionId',
             'amount' => 100,
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -98,17 +98,17 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function ($details) {
                 $this->assertSame(50, $details['refund_amount']);
 
-                return array();
+                return [];
             });
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'transaction_id' => 'sweetTransactionId',
             'amount' => 100,
             'refund_amount' => 50,
-        ));
+        ]);
 
         $action->execute($request);
     }

@@ -19,9 +19,9 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $recurringPaymentDetails = array(
+        $recurringPaymentDetails = [
            'BILLINGPERIOD' => 'foo',
-        );
+        ];
 
         $request = new GetBinaryStatus($recurringPaymentDetails);
 
@@ -56,10 +56,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'L_ERRORCODE9' => 'foo',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -70,9 +70,9 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -83,11 +83,11 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => 'foo',
             'PROFILESTATUS' => 'bar',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -98,11 +98,11 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_EXPIRED,
             'PROFILESTATUS' => Api::PROFILESTATUS_PENDINGPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -113,10 +113,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'PROFILESTATUS' => Api::PROFILESTATUS_PENDINGPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -127,10 +127,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'PROFILESTATUS' => Api::PROFILESTATUS_ACTIVEPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -141,10 +141,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_ACTIVE,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -155,10 +155,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_CANCELLED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -169,10 +169,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_PENDING,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -183,10 +183,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_EXPIRED,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -197,10 +197,10 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_SUSPENDED,
-        ));
+        ]);
 
         $action->execute($request);
 

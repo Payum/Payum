@@ -35,7 +35,7 @@ class StorageExtensionTest extends TestCase
             ->method('find')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
 
         $extension = new StorageExtension($neverUsedStorageMock);
 
@@ -66,7 +66,7 @@ class StorageExtensionTest extends TestCase
             ->method('setModel')
         ;
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension = new StorageExtension($storageMock);
 
@@ -96,7 +96,7 @@ class StorageExtensionTest extends TestCase
             ->method('setModel')
         ;
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension = new StorageExtension($storageMock);
 
@@ -117,7 +117,7 @@ class StorageExtensionTest extends TestCase
 
         $requestMock = $this->createMock(\stdClass::class);
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension = new StorageExtension($storageMock);
 
@@ -148,7 +148,7 @@ class StorageExtensionTest extends TestCase
             ->with($this->identicalTo($expectedModel))
         ;
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension = new StorageExtension($storageMock);
 
@@ -179,7 +179,7 @@ class StorageExtensionTest extends TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension->onPreExecute($context);
     }
@@ -206,9 +206,9 @@ class StorageExtensionTest extends TestCase
             ->willReturn($model)
         ;
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array(
-            new Context($this->createGatewayMock(), $requestMock, array())
-        ));
+        $context = new Context($this->createGatewayMock(), $requestMock, [
+            new Context($this->createGatewayMock(), $requestMock, [])
+        ]);
 
         $extension = new StorageExtension($storageMock);
 
@@ -247,7 +247,7 @@ class StorageExtensionTest extends TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $context = new Context($this->createGatewayMock(), $requestMock, array());
+        $context = new Context($this->createGatewayMock(), $requestMock, []);
 
         $extension->onPreExecute($context);
 
@@ -281,8 +281,8 @@ class StorageExtensionTest extends TestCase
 
         $extension = new StorageExtension($storageMock);
 
-        $previousContext = new Context($this->createGatewayMock(), $requestMock, array());
-        $context = new Context($this->createGatewayMock(), $requestMock, array($previousContext));
+        $previousContext = new Context($this->createGatewayMock(), $requestMock, []);
+        $context = new Context($this->createGatewayMock(), $requestMock, [$previousContext]);
 
         $extension->onPreExecute($context);
 

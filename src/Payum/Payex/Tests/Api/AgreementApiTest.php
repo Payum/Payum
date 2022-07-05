@@ -18,7 +18,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
-        new AgreementApi(new SoapClientFactory(), array());
+        new AgreementApi(new SoapClientFactory(), []);
     }
 
     public function testThrowIfEncryptionKeyOptionNotSet()
@@ -27,9 +27,9 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The encryption_key option must be set.');
         new AgreementApi(
             new SoapClientFactory(),
-            array(
+            [
                 'account_number' => 'aNumber',
-            )
+            ]
         );
     }
 
@@ -39,11 +39,11 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new AgreementApi(
             new SoapClientFactory(),
-            array(
+            [
                 'account_number' => 'aNumber',
                 'encryption_key' => 'aKey',
                 'sandbox' => 'not a bool',
-            )
+            ]
         );
     }
 
@@ -60,7 +60,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -69,16 +69,16 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $agreementApi = new AgreementApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $agreementApi->create(array());
+        $result = $agreementApi->create([]);
 
-        $this->assertSame(array('fooValue'), $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
@@ -94,7 +94,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -103,16 +103,16 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $agreementApi = new AgreementApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $agreementApi->check(array());
+        $result = $agreementApi->check([]);
 
-        $this->assertSame(array('fooValue'), $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
@@ -128,7 +128,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -137,16 +137,16 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $agreementApi = new AgreementApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $agreementApi->delete(array());
+        $result = $agreementApi->delete([]);
 
-        $this->assertSame(array('fooValue'), $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
@@ -162,7 +162,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', ['createWsdlClient']);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -171,16 +171,16 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $agreementApi = new AgreementApi(
             $clientFactoryMock,
-            array(
+            [
                 'encryption_key' => 'aKey',
                 'account_number' => 'aNumber',
                 'sandbox' => true,
-            )
+            ]
         );
 
-        $result = $agreementApi->autoPay(array());
+        $result = $agreementApi->autoPay([]);
 
-        $this->assertSame(array('fooValue'), $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     /**
@@ -213,4 +213,4 @@ class AgreementSoapClient extends \SoapClient
     public function AutoPay3()
     {
     }
-};
+}

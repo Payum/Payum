@@ -24,12 +24,12 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
      */
     public function execute($request)
     {
-        /** @var $request ManageRecurringPaymentsProfileStatus */
+        /** @var ManageRecurringPaymentsProfileStatus $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('PROFILEID', 'ACTION'));
+        $model->validateNotEmpty(['PROFILEID', 'ACTION']);
 
         $model->replace(
             $this->api->manageRecurringPaymentsProfileStatus((array) $model)

@@ -12,7 +12,7 @@ class PayoutAction implements ActionInterface
 {
     public function execute($request)
     {
-        /** @var $request Payout */
+        /** @var Payout $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

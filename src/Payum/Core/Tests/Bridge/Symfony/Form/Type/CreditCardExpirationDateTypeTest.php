@@ -51,10 +51,10 @@ class CreditCardExpirationDateTypeTest extends TestCase
 
         $type->configureOptions($resolver);
 
-        $options = $resolver->resolve(array(
+        $options = $resolver->resolve([
             'min_expiration_year' => 2000,
             'max_expiration_year' => 2002,
-        ));
+        ]);
 
         $this->assertArrayHasKey('years', $options);
         $this->assertCount(3, $options['years']);

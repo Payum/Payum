@@ -48,9 +48,9 @@ class CaptureActionTest extends GenericActionTest
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -76,7 +76,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array('RESULT' => Api::RESULT_SUCCESS));
+        $request = new Capture(['RESULT' => Api::RESULT_SUCCESS]);
 
         $action->execute($request);
     }
@@ -89,7 +89,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $result = array('FOO' => 'FOOVAL', 'BAR' => 'BARVAL');
+        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -102,12 +102,12 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
             'ACCT' => '1234432112344321',
             'CVV2' => 123,
             'EXPDATE' => '1016',
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -141,7 +141,7 @@ class CaptureActionTest extends GenericActionTest
             })
         ;
 
-        $result = array('FOO' => 'FOOVAL', 'BAR' => 'BARVAL');
+        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -154,9 +154,9 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -175,11 +175,11 @@ class CaptureActionTest extends GenericActionTest
     public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
     {
         $firstModel = new \stdClass();
-        $currentModel = new \ArrayObject(array(
+        $currentModel = new \ArrayObject([
             'AMOUNT' => 10,
-        ));
+        ]);
 
-        $result = array('FOO' => 'FOOVAL', 'BAR' => 'BARVAL');
+        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -219,7 +219,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', [], [], '', false);
     }
 
     /**

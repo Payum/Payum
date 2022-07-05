@@ -51,7 +51,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $this->expectExceptionMessage('The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
         $action = new CreateRecurringPaymentProfileAction();
 
-        $action->execute(new CreateRecurringPaymentProfile(array()));
+        $action->execute(new CreateRecurringPaymentProfile([]));
     }
 
     public function testThrowIfRequiredFieldMissing()
@@ -60,9 +60,9 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $this->expectExceptionMessage('The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
         $action = new CreateRecurringPaymentProfileAction();
 
-        $action->execute(new CreateRecurringPaymentProfile(array(
+        $action->execute(new CreateRecurringPaymentProfile([
             'TOKEN' => 'aToken',
-        )));
+        ]));
     }
 
     public function testShouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
@@ -110,14 +110,14 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
                 $testCase->assertArrayHasKey('ZIP', $fields);
                 $testCase->assertSame('theZip', $fields['ZIP']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new CreateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new CreateRecurringPaymentProfile(array(
+        $request = new CreateRecurringPaymentProfile([
             'TOKEN' => 'theToken',
             'PROFILESTARTDATE' => 'theStartDate',
             'DESC' => 'theDesc',
@@ -130,7 +130,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
             'CITY' => 'theCity',
             'COUNTRYCODE' => 'theCountry',
             'ZIP' => 'theZip',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -142,17 +142,17 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'PROFILEID' => 'theId',
                     'PROFILESTATUS' => 'theStatus',
-                );
+                ];
             })
         ;
 
         $action = new CreateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new CreateRecurringPaymentProfile(array(
+        $request = new CreateRecurringPaymentProfile([
             'TOKEN' => 'theToken',
             'PROFILESTARTDATE' => 'theStartDate',
             'DESC' => 'theDesc',
@@ -165,7 +165,7 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
             'CITY' => 'theCity',
             'COUNTRYCODE' => 'theCountry',
             'ZIP' => 'theZip',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -182,6 +182,6 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

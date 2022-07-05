@@ -96,8 +96,8 @@ class Api
         $transactionData->setApiVersion('2.0');
         $transactionData->sendRequest();
 
-        $fields = array();
-        $methods = array(
+        $fields = [];
+        $methods = [
             'getAmount' => '',
             'getAmountRefunded' => '',
             'getCount' => '',
@@ -109,7 +109,7 @@ class Api
             'getLanguageCode' => '',
             'getCurrency' => '',
             'getTransaction' => '',
-            'getReason' => array(0, 0),
+            'getReason' => [0, 0],
             'getUserVariable' => 0,
             'getTime' => '',
             'getProjectId' => '',
@@ -127,7 +127,7 @@ class Api
             'getSenderBankName' => '',
             'getSenderBic' => '',
             'getSenderIban' => '',
-        );
+        ];
 
         foreach ($methods as $method => $params) {
             $varName = $method;

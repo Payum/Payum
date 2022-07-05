@@ -47,7 +47,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->method('debug')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
 
         $extension = new LogExecutedActionsExtension($logger);
 
@@ -62,7 +62,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->method('debug')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($this->createActionMock());
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -79,9 +79,9 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->with($this->stringStartsWith('[Payum] 2# '))
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array(
-            new Context($this->createGatewayMock(), new \stdClass(), array()),
-        ));
+        $context = new Context($this->createGatewayMock(), new \stdClass(), [
+            new Context($this->createGatewayMock(), new \stdClass(), []),
+        ]);
         $context->setAction($this->createActionMock());
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -92,7 +92,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     public function testShouldLogNotObjectActionAndRequestOnExecute()
     {
         $stringRequest = 'a string';
-        $arrayRequest = array();
+        $arrayRequest = [];
         $action = new FooAction();
 
         $logger = $this->createLoggerMock();
@@ -107,12 +107,12 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), $stringRequest, array());
+        $context = new Context($this->createGatewayMock(), $stringRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
 
-        $context = new Context($this->createGatewayMock(), $arrayRequest, array());
+        $context = new Context($this->createGatewayMock(), $arrayRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -136,12 +136,12 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), $stdRequest, array());
+        $context = new Context($this->createGatewayMock(), $stdRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
 
-        $context = new Context($this->createGatewayMock(), $namespacedRequest, array());
+        $context = new Context($this->createGatewayMock(), $namespacedRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -150,7 +150,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     public function testShouldLogActionAndModelRequestWithModelNoObjectOnExecute()
     {
         $action = new FooAction();
-        $model = array();
+        $model = [];
         $modelRequest = new Capture($model);
 
         $logger = $this->createLoggerMock();
@@ -162,7 +162,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), $modelRequest, array());
+        $context = new Context($this->createGatewayMock(), $modelRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -183,7 +183,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), $stdModelRequest, array());
+        $context = new Context($this->createGatewayMock(), $stdModelRequest, []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -203,7 +203,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->with('[Payum] 1# FooAction::execute(string) throws reply ' . $ro->getShortName())
         ;
 
-        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context = new Context($this->createGatewayMock(), 'string', []);
         $context->setAction($action);
         $context->setReply($replyMock);
 
@@ -226,7 +226,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context = new Context($this->createGatewayMock(), 'string', []);
         $context->setAction($action);
         $context->setReply($reply);
 
@@ -246,7 +246,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context = new Context($this->createGatewayMock(), 'string', []);
         $context->setAction($action);
         $context->setException(new \LogicException());
 
@@ -264,7 +264,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $extension = new LogExecutedActionsExtension($logger);
 
-        $context = new Context($this->createGatewayMock(), 'string', array());
+        $context = new Context($this->createGatewayMock(), 'string', []);
         $context->setException(new \LogicException());
 
         $extension->onPostExecute($context);

@@ -16,7 +16,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 
     public function execute($request)
     {
-        /** @var $request Sync */
+        /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

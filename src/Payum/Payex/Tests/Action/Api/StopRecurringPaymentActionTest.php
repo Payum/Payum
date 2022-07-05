@@ -7,16 +7,16 @@ use Payum\Payex\Request\Api\StopRecurringPayment;
 
 class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'agreementRef' => 'aRef',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -94,9 +94,9 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('stop')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'errorCode' => 'theCode',
-            ));
+            ]);
 
         $action = new StopRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -114,6 +114,6 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\RecurringApi', [], [], '', false);
     }
 }

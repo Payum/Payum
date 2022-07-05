@@ -15,7 +15,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 
     public function testValidate()
     {
-        $options = array('min' => 'today');
+        $options = ['min' => 'today'];
         $constraint = new CreditCardDate($options);
 
         $value = new \Datetime();
@@ -25,7 +25,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 
     public function testValidateWrongDate()
     {
-        $options = array('min' => 'today');
+        $options = ['min' => 'today'];
         $constraint = new CreditCardDate($options);
 
         $validator = new CreditCardDateValidator();

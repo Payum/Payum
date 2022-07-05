@@ -21,15 +21,15 @@ abstract class OrmTest extends BaseOrmTest
 
         $driver = new MappingDriverChain();
 
-        $xmlDriver = new SimplifiedXmlDriver(array(
+        $xmlDriver = new SimplifiedXmlDriver([
             $rootDir . '/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model',
-        ));
+        ]);
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
         $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Entity\TestModel');
-        $annotationDriver = $config->newDefaultAnnotationDriver(array(
+        $annotationDriver = $config->newDefaultAnnotationDriver([
             dirname($rc->getFileName()),
-        ), false);
+        ], false);
 
         $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Entity');
 

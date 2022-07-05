@@ -114,7 +114,7 @@ class Api
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'username' => null,
         'password' => null,
         'signature' => null,
@@ -122,7 +122,7 @@ class Api
         'return' => null,
         'sandbox' => null,
         'cmd' => Api::FORM_CMD,
-    );
+    ];
 
     /**
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
@@ -217,9 +217,9 @@ class Api
      */
     protected function doRequest(array $fields)
     {
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 

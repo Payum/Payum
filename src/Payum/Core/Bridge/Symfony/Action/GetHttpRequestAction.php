@@ -35,7 +35,7 @@ class GetHttpRequestAction implements ActionInterface
 
     public function execute($request)
     {
-        /** @var $request GetHttpRequest */
+        /** @var GetHttpRequest $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         if ($this->httpRequest instanceof Request) {

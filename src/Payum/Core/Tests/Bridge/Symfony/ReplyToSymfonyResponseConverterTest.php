@@ -47,10 +47,10 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
     public function testShouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders()
     {
-        $reply = new HttpResponse('theContent', 418, array(
+        $reply = new HttpResponse('theContent', 418, [
             'foo' => 'fooVal',
             'bar' => 'bar',
-        ));
+        ]);
 
         $converter = new ReplyToSymfonyResponseConverter();
 
@@ -65,7 +65,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
     public function testShouldReturnResponseIfPayumHttpPostRedirectReply()
     {
-        $reply = new HttpPostRedirect('anUrl', array('foo' => 'foo'));
+        $reply = new HttpPostRedirect('anUrl', ['foo' => 'foo']);
 
         $converter = new ReplyToSymfonyResponseConverter();
 

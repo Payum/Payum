@@ -45,7 +45,7 @@ class RecurringApi extends BaseApi
         //Deprecated, set to blank.
         $parameters['notifyUrl'] = '';
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
             'startDate',
@@ -57,7 +57,7 @@ class RecurringApi extends BaseApi
             'orderID',
             'description',
             'notifyUrl',
-        ));
+        ]);
 
         return $this->call('Start', $parameters, $this->getPxRecurringWsdl());
     }
@@ -71,10 +71,10 @@ class RecurringApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
-        ));
+        ]);
 
         return $this->call('Stop', $parameters, $this->getPxRecurringWsdl());
     }
@@ -88,10 +88,10 @@ class RecurringApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
-        ));
+        ]);
 
         return $this->call('Check', $parameters, $this->getPxRecurringWsdl());
     }

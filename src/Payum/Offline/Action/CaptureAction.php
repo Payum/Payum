@@ -12,7 +12,7 @@ class CaptureAction implements ActionInterface
 {
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

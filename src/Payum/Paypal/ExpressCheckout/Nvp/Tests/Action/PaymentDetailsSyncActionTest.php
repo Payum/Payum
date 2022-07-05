@@ -23,9 +23,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsSyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'PAYMENTREQUEST_0_AMT' => 12,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
@@ -36,9 +36,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsSyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'PAYMENTREQUEST_0_AMT' => 0,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
@@ -71,9 +71,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'PAYMENTREQUEST_0_AMT' => 12,
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -95,10 +95,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 11,
             'TOKEN' => 'aToken',
-        ));
+        ]);
 
         $action->execute($sync = new Sync($details));
 
@@ -127,10 +127,10 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 11,
             'TOKEN' => 'aToken',
-        ));
+        ]);
 
         $action->execute($sync = new Sync($details));
 
@@ -166,12 +166,12 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'PAYMENTREQUEST_0_AMT' => 12,
             'TOKEN' => 'aToken',
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'zeroTransId',
             'PAYMENTREQUEST_9_TRANSACTIONID' => 'nineTransId',
-        ));
+        ]);
 
         $action->execute(new Sync($details));
 

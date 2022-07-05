@@ -50,17 +50,17 @@ class CaptureOffsiteActionTest extends GenericActionTest
     public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
         $this->expectException(\Payum\Core\Reply\HttpPostRedirect::class);
-        $model = array(
+        $model = [
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',
             'DESCRIPTION' => 'Gateway for digital stuff',
             'ORDERID' => 'orderId',
             'EXTRADATA' => '[]',
-        );
+        ];
 
-        $postArray = array_replace($model, array(
+        $postArray = array_replace($model, [
             'HASH' => 'foobarbaz',
-        ));
+        ]);
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -88,12 +88,12 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     public function testShouldUpdateModelWhenComeBackFromBe2billSite()
     {
-        $model = array(
+        $model = [
             'AMOUNT' => 1000,
             'CLIENTIDENT' => 'payerId',
             'DESCRIPTION' => 'Gateway for digital stuff',
             'ORDERID' => 'orderId',
-        );
+        ];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -136,7 +136,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 
     /**

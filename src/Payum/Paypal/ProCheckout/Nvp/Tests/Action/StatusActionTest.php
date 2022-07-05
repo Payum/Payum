@@ -17,7 +17,7 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array());
+        $status = new GetHumanStatus([]);
 
         //guard
         $status->markUnknown();
@@ -31,9 +31,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 123,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -47,10 +47,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_SALE,
             'RESULT' => Api::RESULT_SUCCESS,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -64,11 +64,11 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_CREDIT,
             'RESULT' => Api::RESULT_SUCCESS,
             'ORIGID' => 'anId',
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -82,9 +82,9 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 1,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -93,9 +93,9 @@ class StatusActionTest extends GenericActionTest
 
         $this->assertTrue($status->isFailed());
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 100000,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -109,10 +109,10 @@ class StatusActionTest extends GenericActionTest
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_CREDIT,
             'RESULT' => Api::RESULT_SUCCESS,
-        ));
+        ]);
 
         //guard
         $status->markNew();

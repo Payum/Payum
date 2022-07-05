@@ -18,7 +18,7 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 
     public function execute($request)
     {
-        /** @var $request Sync */
+        /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -27,9 +27,9 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
-        $copiedModel = new ArrayObject(array(
+        $copiedModel = new ArrayObject([
             'TOKEN' => $model['TOKEN'],
-        ));
+        ]);
 
         $this->gateway->execute(new GetExpressCheckoutDetails($copiedModel));
         if (Api::L_ERRORCODE_SESSION_HAS_EXPIRED != $copiedModel['L_ERRORCODE0']) {

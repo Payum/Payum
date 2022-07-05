@@ -15,12 +15,12 @@ class TwigFactory
      */
     public static function createGenericPaths()
     {
-        return array_flip(array_filter(array(
+        return array_flip(array_filter([
             'PayumCore' => self::guessViewsPath('Payum\Core\Gateway'),
             'PayumStripe' => self::guessViewsPath('Payum\Stripe\StripeJsGatewayFactory'),
             'PayumKlarnaCheckout' => self::guessViewsPath('Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory'),
             'PayumSymfonyBridge' => self::guessViewsPath('Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter'),
-        )));
+        ]));
     }
 
     /**

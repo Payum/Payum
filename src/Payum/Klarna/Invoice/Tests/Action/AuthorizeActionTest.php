@@ -21,7 +21,7 @@ class AuthorizeActionTest extends TestCase
     {
         $action = new AuthorizeAction();
 
-        $this->assertTrue($action->supports(new Authorize(array())));
+        $this->assertTrue($action->supports(new Authorize([])));
     }
 
     public function testShouldNotSupportAnythingNotAuthorize()
@@ -58,7 +58,7 @@ class AuthorizeActionTest extends TestCase
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Authorize(array());
+        $request = new Authorize([]);
 
         $action->execute($request);
     }
@@ -74,9 +74,9 @@ class AuthorizeActionTest extends TestCase
         $action = new AuthorizeAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Authorize(array(
+        $request = new Authorize([
             'rno' => 'aRno',
-        ));
+        ]);
 
         $action->execute($request);
     }

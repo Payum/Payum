@@ -71,10 +71,10 @@ class ArrayObjectTest extends TestCase
 
         $this->assertInstanceOf('ArrayIterator', $iterator);
         $this->assertSame(
-            array(
+            [
                 'foo' => 'theFoo',
                 'bar' => 'theBar',
-            ),
+            ],
             iterator_to_array($model)
         );
     }

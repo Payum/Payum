@@ -22,7 +22,7 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param $request CreateTransaction
+     * @param CreateTransaction $request
      */
     public function execute($request)
     {

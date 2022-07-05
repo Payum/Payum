@@ -16,7 +16,7 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * @param $request Notify
+     * @param Notify $request
      */
     public function execute($request)
     {

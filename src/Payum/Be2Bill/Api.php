@@ -115,11 +115,11 @@ class Api
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'identifier' => null,
         'password' => null,
         'sandbox' => null,
-    );
+    ];
 
     /**
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
@@ -128,10 +128,10 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-        $options->validateNotEmpty(array(
+        $options->validateNotEmpty([
             'identifier',
             'password',
-        ));
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new LogicException('The boolean sandbox option must be set.');
@@ -179,9 +179,9 @@ class Api
      */
     protected function doRequest(array $fields)
     {
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
@@ -215,7 +215,7 @@ class Api
      */
     public function prepareOffsitePayment(array $params)
     {
-        $supportedParams = array(
+        $supportedParams = [
             'CLIENTIDENT' => null,
             'DESCRIPTION' => null,
             'ORDERID' => null,
@@ -233,7 +233,7 @@ class Api
             'USETEMPLATE' => null,
             'HIDECLIENTEMAIL' => null,
             'HIDEFULLNAME' => null,
-        );
+        ];
 
         $params = array_filter(array_replace(
             $supportedParams,

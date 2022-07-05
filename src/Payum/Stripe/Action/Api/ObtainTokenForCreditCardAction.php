@@ -49,7 +49,7 @@ class ObtainTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
 
     public function execute($request)
     {
-        /** @var $request ObtainToken */
+        /** @var ObtainToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

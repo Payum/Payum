@@ -25,38 +25,38 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(array(
+        yield [new $this->requestClass([
             'recurring_token' => 'aToken',
-        )));
-        yield array(new $this->requestClass(array(
+        ])];
+        yield [new $this->requestClass([
             'recurring' => false,
             'recurring_token' => 'aToken',
-        )));
-        yield array(new $this->requestClass(new \ArrayObject(array(
+        ])];
+        yield [new $this->requestClass(new \ArrayObject([
             'recurring_token' => 'aToken',
-        ))));
-        yield array(new $this->requestClass(new \ArrayObject(array(
+        ]))];
+        yield [new $this->requestClass(new \ArrayObject([
             'recurring' => false,
             'recurring_token' => 'aToken',
-        ))));
+        ]))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array(new $this->requestClass('foo'));
-        yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
-        yield array(new $this->requestClass(array(
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [new $this->requestClass('foo')];
+        yield [new $this->requestClass(new \stdClass())];
+        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
+        yield [new $this->requestClass([
             'recurring' => true,
             'recurring_token' => 'aToken',
-        )));
-        yield array(new $this->requestClass(array()));
-        yield array(new $this->requestClass(array(
+        ])];
+        yield [new $this->requestClass([])];
+        yield [new $this->requestClass([
             'recurring' => false,
-        )));
+        ])];
     }
 
     public function testShouldImplementGatewayAwareInterface()
@@ -92,10 +92,10 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $action = new AuthorizeRecurringAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'reservation' => 'aReservation',
             'recurring_token' => 'aToken',
-        )));
+        ]));
     }
 
     public function testShouldCreateOrderIfReservationNotSet()
@@ -104,9 +104,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array(
+            ->willReturn([
                 'reservation' => 'theReservation',
-            ))
+            ])
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -119,9 +119,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             })
         ;
 
-        $model = new \ArrayObject(array(
+        $model = new \ArrayObject([
             'recurring_token' => 'theToken',
-        ));
+        ]);
 
         $action = new AuthorizeRecurringAction();
         $action->setGateway($gatewayMock);
@@ -147,9 +147,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array(
+            ->willReturn([
                 'reservation' => 'theReservation',
-            ))
+            ])
         ;
 
         $testCase = $this;
@@ -170,9 +170,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             })
         ;
 
-        $model = new \ArrayObject(array(
+        $model = new \ArrayObject([
             'recurring_token' => 'theToken',
-        ));
+        ]);
 
         $action = new AuthorizeRecurringAction();
         $action->setGateway($gatewayMock);
@@ -200,9 +200,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array(
+            ->willReturn([
                 'reservation' => 'theReservation',
-            ))
+            ])
         ;
 
         $testCase = $this;
@@ -219,9 +219,9 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             })
         ;
 
-        $model = new \ArrayObject(array(
+        $model = new \ArrayObject([
             'recurring_token' => 'theToken',
-        ));
+        ]);
 
         $action = new AuthorizeRecurringAction();
         $action->setGateway($gatewayMock);
@@ -241,6 +241,6 @@ class AuthorizeRecurringActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
     }
 }

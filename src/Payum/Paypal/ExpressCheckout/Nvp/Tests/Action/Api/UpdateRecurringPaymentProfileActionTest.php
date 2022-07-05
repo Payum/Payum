@@ -51,7 +51,7 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new UpdateRecurringPaymentProfileAction();
 
-        $action->execute(new UpdateRecurringPaymentProfile(array()));
+        $action->execute(new UpdateRecurringPaymentProfile([]));
     }
 
     public function testShouldCallApiUpdateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
@@ -66,16 +66,16 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new UpdateRecurringPaymentProfile(array(
+        $request = new UpdateRecurringPaymentProfile([
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -87,19 +87,19 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'PROFILEID' => 'theId',
                     'PROFILESTATUS' => 'theStatus',
-                );
+                ];
             })
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
         $action->setApi($apiMock);
 
-        $request = new UpdateRecurringPaymentProfile(array(
+        $request = new UpdateRecurringPaymentProfile([
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -116,6 +116,6 @@ class UpdateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

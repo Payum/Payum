@@ -45,7 +45,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldSubExecuteObtainTokenRequestIfTokenNotSet()
     {
-        $model = array();
+        $model = [];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -85,9 +85,9 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldSubExecuteCreateChargeIfTokenSetButNotUsed()
     {
-        $model = array(
+        $model = [
             'card' => 'notUsedToken',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

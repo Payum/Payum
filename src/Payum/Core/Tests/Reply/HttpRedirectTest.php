@@ -70,17 +70,17 @@ HTML;
     {
         $request = new HttpRedirect('anUrl');
 
-        $this->assertSame(array(
+        $this->assertSame([
             'Location' => 'anUrl',
-        ), $request->getHeaders());
+        ], $request->getHeaders());
     }
 
     public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
-        $customHeaders = array(
+        $customHeaders = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        );
+        ];
 
         $expectedHeaders = $customHeaders;
         $expectedHeaders['Location'] = 'anUrl';

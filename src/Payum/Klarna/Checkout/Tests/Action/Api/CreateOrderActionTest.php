@@ -17,10 +17,10 @@ class CreateOrderActionTest extends GenericActionTest
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
@@ -32,7 +32,7 @@ class CreateOrderActionTest extends GenericActionTest
 
     public function testShouldCreateOrderOnExecute()
     {
-        $request = new CreateOrder(array());
+        $request = new CreateOrder([]);
 
         $connector = $this->createConnectorMock();
         $connector
@@ -51,11 +51,11 @@ class CreateOrderActionTest extends GenericActionTest
 
     public function testShouldUseModelAsDataToCreateOrderOnExecute()
     {
-        $model = array(
+        $model = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-            'merchant' => array('id' => 'anId'),
-        );
+            'merchant' => ['id' => 'anId'],
+        ];
 
         $request = new CreateOrder($model);
 
@@ -86,10 +86,10 @@ class CreateOrderActionTest extends GenericActionTest
         $config = new Config();
         $config->merchantId = 'theMerchantId';
 
-        $model = array(
+        $model = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        );
+        ];
 
         $expectedModel = $model;
         $expectedModel['merchant']['id'] = 'theMerchantId';
@@ -120,7 +120,7 @@ class CreateOrderActionTest extends GenericActionTest
 
     public function testShouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
     {
-        $request = new CreateOrder(array());
+        $request = new CreateOrder([]);
 
         $expectedOrder = null;
 
@@ -145,15 +145,15 @@ class CreateOrderActionTest extends GenericActionTest
     public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $request = new CreateOrder($model);
 
@@ -173,15 +173,15 @@ class CreateOrderActionTest extends GenericActionTest
 
     public function testShouldRecoverAfterTimeout()
     {
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $request = new CreateOrder($model);
 
@@ -213,6 +213,6 @@ class CreateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_ConnectorInterface', [], [], '', false);
     }
 }

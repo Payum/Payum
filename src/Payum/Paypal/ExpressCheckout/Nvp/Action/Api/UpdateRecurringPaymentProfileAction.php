@@ -21,12 +21,12 @@ class UpdateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
 
     public function execute($request)
     {
-        /** @var $request UpdateRecurringPaymentProfile */
+        /** @var UpdateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('PROFILEID'));
+        $model->validateNotEmpty(['PROFILEID']);
 
         $model->replace(
             $this->api->updateRecurringPaymentsProfile((array) $model)

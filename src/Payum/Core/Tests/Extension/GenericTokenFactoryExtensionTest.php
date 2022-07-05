@@ -28,7 +28,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
 
         $action = new ActionGenericTokenFactoryAware();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onExecute($context);
@@ -45,7 +45,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $action = new ActionGenericTokenFactoryAware();
         $action->tokenFactory = $tokenFactory;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onPostExecute($context);
@@ -63,7 +63,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
 
         $action = $this->createActionMock();
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), array());
+        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
         $context->setAction($action);
 
         $extension->onPostExecute($context);

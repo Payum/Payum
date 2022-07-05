@@ -20,7 +20,7 @@ class GetTokenAction implements ActionInterface
     }
 
     /**
-     * @param $request GetToken
+     * @param GetToken $request
      */
     public function execute($request)
     {
