@@ -27,7 +27,7 @@ class SoapClientFactory
             $soapClientOptions
         );
 
-        $this->soapClientClass = $soapClientClass ?: 'SoapClient';
+        $this->soapClientClass = $soapClientClass ?: \SoapClient::class;
         $this->soapClientOptions = $soapClientOptions;
     }
 

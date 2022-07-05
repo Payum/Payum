@@ -11,9 +11,9 @@ class HttpRequestVerifierTest extends TestCase
 {
     public function testShouldImplementHttpRequestVerifierInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\HttpRequestVerifierInterface::class));
     }
 
     public function testThrowIfRequestIsNotArrayOnVerify()
@@ -177,6 +177,6 @@ class HttpRequestVerifierTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 }

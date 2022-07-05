@@ -21,7 +21,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(\ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -36,7 +36,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(\ArrayAccess::class);
         $array
             ->expects($this->atLeast(2))
             ->method('offsetExists')
@@ -158,6 +158,6 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

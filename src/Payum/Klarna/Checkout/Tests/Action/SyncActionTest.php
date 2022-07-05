@@ -54,7 +54,7 @@ class SyncActionTest extends GenericActionTest
 
     public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
-        $orderMock = $this->createMock('Klarna_Checkout_Order', ['marshal'], [], '', false);
+        $orderMock = $this->createMock(\Klarna_Checkout_Order::class, ['marshal'], [], '', false);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
@@ -68,7 +68,7 @@ class SyncActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\FetchOrder::class))
             ->willReturnCallback(function (FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             })
@@ -112,7 +112,7 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**
@@ -120,6 +120,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
+        return $this->createMock(\Klarna_Checkout_Order::class, [], [], '', false);
     }
 }

@@ -86,7 +86,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $content = [];
         parse_str($actualRequest->getBody()->getContents(), $content);
 
-        $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $actualRequest);
+        $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::class, $actualRequest);
         $this->assertEquals([
             'cmd' => Api::CMD_NOTIFY_VALIDATE,
         ] + $expectedNotification, $content);
@@ -153,7 +153,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock('Payum\Core\HttpClientInterface', ['send']);
+        return $this->createMock(\Payum\Core\HttpClientInterface::class, ['send']);
     }
 
     /**

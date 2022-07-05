@@ -8,15 +8,15 @@ class InvalidArgumentExceptionExceptionTest extends TestCase
 {
     public function testShouldImplementExceptionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Exception\ExceptionInterface::class));
     }
 
     public function testShouldBeSubClassOfRuntimeException()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 
-        $this->assertTrue($rc->isSubclassOf('InvalidArgumentException'));
+        $this->assertTrue($rc->isSubclassOf(\InvalidArgumentException::class));
     }
 }

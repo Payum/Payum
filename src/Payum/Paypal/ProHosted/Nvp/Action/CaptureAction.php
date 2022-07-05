@@ -23,6 +23,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
      */
     public function execute($request)
     {
+        $newResponse = [];
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());

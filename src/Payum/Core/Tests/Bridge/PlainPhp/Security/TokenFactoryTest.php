@@ -45,7 +45,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -102,7 +102,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -164,7 +164,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -207,7 +207,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -253,7 +253,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -295,7 +295,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -382,7 +382,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -443,7 +443,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -505,7 +505,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -568,7 +568,7 @@ class TokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();

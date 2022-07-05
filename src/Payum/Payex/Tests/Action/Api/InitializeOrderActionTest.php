@@ -41,16 +41,16 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\InitializeOrderAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\InitializeOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\InitializeOrderAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\InitializeOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotOrderApiAsApi()
@@ -66,7 +66,7 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new InitializeOrderAction();
 
-        $this->assertTrue($action->supports(new InitializeOrder($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new InitializeOrder($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotInitializeOrderRequest()
@@ -176,6 +176,6 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\OrderApi', [], [], '', false);
+        return $this->createMock(\Payum\Payex\Api\OrderApi::class, [], [], '', false);
     }
 }

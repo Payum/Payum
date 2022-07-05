@@ -10,21 +10,21 @@ class AbstractStorageTest extends TestCase
 {
     public function testShouldImplementStorageInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Storage\AbstractStorage');
+        $rc = new \ReflectionClass(\Payum\Core\Storage\AbstractStorage::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Storage\StorageInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Storage\StorageInterface::class));
     }
 
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Core\Storage\AbstractStorage');
+        $rc = new \ReflectionClass(\Payum\Core\Storage\AbstractStorage::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
     public function testShouldCreateInstanceOfModelClassSetInConstructor()
     {
-        $storage = new class('stdClass') extends AbstractStorage {
+        $storage = new class(\stdClass::class) extends AbstractStorage {
             protected function doUpdateModel($model)
             {
             }
@@ -48,16 +48,16 @@ class AbstractStorageTest extends TestCase
 
         $model = $storage->create();
 
-        $this->assertInstanceOf('stdClass', $model);
+        $this->assertInstanceOf(\stdClass::class, $model);
     }
 
     public function testThrowIfInvalidModelGivenOnUpdate()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
 
         $storage->update(new \stdClass());
     }
@@ -66,7 +66,7 @@ class AbstractStorageTest extends TestCase
     {
         $model = new \stdClass();
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doUpdateModel')
@@ -80,9 +80,9 @@ class AbstractStorageTest extends TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
 
         $storage->delete(new \stdClass());
     }
@@ -91,7 +91,7 @@ class AbstractStorageTest extends TestCase
     {
         $model = new \stdClass();
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doDeleteModel')
@@ -105,9 +105,9 @@ class AbstractStorageTest extends TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
 
         $storage->identify(new \stdClass());
     }
@@ -116,7 +116,7 @@ class AbstractStorageTest extends TestCase
     {
         $model = new \stdClass();
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doGetIdentity')
@@ -128,10 +128,10 @@ class AbstractStorageTest extends TestCase
 
     public function testShouldReturnNullIfNotSupportedIdentityGivenOnFindModelByIdentity()
     {
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
         $identity = new Identity('anId', new \stdClass());
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
 
         $this->assertNull($storage->find($identity));
     }
@@ -140,7 +140,7 @@ class AbstractStorageTest extends TestCase
     {
         $identity = new Identity('theId', new \stdClass());
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doFind')
@@ -154,7 +154,7 @@ class AbstractStorageTest extends TestCase
     {
         $identity = new Identity('theId', new \stdClass());
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['\stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doFind')
@@ -169,7 +169,7 @@ class AbstractStorageTest extends TestCase
         $expectedModel = new \stdClass();
         $identity = new Identity('aId', $expectedModel);
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
         $storage
             ->expects($this->once())
             ->method('doFind')
@@ -184,9 +184,9 @@ class AbstractStorageTest extends TestCase
         $expectedModel = new \stdClass();
         $identity = new Identity('aId', $expectedModel);
 
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
         $storage
             ->expects($this->never())
             ->method('doFind')
@@ -197,25 +197,25 @@ class AbstractStorageTest extends TestCase
 
     public function testShouldReturnTrueIfModelSupportedOnSupportModel()
     {
-        $model = $this->createMock('stdClass');
+        $model = $this->createMock(\stdClass::class);
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [get_class($model)]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [get_class($model)]);
 
         $this->assertTrue($storage->support($model));
     }
 
     public function testShouldReturnFalseIfModelNotSupportedOnSupportModel()
     {
-        $modelClass = get_class($this->createMock('stdClass'));
+        $modelClass = get_class($this->createMock(\stdClass::class));
 
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', [$modelClass]);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [$modelClass]);
 
         $this->assertFalse($storage->support(new \stdClass()));
     }
 
     public function testShouldReturnFalseIfModelNotObjectOnSupportModel()
     {
-        $storage = $this->getMockForAbstractClass('Payum\Core\Storage\AbstractStorage', ['stdClass']);
+        $storage = $this->getMockForAbstractClass(\Payum\Core\Storage\AbstractStorage::class, [\stdClass::class]);
 
         $this->assertFalse($storage->support('notObject'));
     }

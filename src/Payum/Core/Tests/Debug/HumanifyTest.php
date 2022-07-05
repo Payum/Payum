@@ -11,14 +11,14 @@ class HumanifyTest extends TestCase
 {
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
+        $rc = new \ReflectionClass(\Payum\Core\Debug\Humanify::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
     public function testCouldNotBeInstantiable()
     {
-        $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
+        $rc = new \ReflectionClass(\Payum\Core\Debug\Humanify::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
@@ -35,7 +35,7 @@ class HumanifyTest extends TestCase
 
     public function testShouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
     {
-        $this->assertSame(__CLASS__, Humanify::value($this, false));
+        $this->assertSame(self::class, Humanify::value($this, false));
     }
 
     public function testShouldReturnValueTypeIfNotObjectValueGivenOnValue()

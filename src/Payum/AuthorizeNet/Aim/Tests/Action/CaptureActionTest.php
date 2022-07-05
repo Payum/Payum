@@ -16,9 +16,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class CaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\CaptureAction';
+    protected $actionClass = \Payum\AuthorizeNet\Aim\Action\CaptureAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = \Payum\Core\Request\Capture::class;
 
     public function testShouldImplementActionInterface()
     {
@@ -36,9 +36,9 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
+        $rc = new \ReflectionClass(\Payum\AuthorizeNet\Aim\Action\CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testShouldAllowSetApi()
@@ -121,7 +121,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willThrowException(new RequestNotSupportedException())
         ;
 
@@ -152,7 +152,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
@@ -187,7 +187,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
@@ -211,7 +211,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**
@@ -219,7 +219,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMMock()
     {
-        return $this->createMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', [], [], '', false);
+        return $this->createMock(\Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM::class, [], [], '', false);
     }
 
     /**
@@ -227,6 +227,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMResponseMock()
     {
-        return $this->createMock('AuthorizeNetAIM_Response', [], [], '', false);
+        return $this->createMock(\AuthorizeNetAIM_Response::class, [], [], '', false);
     }
 }

@@ -27,7 +27,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new DoReferenceTransactionAction();
 
-        $this->assertTrue($action->supports(new DoReferenceTransaction($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DoReferenceTransaction($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotDoReferenceTransactionRequest()
@@ -154,6 +154,6 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

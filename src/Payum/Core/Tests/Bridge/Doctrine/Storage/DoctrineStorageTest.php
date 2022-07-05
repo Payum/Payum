@@ -13,14 +13,14 @@ class DoctrineStorageTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractStorage()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Storage\AbstractStorage::class));
     }
 
     public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $expectedModelClass = \Payum\Core\Tests\Mocks\Model\TestModel::class;
 
         $storage = new DoctrineStorage(
             $this->createObjectManagerMock(),
@@ -39,7 +39,7 @@ class DoctrineStorageTest extends TestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel'))
+            ->with($this->isInstanceOf(\Payum\Core\Tests\Mocks\Model\TestModel::class))
         ;
         $objectManagerMock
             ->expects($this->once())
@@ -48,7 +48,7 @@ class DoctrineStorageTest extends TestCase
 
         $storage = new DoctrineStorage(
             $objectManagerMock,
-            'Payum\Core\Tests\Mocks\Model\TestModel'
+            \Payum\Core\Tests\Mocks\Model\TestModel::class
         );
 
         $model = $storage->create();
@@ -58,7 +58,7 @@ class DoctrineStorageTest extends TestCase
 
     public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
     {
-        $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $modelClass = \Payum\Core\Tests\Mocks\Model\TestModel::class;
         $model = new TestModel();
 
         $criteria = [
@@ -84,7 +84,7 @@ class DoctrineStorageTest extends TestCase
 
         $storage = new DoctrineStorage(
             $objectManagerMock,
-            'Payum\Core\Tests\Mocks\Model\TestModel'
+            \Payum\Core\Tests\Mocks\Model\TestModel::class
         );
 
         $this->assertSame($model, $storage->findBy($criteria));
@@ -92,7 +92,7 @@ class DoctrineStorageTest extends TestCase
 
     public function testShouldFindModelById()
     {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $expectedModelClass = \Payum\Core\Tests\Mocks\Model\TestModel::class;
         $expectedModelId = 123;
         $expectedFoundModel = new TestModel();
 
@@ -106,7 +106,7 @@ class DoctrineStorageTest extends TestCase
 
         $storage = new DoctrineStorage(
             $objectManagerMock,
-            'Payum\Core\Tests\Mocks\Model\TestModel'
+            \Payum\Core\Tests\Mocks\Model\TestModel::class
         );
 
         $actualModel = $storage->find($expectedModelId);

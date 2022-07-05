@@ -12,9 +12,9 @@ class HttpRequestVerifierTest extends TestCase
 {
     public function testShouldImplementHttpRequestVerifierInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\HttpRequestVerifierInterface::class));
     }
 
     public function testThrowIfNotSymfonyRequestGivenOnVerify()
@@ -46,7 +46,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($invalidHash)
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $request = Request::create('/');
@@ -70,7 +70,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
 
         $request = Request::create('http://target.com/bar');
@@ -92,7 +92,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($expectedToken))
+            ->willReturn($expectedToken)
         ;
 
         $request = Request::create('http://target.com/foo');
@@ -116,7 +116,7 @@ class HttpRequestVerifierTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with('theHash')
-            ->will($this->returnValue($expectedToken))
+            ->willReturn($expectedToken)
         ;
 
         $request = Request::create('http://target.com/foo');
@@ -225,6 +225,6 @@ class HttpRequestVerifierTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 }

@@ -52,7 +52,7 @@ class AuthorizeActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\ReserveAmount'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\ReserveAmount::class))
         ;
 
         $action = new AuthorizeAction();
@@ -86,6 +86,6 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

@@ -26,7 +26,7 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $payment = $request->getSource();
 
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
-        $divisor = pow(10, $currency->exp);
+        $divisor = 10 ** $currency->exp;
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
         $details['currency_code'] = $payment->getCurrencyCode();

@@ -43,7 +43,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -100,7 +100,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -161,7 +161,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -248,7 +248,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -309,7 +309,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -371,7 +371,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -434,7 +434,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $model = new \stdClass();
-        $identity = new Identity('anId', 'stdClass');
+        $identity = new Identity('anId', \stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();

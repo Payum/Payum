@@ -11,16 +11,16 @@ class TableGatewayStorageTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractStorage()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Zend\Storage\TableGatewayStorage');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Zend\Storage\TableGatewayStorage::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Storage\AbstractStorage::class));
     }
 
     public function testThrowIfTryToUseNotSupportedFindByMethod()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Method is not supported by the storage.');
-        $storage = new TableGatewayStorage($this->createTableGatewayMock(), 'stdClass');
+        $storage = new TableGatewayStorage($this->createTableGatewayMock(), \stdClass::class);
 
         $storage->findBy([]);
     }

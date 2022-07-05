@@ -12,9 +12,9 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CancelReservationAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\CancelReservationAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
@@ -127,7 +127,7 @@ class CancelReservationActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
+        $klarnaMock = $this->createMock(\Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

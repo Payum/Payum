@@ -514,7 +514,7 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**
@@ -522,6 +522,6 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order');
+        return $this->createMock(\Klarna_Checkout_Order::class);
     }
 }

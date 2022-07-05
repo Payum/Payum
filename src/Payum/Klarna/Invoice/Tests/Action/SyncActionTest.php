@@ -52,7 +52,7 @@ class SyncActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CheckOrderStatus'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\CheckOrderStatus::class))
         ;
 
         $action = new SyncAction();
@@ -105,6 +105,6 @@ class SyncActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

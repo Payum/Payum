@@ -24,16 +24,16 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\StopRecurringPaymentAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\StopRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\StopRecurringPaymentAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\StopRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotRecurringApiAsApi()
@@ -49,7 +49,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StopRecurringPaymentAction();
 
-        $this->assertTrue($action->supports(new StopRecurringPayment($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new StopRecurringPayment($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotStopRecurringPaymentRequest()
@@ -114,6 +114,6 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\RecurringApi', [], [], '', false);
+        return $this->createMock(\Payum\Payex\Api\RecurringApi::class, [], [], '', false);
     }
 }

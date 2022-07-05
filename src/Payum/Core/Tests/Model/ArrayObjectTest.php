@@ -69,7 +69,7 @@ class ArrayObjectTest extends TestCase
 
         $iterator = $model->getIterator();
 
-        $this->assertInstanceOf('ArrayIterator', $iterator);
+        $this->assertInstanceOf(\ArrayIterator::class, $iterator);
         $this->assertEquals(
             [
                 'foo' => 'theFoo',

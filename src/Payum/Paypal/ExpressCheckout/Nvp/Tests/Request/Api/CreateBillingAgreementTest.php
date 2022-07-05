@@ -8,7 +8,7 @@ class CreateBillingAgreementTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

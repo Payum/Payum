@@ -26,7 +26,7 @@ abstract class OrmTest extends BaseOrmTest
         ]);
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
-        $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Entity\TestModel');
+        $rc = new \ReflectionClass(\Payum\Core\Tests\Mocks\Entity\TestModel::class);
         $annotationDriver = $config->newDefaultAnnotationDriver([
             dirname($rc->getFileName()),
         ], false);

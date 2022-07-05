@@ -10,9 +10,9 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()

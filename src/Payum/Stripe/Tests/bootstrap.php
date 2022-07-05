@@ -12,7 +12,7 @@ EOM;
     exit(1);
 }
 
-$rc = new \ReflectionClass('Payum\Core\GatewayInterface');
+$rc = new \ReflectionClass(\Payum\Core\GatewayInterface::class);
 $coreDir = dirname($rc->getFileName()) . '/Tests';
 
 $loader->add('Payum\Core\Tests', $coreDir);

@@ -8,8 +8,8 @@ class ReplyInterfaceTest extends TestCase
 {
     public function testShouldImplementExceptionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\ReplyInterface');
+        $rc = new \ReflectionClass(\Payum\Core\Reply\ReplyInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Exception\ExceptionInterface::class));
     }
 }

@@ -28,7 +28,7 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new GetTransactionDataAction();
 
-        $this->assertTrue($action->supports(new GetTransactionData($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new GetTransactionData($this->createMock(\ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingGetTransactionDataRequest()

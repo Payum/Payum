@@ -28,7 +28,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
         $action = new GetRecurringPaymentsProfileDetailsAction();
 
         $this->assertTrue(
-            $action->supports(new GetRecurringPaymentsProfileDetails($this->createMock('ArrayAccess')))
+            $action->supports(new GetRecurringPaymentsProfileDetails($this->createMock(\ArrayAccess::class)))
         );
     }
 
@@ -117,6 +117,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }

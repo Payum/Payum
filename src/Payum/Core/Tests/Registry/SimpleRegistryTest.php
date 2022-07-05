@@ -62,12 +62,12 @@ class SimpleRegistryTest extends TestCase
         $registry = new SimpleRegistry(
             [],
             [
-                'stdClass' => $storageFooMock,
+                \stdClass::class => $storageFooMock,
                 TestModel::class => $storageBarMock,
             ]
         );
 
-        $this->assertSame($storageFooMock, $registry->getStorage('stdClass'));
+        $this->assertSame($storageFooMock, $registry->getStorage(\stdClass::class));
         $this->assertSame($storageBarMock, $registry->getStorage(TestModel::class));
     }
 
@@ -77,7 +77,7 @@ class SimpleRegistryTest extends TestCase
         $storageBarMock = $this->createMock(StorageInterface::class);
 
         $storages = [
-            'stdClass' => $storageFooMock,
+            \stdClass::class => $storageFooMock,
             TestModel::class => $storageBarMock,
         ];
 
@@ -105,7 +105,7 @@ class SimpleRegistryTest extends TestCase
                 'foo' => $gatewayMock,
             ],
             [
-                'stdClass' => $storageMock,
+                \stdClass::class => $storageMock,
             ]
         );
 

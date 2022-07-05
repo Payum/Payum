@@ -9,37 +9,37 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
     }
 
     public function testShouldUseApiAwareTrait()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
 
-        $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
+        $this->assertContains(\Payum\Core\ApiAwareTrait::class, $rc->getTraitNames());
     }
 
     public function testShouldUseGatewayAwareTrait()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
 
-        $this->assertContains('Payum\Core\GatewayAwareTrait', $rc->getTraitNames());
+        $this->assertContains(\Payum\Core\GatewayAwareTrait::class, $rc->getTraitNames());
     }
 
     public function testShouldSupportDoVoidRequestAndArrayAccessAsModel()
@@ -47,7 +47,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $action = new DoVoidAction();
 
         $this->assertTrue(
-            $action->supports(new DoVoid($this->createMock('ArrayAccess')))
+            $action->supports(new DoVoid($this->createMock(\ArrayAccess::class)))
         );
     }
 
@@ -140,6 +140,6 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
     }
 }
