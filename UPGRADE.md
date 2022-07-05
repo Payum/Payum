@@ -3,6 +3,7 @@
 ## 2.0.0 - TBD
 
 * Dropped support for PHP 7.x
+* Twig 1.x is no longer supported
 
 ## 1.5.0
 
