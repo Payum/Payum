@@ -27,7 +27,7 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
      */
     public function execute($request)
     {
-        /** @var $request AuthorizeToken */
+        /** @var AuthorizeToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -37,10 +37,10 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
 
         if (false == $model['PAYERID'] || $request->isForced()) {
             throw new HttpRedirect(
-                $this->api->getAuthorizeTokenUrl($model['TOKEN'], array(
+                $this->api->getAuthorizeTokenUrl($model['TOKEN'], [
                     'useraction' => $model['AUTHORIZE_TOKEN_USERACTION'],
                     'cmd' => $model['AUTHORIZE_TOKEN_CMD'],
-                ))
+                ])
             );
         }
     }

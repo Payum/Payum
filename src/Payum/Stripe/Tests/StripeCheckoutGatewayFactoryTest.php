@@ -22,10 +22,10 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new StripeCheckoutGatewayFactory(array(
+        $factory = new StripeCheckoutGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -47,7 +47,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('publishable_key' => '', 'secret_key' => ''), $config['payum.default_options']);
+        $this->assertEquals(['publishable_key' => '', 'secret_key' => ''], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

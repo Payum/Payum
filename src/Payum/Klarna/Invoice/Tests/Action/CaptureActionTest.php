@@ -21,7 +21,7 @@ class CaptureActionTest extends TestCase
     {
         $action = new CaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array())));
+        $this->assertTrue($action->supports(new Capture([])));
     }
 
     public function testShouldNotSupportAnythingNotCapture()
@@ -58,7 +58,7 @@ class CaptureActionTest extends TestCase
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array());
+        $request = new Capture([]);
 
         $action->execute($request);
     }
@@ -75,9 +75,9 @@ class CaptureActionTest extends TestCase
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'rno' => 'aRno',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -93,10 +93,10 @@ class CaptureActionTest extends TestCase
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'rno' => 'aRno',
             'invoice_number' => 'anInvNumber',
-        ));
+        ]);
 
         $action->execute($request);
     }

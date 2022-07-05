@@ -27,12 +27,12 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        $recurringCanceledStatuses = array(
+        $recurringCanceledStatuses = [
             RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
-        );
+        ];
         if (
             is_numeric($model['recurringStatus']) &&
             in_array($model['recurringStatus'], $recurringCanceledStatuses)

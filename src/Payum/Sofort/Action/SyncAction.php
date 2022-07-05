@@ -15,7 +15,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * @param $request Sync
+     * @param Sync $request
      */
     public function execute($request)
     {

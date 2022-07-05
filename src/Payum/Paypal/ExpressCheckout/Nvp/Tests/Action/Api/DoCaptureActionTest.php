@@ -71,10 +71,10 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The COMPLETETYPE fields are required.');
         $action = new DoCaptureAction();
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aTransactionId',
             'PAYMENTREQUEST_0_AMT' => 100,
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
@@ -85,10 +85,10 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The AMT fields are required.');
         $action = new DoCaptureAction();
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aReferenceId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
@@ -109,7 +109,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
                 $this->assertArrayHasKey('COMPLETETYPE', $fields);
                 $this->assertSame('Complete', $fields['COMPLETETYPE']);
 
-                return array();
+                return [];
             })
         ;
 
@@ -117,11 +117,11 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi($apiMock);
         $action->setGateway($this->createGatewayMock());
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
@@ -133,10 +133,10 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('DoCapture')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
-                );
+                ];
             })
         ;
 
@@ -147,11 +147,11 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf(GetTransactionDetails::class))
             ->willReturnCallback(function (GetTransactionDetails $request) {
                 $this->assertSame(0, $request->getPaymentRequestN());
-                $this->assertSame(array(
+                $this->assertSame([
                     'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
                     'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
                     'PAYMENTREQUEST_0_AMT' => 'theAmt',
-                ), (array) $request->getModel());
+                ], (array) $request->getModel());
 
                 $model = $request->getModel();
                 $model['FIRSTNAME'] = 'theFirstname';
@@ -163,11 +163,11 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
 

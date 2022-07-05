@@ -47,7 +47,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CreateSubscription */
+        /** @var CreateSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

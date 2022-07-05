@@ -104,19 +104,19 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
             }
         }
 
-        $renderTemplate = new RenderTemplate($this->templateName, array(
+        $renderTemplate = new RenderTemplate($this->templateName, [
             'model' => $request->getModel(),
             'firstModel' => $request->getFirstModel(),
             'form' => $form->createView(),
             'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
-        ));
+        ]);
         $this->gateway->execute($renderTemplate);
 
-        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
+        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, [
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
             'X-Status-Code' => 200,
             'Pragma' => 'no-cache',
-        )));
+        ]));
     }
 
     public function supports($request)

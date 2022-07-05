@@ -17,7 +17,7 @@ use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainToken;
 
 /**
- * @param Keys $keys
+ * @param Keys $templateName
  * @param Keys $api
  */
 class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
@@ -59,7 +59,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
     public function execute($request)
     {
-        /** @var $request ObtainToken */
+        /** @var ObtainToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -76,11 +76,11 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
             return;
         }
 
-        $this->gateway->execute($renderTemplate = new RenderTemplate($this->templateName, array(
+        $this->gateway->execute($renderTemplate = new RenderTemplate($this->templateName, [
             'model' => $model,
             'publishable_key' => $this->keys->getPublishableKey(),
             'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
-        )));
+        ]));
 
         throw new HttpResponse($renderTemplate->getResult());
     }

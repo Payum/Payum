@@ -14,16 +14,16 @@ class GetCurrencyActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass('USD'));
-        yield array(new $this->requestClass('EUR'));
+        yield [new $this->requestClass('USD')];
+        yield [new $this->requestClass('EUR')];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
     }
 
     public function testShouldSetCurrencyByAlpha3()

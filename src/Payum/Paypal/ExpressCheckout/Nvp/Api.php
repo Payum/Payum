@@ -299,7 +299,7 @@ class Api
      */
     protected $messageFactory;
 
-    protected $options = array(
+    protected $options = [
         'username' => null,
         'password' => null,
         'signature' => null,
@@ -309,7 +309,7 @@ class Api
         'sandbox' => null,
         'useraction' => null,
         'cmd' => Api::CMD_EXPRESS_CHECKOUT,
-    );
+    ];
 
     /**
      * @param HttpClientInterface|null $client
@@ -319,11 +319,11 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-        $options->validateNotEmpty(array(
+        $options->validateNotEmpty([
             'username',
             'password',
             'signature',
-        ));
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
@@ -559,9 +559,9 @@ class Api
      */
     protected function doRequest(array $fields)
     {
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
@@ -571,7 +571,7 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        $result = array();
+        $result = [];
         parse_str($response->getBody()->getContents(), $result);
         foreach ($result as &$value) {
             $value = urldecode($value);
@@ -585,13 +585,13 @@ class Api
      *
      * @return string
      */
-    public function getAuthorizeTokenUrl($token, array $query = array())
+    public function getAuthorizeTokenUrl($token, array $query = [])
     {
-        $defaultQuery = array_filter(array(
+        $defaultQuery = array_filter([
             'useraction' => $this->options['useraction'],
             'cmd' => $this->options['cmd'],
             'token' => $token,
-        ));
+        ]);
 
         $query = array_filter($query);
 

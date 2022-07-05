@@ -22,7 +22,7 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
 
     public function execute($request)
     {
-        /** @var $request CreateRecurringPaymentProfile */
+        /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -30,7 +30,7 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         $model->validateNotEmpty('PROFILEID');
 
         $model->replace(
-            $this->api->getRecurringPaymentsProfileDetails(array('PROFILEID' => $model['PROFILEID']))
+            $this->api->getRecurringPaymentsProfileDetails(['PROFILEID' => $model['PROFILEID']])
         );
     }
 

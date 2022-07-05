@@ -12,7 +12,7 @@ class CaptureAction extends PurchaseAction
 {
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());

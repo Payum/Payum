@@ -28,8 +28,8 @@ class ContainerAwareRegistryTest extends TestCase
 
     public function testShouldReturnGatewaySetToContainer()
     {
-        $gateways = array('fooGateway' => 'fooGatewayServiceId');
-        $storages = array();
+        $gateways = ['fooGateway' => 'fooGatewayServiceId'];
+        $storages = [];
 
         $container = new Container();
         $container->set('fooGatewayServiceId', $this->createMock(GatewayInterface::class));
@@ -45,10 +45,10 @@ class ContainerAwareRegistryTest extends TestCase
 
     public function testShouldReturnStorageSetToContainer()
     {
-        $gateways = array();
-        $storages = array(
+        $gateways = [];
+        $storages = [
             'stdClass' => 'fooStorageServiceId'
-        );
+        ];
 
         $container = new Container();
         $container->set('fooStorageServiceId', $this->createMock(StorageInterface::class));
@@ -64,9 +64,9 @@ class ContainerAwareRegistryTest extends TestCase
         $container = new Container();
         $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));
 
-        $registry = new ContainerAwareRegistry(array(), array(), array(
+        $registry = new ContainerAwareRegistry([], [], [
             'fooName' => 'fooFactoryServiceId',
-        ));
+        ]);
         $registry->setContainer($container);
 
         $this->assertSame($container->get('fooFactoryServiceId'), $registry->getGatewayFactory('fooName'));

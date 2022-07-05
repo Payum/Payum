@@ -35,9 +35,9 @@ class GatewayConfigTypeTest extends TestCase
         ;
 
         $this->formFactory = Forms::createFormFactoryBuilder()
-            ->addType(new GatewayFactoriesChoiceType(array(
+            ->addType(new GatewayFactoriesChoiceType([
                 'foo' => 'Foo Factory',
-            )))
+            ]))
             ->addType(new GatewayConfigType($registry))
             ->getFormFactory()
         ;
@@ -65,23 +65,23 @@ class GatewayConfigTypeTest extends TestCase
         $this->fooGatewayFactoryMock
             ->expects($this->once())
             ->method('createConfig')
-            ->with(array())
-            ->willReturn(array(
-                'payum.default_options' => array(
+            ->with([])
+            ->willReturn([
+                'payum.default_options' => [
                     'username' => 'defaultName',
                     'password' => 'defaultPass',
                     'sandbox' => true,
-                ),
-                'payum.required_options' => array(),
-            ))
+                ],
+                'payum.required_options' => [],
+            ])
         ;
 
         $form = $this->formFactory->create(GatewayConfigType::class);
 
-        $form->submit(array(
+        $form->submit([
             'gatewayName' => 'foo',
             'factoryName' => 'foo',
-        ));
+        ]);
 
         $this->assertTrue($form->has('config'));
 
@@ -100,29 +100,29 @@ class GatewayConfigTypeTest extends TestCase
         $this->fooGatewayFactoryMock
             ->expects($this->once())
             ->method('createConfig')
-            ->with(array())
-            ->willReturn(array(
-                'payum.default_options' => array(
+            ->with([])
+            ->willReturn([
+                'payum.default_options' => [
                     'username' => 'defaultName',
                     'password' => 'defaultPass',
                     'sandbox' => true,
-                ),
-                'payum.required_options' => array(),
-            ))
+                ],
+                'payum.required_options' => [],
+            ])
         ;
 
         $form = $this->formFactory->create(GatewayConfigType::class);
 
-        $form->submit(array(
+        $form->submit([
             'gatewayName' => 'foo',
             'factoryName' => 'foo',
-            'config' => array(
+            'config' => [
                 'username' => 'submitName',
                 'password' => 'submitPass',
                 'sandbox' => false,
-            )
+            ]
 
-        ));
+        ]);
 
         $this->assertTrue($form->has('config'));
 
@@ -141,28 +141,28 @@ class GatewayConfigTypeTest extends TestCase
         $this->fooGatewayFactoryMock
             ->expects($this->once())
             ->method('createConfig')
-            ->with(array())
-            ->willReturn(array(
-                'payum.default_options' => array(
+            ->with([])
+            ->willReturn([
+                'payum.default_options' => [
                     'username' => 'defaultName',
                     'password' => 'defaultPass',
                     'sandbox' => true,
-                ),
-                'payum.required_options' => array(),
-            ))
+                ],
+                'payum.required_options' => [],
+            ])
         ;
 
         $form = $this->formFactory->create(GatewayConfigType::class);
 
-        $form->submit(array(
+        $form->submit([
             'gatewayName' => 'foo',
             'factoryName' => 'foo',
-            'config' => array(
+            'config' => [
                 'username' => 'submitName',
                 'password' => 'submitPass',
-            )
+            ]
 
-        ));
+        ]);
 
         $this->assertTrue($form->has('config'));
 
@@ -181,25 +181,25 @@ class GatewayConfigTypeTest extends TestCase
         $this->fooGatewayFactoryMock
             ->expects($this->once())
             ->method('createConfig')
-            ->with(array())
-            ->willReturn(array(
-                'payum.default_options' => array(
+            ->with([])
+            ->willReturn([
+                'payum.default_options' => [
                     'username' => 'defaultName',
                     'password' => 'defaultPass',
                     'sandbox' => true,
-                ),
-                'payum.required_options' => array(),
-            ))
+                ],
+                'payum.required_options' => [],
+            ])
         ;
 
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setFactoryName('foo');
         $gatewayConfig->setGatewayName('theName');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'username' => 'modelName',
             'password' => 'modelPass',
             'sandbox' => false,
-        ));
+        ]);
 
         $form = $this->formFactory->create(GatewayConfigType::class, $gatewayConfig);
 

@@ -39,12 +39,12 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
     public function testShouldPopulateKlarnaFromDetails()
     {
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'pno' => '410321-9202',
             'amount' => -1,
             'gender' => 1,
-            'articles' => array(
-                array(
+            'articles' => [
+                [
                     'qty' => 4,
                     'artNo' => 'HANDLING',
                     'title' => 'Handling fee',
@@ -52,9 +52,9 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
                     'vat' => '25',
                     'discount' => '0',
                     'flags' => 48,
-                ),
-            ),
-            'billing_address' => array(
+                ],
+            ],
+            'billing_address' => [
                 'email' => 'info@payum.com',
                 'telno' => '0700 00 00 00',
                 'cellno' => '',
@@ -68,8 +68,8 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
                 'zip' => '12345',
                 'city' => 'Ankeborg',
                 'country' => 209,
-            ),
-            'shipping_address' => array(
+            ],
+            'shipping_address' => [
                 'email' => 'info@payum.com',
                 'telno' => '0700 00 00 00',
                 'cellno' => '',
@@ -83,14 +83,14 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
                 'zip' => '12345',
                 'city' => 'Ankeborg',
                 'country' => 209,
-            ),
-            'estore_info' => array(
+            ],
+            'estore_info' => [
                 'order_id1' => 'anId',
                 'order_id2' => 'anId',
                 'username' => 'aName',
-            ),
+            ],
             'comment' => 'aComment',
-        ));
+        ]);
 
         $klarna = $this->createMock(\Klarna::class);
 
@@ -141,9 +141,9 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
     public function testShouldCorrectlyPutPartialArticles()
     {
-        $details = new \ArrayObject(array(
-            'partial_articles' => array(
-                array(
+        $details = new \ArrayObject([
+            'partial_articles' => [
+                [
                     'qty' => 4,
                     'artNo' => 'HANDLING',
                     'title' => 'Handling fee',
@@ -151,9 +151,9 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
                     'vat' => '25',
                     'discount' => '0',
                     'flags' => 48,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $klarna = $this->createMock(\Klarna::class);
 

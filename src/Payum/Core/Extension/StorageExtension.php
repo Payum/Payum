@@ -16,7 +16,7 @@ class StorageExtension implements ExtensionInterface
     /**
      * @var object[]
      */
-    protected $scheduledForUpdateModels = array();
+    protected $scheduledForUpdateModels = [];
 
     public function __construct(StorageInterface $storage)
     {

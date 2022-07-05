@@ -25,7 +25,7 @@ class NotifyActionTest extends GenericActionTest
 
     public function testShouldSubExecuteSyncWithSameModelAndThrowHttpResponse()
     {
-        $expectedModel = array('foo' => 'fooVal');
+        $expectedModel = ['foo' => 'fooVal'];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

@@ -21,12 +21,12 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request TransactionSearch */
+        /** @var TransactionSearch $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('STARTDATE'));
+        $model->validateNotEmpty(['STARTDATE']);
 
         $model->replace(
             $this->api->transactionSearch((array) $model)

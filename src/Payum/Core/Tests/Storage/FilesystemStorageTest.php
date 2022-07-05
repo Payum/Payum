@@ -176,7 +176,7 @@ class FilesystemStorageTest extends TestCase
             'id'
         );
 
-        $storage->findBy(array());
+        $storage->findBy([]);
     }
 
     public function testShouldFindModelById()

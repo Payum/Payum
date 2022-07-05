@@ -39,7 +39,7 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array()));
+        $action->execute(new Refund([]));
     }
 
     public function testThrowIfTransactionTypeIsNotRefundable()
@@ -55,10 +55,10 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array(
+        $action->execute(new Refund([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => 'notSupported',
-        )));
+        ]));
     }
 
     public function testThrowIfTransactionIdNotSet()
@@ -74,36 +74,36 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array(
+        $action->execute(new Refund([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => Api::TRXTYPE_SALE,
-        )));
+        ]));
     }
 
     public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall()
     {
-        $details = new \ArrayObject(array(
+        $details = new \ArrayObject([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => Api::TRXTYPE_SALE,
             'PNREF' => 'aRef',
-        ));
+        ]);
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doCredit')
-            ->with(array(
+            ->with([
                 'RESULT' => null,
                 'TRXTYPE' => null,
                 'PNREF' => 'aRef',
                 'PURCHASE_TRXTYPE' => 'S',
                 'PURCHASE_RESULT' => 0,
                 'ORIGID' => 'aRef',
-            ))
-            ->willReturn(array(
+            ])
+            ->willReturn([
                 'RESULT' => 'aResult',
                 'FOO' => 'aVal',
-            ))
+            ])
         ;
 
         $action = new RefundAction();
@@ -126,6 +126,6 @@ class RefundActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', [], [], '', false);
     }
 }

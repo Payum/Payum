@@ -98,20 +98,20 @@ class PaymentDetailsStatusAction implements ActionInterface
 
                 $allCounter++;
 
-                $refundStatuses = array(
+                $refundStatuses = [
                     Api::PAYMENTSTATUS_REFUNDED,
                     Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
-                );
+                ];
                 if (in_array($paymentStatus, $refundStatuses)) {
                     $request->markRefunded();
 
                     return;
                 }
 
-                $pendingStatuses = array(
+                $pendingStatuses = [
                     Api::PAYMENTSTATUS_IN_PROGRESS,
                     Api::PAYMENTSTATUS_PENDING,
-                );
+                ];
                 if (in_array($paymentStatus, $pendingStatuses)) {
                     if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $authorizedCounter++;
@@ -122,32 +122,32 @@ class PaymentDetailsStatusAction implements ActionInterface
                     }
                 }
 
-                $canceledStatuses = array(
+                $canceledStatuses = [
                     Api::PAYMENTSTATUS_VOIDED,
-                );
+                ];
                 if (in_array($paymentStatus, $canceledStatuses)) {
                     if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $voidedCounter++;
                     }
                 }
 
-                $failedStatuses = array(
+                $failedStatuses = [
                     Api::PAYMENTSTATUS_FAILED,
                     Api::PAYMENTSTATUS_EXPIRED,
                     Api::PAYMENTSTATUS_DENIED,
                     Api::PAYMENTSTATUS_REVERSED,
                     Api::PAYMENTSTATUS_CANCELED_REVERSAL,
-                );
+                ];
                 if (in_array($paymentStatus, $failedStatuses)) {
                     $request->markFailed();
 
                     return;
                 }
 
-                $completedStatuses = array(
+                $completedStatuses = [
                     Api::PAYMENTSTATUS_COMPLETED,
                     Api::PAYMENTSTATUS_PROCESSED,
-                );
+                ];
                 if (in_array($paymentStatus, $completedStatuses)) {
                     $completedCounter++;
                 }

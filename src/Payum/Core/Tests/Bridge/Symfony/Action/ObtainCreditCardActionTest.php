@@ -103,12 +103,12 @@ class ObtainCreditCardActionTest extends TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array(
+                $testCase->assertEquals([
                     'form' => $formView,
                     'model' => null,
                     'firstModel' => null,
                     'actionUrl' => null,
-                ), $request->getParameters());
+                ], $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             })
@@ -187,12 +187,12 @@ class ObtainCreditCardActionTest extends TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
-                $testCase->assertEquals(array(
+                $testCase->assertEquals([
                     'form' => $formView,
                     'model' => null,
                     'firstModel' => null,
                     'actionUrl' => null,
-                ), $request->getParameters());
+                ], $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             })
@@ -318,12 +318,12 @@ class ObtainCreditCardActionTest extends TestCase
             ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
             ->willReturnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel) {
                 $this->assertSame('theTemplateName', $request->getTemplateName());
-                $this->assertEquals(array(
+                $this->assertEquals([
                     'form' => $formView,
                     'model' => $currentModel,
                     'firstModel' => $firstModel,
                     'actionUrl' => null,
-                ), $request->getParameters());
+                ], $request->getParameters());
 
                 $request->setResult('theObtainCreditCardPageWithForm');
             })
@@ -355,7 +355,7 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createFormMock()
     {
-        return $this->createMock('Symfony\Component\Form\Form', array(), array(), '', false);
+        return $this->createMock('Symfony\Component\Form\Form', [], [], '', false);
     }
 
     /**

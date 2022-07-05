@@ -28,9 +28,9 @@ class ConvertPayoutAction implements ActionInterface
         $details['recipient_email'] = $payout->getRecipientEmail();
         $details['recipient_id'] = $payout->getRecipientId();
 
-        $details->defaults(array(
+        $details->defaults([
             Constants::FIELD_PAYOUT => true,
-        ));
+        ]);
 
         $request->setResult((array) $details);
     }

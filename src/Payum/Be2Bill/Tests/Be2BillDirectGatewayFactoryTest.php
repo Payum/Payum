@@ -23,10 +23,10 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new Be2BillDirectGatewayFactory(array(
+        $factory = new Be2BillDirectGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -48,7 +48,7 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('identifier' => '', 'password' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(['identifier' => '', 'password' => '', 'sandbox' => true], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

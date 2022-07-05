@@ -53,7 +53,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('PAYMENTREQUEST_5_TRANSACTIONID must be set.');
         $action = new GetTransactionDetailsAction();
 
-        $request = new GetTransactionDetails(array(), $paymentRequestN = 5);
+        $request = new GetTransactionDetails([], $paymentRequestN = 5);
 
         $action->execute($request);
     }
@@ -70,16 +70,16 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
                 $testCase->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetTransactionDetails(array(
+        $request = new GetTransactionDetails([
             'PAYMENTREQUEST_5_TRANSACTIONID' => 'theTransactionId',
-        ), $paymentRequestN = 5);
+        ], $paymentRequestN = 5);
 
         $action->execute($request);
     }
@@ -91,18 +91,18 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getTransactionDetails')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'PAYMENTSTATUS' => 'theStatus',
-                );
+                ];
             })
         ;
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetTransactionDetails(array(
+        $request = new GetTransactionDetails([
             'PAYMENTREQUEST_5_TRANSACTIONID' => 'aTransactionId',
-        ), $paymentRequestN = 5);
+        ], $paymentRequestN = 5);
 
         $action->execute($request);
 
@@ -117,6 +117,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

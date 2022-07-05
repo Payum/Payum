@@ -11,7 +11,7 @@ use Payum\Sofort\Api;
 class StatusAction implements ActionInterface
 {
     /**
-     * @param $request GetStatusInterface
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {

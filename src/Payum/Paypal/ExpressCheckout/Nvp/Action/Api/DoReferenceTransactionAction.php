@@ -22,7 +22,7 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request DoReferenceTransaction */
+        /** @var DoReferenceTransaction $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

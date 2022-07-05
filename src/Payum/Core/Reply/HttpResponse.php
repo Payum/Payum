@@ -24,7 +24,7 @@ class HttpResponse extends Base
      * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($content, $statusCode = 200, array $headers = array())
+    public function __construct($content, $statusCode = 200, array $headers = [])
     {
         $this->content = $content;
         $this->statusCode = $statusCode;

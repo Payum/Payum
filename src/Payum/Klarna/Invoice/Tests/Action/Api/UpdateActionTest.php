@@ -54,7 +54,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
     {
         $action = new UpdateAction();
 
-        $this->assertTrue($action->supports(new Update(array())));
+        $this->assertTrue($action->supports(new Update([])));
     }
 
     public function testShouldNotSupportAnythingNotUpdate()
@@ -81,9 +81,9 @@ class UpdateActionTest extends GenericApiAwareActionTest
 
     public function testShouldCallKlarnaUpdate()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -113,9 +113,9 @@ class UpdateActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -148,7 +148,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'update'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'update']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

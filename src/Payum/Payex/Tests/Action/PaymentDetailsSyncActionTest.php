@@ -65,9 +65,9 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Sync(array(
+        $action->execute(new Sync([
             'transactionNumber' => 'aNum',
-        )));
+        ]));
     }
 
     /**

@@ -66,11 +66,11 @@ class CaptureActionTest extends GenericActionTest
         $action = new CaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',
             'CARDCODE' => '1234432112344321',
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -96,7 +96,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array('EXECCODE' => 1));
+        $request = new Capture(['EXECCODE' => 1]);
 
         $action->execute($request);
     }
@@ -113,17 +113,17 @@ class CaptureActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->willReturn(array(
+            ->willReturn([
                 'FOO' => 'FOOVAL',
                 'BAR' => 'BARVAL',
-            ))
+            ])
         ;
 
         $action = new CaptureAction();
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
             'CARDCODE' => '1234432112344321',
             'CARDCVV' => 123,
@@ -131,7 +131,7 @@ class CaptureActionTest extends GenericActionTest
             'CARDVALIDITYDATE' => '10-16',
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -169,21 +169,21 @@ class CaptureActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->willReturn(array(
+            ->willReturn([
                 'FOO' => 'FOOVAL',
                 'BAR' => 'BARVAL',
-            ))
+            ])
         ;
 
         $action = new CaptureAction();
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -222,21 +222,21 @@ class CaptureActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->willReturn(array(
+            ->willReturn([
                 'FOO' => 'FOOVAL',
                 'BAR' => 'BARVAL',
-            ))
+            ])
         ;
 
         $action = new CaptureAction();
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'AMOUNT' => 10,
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',
-        ));
+        ]);
 
         //guard
         $this->assertTrue($action->supports($request));
@@ -258,20 +258,20 @@ class CaptureActionTest extends GenericActionTest
     public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
     {
         $firstModel = new \stdClass();
-        $currentModel = new \ArrayObject(array(
+        $currentModel = new \ArrayObject([
             'AMOUNT' => 10,
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',
-        ));
+        ]);
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('payment')
-            ->willReturn(array(
+            ->willReturn([
                 'FOO' => 'FOOVAL',
                 'BAR' => 'BARVAL',
-            ))
+            ])
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -316,7 +316,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 
     /**

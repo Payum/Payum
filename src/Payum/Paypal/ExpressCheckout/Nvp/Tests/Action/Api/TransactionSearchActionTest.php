@@ -43,7 +43,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('The STARTDATE fields are required.');
         $action = new TransactionSearchAction();
 
-        $action->execute(new TransactionSearch(array()));
+        $action->execute(new TransactionSearch([]));
     }
 
     public function testShouldCallApiTransactionSearchWithExpectedRequiredArguments()
@@ -95,13 +95,13 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
-                return array();
+                return [];
             });
 
         $action = new TransactionSearchAction();
         $action->setApi($apiMock);
 
-        $request = new TransactionSearch(array(
+        $request = new TransactionSearch([
             'STARTDATE' => 'theStartDate',
             'ENDDATE' => 'theEndDate',
             'EMAIL' => 'theEmail',
@@ -115,7 +115,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
             'CURRENCYCODE' => 'theCurrencyCode',
             'STATUS' => 'theStatus',
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -127,7 +127,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('transactionSearch')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'L_TIMESTAMP0' => 'theTransactionTimestamp',
                     'L_TIMEZONE0' => 'TheTimezone',
                     'L_TYPE0' => 'theTransactionType',
@@ -139,17 +139,17 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
                     'ACK' => 'TheAckStatus',
                     'VERSION' => 'theVersion',
                     'BUILD' => 'TheVersionBuild'
-                );
+                ];
             })
         ;
 
         $action = new TransactionSearchAction();
         $action->setApi($apiMock);
 
-        $request = new TransactionSearch(array(
+        $request = new TransactionSearch([
             'STARTDATE' => 'theStartDate',
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -173,6 +173,6 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

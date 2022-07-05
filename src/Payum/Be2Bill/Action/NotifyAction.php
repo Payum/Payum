@@ -25,7 +25,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * @param $request Notify
+     * @param Notify $request
      */
     public function execute($request)
     {

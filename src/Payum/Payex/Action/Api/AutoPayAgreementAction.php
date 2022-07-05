@@ -21,12 +21,12 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request AutoPayAgreement */
+        /** @var AutoPayAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'agreementRef',
             'price',
             'productNumber',
@@ -34,7 +34,7 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
             'orderId',
             'purchaseOperation',
             'currency',
-        ));
+        ]);
 
         $result = $this->api->autoPay((array) $model);
 

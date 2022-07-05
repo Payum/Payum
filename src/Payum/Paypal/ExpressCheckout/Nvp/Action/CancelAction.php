@@ -17,7 +17,7 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 
     public function execute($request)
     {
-        /** @var $request Cancel */
+        /** @var Cancel $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());

@@ -35,7 +35,7 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
 
     public function execute($request)
     {
-        /** @var $request SetExpressCheckout */
+        /** @var SetExpressCheckout $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
@@ -43,10 +43,10 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
             return;
         }
 
-        $renderTemplate = new RenderTemplate($this->templateName, array(
+        $renderTemplate = new RenderTemplate($this->templateName, [
             'model' => ArrayObject::ensureArrayObject($request->getModel()),
             'firstModel' => $request->getFirstModel(),
-        ));
+        ]);
         $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());

@@ -19,18 +19,18 @@ class GatewayFactory implements GatewayFactoryInterface
     /**
      * @param GatewayFactoryInterface $coreGatewayFactory
      */
-    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
+    public function __construct(array $defaultConfig = [], GatewayFactoryInterface $coreGatewayFactory = null)
     {
         $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
         $this->defaultConfig = $defaultConfig;
     }
 
-    public function create(array $config = array())
+    public function create(array $config = [])
     {
         return $this->coreGatewayFactory->create($this->createConfig($config));
     }
 
-    public function createConfig(array $config = array())
+    public function createConfig(array $config = [])
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);

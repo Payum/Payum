@@ -32,7 +32,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
 
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = new ArrayObject($request->getModel());
@@ -41,7 +41,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
             return;
         }
 
-        $cardFields = array('ACCT', 'CVV2', 'EXPDATE');
+        $cardFields = ['ACCT', 'CVV2', 'EXPDATE'];
         if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
                 $obtainCreditCard = new ObtainCreditCard($request->getToken());

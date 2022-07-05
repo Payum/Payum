@@ -21,7 +21,7 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param $request GetTransactionData
+     * @param GetTransactionData $request
      */
     public function execute($request)
     {

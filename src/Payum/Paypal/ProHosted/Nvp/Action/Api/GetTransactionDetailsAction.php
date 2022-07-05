@@ -22,7 +22,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request GetTransactionDetails */
+        /** @var GetTransactionDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 

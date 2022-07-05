@@ -24,7 +24,7 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * @param $request DoVoid
+     * @param DoVoid $request
      */
     public function execute($request)
     {

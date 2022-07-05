@@ -53,7 +53,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new GetRecurringPaymentsProfileDetailsAction();
 
-        $request = new GetRecurringPaymentsProfileDetails(array());
+        $request = new GetRecurringPaymentsProfileDetails([]);
 
         $action->execute($request);
     }
@@ -70,16 +70,16 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetRecurringPaymentsProfileDetails(array(
+        $request = new GetRecurringPaymentsProfileDetails([
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -91,18 +91,18 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'STATUS' => 'theStatus',
-                );
+                ];
             })
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
         $action->setApi($apiMock);
 
-        $request = new GetRecurringPaymentsProfileDetails(array(
+        $request = new GetRecurringPaymentsProfileDetails([
             'PROFILEID' => 'theProfileId',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -117,6 +117,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

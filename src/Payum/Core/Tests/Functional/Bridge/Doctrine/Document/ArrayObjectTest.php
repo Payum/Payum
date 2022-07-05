@@ -21,7 +21,7 @@ class ArrayObjectTest extends MongoTest
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = ['bar1', 'bar2' => 'theBar2'];
 
         $this->dm->persist($model);
         $this->dm->flush();
@@ -33,7 +33,7 @@ class ArrayObjectTest extends MongoTest
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = ['bar1', 'bar2' => 'theBar2'];
 
         $this->dm->persist($model);
         $this->dm->flush();

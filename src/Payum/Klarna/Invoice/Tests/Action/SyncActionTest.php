@@ -21,7 +21,7 @@ class SyncActionTest extends TestCase
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new Sync(array())));
+        $this->assertTrue($action->supports(new Sync([])));
     }
 
     public function testShouldNotSupportAnythingNotSync()
@@ -58,9 +58,9 @@ class SyncActionTest extends TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'rno' => 'aRno',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -76,7 +76,7 @@ class SyncActionTest extends TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array());
+        $request = new Sync([]);
 
         $action->execute($request);
     }
@@ -92,10 +92,10 @@ class SyncActionTest extends TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'rno' => 'aRno',
             'invoice_number' => 'aInvNumber',
-        ));
+        ]);
 
         $action->execute($request);
     }

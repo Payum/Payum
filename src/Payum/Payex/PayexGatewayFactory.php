@@ -35,15 +35,15 @@ class PayexGatewayFactory extends GatewayFactory
             throw new \LogicException('You must install "ext-soap" extension.');
         }
 
-        $config['payum.default_options'] = array(
+        $config['payum.default_options'] = [
             'account_number' => '',
             'encryption_key' => '',
             'sandbox' => true,
-        );
+        ];
         $config->defaults($config['payum.default_options']);
-        $config['payum.required_options'] = array('account_number', 'encryption_key');
+        $config['payum.required_options'] = ['account_number', 'encryption_key'];
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'payex',
             'payum.factory_title' => 'Payex',
 
@@ -52,33 +52,33 @@ class PayexGatewayFactory extends GatewayFactory
             'payum.api.order' => function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $payexConfig = array(
+                $payexConfig = [
                     'account_number' => $config['account_number'],
                     'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
-                );
+                ];
 
                 return new OrderApi($config['soap.client_factory'], $payexConfig);
             },
             'payum.api.agreement' => function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $payexConfig = array(
+                $payexConfig = [
                     'account_number' => $config['account_number'],
                     'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
-                );
+                ];
 
                 return new AgreementApi($config['soap.client_factory'], $payexConfig);
             },
             'payum.api.recurring' => function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $payexConfig = array(
+                $payexConfig = [
                     'account_number' => $config['account_number'],
                     'encryption_key' => $config['encryption_key'],
                     'sandbox' => $config['sandbox'],
-                );
+                ];
 
                 return new RecurringApi($config['soap.client_factory'], $payexConfig);
             },
@@ -107,6 +107,6 @@ class PayexGatewayFactory extends GatewayFactory
             'payum.action.api.initialize_order' => new InitializeOrderAction(),
             'payum.action.api.complete_order' => new CompleteOrderAction(),
             'payum.action.api.check_order' => new CheckOrderAction(),
-        ));
+        ]);
     }
 }

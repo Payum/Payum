@@ -24,11 +24,11 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), array(
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-        ));
+        $context = new Context($gatewayMock, new \stdClass(), [
+            new Context($gatewayMock, new \stdClass(), []),
+            new Context($gatewayMock, new \stdClass(), []),
+            new Context($gatewayMock, new \stdClass(), []),
+        ]);
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 2);
 
@@ -41,11 +41,11 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), array(
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-        ));
+        $context = new Context($gatewayMock, new \stdClass(), [
+            new Context($gatewayMock, new \stdClass(), []),
+            new Context($gatewayMock, new \stdClass(), []),
+            new Context($gatewayMock, new \stdClass(), []),
+        ]);
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 5);
 

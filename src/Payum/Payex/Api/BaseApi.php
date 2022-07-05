@@ -77,7 +77,7 @@ abstract class BaseApi
      */
     protected function calculateHash(array $parameters, array $parametersKeys)
     {
-        $orderedParameters = array();
+        $orderedParameters = [];
         foreach ($parametersKeys as $parametersKey) {
             if (false == isset($parameters[$parametersKey])) {
                 //TODO exception?

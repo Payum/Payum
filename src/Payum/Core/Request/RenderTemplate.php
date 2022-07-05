@@ -22,7 +22,7 @@ class RenderTemplate
     /**
      * @param string $templateName
      */
-    public function __construct($templateName, array $parameters = array())
+    public function __construct($templateName, array $parameters = [])
     {
         $this->templateName = $templateName;
         $this->parameters = $parameters;

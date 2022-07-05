@@ -108,16 +108,16 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $model->setCurrency('EUR');
         $storage->update($model);
 
-        $result = $storage->findBy(array(
+        $result = $storage->findBy([
             'currency' => 'USD'
-        ));
+        ]);
 
         $this->assertCount(2, $result);
         $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
 
-        $result = $storage->findBy(array(
+        $result = $storage->findBy([
             'currency' => 'EUR'
-        ));
+        ]);
 
         $this->assertCount(1, $result);
         $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
@@ -145,7 +145,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $model->setCurrency('EUR');
         $storage->update($model);
 
-        $result = $storage->findBy(array());
+        $result = $storage->findBy([]);
 
         $this->assertCount(3, $result);
         $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);

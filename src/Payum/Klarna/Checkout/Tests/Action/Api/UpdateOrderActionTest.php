@@ -15,10 +15,10 @@ class UpdateOrderActionTest extends GenericActionTest
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [$this->getMockForAbstractClass('Payum\Core\Request\Generic', [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
@@ -30,15 +30,15 @@ class UpdateOrderActionTest extends GenericActionTest
 
     public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
     {
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $request = new UpdateOrder($model);
 
@@ -52,7 +52,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
+                $testCase->assertEquals(['cart' => $model['cart']], $options['data']);
             })
         ;
 
@@ -67,15 +67,15 @@ class UpdateOrderActionTest extends GenericActionTest
     public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $connector = $this->createConnectorMock();
         $connector
@@ -93,15 +93,15 @@ class UpdateOrderActionTest extends GenericActionTest
 
     public function testShouldRecoverAfterTimeout()
     {
-        $model = array(
+        $model = [
             'location' => 'theLocation',
-            'cart' => array(
-                'items' => array(
-                    array('foo'),
-                    array('bar'),
-                ),
-            ),
-        );
+            'cart' => [
+                'items' => [
+                    ['foo'],
+                    ['bar'],
+                ],
+            ],
+        ];
 
         $connector = $this->createConnectorMock();
         $connector
@@ -113,7 +113,7 @@ class UpdateOrderActionTest extends GenericActionTest
                 $this->returnCallback(function ($method, $order, $options) use ($model) {
                     $this->assertIsArray($options);
                     $this->assertArrayHasKey('data', $options);
-                    $this->assertEquals(array('cart' => $model['cart']), $options['data']);
+                    $this->assertEquals(['cart' => $model['cart']], $options['data']);
                 })
             )
         ;
@@ -131,6 +131,6 @@ class UpdateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_ConnectorInterface', [], [], '', false);
     }
 }

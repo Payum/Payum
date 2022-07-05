@@ -25,7 +25,7 @@ abstract class MongoTest extends BaseMongoTest
         $driver = new MappingDriverChain();
         $xmlDriver = new XmlDriver(
             new SymfonyFileLocator(
-                array($rootDir . '/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'),
+                [$rootDir . '/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'],
                 '.mongodb.xml'
             ),
             '.mongodb.xml'
@@ -33,9 +33,9 @@ abstract class MongoTest extends BaseMongoTest
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
         $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Document\TestModel');
-        $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
+        $annotationDriver = new AnnotationDriver(new AnnotationReader(), [
             dirname($rc->getFileName()),
-        ));
+        ]);
         $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Document');
 
         return $driver;

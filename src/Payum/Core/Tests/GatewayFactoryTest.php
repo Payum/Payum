@@ -17,7 +17,7 @@ class GatewayFactoryTest extends TestCase
     {
         $factory = new GatewayFactory();
 
-        $gateway = $factory->create(array());
+        $gateway = $factory->create([]);
 
         $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
     }

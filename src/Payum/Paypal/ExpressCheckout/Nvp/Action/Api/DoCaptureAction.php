@@ -25,7 +25,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
 
     public function execute($request)
     {
-        /** @var $request DoCapture */
+        /** @var DoCapture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -49,7 +49,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
      */
     protected function getPaymentRequestNFields()
     {
-        return array(
+        return [
             'TRANSACTIONID',
             'PARENTTRANSACTIONID',
             'RECEIPTID',
@@ -66,7 +66,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
             'PENDINGREASON',
             'REASONCODE',
             'COMPLETETYPE'
-        );
+        ];
     }
 
     public function supports($request)

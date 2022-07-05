@@ -30,7 +30,7 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $details->validateNotEmpty(array('invoice_number'));
+        $details->validateNotEmpty(['invoice_number']);
 
         $klarna = $this->getKlarna();
 

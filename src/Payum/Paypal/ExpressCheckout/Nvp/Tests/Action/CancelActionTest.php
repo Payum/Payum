@@ -40,9 +40,9 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CancelAction();
 
-        $payment = array(
+        $payment = [
            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-        );
+        ];
 
         $request = new Cancel($payment);
 
@@ -53,9 +53,9 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CancelAction();
 
-        $payment = array(
+        $payment = [
            'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
-        );
+        ];
 
         $request = new Cancel($payment);
 
@@ -66,9 +66,9 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CancelAction();
 
-        $payment = array(
+        $payment = [
            'BILLINGPERIOD' => 'Month',
-        );
+        ];
 
         $request = new Cancel($payment);
 
@@ -122,17 +122,17 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('execute')
             ->withConsecutive(
-                array($this->isInstanceOf(DoVoid::class)),
-                array($this->isInstanceOf(Sync::class))
+                [$this->isInstanceOf(DoVoid::class)],
+                [$this->isInstanceOf(Sync::class)]
             )
         ;
 
         $action = new CancelAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Cancel(array(
+        $request = new Cancel([
             'TRANSACTIONID' => 'theId',
-        ));
+        ]);
 
         $action->execute($request);
     }

@@ -15,7 +15,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         if ($request->getModel() instanceof AuthorizeRequiredModel) {
             $this->gateway->execute(new AuthorizeRequest());
         }

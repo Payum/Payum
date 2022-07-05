@@ -21,12 +21,12 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
 
     public function execute($request)
     {
-        /** @var $request CreateRecurringPaymentProfile */
+        /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'TOKEN',
             'PROFILESTARTDATE',
             'DESC',
@@ -34,7 +34,7 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
             'BILLINGFREQUENCY',
             'AMT',
             'CURRENCYCODE',
-        ));
+        ]);
 
         $model->replace(
             $this->api->createRecurringPaymentsProfile((array) $model)

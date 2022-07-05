@@ -22,7 +22,7 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request CreateBillingAgreement */
+        /** @var CreateBillingAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

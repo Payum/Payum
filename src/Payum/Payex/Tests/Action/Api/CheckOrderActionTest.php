@@ -7,16 +7,16 @@ use Payum\Payex\Request\Api\CheckOrder;
 
 class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'transactionNumber' => 'aNum',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -94,9 +94,9 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('check')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'transactionStatus' => 'theStatus',
-            ));
+            ]);
 
         $action = new CheckOrderAction();
         $action->setApi($apiMock);
@@ -114,6 +114,6 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\OrderApi', [], [], '', false);
     }
 }

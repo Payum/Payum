@@ -40,7 +40,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
     {
         $action = new EmailInvoiceAction();
 
-        $this->assertTrue($action->supports(new EmailInvoice(array())));
+        $this->assertTrue($action->supports(new EmailInvoice([])));
     }
 
     public function testShouldNotSupportAnythingNotEmailInvoice()
@@ -67,9 +67,9 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
 
     public function testShouldCallKlarnaEmailInvoice()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'invoice number',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -88,9 +88,9 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
 
     public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
-        $details = array(
+        $details = [
             'invoice_number' => 'invoice number',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -117,7 +117,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock('Klarna', array('config', 'emailInvoice'));
+        $klarnaMock = $this->createMock('Klarna', ['config', 'emailInvoice']);
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

@@ -53,7 +53,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
         $this->expectExceptionMessage('The PROFILEID, ACTION fields are required.');
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
-        $request = new ManageRecurringPaymentsProfileStatus(array());
+        $request = new ManageRecurringPaymentsProfileStatus([]);
 
         $action->execute($request);
     }
@@ -64,9 +64,9 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
         $this->expectExceptionMessage('The ACTION fields are required.');
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
-        $request = new ManageRecurringPaymentsProfileStatus(array(
+        $request = new ManageRecurringPaymentsProfileStatus([
             'PROFILEID' => 'aProfId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -89,18 +89,18 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
                 $testCase->assertArrayHasKey('NOTE', $fields);
                 $testCase->assertSame('theNote', $fields['NOTE']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new ManageRecurringPaymentsProfileStatusAction();
         $action->setApi($apiMock);
 
-        $request = new ManageRecurringPaymentsProfileStatus(array(
+        $request = new ManageRecurringPaymentsProfileStatus([
             'PROFILEID' => 'theProfileId',
             'ACTION' => 'theAction',
             'NOTE' => 'theNote',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -112,20 +112,20 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'PROFILEID' => 'theResponseProfileId',
-                );
+                ];
             })
         ;
 
         $action = new ManageRecurringPaymentsProfileStatusAction();
         $action->setApi($apiMock);
 
-        $request = new ManageRecurringPaymentsProfileStatus(array(
+        $request = new ManageRecurringPaymentsProfileStatus([
             'PROFILEID' => 'aProfileId',
             'ACTION' => 'anAction',
             'NOTE' => 'aNote',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -140,6 +140,6 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

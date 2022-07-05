@@ -17,10 +17,10 @@ class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldAllowCreateSoapClientWithCustomClassAndOptions()
     {
-        $options = array(
+        $options = [
             'trace' => true,
             'exceptions' => true,
-        );
+        ];
 
         $factory = new SoapClientFactory($options, 'Payum\Payex\Tests\Api\CustomSoapClient');
 

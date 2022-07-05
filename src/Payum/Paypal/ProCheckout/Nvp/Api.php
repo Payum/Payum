@@ -171,14 +171,14 @@ class Api
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'username' => '',
         'password' => '',
         'partner' => '',
         'vendor' => '',
         'tender' => self::TENDER_CREDIT_CARD,
         'sandbox' => true,
-    );
+    ];
 
     /**
      * @throw InvalidArgumentException
@@ -187,13 +187,13 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-        $options->validateNotEmpty(array(
+        $options->validateNotEmpty([
             'username',
             'password',
             'partner',
             'vendor',
             'tender',
-        ));
+        ]);
 
         if (false == is_bool($options['sandbox'])) {
             throw new LogicException('The boolean sandbox option must be set.');
@@ -237,9 +237,9 @@ class Api
      */
     protected function doRequest(array $fields)
     {
-        $headers = array(
+        $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        ];
 
         $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
@@ -249,7 +249,7 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        $result = array();
+        $result = [];
         parse_str($response->getBody()->getContents(), $result);
         foreach ($result as &$value) {
             $value = urldecode($value);

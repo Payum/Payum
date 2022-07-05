@@ -16,7 +16,7 @@ class CancelReservationAction extends BaseApiAwareAction
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
-        $details->validateNotEmpty(array('rno'));
+        $details->validateNotEmpty(['rno']);
 
         $klarna = $this->getKlarna();
 

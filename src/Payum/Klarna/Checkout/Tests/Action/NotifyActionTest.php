@@ -53,13 +53,13 @@ class NotifyActionTest extends GenericActionTest
         $action = new NotifyAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Notify(array(
+        $action->execute(new Notify([
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
             'location' => 'theLocation',
-            'merchant_reference' => array(
+            'merchant_reference' => [
                 'orderid1' => 'theOrderId',
-            ),
-        )));
+            ],
+        ]));
     }
 
     public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
@@ -74,10 +74,10 @@ class NotifyActionTest extends GenericActionTest
         $action = new NotifyAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Notify(array(
+        $action->execute(new Notify([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
-        )));
+        ]));
     }
 
     public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
@@ -92,10 +92,10 @@ class NotifyActionTest extends GenericActionTest
         $action = new NotifyAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Notify(array(
+        $action->execute(new Notify([
             'status' => Constants::STATUS_CREATED,
             'location' => 'aLocation',
-        )));
+        ]));
     }
 
     /**
@@ -111,6 +111,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_Order', [], [], '', false);
     }
 }

@@ -36,7 +36,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 
     public function execute($request)
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var \ArrayAccess|PaypalPayment $model */

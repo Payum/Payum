@@ -72,16 +72,16 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
                 $testCase->assertSame($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new SetExpressCheckoutAction($apiMock);
         $action->setApi($apiMock);
 
-        $request = new SetExpressCheckout(array(
+        $request = new SetExpressCheckout([
             'PAYMENTREQUEST_0_AMT' => $expectedAmount,
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -93,19 +93,19 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('setExpressCheckout')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
-                );
+                ];
             })
         ;
 
         $action = new SetExpressCheckoutAction();
         $action->setApi($apiMock);
 
-        $request = new SetExpressCheckout(array(
+        $request = new SetExpressCheckout([
             'PAYMENTREQUEST_0_AMT' => $expectedAmount = 154.23,
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -120,6 +120,6 @@ class SetExpressCheckoutActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

@@ -79,9 +79,9 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new AgreementDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Sync(array(
+        $action->execute(new Sync([
             'agreementRef' => 'aRef',
-        )));
+        ]));
     }
 
     /**

@@ -24,10 +24,10 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new PaypalMasspayGatewayFactory(array(
+        $factory = new PaypalMasspayGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -50,7 +50,7 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            array('username' => '', 'password' => '', 'signature' => '', 'sandbox' => true),
+            ['username' => '', 'password' => '', 'signature' => '', 'sandbox' => true],
             $config['payum.default_options']
         );
     }

@@ -29,9 +29,9 @@ class ConvertPaymentAction implements ActionInterface
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
 
-        $details->defaults(array(
+        $details->defaults([
             Constants::FIELD_PAID => true,
-        ));
+        ]);
 
         $request->setResult((array) $details);
     }

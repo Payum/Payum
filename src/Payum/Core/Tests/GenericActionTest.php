@@ -33,18 +33,18 @@ abstract class GenericActionTest extends TestCase
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield array(new $this->requestClass(array()));
-        yield array(new $this->requestClass(new \ArrayObject()));
+        yield [new $this->requestClass([])];
+        yield [new $this->requestClass(new \ArrayObject())];
     }
 
     public function provideNotSupportedRequests(): \Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array(new $this->requestClass('foo'));
-        yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new \stdClass()];
+        yield [new $this->requestClass('foo')];
+        yield [new $this->requestClass(new \stdClass())];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldImplementActionInterface()

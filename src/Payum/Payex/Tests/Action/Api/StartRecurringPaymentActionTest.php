@@ -8,7 +8,7 @@ use Payum\Payex\Request\Api\StartRecurringPayment;
 
 class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'agreementRef' => 'aRef',
         'startDate' => '2013-10-10 12:21:21',
         'periodType' => RecurringApi::PERIODTYPE_HOURS,
@@ -18,14 +18,14 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         'productNumber' => 'aProductNumber',
         'orderId' => 'anOrderId',
         'description' => 'aDesc',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -103,9 +103,9 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('start')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'recurringRef' => 'theRecRef',
-            ));
+            ]);
 
         $action = new StartRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -123,6 +123,6 @@ class StartRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\RecurringApi', [], [], '', false);
     }
 }

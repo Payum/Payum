@@ -13,7 +13,7 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config)
     {
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'paypal_masspay_nvp',
             'payum.factory_title' => 'PayPal Masspay',
 
@@ -21,17 +21,17 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
             'payum.action.api.masspay' => new MasspayAction(),
             'payum.action.convert_payout' => new ConvertPayoutAction(),
             'payum.action.get_payout_status' => new GetPayoutStatusAction(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+            $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',
                 'signature' => '',
                 'sandbox' => true,
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('username', 'password', 'signature');
+            $config['payum.required_options'] = ['username', 'password', 'signature'];
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

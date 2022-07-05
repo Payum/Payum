@@ -32,7 +32,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
             throw new \LogicException('You must install "fp/klarna-invoice" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'klarna_invoice',
             'payum.factory_title' => 'Klarna Invoice',
             'sandbox' => true,
@@ -60,22 +60,22 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
             'payum.action.api.email_invoice' => new EmailInvoiceAction(),
             'payum.action.api.send_invoice' => new SendInvoiceAction(),
             'payum.action.api.update' => new UpdateAction(),
-        ));
+        ]);
 
         if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+            $config['payum.default_options'] = [
                 'eid' => '',
                 'secret' => '',
                 'country' => '',
                 'language' => '',
                 'currency' => '',
                 'sandbox' => true,
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('eid', 'secret', 'country', 'language', 'currency');
-            $config->defaults(array(
+            $config['payum.required_options'] = ['eid', 'secret', 'country', 'language', 'currency'];
+            $config->defaults([
                 'sandbox' => true,
-            ));
+            ]);
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);

@@ -20,7 +20,7 @@ class AgreementApi extends BaseApi
         //Deprecated, set to blank.
         $parameters['notifyUrl'] = '';
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'merchantRef',
             'description',
@@ -29,7 +29,7 @@ class AgreementApi extends BaseApi
             'notifyUrl',
             'startDate',
             'stopDate',
-        ));
+        ]);
 
         return $this->call('CreateAgreement3', $parameters, $this->getPxAgreementWsdl());
     }
@@ -41,10 +41,10 @@ class AgreementApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
-        ));
+        ]);
 
         return $this->call('Check', $parameters, $this->getPxAgreementWsdl());
     }
@@ -56,10 +56,10 @@ class AgreementApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
-        ));
+        ]);
 
         return $this->call('DeleteAgreement', $parameters, $this->getPxAgreementWsdl());
     }
@@ -71,7 +71,7 @@ class AgreementApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        $parameters['hash'] = $this->calculateHash($parameters, array(
+        $parameters['hash'] = $this->calculateHash($parameters, [
             'accountNumber',
             'agreementRef',
             'price',
@@ -80,7 +80,7 @@ class AgreementApi extends BaseApi
             'orderId',
             'purchaseOperation',
             'currency',
-        ));
+        ]);
 
         return $this->call('AutoPay3', $parameters, $this->getPxAgreementWsdl());
     }

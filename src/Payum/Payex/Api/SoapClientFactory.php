@@ -17,13 +17,13 @@ class SoapClientFactory
     /**
      * @param string $soapClientClass
      */
-    public function __construct(array $soapClientOptions = array(), $soapClientClass = null)
+    public function __construct(array $soapClientOptions = [], $soapClientClass = null)
     {
         $soapClientOptions = array_replace(
-            array(
+            [
                 'trace' => true,
                 'exceptions' => true,
-            ),
+            ],
             $soapClientOptions
         );
 

@@ -15,7 +15,7 @@ abstract class Humanify
     {
         $return = self::value($request);
 
-        $details = array();
+        $details = [];
 
         if ($request instanceof ModelAggregateInterface) {
             $details[] = sprintf('model: %s', self::value($request->getModel()));

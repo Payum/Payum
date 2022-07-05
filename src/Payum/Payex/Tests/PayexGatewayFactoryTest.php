@@ -22,10 +22,10 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
-        $factory = new PayexGatewayFactory(array(
+        $factory = new PayexGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
@@ -47,7 +47,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('account_number' => '', 'encryption_key' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals(['account_number' => '', 'encryption_key' => '', 'sandbox' => true], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

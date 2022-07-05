@@ -12,7 +12,7 @@ class StatusAction implements ActionInterface
 {
     public function execute($request)
     {
-        /** @var $request GetStatusInterface */
+        /** @var GetStatusInterface $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

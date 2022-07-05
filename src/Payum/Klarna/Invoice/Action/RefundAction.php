@@ -27,7 +27,7 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
-        $details->validateNotEmpty(array('invoice_number'));
+        $details->validateNotEmpty(['invoice_number']);
 
         $this->gateway->execute(new CreditPart($details));
     }

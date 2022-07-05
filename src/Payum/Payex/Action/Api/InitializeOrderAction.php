@@ -23,7 +23,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request InitializeOrder */
+        /** @var InitializeOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -32,7 +32,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
             throw new LogicException('The order has already been initialized.');
         }
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'price',
             'priceArgList',
             'vat',
@@ -49,7 +49,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
             'clientIdentifier',
             'agreementRef',
             'clientLanguage',
-        ));
+        ]);
 
         $result = $this->api->initialize((array) $model);
 

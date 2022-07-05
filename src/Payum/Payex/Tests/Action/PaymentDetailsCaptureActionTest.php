@@ -24,35 +24,35 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array())));
+        $this->assertTrue($action->supports(new Capture([])));
     }
 
     public function testShouldNotSupportCaptureayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(array(
+        $this->assertFalse($action->supports(new Capture([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
     public function testShouldSupportCaptureCaptureelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array(
+        $this->assertTrue($action->supports(new Capture([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
     public function testShouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array(
+        $this->assertTrue($action->supports(new Capture([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
     public function testShouldNotSupportAnythingNotCapture()
@@ -89,9 +89,9 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -108,10 +108,10 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'orderRef' => 'aRef',
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -131,11 +131,11 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'orderRef' => 'aRef',
             'recurring' => true,
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -160,7 +160,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array());
+        $request = new Capture([]);
 
         $action->execute($request);
 

@@ -32,7 +32,7 @@ class RenderTemplateAction implements ActionInterface
      */
     public function execute($request)
     {
-        /** @var $request RenderTemplate */
+        /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setResult(

@@ -29,7 +29,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
 
     public function execute($request)
     {
-        /** @var $request Refund */
+        /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -38,7 +38,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
             return;
         }
 
-        $refundableTrxTypes = array(Api::TRXTYPE_SALE, Api::TRXTYPE_DELAYED_CAPUTER, Api::TRXTYPE_VOICE_AUTHORIZATION);
+        $refundableTrxTypes = [Api::TRXTYPE_SALE, Api::TRXTYPE_DELAYED_CAPUTER, Api::TRXTYPE_VOICE_AUTHORIZATION];
         if (false == in_array($details['TRXTYPE'], $refundableTrxTypes)) {
             throw new LogicException(sprintf(
                 'You cannot refund transaction with type %s. Only these types could be refunded: %s',
@@ -47,7 +47,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
             ));
         }
 
-        $details->validateNotEmpty(array('PNREF'), true);
+        $details->validateNotEmpty(['PNREF'], true);
 
         $details['PURCHASE_TRXTYPE'] = $details['TRXTYPE'];
         $details['TRXTYPE'] = null;

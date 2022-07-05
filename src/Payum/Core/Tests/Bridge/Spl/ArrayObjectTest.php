@@ -45,39 +45,39 @@ class ArrayObjectTest extends TestCase
 
     public function testShouldReplaceFromArray()
     {
-        $expectedArray = array(
+        $expectedArray = [
             'foo' => 'valNew',
             'ololo' => 'valCurr',
             'baz' => 'bazNew',
-        );
+        ];
 
-        $array = new ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
+        $array = new ArrayObject(['foo' => 'valCurr', 'ololo' => 'valCurr']);
 
-        $array->replace(array(
+        $array->replace([
             'foo' => 'valNew',
             'baz' => 'bazNew',
-        ));
+        ]);
 
         $this->assertEquals($expectedArray, (array) $array);
     }
 
     public function testShouldReplaceFromTraversable()
     {
-        $traversable = new \ArrayIterator(array(
+        $traversable = new \ArrayIterator([
             'foo' => 'valNew',
             'baz' => 'bazNew',
-        ));
+        ]);
 
         //guard
         $this->assertInstanceOf('Traversable', $traversable);
 
-        $expectedArray = array(
+        $expectedArray = [
             'foo' => 'valNew',
             'ololo' => 'valCurr',
             'baz' => 'bazNew',
-        );
+        ];
 
-        $array = new ArrayObject(array('foo' => 'valCurr', 'ololo' => 'valCurr'));
+        $array = new ArrayObject(['foo' => 'valCurr', 'ololo' => 'valCurr']);
 
         $array->replace($traversable);
 
@@ -103,7 +103,7 @@ class ArrayObjectTest extends TestCase
         $array = (array) $arrayObject;
 
         $this->assertIsArray($array);
-        $this->assertEquals(array('foo' => 'barbaz'), $array);
+        $this->assertEquals(['foo' => 'barbaz'], $array);
     }
 
     public function testShouldAllowSetToCustomArrayObject()
@@ -159,7 +159,7 @@ class ArrayObjectTest extends TestCase
         $array = iterator_to_array($arrayObject);
 
         $this->assertIsArray($array);
-        $this->assertEquals(array('foo' => 'barbaz'), $array);
+        $this->assertEquals(['foo' => 'barbaz'], $array);
     }
 
     public function testThrowIfRequiredFieldEmptyAndThrowOnInvalidTrue()
@@ -168,7 +168,7 @@ class ArrayObjectTest extends TestCase
         $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validateNotEmpty(['aRequiredField'], $throwOnInvalid = true);
     }
 
     public function testThrowIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
@@ -178,7 +178,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
 
-        $arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validateNotEmpty(['aRequiredField', 'otherRequiredField'], $throwOnInvalid = true);
     }
 
     public function testThrowByDefaultIfRequiredFieldEmpty()
@@ -187,14 +187,14 @@ class ArrayObjectTest extends TestCase
         $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validateNotEmpty(array('aRequiredField'));
+        $arrayObject->validateNotEmpty(['aRequiredField']);
     }
 
     public function testShouldReturnFalseIfRequiredFieldEmptyAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
-        $this->assertFalse($arrayObject->validateNotEmpty(array('aRequiredField'), $throwOnInvalid = false));
+        $this->assertFalse($arrayObject->validateNotEmpty(['aRequiredField'], $throwOnInvalid = false));
     }
 
     public function testShouldAllowValidateScalarWhetherItNotEmpty()
@@ -210,7 +210,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject['aRequiredField'] = 'foo';
         $arrayObject['otherRequiredField'] = 'bar';
 
-        $this->assertTrue($arrayObject->validateNotEmpty(array('aRequiredField', 'otherRequiredField')));
+        $this->assertTrue($arrayObject->validateNotEmpty(['aRequiredField', 'otherRequiredField']));
     }
 
     public function testThrowIfRequiredFieldNotSetAndThrowOnInvalidTrue()
@@ -219,7 +219,7 @@ class ArrayObjectTest extends TestCase
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validatedKeysSet(['aRequiredField'], $throwOnInvalid = true);
     }
 
     public function testThrowIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
@@ -229,7 +229,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
 
-        $arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField'), $throwOnInvalid = true);
+        $arrayObject->validatedKeysSet(['aRequiredField', 'otherRequiredField'], $throwOnInvalid = true);
     }
 
     public function testThrowByDefaultIfRequiredFieldNotSet()
@@ -238,14 +238,14 @@ class ArrayObjectTest extends TestCase
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
-        $arrayObject->validatedKeysSet(array('aRequiredField'));
+        $arrayObject->validatedKeysSet(['aRequiredField']);
     }
 
     public function testShouldReturnFalseIfRequiredFieldNotSetAndThrowOnInvalidFalse()
     {
         $arrayObject = new ArrayObject();
 
-        $this->assertFalse($arrayObject->validatedKeysSet(array('aRequiredField'), $throwOnInvalid = false));
+        $this->assertFalse($arrayObject->validatedKeysSet(['aRequiredField'], $throwOnInvalid = false));
     }
 
     public function testShouldAllowValidateScalarNotSet()
@@ -261,7 +261,7 @@ class ArrayObjectTest extends TestCase
         $arrayObject['aRequiredField'] = 'foo';
         $arrayObject['otherRequiredField'] = 'bar';
 
-        $this->assertTrue($arrayObject->validatedKeysSet(array('aRequiredField', 'otherRequiredField')));
+        $this->assertTrue($arrayObject->validatedKeysSet(['aRequiredField', 'otherRequiredField']));
     }
 
     public function testShouldConvertArrayObjectToPrimitiveArrayMakingSensitiveValueUnsafeAndEraseIt()
@@ -290,10 +290,10 @@ class ArrayObjectTest extends TestCase
         $arrayObject = new ArrayObject();
         $arrayObject['foo'] = 'fooVal';
 
-        $arrayObject->defaults(array(
+        $arrayObject->defaults([
             'foo' => 'fooDefVal',
             'bar' => 'barDefVal',
-        ));
+        ]);
 
         $this->assertSame('fooVal', $arrayObject['foo']);
         $this->assertSame('barDefVal', $arrayObject['bar']);
@@ -363,8 +363,8 @@ class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
     #[\ReturnTypeWillChange]
     public function getIterator()
     {
-        return new \ArrayIterator(array(
+        return new \ArrayIterator([
             'foo' => $this->foo,
-        ));
+        ]);
     }
 }

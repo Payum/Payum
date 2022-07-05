@@ -9,7 +9,7 @@ use Payum\Payex\Request\Api\InitializeOrder;
 
 class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'price' => 1000,
         'priceArgList' => '',
         'vat' => 0,
@@ -26,14 +26,14 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
         'clientIdentifier' => 'USER-AGENT=cli-php',
         'agreementRef' => '',
         'clientLanguage' => 'en-US',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -104,9 +104,9 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
 
-        $action->execute(new InitializeOrder(array(
+        $action->execute(new InitializeOrder([
             'orderRef' => 'aRef',
-        )));
+        ]));
     }
 
     /**
@@ -129,9 +129,9 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('initialize')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'orderRef' => 'theRef',
-            ));
+            ]);
 
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
@@ -151,9 +151,9 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('initialize')
             ->with($this->requiredFields)
-            ->willReturn(array(
+            ->willReturn([
                 'redirectUrl' => 'http://example.com/theUrl',
-            ));
+            ]);
 
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
@@ -176,6 +176,6 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\OrderApi', array(), array(), '', false);
+        return $this->createMock('Payum\Payex\Api\OrderApi', [], [], '', false);
     }
 }

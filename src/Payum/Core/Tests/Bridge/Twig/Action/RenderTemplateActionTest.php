@@ -21,7 +21,7 @@ class RenderTemplateActionTest extends TestCase
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
-        $this->assertTrue($action->supports(new RenderTemplate('aTemplate', array())));
+        $this->assertTrue($action->supports(new RenderTemplate('aTemplate', [])));
     }
 
     public function testShouldNotSupportAnythingNotRenderTemplate()
@@ -46,7 +46,7 @@ class RenderTemplateActionTest extends TestCase
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = array('foo' => 'fooVal', 'bar' => 'barVal');
+        $context = $expectedContext = ['foo' => 'fooVal', 'bar' => 'barVal'];
         $expectedContext['layout'] = 'theLayout';
 
         $twigMock = $this->createTwigMock();
@@ -71,7 +71,7 @@ class RenderTemplateActionTest extends TestCase
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = array('foo' => 'fooVal', 'bar' => 'barVal', 'layout' => 'theCustomLayout');
+        $context = $expectedContext = ['foo' => 'fooVal', 'bar' => 'barVal', 'layout' => 'theCustomLayout'];
         $expectedContext['layout'] = 'theCustomLayout';
 
         $twigMock = $this->createTwigMock();
@@ -95,6 +95,6 @@ class RenderTemplateActionTest extends TestCase
      */
     protected function createTwigMock()
     {
-        return $this->createMock(Environment::class, array('render'), array(), '', false);
+        return $this->createMock(Environment::class, ['render'], [], '', false);
     }
 }

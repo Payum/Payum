@@ -12,7 +12,7 @@ class RefundAction implements ActionInterface
 {
     public function execute($request)
     {
-        /** @var $request Refund */
+        /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());

@@ -10,7 +10,7 @@ class ArrayObject extends \ArrayObject
 {
     protected $input;
 
-    public function __construct($input = array(), $flags = 0, $iterator_class = "ArrayIterator")
+    public function __construct($input = [], $flags = 0, $iterator_class = "ArrayIterator")
     {
         if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
             $this->input = $input;
@@ -91,9 +91,9 @@ class ArrayObject extends \ArrayObject
      */
     public function validateNotEmpty($required, $throwOnInvalid = true)
     {
-        $required = is_array($required) ? $required : array($required);
+        $required = is_array($required) ? $required : [$required];
 
-        $empty = array();
+        $empty = [];
 
         foreach ($required as $r) {
             $value = $this[$r];
@@ -124,7 +124,7 @@ class ArrayObject extends \ArrayObject
      */
     public function validatedKeysSet($required, $throwOnInvalid = true)
     {
-        $required = is_array($required) ? $required : array($required);
+        $required = is_array($required) ? $required : [$required];
 
         foreach ($required as $required) {
             if (false == $this->offsetExists($required)) {

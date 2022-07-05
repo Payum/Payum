@@ -51,7 +51,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('REFERENCEID must be set.');
         $action = new DoReferenceTransactionAction();
 
-        $action->execute(new DoReferenceTransaction(array()));
+        $action->execute(new DoReferenceTransaction([]));
     }
 
     public function testThrowIfPaymentActionNotSet()
@@ -60,9 +60,9 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('PAYMENTACTION must be set.');
         $action = new DoReferenceTransactionAction();
 
-        $request = new DoReferenceTransaction(array(
+        $request = new DoReferenceTransaction([
             'REFERENCEID' => 'aReferenceId',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -73,10 +73,10 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('AMT must be set.');
         $action = new DoReferenceTransactionAction();
 
-        $request = new DoReferenceTransaction(array(
+        $request = new DoReferenceTransaction([
             'REFERENCEID' => 'aReferenceId',
             'PAYMENTACTION' => 'anAction',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -99,18 +99,18 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
                 $testCase->assertArrayHasKey('PAYMENTACTION', $fields);
                 $testCase->assertSame('theAction', $fields['PAYMENTACTION']);
 
-                return array();
+                return [];
             })
         ;
 
         $action = new DoReferenceTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new DoReferenceTransaction(array(
+        $request = new DoReferenceTransaction([
             'REFERENCEID' => 'theReferenceId',
             'PAYMENTACTION' => 'theAction',
             'AMT' => 'theAmt',
-        ));
+        ]);
 
         $action->execute($request);
     }
@@ -122,21 +122,21 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('doReferenceTransaction')
             ->willReturnCallback(function () {
-                return array(
+                return [
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
-                );
+                ];
             })
         ;
 
         $action = new DoReferenceTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new DoReferenceTransaction(array(
+        $request = new DoReferenceTransaction([
             'REFERENCEID' => 'aReferenceId',
             'PAYMENTACTION' => 'anAction',
             'AMT' => 'anAmt',
-        ));
+        ]);
 
         $action->execute($request);
 
@@ -154,6 +154,6 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', [], [], '', false);
     }
 }

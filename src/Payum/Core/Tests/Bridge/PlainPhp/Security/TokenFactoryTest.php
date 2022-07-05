@@ -70,7 +70,7 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'theTargetPath',
-            array('target' => 'val')
+            ['target' => 'val']
         );
 
         $this->assertSame($token, $actualToken);
@@ -125,9 +125,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'theTargetPath',
-            array('target' => 'val'),
+            ['target' => 'val'],
             'theAfterPath',
-            array('after' => 'val')
+            ['after' => 'val']
         );
 
         $this->assertSame($token, $actualToken);
@@ -297,9 +297,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $identity,
             'theTargetPath',
-            array('target' => 'val'),
+            ['target' => 'val'],
             'theAfterPath',
-            array('after' => 'val')
+            ['after' => 'val']
         );
 
         $this->assertSame($token, $actualToken);
@@ -336,9 +336,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             null,
             'theTargetPath',
-            array('target' => 'val'),
+            ['target' => 'val'],
             'theAfterPath',
-            array('after' => 'val')
+            ['after' => 'val']
         );
 
         $this->assertSame($token, $actualToken);
@@ -387,9 +387,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'http://google.com/?foo=fooVal',
-            array('target' => 'val'),
+            ['target' => 'val'],
             'theAfterPath',
-            array('after' => 'val')
+            ['after' => 'val']
         );
 
         $this->assertSame($token, $actualToken);
@@ -444,9 +444,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'http://example.com/authorize.php',
-            array(),
+            [],
             'http://google.com/?payum_token=foo',
-            array('afterKey' => 'afterVal')
+            ['afterKey' => 'afterVal']
         );
 
         $this->assertSame($authorizeToken, $actualToken);
@@ -564,9 +564,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'http://example.com/authorize.php',
-            array(),
+            [],
             'http://google.com/foo/bar?foo=fooVal#fragment',
-            array('payum_token' => null)
+            ['payum_token' => null]
         );
 
         $this->assertSame($authorizeToken, $actualToken);

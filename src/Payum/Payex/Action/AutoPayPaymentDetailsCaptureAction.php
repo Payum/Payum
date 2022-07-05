@@ -16,7 +16,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 
     public function execute($request)
     {
-        /** @var $request \Payum\Core\Request\Capture */
+        /** @var \Payum\Core\Request\Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute(new AutoPayAgreement($request->getModel()));
