@@ -2,12 +2,17 @@
 
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
-class ReserveAmountTest extends \PHPUnit\Framework\TestCase
+use Payum\Core\Request\Generic;
+use Payum\Klarna\Invoice\Request\Api\ReserveAmount;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class ReserveAmountTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\ReserveAmount::class);
+        $rc = new ReflectionClass(ReserveAmount::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

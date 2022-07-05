@@ -2,6 +2,9 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
+use KlarnaFlags;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -39,12 +42,12 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
                 $details['pno'],
                 $details['gender'],
                 $details['amount'] ?: -1,
-                $details['reservation_flags'] ?: \KlarnaFlags::NO_FLAG
+                $details['reservation_flags'] ?: KlarnaFlags::NO_FLAG
             );
 
             $details['rno'] = $result[0];
             $details['status'] = $result[1];
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
@@ -52,7 +55,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
     public function supports($request)
     {
         return $request instanceof ReserveAmount &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

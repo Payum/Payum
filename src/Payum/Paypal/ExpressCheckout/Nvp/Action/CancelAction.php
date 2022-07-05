@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -36,7 +37,7 @@ class CancelAction implements ActionInterface, GatewayAwareInterface
 
     public function supports($request)
     {
-        if (false == ($request instanceof Cancel && $request->getModel() instanceof \ArrayAccess)) {
+        if (false == ($request instanceof Cancel && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 

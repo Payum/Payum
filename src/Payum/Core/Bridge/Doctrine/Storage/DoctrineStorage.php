@@ -3,13 +3,14 @@
 namespace Payum\Core\Bridge\Doctrine\Storage;
 
 use Doctrine\Persistence\ObjectManager;
+use LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 
 class DoctrineStorage extends AbstractStorage
 {
     /**
-     * @var \Doctrine\Persistence\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -50,7 +51,7 @@ class DoctrineStorage extends AbstractStorage
         $modelMetadata = $this->objectManager->getClassMetadata(get_class($model));
         $id = $modelMetadata->getIdentifierValues($model);
         if (count($id) > 1) {
-            throw new \LogicException('Storage not support composite primary ids');
+            throw new LogicException('Storage not support composite primary ids');
         }
 
         return new Identity(array_shift($id), $model);

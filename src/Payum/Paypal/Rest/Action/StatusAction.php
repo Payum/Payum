@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Rest\Action;
 
+use ArrayAccess;
 use PayPal\Api\Payment;
 use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
@@ -26,10 +27,10 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var \ArrayAccess|Payment $model */
+        /** @var ArrayAccess|Payment $model */
         $model = $request->getModel();
 
-        $state = $model instanceof \ArrayAccess ? ($model['state'] ?? null) : $model->state;
+        $state = $model instanceof ArrayAccess ? ($model['state'] ?? null) : $model->state;
 
         if ('approved' == $state) {
             $request->markCaptured();
@@ -61,7 +62,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof GetStatusInterface &&
-            ($request->getModel() instanceof Payment || $request->getModel() instanceof \ArrayAccess)
+            ($request->getModel() instanceof Payment || $request->getModel() instanceof ArrayAccess)
         ;
     }
 }

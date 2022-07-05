@@ -5,6 +5,7 @@
 
 namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 
+use DateTime;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 
@@ -28,7 +29,7 @@ class CreditCardDate extends Constraint
         }
 
         if (null !== $this->min) {
-            $this->min = new \DateTime($this->min);
+            $this->min = new DateTime($this->min);
             $this->min->modify('last day of this month');
         }
     }

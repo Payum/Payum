@@ -2,24 +2,31 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class SyncActionTest extends \PHPUnit\Framework\TestCase
+class SyncActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -54,15 +61,15 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel()
@@ -71,7 +78,7 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails::class))
+            ->with($this->isInstanceOf(GetTransactionDetails::class))
             ->willReturnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
@@ -82,7 +89,7 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'AMT' => 11,
             'txn_id' => 'aTxn_id',
         ]);
@@ -97,10 +104,10 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

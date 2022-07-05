@@ -4,33 +4,36 @@ namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identificator;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Serializable;
+use stdClass;
 
 class IdentificatorTest extends TestCase
 {
     public function testShouldImplementSerializableInterface()
     {
-        $rc = new \ReflectionClass(Identificator::class);
+        $rc = new ReflectionClass(Identificator::class);
 
-        $this->assertTrue($rc->implementsInterface(\Serializable::class));
+        $this->assertTrue($rc->implementsInterface(Serializable::class));
     }
 
     public function testShouldAllowGetIdSetInConstructor()
     {
-        $id = new Identificator('theId', new \stdClass());
+        $id = new Identificator('theId', new stdClass());
 
         $this->assertSame('theId', $id->getId());
     }
 
     public function testShouldAllowGetClassSetInConstructor()
     {
-        $id = new Identificator('theId', new \stdClass());
+        $id = new Identificator('theId', new stdClass());
 
-        $this->assertSame(\stdClass::class, $id->getClass());
+        $this->assertSame(stdClass::class, $id->getClass());
     }
 
     public function testShouldBeCorrectlySerializedAndUnserialized()
     {
-        $id = new Identificator('theId', new \stdClass());
+        $id = new Identificator('theId', new stdClass());
 
         $serializedId = serialize($id);
 

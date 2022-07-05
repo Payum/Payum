@@ -7,11 +7,14 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Payum\Core\Tests\Mocks\Document\TestModel;
+use ReflectionClass;
+use RuntimeException;
 
 abstract class MongoTest extends BaseMongoTest
 {
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return MappingDriverChain
      */
@@ -19,7 +22,7 @@ abstract class MongoTest extends BaseMongoTest
     {
         $rootDir = realpath(__DIR__ . '/../../../..');
         if (false === $rootDir || false === is_file($rootDir . '/Gateway.php')) {
-            throw new \RuntimeException('Cannot guess Payum root dir.');
+            throw new RuntimeException('Cannot guess Payum root dir.');
         }
 
         $driver = new MappingDriverChain();
@@ -34,7 +37,7 @@ abstract class MongoTest extends BaseMongoTest
         );
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
-        $rc = new \ReflectionClass(\Payum\Core\Tests\Mocks\Document\TestModel::class);
+        $rc = new ReflectionClass(TestModel::class);
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), [
             dirname($rc->getFileName()),
         ]);

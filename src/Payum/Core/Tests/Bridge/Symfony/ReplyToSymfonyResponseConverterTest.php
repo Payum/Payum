@@ -4,6 +4,8 @@ namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
 use Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
@@ -22,7 +24,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
         $response = $converter->convert($reply);
 
-        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertStringContainsString('Redirecting to /foo/bar', $response->getContent());
         $this->assertSame(302, $response->getStatusCode());
 
@@ -40,7 +42,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
         $response = $converter->convert($reply);
 
-        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('theContent', $response->getContent());
         $this->assertSame(200, $response->getStatusCode());
     }
@@ -56,7 +58,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
         $response = $converter->convert($reply);
 
-        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('theContent', $response->getContent());
         $this->assertSame(418, $response->getStatusCode());
         $this->assertArrayHasKey('foo', $response->headers->all());
@@ -73,7 +75,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
         $response = $converter->convert($reply);
 
-        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame($reply->getContent(), $response->getContent());
     }
@@ -93,9 +95,9 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
     public function testShouldChangeReplyToLogicExceptionIfNotSupported()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot convert reply Mock_Base_');
-        $notSupportedReply = $this->createMock(\Payum\Core\Reply\Base::class);
+        $notSupportedReply = $this->createMock(Base::class);
 
         $listener = new ReplyToSymfonyResponseConverter();
 

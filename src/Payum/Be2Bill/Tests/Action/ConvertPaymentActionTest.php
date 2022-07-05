@@ -2,11 +2,15 @@
 
 namespace Payum\Be2Bill\Tests\Action;
 
+use Iterator;
 use Payum\Be2Bill\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\Generic;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
+use stdClass;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
@@ -14,20 +18,20 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     protected $requestClass = Convert::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment(), 'array')];
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'array')];
-        yield [new $this->requestClass(new Payment(), 'array', $this->createMock(\Payum\Core\Security\TokenInterface::class))];
+        yield [new $this->requestClass(new Payment(), 'array', $this->createMock(TokenInterface::class))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
-        yield [new $this->requestClass(new \stdClass(), 'array')];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
+        yield [new $this->requestClass(new stdClass(), 'array')];
         yield [new $this->requestClass(new Payment(), 'foobar')];
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }

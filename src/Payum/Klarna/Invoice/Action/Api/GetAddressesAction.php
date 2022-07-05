@@ -2,6 +2,7 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use KlarnaAddr;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 
@@ -17,7 +18,7 @@ class GetAddressesAction extends BaseApiAwareAction
         $klarna = $this->getKlarna();
 
         foreach ($klarna->getAddresses($request->getPno()) as $address) {
-            /** @var \KlarnaAddr $address */
+            /** @var KlarnaAddr $address */
             $address->setEmail(utf8_encode($address->getEmail()));
             $address->setTelno(utf8_encode($address->getTelno()));
             $address->setCellno(utf8_encode($address->getCellno()));

@@ -6,6 +6,7 @@ use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
+use ReflectionObject;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReplyToSymfonyResponseConverter
@@ -24,7 +25,7 @@ class ReplyToSymfonyResponseConverter
             return new Response($reply->getContent(), $reply->getStatusCode(), $headers);
         }
 
-        $ro = new \ReflectionObject($reply);
+        $ro = new ReflectionObject($reply);
 
         throw new LogicException(
             sprintf('Cannot convert reply %s to http response.', $ro->getShortName()),

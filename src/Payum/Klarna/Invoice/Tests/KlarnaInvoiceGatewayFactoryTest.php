@@ -2,6 +2,7 @@
 
 namespace Payum\Klarna\Invoice\Tests;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 
@@ -64,7 +65,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The eid, secret, country, language, currency fields are required.');
         $factory = new KlarnaInvoiceGatewayFactory();
 

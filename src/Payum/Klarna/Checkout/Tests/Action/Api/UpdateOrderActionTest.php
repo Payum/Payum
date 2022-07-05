@@ -2,30 +2,39 @@
 
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Iterator;
+use Klarna_Checkout_ConnectionErrorException;
+use Klarna_Checkout_ConnectorInterface;
+use Klarna_Checkout_Order;
+use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Checkout\Action\Api\UpdateOrderAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class UpdateOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = \Payum\Klarna\Checkout\Request\Api\UpdateOrder::class;
+    protected $requestClass = UpdateOrder::class;
 
-    protected $actionClass = \Payum\Klarna\Checkout\Action\Api\UpdateOrderAction::class;
+    protected $actionClass = UpdateOrderAction::class;
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\UpdateOrderAction::class);
+        $rc = new ReflectionClass(UpdateOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
@@ -63,12 +72,12 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
+        $this->assertInstanceOf(Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
-        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
+        $this->expectException(Klarna_Checkout_ConnectionErrorException::class);
         $model = [
             'location' => 'theLocation',
             'cart' => [
@@ -84,7 +93,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('POST')
-            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
+            ->willThrowException(new Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new UpdateOrderAction($connector);
@@ -111,7 +120,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->method('apply')
             ->withConsecutive(['POST'], ['POST'])
             ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Klarna_Checkout_ConnectionErrorException()),
+                $this->throwException(new Klarna_Checkout_ConnectionErrorException()),
                 $this->returnCallback(function ($method, $order, $options) use ($model) {
                     $this->assertIsArray($options);
                     $this->assertArrayHasKey('data', $options);
@@ -127,14 +136,14 @@ class UpdateOrderActionTest extends GenericActionTest
 
         $action->execute($request = new UpdateOrder($model));
 
-        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
+        $this->assertInstanceOf(Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna_Checkout_ConnectorInterface
+     * @return MockObject|Klarna_Checkout_ConnectorInterface
      */
     protected function createConnectorMock()
     {
-        return $this->createMock(\Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
     }
 }

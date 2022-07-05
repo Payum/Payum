@@ -2,22 +2,26 @@
 
 namespace Payum\Payex\Tests\Api;
 
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Payex\Api\BaseApi;
 use Payum\Payex\Api\SoapClientFactory;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class BaseApiTest extends \PHPUnit\Framework\TestCase
+class BaseApiTest extends TestCase
 {
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Api\BaseApi::class);
+        $rc = new ReflectionClass(BaseApi::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
     public function testThrowIfAccountNumberOptionNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
-        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, [
+        $this->getMockForAbstractClass(BaseApi::class, [
             new SoapClientFactory(),
             [],
         ]);
@@ -25,9 +29,9 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfEncryptionKeyOptionNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
-        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, [
+        $this->getMockForAbstractClass(BaseApi::class, [
             new SoapClientFactory(),
             [
                 'account_number' => 'aNumber',
@@ -37,9 +41,9 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfNotBoolSandboxOptionGiven()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, [
+        $this->getMockForAbstractClass(BaseApi::class, [
             new SoapClientFactory(),
             [
                 'account_number' => 'aNumber',

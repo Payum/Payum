@@ -2,7 +2,11 @@
 
 namespace Payum\Stripe\Tests\Action\Api;
 
+use ArrayObject;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
@@ -11,26 +15,30 @@ use Payum\Core\Request\RenderTemplate;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainToken;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
+class ObtainTokenActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(ObtainTokenAction::class);
+        $rc = new ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass(ObtainTokenAction::class);
+        $rc = new ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new ObtainTokenAction('aTemplateName');
 
         $action->setApi('not keys instance');
@@ -47,28 +55,28 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new ObtainToken(new \stdClass())));
+        $this->assertFalse($action->supports(new ObtainToken(new stdClass())));
     }
 
     public function testShouldNotSupportNotObtainTokenRequest()
     {
         $action = new ObtainTokenAction('aTemplateName');
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowRequestNotSupportedIfNotSupportedGiven()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action ObtainTokenAction is not supported the request stdClass.');
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfModelAlreadyHaveTokenSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The token has already been set.');
         $action = new ObtainTokenAction('aTemplateName');
 
@@ -79,7 +87,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldRenderExpectedTemplateIfHttpRequestNotPOST()
     {
-        $model = new \ArrayObject();
+        $model = new ArrayObject();
         $templateName = 'theTemplateName';
         $publishableKey = 'thePubKey';
 
@@ -187,7 +195,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

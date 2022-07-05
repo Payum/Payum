@@ -3,15 +3,17 @@
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HttpResponseTest extends TestCase
 {
     public function testShouldImplementReplyInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpResponse::class);
+        $rc = new ReflectionClass(HttpResponse::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Reply\ReplyInterface::class));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
     public function testShouldAllowGetContentSetInConstructor()

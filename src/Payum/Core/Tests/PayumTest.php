@@ -11,12 +11,13 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class PayumTest extends TestCase
 {
     public function testShouldImplementRegistryInterface()
     {
-        $rc = new \ReflectionClass(Payum::class);
+        $rc = new ReflectionClass(Payum::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }

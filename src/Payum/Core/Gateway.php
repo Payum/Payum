@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,6 +11,7 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Reply\ReplyInterface;
+use ReflectionProperty;
 
 class Gateway implements GatewayInterface
 {
@@ -24,7 +26,7 @@ class Gateway implements GatewayInterface
     protected $apis;
 
     /**
-     * @var \Payum\Core\Extension\ExtensionCollection
+     * @var ExtensionCollection
      */
     protected $extensions;
 
@@ -112,7 +114,7 @@ class Gateway implements GatewayInterface
             if ($context->getReply()) {
                 throw $context->getReply();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $context->setException($e);
 
             $this->onPostExecuteWithException($context);
@@ -129,7 +131,7 @@ class Gateway implements GatewayInterface
 
         try {
             $this->extensions->onPostExecute($context);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // logic is similar to one in Symfony's ExceptionListener::onKernelException
             $wrapper = $e;
             while ($prev = $wrapper->getPrevious()) {
@@ -138,7 +140,7 @@ class Gateway implements GatewayInterface
                 }
             }
 
-            $prev = new \ReflectionProperty('Exception', 'previous');
+            $prev = new ReflectionProperty('Exception', 'previous');
             $prev->setAccessible(true);
             $prev->setValue($wrapper, $exception);
 

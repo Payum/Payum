@@ -2,6 +2,7 @@
 
 namespace Payum\AuthorizeNet\Aim;
 
+use LogicException;
 use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
@@ -14,7 +15,7 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         if (! class_exists(\AuthorizeNetAIM::class)) {
-            throw new \LogicException('You must install "authorizenet/authorizenet" library.');
+            throw new LogicException('You must install "authorizenet/authorizenet" library.');
         }
 
         $config->defaults([

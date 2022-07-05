@@ -2,6 +2,9 @@
 
 namespace Payum\Paypal\Rest\Tests;
 
+use PayPal\Rest\ApiContext;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
@@ -27,7 +30,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $apis = $this->getPropertyValue($gateway, 'apis');
         $apiContext = null;
         foreach ($apis as $api) {
-            if ($api instanceof \PayPal\Rest\ApiContext) {
+            if ($api instanceof ApiContext) {
                 $apiContext = $api;
                 break;
             }
@@ -94,7 +97,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The client_id, client_secret fields are required.');
         $factory = new PaypalRestGatewayFactory();
 
@@ -104,7 +107,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
     public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         define('PP_CONFIG_PATH', __DIR__);
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         if (method_exists($this, 'expectExceptionMessageMatches')) {
             $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');

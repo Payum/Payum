@@ -2,6 +2,7 @@
 
 namespace Payum\Sofort\Tests;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Sofort\SofortGatewayFactory;
 
@@ -61,7 +62,7 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The config_key fields are required.');
         $factory = new SofortGatewayFactory();
 

@@ -2,6 +2,7 @@
 
 namespace Payum\Sofort\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -54,7 +55,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
     public function supports($request)
     {
         return $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

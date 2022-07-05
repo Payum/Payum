@@ -2,6 +2,8 @@
 
 namespace Payum\Stripe\Tests\Action;
 
+use DateTime;
+use Iterator;
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
@@ -11,6 +13,7 @@ use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\ConvertPaymentAction;
+use stdClass;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
@@ -18,20 +21,20 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     protected $requestClass = Convert::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment(), 'array')];
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'array')];
         yield [new $this->requestClass(new Payment(), 'array', $this->createMock(TokenInterface::class))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
+        yield [new stdClass()];
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
-        yield [new $this->requestClass(new \stdClass(), 'array')];
+        yield [new $this->requestClass(new stdClass(), 'array')];
         yield [new $this->requestClass(new Payment(), 'foobar')];
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
@@ -89,7 +92,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     {
         $creditCard = new CreditCard();
         $creditCard->setNumber('4111111111111111');
-        $creditCard->setExpireAt(new \DateTime('2018-05-12'));
+        $creditCard->setExpireAt(new DateTime('2018-05-12'));
         $creditCard->setSecurityCode(123);
         $creditCard->setHolder('John Doe');
 

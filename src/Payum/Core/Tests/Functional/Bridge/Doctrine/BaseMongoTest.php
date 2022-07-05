@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use MongoDB\Client;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -19,7 +20,7 @@ abstract class BaseMongoTest extends TestCase
 
     protected function setUp(): void
     {
-        if (false === (class_exists(\MongoDB\Client::class))) {
+        if (false === (class_exists(Client::class))) {
             $this->markTestSkipped('Either mongo extension or\and doctrine/mongodb-odm are not installed.');
         }
 

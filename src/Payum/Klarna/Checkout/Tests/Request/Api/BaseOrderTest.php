@@ -2,28 +2,33 @@
 
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
+use Klarna_Checkout_Order;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Checkout\Request\Api\BaseOrder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BaseOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class);
+        $rc = new ReflectionClass(BaseOrder::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
     public function testShouldBeAbstractClass()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class);
+        $rc = new ReflectionClass(BaseOrder::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
     public function testThrowIfTryConstructWithNotArrayModel()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
@@ -40,18 +45,18 @@ class BaseOrderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna_Checkout_Order
+     * @return MockObject|Klarna_Checkout_Order
      */
     protected function createOrderMock()
     {
-        return $this->createMock(\Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|BaseOrder
+     * @return MockObject|BaseOrder
      */
     protected function createBaseOrderMock($model)
     {
-        return $this->getMockForAbstractClass(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class, [$model]);
+        return $this->getMockForAbstractClass(BaseOrder::class, [$model]);
     }
 }

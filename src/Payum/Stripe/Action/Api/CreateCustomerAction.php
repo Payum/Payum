@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -14,7 +15,7 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Stripe\Customer;
-use Stripe\Exception;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 /**
@@ -69,7 +70,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
             $customer = Customer::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($customer->toArray(true));
-        } catch (Exception\ApiErrorException $e) {
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
@@ -77,7 +78,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
     public function supports($request)
     {
         return $request instanceof CreateCustomer &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

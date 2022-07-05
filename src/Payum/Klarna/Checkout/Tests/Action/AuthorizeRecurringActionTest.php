@@ -2,28 +2,36 @@
 
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use ArrayObject;
+use Iterator;
+use Klarna_Checkout_Order;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Authorize;
+use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\AuthorizeRecurringAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class AuthorizeRecurringActionTest extends GenericActionTest
 {
     /**
      * @var Authorize
      */
-    protected $requestClass = \Payum\Core\Request\Authorize::class;
+    protected $requestClass = Authorize::class;
 
     /**
      * @var AuthorizeRecurringAction
      */
-    protected $actionClass = \Payum\Klarna\Checkout\Action\AuthorizeRecurringAction::class;
+    protected $actionClass = AuthorizeRecurringAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass([
             'recurring_token' => 'aToken',
@@ -32,23 +40,23 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             'recurring' => false,
             'recurring_token' => 'aToken',
         ])];
-        yield [new $this->requestClass(new \ArrayObject([
+        yield [new $this->requestClass(new ArrayObject([
             'recurring_token' => 'aToken',
         ]))];
-        yield [new $this->requestClass(new \ArrayObject([
+        yield [new $this->requestClass(new ArrayObject([
             'recurring' => false,
             'recurring_token' => 'aToken',
         ]))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
+        yield [new stdClass()];
         yield [new $this->requestClass('foo')];
-        yield [new $this->requestClass(new \stdClass())];
-        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
+        yield [new $this->requestClass(new stdClass())];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
         yield [new $this->requestClass([
             'recurring' => true,
             'recurring_token' => 'aToken',
@@ -61,24 +69,24 @@ class AuthorizeRecurringActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
+        $rc = new ReflectionClass(AuthorizeRecurringAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldImplementsApiAwareInterface()
     {
-        $rc = new \ReflectionClass(AuthorizeRecurringAction::class);
+        $rc = new ReflectionClass(AuthorizeRecurringAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testThrowIfNotKlarnaConfigGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config');
         $action = new AuthorizeRecurringAction();
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldDoNothingIfReservationAlreadySet()
@@ -113,13 +121,13 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
+            ->with($this->isInstanceOf(CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             })
         ;
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'recurring_token' => 'theToken',
         ]);
 
@@ -158,7 +166,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
+            ->with($this->isInstanceOf(CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 
@@ -170,7 +178,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             })
         ;
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'recurring_token' => 'theToken',
         ]);
 
@@ -211,7 +219,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
+            ->with($this->isInstanceOf(CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 
@@ -219,7 +227,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             })
         ;
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'recurring_token' => 'theToken',
         ]);
 
@@ -237,10 +245,10 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna_Checkout_Order
+     * @return MockObject|Klarna_Checkout_Order
      */
     protected function createOrderMock()
     {
-        return $this->createMock(\Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
     }
 }

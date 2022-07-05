@@ -4,12 +4,14 @@ namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
 
 abstract class GenericApiAwareActionTest extends TestCase
 {
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass($this->getActionClass());
+        $rc = new ReflectionClass($this->getActionClass());
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
@@ -21,7 +23,7 @@ abstract class GenericApiAwareActionTest extends TestCase
         $api = new $class();
         $api->setApi($apiClass);
 
-        $rc = new \ReflectionProperty($api, 'apiClass');
+        $rc = new ReflectionProperty($api, 'apiClass');
         $rc->setAccessible(true);
 
         $this->assertInstanceOf($rc->getValue($api), $apiClass);

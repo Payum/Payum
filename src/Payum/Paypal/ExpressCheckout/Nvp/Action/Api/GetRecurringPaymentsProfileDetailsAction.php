@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -39,7 +40,7 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
     public function supports($request)
     {
         return $request instanceof GetRecurringPaymentsProfileDetails &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

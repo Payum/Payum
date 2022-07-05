@@ -2,14 +2,17 @@
 
 namespace Payum\Core\Tests\Exception;
 
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\UnsupportedApiException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class UnsupportedApiExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfInvalidArgumentException()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Exception\UnsupportedApiException::class);
+        $rc = new ReflectionClass(UnsupportedApiException::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Exception\InvalidArgumentException::class));
+        $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 }

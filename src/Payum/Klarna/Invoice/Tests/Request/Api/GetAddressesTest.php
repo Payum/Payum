@@ -2,9 +2,11 @@
 
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use KlarnaAddr;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
+use PHPUnit\Framework\TestCase;
 
-class GetAddressesTest extends \PHPUnit\Framework\TestCase
+class GetAddressesTest extends TestCase
 {
     public function testShouldAllowGetPnoSetInConstructor()
     {
@@ -17,7 +19,7 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $address = new \KlarnaAddr();
+        $address = new KlarnaAddr();
         $request->addAddress($address);
         $this->assertSame([$address], $request->getAddresses());
     }
@@ -26,8 +28,8 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr());
-        $request->addAddress($second = new \KlarnaAddr());
+        $request->addAddress($first = new KlarnaAddr());
+        $request->addAddress($second = new KlarnaAddr());
 
         $addresses = $request->getAddresses();
 
@@ -47,8 +49,8 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr());
-        $request->addAddress($second = new \KlarnaAddr());
+        $request->addAddress($first = new KlarnaAddr());
+        $request->addAddress($second = new KlarnaAddr());
 
         $this->assertSame($first, $request->getFirstAddress());
     }

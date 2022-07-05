@@ -2,6 +2,8 @@
 
 namespace Payum\Payex\Api;
 
+use SoapClient;
+
 class SoapClientFactory
 {
     /**
@@ -27,14 +29,14 @@ class SoapClientFactory
             $soapClientOptions
         );
 
-        $this->soapClientClass = $soapClientClass ?: \SoapClient::class;
+        $this->soapClientClass = $soapClientClass ?: SoapClient::class;
         $this->soapClientOptions = $soapClientOptions;
     }
 
     /**
      * @param string $wsdl
      *
-     * @return \SoapClient
+     * @return SoapClient
      */
     public function createWsdlClient($wsdl)
     {

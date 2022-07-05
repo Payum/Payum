@@ -2,23 +2,31 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckoutDetailsAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
+class GetExpressCheckoutDetailsActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(GetExpressCheckoutDetailsAction::class);
+        $rc = new ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementApoAwareInterface()
     {
-        $rc = new \ReflectionClass(GetExpressCheckoutDetailsAction::class);
+        $rc = new ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
@@ -28,7 +36,7 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action = new GetExpressCheckoutDetailsAction();
 
         $this->assertTrue(
-            $action->supports(new GetExpressCheckoutDetails($this->createMock(\ArrayAccess::class)))
+            $action->supports(new GetExpressCheckoutDetails($this->createMock(ArrayAccess::class)))
         );
     }
 
@@ -36,20 +44,20 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new GetExpressCheckoutDetailsAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new GetExpressCheckoutDetailsAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfTokenNotSetInModel()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         $action = new GetExpressCheckoutDetailsAction();
 
@@ -117,10 +125,10 @@ class GetExpressCheckoutDetailsActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

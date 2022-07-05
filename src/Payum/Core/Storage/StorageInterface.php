@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Storage;
 
+use Payum\Core\Exception\InvalidArgumentException;
+
 interface StorageInterface
 {
     /**
@@ -19,14 +21,14 @@ interface StorageInterface
     /**
      * @param object $model
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     * @throws InvalidArgumentException if not supported model given.
      */
     public function update($model);
 
     /**
      * @param object $model
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     * @throws InvalidArgumentException if not supported model given.
      */
     public function delete($model);
 
@@ -45,7 +47,7 @@ interface StorageInterface
     /**
      * @param object $model
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if not supported model given.
+     * @throws InvalidArgumentException if not supported model given.
      *
      * @return IdentityInterface
      */

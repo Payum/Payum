@@ -2,12 +2,17 @@
 
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
-class EmailInvoiceTest extends \PHPUnit\Framework\TestCase
+use Payum\Core\Request\Generic;
+use Payum\Klarna\Invoice\Request\Api\EmailInvoice;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class EmailInvoiceTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\EmailInvoice::class);
+        $rc = new ReflectionClass(EmailInvoice::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -54,7 +55,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof CreateAgreement &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

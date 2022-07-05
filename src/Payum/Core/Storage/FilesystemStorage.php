@@ -4,6 +4,8 @@ namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
+use ReflectionObject;
+use ReflectionProperty;
 
 class FilesystemStorage extends AbstractStorage
 {
@@ -53,13 +55,13 @@ class FilesystemStorage extends AbstractStorage
 
     protected function doUpdateModel($model)
     {
-        $ro = new \ReflectionObject($model);
+        $ro = new ReflectionObject($model);
 
         if (false == $ro->hasProperty($this->idProperty)) {
             $model->{$this->idProperty} = null;
         }
 
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
         $id = $rp->getValue($model);
@@ -75,7 +77,7 @@ class FilesystemStorage extends AbstractStorage
 
     protected function doDeleteModel($model)
     {
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
         if ($id = $rp->getValue($model)) {
@@ -86,7 +88,7 @@ class FilesystemStorage extends AbstractStorage
 
     protected function doGetIdentity($model)
     {
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
         if (false == $id = $rp->getValue($model)) {

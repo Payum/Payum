@@ -8,19 +8,20 @@ use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class GatewayConfigTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass(GatewayConfig::class);
+        $rc = new ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayConfigInterface::class));
     }
 
     public function testShouldImplementCryptedInterface()
     {
-        $rc = new \ReflectionClass(GatewayConfig::class);
+        $rc = new ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(CryptedInterface::class));
     }

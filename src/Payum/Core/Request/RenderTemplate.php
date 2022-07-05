@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Request;
 
+use InvalidArgumentException;
+
 class RenderTemplate
 {
     /**
@@ -77,7 +79,7 @@ class RenderTemplate
     public function addParameter($name, $value)
     {
         if (array_key_exists($name, $this->parameters)) {
-            throw new \InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));
+            throw new InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));
         }
 
         $this->parameters[$name] = $value;

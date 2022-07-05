@@ -2,6 +2,7 @@
 
 namespace Payum\AuthorizeNet\Aim\Action;
 
+use ArrayAccess;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -69,7 +70,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
     public function supports($request)
     {
         return $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

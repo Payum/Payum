@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -40,7 +41,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
     public function supports($request)
     {
         return $request instanceof GetExpressCheckoutDetails &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Extension;
 
+use ArrayAccess;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
@@ -25,7 +26,7 @@ class CreateCustomerExtension implements ExtensionInterface
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
+        if (false == $model instanceof ArrayAccess) {
             return;
         }
 
@@ -52,7 +53,7 @@ class CreateCustomerExtension implements ExtensionInterface
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
+        if (false == $model instanceof ArrayAccess) {
             return;
         }
 

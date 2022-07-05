@@ -2,28 +2,38 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Klarna;
+use KlarnaException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Activate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PhpXmlRpc\Client;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 class ActivateActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\ActivateAction::class);
+        $rc = new ReflectionClass(ActivateAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new ActivateAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldSupportActivateWithArrayAsModel()
@@ -37,27 +47,27 @@ class ActivateActionTest extends GenericApiAwareActionTest
     {
         $action = new ActivateAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportActivateWithNotArrayAccessModel()
     {
         $action = new ActivateAction();
 
-        $this->assertFalse($action->supports(new Activate(new \stdClass())));
+        $this->assertFalse($action->supports(new Activate(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new ActivateAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfRnoNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new ActivateAction();
 
@@ -111,7 +121,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->willThrowException(new \KlarnaException('theMessage', 123))
+            ->willThrowException(new KlarnaException('theMessage', 123))
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -136,13 +146,13 @@ class ActivateActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna
+     * @return MockObject|Klarna
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock(\Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
+        $klarnaMock = $this->createMock(Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus']);
 
-        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
         $rp->setAccessible(false);

@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Model;
 
+use Traversable;
+
 class Payment implements PaymentInterface, DirectDebitPaymentInterface
 {
     /**
@@ -138,11 +140,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     }
 
     /**
-     * @param array|\Traversable $details
+     * @param array|Traversable $details
      */
     public function setDetails($details)
     {
-        if ($details instanceof \Traversable) {
+        if ($details instanceof Traversable) {
             $details = iterator_to_array($details);
         }
 

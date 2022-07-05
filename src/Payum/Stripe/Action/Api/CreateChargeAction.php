@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -14,7 +15,7 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Stripe\Charge;
-use Stripe\Exception;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface
@@ -73,7 +74,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($charge->toArray(true));
-        } catch (Exception\ApiErrorException $e) {
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
@@ -81,7 +82,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof CreateCharge &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

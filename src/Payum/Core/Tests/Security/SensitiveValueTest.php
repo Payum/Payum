@@ -2,23 +2,26 @@
 
 namespace Payum\Core\Tests\Security;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\SensitiveValue;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Serializable;
 
 class SensitiveValueTest extends TestCase
 {
     public function testShouldBeFinal()
     {
-        $rc = new \ReflectionClass(SensitiveValue::class);
+        $rc = new ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->isFinal());
     }
 
     public function testShouldImplementSerializableInterface()
     {
-        $rc = new \ReflectionClass(SensitiveValue::class);
+        $rc = new ReflectionClass(SensitiveValue::class);
 
-        $this->assertTrue($rc->implementsInterface(\Serializable::class));
+        $this->assertTrue($rc->implementsInterface(Serializable::class));
     }
 
     public function testShouldAllowGetValueSetInConstructorAndErase()
@@ -86,7 +89,7 @@ class SensitiveValueTest extends TestCase
 
     public function testThrowIfTryToCloneValue()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('It is not permitted to close this object.');
         $sensitiveValue = new SensitiveValue('cardNumber');
 

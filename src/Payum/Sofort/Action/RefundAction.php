@@ -2,6 +2,7 @@
 
 namespace Payum\Sofort\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -30,7 +31,7 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
     public function supports($request)
     {
         return $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

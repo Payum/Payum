@@ -2,28 +2,32 @@
 
 namespace Payum\Core\Tests\Action;
 
+use Iterator;
 use Payum\Core\Action\GetCurrencyAction;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Tests\GenericActionTest;
+use RuntimeException;
+use stdClass;
 
 class GetCurrencyActionTest extends GenericActionTest
 {
-    protected $requestClass = \Payum\Core\Request\GetCurrency::class;
+    protected $requestClass = GetCurrency::class;
 
-    protected $actionClass = \Payum\Core\Action\GetCurrencyAction::class;
+    protected $actionClass = GetCurrencyAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass('USD')];
         yield [new $this->requestClass('EUR')];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldSetCurrencyByAlpha3()
@@ -46,7 +50,7 @@ class GetCurrencyActionTest extends GenericActionTest
 
     public function testThrowsIfCurrencyNotSupported()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('ISO 4217 does not contain: 000');
         $action = new GetCurrencyAction();
 

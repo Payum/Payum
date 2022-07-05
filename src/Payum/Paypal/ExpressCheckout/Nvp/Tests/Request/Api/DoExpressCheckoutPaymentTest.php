@@ -3,12 +3,15 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class DoExpressCheckoutPaymentTest extends \PHPUnit\Framework\TestCase
+class DoExpressCheckoutPaymentTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment::class);
+        $rc = new ReflectionClass(DoExpressCheckoutPayment::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

@@ -2,44 +2,52 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use ArrayObject;
+use Klarna;
+use KlarnaAddr;
+use KlarnaFlags;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class PopulateKlarnaFromDetailsActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction::class);
+        $rc = new ReflectionClass(PopulateKlarnaFromDetailsAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldSupportPopulateKlarnaFromDetails()
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
-        $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna())));
+        $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new ArrayObject(), new Klarna())));
     }
 
     public function testShouldNotSupportAnythingNotPopulateKlarnaFromDetails()
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PopulateKlarnaFromDetailsAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldPopulateKlarnaFromDetails()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'pno' => '410321-9202',
             'amount' => -1,
             'gender' => 1,
@@ -92,7 +100,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
             'comment' => 'aComment',
         ]);
 
-        $klarna = $this->createMock(\Klarna::class);
+        $klarna = $this->createMock(Klarna::class);
 
         $klarna->expects($this->once())
             ->method('setComment')
@@ -105,8 +113,8 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         $klarna->expects($this->atMost(2))
             ->method('setAddress')
             ->withConsecutive(
-                [\KlarnaFlags::IS_SHIPPING, new \KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')],
-                [\KlarnaFlags::IS_BILLING, new \KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')]
+                [KlarnaFlags::IS_SHIPPING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')],
+                [KlarnaFlags::IS_BILLING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')]
             );
 
         $klarna->expects($this->once())
@@ -124,13 +132,13 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
     public function testShouldNotFaileIfEmptyDetailsGiven()
     {
-        $klarna = $this->createMock(\Klarna::class);
+        $klarna = $this->createMock(Klarna::class);
 
         $klarna->expects($this->once())
             ->method('setComment')
             ->with(null);
 
-        $request = new PopulateKlarnaFromDetails(new \ArrayObject(), $klarna);
+        $request = new PopulateKlarnaFromDetails(new ArrayObject(), $klarna);
 
         $action = new PopulateKlarnaFromDetailsAction();
 
@@ -141,7 +149,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
     public function testShouldCorrectlyPutPartialArticles()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'partial_articles' => [
                 [
                     'qty' => 4,
@@ -155,7 +163,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
             ],
         ]);
 
-        $klarna = $this->createMock(\Klarna::class);
+        $klarna = $this->createMock(Klarna::class);
 
         $klarna->expects($this->once())
             ->method('addArtNo')

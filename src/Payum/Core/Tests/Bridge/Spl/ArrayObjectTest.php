@@ -2,15 +2,23 @@
 
 namespace Payum\Core\Tests\Bridge\Spl;
 
+use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\SensitiveValue;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReturnTypeWillChange;
+use Traversable;
 
 class ArrayObjectTest extends TestCase
 {
     public function testShouldBeSubClassOfArrayObject()
     {
-        $rc = new \ReflectionClass(ArrayObject::class);
+        $rc = new ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->isSubclassOf(\ArrayObject::class));
     }
@@ -66,13 +74,13 @@ class ArrayObjectTest extends TestCase
 
     public function testShouldReplaceFromTraversable()
     {
-        $traversable = new \ArrayIterator([
+        $traversable = new ArrayIterator([
             'foo' => 'valNew',
             'baz' => 'bazNew',
         ]);
 
         //guard
-        $this->assertInstanceOf(\Traversable::class, $traversable);
+        $this->assertInstanceOf(Traversable::class, $traversable);
 
         $expectedArray = [
             'foo' => 'valNew',
@@ -92,7 +100,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowIfInvalidArgumentGivenForReplace()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid input given. Should be an array or instance of \Traversable');
         $array = new ArrayObject();
 
@@ -174,7 +182,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowIfRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
@@ -183,7 +191,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowIfSecondRequiredFieldEmptyAndThrowOnInvalidTrue()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields are required.');
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -193,7 +201,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowByDefaultIfRequiredFieldEmpty()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields are required.');
         $arrayObject = new ArrayObject();
 
@@ -225,7 +233,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowIfRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
@@ -234,7 +242,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowIfSecondRequiredFieldNotSetAndThrowOnInvalidTrue()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The otherRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
         $arrayObject['aRequiredField'] = 'foo';
@@ -244,7 +252,7 @@ class ArrayObjectTest extends TestCase
 
     public function testThrowByDefaultIfRequiredFieldNotSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The aRequiredField fields is not set.');
         $arrayObject = new ArrayObject();
 
@@ -348,38 +356,38 @@ class ArrayObjectTest extends TestCase
     }
 }
 
-class CustomArrayObject implements \ArrayAccess, \IteratorAggregate
+class CustomArrayObject implements ArrayAccess, IteratorAggregate
 {
     private $foo;
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return 'foo' === $offset;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->{$offset};
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->{$offset} = $value;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->{$offset} = null;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
-        return new \ArrayIterator([
+        return new ArrayIterator([
             'foo' => $this->foo,
         ]);
     }

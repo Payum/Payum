@@ -2,6 +2,7 @@
 
 namespace Payum\Payex;
 
+use LogicException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
@@ -26,13 +27,14 @@ use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\SoapClientFactory;
+use SoapClient;
 
 class PayexGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config)
     {
-        if (! class_exists(\SoapClient::class)) {
-            throw new \LogicException('You must install "ext-soap" extension.');
+        if (! class_exists(SoapClient::class)) {
+            throw new LogicException('You must install "ext-soap" extension.');
         }
 
         $config['payum.default_options'] = [

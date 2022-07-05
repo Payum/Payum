@@ -3,12 +3,15 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\UpdateRecurringPaymentProfile;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class UpdateRecurringPaymentProfileTest extends \PHPUnit\Framework\TestCase
+class UpdateRecurringPaymentProfileTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\UpdateRecurringPaymentProfile::class);
+        $rc = new ReflectionClass(UpdateRecurringPaymentProfile::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

@@ -2,17 +2,22 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ProHosted\Nvp\Action\StatusAction;
 use Payum\Paypal\ProHosted\Nvp\Api;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class StatusActionTest extends \PHPUnit\Framework\TestCase
+class StatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ProHosted\Nvp\Action\StatusAction::class);
+        $rc = new ReflectionClass(StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
@@ -54,7 +59,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetHumanStatus(new \stdClass());
+        $request = new GetHumanStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -63,15 +68,15 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkCanceledIfDetailsContainCanceledKey()

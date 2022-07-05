@@ -2,23 +2,27 @@
 
 namespace Payum\Core\Tests\Registry;
 
+use Exception;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class FallbackRegistryTest extends TestCase
 {
     public function testShouldImplementsRegistryInterface()
     {
-        $rc = new \ReflectionClass(FallbackRegistry::class);
+        $rc = new ReflectionClass(FallbackRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
     public function testShouldReturnGatewayFromMainRegistry()
     {
-        $expectedGateway = new \stdClass();
+        $expectedGateway = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -41,7 +45,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGateway()
     {
-        $expectedGateway = new \stdClass();
+        $expectedGateway = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -66,9 +70,9 @@ class FallbackRegistryTest extends TestCase
 
     public function testThrowIfBothRegistriesNotContainsGateway()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
-        $expectedGateway = new \stdClass();
+        $expectedGateway = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -93,15 +97,15 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGateway()
     {
-        $this->expectException(\Exception::class);
-        $expectedGateway = new \stdClass();
+        $this->expectException(Exception::class);
+        $expectedGateway = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
             ->expects($this->once())
             ->method('getGateway')
             ->with('theGatewayName')
-            ->willThrowException(new \Exception())
+            ->willThrowException(new Exception())
         ;
 
         $fallbackRegistryMock = $this->createRegistryMock();
@@ -117,7 +121,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldReturnStorageFromMainRegistry()
     {
-        $expectedStorage = new \stdClass();
+        $expectedStorage = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -140,7 +144,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetStorage()
     {
-        $expectedStorage = new \stdClass();
+        $expectedStorage = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -165,9 +169,9 @@ class FallbackRegistryTest extends TestCase
 
     public function testThrowIfBothRegistriesNotContainsStorage()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
-        $expectedStorage = new \stdClass();
+        $expectedStorage = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -192,15 +196,15 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetStorage()
     {
-        $this->expectException(\Exception::class);
-        $expectedStorage = new \stdClass();
+        $this->expectException(Exception::class);
+        $expectedStorage = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
             ->expects($this->once())
             ->method('getStorage')
             ->with('theStorageName')
-            ->willThrowException(new \Exception())
+            ->willThrowException(new Exception())
         ;
 
         $fallbackRegistryMock = $this->createRegistryMock();
@@ -216,7 +220,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldReturnGatewayFactoryFromMainRegistry()
     {
-        $expectedGatewayFactory = new \stdClass();
+        $expectedGatewayFactory = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -239,7 +243,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGatewayFactory()
     {
-        $expectedGatewayFactory = new \stdClass();
+        $expectedGatewayFactory = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -264,9 +268,9 @@ class FallbackRegistryTest extends TestCase
 
     public function testThrowIfBothRegistriesNotContainsGatewayFactory()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
-        $expectedGatewayFactory = new \stdClass();
+        $expectedGatewayFactory = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -291,15 +295,15 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGatewayFactory()
     {
-        $this->expectException(\Exception::class);
-        $expectedGatewayFactory = new \stdClass();
+        $this->expectException(Exception::class);
+        $expectedGatewayFactory = new stdClass();
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
             ->expects($this->once())
             ->method('getGatewayFactory')
             ->with('theGatewayFactoryName')
-            ->willThrowException(new \Exception())
+            ->willThrowException(new Exception())
         ;
 
         $fallbackRegistryMock = $this->createRegistryMock();
@@ -413,10 +417,10 @@ class FallbackRegistryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface
      */
     protected function createRegistryMock()
     {
-        return $this->createMock(\Payum\Core\Registry\RegistryInterface::class);
+        return $this->createMock(RegistryInterface::class);
     }
 }

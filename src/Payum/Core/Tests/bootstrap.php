@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Payum\Core\GatewayInterface;
 
 if (! $loader = @include __DIR__ . '/../vendor/autoload.php') {
     echo <<<EOM
@@ -16,7 +17,7 @@ EOM;
 
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
-$rc = new \ReflectionClass(\Payum\Core\GatewayInterface::class);
+$rc = new ReflectionClass(GatewayInterface::class);
 $coreDir = dirname($rc->getFileName()) . '/Tests';
 
 $loader->add('Payum\Core\Tests', $coreDir);

@@ -3,8 +3,10 @@
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Payex\Api\SoapClientFactory;
+use PHPUnit\Framework\TestCase;
+use SoapClient;
 
-class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
+class SoapClientFactoryTest extends TestCase
 {
     public function testShouldAllowCreateSoapClientWithDefaultClassAndOptions()
     {
@@ -12,7 +14,7 @@ class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
 
         $client = $factory->createWsdlClient('https://external.externaltest.payex.com/pxorder/pxorder.asmx?WSDL');
 
-        $this->assertInstanceOf(\SoapClient::class, $client);
+        $this->assertInstanceOf(SoapClient::class, $client);
     }
 
     public function testShouldAllowCreateSoapClientWithCustomClassAndOptions()
@@ -30,6 +32,6 @@ class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
     }
 }
 
-class CustomSoapClient extends \SoapClient
+class CustomSoapClient extends SoapClient
 {
 }

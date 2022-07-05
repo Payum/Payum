@@ -2,16 +2,19 @@
 
 namespace Payum\Core\Tests\Request;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\CreditCardInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\ObtainCreditCard;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class ObtainCreditCardTest extends TestCase
 {
     public function testShouldBeSubClassOfGenericRequest()
     {
-        $rc = new \ReflectionClass(ObtainCreditCard::class);
+        $rc = new ReflectionClass(ObtainCreditCard::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
@@ -26,7 +29,7 @@ class ObtainCreditCardTest extends TestCase
 
     public function testCouldBeConstructedWithFirstModelAsFirstArgument()
     {
-        $request = new ObtainCreditCard($firstModel = new \stdClass());
+        $request = new ObtainCreditCard($firstModel = new stdClass());
 
         $this->assertSame($firstModel, $request->getFirstModel());
         $this->assertNull($request->getModel());
@@ -34,7 +37,7 @@ class ObtainCreditCardTest extends TestCase
 
     public function testCouldBeConstructedWithFirstModelAndCurrentModelAsArguments()
     {
-        $request = new ObtainCreditCard($firstModel = new \stdClass(), $currentModel = new \stdClass());
+        $request = new ObtainCreditCard($firstModel = new stdClass(), $currentModel = new stdClass());
 
         $this->assertSame($firstModel, $request->getFirstModel());
         $this->assertSame($currentModel, $request->getModel());
@@ -62,7 +65,7 @@ class ObtainCreditCardTest extends TestCase
 
     public function testThrowIfObtainCalledBeforeCreditCardSet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Credit card could not be obtained. It has to be set before obtain.');
         $request = new ObtainCreditCard();
 

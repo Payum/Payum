@@ -7,6 +7,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\GetPayoutStatusAction;
 use Payum\Paypal\Masspay\Nvp\Api;
+use ReflectionClass;
 
 class GetPayoutStatusActionTest extends GenericActionTest
 {
@@ -16,7 +17,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
 
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(GetPayoutStatusAction::class);
+        $rc = new ReflectionClass(GetPayoutStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }

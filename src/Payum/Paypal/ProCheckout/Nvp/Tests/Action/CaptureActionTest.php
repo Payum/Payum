@@ -2,7 +2,11 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
+use DateTime;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\CreditCard;
@@ -11,6 +15,9 @@ use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class CaptureActionTest extends GenericActionTest
 {
@@ -20,28 +27,28 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testThrowIfUnsupportedApiGiven()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
             ->willThrowException(new RequestNotSupportedException())
         ;
 
@@ -134,11 +141,11 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
-                $card->setExpireAt(new \DateTime('2014-10-01'));
+                $card->setExpireAt(new DateTime('2014-10-01'));
                 $card->setHolder('John Doe');
                 $card->setSecurityCode('123');
 
@@ -182,8 +189,8 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
     {
-        $firstModel = new \stdClass();
-        $currentModel = new \ArrayObject([
+        $firstModel = new stdClass();
+        $currentModel = new ArrayObject([
             'AMOUNT' => 10,
         ]);
 
@@ -203,13 +210,13 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
 
                 $card = new CreditCard();
-                $card->setExpireAt(new \DateTime('2014-10-01'));
+                $card->setExpireAt(new DateTime('2014-10-01'));
 
                 $request->set($card);
             })
@@ -226,18 +233,18 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ProCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

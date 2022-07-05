@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
@@ -35,7 +36,7 @@ class CaptureAction extends PurchaseAction
     public function supports($request)
     {
         return $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Payum\Core;
 
+use LogicException;
+use Omnipay\Omnipay;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
@@ -169,7 +171,7 @@ class PayumBuilder
 
             $this->gatewayConfigs[$name] = $currentConfig;
         } else {
-            throw new \LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
+            throw new LogicException('Gateway argument must be either instance of GatewayInterface or a config array');
         }
 
         return $this;
@@ -374,7 +376,7 @@ class PayumBuilder
     public function getPayum()
     {
         if (false == $tokenStorage = $this->tokenStorage) {
-            throw new \LogicException('Token storage must be configured.');
+            throw new LogicException('Token storage must be configured.');
         }
 
         $storages = $this->storages;
@@ -432,7 +434,7 @@ class PayumBuilder
             $tokenFactory = call_user_func($tokenFactory, $tokenStorage, $storageRegistry);
 
             if (false == $tokenFactory instanceof TokenFactoryInterface) {
-                throw new \LogicException('Builder returned invalid instance');
+                throw new LogicException('Builder returned invalid instance');
             }
         }
 
@@ -452,7 +454,7 @@ class PayumBuilder
             $genericTokenFactory = call_user_func($genericTokenFactory, $tokenFactory, $paths);
 
             if (false == $genericTokenFactory instanceof GenericTokenFactoryInterface) {
-                throw new \LogicException('Builder returned invalid instance');
+                throw new LogicException('Builder returned invalid instance');
             }
         }
 
@@ -545,11 +547,11 @@ class PayumBuilder
     protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
         $gatewayFactories = [];
-        if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayGatewayFactory::class)) {
+        if (false == class_exists(Omnipay::class) || false == class_exists(OmnipayGatewayFactory::class)) {
             return $gatewayFactories;
         }
 
-        $factory = \Omnipay\Omnipay::getFactory();
+        $factory = Omnipay::getFactory();
 
         $gatewayFactories['omnipay'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
         $gatewayFactories['omnipay_direct'] = new OmnipayGatewayFactory('', $factory, [], $coreGatewayFactory);
@@ -574,11 +576,11 @@ class PayumBuilder
     protected function buildOmnipayV3GatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
         $gatewayFactories = [];
-        if (false == class_exists(\Omnipay\Omnipay::class) || false == class_exists(OmnipayV3GatewayFactory::class)) {
+        if (false == class_exists(Omnipay::class) || false == class_exists(OmnipayV3GatewayFactory::class)) {
             return $gatewayFactories;
         }
 
-        $factory = \Omnipay\Omnipay::getFactory();
+        $factory = Omnipay::getFactory();
 
         $gatewayFactories['omnipay'] = new OmnipayV3GatewayFactory($factory, [], $coreGatewayFactory);
 
@@ -596,7 +598,7 @@ class PayumBuilder
             $httpRequestVerifier = call_user_func($httpRequestVerifier, $tokenStorage);
 
             if (false == $httpRequestVerifier instanceof HttpRequestVerifierInterface) {
-                throw new \LogicException('Builder returned invalid instance');
+                throw new LogicException('Builder returned invalid instance');
             }
         }
 
@@ -621,7 +623,7 @@ class PayumBuilder
             $coreGatewayFactory = call_user_func($coreGatewayFactory, $config);
 
             if (false == $coreGatewayFactory instanceof GatewayFactoryInterface) {
-                throw new \LogicException('Builder returned invalid instance');
+                throw new LogicException('Builder returned invalid instance');
             }
         }
 

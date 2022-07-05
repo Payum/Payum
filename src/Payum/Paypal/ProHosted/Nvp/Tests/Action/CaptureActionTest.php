@@ -2,7 +2,9 @@
 
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
@@ -12,6 +14,8 @@ use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
 use Payum\Paypal\ProHosted\Nvp\Action\CaptureAction;
 use Payum\Paypal\ProHosted\Nvp\Api;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class CaptureActionTest extends GenericActionTest
 {
@@ -21,14 +25,14 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -55,16 +59,16 @@ class CaptureActionTest extends GenericActionTest
 
     public function testThrowIfModelNotHavePaymentAmountOrCurrencySet()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $action = new CreateButtonPaymentAction();
 
-        $request = new CreateButtonPayment(new \ArrayObject());
+        $request = new CreateButtonPayment(new ArrayObject());
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
@@ -72,7 +76,7 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

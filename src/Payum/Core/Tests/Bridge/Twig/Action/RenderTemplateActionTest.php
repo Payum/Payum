@@ -2,19 +2,22 @@
 
 namespace Payum\Core\Tests\Bridge\Twig\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Twig\Environment;
 
 class RenderTemplateActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Bridge\Twig\Action\RenderTemplateAction::class);
+        $rc = new ReflectionClass(RenderTemplateAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportRenderTemplate()
@@ -33,7 +36,7 @@ class RenderTemplateActionTest extends TestCase
 
     public function testThrowIfNotSupportedRequestPassedToExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action RenderTemplateAction is not supported the request string.');
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 

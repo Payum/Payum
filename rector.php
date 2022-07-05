@@ -14,6 +14,9 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src'
     ]);
 
+    $rectorConfig->importNames();
+    $rectorConfig->importShortClasses();
+
     // define sets of rules
     $rectorConfig->sets([
         PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER,

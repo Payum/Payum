@@ -2,12 +2,17 @@
 
 namespace Payum\Payex\Tests\Request\Api;
 
-class CheckAgreementTest extends \PHPUnit\Framework\TestCase
+use Payum\Core\Request\Generic;
+use Payum\Payex\Request\Api\CheckAgreement;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+class CheckAgreementTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Request\Api\CheckAgreement::class);
+        $rc = new ReflectionClass(CheckAgreement::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

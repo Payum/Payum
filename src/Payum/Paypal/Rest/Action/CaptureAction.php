@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Rest\Action;
 
+use ArrayAccess;
 use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use PayPal\Api\Amount;
@@ -39,7 +40,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var \ArrayAccess|PaypalPayment $model */
+        /** @var ArrayAccess|PaypalPayment $model */
         $model = $request->getModel();
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
@@ -67,7 +68,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         ) {
             $payment->create($this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
 
@@ -85,7 +86,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         ) {
             $payment->create($this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
         }
@@ -102,7 +103,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 
             $payment->execute($execution, $this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
         }
@@ -111,11 +112,11 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
     public function supports($request)
     {
         return $request instanceof Capture &&
-            ($request->getModel() instanceof PaypalPayment || $request->getModel() instanceof \ArrayAccess)
+            ($request->getModel() instanceof PaypalPayment || $request->getModel() instanceof ArrayAccess)
         ;
     }
 
-    private function captureArrayAccess(\ArrayAccess $model, Capture $request): PaypalPayment
+    private function captureArrayAccess(ArrayAccess $model, Capture $request): PaypalPayment
     {
         if (isset($model['id'])) {
             return PaypalPayment::get($model['id'], $this->api);
