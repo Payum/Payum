@@ -30,7 +30,9 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         $model->validateNotEmpty('PROFILEID');
 
         $model->replace(
-            $this->api->getRecurringPaymentsProfileDetails(['PROFILEID' => $model['PROFILEID']])
+            $this->api->getRecurringPaymentsProfileDetails([
+                'PROFILEID' => $model['PROFILEID'],
+            ])
         );
     }
 

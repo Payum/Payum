@@ -27,7 +27,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender',
-            'sandbox' => 'notABool'
+            'sandbox' => 'notABool',
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
@@ -38,7 +38,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'password' => 'aPassword',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
-            'tender' => 'aTender'
+            'tender' => 'aTender',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doSale([]);
@@ -54,7 +54,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'password' => 'aPassword',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
-            'tender' => 'aTender'
+            'tender' => 'aTender',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCredit([]);
@@ -70,7 +70,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
-            'tender' => 'theTender'
+            'tender' => 'theTender',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doSale([]);
@@ -98,7 +98,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
-            'tender' => 'theTender'
+            'tender' => 'theTender',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
         $result = $api->doCredit([]);

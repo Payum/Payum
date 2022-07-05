@@ -59,8 +59,12 @@ class PayoutTest extends TestCase
     {
         $payout = new Payout();
 
-        $payout->setDetails(['foo' => 'fooVal']);
+        $payout->setDetails([
+            'foo' => 'fooVal',
+        ]);
 
-        $this->assertEquals(['foo' => 'fooVal'], $payout->getDetails());
+        $this->assertEquals([
+            'foo' => 'fooVal',
+        ], $payout->getDetails());
     }
 }

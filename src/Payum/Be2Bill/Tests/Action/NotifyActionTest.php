@@ -83,7 +83,9 @@ class NotifyActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->query = ['AMOUNT' => 2.0];
+                $request->query = [
+                    'AMOUNT' => 2.0,
+                ];
             })
         ;
 
@@ -100,7 +102,7 @@ class NotifyActionTest extends GenericActionTest
 
         try {
             $action->execute(new Notify([
-                'AMOUNT' => 1.0
+                'AMOUNT' => 1.0,
             ]));
         } catch (HttpResponse $reply) {
             $this->assertSame(400, $reply->getStatusCode());
@@ -120,7 +122,11 @@ class NotifyActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->query = ['AMOUNT' => 1.0, 'FOO' => 'FOO', 'BAR' => 'BAR'];
+                $request->query = [
+                    'AMOUNT' => 1.0,
+                    'FOO' => 'FOO',
+                    'BAR' => 'BAR',
+                ];
             })
         ;
 

@@ -60,7 +60,10 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldWrapArrayDetailsToArrayObjectAndExecute()
     {
-        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $model = new DetailsAggregateModel();
         $model->details = $expectedDetails;
@@ -95,7 +98,10 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
     {
-        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $model = new DetailsAggregateAndAwareModel();
         $model->details = $expectedDetails;
@@ -127,14 +133,21 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $details = $model->getDetails();
         $testCase->assertInstanceOf('ArrayAccess', $details);
         $testCase->assertSame(
-            ['foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'],
+            [
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
+                'baz' => 'bazVal',
+            ],
             iterator_to_array($details)
         );
     }
 
     public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
     {
-        $expectedDetails = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $expectedDetails = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $model = new DetailsAggregateAndAwareModel();
         $model->details = $expectedDetails;
@@ -169,7 +182,11 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             $details = $model->getDetails();
             $testCase->assertInstanceOf('ArrayAccess', $details);
             $testCase->assertSame(
-                ['foo' => 'fooVal', 'bar' => 'barVal', 'baz' => 'bazVal'],
+                [
+                    'foo' => 'fooVal',
+                    'bar' => 'barVal',
+                    'baz' => 'bazVal',
+                ],
                 iterator_to_array($details)
             );
 

@@ -25,7 +25,9 @@ abstract class MongoTest extends BaseMongoTest
         $driver = new MappingDriverChain();
         $xmlDriver = new XmlDriver(
             new SymfonyFileLocator(
-                [$rootDir . '/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'],
+                [
+                    $rootDir . '/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model',
+                ],
                 '.mongodb.xml'
             ),
             '.mongodb.xml'

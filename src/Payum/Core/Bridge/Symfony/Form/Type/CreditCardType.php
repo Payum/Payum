@@ -13,9 +13,15 @@ class CreditCardType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('holder', TextType::class, ['label' => 'form.credit_card.holder'])
-            ->add('number', TextType::class, ['label' => 'form.credit_card.number'])
-            ->add('securityCode', TextType::class, ['label' => 'form.credit_card.security_code'])
+            ->add('holder', TextType::class, [
+                'label' => 'form.credit_card.holder',
+            ])
+            ->add('number', TextType::class, [
+                'label' => 'form.credit_card.number',
+            ])
+            ->add('securityCode', TextType::class, [
+                'label' => 'form.credit_card.security_code',
+            ])
             ->add(
                 'expireAt',
                 CreditCardExpirationDateType::class,

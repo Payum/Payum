@@ -26,8 +26,13 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 
     public function provideSupportedRequests(): \Iterator
     {
-        yield [new $this->requestClass(['BILLINGPERIOD' => 'foo'])];
-        yield [new $this->requestClass(new \ArrayObject(['BILLINGPERIOD' => 'foo']))];
+        yield [
+            new $this->requestClass([
+                'BILLINGPERIOD' => 'foo',
+            ]), ];
+        yield [new $this->requestClass(new \ArrayObject([
+            'BILLINGPERIOD' => 'foo',
+        ]))];
     }
 
     public function provideNotSupportedRequests(): \Iterator
@@ -59,11 +64,15 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action = new CancelRecurringPaymentsProfileAction();
 
         $this->assertTrue(
-            $action->supports(new Cancel(['BILLINGPERIOD' => 'foo']))
+            $action->supports(new Cancel([
+                'BILLINGPERIOD' => 'foo',
+            ]))
         );
 
         $this->assertTrue(
-            $action->supports(new Cancel(new \ArrayObject(['BILLINGPERIOD' => 'foo'])))
+            $action->supports(new Cancel(new \ArrayObject([
+                'BILLINGPERIOD' => 'foo',
+            ])))
         );
     }
 
@@ -88,7 +97,9 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new CancelRecurringPaymentsProfileAction();
 
-        $request = new Cancel(['BILLINGPERIOD' => 'foo']);
+        $request = new Cancel([
+            'BILLINGPERIOD' => 'foo',
+        ]);
 
         $action->execute($request);
     }

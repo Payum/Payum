@@ -62,7 +62,9 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldSubExecuteObtainTokenRequestWithCurrentModel()
     {
-        $model = new \ArrayObject(['foo' => 'fooVal']);
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -72,7 +74,9 @@ class CaptureActionTest extends GenericActionTest
             ->willReturnOnConsecutiveCalls(
                 $this->returnCallback(function (ObtainToken $request) use ($model) {
                     $this->assertInstanceOf(ArrayObject::class, $request->getModel());
-                    $this->assertSame(['foo' => 'fooVal'], (array) $request->getModel());
+                    $this->assertSame([
+                        'foo' => 'fooVal',
+                    ], (array) $request->getModel());
                 })
             )
         ;

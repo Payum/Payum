@@ -19,7 +19,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $this->formFactory = Forms::createFormFactoryBuilder()
             ->addType(new GatewayFactoriesChoiceType([
                 'Foo Factory' => 'foo',
-                'Bar Factory' => 'bar'
+                'Bar Factory' => 'bar',
             ]))
             ->getFormFactory()
         ;

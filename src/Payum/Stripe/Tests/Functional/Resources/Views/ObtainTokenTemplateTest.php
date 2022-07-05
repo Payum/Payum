@@ -35,7 +35,9 @@ class ObtainTokenTemplateTest extends TestCase
         $twig = TwigFactory::createGeneric();
 
         $result = $twig->render('@PayumStripe/Action/obtain_checkout_token.html.twig', [
-            'model' => ['currency' => 'GBP'],
+            'model' => [
+                'currency' => 'GBP',
+            ],
         ]);
 
         $this->assertStringContainsString('data-currency="GBP"', $result);
@@ -46,7 +48,9 @@ class ObtainTokenTemplateTest extends TestCase
         $twig = TwigFactory::createGeneric();
 
         $result = $twig->render('@PayumStripe/Action/obtain_checkout_token.html.twig', [
-            'model' => ['currency' => ''],
+            'model' => [
+                'currency' => '',
+            ],
         ]);
 
         $this->assertStringContainsString('data-currency="USD"', $result);

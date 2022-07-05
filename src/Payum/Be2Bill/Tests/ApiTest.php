@@ -23,7 +23,7 @@ class ApiTest extends TestCase
         new Api([
             'identifier' => 'anId',
             'password' => 'aPass',
-            'sandbox' => 'notABool'
+            'sandbox' => 'notABool',
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 

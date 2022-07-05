@@ -41,7 +41,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $action = new CancelAction();
 
         $payment = [
-           'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
+            'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
         ];
 
         $request = new Cancel($payment);
@@ -54,7 +54,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $action = new CancelAction();
 
         $payment = [
-           'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
+            'PAYMENTINFO_0_PENDINGREASON' => 'Foo',
         ];
 
         $request = new Cancel($payment);
@@ -67,7 +67,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $action = new CancelAction();
 
         $payment = [
-           'BILLINGPERIOD' => 'Month',
+            'BILLINGPERIOD' => 'Month',
         ];
 
         $request = new Cancel($payment);

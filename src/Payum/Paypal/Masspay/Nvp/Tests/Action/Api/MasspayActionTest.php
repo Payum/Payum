@@ -27,7 +27,9 @@ class MasspayActionTest extends GenericActionTest
         $this->expectExceptionMessage('Payout has already been acknowledged');
         $action = new MasspayAction();
 
-        $action->execute(new Masspay(['ACK' => 'foo'], 0));
+        $action->execute(new Masspay([
+            'ACK' => 'foo',
+        ], 0));
     }
 
     public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments()
@@ -37,7 +39,9 @@ class MasspayActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('massPay')
             ->willReturnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+                $this->assertEquals([
+                    'foo' => 'fooVal',
+                ], $fields);
 
                 return [];
             })
@@ -46,7 +50,9 @@ class MasspayActionTest extends GenericActionTest
         $action = new MasspayAction();
         $action->setApi($apiMock);
 
-        $request = new Masspay(['foo' => 'fooVal', ]);
+        $request = new Masspay([
+            'foo' => 'fooVal',
+        ]);
 
         $action->execute($request);
     }
@@ -58,7 +64,9 @@ class MasspayActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('massPay')
             ->willReturnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+                $this->assertEquals([
+                    'foo' => 'fooVal',
+                ], $fields);
 
                 $fields['bar'] = 'barVal';
 
@@ -69,11 +77,16 @@ class MasspayActionTest extends GenericActionTest
         $action = new MasspayAction();
         $action->setApi($apiMock);
 
-        $request = new Masspay(['foo' => 'fooVal', ]);
+        $request = new Masspay([
+            'foo' => 'fooVal',
+        ]);
 
         $action->execute($request);
 
-        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getModel());
+        $this->assertEquals([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], (array) $request->getModel());
     }
 
     /**

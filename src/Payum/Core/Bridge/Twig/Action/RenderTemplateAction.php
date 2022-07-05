@@ -34,7 +34,9 @@ class RenderTemplateAction implements ActionInterface
         RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setResult($this->twig->render($request->getTemplateName(), array_replace(
-            ['layout' => $this->layout],
+            [
+                'layout' => $this->layout,
+            ],
             $request->getParameters()
         )));
     }

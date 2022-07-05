@@ -65,7 +65,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
             'PAYMENTSTATUS',
             'PENDINGREASON',
             'REASONCODE',
-            'COMPLETETYPE'
+            'COMPLETETYPE',
         ];
     }
 

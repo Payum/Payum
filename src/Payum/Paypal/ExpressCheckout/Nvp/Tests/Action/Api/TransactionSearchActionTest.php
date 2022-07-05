@@ -138,7 +138,7 @@ class TransactionSearchActionTest extends \PHPUnit\Framework\TestCase
                     'TIMESTAMP' => 'theTimestamp',
                     'ACK' => 'TheAckStatus',
                     'VERSION' => 'theVersion',
-                    'BUILD' => 'TheVersionBuild'
+                    'BUILD' => 'TheVersionBuild',
                 ];
             })
         ;

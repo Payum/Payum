@@ -62,7 +62,10 @@ HTML;
 </html>
 HTML;
 
-        $request = new HttpPostRedirect('theUrl', ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $request = new HttpPostRedirect('theUrl', [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $this->assertSame($expectedContent, $request->getContent());
     }
@@ -85,7 +88,9 @@ HTML;
 </html>
 HTML;
 
-        $request = new HttpPostRedirect('theUrl', ['foo' => '<>&"']);
+        $request = new HttpPostRedirect('theUrl', [
+            'foo' => '<>&"',
+        ]);
 
         $this->assertSame($expectedContent, $request->getContent());
     }

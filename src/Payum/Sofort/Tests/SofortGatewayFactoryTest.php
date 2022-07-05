@@ -47,7 +47,11 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            ['config_key' => '', 'abort_url' => '', 'disable_notification' => false],
+            [
+                'config_key' => '',
+                'abort_url' => '',
+                'disable_notification' => false,
+            ],
             $config['payum.default_options']
         );
     }

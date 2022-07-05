@@ -96,7 +96,9 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(['EXECCODE' => 1]);
+        $request = new Capture([
+            'EXECCODE' => 1,
+        ]);
 
         $action->execute($request);
     }

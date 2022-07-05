@@ -20,7 +20,7 @@ class StatusActionTest extends GenericActionTest
         $expires = time();
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'expires' => --$expires
+            'expires' => --$expires,
         ]);
 
         $this->assertTrue($request->isExpired());
@@ -40,7 +40,7 @@ class StatusActionTest extends GenericActionTest
     public function testShouldMarkNewIfPaymentWithoutStatus()
     {
         $request = $this->executeRequestWithDetails([
-            'transaction_id' => self::TRANSACTION_ID
+            'transaction_id' => self::TRANSACTION_ID,
         ]);
 
         $this->assertTrue($request->isNew());
@@ -50,7 +50,7 @@ class StatusActionTest extends GenericActionTest
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_LOSS
+            'status' => Api::STATUS_LOSS,
         ]);
 
         $this->assertTrue($request->isFailed());
@@ -60,7 +60,7 @@ class StatusActionTest extends GenericActionTest
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_PENDING
+            'status' => Api::STATUS_PENDING,
         ]);
 
         $this->assertTrue($request->isPending());
@@ -71,7 +71,7 @@ class StatusActionTest extends GenericActionTest
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_PARTIALLY
+            'statusReason' => Api::SUB_PARTIALLY,
         ]);
 
         $this->assertTrue($request->isUnknown());
@@ -82,7 +82,7 @@ class StatusActionTest extends GenericActionTest
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_CREDITED
+            'statusReason' => Api::SUB_CREDITED,
         ]);
 
         $this->assertTrue($request->isCaptured());
@@ -93,7 +93,7 @@ class StatusActionTest extends GenericActionTest
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_OVERPAYMENT
+            'statusReason' => Api::SUB_OVERPAYMENT,
         ]);
 
         $this->assertTrue($request->isCaptured());
@@ -104,7 +104,7 @@ class StatusActionTest extends GenericActionTest
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_REFUNDED,
-            'statusReason' => Api::SUB_COMPENSATION
+            'statusReason' => Api::SUB_COMPENSATION,
         ]);
 
         $this->assertTrue($request->isUnknown());
@@ -115,7 +115,7 @@ class StatusActionTest extends GenericActionTest
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_REFUNDED,
-            'statusReason' => Api::SUB_REFUNDED
+            'statusReason' => Api::SUB_REFUNDED,
         ]);
 
         $this->assertTrue($request->isRefunded());
@@ -125,7 +125,7 @@ class StatusActionTest extends GenericActionTest
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_UNTRACEABLE
+            'status' => Api::STATUS_UNTRACEABLE,
         ]);
 
         $this->assertTrue($request->isCaptured());
@@ -135,7 +135,7 @@ class StatusActionTest extends GenericActionTest
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => 'unsupported'
+            'status' => 'unsupported',
         ]);
 
         $this->assertTrue($request->isUnknown());

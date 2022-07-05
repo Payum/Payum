@@ -61,7 +61,10 @@ class DoctrineStorageTest extends TestCase
         $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $model = new TestModel();
 
-        $criteria = ['foo' => 'fooVal', 'bar' => 'barVal'];
+        $criteria = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
 
         $objectRepositoryMock = $this->createObjectRepositoryMock();
         $objectRepositoryMock

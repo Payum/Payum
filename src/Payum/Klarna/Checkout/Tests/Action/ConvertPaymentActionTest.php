@@ -60,7 +60,7 @@ class ConvertPaymentActionTest extends GenericActionTest
                         'unit_price' => 164.0,
                         'discount_rate' => 0,
                         'tax_rate' => 2500,
-                    ]
+                    ],
                 ],
             ],
             'purchase_country' => 'SE',

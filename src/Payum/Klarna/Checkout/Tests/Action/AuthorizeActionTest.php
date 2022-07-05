@@ -107,7 +107,7 @@ class AuthorizeActionTest extends TestCase
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]));
     }
 
@@ -153,7 +153,7 @@ class AuthorizeActionTest extends TestCase
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]);
 
         $action->execute(new Authorize($model));
@@ -168,7 +168,9 @@ class AuthorizeActionTest extends TestCase
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
         $expectedTemplateName = 'theTemplateName';
-        $expectedContext = ['snippet' => $snippet];
+        $expectedContext = [
+            'snippet' => $snippet,
+        ];
 
         $testCase = $this;
 
@@ -198,13 +200,15 @@ class AuthorizeActionTest extends TestCase
             $action->execute(new Authorize([
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-                'gui' => ['snippet' => $snippet],
+                'gui' => [
+                    'snippet' => $snippet,
+                ],
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
                     'push_uri' => 'thePushUri',
                     'checkout_uri' => 'theCheckoutUri',
                     'terms_uri' => 'theTermsUri',
-                ]
+                ],
             ]));
         } catch (HttpResponse $reply) {
             $this->assertSame($expectedContent, $reply->getContent());
@@ -225,26 +229,30 @@ class AuthorizeActionTest extends TestCase
             ->method('execute')
             ->with(
                 new Sync(ArrayObject::ensureArrayObject([
-                'location' => 'aLocation',
-                'gui' => ['snippet' => 'theSnippet'],
-                'merchant' => [
-                    'confirmation_uri' => 'theConfirmationUri',
-                    'push_uri' => 'thePushUri',
-                    'checkout_uri' => 'theCheckoutUri',
-                    'terms_uri' => 'theTermsUri',
-                ]
-            ]))
+                    'location' => 'aLocation',
+                    'gui' => [
+                        'snippet' => 'theSnippet',
+                    ],
+                    'merchant' => [
+                        'confirmation_uri' => 'theConfirmationUri',
+                        'push_uri' => 'thePushUri',
+                        'checkout_uri' => 'theCheckoutUri',
+                        'terms_uri' => 'theTermsUri',
+                    ],
+                ]))
             );
 
         $action->execute(new Authorize([
             'location' => 'aLocation',
-            'gui' => ['snippet' => 'theSnippet'],
+            'gui' => [
+                'snippet' => 'theSnippet',
+            ],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]));
     }
 
@@ -259,28 +267,34 @@ class AuthorizeActionTest extends TestCase
             ->with(
                 new Sync(ArrayObject::ensureArrayObject(
                     [
-                'location' => 'aLocation',
-                'status' => Constants::STATUS_CREATED,
-                'gui' => ['snippet' => 'theSnippet'],
-                'merchant' => [
-                    'confirmation_uri' => 'theConfirmationUri',
-                    'push_uri' => 'thePushUri',
-                    'checkout_uri' => 'theCheckoutUri',
-                    'terms_uri' => 'theTermsUri',
-                ]]
+                        'location' => 'aLocation',
+                        'status' => Constants::STATUS_CREATED,
+                        'gui' => [
+                            'snippet' => 'theSnippet',
+                        ],
+                        'merchant' => [
+                            'confirmation_uri' => 'theConfirmationUri',
+                            'push_uri' => 'thePushUri',
+                            'checkout_uri' => 'theCheckoutUri',
+                            'terms_uri' => 'theTermsUri',
+
+                        ],
+                    ]
                 ))
             );
 
         $action->execute(new Authorize([
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
-            'gui' => ['snippet' => 'theSnippet'],
+            'gui' => [
+                'snippet' => 'theSnippet',
+            ],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]));
     }
 
@@ -296,7 +310,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]));
     }
 
@@ -312,7 +326,7 @@ class AuthorizeActionTest extends TestCase
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
@@ -329,7 +343,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
@@ -342,7 +356,16 @@ class AuthorizeActionTest extends TestCase
         $gateway = $this->createGatewayMock();
         $gateway->expects($this->once())
             ->method('execute')
-            ->with(new Sync(ArrayObject::ensureArrayObject(['location' => 'aLocation', 'merchant' => ['checkout_uri' => 'theCheckoutUrl', 'confirmation_uri' => 'theConfirmationUri', 'terms_uri' => 'theTermsUri', 'push_uri' => 'thePushUri']])));
+            ->with(new Sync(ArrayObject::ensureArrayObject([
+                'location' => 'aLocation',
+                'merchant' => [
+                    'checkout_uri' => 'theCheckoutUrl',
+                    'confirmation_uri' => 'theConfirmationUri',
+                    'terms_uri' => 'theTermsUri',
+                    'push_uri' => 'thePushUri',
+
+                ],
+            ])));
 
         $action->setGateway($gateway);
         $action->setApi($config);
@@ -353,7 +376,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
@@ -370,7 +393,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
-            ]
+            ],
         ]));
     }
 
@@ -388,14 +411,14 @@ class AuthorizeActionTest extends TestCase
             ->method('execute')
             ->with(
                 new Sync(ArrayObject::ensureArrayObject([
-                'location' => 'aLocation',
-                'merchant' => [
-                    'confirmation_uri' => 'theConfirmationUri',
-                    'checkout_uri' => 'theCheckoutUri',
-                    'push_uri' => 'thePushUri',
-                    'terms_uri' => 'theTermsUrl',
-                ]
-            ]))
+                    'location' => 'aLocation',
+                    'merchant' => [
+                        'confirmation_uri' => 'theConfirmationUri',
+                        'checkout_uri' => 'theCheckoutUri',
+                        'push_uri' => 'thePushUri',
+                        'terms_uri' => 'theTermsUrl',
+                    ],
+                ]))
             );
 
         $action->execute(new Authorize([
@@ -404,7 +427,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
@@ -430,7 +453,7 @@ class AuthorizeActionTest extends TestCase
                         'checkout_uri' => 'theCheckoutUri',
                         'push_uri' => 'thePushUri',
                         'terms_uri' => 'theTermsUri',
-                    ]
+                    ],
                 ]))
             );
 
@@ -441,7 +464,7 @@ class AuthorizeActionTest extends TestCase
                 'terms_uri' => 'theTermsUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]);
 
         $action->execute($authorize);
@@ -480,7 +503,7 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]);
 
         $action->execute($authorize);

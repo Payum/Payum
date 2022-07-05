@@ -47,7 +47,11 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(['login_id' => '', 'transaction_key' => '', 'sandbox' => true], $config['payum.default_options']);
+        $this->assertEquals([
+            'login_id' => '',
+            'transaction_key' => '',
+            'sandbox' => true,
+        ], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

@@ -78,7 +78,9 @@ class BaseModeAwareTest extends TestCase
 
     public function testShouldConvertArrayToArrayObjectInConstructor()
     {
-        $model = ['foo' => 'bar'];
+        $model = [
+            'foo' => 'bar',
+        ];
 
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', [$model]);
 
@@ -90,7 +92,9 @@ class BaseModeAwareTest extends TestCase
     {
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', [123321]);
 
-        $model = ['foo' => 'bar'];
+        $model = [
+            'foo' => 'bar',
+        ];
 
         $request->setModel($model);
 

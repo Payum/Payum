@@ -62,7 +62,9 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('One of the parameters "refund_amount" or "amount" must be set.');
         $action = new RefundTransactionAction();
 
-        $request = new RefundTransaction(['transaction_id' => 'daTransactionId']);
+        $request = new RefundTransaction([
+            'transaction_id' => 'daTransactionId',
+        ]);
         $action->execute($request);
     }
 
