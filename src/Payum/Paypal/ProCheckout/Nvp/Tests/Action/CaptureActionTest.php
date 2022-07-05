@@ -76,7 +76,9 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(['RESULT' => Api::RESULT_SUCCESS]);
+        $request = new Capture([
+            'RESULT' => Api::RESULT_SUCCESS,
+        ]);
 
         $action->execute($request);
     }
@@ -89,7 +91,10 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
         ;
 
-        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
+        $result = [
+            'FOO' => 'FOOVAL',
+            'BAR' => 'BARVAL',
+        ];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -141,7 +146,10 @@ class CaptureActionTest extends GenericActionTest
             })
         ;
 
-        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
+        $result = [
+            'FOO' => 'FOOVAL',
+            'BAR' => 'BARVAL',
+        ];
 
         $apiMock = $this->createApiMock();
         $apiMock
@@ -179,7 +187,10 @@ class CaptureActionTest extends GenericActionTest
             'AMOUNT' => 10,
         ]);
 
-        $result = ['FOO' => 'FOOVAL', 'BAR' => 'BARVAL'];
+        $result = [
+            'FOO' => 'FOOVAL',
+            'BAR' => 'BARVAL',
+        ];
 
         $apiMock = $this->createApiMock();
         $apiMock

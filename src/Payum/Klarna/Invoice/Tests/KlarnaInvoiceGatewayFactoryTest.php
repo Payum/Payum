@@ -51,7 +51,14 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            ['eid' => '', 'secret' => '', 'country' => '', 'language' => '', 'currency' => '', 'sandbox' => true],
+            [
+                'eid' => '',
+                'secret' => '',
+                'country' => '',
+                'language' => '',
+                'currency' => '',
+                'sandbox' => true,
+            ],
             $config['payum.default_options']
         );
     }

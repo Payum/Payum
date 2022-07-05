@@ -20,7 +20,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $action = new PaymentDetailsStatusAction();
 
         $payment = [
-           'PAYMENTREQUEST_0_AMT' => 1,
+            'PAYMENTREQUEST_0_AMT' => 1,
         ];
 
         $request = new GetHumanStatus($payment);
@@ -107,7 +107,7 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 
         $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 21,
-            'L_ERRORCODE9' => 'foo'
+            'L_ERRORCODE9' => 'foo',
         ]);
 
         $action->execute($request);

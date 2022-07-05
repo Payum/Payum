@@ -170,7 +170,9 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
-                $request->request = ['stripeToken' => 'theToken'];
+                $request->request = [
+                    'stripeToken' => 'theToken',
+                ];
             })
         ;
 

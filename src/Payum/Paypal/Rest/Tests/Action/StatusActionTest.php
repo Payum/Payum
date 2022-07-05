@@ -61,7 +61,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isPending());
 
-        $model = new \ArrayObject(['state' => 'created']);
+        $model = new \ArrayObject([
+            'state' => 'created',
+        ]);
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
@@ -102,7 +104,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCaptured());
 
-        $model = new \ArrayObject(['state' => 'approved']);
+        $model = new \ArrayObject([
+            'state' => 'approved',
+        ]);
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
@@ -123,7 +127,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCanceled());
 
-        $model = new \ArrayObject(['state' => 'cancelled']);
+        $model = new \ArrayObject([
+            'state' => 'cancelled',
+        ]);
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
@@ -144,7 +150,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isUnknown());
 
-        $model = new \ArrayObject(['state' => 'random']);
+        $model = new \ArrayObject([
+            'state' => 'random',
+        ]);
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);

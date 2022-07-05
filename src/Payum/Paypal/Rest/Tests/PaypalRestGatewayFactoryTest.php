@@ -83,7 +83,12 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(['client_id' => '', 'client_secret' => '', 'config_path' => '', 'config' => []], $config['payum.default_options']);
+        $this->assertEquals([
+            'client_id' => '',
+            'client_secret' => '',
+            'config_path' => '',
+            'config' => [],
+        ], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

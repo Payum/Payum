@@ -32,7 +32,10 @@ class ConfirmOrderActionTest extends GenericActionTest
     public function testShouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
     {
         $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -51,7 +54,10 @@ class ConfirmOrderActionTest extends GenericActionTest
                     $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                     $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                    $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertSame([
+                        'foo' => 'fooVal',
+                        'bar' => 'barVal',
+                    ], (array) $request->getParameters()['model']);
 
                     $request->setResult('thePage');
                 })
@@ -78,7 +84,10 @@ class ConfirmOrderActionTest extends GenericActionTest
     public function testShouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
     {
         $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -97,7 +106,10 @@ class ConfirmOrderActionTest extends GenericActionTest
                     $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                     $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                    $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertSame([
+                        'foo' => 'fooVal',
+                        'bar' => 'barVal',
+                    ], (array) $request->getParameters()['model']);
 
                     $request->setResult('thePage');
                 })
@@ -124,7 +136,10 @@ class ConfirmOrderActionTest extends GenericActionTest
     public function testShouldGiveControllBackIfHttpRequestPostWithConfirm()
     {
         $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -133,7 +148,9 @@ class ConfirmOrderActionTest extends GenericActionTest
             ->with($this->isInstanceOf(GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
-                $request->request = ['confirm' => 1];
+                $request->request = [
+                    'confirm' => 1,
+                ];
             })
         ;
 

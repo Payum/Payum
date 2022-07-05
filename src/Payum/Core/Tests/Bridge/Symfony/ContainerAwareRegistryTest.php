@@ -28,7 +28,9 @@ class ContainerAwareRegistryTest extends TestCase
 
     public function testShouldReturnGatewaySetToContainer()
     {
-        $gateways = ['fooGateway' => 'fooGatewayServiceId'];
+        $gateways = [
+            'fooGateway' => 'fooGatewayServiceId',
+        ];
         $storages = [];
 
         $container = new Container();
@@ -47,7 +49,7 @@ class ContainerAwareRegistryTest extends TestCase
     {
         $gateways = [];
         $storages = [
-            'stdClass' => 'fooStorageServiceId'
+            'stdClass' => 'fooStorageServiceId',
         ];
 
         $container = new Container();

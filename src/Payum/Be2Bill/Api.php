@@ -153,7 +153,7 @@ class Api
 
         return $this->doRequest([
             'method' => 'payment',
-            'params' => $params
+            'params' => $params,
         ]);
     }
 

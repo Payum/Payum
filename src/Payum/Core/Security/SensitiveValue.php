@@ -80,7 +80,9 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
 
     public function __debugInfo()
     {
-        return ['value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]'];
+        return [
+            'value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]',
+        ];
     }
 
     /**

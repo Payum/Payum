@@ -16,9 +16,15 @@ class RenderTemplateTest extends TestCase
 
     public function testShouldAllowGetParametersSetInConstructor()
     {
-        $request = new RenderTemplate('aTemplate', ['foo' => 'fooVal', 'bar' => 'barVal']);
+        $request = new RenderTemplate('aTemplate', [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
-        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], $request->getParameters());
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $request->getParameters());
     }
 
     public function testShouldAllowGetResultPreviouslySet()

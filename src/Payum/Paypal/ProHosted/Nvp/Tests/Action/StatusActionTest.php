@@ -20,7 +20,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action = new StatusAction();
 
         $payment = [
-           'AMT' => 1,
+            'AMT' => 1,
         ];
 
         $request = new GetHumanStatus($payment);

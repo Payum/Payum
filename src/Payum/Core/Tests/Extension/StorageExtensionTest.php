@@ -207,7 +207,7 @@ class StorageExtensionTest extends TestCase
         ;
 
         $context = new Context($this->createGatewayMock(), $requestMock, [
-            new Context($this->createGatewayMock(), $requestMock, [])
+            new Context($this->createGatewayMock(), $requestMock, []),
         ]);
 
         $extension = new StorageExtension($storageMock);

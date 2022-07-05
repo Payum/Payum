@@ -49,7 +49,12 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
-            ['username' => '', 'password' => '', 'signature' => '', 'sandbox' => true],
+            [
+                'username' => '',
+                'password' => '',
+                'signature' => '',
+                'sandbox' => true,
+            ],
             $config['payum.default_options']
         );
     }

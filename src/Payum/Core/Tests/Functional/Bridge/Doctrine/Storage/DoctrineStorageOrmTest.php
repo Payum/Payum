@@ -109,14 +109,14 @@ class DoctrineStorageOrmTest extends OrmTest
         $storage->update($model);
 
         $result = $storage->findBy([
-            'currency' => 'USD'
+            'currency' => 'USD',
         ]);
 
         $this->assertCount(2, $result);
         $this->assertContainsOnly('Payum\Core\Tests\Mocks\Entity\TestModel', $result);
 
         $result = $storage->findBy([
-            'currency' => 'EUR'
+            'currency' => 'EUR',
         ]);
 
         $this->assertCount(1, $result);

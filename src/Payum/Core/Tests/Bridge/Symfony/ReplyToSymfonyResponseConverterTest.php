@@ -65,7 +65,9 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
     public function testShouldReturnResponseIfPayumHttpPostRedirectReply()
     {
-        $reply = new HttpPostRedirect('anUrl', ['foo' => 'foo']);
+        $reply = new HttpPostRedirect('anUrl', [
+            'foo' => 'foo',
+        ]);
 
         $converter = new ReplyToSymfonyResponseConverter();
 

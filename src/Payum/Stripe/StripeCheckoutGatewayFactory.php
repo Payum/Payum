@@ -51,7 +51,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = [
                 'publishable_key' => '',
-                'secret_key' => ''
+                'secret_key' => '',
             ];
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['publishable_key', 'secret_key'];

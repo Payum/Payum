@@ -20,7 +20,7 @@ class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCas
         $action = new RecurringPaymentDetailsStatusAction();
 
         $recurringPaymentDetails = [
-           'BILLINGPERIOD' => 'foo',
+            'BILLINGPERIOD' => 'foo',
         ];
 
         $request = new GetBinaryStatus($recurringPaymentDetails);

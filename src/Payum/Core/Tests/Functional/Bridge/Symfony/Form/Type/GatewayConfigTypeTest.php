@@ -120,7 +120,7 @@ class GatewayConfigTypeTest extends TestCase
                 'username' => 'submitName',
                 'password' => 'submitPass',
                 'sandbox' => false,
-            ]
+            ],
 
         ]);
 
@@ -160,7 +160,7 @@ class GatewayConfigTypeTest extends TestCase
             'config' => [
                 'username' => 'submitName',
                 'password' => 'submitPass',
-            ]
+            ],
 
         ]);
 

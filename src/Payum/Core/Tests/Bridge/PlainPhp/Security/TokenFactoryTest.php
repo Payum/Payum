@@ -70,7 +70,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'theTargetPath',
-            ['target' => 'val']
+            [
+                'target' => 'val',
+            ]
         );
 
         $this->assertSame($token, $actualToken);
@@ -125,9 +127,13 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'theTargetPath',
-            ['target' => 'val'],
+            [
+                'target' => 'val',
+            ],
             'theAfterPath',
-            ['after' => 'val']
+            [
+                'after' => 'val',
+            ]
         );
 
         $this->assertSame($token, $actualToken);
@@ -172,7 +178,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $identity,
             'theTargetPath',
-            ['target' => 'val']
+            [
+                'target' => 'val',
+            ]
         );
 
         $this->assertSame(
@@ -213,7 +221,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $identity,
             'theTargetPath',
-            ['target' => 'val']
+            [
+                'target' => 'val',
+            ]
         );
 
         $this->assertSame(
@@ -257,7 +267,9 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $identity,
             $target,
-            ['target' => 'val']
+            [
+                'target' => 'val',
+            ]
         );
 
         $this->assertSame(
@@ -297,9 +309,13 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $identity,
             'theTargetPath',
-            ['target' => 'val'],
+            [
+                'target' => 'val',
+            ],
             'theAfterPath',
-            ['after' => 'val']
+            [
+                'after' => 'val',
+            ]
         );
 
         $this->assertSame($token, $actualToken);
@@ -336,9 +352,13 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             null,
             'theTargetPath',
-            ['target' => 'val'],
+            [
+                'target' => 'val',
+            ],
             'theAfterPath',
-            ['after' => 'val']
+            [
+                'after' => 'val',
+            ]
         );
 
         $this->assertSame($token, $actualToken);
@@ -387,9 +407,13 @@ class TokenFactoryTest extends TestCase
             $gatewayName,
             $model,
             'http://google.com/?foo=fooVal',
-            ['target' => 'val'],
+            [
+                'target' => 'val',
+            ],
             'theAfterPath',
-            ['after' => 'val']
+            [
+                'after' => 'val',
+            ]
         );
 
         $this->assertSame($token, $actualToken);
@@ -446,7 +470,9 @@ class TokenFactoryTest extends TestCase
             'http://example.com/authorize.php',
             [],
             'http://google.com/?payum_token=foo',
-            ['afterKey' => 'afterVal']
+            [
+                'afterKey' => 'afterVal',
+            ]
         );
 
         $this->assertSame($authorizeToken, $actualToken);
@@ -506,7 +532,10 @@ class TokenFactoryTest extends TestCase
             'http://example.com/authorize.php',
             [],
             'http://google.com/?payum_token=foo',
-            ['payum_token' => null, 'afterKey' => 'afterVal']
+            [
+                'payum_token' => null,
+                'afterKey' => 'afterVal',
+            ]
         );
 
         $this->assertSame($authorizeToken, $actualToken);
@@ -566,7 +595,9 @@ class TokenFactoryTest extends TestCase
             'http://example.com/authorize.php',
             [],
             'http://google.com/foo/bar?foo=fooVal#fragment',
-            ['payum_token' => null]
+            [
+                'payum_token' => null,
+            ]
         );
 
         $this->assertSame($authorizeToken, $actualToken);

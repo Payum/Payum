@@ -26,7 +26,10 @@ class PaymentTest extends OrmTest
         $order->setDetails('aDesc');
         $order->setClientEmail('anEmail');
         $order->setClientId('anId');
-        $order->setDetails(['bar1', 'bar2' => 'theBar2']);
+        $order->setDetails([
+            'bar1',
+            'bar2' => 'theBar2',
+        ]);
 
         $this->em->persist($order);
         $this->em->flush();
@@ -56,13 +59,17 @@ class PaymentTest extends OrmTest
     public function testShouldNotStoreSensitiveValue()
     {
         $order = new Payment();
-        $order->setDetails(['cardNumber' => new SensitiveValue('theCardNumber')]);
+        $order->setDetails([
+            'cardNumber' => new SensitiveValue('theCardNumber'),
+        ]);
 
         $this->em->persist($order);
         $this->em->flush();
 
         $this->em->refresh($order);
 
-        $this->assertEquals(['cardNumber' => null], $order->getDetails());
+        $this->assertEquals([
+            'cardNumber' => null,
+        ], $order->getDetails());
     }
 }

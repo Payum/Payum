@@ -74,7 +74,9 @@ class GetHttpRequestActionTest extends TestCase
         $stack->push(Request::create(
             'http://request.uri',
             'GET',
-            ['foo' => 'fooVal']
+            [
+                'foo' => 'fooVal',
+            ]
         ));
 
         $action = new GetHttpRequestAction();
@@ -83,7 +85,9 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame(['foo' => 'fooVal'], $request->query);
+        self::assertSame([
+            'foo' => 'fooVal',
+        ], $request->query);
         self::assertSame([], $request->request);
         self::assertSame('GET', $request->method);
         self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
@@ -97,7 +101,9 @@ class GetHttpRequestActionTest extends TestCase
         $stack->push(Request::create(
             'http://request.uri',
             'POST',
-            ['foo' => 'fooVal']
+            [
+                'foo' => 'fooVal',
+            ]
         ));
 
         $action = new GetHttpRequestAction();
@@ -107,7 +113,9 @@ class GetHttpRequestActionTest extends TestCase
         $action->execute($request);
 
         self::assertSame([], $request->query);
-        self::assertSame(['foo' => 'fooVal'], $request->request);
+        self::assertSame([
+            'foo' => 'fooVal',
+        ], $request->request);
         self::assertSame('POST', $request->method);
         self::assertSame('http://request.uri/', $request->uri);
         self::assertStringStartsWith('Symfony', $request->userAgent);
@@ -120,7 +128,9 @@ class GetHttpRequestActionTest extends TestCase
         $stack->push(Request::create(
             'http://request.uri',
             'GET',
-            ['foo' => 'fooVal']
+            [
+                'foo' => 'fooVal',
+            ]
         ));
         $stack->push(Request::create(
             'http://another.request.uri',
@@ -145,13 +155,17 @@ class GetHttpRequestActionTest extends TestCase
         $action->setHttpRequest(Request::create(
             'http://request.uri',
             'GET',
-            ['foo' => 'fooVal']
+            [
+                'foo' => 'fooVal',
+            ]
         ));
 
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame(['foo' => 'fooVal'], $request->query);
+        self::assertSame([
+            'foo' => 'fooVal',
+        ], $request->query);
         self::assertSame([], $request->request);
         self::assertSame('GET', $request->method);
         self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
@@ -168,14 +182,18 @@ class GetHttpRequestActionTest extends TestCase
         $action->setHttpRequest(Request::create(
             'http://request.uri',
             'POST',
-            ['foo' => 'fooVal']
+            [
+                'foo' => 'fooVal',
+            ]
         ));
 
         $request = new GetHttpRequest();
         $action->execute($request);
 
         self::assertSame([], $request->query);
-        self::assertSame(['foo' => 'fooVal'], $request->request);
+        self::assertSame([
+            'foo' => 'fooVal',
+        ], $request->request);
         self::assertSame('POST', $request->method);
         self::assertSame('http://request.uri/', $request->uri);
         self::assertStringStartsWith('Symfony', $request->userAgent);

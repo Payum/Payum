@@ -53,7 +53,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cancel_url' => 'optionCancelUrl',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
-        $result = $api->setExpressCheckout(['RETURNURL' => 'formRequestReturnUrl']);
+        $result = $api->setExpressCheckout([
+            'RETURNURL' => 'formRequestReturnUrl',
+        ]);
 
         $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
@@ -99,7 +101,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cancel_url' => 'optionCancelUrl',
         ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
 
-        $result = $api->setExpressCheckout(['CANCELURL' => 'formRequestCancelUrl']);
+        $result = $api->setExpressCheckout([
+            'CANCELURL' => 'formRequestCancelUrl',
+        ]);
 
         $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
@@ -220,7 +224,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', ['useraction' => 'theUseraction'])
+            $api->getAuthorizeTokenUrl('theToken', [
+                'useraction' => 'theUseraction',
+            ])
         );
     }
 
@@ -252,7 +258,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', ['cmd' => 'theCmd'])
+            $api->getAuthorizeTokenUrl('theToken', [
+                'cmd' => 'theCmd',
+            ])
         );
     }
 
@@ -267,7 +275,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
-            $api->getAuthorizeTokenUrl('theToken', ['foo' => 'fooVal'])
+            $api->getAuthorizeTokenUrl('theToken', [
+                'foo' => 'fooVal',
+            ])
         );
     }
 
@@ -282,7 +292,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', ['foo' => ''])
+            $api->getAuthorizeTokenUrl('theToken', [
+                'foo' => '',
+            ])
         );
     }
 

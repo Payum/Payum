@@ -39,7 +39,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_SUCCESS
+            'ACK' => Api::ACK_SUCCESS,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -54,7 +54,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_SUCCESS_WITH_WARNING
+            'ACK' => Api::ACK_SUCCESS_WITH_WARNING,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -69,7 +69,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_FAILURE
+            'ACK' => Api::ACK_FAILURE,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -84,7 +84,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_FAILURE_WITH_WARNING
+            'ACK' => Api::ACK_FAILURE_WITH_WARNING,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -99,7 +99,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => 'foo'
+            'ACK' => 'foo',
         ];
 
         $request = new GetHumanStatus($payout);

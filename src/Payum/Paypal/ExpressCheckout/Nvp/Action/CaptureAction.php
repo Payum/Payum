@@ -21,7 +21,9 @@ class CaptureAction extends PurchaseAction
 
         foreach (range(0, 9) as $index) {
             if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
-                $details->defaults(['PAYMENTREQUEST_' . $index . '_COMPLETETYPE' => 'Complete']);
+                $details->defaults([
+                    'PAYMENTREQUEST_' . $index . '_COMPLETETYPE' => 'Complete',
+                ]);
 
                 $this->gateway->execute(new DoCapture($details, $index));
             }
