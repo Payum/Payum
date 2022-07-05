@@ -13,8 +13,6 @@ class RefundAction implements ActionInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Refund $request
      */
     public function execute($request)
@@ -26,12 +24,9 @@ class RefundAction implements ActionInterface
         throw new \LogicException('Not implemented');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof Refund &&
+        return $request instanceof Refund &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

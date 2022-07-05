@@ -20,9 +20,6 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateRecurringPaymentProfile */
@@ -37,9 +34,6 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetRecurringPaymentsProfileDetails &&

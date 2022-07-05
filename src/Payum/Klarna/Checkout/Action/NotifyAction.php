@@ -17,8 +17,6 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Notify $request
      */
     public function execute($request)
@@ -42,12 +40,9 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof Notify &&
+        return $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

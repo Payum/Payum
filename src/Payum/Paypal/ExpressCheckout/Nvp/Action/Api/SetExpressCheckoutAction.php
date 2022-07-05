@@ -20,9 +20,6 @@ class SetExpressCheckoutAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request SetExpressCheckout */
@@ -39,12 +36,9 @@ class SetExpressCheckoutAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof SetExpressCheckout &&
+        return $request instanceof SetExpressCheckout &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

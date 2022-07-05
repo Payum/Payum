@@ -14,17 +14,12 @@ class GetTokenAction implements ActionInterface
      */
     private $tokenStorage;
 
-    /**
-     * @param StorageInterface $tokenStorage
-     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param $request GetToken
      */
     public function execute($request)
@@ -38,9 +33,6 @@ class GetTokenAction implements ActionInterface
         $request->setToken($token);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetToken;

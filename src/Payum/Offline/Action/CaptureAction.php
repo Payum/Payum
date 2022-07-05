@@ -10,9 +10,6 @@ use Payum\Offline\Constants;
 
 class CaptureAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -27,9 +24,6 @@ class CaptureAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

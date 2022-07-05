@@ -20,9 +20,6 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = RecurringApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CheckRecurringPayment */
@@ -39,12 +36,9 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof CheckRecurringPayment &&
+        return $request instanceof CheckRecurringPayment &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

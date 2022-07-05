@@ -11,8 +11,6 @@ class AgreementApi extends BaseApi
     public const AGREEMENTSTATUS_DELETED = 2;
 
     /**
-     * @param array $parameters
-     *
      * @return array
      */
     public function create(array $parameters)
@@ -37,8 +35,6 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      */
     public function check(array $parameters)
@@ -54,8 +50,6 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      */
     public function delete(array $parameters)
@@ -71,8 +65,6 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @param array $parameters
-     *
      * @return array
      */
     public function autoPay(array $parameters)
@@ -93,9 +85,6 @@ class AgreementApi extends BaseApi
         return $this->call('AutoPay3', $parameters, $this->getPxAgreementWsdl());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getPxAgreementWsdl()
     {
         return $this->options['sandbox'] ?

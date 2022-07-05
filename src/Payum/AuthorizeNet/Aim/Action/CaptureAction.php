@@ -29,8 +29,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -68,9 +66,6 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $model->replace(get_object_vars($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&

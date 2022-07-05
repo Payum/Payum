@@ -18,8 +18,6 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -55,9 +53,6 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         if (false == (

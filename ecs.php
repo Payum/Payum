@@ -11,5 +11,7 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->sets([
         SetList::PSR_12,
         SetList::SPACES,
+        SetList::DOCBLOCK,
+        SetList::COMMENTS,
     ]);
 };

@@ -10,9 +10,6 @@ use Payum\Offline\Constants;
 
 class RefundAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Refund */
@@ -25,9 +22,6 @@ class RefundAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Refund &&

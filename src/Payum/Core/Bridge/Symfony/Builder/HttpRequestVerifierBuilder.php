@@ -9,8 +9,6 @@ use Payum\Core\Storage\StorageInterface;
 class HttpRequestVerifierBuilder
 {
     /**
-     * @param StorageInterface $tokenStorage
-     *
      * @return HttpRequestVerifierInterface
      */
     public function build(StorageInterface $tokenStorage)

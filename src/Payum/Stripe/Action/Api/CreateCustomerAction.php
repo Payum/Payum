@@ -40,9 +40,6 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -51,9 +48,6 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CreateCustomer */
@@ -80,9 +74,6 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof CreateCustomer &&

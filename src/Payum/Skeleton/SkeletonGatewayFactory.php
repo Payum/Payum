@@ -14,9 +14,6 @@ use Payum\Skeleton\Action\StatusAction;
 
 class SkeletonGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([

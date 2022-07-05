@@ -19,17 +19,11 @@ class HttplugClient implements HttpClientInterface
      */
     private $client;
 
-    /**
-     * @param HttpClient $client
-     */
     public function __construct(HttpClient $client)
     {
         $this->client = $client;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function send(RequestInterface $request)
     {
         return $this->client->sendRequest($request);

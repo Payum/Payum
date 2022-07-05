@@ -20,9 +20,6 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request CompleteOrder */
@@ -39,12 +36,9 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof CompleteOrder &&
+        return $request instanceof CompleteOrder &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

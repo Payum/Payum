@@ -20,9 +20,6 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request DeleteAgreement */
@@ -39,12 +36,9 @@ class DeleteAgreementAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return             $request instanceof DeleteAgreement &&
+        return $request instanceof DeleteAgreement &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

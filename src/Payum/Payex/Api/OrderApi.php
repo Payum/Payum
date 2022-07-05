@@ -78,7 +78,7 @@ class OrderApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/
      *
-     * @var array $parameters
+     * @var array
      *
      * @return array
      */
@@ -122,8 +122,6 @@ class OrderApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
      *
-     * @param array $parameters
-     *
      * @return array
      */
     public function complete(array $parameters)
@@ -141,8 +139,6 @@ class OrderApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/check2/
      *
-     * @param array $parameters
-     *
      * @return array
      */
     public function check(array $parameters)
@@ -157,9 +153,6 @@ class OrderApi extends BaseApi
         return $this->call('Check2', $parameters, $this->getPxOrderWsdl());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getPxOrderWsdl()
     {
         return $this->options['sandbox'] ?

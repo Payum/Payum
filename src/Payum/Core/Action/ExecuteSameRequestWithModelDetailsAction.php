@@ -16,8 +16,6 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param ModelAggregateInterface|ModelAwareInterface $request
      */
     public function execute($request)
@@ -42,9 +40,6 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ModelAggregateInterface &&

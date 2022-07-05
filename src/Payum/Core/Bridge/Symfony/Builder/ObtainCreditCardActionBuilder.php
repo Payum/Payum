@@ -19,10 +19,6 @@ class ObtainCreditCardActionBuilder
      */
     private $requestStack;
 
-    /**
-     * @param FormFactoryInterface $formFactory
-     * @param RequestStack $requestStack
-     */
     public function __construct(FormFactoryInterface $formFactory, RequestStack $requestStack)
     {
         $this->formFactory = $formFactory;
@@ -30,8 +26,6 @@ class ObtainCreditCardActionBuilder
     }
 
     /**
-     * @param ArrayObject $config
-     *
      * @return ObtainCreditCardAction
      */
     public function build(ArrayObject $config)

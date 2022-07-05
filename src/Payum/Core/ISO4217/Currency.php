@@ -34,10 +34,6 @@ final class Currency
     private $country;
 
     /**
-     * @param string $name
-     * @param string $alpha3
-     * @param string $numeric
-     * @param int $exp
      * @param string|string[] $country
      */
     public function __construct(string $name, string $alpha3, string $numeric, int $exp, $country)

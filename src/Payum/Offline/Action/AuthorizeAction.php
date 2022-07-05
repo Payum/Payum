@@ -11,9 +11,6 @@ use Payum\Offline\Constants;
 
 class AuthorizeAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request)
     {
         /** @var $request Capture */
@@ -28,9 +25,6 @@ class AuthorizeAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Authorize &&

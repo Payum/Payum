@@ -31,8 +31,6 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
     public function execute($request)
@@ -72,9 +70,6 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof Capture &&
