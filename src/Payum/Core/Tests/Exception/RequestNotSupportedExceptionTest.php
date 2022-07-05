@@ -9,12 +9,14 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Request\Capture;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfInvalidArgumentException()
     {
-        $rc = new \ReflectionClass(RequestNotSupportedException::class);
+        $rc = new ReflectionClass(RequestNotSupportedException::class);
 
         $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
@@ -32,7 +34,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
     public function testShouldCreateWithObjectRequest()
     {
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $exception = RequestNotSupportedException::create($request);
 
@@ -62,7 +64,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
     public function testShouldCreateWithActionAndObjectRequest()
     {
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -81,7 +83,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
     public function testShouldCreateWithSuggestions()
     {
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $exception = RequestNotSupportedException::create($request);
 
@@ -94,7 +96,7 @@ class RequestNotSupportedExceptionTest extends TestCase
 
     public function testShouldCreateWithSuggestionsOnIdentityAsModel()
     {
-        $request = new Capture(new Identity('theId', \stdClass::class));
+        $request = new Capture(new Identity('theId', stdClass::class));
 
         $exception = RequestNotSupportedException::create($request);
 
@@ -106,7 +108,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     }
 
     /**
-     * @return MockObject|\Payum\Core\Action\ActionInterface
+     * @return MockObject|ActionInterface
      */
     protected function createActionMock()
     {

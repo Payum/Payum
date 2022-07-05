@@ -3,22 +3,25 @@
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HttpRedirectTest extends TestCase
 {
     public function testShouldReplyInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpRedirect::class);
+        $rc = new ReflectionClass(HttpRedirect::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Reply\ReplyInterface::class));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
     public function testShouldBeSubClassOfHttpResponseClass()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpRedirect::class);
+        $rc = new ReflectionClass(HttpRedirect::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Reply\HttpResponse::class));
+        $this->assertTrue($rc->isSubclassOf(HttpResponse::class));
     }
 
     public function testShouldAllowGetUrlSetInConstructor()

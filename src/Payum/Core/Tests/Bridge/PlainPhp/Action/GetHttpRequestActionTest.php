@@ -2,27 +2,30 @@
 
 namespace Payum\Core\Tests\Bridge\PlainPhp\Action;
 
+use Iterator;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
+use stdClass;
 
 class GetHttpRequestActionTest extends GenericActionTest
 {
-    protected $requestClass = \Payum\Core\Request\GetHttpRequest::class;
+    protected $requestClass = GetHttpRequest::class;
 
-    protected $actionClass = \Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction::class;
+    protected $actionClass = GetHttpRequestAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass()];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
-        yield [$this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, [[]])];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldFillRequestDetails()

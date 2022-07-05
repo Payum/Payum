@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Tests\Extension;
 
+use ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\GatewayInterface;
@@ -11,19 +12,22 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Extension\CreateCustomerExtension;
 use Payum\Stripe\Request\Api\CreateCustomer;
 use Payum\Stripe\Request\Api\ObtainToken;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
+class CreateCustomerExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass(CreateCustomerExtension::class);
+        $rc = new ReflectionClass(CreateCustomerExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     public function testShouldCreateCustomerAndReplaceCardTokenOnPreCapture()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -39,7 +43,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'card' => 'theCardToken',
@@ -67,7 +71,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPreCapture()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -87,7 +91,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'foo' => 'fooVal',
@@ -119,7 +123,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPreCapture()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -135,7 +139,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'card' => 'theCardToken',
@@ -164,7 +168,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfNotCaptureRequestOnPreExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -193,7 +197,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfSaveCardNotSetOnPreExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
         ]);
         $request = new Capture($model);
@@ -216,7 +220,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfSaveCardSetToFalseOnPreExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => false,
@@ -245,7 +249,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfCardNotTokenOnPreExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => ['theTokenMustBeObtained'],
             'local' => [
                 'save_card' => true,
@@ -274,7 +278,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfCustomerSetOnPreExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'customer' => 'aCustomerId',
             'card' => 'theTokenMustBeObtained',
             'local' => [
@@ -305,7 +309,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldCreateCustomerAndReplaceCardTokenOnPostObtainToken()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -321,7 +325,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'card' => 'theCardToken',
@@ -349,7 +353,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPostObtainToken()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -369,7 +373,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'foo' => 'fooVal',
@@ -401,7 +405,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPostObtainToken()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -417,7 +421,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             ->willReturnCallback(function (CreateCustomer $request) {
                 $model = $request->getModel();
 
-                $this->assertInstanceOf(\ArrayObject::class, $model);
+                $this->assertInstanceOf(ArrayObject::class, $model);
 
                 $this->assertSame([
                     'card' => 'theCardToken',
@@ -446,7 +450,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfNotCaptureRequestOnPostExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
@@ -475,7 +479,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfSaveCardNotSetOnPostExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
         ]);
         $request = new ObtainToken($model);
@@ -498,7 +502,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfSaveCardSetToFalseOnPostExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => 'theCardToken',
             'local' => [
                 'save_card' => false,
@@ -527,7 +531,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfCardNotTokenOnPostExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'card' => ['theTokenMustBeObtained'],
             'local' => [
                 'save_card' => true,
@@ -556,7 +560,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldDoNothingIfCustomerSetOnPostExecute()
     {
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'customer' => 'aCustomerId',
             'card' => 'theTokenMustBeObtained',
             'local' => [
@@ -586,7 +590,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

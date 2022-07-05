@@ -2,14 +2,17 @@
 
 namespace Payum\Core\Tests\Exception\Http;
 
+use Payum\Core\Exception\ExceptionInterface;
+use Payum\Core\Exception\Http\HttpExceptionInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HttpExceptionInterfaceTest extends TestCase
 {
     public function testShouldImplementPayumExceptionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Exception\Http\HttpExceptionInterface::class);
+        $rc = new ReflectionClass(HttpExceptionInterface::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Exception\ExceptionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 }

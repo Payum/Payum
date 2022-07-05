@@ -2,6 +2,7 @@
 
 namespace Payum\Be2Bill\Action;
 
+use ArrayAccess;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -73,7 +74,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
     public function supports($request)
     {
         return $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

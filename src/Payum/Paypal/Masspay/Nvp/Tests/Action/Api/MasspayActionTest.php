@@ -3,10 +3,13 @@
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action\Api;
 
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\Api\MasspayAction;
 use Payum\Paypal\Masspay\Nvp\Api;
 use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class MasspayActionTest extends GenericActionTest
 {
@@ -16,14 +19,14 @@ class MasspayActionTest extends GenericActionTest
 
         public function testShouldImplementsApiAwareAction()
     {
-        $rc = new \ReflectionClass(MasspayAction::class);
+        $rc = new ReflectionClass(MasspayAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testThrowIfPayoutAlreadyAcknowledged()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Payout has already been acknowledged');
         $action = new MasspayAction();
 
@@ -90,7 +93,7 @@ class MasspayActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {

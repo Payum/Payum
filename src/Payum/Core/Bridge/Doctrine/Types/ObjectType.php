@@ -3,6 +3,7 @@
 namespace Payum\Core\Bridge\Doctrine\Types;
 
 use Doctrine\ODM\MongoDB\Types\Type;
+use LogicException;
 
 /**
  * Used as a workaround till I (or you?) found out how to store object to mongo.
@@ -30,7 +31,7 @@ class ObjectType extends Type
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value);
         if (false === $val && 'b:0;' !== $value) {
-            throw new \LogicException('Conversion exception: ' . $value . '. ' . $this->getName());
+            throw new LogicException('Conversion exception: ' . $value . '. ' . $this->getName());
         }
 
         return $val;

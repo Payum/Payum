@@ -2,6 +2,7 @@
 
 namespace Payum\Klarna\Invoice\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -35,7 +36,7 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
     public function supports($request)
     {
         return $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

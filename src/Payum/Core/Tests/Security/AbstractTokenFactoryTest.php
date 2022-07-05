@@ -8,20 +8,23 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class AbstractTokenFactoryTest extends TestCase
 {
     public function testShouldImplementsGenericTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass(AbstractTokenFactory::class);
+        $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass(AbstractTokenFactory::class);
+        $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
@@ -42,8 +45,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -99,8 +102,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -161,7 +164,7 @@ class AbstractTokenFactoryTest extends TestCase
         ;
 
         $gatewayName = 'theGatewayName';
-        $identity = new Identity('anId', \stdClass::class);
+        $identity = new Identity('anId', stdClass::class);
 
         $storageRegistryMock = $this->createStorageRegistryMock();
         $storageRegistryMock
@@ -247,8 +250,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($token))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -308,8 +311,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -370,8 +373,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -433,8 +436,8 @@ class AbstractTokenFactoryTest extends TestCase
             ->with($this->identicalTo($authorizeToken))
         ;
 
-        $model = new \stdClass();
-        $identity = new Identity('anId', \stdClass::class);
+        $model = new stdClass();
+        $identity = new Identity('anId', stdClass::class);
         $gatewayName = 'theGatewayName';
 
         $modelStorage = $this->createStorageMock();
@@ -480,7 +483,7 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return AbstractTokenFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractTokenFactory|MockObject
      */
     protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
     {
@@ -496,7 +499,7 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
+     * @return MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -504,7 +507,7 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|StorageRegistryInterface
+     * @return MockObject|StorageRegistryInterface
      */
     protected function createStorageRegistryMock()
     {

@@ -5,12 +5,13 @@ namespace Payum\Core\Tests\Model;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class PayoutTest extends TestCase
 {
     public function testShouldExtendPayoutInterface()
     {
-        $rc = new \ReflectionClass(Payout::class);
+        $rc = new ReflectionClass(Payout::class);
 
         $this->assertTrue($rc->implementsInterface(PayoutInterface::class));
     }

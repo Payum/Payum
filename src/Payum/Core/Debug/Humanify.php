@@ -4,6 +4,7 @@ namespace Payum\Core\Debug;
 
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Reply\HttpRedirect;
+use ReflectionObject;
 
 abstract class Humanify
 {
@@ -45,7 +46,7 @@ abstract class Humanify
     {
         if (is_object($value)) {
             if ($shortClass) {
-                $ro = new \ReflectionObject($value);
+                $ro = new ReflectionObject($value);
 
                 return $ro->getShortName();
             }

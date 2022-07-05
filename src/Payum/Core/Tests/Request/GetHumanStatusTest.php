@@ -2,13 +2,16 @@
 
 namespace Payum\Core\Tests\Request;
 
+use Iterator;
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetHumanStatus;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class GetHumanStatusTest extends TestCase
 {
-    public static function provideIsXXXMethods(): \Iterator
+    public static function provideIsXXXMethods(): Iterator
     {
         yield ['isCaptured'];
         yield ['isAuthorized'];
@@ -23,7 +26,7 @@ class GetHumanStatusTest extends TestCase
         yield ['isExpired'];
     }
 
-    public static function provideMarkXXXMethods(): \Iterator
+    public static function provideMarkXXXMethods(): Iterator
     {
         yield ['markCaptured'];
         yield ['markAuthorized'];
@@ -40,14 +43,14 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldBeSubClassOfBaseStatusRequest()
     {
-        $rc = new \ReflectionClass(GetHumanStatus::class);
+        $rc = new ReflectionClass(GetHumanStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
     public function testShouldMarkUnknownInConstructor()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $this->assertTrue($getStatus->isUnknown());
     }
@@ -57,7 +60,7 @@ class GetHumanStatusTest extends TestCase
      */
     public function testShouldAllowGetMarkedStatus($markXXXMethod)
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->{$markXXXMethod}();
 
@@ -69,14 +72,14 @@ class GetHumanStatusTest extends TestCase
      */
     public function testShouldCallIsXXXStatus($isXXXMethod)
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
     public function testShouldNotMatchOthersThenCapturedStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markCaptured();
 
@@ -95,7 +98,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenFailedStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markFailed();
 
@@ -114,7 +117,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenPendingStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markPending();
 
@@ -133,7 +136,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenCanceledStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markCanceled();
 
@@ -152,7 +155,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenNewStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markNew();
 
@@ -171,7 +174,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenUnknownStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markUnknown();
 
@@ -190,7 +193,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenExpiredStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markExpired();
 
@@ -209,7 +212,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenSuspendedStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markSuspended();
 
@@ -228,7 +231,7 @@ class GetHumanStatusTest extends TestCase
 
     public function testShouldNotMatchOthersThenPayedoutStatus()
     {
-        $getStatus = new GetHumanStatus(new \stdClass());
+        $getStatus = new GetHumanStatus(new stdClass());
 
         $getStatus->markPayedout();
 

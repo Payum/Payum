@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
@@ -17,6 +18,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class CaptureActionTest extends GenericActionTest
 {
@@ -26,14 +29,14 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -413,7 +416,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'foo' => 'fooVal',
         ]);
 
@@ -450,7 +453,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfAlreadySet()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl',
         ]);
 
@@ -479,7 +482,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfPaypalTokenAlreadySet()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
             'TOKEN' => 'foo',
         ]);
 
@@ -507,7 +510,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfTokenFactoryNotSet()
     {
-        $details = new \ArrayObject([
+        $details = new ArrayObject([
         ]);
 
         $captureToken = new Token();
@@ -527,7 +530,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfCaptureTokenNotSet()
     {
-        $details = new \ArrayObject();
+        $details = new ArrayObject();
 
         $tokenFactoryMock = $this->createMock(GenericTokenFactoryInterface::class);
         $tokenFactoryMock
@@ -547,7 +550,7 @@ class CaptureActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

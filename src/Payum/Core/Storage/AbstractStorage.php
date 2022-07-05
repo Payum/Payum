@@ -90,7 +90,7 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * @param object $model
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function assertModelSupported($model)
     {

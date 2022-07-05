@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Checkout\Action;
 
+use ArrayAccess;
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -79,7 +81,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
             $this->gateway->execute($createOrderRequest = new CreateOrder($model));
 
             $model->replace($createOrderRequest->getOrder()->marshal());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->api->contentType = $backupConfig->contentType;
             $this->api->acceptHeader = $backupConfig->acceptHeader;
             $this->api->baseUri = $backupConfig->baseUri;
@@ -98,7 +100,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
 
     public function supports($request)
     {
-        if (false == ($request instanceof Authorize && $request->getModel() instanceof \ArrayAccess)) {
+        if (false == ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 

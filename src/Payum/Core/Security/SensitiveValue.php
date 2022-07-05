@@ -2,10 +2,13 @@
 
 namespace Payum\Core\Security;
 
+use JsonSerializable;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\Util\Mask;
+use ReturnTypeWillChange;
+use Serializable;
 
-final class SensitiveValue implements \Serializable, \JsonSerializable
+final class SensitiveValue implements Serializable, JsonSerializable
 {
     private $value;
 
@@ -80,7 +83,7 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
     }

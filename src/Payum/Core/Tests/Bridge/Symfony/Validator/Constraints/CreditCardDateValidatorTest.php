@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Tests\Bridge\Symfony\Validator\Constraints;
 
+use Datetime;
 use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate;
 use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDateValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -15,7 +16,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
         ];
         $constraint = new CreditCardDate($options);
 
-        $value = new \Datetime();
+        $value = new Datetime();
 
         $this->assertNull($this->validator->validate($value, $constraint));
     }
@@ -30,7 +31,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
         $validator = new CreditCardDateValidator();
         $validator->initialize($this->context);
 
-        $value = new \Datetime('1981-08-24');
+        $value = new Datetime('1981-08-24');
 
         $validator->validate($value, $constraint);
 

@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Request;
 
+use ArrayObject;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Security\TokenAggregateInterface;
@@ -51,7 +52,7 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     public function setModel($model)
     {
         if (is_array($model)) {
-            $model = new \ArrayObject($model);
+            $model = new ArrayObject($model);
         }
 
         $this->model = $model;

@@ -2,12 +2,20 @@
 
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
+use Iterator;
+use Klarna_Checkout_ConnectionErrorException;
+use Klarna_Checkout_ConnectorInterface;
+use Klarna_Checkout_Order;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Checkout\Action\Api\FetchOrderAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class FetchOrderActionTest extends GenericActionTest
 {
@@ -15,24 +23,24 @@ class FetchOrderActionTest extends GenericActionTest
 
     protected $actionClass = FetchOrderAction::class;
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
+        yield [new stdClass()];
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass(FetchOrderAction::class);
+        $rc = new ReflectionClass(FetchOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testThrowIfLocationNotSetOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Location has to be provided to fetch an order');
         $action = new FetchOrderAction();
 
@@ -67,7 +75,7 @@ class FetchOrderActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertInstanceOf(\Klarna_Checkout_Order::class, $request->getOrder());
+        $this->assertInstanceOf(Klarna_Checkout_Order::class, $request->getOrder());
     }
 
     public function testShouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
@@ -106,7 +114,7 @@ class FetchOrderActionTest extends GenericActionTest
 
     public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
-        $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
+        $this->expectException(Klarna_Checkout_ConnectionErrorException::class);
         $model = [
             'location' => 'theLocation',
             'cart' => [
@@ -122,7 +130,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('GET')
-            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
+            ->willThrowException(new Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new FetchOrderAction($connector);
@@ -151,7 +159,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->method('apply')
             ->withConsecutive(['GET'], ['GET'])
             ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Klarna_Checkout_ConnectionErrorException()),
+                $this->throwException(new Klarna_Checkout_ConnectionErrorException()),
                 $this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
                     $expectedOrder = $order;
                 })
@@ -167,10 +175,10 @@ class FetchOrderActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna_Checkout_ConnectorInterface
+     * @return MockObject|Klarna_Checkout_ConnectorInterface
      */
     protected function createConnectorMock()
     {
-        return $this->createMock(\Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
     }
 }

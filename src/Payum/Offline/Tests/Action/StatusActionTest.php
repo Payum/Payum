@@ -2,25 +2,32 @@
 
 namespace Payum\Offline\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\StatusAction;
 use Payum\Offline\Constants;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class StatusActionTest extends \PHPUnit\Framework\TestCase
+class StatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Offline\Action\StatusAction::class);
+        $rc = new ReflectionClass(StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAccessAsModel()
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->createMock(\ArrayAccess::class));
+        $request = $this->createGetStatusStub($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -29,7 +36,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -38,17 +45,17 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub(new \stdClass());
+        $request = $this->createGetStatusStub(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkNewIfDetailsEmpty()
@@ -160,11 +167,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GetStatusInterface
+     * @return MockObject|GetStatusInterface
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->createMock(\Payum\Core\Request\GetStatusInterface::class);
+        $status = $this->createMock(GetStatusInterface::class);
 
         $status
             ->method('getModel')

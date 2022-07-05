@@ -2,24 +2,30 @@
 
 namespace Payum\Paypal\Rest\Tests\Action;
 
+use ArrayObject;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class StatusActionTest extends \PHPUnit\Framework\TestCase
+class StatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\Rest\Action\StatusAction::class);
+        $rc = new ReflectionClass(StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldNotSupportStatusRequestWithNoPaymentAsModel()
     {
         $action = new StatusAction();
 
-        $request = new GetBinaryStatus(new \stdClass());
+        $request = new GetBinaryStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
@@ -28,7 +34,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $request = new GetBinaryStatus(new \ArrayObject());
+        $request = new GetBinaryStatus(new ArrayObject());
 
         $this->assertTrue($action->supports($request));
     }
@@ -37,15 +43,15 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new StatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkPendingIfStateCreated()
@@ -61,7 +67,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isPending());
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'state' => 'created',
         ]);
         $request = new GetBinaryStatus($model);
@@ -83,7 +89,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isNew());
 
-        $model = new \ArrayObject();
+        $model = new ArrayObject();
         $request = new GetBinaryStatus($model);
 
         $action->execute($request);
@@ -104,7 +110,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCaptured());
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'state' => 'approved',
         ]);
         $request = new GetBinaryStatus($model);
@@ -127,7 +133,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCanceled());
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'state' => 'cancelled',
         ]);
         $request = new GetBinaryStatus($model);
@@ -150,7 +156,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isUnknown());
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'state' => 'random',
         ]);
         $request = new GetBinaryStatus($model);

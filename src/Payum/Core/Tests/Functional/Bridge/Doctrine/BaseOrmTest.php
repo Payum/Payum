@@ -6,7 +6,9 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Version;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -19,11 +21,11 @@ abstract class BaseOrmTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (false == class_exists(\Doctrine\ORM\Version::class, $autoload = true)) {
-            throw new \PHPUnit\Framework\SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
+        if (false == class_exists(Version::class, $autoload = true)) {
+            throw new SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
         }
         if (false == extension_loaded('pdo_sqlite')) {
-            throw new \PHPUnit\Framework\SkippedTestError('The pdo_sqlite extension is not loaded. It is required to run doctrine tests.');
+            throw new SkippedTestError('The pdo_sqlite extension is not loaded. It is required to run doctrine tests.');
         }
     }
 

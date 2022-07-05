@@ -4,12 +4,16 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class ConfirmOrderActionTest extends GenericActionTest
 {
@@ -24,14 +28,14 @@ class ConfirmOrderActionTest extends GenericActionTest
 
     public function testShouldBeSubClassOfGatewayAwareAction()
     {
-        $rc = new \ReflectionClass(ConfirmOrderAction::class);
+        $rc = new ReflectionClass(ConfirmOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
     public function testShouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
     {
-        $firstModel = new \stdClass();
+        $firstModel = new stdClass();
         $model = new \ArrayObject([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -83,7 +87,7 @@ class ConfirmOrderActionTest extends GenericActionTest
 
     public function testShouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
     {
-        $firstModel = new \stdClass();
+        $firstModel = new stdClass();
         $model = new \ArrayObject([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -135,7 +139,7 @@ class ConfirmOrderActionTest extends GenericActionTest
 
     public function testShouldGiveControllBackIfHttpRequestPostWithConfirm()
     {
-        $firstModel = new \stdClass();
+        $firstModel = new stdClass();
         $model = new \ArrayObject([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -163,10 +167,10 @@ class ConfirmOrderActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock(\Payum\Core\GatewayInterface::class);
+        return $this->createMock(GatewayInterface::class);
     }
 }

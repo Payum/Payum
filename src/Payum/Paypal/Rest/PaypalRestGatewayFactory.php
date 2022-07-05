@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Rest;
 
+use LogicException;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -17,7 +18,7 @@ class PaypalRestGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         if (false == class_exists(ApiContext::class)) {
-            throw new \LogicException('You must install "paypal/rest-api-sdk-php" library.');
+            throw new LogicException('You must install "paypal/rest-api-sdk-php" library.');
         }
 
         $config->defaults([

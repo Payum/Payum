@@ -1,5 +1,7 @@
 <?php
 
+use Payum\Core\GatewayInterface;
+
 ini_set('display_errors', 1);
 error_reporting(-1);
 
@@ -15,7 +17,7 @@ EOM;
     exit(1);
 }
 
-$rc = new \ReflectionClass(\Payum\Core\GatewayInterface::class);
+$rc = new ReflectionClass(GatewayInterface::class);
 $coreDir = dirname($rc->getFileName()) . '/Tests';
 
 $loader->add('Payum\Core\Tests', $coreDir);

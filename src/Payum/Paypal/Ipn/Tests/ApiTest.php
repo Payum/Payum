@@ -3,17 +3,21 @@
 namespace Payum\Paypal\Ipn\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
     public function testThrowIfSandboxOptionNotSetInConstructor()
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
@@ -38,7 +42,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowIfResponseStatusNotOk()
     {
-        $this->expectException(\Payum\Core\Exception\Http\HttpException::class);
+        $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Client error response');
         $clientMock = $this->createHttpClientMock();
         $clientMock
@@ -86,7 +90,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $content = [];
         parse_str($actualRequest->getBody()->getContents(), $content);
 
-        $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::class, $actualRequest);
+        $this->assertInstanceOf(RequestInterface::class, $actualRequest);
         $this->assertSame($expectedNotification + [
             'cmd' => Api::CMD_NOTIFY_VALIDATE,
         ], $content);
@@ -153,11 +157,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(\Payum\Core\HttpClientInterface::class, ['send']);
+        return $this->createMock(HttpClientInterface::class, ['send']);
     }
 
     /**
-     * @return \Http\Message\MessageFactory
+     * @return MessageFactory
      */
     protected function createHttpMessageFactory()
     {

@@ -2,6 +2,10 @@
 
 namespace Payum\Klarna\Invoice;
 
+use Klarna;
+use KlarnaCountry;
+use KlarnaCurrency;
+use KlarnaLanguage;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
@@ -28,7 +32,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config)
     {
-        if (! class_exists(\KlarnaCurrency::class)) {
+        if (! class_exists(KlarnaCurrency::class)) {
             throw new \LogicException('You must install "fp/klarna-invoice" library.');
         }
 
@@ -80,15 +84,15 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $config['mode'] = $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+                $config['mode'] = $config['sandbox'] ? Klarna::BETA : Klarna::LIVE;
 
-                if (null === $country = \KlarnaCountry::fromCode($config['country'])) {
+                if (null === $country = KlarnaCountry::fromCode($config['country'])) {
                     throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $config['country']));
                 }
-                if (null === $language = \KlarnaLanguage::fromCode($config['language'])) {
+                if (null === $language = KlarnaLanguage::fromCode($config['language'])) {
                     throw new LogicException(sprintf('Given %s language code is not valid. Klarna cannot recognize it.', $config['language']));
                 }
-                if (null === $currency = \KlarnaCurrency::fromCode($config['currency'])) {
+                if (null === $currency = KlarnaCurrency::fromCode($config['currency'])) {
                     throw new LogicException(sprintf('Given %s currency code is not valid. Klarna cannot recognize it.', $config['currency']));
                 }
 

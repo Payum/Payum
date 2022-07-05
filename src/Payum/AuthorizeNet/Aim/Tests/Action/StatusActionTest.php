@@ -2,17 +2,20 @@
 
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
+use AuthorizeNetAIM_Response;
 use Payum\AuthorizeNet\Aim\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Tests\GenericActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = \Payum\AuthorizeNet\Aim\Action\StatusAction::class;
+    protected $actionClass = StatusAction::class;
 
-    protected $requestClass = \Payum\Core\Request\GetHumanStatus::class;
+    protected $requestClass = GetHumanStatus::class;
 
     public function testShouldMarkNewIfDetailsEmpty()
     {
@@ -55,7 +58,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $model = new ArrayObject();
-        $model['response_code'] = \AuthorizeNetAIM_Response::APPROVED;
+        $model['response_code'] = AuthorizeNetAIM_Response::APPROVED;
 
         $request = new GetBinaryStatus($model);
 
@@ -69,7 +72,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $model = new ArrayObject();
-        $model['response_code'] = \AuthorizeNetAIM_Response::ERROR;
+        $model['response_code'] = AuthorizeNetAIM_Response::ERROR;
 
         $request = new GetBinaryStatus($model);
 
@@ -83,7 +86,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $model = new ArrayObject();
-        $model['response_code'] = \AuthorizeNetAIM_Response::HELD;
+        $model['response_code'] = AuthorizeNetAIM_Response::HELD;
 
         $request = new GetBinaryStatus($model);
 
@@ -97,7 +100,7 @@ class StatusActionTest extends GenericActionTest
         $action = new StatusAction();
 
         $model = new ArrayObject();
-        $model['response_code'] = \AuthorizeNetAIM_Response::DECLINED;
+        $model['response_code'] = AuthorizeNetAIM_Response::DECLINED;
 
         $request = new GetBinaryStatus($model);
 
@@ -107,11 +110,11 @@ class StatusActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GetStatusInterface
+     * @return MockObject|GetStatusInterface
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->createMock(\Payum\Core\Request\GetStatusInterface::class);
+        $status = $this->createMock(GetStatusInterface::class);
 
         $status
             ->method('getModel')

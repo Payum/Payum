@@ -2,17 +2,22 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action;
 
+use KlarnaFlags;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Klarna\Invoice\Action\StatusAction;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class StatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\StatusAction::class);
+        $rc = new ReflectionClass(StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportGetStatusWithArrayAsModel()
@@ -26,22 +31,22 @@ class StatusActionTest extends TestCase
     {
         $action = new StatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportGetStatusWithNotArrayAccessModel()
     {
         $action = new StatusAction();
 
-        $this->assertFalse($action->supports(new GetHumanStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetHumanStatus(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldMarkAsNewIfDetailsEmpty()
@@ -100,7 +105,7 @@ class StatusActionTest extends TestCase
         $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus([
-            'status' => \KlarnaFlags::ACCEPTED,
+            'status' => KlarnaFlags::ACCEPTED,
         ]));
 
         $this->assertTrue($getStatus->isAuthorized());
@@ -111,7 +116,7 @@ class StatusActionTest extends TestCase
         $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus([
-            'status' => \KlarnaFlags::PENDING,
+            'status' => KlarnaFlags::PENDING,
         ]));
 
         $this->assertTrue($getStatus->isPending());
@@ -122,7 +127,7 @@ class StatusActionTest extends TestCase
         $action = new StatusAction();
 
         $action->execute($getStatus = new GetHumanStatus([
-            'status' => \KlarnaFlags::DENIED,
+            'status' => KlarnaFlags::DENIED,
         ]));
 
         $this->assertTrue($getStatus->isFailed());

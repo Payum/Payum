@@ -2,15 +2,20 @@
 
 namespace Payum\Be2Bill\Tests\Action;
 
+use ArrayObject;
 use Payum\Be2Bill\Action\NotifyAction;
 use Payum\Be2Bill\Api;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -20,24 +25,24 @@ class NotifyActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testThrowIfUnsupportedApiGiven()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new NotifyAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testThrowIfQueryHashDoesNotMatchExpected()
@@ -141,7 +146,7 @@ class NotifyActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
         $action->setApi($apiMock);
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'AMOUNT' => 1.0,
             'FOO' => 'FOOOLD',
         ]);
@@ -165,7 +170,7 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
@@ -173,7 +178,7 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

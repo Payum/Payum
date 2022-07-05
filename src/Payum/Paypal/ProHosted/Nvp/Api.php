@@ -125,7 +125,7 @@ class Api
     ];
 
     /**
-     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
+     * @throws InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {

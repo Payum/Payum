@@ -10,12 +10,14 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Model\TestModel;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class SimpleRegistryTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractRegistry()
     {
-        $rc = new \ReflectionClass(SimpleRegistry::class);
+        $rc = new ReflectionClass(SimpleRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
@@ -62,12 +64,12 @@ class SimpleRegistryTest extends TestCase
         $registry = new SimpleRegistry(
             [],
             [
-                \stdClass::class => $storageFooMock,
+                stdClass::class => $storageFooMock,
                 TestModel::class => $storageBarMock,
             ]
         );
 
-        $this->assertSame($storageFooMock, $registry->getStorage(\stdClass::class));
+        $this->assertSame($storageFooMock, $registry->getStorage(stdClass::class));
         $this->assertSame($storageBarMock, $registry->getStorage(TestModel::class));
     }
 
@@ -77,7 +79,7 @@ class SimpleRegistryTest extends TestCase
         $storageBarMock = $this->createMock(StorageInterface::class);
 
         $storages = [
-            \stdClass::class => $storageFooMock,
+            stdClass::class => $storageFooMock,
             TestModel::class => $storageBarMock,
         ];
 
@@ -105,7 +107,7 @@ class SimpleRegistryTest extends TestCase
                 'foo' => $gatewayMock,
             ],
             [
-                \stdClass::class => $storageMock,
+                stdClass::class => $storageMock,
             ]
         );
 

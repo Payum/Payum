@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use function get_class;
+use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
 use Payum\Core\Extension\Context;
@@ -15,19 +16,22 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
+use ReflectionObject;
+use stdClass;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass(LogExecutedActionsExtension::class);
+        $rc = new ReflectionClass(LogExecutedActionsExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
     public function testShouldImplementLoggerAwareInterface()
     {
-        $rc = new \ReflectionClass(LogExecutedActionsExtension::class);
+        $rc = new ReflectionClass(LogExecutedActionsExtension::class);
 
         $this->assertTrue($rc->implementsInterface(LoggerAwareInterface::class));
     }
@@ -47,7 +51,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->method('debug')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
 
         $extension = new LogExecutedActionsExtension($logger);
 
@@ -62,7 +66,7 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->method('debug')
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), []);
+        $context = new Context($this->createGatewayMock(), new stdClass(), []);
         $context->setAction($this->createActionMock());
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -79,8 +83,8 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->with($this->stringStartsWith('[Payum] 2# '))
         ;
 
-        $context = new Context($this->createGatewayMock(), new \stdClass(), [
-            new Context($this->createGatewayMock(), new \stdClass(), []),
+        $context = new Context($this->createGatewayMock(), new stdClass(), [
+            new Context($this->createGatewayMock(), new stdClass(), []),
         ]);
         $context->setAction($this->createActionMock());
 
@@ -121,7 +125,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     public function testShouldLogActionAndObjectRequestOnExecute()
     {
         $action = new FooAction();
-        $stdRequest = new \stdClass();
+        $stdRequest = new stdClass();
         $namespacedRequest = new NamespacedRequest();
 
         $logger = $this->createLoggerMock();
@@ -171,7 +175,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     public function testShouldLogActionAndModelRequestWithObjectModelOnExecute()
     {
         $action = new FooAction();
-        $stdModel = new \stdClass();
+        $stdModel = new stdClass();
         $stdModelRequest = new Capture($stdModel);
 
         $logger = $this->createLoggerMock();
@@ -194,7 +198,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $action = new FooAction();
         $replyMock = $this->createReplyMock();
 
-        $ro = new \ReflectionObject($replyMock);
+        $ro = new ReflectionObject($replyMock);
 
         $logger = $this->createLoggerMock();
         $logger
@@ -248,7 +252,7 @@ class LogExecutedActionsExtensionTest extends TestCase
 
         $context = new Context($this->createGatewayMock(), 'string', []);
         $context->setAction($action);
-        $context->setException(new \LogicException());
+        $context->setException(new LogicException());
 
         $extension->onPostExecute($context);
     }
@@ -265,7 +269,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension = new LogExecutedActionsExtension($logger);
 
         $context = new Context($this->createGatewayMock(), 'string', []);
-        $context->setException(new \LogicException());
+        $context->setException(new LogicException());
 
         $extension->onPostExecute($context);
     }
@@ -287,7 +291,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return MockObject|\Payum\Core\Action\ActionInterface
+     * @return MockObject|ActionInterface
      */
     protected function createActionMock()
     {

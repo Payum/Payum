@@ -2,12 +2,13 @@
 
 namespace Payum\Core\Tests\Security\Util;
 
+use Iterator;
 use Payum\Core\Security\Util\Mask;
 use PHPUnit\Framework\TestCase;
 
 class MaskTest extends TestCase
 {
-    public static function provideValues(): \Iterator
+    public static function provideValues(): Iterator
     {
         yield 'just 16 numbers' => ['4567890123456789', '4XXXXXXXXXXX6789'];
         yield 'just 9 numbers' => ['498291842', '4XXXX1842'];

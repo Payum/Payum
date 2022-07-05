@@ -2,6 +2,7 @@
 
 namespace Payum\Klarna\Checkout\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -100,7 +101,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     public function supports($request)
     {
         return $request instanceof Authorize &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Storage;
 
+use LogicException;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 
@@ -86,7 +87,7 @@ final class CryptoStorageDecorator implements StorageInterface
     private function assertCrypted($model)
     {
         if (false == $model instanceof  CryptedInterface) {
-            throw new \LogicException(sprintf(
+            throw new LogicException(sprintf(
                 'The model %s must implement %s interface. It is required for this decorator.',
                 get_class($model),
                 CryptedInterface::class

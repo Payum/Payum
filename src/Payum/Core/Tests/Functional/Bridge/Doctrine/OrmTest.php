@@ -6,6 +6,9 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Payum\Core\Tests\Mocks\Entity\TestModel;
+use ReflectionClass;
+use RuntimeException;
 
 abstract class OrmTest extends BaseOrmTest
 {
@@ -16,7 +19,7 @@ abstract class OrmTest extends BaseOrmTest
     {
         $rootDir = realpath(__DIR__ . '/../../../..');
         if (false === $rootDir || false === is_file($rootDir . '/Gateway.php')) {
-            throw new \RuntimeException('Cannot guess Payum root dir.');
+            throw new RuntimeException('Cannot guess Payum root dir.');
         }
 
         $driver = new MappingDriverChain();
@@ -26,7 +29,7 @@ abstract class OrmTest extends BaseOrmTest
         ]);
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
-        $rc = new \ReflectionClass(\Payum\Core\Tests\Mocks\Entity\TestModel::class);
+        $rc = new ReflectionClass(TestModel::class);
         $annotationDriver = $config->newDefaultAnnotationDriver([
             dirname($rc->getFileName()),
         ], false);

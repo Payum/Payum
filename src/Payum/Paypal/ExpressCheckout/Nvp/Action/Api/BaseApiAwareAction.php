@@ -13,7 +13,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @var Api
      */
     protected $api;
 

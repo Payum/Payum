@@ -7,6 +7,8 @@ use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\GatewayInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,14 +16,14 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
     public function testShouldExtendCoreGatewayFactory()
     {
-        $rc = new \ReflectionClass(ContainerAwareCoreGatewayFactory::class);
+        $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(CoreGatewayFactory::class));
     }
 
     public function testShouldImplementContainerAwareInterface()
     {
-        $rc = new \ReflectionClass(ContainerAwareCoreGatewayFactory::class);
+        $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
@@ -96,7 +98,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
     public function testShouldResolveContainerServiceIfSuchExist()
     {
-        $service = new \stdClass();
+        $service = new stdClass();
 
         $container = new Container();
         $container->set('anActionService', $service);

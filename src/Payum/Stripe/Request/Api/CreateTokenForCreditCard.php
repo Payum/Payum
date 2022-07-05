@@ -2,17 +2,18 @@
 
 namespace Payum\Stripe\Request\Api;
 
+use ArrayAccess;
 use Payum\Core\Request\Generic;
 
 class CreateTokenForCreditCard extends Generic
 {
     /**
-     * @var array|\ArrayAccess
+     * @var array|ArrayAccess
      */
     protected $token = [];
 
     /**
-     * @return array|\ArrayAccess
+     * @return array|ArrayAccess
      */
     public function getToken()
     {
@@ -20,7 +21,7 @@ class CreateTokenForCreditCard extends Generic
     }
 
     /**
-     * @param array|\ArrayAccess $token
+     * @param array|ArrayAccess $token
      */
     public function setToken($token)
     {

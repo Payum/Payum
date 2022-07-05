@@ -2,6 +2,7 @@
 
 namespace Payum\Klarna\Checkout\Action\Api;
 
+use Klarna_Checkout_Order;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -23,7 +24,7 @@ class FetchOrderAction extends BaseApiAwareAction
         }
 
         $this->callWithRetry(function () use ($model, $request) {
-            $order = new \Klarna_Checkout_Order($this->getConnector(), $model['location']);
+            $order = new Klarna_Checkout_Order($this->getConnector(), $model['location']);
             $order->fetch();
 
             $request->setOrder($order);

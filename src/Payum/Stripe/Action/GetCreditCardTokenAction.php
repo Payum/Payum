@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -24,7 +25,7 @@ class GetCreditCardTokenAction implements ActionInterface
     public function supports($request)
     {
         return $request instanceof GetCreditCardToken &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

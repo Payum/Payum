@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -36,7 +38,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
             $this->gateway->execute(new PopulateKlarnaFromDetails($details, $klarna));
 
             $details['updated'] = $klarna->update($details['rno']);
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
@@ -44,7 +46,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
     public function supports($request)
     {
         return $request instanceof Update &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

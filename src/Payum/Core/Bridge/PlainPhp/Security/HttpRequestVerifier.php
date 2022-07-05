@@ -11,7 +11,7 @@ use Payum\Core\Storage\StorageInterface;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
+     * @var StorageInterface
      */
     protected $tokenStorage;
 

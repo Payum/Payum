@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -11,7 +12,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateSubscription;
-use Stripe\Exception;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -66,7 +67,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($subscription->toArray(true));
-        } catch (Exception\ApiErrorException $e) {
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
@@ -74,7 +75,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof CreateSubscription &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

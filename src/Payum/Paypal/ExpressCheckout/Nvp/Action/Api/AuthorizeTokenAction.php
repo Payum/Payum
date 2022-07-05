@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -22,8 +23,8 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @throws \Payum\Core\Exception\LogicException if the token not set in the instruction.
-     * @throws \Payum\Core\Reply\HttpRedirect       if authorization required.
+     * @throws LogicException if the token not set in the instruction.
+     * @throws HttpRedirect if authorization required.
      */
     public function execute($request)
     {
@@ -48,7 +49,7 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return $request instanceof AuthorizeToken &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

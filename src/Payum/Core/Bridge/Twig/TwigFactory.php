@@ -2,6 +2,11 @@
 
 namespace Payum\Core\Bridge\Twig;
 
+use Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter;
+use Payum\Core\Gateway;
+use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
+use Payum\Stripe\StripeJsGatewayFactory;
+use ReflectionClass;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -16,10 +21,10 @@ class TwigFactory
     public static function createGenericPaths()
     {
         return array_flip(array_filter([
-            'PayumCore' => self::guessViewsPath(\Payum\Core\Gateway::class),
-            'PayumStripe' => self::guessViewsPath(\Payum\Stripe\StripeJsGatewayFactory::class),
-            'PayumKlarnaCheckout' => self::guessViewsPath(\Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory::class),
-            'PayumSymfonyBridge' => self::guessViewsPath(\Payum\Core\Bridge\Symfony\ReplyToSymfonyResponseConverter::class),
+            'PayumCore' => self::guessViewsPath(Gateway::class),
+            'PayumStripe' => self::guessViewsPath(StripeJsGatewayFactory::class),
+            'PayumKlarnaCheckout' => self::guessViewsPath(KlarnaCheckoutGatewayFactory::class),
+            'PayumSymfonyBridge' => self::guessViewsPath(ReplyToSymfonyResponseConverter::class),
         ]));
     }
 
@@ -47,7 +52,7 @@ class TwigFactory
             return;
         }
 
-        $rc = new \ReflectionClass($gatewayFactoryOrRootClass);
+        $rc = new ReflectionClass($gatewayFactoryOrRootClass);
 
         return dirname($rc->getFileName()) . '/Resources/views';
     }

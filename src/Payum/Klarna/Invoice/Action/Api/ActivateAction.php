@@ -2,6 +2,8 @@
 
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\Activate;
@@ -25,7 +27,7 @@ class ActivateAction extends BaseApiAwareAction
 
             $details['risk_status'] = $result[0];
             $details['invoice_number'] = $result[1];
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
@@ -33,7 +35,7 @@ class ActivateAction extends BaseApiAwareAction
     public function supports($request)
     {
         return $request instanceof Activate &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

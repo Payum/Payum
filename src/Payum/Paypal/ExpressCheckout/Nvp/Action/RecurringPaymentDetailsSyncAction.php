@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -35,7 +36,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
+        if (false == $model instanceof ArrayAccess) {
             return false;
         }
 

@@ -2,28 +2,37 @@
 
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Klarna;
+use KlarnaException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Tests\GenericApiAwareActionTest;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
+use PHPUnit\Framework\MockObject\MockObject;
 use PhpXmlRpc\Client;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 class ReturnAmountActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\ReturnAmountAction::class);
+        $rc = new ReflectionClass(ReturnAmountAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new ReturnAmountAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldSupportReserveAmountWithArrayAsModel()
@@ -37,22 +46,22 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
     {
         $action = new ReturnAmountAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportReturnAmountWithNotArrayAccessModel()
     {
         $action = new ReturnAmountAction();
 
-        $this->assertFalse($action->supports(new ReturnAmount(new \stdClass())));
+        $this->assertFalse($action->supports(new ReturnAmount(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new ReturnAmountAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldCallKlarnaReturnAmount()
@@ -105,7 +114,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
                 $details['flags'],
                 $details['description']
             )
-            ->willThrowException(new \KlarnaException('theMessage', 123))
+            ->willThrowException(new KlarnaException('theMessage', 123))
         ;
 
         $action = new ReturnAmountAction($klarnaMock);
@@ -129,13 +138,13 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna
+     * @return MockObject|Klarna
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock(\Klarna::class, ['config', 'returnAmount']);
+        $klarnaMock = $this->createMock(Klarna::class, ['config', 'returnAmount']);
 
-        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
         $rp->setAccessible(false);

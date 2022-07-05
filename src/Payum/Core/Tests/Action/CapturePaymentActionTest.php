@@ -2,6 +2,9 @@
 
 namespace Payum\Core\Tests\Action;
 
+use ArrayAccess;
+use Exception;
+use Iterator;
 use function iterator_to_array;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\GatewayAwareInterface;
@@ -12,6 +15,7 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
+use ReflectionClass;
 
 class CapturePaymentActionTest extends GenericActionTest
 {
@@ -19,7 +23,7 @@ class CapturePaymentActionTest extends GenericActionTest
 
     protected $actionClass = CapturePaymentAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         $capture = new $this->requestClass($this->createMock(TokenInterface::class));
         $capture->setModel($this->createMock(PaymentInterface::class));
@@ -29,7 +33,7 @@ class CapturePaymentActionTest extends GenericActionTest
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
@@ -65,7 +69,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $capture->getModel());
         $this->assertNull($capture->getToken());
     }
 
@@ -96,7 +100,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $capture->getModel());
 
         $details = $payment->getDetails();
         $this->assertNotEmpty($details);
@@ -139,7 +143,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture);
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $capture->getModel());
         $this->assertSame($token, $capture->getToken());
     }
 
@@ -166,7 +170,7 @@ class CapturePaymentActionTest extends GenericActionTest
                 $this->returnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
                     $details = $request->getModel();
 
-                    $testCase->assertInstanceOf(\ArrayAccess::class, $details);
+                    $testCase->assertInstanceOf(ArrayAccess::class, $details);
                     $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
@@ -180,7 +184,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $capture->getModel());
         $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
@@ -209,7 +213,7 @@ class CapturePaymentActionTest extends GenericActionTest
                     $details = $request->getModel();
                     $details['bar'] = 'barVal';
 
-                    throw new \Exception();
+                    throw new Exception();
                 })
             )
         ;
@@ -221,7 +225,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $action->execute($capture = new Capture($payment));
 
         $this->assertSame($payment, $capture->getFirstModel());
-        $this->assertInstanceOf(\ArrayAccess::class, $capture->getModel());
+        $this->assertInstanceOf(ArrayAccess::class, $capture->getModel());
         $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',

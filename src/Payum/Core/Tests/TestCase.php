@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use ReflectionProperty;
 
 abstract class TestCase extends PHPUnitTestCase
 {
@@ -11,7 +12,7 @@ abstract class TestCase extends PHPUnitTestCase
      */
     public static function readAttribute($object, string $attributeName)
     {
-        $attribute = new \ReflectionProperty($object, $attributeName);
+        $attribute = new ReflectionProperty($object, $attributeName);
         $attribute->setAccessible(true);
 
         return $attribute->getValue($object);

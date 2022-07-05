@@ -2,6 +2,8 @@
 
 namespace Payum\Core\Model;
 
+use Traversable;
+
 /**
  * Experimental. Anything could be changed in this model at any moment
  */
@@ -128,11 +130,11 @@ class Payout implements PayoutInterface
     }
 
     /**
-     * @param array|\Traversable $details
+     * @param array|Traversable $details
      */
     public function setDetails($details)
     {
-        if ($details instanceof \Traversable) {
+        if ($details instanceof Traversable) {
             $details = iterator_to_array($details);
         }
 

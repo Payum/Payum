@@ -6,19 +6,20 @@ use Payum\Core\Debug\Humanify;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Capture;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HumanifyTest extends TestCase
 {
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Debug\Humanify::class);
+        $rc = new ReflectionClass(Humanify::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
     public function testCouldNotBeInstantiable()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Debug\Humanify::class);
+        $rc = new ReflectionClass(Humanify::class);
 
         $this->assertFalse($rc->isInstantiable());
     }

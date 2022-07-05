@@ -2,11 +2,21 @@
 
 namespace Payum\Payex\Tests\Action\Api;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\CheckAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CheckAgreement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
+class CheckAgreementActionTest extends TestCase
 {
     protected $requiredNotEmptyFields = [
         'agreementRef' => 'anAgreementRef',
@@ -25,54 +35,54 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckAgreementAction::class);
+        $rc = new ReflectionClass(CheckAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckAgreementAction::class);
+        $rc = new ReflectionClass(CheckAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotAgreementApiAsApi()
     {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
         $action = new CheckAgreementAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
     public function testShouldSupportCheckAgreementRequestWithArrayAccessAsModel()
     {
         $action = new CheckAgreementAction();
 
-        $this->assertTrue($action->supports(new CheckAgreement($this->createMock(\ArrayAccess::class))));
+        $this->assertTrue($action->supports(new CheckAgreement($this->createMock(ArrayAccess::class))));
     }
 
     public function testShouldNotSupportAnythingNotCheckAgreementRequest()
     {
         $action = new CheckAgreementAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testShouldNotSupportCheckAgreementRequestWithNotArrayAccessModel()
     {
         $action = new CheckAgreementAction();
 
-        $this->assertFalse($action->supports(new CheckAgreement(new \stdClass())));
+        $this->assertFalse($action->supports(new CheckAgreement(new stdClass())));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CheckAgreementAction($this->createApiMock());
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     /**
@@ -80,7 +90,7 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $fields = $this->requiredNotEmptyFields;
 
         $fields[$requiredField] = '';
@@ -113,10 +123,10 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Payex\Api\AgreementApi
+     * @return MockObject|AgreementApi
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Payex\Api\AgreementApi::class, [], [], '', false);
+        return $this->createMock(AgreementApi::class, [], [], '', false);
     }
 }

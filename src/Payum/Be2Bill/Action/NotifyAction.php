@@ -2,6 +2,7 @@
 
 namespace Payum\Be2Bill\Action;
 
+use ArrayAccess;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -51,7 +52,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     public function supports($request)
     {
         return $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -3,7 +3,10 @@
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
+use Payum\Core\Model\CreditCard;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -11,9 +14,9 @@ class CreditCardTypeTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractType()
     {
-        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Form\Type\CreditCardType::class);
+        $rc = new ReflectionClass(CreditCardType::class);
 
-        $this->assertTrue($rc->isSubclassOf(\Symfony\Component\Form\AbstractType::class));
+        $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
     public function testShouldExtendFormType()
@@ -34,7 +37,7 @@ class CreditCardTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('data_class', $options);
-        $this->assertSame(\Payum\Core\Model\CreditCard::class, $options['data_class']);
+        $this->assertSame(CreditCard::class, $options['data_class']);
 
         $this->assertArrayHasKey('validation_groups', $options);
         $this->assertSame(['Payum'], $options['validation_groups']);

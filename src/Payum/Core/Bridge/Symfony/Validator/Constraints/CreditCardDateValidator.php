@@ -5,6 +5,7 @@
 
 namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 
+use DateTime;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -21,7 +22,7 @@ class CreditCardDateValidator extends ConstraintValidator
             return;
         }
 
-        if (! ($value instanceof \DateTime)) {
+        if (! ($value instanceof DateTime)) {
             if (method_exists($this->context, 'buildViolation')) {
                 $this->context->buildViolation($constraint->invalidMessage, [
                     '{{ value }}' => $value,

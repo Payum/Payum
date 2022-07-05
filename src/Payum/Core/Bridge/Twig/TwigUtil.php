@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Bridge\Twig;
 
+use SplObjectStorage;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
@@ -9,7 +10,7 @@ use Twig\Loader\FilesystemLoader;
 class TwigUtil
 {
     /**
-     * @var \SplObjectStorage
+     * @var SplObjectStorage
      */
     protected static $storage;
 
@@ -19,7 +20,7 @@ class TwigUtil
     public static function registerPaths(Environment $twig, array $paths)
     {
         if (false == static::$storage) {
-            static::$storage = new \SplObjectStorage();
+            static::$storage = new SplObjectStorage();
         }
 
         $storage = static::$storage;

@@ -2,20 +2,24 @@
 
 namespace Payum\Core\Bridge\Spl;
 
+use ArrayAccess;
+use ArrayIterator;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\SensitiveValue;
+use ReturnTypeWillChange;
+use Traversable;
 
 class ArrayObject extends \ArrayObject
 {
     protected $input;
 
-    public function __construct($input = [], $flags = 0, $iterator_class = \ArrayIterator::class)
+    public function __construct($input = [], $flags = 0, $iterator_class = ArrayIterator::class)
     {
-        if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
+        if ($input instanceof ArrayAccess && false == $input instanceof \ArrayObject) {
             $this->input = $input;
 
-            if (false == $input instanceof \Traversable) {
+            if (false == $input instanceof Traversable) {
                 throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
@@ -48,9 +52,9 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array|\Traversable $input
+     * @param array|Traversable $input
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function replace($input)
     {
@@ -64,9 +68,9 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array|\Traversable $input
+     * @param array|Traversable $input
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function defaults($input)
     {
@@ -118,7 +122,7 @@ class ArrayObject extends \ArrayObject
      * @param array   $required
      * @param boolean $throwOnInvalid
      *
-     * @throws \Payum\Core\Exception\LogicException when one of the required fields present
+     * @throws LogicException when one of the required fields present
      *
      * @return bool
      */
@@ -142,7 +146,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($index, $value)
     {
         if ($this->input) {
@@ -155,7 +159,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($index)
     {
         if ($this->input) {
@@ -171,7 +175,7 @@ class ArrayObject extends \ArrayObject
      *
      * {@inheritDoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($index)
     {
         if ($this->offsetExists($index)) {

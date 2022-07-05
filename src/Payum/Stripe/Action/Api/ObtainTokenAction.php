@@ -2,6 +2,7 @@
 
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -88,7 +89,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
     public function supports($request)
     {
         return $request instanceof ObtainToken &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

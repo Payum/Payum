@@ -2,44 +2,57 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class DoVoidActionTest extends \PHPUnit\Framework\TestCase
+class DoVoidActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
+        $rc = new ReflectionClass(DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
+        $rc = new ReflectionClass(DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\ApiAwareInterface::class));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
     public function testShouldImplementGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
+        $rc = new ReflectionClass(DoVoidAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
+        $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
     public function testShouldUseApiAwareTrait()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
+        $rc = new ReflectionClass(DoVoidAction::class);
 
-        $this->assertContains(\Payum\Core\ApiAwareTrait::class, $rc->getTraitNames());
+        $this->assertContains(ApiAwareTrait::class, $rc->getTraitNames());
     }
 
     public function testShouldUseGatewayAwareTrait()
     {
-        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction::class);
+        $rc = new ReflectionClass(DoVoidAction::class);
 
-        $this->assertContains(\Payum\Core\GatewayAwareTrait::class, $rc->getTraitNames());
+        $this->assertContains(GatewayAwareTrait::class, $rc->getTraitNames());
     }
 
     public function testShouldSupportDoVoidRequestAndArrayAccessAsModel()
@@ -47,7 +60,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $action = new DoVoidAction();
 
         $this->assertTrue(
-            $action->supports(new DoVoid($this->createMock(\ArrayAccess::class)))
+            $action->supports(new DoVoid($this->createMock(ArrayAccess::class)))
         );
     }
 
@@ -55,20 +68,20 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new DoVoidAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new DoVoidAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testThrowIfAuthorizationIdNotSetInModel()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('AUTHORIZATIONID must be set. Has user not authorized this transaction?');
         $action = new DoVoidAction();
 
@@ -136,10 +149,10 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, [], [], '', false);
+        return $this->createMock(Api::class, [], [], '', false);
     }
 }

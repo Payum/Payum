@@ -2,25 +2,31 @@
 
 namespace Payum\Offline\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Refund;
 use Payum\Offline\Action\RefundAction;
 use Payum\Offline\Constants;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class RefundActionTest extends \PHPUnit\Framework\TestCase
+class RefundActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Offline\Action\RefundAction::class);
+        $rc = new ReflectionClass(RefundAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportRefundWithArrayAccessAsModel()
     {
         $action = new RefundAction();
 
-        $request = new Refund($this->createMock(\ArrayAccess::class));
+        $request = new Refund($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -29,7 +35,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new RefundAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -38,17 +44,17 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new RefundAction();
 
-        $request = new Refund(new \stdClass());
+        $request = new Refund(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new RefundAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldSetStatusRefundedIfStatusSetToCaptured()

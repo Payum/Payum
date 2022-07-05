@@ -2,12 +2,17 @@
 
 namespace Payum\Core\Tests;
 
+use ArrayObject;
+use Iterator;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 abstract class GenericActionTest extends TestCase
 {
@@ -31,25 +36,25 @@ abstract class GenericActionTest extends TestCase
         $this->action = new $this->actionClass();
     }
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass([])];
-        yield [new $this->requestClass(new \ArrayObject())];
+        yield [new $this->requestClass(new ArrayObject())];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
         yield ['foo'];
         yield [['foo']];
-        yield [new \stdClass()];
+        yield [new stdClass()];
         yield [new $this->requestClass('foo')];
-        yield [new $this->requestClass(new \stdClass())];
+        yield [new $this->requestClass(new stdClass())];
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
@@ -75,7 +80,7 @@ abstract class GenericActionTest extends TestCase
      */
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->action->execute($request);
     }
 

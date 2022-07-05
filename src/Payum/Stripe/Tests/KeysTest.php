@@ -3,8 +3,9 @@
 namespace Payum\Stripe\Tests;
 
 use Payum\Stripe\Keys;
+use PHPUnit\Framework\TestCase;
 
-class KeysTest extends \PHPUnit\Framework\TestCase
+class KeysTest extends TestCase
 {
     public function testSouldAllowGetPublishableKeySetInConstructor()
     {

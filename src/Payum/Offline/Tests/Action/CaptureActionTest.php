@@ -2,25 +2,31 @@
 
 namespace Payum\Offline\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CaptureActionTest extends \PHPUnit\Framework\TestCase
+class CaptureActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(\Payum\Offline\Action\CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportCaptureWithArrayAccessAsModel()
     {
         $action = new CaptureAction();
 
-        $request = new Capture($this->createMock(\ArrayAccess::class));
+        $request = new Capture($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
@@ -29,7 +35,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CaptureAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
@@ -38,17 +44,17 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
     {
         $action = new CaptureAction();
 
-        $request = new Capture(new \stdClass());
+        $request = new Capture(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     public function testShouldSetStatusPendingIfPaidNotSet()

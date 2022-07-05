@@ -4,12 +4,15 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class DoCaptureTest extends \PHPUnit\Framework\TestCase
+class DoCaptureTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass(DoCapture::class);
+        $rc = new ReflectionClass(DoCapture::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
@@ -18,7 +21,7 @@ class DoCaptureTest extends \PHPUnit\Framework\TestCase
     {
         $expectedPaymentRequestN = 7;
 
-        $request = new DoCapture(new \stdClass(), $expectedPaymentRequestN);
+        $request = new DoCapture(new stdClass(), $expectedPaymentRequestN);
 
         $this->assertSame($expectedPaymentRequestN, $request->getPaymentRequestN());
     }

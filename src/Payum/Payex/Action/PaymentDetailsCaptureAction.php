@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -57,7 +58,7 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
     {
         if (false == (
             $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         )) {
             return false;
         }

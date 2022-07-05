@@ -4,8 +4,10 @@ namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHttpRequest;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -13,7 +15,7 @@ class GetHttpRequestActionTest extends TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(GetHttpRequestAction::class);
+        $rc = new ReflectionClass(GetHttpRequestAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
@@ -34,7 +36,7 @@ class GetHttpRequestActionTest extends TestCase
 
     public function testThrowIfNotSupportedRequestPassedToExecute()
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action GetHttpRequestAction is not supported the request string.');
         $action = new GetHttpRequestAction();
 

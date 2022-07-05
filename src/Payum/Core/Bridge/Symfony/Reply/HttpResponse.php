@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 class HttpResponse extends Base
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Response
+     * @var Response
      */
     protected $response;
 
@@ -18,7 +18,7 @@ class HttpResponse extends Base
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function getResponse()
     {

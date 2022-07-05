@@ -6,6 +6,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetCreditCardToken;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\GetCreditCardTokenAction;
+use ReflectionClass;
 
 class GetCreditCardTokenActionTest extends GenericActionTest
 {
@@ -15,7 +16,7 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass(GetCreditCardTokenAction::class);
+        $rc = new ReflectionClass(GetCreditCardTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }

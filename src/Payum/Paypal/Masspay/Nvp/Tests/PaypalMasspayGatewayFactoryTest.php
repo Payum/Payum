@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
@@ -63,7 +64,7 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 
     public function testShouldThrowIfRequiredOptionsNotPassed()
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         $factory = new PaypalMasspayGatewayFactory();
 

@@ -2,6 +2,7 @@
 
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -24,7 +25,7 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
     public function supports($request)
     {
         return $request instanceof Sync &&
-            $request->getModel() instanceof \ArrayAccess &&
+            $request->getModel() instanceof ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&
             false == $request->getModel()->offsetExists('orderId')
