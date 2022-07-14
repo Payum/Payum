@@ -17,21 +17,21 @@ use stdClass;
 
 class GetTransactionDetailsActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel(): void
     {
         $action = new GetTransactionDetailsAction();
 
@@ -40,14 +40,14 @@ class GetTransactionDetailsActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest(): void
     {
         $action = new GetTransactionDetailsAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetTransactionDetailsAction();
@@ -55,7 +55,7 @@ class GetTransactionDetailsActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel()
+    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_5_TRANSACTIONID must be set.');
@@ -66,7 +66,7 @@ class GetTransactionDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetTransactionDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetTransactionDetailsMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -92,7 +92,7 @@ class GetTransactionDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

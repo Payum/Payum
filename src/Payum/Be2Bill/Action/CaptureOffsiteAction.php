@@ -31,10 +31,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -71,7 +68,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

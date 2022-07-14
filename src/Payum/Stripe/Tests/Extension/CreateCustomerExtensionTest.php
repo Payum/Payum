@@ -18,14 +18,14 @@ use ReflectionClass;
 
 class CreateCustomerExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(CreateCustomerExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldCreateCustomerAndReplaceCardTokenOnPreCapture()
+    public function testShouldCreateCustomerAndReplaceCardTokenOnPreCapture(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -40,7 +40,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -69,7 +69,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPreCapture()
+    public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPreCapture(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -88,7 +88,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -121,7 +121,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPreCapture()
+    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPreCapture(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -136,7 +136,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -166,7 +166,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfNotCaptureRequestOnPreExecute()
+    public function testShouldDoNothingIfNotCaptureRequestOnPreExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -195,7 +195,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfSaveCardNotSetOnPreExecute()
+    public function testShouldDoNothingIfSaveCardNotSetOnPreExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -218,7 +218,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfSaveCardSetToFalseOnPreExecute()
+    public function testShouldDoNothingIfSaveCardSetToFalseOnPreExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -247,7 +247,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfCardNotTokenOnPreExecute()
+    public function testShouldDoNothingIfCardNotTokenOnPreExecute(): void
     {
         $model = new ArrayObject([
             'card' => ['theTokenMustBeObtained'],
@@ -276,7 +276,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfCustomerSetOnPreExecute()
+    public function testShouldDoNothingIfCustomerSetOnPreExecute(): void
     {
         $model = new ArrayObject([
             'customer' => 'aCustomerId',
@@ -307,7 +307,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldCreateCustomerAndReplaceCardTokenOnPostObtainToken()
+    public function testShouldCreateCustomerAndReplaceCardTokenOnPostObtainToken(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -322,7 +322,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -351,7 +351,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPostObtainToken()
+    public function testShouldCreateCustomerWithCustomInfoAndReplaceCardTokenOnPostObtainToken(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -370,7 +370,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -403,7 +403,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPostObtainToken()
+    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPostObtainToken(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -418,7 +418,7 @@ class CreateCustomerExtensionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateCustomer::class))
-            ->willReturnCallback(function (CreateCustomer $request) {
+            ->willReturnCallback(function (CreateCustomer $request): void {
                 $model = $request->getModel();
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
@@ -448,7 +448,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfNotCaptureRequestOnPostExecute()
+    public function testShouldDoNothingIfNotCaptureRequestOnPostExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -477,7 +477,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfSaveCardNotSetOnPostExecute()
+    public function testShouldDoNothingIfSaveCardNotSetOnPostExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -500,7 +500,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfSaveCardSetToFalseOnPostExecute()
+    public function testShouldDoNothingIfSaveCardSetToFalseOnPostExecute(): void
     {
         $model = new ArrayObject([
             'card' => 'theCardToken',
@@ -529,7 +529,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfCardNotTokenOnPostExecute()
+    public function testShouldDoNothingIfCardNotTokenOnPostExecute(): void
     {
         $model = new ArrayObject([
             'card' => ['theTokenMustBeObtained'],
@@ -558,7 +558,7 @@ class CreateCustomerExtensionTest extends TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldDoNothingIfCustomerSetOnPostExecute()
+    public function testShouldDoNothingIfCustomerSetOnPostExecute(): void
     {
         $model = new ArrayObject([
             'customer' => 'aCustomerId',

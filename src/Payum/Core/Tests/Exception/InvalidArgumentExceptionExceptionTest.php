@@ -9,14 +9,14 @@ use ReflectionClass;
 
 class InvalidArgumentExceptionExceptionTest extends TestCase
 {
-    public function testShouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
         $rc = new ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 
         $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 
-    public function testShouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
         $rc = new ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 

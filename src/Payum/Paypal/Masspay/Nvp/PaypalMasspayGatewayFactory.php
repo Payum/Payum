@@ -11,7 +11,7 @@ use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 
 class PaypalMasspayGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'paypal_masspay_nvp',

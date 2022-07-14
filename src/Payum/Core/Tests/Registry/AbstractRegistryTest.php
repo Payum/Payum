@@ -16,35 +16,35 @@ use stdClass;
 
 class AbstractRegistryTest extends TestCase
 {
-    public function testShouldImplementGatewayRegistryInterface()
+    public function testShouldImplementGatewayRegistryInterface(): void
     {
         $rc = new ReflectionClass(AbstractRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayRegistryInterface::class));
     }
 
-    public function testShouldImplementStorageRegistryInterface()
+    public function testShouldImplementStorageRegistryInterface(): void
     {
         $rc = new ReflectionClass(AbstractRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(StorageRegistryInterface::class));
     }
 
-    public function testShouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface(): void
     {
         $rc = new ReflectionClass(AbstractRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayFactoryRegistryInterface::class));
     }
 
-    public function testShouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
         $rc = new ReflectionClass(AbstractRegistry::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testShouldAllowGetGatewayWithNamePassedExplicitly()
+    public function testShouldAllowGetGatewayWithNamePassedExplicitly(): void
     {
         $gateways = [
             'fooName' => 'fooGateway',
@@ -58,7 +58,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame('barGateway', $registry->getGateway('barName'));
     }
 
-    public function testShouldAllowGetAllGateways()
+    public function testShouldAllowGetAllGateways(): void
     {
         $gateways = [
             'fooName' => 'fooGateway',
@@ -81,7 +81,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame('barGateway', $gateways['barName']);
     }
 
-    public function testThrowIfTryToGetGatewayWithNotExistName()
+    public function testThrowIfTryToGetGatewayWithNotExistName(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway "notExistName" does not exist.');
@@ -97,7 +97,7 @@ class AbstractRegistryTest extends TestCase
         $registry->getGateway('notExistName');
     }
 
-    public function testShouldAllowGetGatewayFactoryByName()
+    public function testShouldAllowGetGatewayFactoryByName(): void
     {
         $gatewayFactories = [
             'foo' => 'fooGatewayFactory',
@@ -113,7 +113,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame('barGatewayFactory', $registry->getGatewayFactory('bar'));
     }
 
-    public function testShouldAllowGetAllGatewayFactories()
+    public function testShouldAllowGetAllGatewayFactories(): void
     {
         $gatewayFactories = [
             'foo' => 'fooGatewayFactory',
@@ -138,7 +138,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame('barGatewayFactory', $gateways['bar']);
     }
 
-    public function testThrowIfTryToGetGatewayFactoryWithNotExistName()
+    public function testThrowIfTryToGetGatewayFactoryWithNotExistName(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway factory "notExistName" does not exist.');
@@ -156,7 +156,7 @@ class AbstractRegistryTest extends TestCase
         $registry->getGatewayFactory('notExistName');
     }
 
-    public function testShouldAllowGetStorageForGivenModelClass()
+    public function testShouldAllowGetStorageForGivenModelClass(): void
     {
         /** @var MockObject | StorageInterface<stdClass> $storageMock */
         $storageMock = $this->createMock(StorageInterface::class);
@@ -177,7 +177,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame($storageMock, $registry->getStorage(stdClass::class));
     }
 
-    public function testShouldAllowGetStorageIfDoctrineProxyClassGiven()
+    public function testShouldAllowGetStorageIfDoctrineProxyClassGiven(): void
     {
         /** @var MockObject | StorageInterface<DoctrineModel | DoctrineProxy> $storage */
         $storage = $this->createMock(StorageInterface::class);
@@ -198,7 +198,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame($storage, $registry->getStorage(DoctrineProxy::class));
     }
 
-    public function testShouldAllowGetStorageIfDoctrineProxyObjectGiven()
+    public function testShouldAllowGetStorageIfDoctrineProxyObjectGiven(): void
     {
         /** @var MockObject | StorageInterface<DoctrineModel> $storage */
         $storage = $this->createMock(StorageInterface::class);
@@ -219,7 +219,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame($storage, $registry->getStorage(DoctrineProxy::class));
     }
 
-    public function testThrowIfTryToGetStorageWithNotRegisteredModelClass()
+    public function testThrowIfTryToGetStorageWithNotRegisteredModelClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('A storage for model Payum\Core\Tests\Registry\DoctrineModel was not registered. There are storages for next models: stdClass.');
@@ -243,7 +243,7 @@ class AbstractRegistryTest extends TestCase
         $registry->getStorage(\Payum\Core\Tests\Registry\DoctrineModel::class);
     }
 
-    public function testShouldAllowGetStorageWithObjectModel()
+    public function testShouldAllowGetStorageWithObjectModel(): void
     {
         /** @var MockObject | StorageInterface<stdClass> $storage */
         $storage = $this->createMock(StorageInterface::class);
@@ -264,7 +264,7 @@ class AbstractRegistryTest extends TestCase
         $this->assertSame($storage, $registry->getStorage(stdClass::class));
     }
 
-    public function testShouldAllowGetStorages()
+    public function testShouldAllowGetStorages(): void
     {
         /** @var MockObject | StorageInterface<stdClass> $storageOne */
         $storageOne = $this->createMock(StorageInterface::class);
@@ -311,11 +311,11 @@ class DoctrineModel
 
 class DoctrineProxy extends DoctrineModel implements Proxy
 {
-    public function __load()
+    public function __load(): void
     {
     }
 
-    public function __isInitialized()
+    public function __isInitialized(): void
     {
     }
 }

@@ -36,7 +36,7 @@ class ArrayObject implements ArrayAccess, IteratorAggregate
      * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->details[$offset] = $value;
     }
@@ -45,7 +45,7 @@ class ArrayObject implements ArrayAccess, IteratorAggregate
      * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->details[$offset]);
     }

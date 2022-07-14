@@ -21,7 +21,7 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateBillingAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -37,7 +37,7 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateBillingAgreement &&
             $request->getModel() instanceof ArrayAccess

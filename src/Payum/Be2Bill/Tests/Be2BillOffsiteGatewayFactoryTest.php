@@ -8,7 +8,7 @@ use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new Be2BillOffsiteGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new Be2BillOffsiteGatewayFactory();
 
@@ -42,7 +42,7 @@ class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new Be2BillOffsiteGatewayFactory();
 
@@ -57,7 +57,7 @@ class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Be2Bill Offsite', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');

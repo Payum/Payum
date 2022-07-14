@@ -24,7 +24,7 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateButtonPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -43,7 +43,7 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateButtonPayment &&
             $request->getModel() instanceof ArrayAccess;

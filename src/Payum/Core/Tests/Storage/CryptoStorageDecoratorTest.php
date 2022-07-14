@@ -15,14 +15,14 @@ use stdClass;
 
 class CryptoStorageDecoratorTest extends TestCase
 {
-    public function testShouldImplementStorageInterface()
+    public function testShouldImplementStorageInterface(): void
     {
         $rc = new ReflectionClass(CryptoStorageDecorator::class);
 
         $this->assertTrue($rc->implementsInterface(StorageInterface::class));
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnCreate()
+    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnCreate(): void
     {
         $model = new CryptedModel();
 
@@ -50,7 +50,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $this->assertSame($model, $createdModel);
     }
 
-    public function testThrowsIfModelDoesImplementCryptedInterfaceOnCreate()
+    public function testThrowsIfModelDoesImplementCryptedInterfaceOnCreate(): void
     {
         $decoratedStorage = $this->createStorageMock();
         $decoratedStorage
@@ -66,7 +66,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->create();
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnSupport()
+    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnSupport(): void
     {
         $model = new CryptedModel();
 
@@ -92,7 +92,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->support($model);
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnDelete()
+    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnDelete(): void
     {
         $model = new CryptedModel();
 
@@ -118,7 +118,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->delete($model);
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnIdentify()
+    public function testShouldProxyCallToDecoratedStorageAndDoNothingWithCypherOnIdentify(): void
     {
         $model = new CryptedModel();
 
@@ -144,7 +144,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->identify($model);
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndPassCypherToModelEncryptOnUpdate()
+    public function testShouldProxyCallToDecoratedStorageAndPassCypherToModelEncryptOnUpdate(): void
     {
         $model = new CryptedModel();
 
@@ -171,7 +171,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->update($model);
     }
 
-    public function testThrowsIfModelDoesImplementCryptedInterfaceOnUpdate()
+    public function testThrowsIfModelDoesImplementCryptedInterfaceOnUpdate(): void
     {
         /** @var CryptoStorageDecorator<stdClass> $storage */
         $storage = new CryptoStorageDecorator($this->createStorageMock(), $this->createCypherMock());
@@ -181,7 +181,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->update(new stdClass());
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndPassCypherToModelDecryptOnFind()
+    public function testShouldProxyCallToDecoratedStorageAndPassCypherToModelDecryptOnFind(): void
     {
         $model = new CryptedModel();
 
@@ -209,7 +209,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $this->assertSame($model, $foundModel);
     }
 
-    public function testThrowsIfModelDoesImplementCryptedInterfaceOnFind()
+    public function testThrowsIfModelDoesImplementCryptedInterfaceOnFind(): void
     {
         $decoratedStorage = $this->createStorageMock();
         $decoratedStorage
@@ -225,7 +225,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $storage->find(new Identity('anId', CryptedModel::class));
     }
 
-    public function testShouldProxyCallToDecoratedStorageAndPassCypherToEveryModelDecryptOnFindBy()
+    public function testShouldProxyCallToDecoratedStorageAndPassCypherToEveryModelDecryptOnFindBy(): void
     {
         $models = [new CryptedModel(), new CryptedModel()];
 
@@ -253,7 +253,7 @@ class CryptoStorageDecoratorTest extends TestCase
         $this->assertSame($models, $foundModels);
     }
 
-    public function testThrowsIfModelDoesImplementCryptedInterfaceOnFindBy()
+    public function testThrowsIfModelDoesImplementCryptedInterfaceOnFindBy(): void
     {
         $decoratedStorage = $this->createStorageMock();
         $decoratedStorage
@@ -285,12 +285,12 @@ class CryptoStorageDecoratorTest extends TestCase
 
 class CryptedModel implements CryptedInterface
 {
-    public function decrypt(CypherInterface $cypher)
+    public function decrypt(CypherInterface $cypher): void
     {
         $cypher->decrypt('theEncryptedVal');
     }
 
-    public function encrypt(CypherInterface $cypher)
+    public function encrypt(CypherInterface $cypher): void
     {
         $cypher->encrypt('theVal');
     }

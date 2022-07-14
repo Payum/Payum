@@ -34,7 +34,7 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var SetExpressCheckout $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -53,7 +53,7 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
         throw new HttpResponse($renderTemplate->getResult());
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ConfirmOrder &&
             $request->getModel() instanceof ArrayAccess

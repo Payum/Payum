@@ -24,10 +24,7 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param DoVoid $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -42,7 +39,7 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof DoVoid &&
             $request->getModel() instanceof ArrayAccess

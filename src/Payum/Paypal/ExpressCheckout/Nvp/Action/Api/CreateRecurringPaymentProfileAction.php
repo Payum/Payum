@@ -20,7 +20,7 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -42,7 +42,7 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateRecurringPaymentProfile &&
             $request->getModel() instanceof ArrayAccess

@@ -14,7 +14,7 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -22,7 +22,7 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
         $this->gateway->execute(new CheckAgreement($request->getModel()));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Sync &&
             $request->getModel() instanceof ArrayAccess &&

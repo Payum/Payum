@@ -46,7 +46,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -72,7 +72,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateSubscription &&
             $request->getModel() instanceof ArrayAccess

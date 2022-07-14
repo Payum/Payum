@@ -40,7 +40,7 @@ class RequestNotSupportedException extends InvalidArgumentException
      *
      * @throws RequestNotSupportedException
      */
-    public static function assertSupports(ActionInterface $action, $request)
+    public static function assertSupports(ActionInterface $action, $request): void
     {
         if (false == $action->supports($request)) {
             throw static::createActionNotSupported($action, $request);

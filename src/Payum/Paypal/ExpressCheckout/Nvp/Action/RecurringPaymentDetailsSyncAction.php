@@ -15,7 +15,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -29,7 +29,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
         $this->gateway->execute(new GetRecurringPaymentsProfileDetails($model));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == $request instanceof Sync) {
             return false;

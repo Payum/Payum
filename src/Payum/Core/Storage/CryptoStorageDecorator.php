@@ -19,7 +19,9 @@ final class CryptoStorageDecorator implements StorageInterface
 
     private CypherInterface $crypto;
 
-    /** @param StorageInterface<T> $decoratedStorage */
+    /**
+     * @param StorageInterface<T> $decoratedStorage
+     */
     public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {
         $this->decoratedStorage = $decoratedStorage;

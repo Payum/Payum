@@ -14,7 +14,7 @@ use Payum\Skeleton\Action\StatusAction;
 
 class SkeletonGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'skeleton',

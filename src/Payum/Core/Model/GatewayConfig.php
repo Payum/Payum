@@ -40,7 +40,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->factoryName;
     }
 
-    public function setFactoryName($factoryName)
+    public function setFactoryName($factoryName): void
     {
         $this->factoryName = $factoryName;
     }
@@ -56,7 +56,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
     /**
      * @param string $gatewayName
      */
-    public function setGatewayName($gatewayName)
+    public function setGatewayName($gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }
@@ -70,13 +70,13 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->config;
     }
 
-    public function setConfig(array $config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
         $this->decryptedConfig = $config;
     }
 
-    public function decrypt(CypherInterface $cypher)
+    public function decrypt(CypherInterface $cypher): void
     {
         if (empty($this->config['encrypted'])) {
             return;
@@ -93,7 +93,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         }
     }
 
-    public function encrypt(CypherInterface $cypher)
+    public function encrypt(CypherInterface $cypher): void
     {
         $this->decryptedConfig['encrypted'] = true;
 

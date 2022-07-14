@@ -24,10 +24,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
         $this->gateway = $gateway;
     }
 
-    /**
-     * @param ReserveAmount $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -52,7 +49,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ReserveAmount &&
             $request->getModel() instanceof ArrayAccess

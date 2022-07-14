@@ -14,14 +14,14 @@ use stdClass;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfInvalidArgumentException()
+    public function testShouldBeSubClassOfInvalidArgumentException(): void
     {
         $rc = new ReflectionClass(RequestNotSupportedException::class);
 
         $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 
-    public function testShouldCreateWithNoneObjectRequest()
+    public function testShouldCreateWithNoneObjectRequest(): void
     {
         $exception = RequestNotSupportedException::create('anRequest');
 
@@ -32,7 +32,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    public function testShouldCreateWithObjectRequest()
+    public function testShouldCreateWithObjectRequest(): void
     {
         $request = new stdClass();
 
@@ -45,7 +45,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    public function testShouldCreateWithActionAndStringRequest()
+    public function testShouldCreateWithActionAndStringRequest(): void
     {
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -62,7 +62,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    public function testShouldCreateWithActionAndObjectRequest()
+    public function testShouldCreateWithActionAndObjectRequest(): void
     {
         $request = new stdClass();
 
@@ -81,7 +81,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    public function testShouldCreateWithSuggestions()
+    public function testShouldCreateWithSuggestions(): void
     {
         $request = new stdClass();
 
@@ -94,7 +94,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         );
     }
 
-    public function testShouldCreateWithSuggestionsOnIdentityAsModel()
+    public function testShouldCreateWithSuggestionsOnIdentityAsModel(): void
     {
         $request = new Capture(new Identity('theId', stdClass::class));
 

@@ -41,14 +41,14 @@ class GetBinaryStatusTest extends TestCase
         yield ['markExpired'];
     }
 
-    public function testShouldBeSubClassOfBaseGetStatus()
+    public function testShouldBeSubClassOfBaseGetStatus(): void
     {
         $rc = new ReflectionClass(GetBinaryStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
-    public function testShouldMarkUnknownInConstructor()
+    public function testShouldMarkUnknownInConstructor(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -58,7 +58,7 @@ class GetBinaryStatusTest extends TestCase
     /**
      * @dataProvider provideMarkXXXMethods
      */
-    public function testShouldAllowGetMarkedStatus($markXXXMethod)
+    public function testShouldAllowGetMarkedStatus($markXXXMethod): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -70,14 +70,14 @@ class GetBinaryStatusTest extends TestCase
     /**
      * @dataProvider provideIsXXXMethods
      */
-    public function testShouldCallIsXXXStatus($isXXXMethod)
+    public function testShouldCallIsXXXStatus($isXXXMethod): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
         $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
-    public function testShouldNotMatchOthersThenCapturedStatus()
+    public function testShouldNotMatchOthersThenCapturedStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -97,7 +97,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenFailedStatus()
+    public function testShouldNotMatchOthersThenFailedStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -116,7 +116,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenPendingStatus()
+    public function testShouldNotMatchOthersThenPendingStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -135,7 +135,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenCanceledStatus()
+    public function testShouldNotMatchOthersThenCanceledStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -154,7 +154,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenNewStatus()
+    public function testShouldNotMatchOthersThenNewStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -173,7 +173,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenUnknownStatus()
+    public function testShouldNotMatchOthersThenUnknownStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -192,7 +192,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isNew());
     }
 
-    public function testShouldNotMatchOthersThenExpiredStatus()
+    public function testShouldNotMatchOthersThenExpiredStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -211,7 +211,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenSuspendedStatus()
+    public function testShouldNotMatchOthersThenSuspendedStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -230,7 +230,7 @@ class GetBinaryStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenPayedoutStatus()
+    public function testShouldNotMatchOthersThenPayedoutStatus(): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 

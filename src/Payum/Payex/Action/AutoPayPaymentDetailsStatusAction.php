@@ -12,10 +12,7 @@ use Payum\Payex\Api\OrderApi;
 
 class AutoPayPaymentDetailsStatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -55,7 +52,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         $request->markFailed();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == (
             $request instanceof GetStatusInterface &&

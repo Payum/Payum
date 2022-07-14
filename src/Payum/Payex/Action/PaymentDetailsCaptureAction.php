@@ -18,10 +18,7 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -54,7 +51,7 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == (
             $request instanceof Capture &&

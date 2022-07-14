@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class CreatePlanTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(CreatePlan::class);
 

@@ -16,7 +16,7 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -28,7 +28,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -46,7 +46,7 @@ class ApiTest extends TestCase
         $this->assertContains('return=formRequestReturnUrl', $result);
     }
 
-    public function testShouldAddAuthorizeFieldsOnDoCreateButtonCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreateButtonCall(): void
     {
         $api = new Api([
             'username' => 'the_username',
@@ -76,7 +76,7 @@ class ApiTest extends TestCase
         $this->assertSame('the_business', $result['SUBJECT']);
     }
 
-    public function testShouldAddVersionOnDoCreateButtonCall()
+    public function testShouldAddVersionOnDoCreateButtonCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -93,7 +93,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -118,7 +118,7 @@ class ApiTest extends TestCase
         $api->doCreateButton([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 
@@ -143,7 +143,7 @@ class ApiTest extends TestCase
         $api->doCreateButton([]);
     }
 
-    public function testShouldAddMethodOnDoCreateButtonCall()
+    public function testShouldAddMethodOnDoCreateButtonCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -160,7 +160,7 @@ class ApiTest extends TestCase
         $this->assertSame('BMCreateButton', $result['METHOD']);
     }
 
-    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return must be set either to FormRequest or to options.');
@@ -175,7 +175,7 @@ class ApiTest extends TestCase
         $api->doCreateButton([]);
     }
 
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');

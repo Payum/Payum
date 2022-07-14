@@ -55,20 +55,17 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
      * @param Request $request
      * @deprecated
      */
-    public function setRequest(Request $request = null)
+    public function setRequest(Request $request = null): void
     {
         $this->httpRequest = $request;
     }
 
-    public function setRequestStack(RequestStack $requestStack = null)
+    public function setRequestStack(RequestStack $requestStack = null): void
     {
         $this->httpRequestStack = $requestStack;
     }
 
-    /**
-     * @param ObtainCreditCard $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -119,7 +116,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         ]));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ObtainCreditCard;
     }

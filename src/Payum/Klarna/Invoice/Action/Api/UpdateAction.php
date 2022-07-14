@@ -23,10 +23,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
         $this->gateway = $gateway;
     }
 
-    /**
-     * @param Update $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -43,7 +40,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Update &&
             $request->getModel() instanceof ArrayAccess

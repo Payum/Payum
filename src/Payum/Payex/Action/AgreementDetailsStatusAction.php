@@ -12,10 +12,7 @@ use Payum\Payex\Api\OrderApi;
 
 class AgreementDetailsStatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -58,7 +55,7 @@ class AgreementDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess &&

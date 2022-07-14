@@ -13,7 +13,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Capture $request */
         if ($request->getModel() instanceof AuthorizeRequiredModel) {
@@ -23,7 +23,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         //sell code here.
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture;
     }

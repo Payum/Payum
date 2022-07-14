@@ -13,35 +13,35 @@ use stdClass;
 
 class StatusActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(StatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportGetStatusWithArrayAsModel()
+    public function testShouldSupportGetStatusWithArrayAsModel(): void
     {
         $action = new StatusAction();
 
         $this->assertTrue($action->supports(new GetHumanStatus([])));
     }
 
-    public function testShouldNotSupportAnythingNotGetStatus()
+    public function testShouldNotSupportAnythingNotGetStatus(): void
     {
         $action = new StatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportGetStatusWithNotArrayAccessModel()
+    public function testShouldNotSupportGetStatusWithNotArrayAccessModel(): void
     {
         $action = new StatusAction();
 
         $this->assertFalse($action->supports(new GetHumanStatus(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -49,7 +49,7 @@ class StatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkAsNewIfDetailsEmpty()
+    public function testShouldMarkAsNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
@@ -58,7 +58,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isNew());
     }
 
-    public function testShouldMarkAsNew()
+    public function testShouldMarkAsNew(): void
     {
         $action = new StatusAction();
 
@@ -67,7 +67,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isNew());
     }
 
-    public function testShouldMarkFailedIfErrorCodeSet()
+    public function testShouldMarkFailedIfErrorCodeSet(): void
     {
         $action = new StatusAction();
 
@@ -78,7 +78,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isFailed());
     }
 
-    public function testShouldMarkCanceledIfCanceledPropertySet()
+    public function testShouldMarkCanceledIfCanceledPropertySet(): void
     {
         $action = new StatusAction();
 
@@ -89,7 +89,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isCanceled());
     }
 
-    public function testShouldMarkCapturedIfInvoiceNumberSet()
+    public function testShouldMarkCapturedIfInvoiceNumberSet(): void
     {
         $action = new StatusAction();
 
@@ -100,7 +100,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isCaptured());
     }
 
-    public function testShouldMarkAuthorizedIfStatusAccepted()
+    public function testShouldMarkAuthorizedIfStatusAccepted(): void
     {
         $action = new StatusAction();
 
@@ -111,7 +111,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isAuthorized());
     }
 
-    public function testShouldMarkPendingIfStatusPending()
+    public function testShouldMarkPendingIfStatusPending(): void
     {
         $action = new StatusAction();
 
@@ -122,7 +122,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isPending());
     }
 
-    public function testShouldMarkFailedIfStatusDenied()
+    public function testShouldMarkFailedIfStatusDenied(): void
     {
         $action = new StatusAction();
 
@@ -133,7 +133,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isFailed());
     }
 
-    public function testShouldMarkUnknownIfStatusUnknown()
+    public function testShouldMarkUnknownIfStatusUnknown(): void
     {
         $action = new StatusAction();
 
@@ -144,7 +144,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($getStatus->isUnknown());
     }
 
-    public function testShouldMarkRefundedIfRefundInvoiceNumberSet()
+    public function testShouldMarkRefundedIfRefundInvoiceNumberSet(): void
     {
         $action = new StatusAction();
 

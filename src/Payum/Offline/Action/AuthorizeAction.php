@@ -12,7 +12,7 @@ use Payum\Offline\Constants;
 
 class AuthorizeAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -26,7 +26,7 @@ class AuthorizeAction implements ActionInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Authorize &&
             $request->getModel() instanceof ArrayAccess

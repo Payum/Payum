@@ -9,6 +9,7 @@ use PhpCsFixer\Fixer\ClassNotation\SelfAccessorFixer;
 use PhpCsFixer\Fixer\ClassNotation\SingleClassElementPerStatementFixer;
 use PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\ExplicitIndirectVariableFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\FunctionToConstantFixer;
@@ -37,6 +38,7 @@ return static function (ECSConfig $ecsConfig): void {
         NoUselessElseFixer::class,
         SingleQuoteFixer::class,
         OrderedClassElementsFixer::class,
+        VoidReturnFixer::class
     ]);
 
     $ecsConfig->ruleWithConfiguration(SingleClassElementPerStatementFixer::class, ['elements' => ['const', 'property']]);

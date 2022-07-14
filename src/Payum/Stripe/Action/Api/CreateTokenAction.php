@@ -45,7 +45,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -71,7 +71,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateToken &&
             $request->getModel() instanceof ArrayAccess

@@ -18,10 +18,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -49,7 +46,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
         throw new HttpRedirect((string) $uri);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             null === $request->getModel()

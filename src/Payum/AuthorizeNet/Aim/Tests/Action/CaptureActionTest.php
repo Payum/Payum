@@ -28,28 +28,28 @@ class CaptureActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldAllowSetApi()
+    public function testShouldAllowSetApi(): void
     {
         $this->assertInstanceOf(ApiAwareInterface::class, new CaptureAction());
     }
@@ -57,7 +57,7 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @group legacy
      */
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();
@@ -65,7 +65,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldDoNothingIfResponseCodeSet()
+    public function testShouldDoNothingIfResponseCodeSet(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
@@ -88,7 +88,7 @@ class CaptureActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldCaptureWithCreditCardSetExplicitly()
+    public function testShouldCaptureWithCreditCardSetExplicitly(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
@@ -114,7 +114,7 @@ class CaptureActionTest extends GenericActionTest
         ]));
     }
 
-    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
+    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
@@ -142,7 +142,7 @@ class CaptureActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest(): void
     {
         $firstModel = new stdClass();
         $currentModel = new ArrayObject([
@@ -161,7 +161,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(ObtainCreditCard::class))
-            ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
+            ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel): void {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
 
@@ -182,7 +182,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($capture);
     }
 
-    public function testShouldCaptureWithObtainedCreditCard()
+    public function testShouldCaptureWithObtainedCreditCard(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
@@ -196,7 +196,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(ObtainCreditCard::class))
-            ->willReturnCallback(function (ObtainCreditCard $request) {
+            ->willReturnCallback(function (ObtainCreditCard $request): void {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new DateTime('2014-10-01'));

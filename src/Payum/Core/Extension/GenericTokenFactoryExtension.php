@@ -17,11 +17,11 @@ class GenericTokenFactoryExtension implements ExtensionInterface
         $this->genericTokenFactory = $genericTokenFactory;
     }
 
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
     }
 
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         $action = $context->getAction();
         if ($action instanceof GenericTokenFactoryAwareInterface) {
@@ -29,7 +29,7 @@ class GenericTokenFactoryExtension implements ExtensionInterface
         }
     }
 
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $action = $context->getAction();
         if ($action instanceof GenericTokenFactoryAwareInterface) {

@@ -13,10 +13,7 @@ class ConvertPaymentAction implements ActionInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Convert $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -26,7 +23,7 @@ class ConvertPaymentAction implements ActionInterface
         throw new LogicException('Not implemented');
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&

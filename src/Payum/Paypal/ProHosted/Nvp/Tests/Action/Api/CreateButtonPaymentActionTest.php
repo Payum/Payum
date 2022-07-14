@@ -17,14 +17,14 @@ use stdClass;
 
 class CreateButtonPaymentActionTest extends TestCase
 {
-    public function testShouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction(): void
     {
         $rc = new ReflectionClass(CreateButtonPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportCreateButtonPaymentRequestAndArrayAccessAsModel()
+    public function testShouldSupportCreateButtonPaymentRequestAndArrayAccessAsModel(): void
     {
         $action = new CreateButtonPaymentAction();
 
@@ -33,14 +33,14 @@ class CreateButtonPaymentActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotCreateButtonPaymentRequest()
+    public function testShouldNotSupportAnythingNotCreateButtonPaymentRequest(): void
     {
         $action = new CreateButtonPaymentAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreateButtonPaymentAction();
@@ -48,7 +48,7 @@ class CreateButtonPaymentActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet()
+    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet(): void
     {
         $this->expectException(LogicException::class);
         $action = new CreateButtonPaymentAction();

@@ -8,10 +8,7 @@ use Payum\Core\Request\GetHttpRequest;
 
 class GetHttpRequestAction implements ActionInterface
 {
-    /**
-     * @param GetHttpRequest $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -24,7 +21,7 @@ class GetHttpRequestAction implements ActionInterface
         $request->content = file_get_contents('php://input');
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetHttpRequest;
     }

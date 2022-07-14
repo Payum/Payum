@@ -20,7 +20,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CompleteOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -36,7 +36,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CompleteOrder &&
             $request->getModel() instanceof ArrayAccess

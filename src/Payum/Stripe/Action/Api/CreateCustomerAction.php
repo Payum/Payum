@@ -49,7 +49,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateCustomer $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -75,7 +75,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateCustomer &&
             $request->getModel() instanceof ArrayAccess

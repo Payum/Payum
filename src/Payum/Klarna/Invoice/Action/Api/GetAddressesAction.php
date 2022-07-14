@@ -8,10 +8,7 @@ use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 
 class GetAddressesAction extends BaseApiAwareAction
 {
-    /**
-     * @param GetAddresses $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -37,7 +34,7 @@ class GetAddressesAction extends BaseApiAwareAction
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetAddresses;
     }

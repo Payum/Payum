@@ -20,7 +20,7 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = RecurringApi::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CheckRecurringPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -36,7 +36,7 @@ class CheckRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CheckRecurringPayment &&
             $request->getModel() instanceof ArrayAccess

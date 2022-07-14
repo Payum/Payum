@@ -14,7 +14,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Notify $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -22,7 +22,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Notify &&
             $request->getModel() instanceof ArrayAccess;

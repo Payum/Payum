@@ -23,26 +23,26 @@ use stdClass;
 
 class CreditPartActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(CreditPartAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testShouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CreditPartAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldAllowSetGateway()
+    public function testShouldAllowSetGateway(): void
     {
         $this->assertInstanceOf(GatewayAwareInterface::class, new CreditPartAction($this->createKlarnaMock()));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -51,28 +51,28 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCreditPartWithArrayAsModel()
+    public function testShouldSupportCreditPartWithArrayAsModel(): void
     {
         $action = new CreditPartAction();
 
         $this->assertTrue($action->supports(new CreditPart([])));
     }
 
-    public function testShouldNotSupportAnythingNotCreditPart()
+    public function testShouldNotSupportAnythingNotCreditPart(): void
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCreditPartWithNotArrayAccessModel()
+    public function testShouldNotSupportCreditPartWithNotArrayAccessModel(): void
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new CreditPart(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreditPartAction();
@@ -80,7 +80,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfDetailsDoNotHaveInvoiceNumber()
+    public function testThrowIfDetailsDoNotHaveInvoiceNumber(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The invoice_number fields are required.');
@@ -89,7 +89,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->execute(new CreditPart([]));
     }
 
-    public function testShouldCallKlarnaCreditPart()
+    public function testShouldCallKlarnaCreditPart(): void
     {
         $details = [
             'invoice_number' => 'theInvNum',
@@ -120,7 +120,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $this->assertStringContainsString('theRefundInvoiceNumber', $actualDetails['refund_invoice_number']);
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'invoice_number' => 'theInvNum',

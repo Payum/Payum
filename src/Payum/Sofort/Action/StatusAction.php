@@ -11,10 +11,7 @@ use Payum\Sofort\Api;
 
 class StatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -80,7 +77,7 @@ class StatusAction implements ActionInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess

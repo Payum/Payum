@@ -20,7 +20,7 @@ class TestModel
         return $this->id;
     }
 
-    public function setPrice($price)
+    public function setPrice($price): void
     {
         $this->price = $price;
     }
@@ -30,7 +30,7 @@ class TestModel
         return $this->price;
     }
 
-    public function setCurrency($currency)
+    public function setCurrency($currency): void
     {
         $this->currency = $currency;
     }

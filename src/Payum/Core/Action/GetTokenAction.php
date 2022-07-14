@@ -24,21 +24,18 @@ class GetTokenAction implements ActionInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * @param GetToken $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        if (false == $token = $this->tokenStorage->find(new Identity($request->getHash(), TokenInterface::class))) {
+        if (! $token = $this->tokenStorage->find(new Identity($request->getHash(), TokenInterface::class))) {
             throw new LogicException(sprintf('The token %s could not be found', $request->getHash()));
         }
 
         $request->setToken($token);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetToken;
     }

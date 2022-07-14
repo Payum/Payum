@@ -20,7 +20,7 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CheckAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -36,7 +36,7 @@ class CheckAgreementAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CheckAgreement &&
             $request->getModel() instanceof ArrayAccess

@@ -29,7 +29,7 @@ class SimpleRegistry extends AbstractRegistry
      *
      * @param boolean $bool
      */
-    public function setAddStorageExtensions($bool)
+    public function setAddStorageExtensions($bool): void
     {
         $this->addStorageExtensions = $bool;
     }
@@ -55,7 +55,7 @@ class SimpleRegistry extends AbstractRegistry
      *
      * @param string           $name
      */
-    protected function addStorageToGateway($name, GatewayInterface $gateway)
+    protected function addStorageToGateway($name, GatewayInterface $gateway): void
     {
         /** @var Gateway $gateway */
         if (false == $gateway instanceof Gateway) {

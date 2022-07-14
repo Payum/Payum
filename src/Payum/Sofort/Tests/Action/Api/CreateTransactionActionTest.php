@@ -17,35 +17,35 @@ use stdClass;
 
 class CreateTransactionActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CreateTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CreateTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportCreateTransactionRequestWithArrayAccessAsModel()
+    public function testShouldSupportCreateTransactionRequestWithArrayAccessAsModel(): void
     {
         $action = new CreateTransactionAction();
 
         $this->assertTrue($action->supports(new CreateTransaction($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingCreateTransactionRequest()
+    public function testShouldNotSupportAnythingCreateTransactionRequest(): void
     {
         $action = new CreateTransactionAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreateTransactionAction($this->createApiMock());
@@ -53,7 +53,7 @@ class CreateTransactionActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfAmountParameterIsNotSet()
+    public function testThrowIfAmountParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The amount, currency_code, reason, success_url, notification_url fields are required.');
@@ -63,7 +63,7 @@ class CreateTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfCurrencyCodeParameterIsNotSet()
+    public function testThrowIfCurrencyCodeParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The currency_code, reason, success_url, notification_url fields are required.');
@@ -75,7 +75,7 @@ class CreateTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfReasonParameterIsNotSet()
+    public function testThrowIfReasonParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The reason, success_url, notification_url fields are required.');

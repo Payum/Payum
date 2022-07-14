@@ -45,7 +45,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateCharge $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -79,7 +79,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateCharge &&
             $request->getModel() instanceof ArrayAccess

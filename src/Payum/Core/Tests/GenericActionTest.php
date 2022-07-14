@@ -52,7 +52,7 @@ abstract class GenericActionTest extends TestCase
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass($this->actionClass);
 
@@ -62,7 +62,7 @@ abstract class GenericActionTest extends TestCase
     /**
      * @dataProvider provideSupportedRequests
      */
-    public function testShouldSupportRequest($request)
+    public function testShouldSupportRequest($request): void
     {
         $this->assertTrue($this->action->supports($request));
     }
@@ -70,7 +70,7 @@ abstract class GenericActionTest extends TestCase
     /**
      * @dataProvider provideNotSupportedRequests
      */
-    public function testShouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request): void
     {
         $this->assertFalse($this->action->supports($request));
     }
@@ -78,7 +78,7 @@ abstract class GenericActionTest extends TestCase
     /**
      * @dataProvider provideNotSupportedRequests
      */
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->action->execute($request);

@@ -7,16 +7,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 interface ActionInterface
 {
     /**
-     * @param mixed $request
-     *
      * @throws RequestNotSupportedException if the action dose not support the request.
      */
-    public function execute($request);
+    public function execute(mixed $request): void;
 
-    /**
-     * @param mixed $request
-     *
-     * @return boolean
-     */
-    public function supports($request);
+    public function supports(mixed $request): bool;
 }

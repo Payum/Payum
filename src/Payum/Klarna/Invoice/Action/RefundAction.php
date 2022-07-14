@@ -15,10 +15,7 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Refund $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -33,7 +30,7 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new CreditPart($details));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Refund &&
             $request->getModel() instanceof ArrayAccess

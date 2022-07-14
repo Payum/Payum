@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class DefuseCypherTest extends TestCase
 {
-    public function testShouldImplementCypherInterface()
+    public function testShouldImplementCypherInterface(): void
     {
         $rc = new ReflectionClass(DefuseCypher::class);
 
         $this->assertTrue($rc->implementsInterface(CypherInterface::class));
     }
 
-    public function testShouldEncryptAndDecryptValue()
+    public function testShouldEncryptAndDecryptValue(): void
     {
         $secret = Key::createNewRandomKey()->saveToAsciiSafeString();
 

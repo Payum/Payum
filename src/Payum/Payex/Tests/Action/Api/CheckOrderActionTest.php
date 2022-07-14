@@ -33,21 +33,21 @@ class CheckOrderActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CheckOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CheckOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotOrderApiAsApi()
+    public function testThrowOnTryingSetNotOrderApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\OrderApi');
@@ -56,28 +56,28 @@ class CheckOrderActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCheckOrderRequestWithArrayAccessAsModel()
+    public function testShouldSupportCheckOrderRequestWithArrayAccessAsModel(): void
     {
         $action = new CheckOrderAction();
 
         $this->assertTrue($action->supports(new CheckOrder($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCheckOrderRequest()
+    public function testShouldNotSupportAnythingNotCheckOrderRequest(): void
     {
         $action = new CheckOrderAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCheckOrderRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderRequestWithNotArrayAccessModel(): void
     {
         $action = new CheckOrderAction();
 
         $this->assertFalse($action->supports(new CheckOrder(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CheckOrderAction($this->createApiMock());
@@ -88,7 +88,7 @@ class CheckOrderActionTest extends TestCase
     /**
      * @dataProvider provideRequiredFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
         $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -98,7 +98,7 @@ class CheckOrderActionTest extends TestCase
         $action->execute(new CheckOrder($this->requiredFields));
     }
 
-    public function testShouldCompletePayment()
+    public function testShouldCompletePayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

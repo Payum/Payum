@@ -14,28 +14,28 @@ use stdClass;
 
 class BaseApiAwareActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(BaseApiAwareAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(BaseApiAwareAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(BaseApiAwareAction::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = $this->getMockForAbstractClass(BaseApiAwareAction::class);
@@ -43,11 +43,11 @@ class BaseApiAwareActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    protected function getActionClass()
+    protected function getActionClass(): void
     {
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): void
     {
     }
 

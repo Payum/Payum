@@ -26,7 +26,7 @@ class StorageExtension implements ExtensionInterface
         $this->storage = $storage;
     }
 
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         $request = $context->getRequest();
 
@@ -47,11 +47,11 @@ class StorageExtension implements ExtensionInterface
         $this->scheduleForUpdateIfSupported($request->getModel());
     }
 
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $request = $context->getRequest();
 
@@ -70,7 +70,7 @@ class StorageExtension implements ExtensionInterface
     /**
      * @param mixed $model
      */
-    protected function scheduleForUpdateIfSupported($model)
+    protected function scheduleForUpdateIfSupported($model): void
     {
         if ($this->storage->support($model)) {
             $modelHash = spl_object_hash($model);

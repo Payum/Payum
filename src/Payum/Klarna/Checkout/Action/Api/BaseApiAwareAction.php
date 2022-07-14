@@ -64,7 +64,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         return Klarna_Checkout_Connector::create($this->config->secret);
     }
 
-    protected function addMerchantId(ArrayAccess $details)
+    protected function addMerchantId(ArrayAccess $details): void
     {
         if (false == isset($details['merchant'])) {
             $details['merchant'] = [];

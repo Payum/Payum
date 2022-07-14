@@ -14,14 +14,14 @@ use stdClass;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(EndlessCycleDetectorExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
+    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
@@ -38,7 +38,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
+    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit(): void
     {
         $this->expectNotToPerformAssertions();
 

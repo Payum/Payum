@@ -19,14 +19,14 @@ use stdClass;
 
 class ReturnAmountActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(ReturnAmountAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -35,28 +35,28 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportReserveAmountWithArrayAsModel()
+    public function testShouldSupportReserveAmountWithArrayAsModel(): void
     {
         $action = new ReturnAmountAction();
 
         $this->assertTrue($action->supports(new ReturnAmount([])));
     }
 
-    public function testShouldNotSupportAnythingNotReserveAmount()
+    public function testShouldNotSupportAnythingNotReserveAmount(): void
     {
         $action = new ReturnAmountAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportReturnAmountWithNotArrayAccessModel()
+    public function testShouldNotSupportReturnAmountWithNotArrayAccessModel(): void
     {
         $action = new ReturnAmountAction();
 
         $this->assertFalse($action->supports(new ReturnAmount(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new ReturnAmountAction();
@@ -64,7 +64,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldCallKlarnaReturnAmount()
+    public function testShouldCallKlarnaReturnAmount(): void
     {
         $details = [
             'invoice_number' => 'invoice number',
@@ -93,7 +93,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
         $action->execute(new ReturnAmount($details));
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'invoice_number' => 'invoice number',

@@ -28,7 +28,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $this->api = $api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -61,7 +61,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $details->replace($this->api->doCredit($details->toUnsafeArray()));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Refund &&
             $request->getModel() instanceof ArrayAccess

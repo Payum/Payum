@@ -28,10 +28,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -86,7 +83,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $model->replace((array) $result);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

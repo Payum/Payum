@@ -52,21 +52,21 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
+    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel(): void
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
@@ -83,14 +83,14 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         );
     }
 
-    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest()
+    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest(): void
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request = null)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request = null): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CancelRecurringPaymentsProfileAction();
@@ -98,7 +98,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfProfileIdNotSetInModel()
+    public function testThrowIfProfileIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
@@ -111,7 +111,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldExecuteManageAndSyncActions()
+    public function testShouldExecuteManageAndSyncActions(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

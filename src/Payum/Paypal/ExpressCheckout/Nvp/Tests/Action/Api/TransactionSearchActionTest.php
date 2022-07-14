@@ -16,35 +16,35 @@ use stdClass;
 
 class TransactionSearchActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(TransactionSearchAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
+    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel(): void
     {
         $action = new TransactionSearchAction();
 
         $this->assertTrue($action->supports(new TransactionSearch($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
+    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest(): void
     {
         $action = new TransactionSearchAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfRequiredFieldMissing()
+    public function testThrowIfRequiredFieldMissing(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The STARTDATE fields are required.');
@@ -53,7 +53,7 @@ class TransactionSearchActionTest extends TestCase
         $action->execute(new TransactionSearch([]));
     }
 
-    public function testShouldCallApiTransactionSearchWithExpectedRequiredArguments()
+    public function testShouldCallApiTransactionSearchWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -127,7 +127,7 @@ class TransactionSearchActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiTransactionSearchMethodAndUpdateModelFromResponse()
+    public function testShouldCallApiTransactionSearchMethodAndUpdateModelFromResponse(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

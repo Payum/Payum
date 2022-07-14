@@ -11,14 +11,14 @@ use ReflectionClass;
 
 class PopulateKlarnaFromDetailsTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
         $rc = new ReflectionClass(PopulateKlarnaFromDetails::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor(): void
     {
         $details = new ArrayObject();
         $klarna = new Klarna();
@@ -28,7 +28,7 @@ class PopulateKlarnaFromDetailsTest extends TestCase
         $this->assertSame($details, $request->getModel());
     }
 
-    public function testShouldAllowGetKlarnaSetInConstructor()
+    public function testShouldAllowGetKlarnaSetInConstructor(): void
     {
         $details = new ArrayObject();
         $klarna = new Klarna();

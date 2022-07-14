@@ -47,10 +47,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->config = $this->api;
     }
 
-    /**
-     * @param Authorize $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -98,7 +95,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->api->baseUri = $backupConfig->baseUri;
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
             return false;

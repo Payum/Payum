@@ -73,7 +73,7 @@ class Convert
     /**
      * @param mixed $result
      */
-    public function setResult($result)
+    public function setResult($result): void
     {
         $this->result = $result;
     }

@@ -15,14 +15,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -33,7 +33,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldAddMethodOnMasspayCall()
+    public function testShouldAddMethodOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -50,7 +50,7 @@ class ApiTest extends TestCase
         $this->assertSame('MassPay', $result['METHOD']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnMasspayCall()
+    public function testShouldAddAuthorizeFieldsOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'the_username',
@@ -71,7 +71,7 @@ class ApiTest extends TestCase
         $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    public function testShouldAddVersionOnMasspayCall()
+    public function testShouldAddVersionOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -86,7 +86,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -111,7 +111,7 @@ class ApiTest extends TestCase
         $api->massPay([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 

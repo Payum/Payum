@@ -21,7 +21,7 @@ class DoExpressCheckoutPaymentAction implements ActionInterface, ApiAwareInterfa
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var DoExpressCheckoutPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -46,7 +46,7 @@ class DoExpressCheckoutPaymentAction implements ActionInterface, ApiAwareInterfa
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof DoExpressCheckoutPayment &&
             $request->getModel() instanceof ArrayAccess

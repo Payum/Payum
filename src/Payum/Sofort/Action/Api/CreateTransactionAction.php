@@ -22,10 +22,7 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param CreateTransaction $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -44,7 +41,7 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateTransaction &&
             $request->getModel() instanceof ArrayAccess

@@ -23,7 +23,7 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
     /**
      * [@inheritdoc}
      */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var ManageRecurringPaymentsProfileStatus $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -40,7 +40,7 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
     /**
      * [@inheritdoc}
      */
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ManageRecurringPaymentsProfileStatus &&
             $request->getModel() instanceof ArrayAccess

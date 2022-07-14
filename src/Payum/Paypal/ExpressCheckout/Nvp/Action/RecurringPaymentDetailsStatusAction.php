@@ -11,10 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class RecurringPaymentDetailsStatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -79,7 +76,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == $request instanceof GetStatusInterface) {
             return false;

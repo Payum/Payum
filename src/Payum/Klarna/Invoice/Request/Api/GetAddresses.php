@@ -33,7 +33,7 @@ class GetAddresses
         return $this->pno;
     }
 
-    public function addAddress(KlarnaAddr $address)
+    public function addAddress(KlarnaAddr $address): void
     {
         $this->addresses[] = $address;
     }

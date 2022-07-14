@@ -14,21 +14,21 @@ use ReflectionClass;
 
 class HttpExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
         $rc = new ReflectionClass(HttpException::class);
 
         $this->assertTrue($rc->isSubclassOf(RuntimeException::class));
     }
 
-    public function testShouldImplementHttpExceptionInterface()
+    public function testShouldImplementHttpExceptionInterface(): void
     {
         $rc = new ReflectionClass(HttpException::class);
 
         $this->assertTrue($rc->isSubclassOf(HttpExceptionInterface::class));
     }
 
-    public function testShouldAllowSetRequest()
+    public function testShouldAllowSetRequest(): void
     {
         $exception = new HttpException();
 
@@ -37,7 +37,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($request, $exception->getRequest());
     }
 
-    public function testShouldAllowGetPreviouslySetRequest()
+    public function testShouldAllowGetPreviouslySetRequest(): void
     {
         $exception = new HttpException();
 
@@ -46,7 +46,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($expectedRequest, $exception->getRequest());
     }
 
-    public function testShouldAllowSetResponse()
+    public function testShouldAllowSetResponse(): void
     {
         $exception = new HttpException();
 
@@ -55,7 +55,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($response, $exception->getResponse());
     }
 
-    public function testShouldAllowGetPreviouslySetResponse()
+    public function testShouldAllowGetPreviouslySetResponse(): void
     {
         $exception = new HttpException();
 
@@ -64,7 +64,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($expectedResponse, $exception->getResponse());
     }
 
-    public function testShouldAllowCreateHttpExceptionFromRequestAndResponse()
+    public function testShouldAllowCreateHttpExceptionFromRequestAndResponse(): void
     {
         $request = new Request('GET', 'http://example.com/foobar');
 

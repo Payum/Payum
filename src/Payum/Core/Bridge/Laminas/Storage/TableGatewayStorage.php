@@ -8,7 +8,6 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Storage\IdentityInterface;
-use Payum\Core\Storage\StorageInterface;
 use ReflectionProperty;
 use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 

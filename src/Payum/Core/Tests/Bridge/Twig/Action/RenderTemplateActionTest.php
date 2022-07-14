@@ -13,28 +13,28 @@ use Twig\Environment;
 
 class RenderTemplateActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(RenderTemplateAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportRenderTemplate()
+    public function testShouldSupportRenderTemplate(): void
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $this->assertTrue($action->supports(new RenderTemplate('aTemplate', [])));
     }
 
-    public function testShouldNotSupportAnythingNotRenderTemplate()
+    public function testShouldNotSupportAnythingNotRenderTemplate(): void
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $this->assertFalse($action->supports('foo'));
     }
 
-    public function testThrowIfNotSupportedRequestPassedToExecute()
+    public function testThrowIfNotSupportedRequestPassedToExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action RenderTemplateAction is not supported the request string.');
@@ -43,7 +43,7 @@ class RenderTemplateActionTest extends TestCase
         $action->execute('foo');
     }
 
-    public function testShouldRenderExpectedTemplateAndContext()
+    public function testShouldRenderExpectedTemplateAndContext(): void
     {
         $expectedTemplate = 'theTemplate';
 
@@ -71,7 +71,7 @@ class RenderTemplateActionTest extends TestCase
         $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
-    public function testShouldRenderExpectedTemplateAndContextWithCustomLayout()
+    public function testShouldRenderExpectedTemplateAndContextWithCustomLayout(): void
     {
         $expectedTemplate = 'theTemplate';
 

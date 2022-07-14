@@ -19,10 +19,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -52,7 +49,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
         $this->gateway->execute(new Sync($details));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

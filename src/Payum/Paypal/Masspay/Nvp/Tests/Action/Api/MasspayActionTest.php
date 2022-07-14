@@ -17,14 +17,14 @@ class MasspayActionTest extends GenericActionTest
 
     protected $actionClass = MasspayAction::class;
 
-    public function testShouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction(): void
     {
         $rc = new ReflectionClass(MasspayAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testThrowIfPayoutAlreadyAcknowledged()
+    public function testThrowIfPayoutAlreadyAcknowledged(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Payout has already been acknowledged');
@@ -35,7 +35,7 @@ class MasspayActionTest extends GenericActionTest
         ], 0));
     }
 
-    public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -60,7 +60,7 @@ class MasspayActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

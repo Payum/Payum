@@ -25,10 +25,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param Notify $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -49,7 +46,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         throw new HttpResponse('OK', 200);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Notify &&
             $request->getModel() instanceof ArrayAccess

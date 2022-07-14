@@ -30,56 +30,56 @@ use stdClass;
 
 class AuthorizeActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementsGenericTokenFactoryAwareInterface()
+    public function testShouldImplementsGenericTokenFactoryAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GenericTokenFactoryAwareInterface::class));
     }
 
-    public function testShouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportAuthorizeWithArrayAsModel()
+    public function testShouldSupportAuthorizeWithArrayAsModel(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
         $this->assertTrue($action->supports(new Authorize([])));
     }
 
-    public function testShouldNotSupportAnythingNotAuthorize()
+    public function testShouldNotSupportAnythingNotAuthorize(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel()
+    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
         $this->assertFalse($action->supports(new Authorize(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AuthorizeAction('aTemplate');
@@ -87,7 +87,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSubExecuteSyncIfModelHasLocationSet()
+    public function testShouldSubExecuteSyncIfModelHasLocationSet(): void
     {
         $this->expectException(HttpResponse::class);
         $gatewayMock = $this->createGatewayMock();
@@ -116,7 +116,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldSubExecuteCreateOrderRequestIfStatusAndLocationNotSet()
+    public function testShouldSubExecuteCreateOrderRequestIfStatusAndLocationNotSet(): void
     {
         $orderMock = $this->createOrderMock();
         $orderMock
@@ -142,7 +142,7 @@ class AuthorizeActionTest extends TestCase
                 [$this->isInstanceOf(Sync::class)]
             )
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (CreateOrder $request) use ($orderMock) {
+                $this->returnCallback(function (CreateOrder $request) use ($orderMock): void {
                     $request->setOrder($orderMock);
                 })
             )
@@ -168,7 +168,7 @@ class AuthorizeActionTest extends TestCase
         $this->assertSame('theLocation', $model['location']);
     }
 
-    public function testShouldThrowReplyWhenStatusCheckoutIncomplete()
+    public function testShouldThrowReplyWhenStatusCheckoutIncomplete(): void
     {
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
@@ -189,7 +189,7 @@ class AuthorizeActionTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
+                $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent): void {
                     $testCase->assertSame($expectedTemplateName, $request->getTemplateName());
                     $testCase->assertEquals($expectedContext, $request->getParameters());
 
@@ -224,7 +224,7 @@ class AuthorizeActionTest extends TestCase
         $this->fail('Exception expected to be throw');
     }
 
-    public function testShouldNotThrowReplyWhenStatusNotSet()
+    public function testShouldNotThrowReplyWhenStatusNotSet(): void
     {
         $action = new AuthorizeAction('aTemplate');
         $gateway = $this->createGatewayMock();
@@ -261,7 +261,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldNotThrowReplyWhenStatusCreated()
+    public function testShouldNotThrowReplyWhenStatusCreated(): void
     {
         $action = new AuthorizeAction('aTemplate');
         $gateway = $this->createGatewayMock();
@@ -303,7 +303,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldThrowIfPushUriNotSet()
+    public function testShouldThrowIfPushUriNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The push_uri fields are required.');
@@ -319,7 +319,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldThrowIfConfirmUriNotSet()
+    public function testShouldThrowIfConfirmUriNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The confirmation_uri fields are required.');
@@ -335,7 +335,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment()
+    public function testShouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The checkout_uri fields are required.');
@@ -352,7 +352,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldUseCheckoutUriFromConfig()
+    public function testShouldUseCheckoutUriFromConfig(): void
     {
         $config = new Config();
         $config->checkoutUri = 'theCheckoutUrl';
@@ -385,7 +385,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldThrowIfTermsUriNotSetNeitherInConfigNorPayment()
+    public function testShouldThrowIfTermsUriNotSetNeitherInConfigNorPayment(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The terms_uri fields are required.');
@@ -402,7 +402,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldUseTermsUriFromConfig()
+    public function testShouldUseTermsUriFromConfig(): void
     {
         $config = new Config();
         $config->termsUri = 'theTermsUrl';
@@ -436,7 +436,7 @@ class AuthorizeActionTest extends TestCase
         ]));
     }
 
-    public function testShouldUseTargetUrlFromRequestTokenAsConfirmationIfNotSet()
+    public function testShouldUseTargetUrlFromRequestTokenAsConfirmationIfNotSet(): void
     {
         $config = new Config();
 
@@ -475,7 +475,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute($authorize);
     }
 
-    public function testShouldGeneratePushUriIfNotSet()
+    public function testShouldGeneratePushUriIfNotSet(): void
     {
         $config = new Config();
         $config->termsUri = 'theTermsUri';

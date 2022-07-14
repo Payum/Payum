@@ -19,35 +19,35 @@ use stdClass;
 
 class AuthorizeTokenActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
+    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel(): void
     {
         $action = new AuthorizeTokenAction();
 
         $this->assertTrue($action->supports(new AuthorizeToken($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
+    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest(): void
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AuthorizeTokenAction($this->createApiMock());
@@ -55,7 +55,7 @@ class AuthorizeTokenActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfModelNotHaveTokenSet()
+    public function testThrowIfModelNotHaveTokenSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information');
@@ -64,7 +64,7 @@ class AuthorizeTokenActionTest extends TestCase
         $action->execute(new AuthorizeToken(new ArrayObject()));
     }
 
-    public function testThrowRedirectUrlRequestIfModelNotHavePayerIdSet()
+    public function testThrowRedirectUrlRequestIfModelNotHavePayerIdSet(): void
     {
         $expectedToken = 'theAuthToken';
         $expectedRedirectUrl = 'theRedirectUrl';
@@ -98,7 +98,7 @@ class AuthorizeTokenActionTest extends TestCase
         $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
-    public function testShouldPassAuthorizeTokenCustomParametersToApi()
+    public function testShouldPassAuthorizeTokenCustomParametersToApi(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -131,7 +131,7 @@ class AuthorizeTokenActionTest extends TestCase
         $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
-    public function testShouldDoNothingIfUserAlreadyAuthorizedToken()
+    public function testShouldDoNothingIfUserAlreadyAuthorizedToken(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -152,7 +152,7 @@ class AuthorizeTokenActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowRedirectUrlRequestIfForceTrue()
+    public function testThrowRedirectUrlRequestIfForceTrue(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

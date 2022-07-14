@@ -10,21 +10,21 @@ use ReflectionClass;
 
 class HttpPostRedirectTest extends TestCase
 {
-    public function testShouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
         $rc = new ReflectionClass(HttpPostRedirect::class);
 
         $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    public function testShouldBeSubClassOfHttpPostRedirectReply()
+    public function testShouldBeSubClassOfHttpPostRedirectReply(): void
     {
         $rc = new ReflectionClass(HttpPostRedirect::class);
 
         $this->assertTrue($rc->isSubclassOf(HttpResponse::class));
     }
 
-    public function testShouldAllowGetContentWhenPostNotSet()
+    public function testShouldAllowGetContentWhenPostNotSet(): void
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -46,7 +46,7 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    public function testShouldAllowGetContentWhenPostSet()
+    public function testShouldAllowGetContentWhenPostSet(): void
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -73,7 +73,7 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    public function testShouldEscapeHtmlSpecialChars()
+    public function testShouldEscapeHtmlSpecialChars(): void
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -98,28 +98,28 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor(): void
     {
         $request = new HttpPostRedirect('anUrl');
 
         $this->assertSame(200, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor(): void
     {
         $request = new HttpPostRedirect('anUrl', [], 201);
 
         $this->assertSame(201, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor(): void
     {
         $request = new HttpPostRedirect('anUrl');
 
         $this->assertEquals([], $request->getHeaders());
     }
 
-    public function testShouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor(): void
     {
         $expectedHeaders = [
             'foo' => 'fooVal',

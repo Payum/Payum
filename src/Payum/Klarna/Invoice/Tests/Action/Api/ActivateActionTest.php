@@ -20,14 +20,14 @@ use stdClass;
 
 class ActivateActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(ActivateAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -36,28 +36,28 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportActivateWithArrayAsModel()
+    public function testShouldSupportActivateWithArrayAsModel(): void
     {
         $action = new ActivateAction();
 
         $this->assertTrue($action->supports(new Activate([])));
     }
 
-    public function testShouldNotSupportAnythingNotActivate()
+    public function testShouldNotSupportAnythingNotActivate(): void
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportActivateWithNotArrayAccessModel()
+    public function testShouldNotSupportActivateWithNotArrayAccessModel(): void
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new Activate(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new ActivateAction();
@@ -65,7 +65,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfRnoNotSet()
+    public function testThrowIfRnoNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -74,7 +74,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $action->execute(new Activate([]));
     }
 
-    public function testShouldCallKlarnaActivate()
+    public function testShouldCallKlarnaActivate(): void
     {
         $details = [
             'rno' => 'theRno',
@@ -104,7 +104,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $this->assertSame('theInvNumber', $activatedDetails['invoice_number']);
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'rno' => 'theRno',

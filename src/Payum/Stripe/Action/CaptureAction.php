@@ -16,10 +16,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -42,7 +39,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new CreateCharge($model));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

@@ -20,14 +20,14 @@ class RefundActionTest extends GenericActionTest
 
     protected $requestClass = Refund::class;
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(RefundAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new RefundAction();
@@ -35,7 +35,7 @@ class RefundActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldDoNothingIfPaymentNew()
+    public function testShouldDoNothingIfPaymentNew(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -49,7 +49,7 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund([]));
     }
 
-    public function testThrowIfTransactionTypeIsNotRefundable()
+    public function testThrowIfTransactionTypeIsNotRefundable(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
@@ -68,7 +68,7 @@ class RefundActionTest extends GenericActionTest
         ]));
     }
 
-    public function testThrowIfTransactionIdNotSet()
+    public function testThrowIfTransactionIdNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PNREF fields are required.');
@@ -87,7 +87,7 @@ class RefundActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall()
+    public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall(): void
     {
         $details = new ArrayObject([
             'RESULT' => Api::RESULT_SUCCESS,

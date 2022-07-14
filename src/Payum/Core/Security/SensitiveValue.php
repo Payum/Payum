@@ -25,7 +25,7 @@ final class SensitiveValue implements Serializable, JsonSerializable
         return [];
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
     }
 
@@ -66,17 +66,17 @@ final class SensitiveValue implements Serializable, JsonSerializable
         return $value;
     }
 
-    public function erase()
+    public function erase(): void
     {
         $this->value = null;
     }
 
-    public function serialize()
+    public function serialize(): void
     {
         return;
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
     }
 
@@ -84,7 +84,7 @@ final class SensitiveValue implements Serializable, JsonSerializable
      * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): void
     {
     }
 

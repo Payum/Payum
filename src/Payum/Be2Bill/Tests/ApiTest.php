@@ -12,14 +12,14 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -30,7 +30,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment()
+    public function testShouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment(): void
     {
         $api = new Api([
             'identifier' => 'anId',
@@ -47,7 +47,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
     }
 
-    public function testShouldReturnPostArrayWithGlobalsAddedOnPrepareOffsitePayment()
+    public function testShouldReturnPostArrayWithGlobalsAddedOnPrepareOffsitePayment(): void
     {
         $api = new Api([
             'identifier' => 'anId',
@@ -65,7 +65,7 @@ class ApiTest extends TestCase
         $this->assertArrayHasKey('HASH', $post);
     }
 
-    public function testShouldFilterNotSupportedOnPrepareOffsitePayment()
+    public function testShouldFilterNotSupportedOnPrepareOffsitePayment(): void
     {
         $api = new Api([
             'identifier' => 'anId',
@@ -84,7 +84,7 @@ class ApiTest extends TestCase
         $this->assertArrayNotHasKey('BAR', $post);
     }
 
-    public function testShouldKeepSupportedOnPrepareOffsitePayment()
+    public function testShouldKeepSupportedOnPrepareOffsitePayment(): void
     {
         $api = new Api([
             'identifier' => 'anId',
@@ -106,7 +106,7 @@ class ApiTest extends TestCase
         $this->assertSame('a desc', $post['DESCRIPTION']);
     }
 
-    public function testShouldReturnFalseIfHashNotSetToParams()
+    public function testShouldReturnFalseIfHashNotSetToParams(): void
     {
         $api = new Api([
             'identifier' => 'anId',
@@ -117,7 +117,7 @@ class ApiTest extends TestCase
         $this->assertFalse($api->verifyHash([]));
     }
 
-    public function testShouldReturnFalseIfHashesMisMatched()
+    public function testShouldReturnFalseIfHashesMisMatched(): void
     {
         $params = [
             'foo' => 'fooVal',
@@ -139,7 +139,7 @@ class ApiTest extends TestCase
         $this->assertFalse($api->verifyHash($params));
     }
 
-    public function testShouldReturnTrueIfHashesMatched()
+    public function testShouldReturnTrueIfHashesMatched(): void
     {
         $params = [
             'foo' => 'fooVal',

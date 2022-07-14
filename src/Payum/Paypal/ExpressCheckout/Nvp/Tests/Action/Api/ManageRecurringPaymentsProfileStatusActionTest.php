@@ -17,21 +17,21 @@ use stdClass;
 
 class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(ManageRecurringPaymentsProfileStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(ManageRecurringPaymentsProfileStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
+    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel(): void
     {
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
@@ -40,14 +40,14 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         );
     }
 
-    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest()
+    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest(): void
     {
         $action = new ManageRecurringPaymentsProfileStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new ManageRecurringPaymentsProfileStatusAction();
@@ -55,7 +55,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfProfileIdNotSetInModel()
+    public function testThrowIfProfileIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID, ACTION fields are required.');
@@ -66,7 +66,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The ACTION fields are required.');
@@ -79,7 +79,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiManageRecurringPaymentsProfileStatusMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiManageRecurringPaymentsProfileStatusMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -113,7 +113,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiManageRecurringPaymentsProfileStatusMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiManageRecurringPaymentsProfileStatusMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

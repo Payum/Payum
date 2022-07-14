@@ -9,14 +9,14 @@ use ReflectionClass;
 
 class HttpResponseTest extends TestCase
 {
-    public function testShouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
         $rc = new ReflectionClass(HttpResponse::class);
 
         $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    public function testShouldAllowGetContentSetInConstructor()
+    public function testShouldAllowGetContentSetInConstructor(): void
     {
         $expectedContent = 'html page';
 
@@ -25,28 +25,28 @@ class HttpResponseTest extends TestCase
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor(): void
     {
         $request = new HttpResponse('html page');
 
         $this->assertSame(200, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor(): void
     {
         $request = new HttpResponse('html page', 301);
 
         $this->assertSame(301, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor(): void
     {
         $request = new HttpResponse('html page');
 
         $this->assertEquals([], $request->getHeaders());
     }
 
-    public function testShouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor(): void
     {
         $expectedHeaders = [
             'foo' => 'fooVal',

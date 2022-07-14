@@ -20,14 +20,14 @@ use stdClass;
 
 class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(CheckOrderStatusAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -36,28 +36,28 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCheckOrderStatusWithArrayAsModel()
+    public function testShouldSupportCheckOrderStatusWithArrayAsModel(): void
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertTrue($action->supports(new CheckOrderStatus([])));
     }
 
-    public function testShouldNotSupportAnythingNotCheckOrderStatus()
+    public function testShouldNotSupportAnythingNotCheckOrderStatus(): void
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderStatusWithNotArrayAccessModel(): void
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new CheckOrderStatus(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CheckOrderStatusAction();
@@ -65,7 +65,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfRnoNotSet()
+    public function testThrowIfRnoNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -74,7 +74,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->execute(new CheckOrderStatus([]));
     }
 
-    public function testShouldCallKlarnaCheckOrderStatusMethod()
+    public function testShouldCallKlarnaCheckOrderStatusMethod(): void
     {
         $details = [
             'rno' => 'theRno',
@@ -98,7 +98,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $this->assertSame('theStatus', $activatedDetails['status']);
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'rno' => 'theRno',
@@ -122,7 +122,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
-    public function testShouldDoNothingIfAlreadyActivated()
+    public function testShouldDoNothingIfAlreadyActivated(): void
     {
         $details = [
             'rno' => 'theRno',

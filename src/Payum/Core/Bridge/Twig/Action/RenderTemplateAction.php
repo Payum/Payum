@@ -28,7 +28,7 @@ class RenderTemplateAction implements ActionInterface
         $this->layout = $layout;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -41,7 +41,7 @@ class RenderTemplateAction implements ActionInterface
         )));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof RenderTemplate;
     }

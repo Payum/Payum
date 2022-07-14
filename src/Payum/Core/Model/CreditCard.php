@@ -85,7 +85,7 @@ class CreditCard implements CreditCardInterface
         $this->securedExpireAt = SensitiveValue::ensureSensitive(null);
     }
 
-    public function setToken($token)
+    public function setToken($token): void
     {
         $this->token = $token;
     }
@@ -95,7 +95,7 @@ class CreditCard implements CreditCardInterface
         return $this->token;
     }
 
-    public function setBrand($brand)
+    public function setBrand($brand): void
     {
         $this->brand = $brand;
     }
@@ -105,7 +105,7 @@ class CreditCard implements CreditCardInterface
         return $this->brand;
     }
 
-    public function setHolder($holder)
+    public function setHolder($holder): void
     {
         $this->securedHolder = SensitiveValue::ensureSensitive($holder);
         $this->maskedHolder = Mask::mask($this->securedHolder->peek());
@@ -119,7 +119,7 @@ class CreditCard implements CreditCardInterface
         return $this->securedHolder->peek();
     }
 
-    public function setMaskedHolder($maskedHolder)
+    public function setMaskedHolder($maskedHolder): void
     {
         $this->maskedHolder = $maskedHolder;
     }
@@ -129,7 +129,7 @@ class CreditCard implements CreditCardInterface
         return $this->maskedHolder;
     }
 
-    public function setNumber($number)
+    public function setNumber($number): void
     {
         $this->securedNumber = SensitiveValue::ensureSensitive($number);
         $this->maskedNumber = Mask::mask($this->securedNumber->peek());
@@ -153,7 +153,7 @@ class CreditCard implements CreditCardInterface
         return $this->maskedNumber;
     }
 
-    public function setSecurityCode($securityCode)
+    public function setSecurityCode($securityCode): void
     {
         $this->securedSecurityCode = SensitiveValue::ensureSensitive($securityCode);
 
@@ -171,7 +171,7 @@ class CreditCard implements CreditCardInterface
         return $this->securedExpireAt->peek();
     }
 
-    public function setExpireAt($date = null)
+    public function setExpireAt($date = null): void
     {
         $date = SensitiveValue::ensureSensitive($date);
 
@@ -185,7 +185,7 @@ class CreditCard implements CreditCardInterface
         $this->expireAt = $this->securedExpireAt->peek();
     }
 
-    public function secure()
+    public function secure(): void
     {
         $this->holder = $this->number = $this->expireAt = $this->securityCode = null;
     }

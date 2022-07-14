@@ -8,7 +8,7 @@ use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new AuthorizeNetAimGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new AuthorizeNetAimGatewayFactory();
 
@@ -42,7 +42,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new AuthorizeNetAimGatewayFactory();
 
@@ -57,7 +57,7 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Authorize.NET AIM', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The login_id, transaction_key fields are required.');

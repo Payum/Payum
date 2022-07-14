@@ -48,7 +48,7 @@ class ObtainTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var ObtainToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -82,7 +82,7 @@ class ObtainTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ObtainToken &&
             $request->getModel() instanceof ArrayAccess

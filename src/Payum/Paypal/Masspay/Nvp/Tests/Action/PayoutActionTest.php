@@ -19,21 +19,21 @@ class PayoutActionTest extends GenericActionTest
 
     protected $actionClass = PayoutAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldDoMasspayRequestIfModelNotAcknowledge()
+    public function testShouldDoMasspayRequestIfModelNotAcknowledge(): void
     {
         $payoutModel = new ArrayObject([
             'bar' => 'barVal',
@@ -44,7 +44,7 @@ class PayoutActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(Masspay::class))
-            ->willReturnCallback(function (Masspay $request) {
+            ->willReturnCallback(function (Masspay $request): void {
                 $model = $request->getModel();
 
                 $model['foo'] = 'fooVal';

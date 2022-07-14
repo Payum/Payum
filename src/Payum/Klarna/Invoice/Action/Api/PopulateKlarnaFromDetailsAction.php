@@ -11,10 +11,7 @@ use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
 class PopulateKlarnaFromDetailsAction implements ActionInterface
 {
-    /**
-     * @param PopulateKlarnaFromDetails $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -97,7 +94,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
         $klarna->setComment(utf8_decode($details['comment']));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof PopulateKlarnaFromDetails;
     }

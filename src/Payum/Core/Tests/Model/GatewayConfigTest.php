@@ -12,21 +12,21 @@ use ReflectionClass;
 
 class GatewayConfigTest extends TestCase
 {
-    public function testShouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface(): void
     {
         $rc = new ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayConfigInterface::class));
     }
 
-    public function testShouldImplementCryptedInterface()
+    public function testShouldImplementCryptedInterface(): void
     {
         $rc = new ReflectionClass(GatewayConfig::class);
 
         $this->assertTrue($rc->implementsInterface(CryptedInterface::class));
     }
 
-    public function testShouldAllowGetPreviouslySetFactoryName()
+    public function testShouldAllowGetPreviouslySetFactoryName(): void
     {
         $config = new GatewayConfig();
 
@@ -35,7 +35,7 @@ class GatewayConfigTest extends TestCase
         $this->assertSame('theName', $config->getFactoryName());
     }
 
-    public function testShouldAllowGetPreviouslySetGatewayName()
+    public function testShouldAllowGetPreviouslySetGatewayName(): void
     {
         $config = new GatewayConfig();
 
@@ -44,14 +44,14 @@ class GatewayConfigTest extends TestCase
         $this->assertSame('theName', $config->getGatewayName());
     }
 
-    public function testShouldAllowGetDefaultConfigSetInConstructor()
+    public function testShouldAllowGetDefaultConfigSetInConstructor(): void
     {
         $config = new GatewayConfig();
 
         $this->assertEquals([], $config->getConfig());
     }
 
-    public function testShouldAllowGetPreviouslySetConfig()
+    public function testShouldAllowGetPreviouslySetConfig(): void
     {
         $config = new GatewayConfig();
 
@@ -64,7 +64,7 @@ class GatewayConfigTest extends TestCase
         ], $config->getConfig());
     }
 
-    public function testShouldDecryptConfigValuesOnDecrypt()
+    public function testShouldDecryptConfigValuesOnDecrypt(): void
     {
         $encryptedConfig = [
             'encrypted' => true,
@@ -87,7 +87,7 @@ class GatewayConfigTest extends TestCase
         $this->assertSame($expectedDecryptedConfig, $config->getConfig());
     }
 
-    public function testShouldDoNothingOnDecryptIfConfigIsNotEncrypted()
+    public function testShouldDoNothingOnDecryptIfConfigIsNotEncrypted(): void
     {
         $plainConfig = [
             'encrypted' => false,
@@ -105,7 +105,7 @@ class GatewayConfigTest extends TestCase
         $this->assertSame($plainConfig, $config->getConfig());
     }
 
-    public function testShouldEncryptConfigValuesOnEncrypt()
+    public function testShouldEncryptConfigValuesOnEncrypt(): void
     {
         $plainConfig = [
             'foo' => 'plainFooVal',
