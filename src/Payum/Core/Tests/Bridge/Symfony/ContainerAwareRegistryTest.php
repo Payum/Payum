@@ -6,6 +6,7 @@ use Payum\Core\Bridge\Symfony\ContainerAwareRegistry;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -50,6 +51,7 @@ class ContainerAwareRegistryTest extends TestCase
     public function testShouldReturnStorageSetToContainer()
     {
         $gateways = [];
+
         $storages = [
             stdClass::class => 'fooStorageServiceId',
         ];

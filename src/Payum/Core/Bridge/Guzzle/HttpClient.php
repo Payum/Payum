@@ -5,6 +5,7 @@ namespace Payum\Core\Bridge\Guzzle;
 use GuzzleHttp\ClientInterface;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * This is a HttpClient that is using Guzzle.
@@ -23,7 +24,7 @@ class HttpClient implements HttpClientInterface
         $this->client = $client;
     }
 
-    public function send(RequestInterface $request)
+    public function send(RequestInterface $request): ResponseInterface
     {
         return $this->client->send($request);
     }

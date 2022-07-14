@@ -4,8 +4,13 @@ namespace Payum\Core\Registry;
 
 use Doctrine\Persistence\Proxy;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Storage\StorageInterface;
 use ReflectionClass;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 abstract class AbstractRegistry implements RegistryInterface
 {
     /**
@@ -14,7 +19,7 @@ abstract class AbstractRegistry implements RegistryInterface
     protected $gateways;
 
     /**
-     * @var array
+     * @var array<class-string<StorageType>, string | StorageInterface<StorageType>>
      */
     protected $storages;
 
@@ -23,6 +28,9 @@ abstract class AbstractRegistry implements RegistryInterface
      */
     protected $gatewayFactories;
 
+    /**
+     * @param array<class-string<StorageType>, string | StorageInterface<StorageType>> $storages
+     */
     public function __construct(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
         $this->gateways = $gateways;
@@ -30,22 +38,13 @@ abstract class AbstractRegistry implements RegistryInterface
         $this->gatewayFactories = $gatewayFactories;
     }
 
-    public function getStorage($class)
+    public function getStorage(string $class): StorageInterface
     {
-        $class = is_object($class) ? get_class($class) : $class;
-
         // TODO: this is a quick fix. I have to find a better\clean solution.
-        if (class_exists($class)) {
-            if (interface_exists(Proxy::class)) {
-                $rc = new ReflectionClass($class);
-                if ($rc->implementsInterface(Proxy::class)) {
-                    $class = $rc->getParentClass()->getName();
-                }
-            } elseif (interface_exists('Doctrine\Common\Persistence\Proxy')) {
-                $rc = new ReflectionClass($class);
-                if ($rc->implementsInterface(\Doctrine\Common\Persistence\Proxy::class)) {
-                    $class = $rc->getParentClass()->getName();
-                }
+        if (class_exists($class) && interface_exists(Proxy::class)) {
+            $rc = new ReflectionClass($class);
+            if ($rc->implementsInterface(Proxy::class)) {
+                $class = $rc->getParentClass()->getName();
             }
         }
 
@@ -60,7 +59,7 @@ abstract class AbstractRegistry implements RegistryInterface
         return $this->getService($this->storages[$class]);
     }
 
-    public function getStorages()
+    public function getStorages(): array
     {
         $storages = [];
         foreach ($this->storages as $modelClass => $storageId) {
@@ -115,7 +114,7 @@ abstract class AbstractRegistry implements RegistryInterface
      *
      * @param string $id name of the service
      *
-     * @return object instance of the given service
+     * @return StorageType | object instance of the given service
      */
     abstract protected function getService($id);
 }

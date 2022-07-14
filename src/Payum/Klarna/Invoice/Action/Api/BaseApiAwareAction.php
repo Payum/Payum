@@ -41,11 +41,9 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param mixed $api
-     *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 

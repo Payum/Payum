@@ -43,7 +43,7 @@ class BaseApiAwareActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    protected function getActionClass(): string
+    protected function getActionClass()
     {
     }
 

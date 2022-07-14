@@ -424,7 +424,7 @@ class DynamicRegistryTest extends TestCase
         $staticRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theName')
+            ->with(\stdClass::class)
             ->willReturn('theStorage')
         ;
 
@@ -433,7 +433,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theStorage', $registry->getStorage('theName'));
+        $this->assertSame('theStorage', $registry->getStorage(\stdClass::class));
     }
 
     public function testAlwaysThrowOnGetStorageForClass()
@@ -446,7 +446,7 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $registry->getStorage('theClass');
+        $registry->getStorage(\stdClass::class);
     }
 
     public function testAlwaysThrowOnGetStorageForObject()
@@ -459,19 +459,19 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $registry->getStorage(new stdClass());
+        $registry->getStorage(stdClass::class);
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject | RegistryInterface<stdClass>
      */
     protected function createRegistryMock()
     {

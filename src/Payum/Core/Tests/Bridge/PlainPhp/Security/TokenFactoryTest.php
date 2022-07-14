@@ -8,6 +8,7 @@ use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -637,7 +638,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<TokenInterface>
      */
     protected function createStorageMock()
     {
@@ -645,7 +646,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface
+     * @return MockObject | StorageRegistryInterface<TokenInterface>
      */
     protected function createStorageRegistryMock()
     {

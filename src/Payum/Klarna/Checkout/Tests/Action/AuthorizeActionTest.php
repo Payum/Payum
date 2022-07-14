@@ -18,6 +18,7 @@ use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
@@ -45,7 +46,6 @@ class AuthorizeActionTest extends TestCase
 
     public function testShouldImplementsGenericTokenFactoryAwareInterface()
     {
-        $rc = new ReflectionClass(AuthorizeAction::class);
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GenericTokenFactoryAwareInterface::class));
@@ -483,7 +483,7 @@ class AuthorizeActionTest extends TestCase
         $token = new Token();
         $token->setTargetUrl('theTargetUrl');
         $token->setGatewayName('theGatewayName');
-        $token->setDetails($identity = new Identity('id', 'class'));
+        $token->setDetails($identity = new Identity('id', TokenInterface::class));
 
         $notifyToken = new Token();
         $notifyToken->setTargetUrl('theNotifyUrl');

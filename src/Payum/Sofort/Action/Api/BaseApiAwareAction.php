@@ -9,17 +9,20 @@ use Payum\Sofort\Api;
 
 /**
  * @deprecated since 1.4.1 will be removed in 2.x
+ *
+ * @template T of Api
+ * @implements ApiAwareInterface<T>
  */
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var Api
+     * @var T
      */
-    protected $api;
+    protected Api $api;
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
-        if (false == $api instanceof Api) {
+        if (! $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 

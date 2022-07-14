@@ -21,7 +21,7 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->paths([__DIR__ . '/src']);
+    $ecsConfig->paths([__DIR__ . '/src', __DIR__ . '/docs']);
 
     $ecsConfig->rule(YodaStyleFixer::class);
 

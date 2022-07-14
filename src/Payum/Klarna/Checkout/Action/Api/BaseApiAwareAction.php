@@ -39,7 +39,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Config::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 

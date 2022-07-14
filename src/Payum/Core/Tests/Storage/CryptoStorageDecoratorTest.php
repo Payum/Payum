@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests\Storage;
 
 use LogicException;
+use Payum\Core\Model\Identity;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 use Payum\Core\Storage\CryptoStorageDecorator;
@@ -172,6 +173,7 @@ class CryptoStorageDecoratorTest extends TestCase
 
     public function testThrowsIfModelDoesImplementCryptedInterfaceOnUpdate()
     {
+        /** @var CryptoStorageDecorator<stdClass> $storage */
         $storage = new CryptoStorageDecorator($this->createStorageMock(), $this->createCypherMock());
 
         $this->expectException(LogicException::class);
@@ -202,7 +204,7 @@ class CryptoStorageDecoratorTest extends TestCase
 
         $storage = new CryptoStorageDecorator($decoratedStorage, $cypherMock);
 
-        $foundModel = $storage->find('anId');
+        $foundModel = $storage->find(new Identity('anId', CryptedModel::class));
 
         $this->assertSame($model, $foundModel);
     }
@@ -220,7 +222,7 @@ class CryptoStorageDecoratorTest extends TestCase
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The model stdClass must implement Payum\Core\Security\CryptedInterface interface.');
-        $storage->find('anId');
+        $storage->find(new Identity('anId', CryptedModel::class));
     }
 
     public function testShouldProxyCallToDecoratedStorageAndPassCypherToEveryModelDecryptOnFindBy()
@@ -268,17 +270,14 @@ class CryptoStorageDecoratorTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<CryptedModel>
      */
-    private function createStorageMock()
+    private function createStorageMock(): MockObject | StorageInterface
     {
         return $this->createMock(StorageInterface::class);
     }
 
-    /**
-     * @return MockObject|CypherInterface
-     */
-    private function createCypherMock()
+    private function createCypherMock(): MockObject | CypherInterface
     {
         return $this->createMock(CypherInterface::class);
     }

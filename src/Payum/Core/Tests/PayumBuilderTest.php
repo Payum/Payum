@@ -352,17 +352,17 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldAllowGetStorageAddedAsInstance()
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addStorage('a_storage', $expectedStorage)
+            ->addStorage(\stdClass::class, $expectedStorage)
             ->getPayum()
         ;
 
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertSame($expectedStorage, $payum->getStorage('a_storage'));
+        $this->assertSame($expectedStorage, $payum->getStorage(\stdClass::class));
     }
 
     public function testShouldAllowGetGatewayFactoryAddedAsInstance()
@@ -516,7 +516,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldAddStorageExtensionForTheAddedStorage()
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
@@ -642,7 +642,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldInjectExpectedOmnipayV3GatewayInstanceAsApi()
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -804,7 +804,7 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject | RegistryInterface<stdClass>
      */
     protected function createRegistryMock()
     {

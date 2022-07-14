@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Storage;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -29,24 +30,27 @@ class AbstractStorageTest extends TestCase
     public function testShouldCreateInstanceOfModelClassSetInConstructor()
     {
         $storage = new class(stdClass::class) extends AbstractStorage {
-            protected function doUpdateModel($model)
-            {
+            protected function doUpdateModel(object $model): object {
+                return $model;
             }
 
-            protected function doDeleteModel($model)
-            {
+            protected function doDeleteModel(object $model): void {
             }
 
-            protected function doGetIdentity($model)
+            protected function doGetIdentity(object $model): IdentityInterface
             {
+                return new Identity(1, $this->modelClass);
             }
 
-            protected function doFind($id)
+            protected function doFind(mixed $id): ?object
             {
+                return null;
             }
 
-            public function findBy(array $criteria)
+            /** @param array<string, mixed> $criteria */
+            public function findBy(array $criteria): array
             {
+                return [];
             }
         };
 
@@ -215,12 +219,5 @@ class AbstractStorageTest extends TestCase
         $storage = $this->getMockForAbstractClass(AbstractStorage::class, [$modelClass]);
 
         $this->assertFalse($storage->support(new stdClass()));
-    }
-
-    public function testShouldReturnFalseIfModelNotObjectOnSupportModel()
-    {
-        $storage = $this->getMockForAbstractClass(AbstractStorage::class, [stdClass::class]);
-
-        $this->assertFalse($storage->support('notObject'));
     }
 }

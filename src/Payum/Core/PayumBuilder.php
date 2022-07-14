@@ -13,6 +13,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\Token;
@@ -25,6 +26,7 @@ use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
@@ -44,6 +46,7 @@ use Payum\Stripe\StripeJsGatewayFactory;
 
 class PayumBuilder
 {
+    /**
     /**
      * @var HttpRequestVerifierInterface|callable|null
      */
@@ -65,7 +68,7 @@ class PayumBuilder
     protected $genericTokenFactoryPaths = [];
 
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
     protected $tokenStorage;
 
@@ -80,7 +83,7 @@ class PayumBuilder
     protected $coreGatewayFactoryConfig = [];
 
     /**
-     * @var StorageInterface
+     * @var StorageInterface<GatewayConfigInterface>
      */
     protected $gatewayConfigStorage;
 
@@ -105,12 +108,12 @@ class PayumBuilder
     protected $gatewayFactoryConfigs = [];
 
     /**
-     * @var StorageInterface[]
+     * @var StorageInterface<object>[]
      */
     protected $storages = [];
 
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<object>
      */
     protected $mainRegistry;
 
@@ -126,8 +129,10 @@ class PayumBuilder
      */
     public function addDefaultStorages()
     {
+        /** @var StorageInterface<TokenInterface> $tokenStorage */
+        $tokenStorage = new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash');
         $this
-            ->setTokenStorage(new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash'))
+            ->setTokenStorage($tokenStorage)
 
             ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number'))
             ->addStorage(ArrayObject::class, new FilesystemStorage(sys_get_temp_dir(), ArrayObject::class))
@@ -138,7 +143,8 @@ class PayumBuilder
     }
 
     /**
-     * @param string           $modelClass
+     * @param class-string $modelClass
+     * @param StorageInterface<object> $storage
      *
      * @return static
      */
@@ -279,7 +285,7 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $tokenStorage
+     * @param ?StorageInterface<TokenInterface> $tokenStorage
      *
      * @return static
      */
@@ -333,7 +339,7 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $gatewayConfigStorage
+     * @param StorageInterface<GatewayConfigInterface> $gatewayConfigStorage
      *
      * @return static
      */
@@ -345,7 +351,7 @@ class PayumBuilder
     }
 
     /**
-     * @param RegistryInterface $mainRegistry
+     * @param RegistryInterface<object> $mainRegistry
      *
      * @return static
      */
@@ -371,7 +377,7 @@ class PayumBuilder
     }
 
     /**
-     * @return Payum
+     * @return Payum<object>
      */
     public function getPayum()
     {
@@ -424,6 +430,9 @@ class PayumBuilder
     }
 
     /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<object> $storageRegistry
+     *
      * @return TokenFactoryInterface
      */
     protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
@@ -462,7 +471,7 @@ class PayumBuilder
     }
 
     /**
-     * @return RegistryInterface
+     * @return RegistryInterface<object>
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
@@ -547,7 +556,7 @@ class PayumBuilder
     protected function buildOmnipayGatewayFactories(GatewayFactoryInterface $coreGatewayFactory)
     {
         $gatewayFactories = [];
-        if (false == class_exists(Omnipay::class) || false == class_exists(OmnipayGatewayFactory::class)) {
+        if (! class_exists(Omnipay::class) || class_exists(OmnipayGatewayFactory::class)) {
             return $gatewayFactories;
         }
 
@@ -588,6 +597,8 @@ class PayumBuilder
     }
 
     /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     *
      * @return HttpRequestVerifierInterface
      */
     private function buildHttpRequestVerifier(StorageInterface $tokenStorage)

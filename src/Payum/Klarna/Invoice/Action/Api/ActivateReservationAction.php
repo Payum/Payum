@@ -19,7 +19,7 @@ class ActivateReservationAction extends BaseApiAwareAction implements GatewayAwa
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

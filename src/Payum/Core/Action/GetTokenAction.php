@@ -4,16 +4,21 @@ namespace Payum\Core\Action;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Model\Identity;
 use Payum\Core\Request\GetToken;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class GetTokenAction implements ActionInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    private $tokenStorage;
+    private StorageInterface $tokenStorage;
 
+    /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
@@ -26,7 +31,7 @@ class GetTokenAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        if (false == $token = $this->tokenStorage->find($request->getHash())) {
+        if (false == $token = $this->tokenStorage->find(new Identity($request->getHash(), TokenInterface::class))) {
             throw new LogicException(sprintf('The token %s could not be found', $request->getHash()));
         }
 

@@ -36,17 +36,14 @@ use Twig\Loader\ChainLoader;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
 {
-    /**
-     * @var array
-     */
-    protected $defaultConfig;
+    protected array $defaultConfig;
 
     public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
     }
 
-    public function create(array $config = [])
+    public function create(array $config = []): Gateway
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->createConfig());
@@ -62,13 +59,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return $gateway;
     }
 
-    public function createConfig(array $config = [])
+    public function createConfig(array $config = []): array
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
 
         $config->defaults([
-            'httplug.message_factory' => function (ArrayObject $config) {
+            'httplug.message_factory' => static function (ArrayObject $config) {
                 if (class_exists(MessageFactoryDiscovery::class)) {
                     return MessageFactoryDiscovery::find();
                 }
@@ -87,7 +84,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
-            'httplug.stream_factory' => function (ArrayObject $config) {
+            'httplug.stream_factory' => static function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
                     return StreamFactoryDiscovery::find();
                 }
@@ -106,7 +103,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
-            'httplug.client' => function (ArrayObject $config) {
+            'httplug.client' => static function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
                     return HttpClientDiscovery::find();
                 }
@@ -141,15 +138,15 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
-            'payum.http_client' => function (ArrayObject $config) {
+            'payum.http_client' => static function (ArrayObject $config) {
                 return new HttplugClient($config['httplug.client']);
             },
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
-            'twig.env' => function () {
+            'twig.env' => static function () {
                 return new Environment(new ChainLoader());
             },
-            'twig.register_paths' => function (ArrayObject $config) {
+            'twig.register_paths' => static function (ArrayObject $config) {
                 $twig = $config['twig.env'];
                 if (false == $twig instanceof Environment) {
                     throw new LogicException(sprintf(
@@ -171,7 +168,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
             },
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
-            'payum.action.get_currency' => function (ArrayObject $config) {
+            'payum.action.get_currency' => static function (ArrayObject $config) {
                 return new GetCurrencyAction();
             },
             'payum.prepend_actions' => [],
@@ -180,7 +177,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.default_options' => [],
             'payum.required_options' => [],
 
-            'payum.api.http_client' => function (ArrayObject $config) {
+            'payum.api.http_client' => static function (ArrayObject $config) {
                 return $config['payum.http_client'];
             },
 
@@ -188,7 +185,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         ]);
 
         if ($config['payum.security.token_storage']) {
-            $config['payum.action.get_token'] = function (ArrayObject $config) {
+            $config['payum.action.get_token'] = static function (ArrayObject $config) {
                 return new GetTokenAction($config['payum.security.token_storage']);
             };
         }
@@ -200,7 +197,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    protected function buildClosures(ArrayObject $config)
+    protected function buildClosures(ArrayObject $config): void
     {
         // with higher priority
         foreach (['httplug.message_factory', 'httplug.stream_factory', 'httplug.client', 'payum.http_client', 'payum.paths', 'twig.env', 'twig.register_paths'] as $name) {
@@ -217,7 +214,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildActions(Gateway $gateway, ArrayObject $config)
+    protected function buildActions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.action')) {
@@ -228,7 +225,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildApis(Gateway $gateway, ArrayObject $config)
+    protected function buildApis(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.api')) {
@@ -239,7 +236,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildExtensions(Gateway $gateway, ArrayObject $config)
+    protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (0 === strpos($name, 'payum.extension')) {

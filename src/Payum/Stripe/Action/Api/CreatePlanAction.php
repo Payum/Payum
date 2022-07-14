@@ -41,7 +41,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 

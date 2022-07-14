@@ -18,7 +18,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

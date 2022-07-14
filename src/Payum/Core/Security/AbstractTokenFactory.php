@@ -12,15 +12,19 @@ use Payum\Core\Storage\StorageInterface;
 abstract class AbstractTokenFactory implements TokenFactoryInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
     /**
-     * @var StorageRegistryInterface
+     * @var StorageRegistryInterface<object>
      */
-    protected $storageRegistry;
+    protected StorageRegistryInterface $storageRegistry;
 
+    /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<object> $storageRegistry
+     */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {
         $this->tokenStorage = $tokenStorage;
@@ -42,7 +46,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         if ($model instanceof IdentityInterface) {
             $token->setDetails($model);
         } elseif (null !== $model) {
-            $token->setDetails($this->storageRegistry->getStorage($model)->identify($model));
+            $token->setDetails($this->storageRegistry->getStorage($model::class)->identify($model));
         }
 
         if (0 === strpos($targetPath, 'http')) {

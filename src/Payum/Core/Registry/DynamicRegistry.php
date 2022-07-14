@@ -7,6 +7,10 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 class DynamicRegistry implements RegistryInterface
 {
     /**
@@ -15,12 +19,12 @@ class DynamicRegistry implements RegistryInterface
     private $gateways = [];
 
     /**
-     * @var StorageInterface
+     * @var StorageInterface<GatewayConfigInterface>
      */
     private $gatewayConfigStore;
 
     /**
-     * @var GatewayFactoryRegistryInterface|null
+     * @var GatewayFactoryRegistryInterface|RegistryInterface<StorageType>|null
      */
     private $gatewayFactoryRegistry;
 
@@ -31,6 +35,9 @@ class DynamicRegistry implements RegistryInterface
      */
     private $backwardCompatibility = true;
 
+    /**
+     * @param StorageInterface<GatewayConfigInterface> $gatewayConfigStore
+     */
     public function __construct(StorageInterface $gatewayConfigStore, GatewayFactoryRegistryInterface $gatewayFactoryRegistry)
     {
         $this->gatewayConfigStore = $gatewayConfigStore;
@@ -97,20 +104,23 @@ class DynamicRegistry implements RegistryInterface
         return $gateways;
     }
 
-    public function getStorage($class)
+    /**
+     * @return StorageInterface<object>
+     */
+    public function getStorage(string $class): StorageInterface
     {
         // @deprecated It will throw invalid argument exception in 2.x
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getStorage($class);
         }
 
-        throw new InvalidArgumentException(sprintf(
-            'Storage for given class "%s" does not exist.',
-            is_object($class) ? get_class($class) : $class
-        ));
+        throw new InvalidArgumentException(sprintf('Storage for given class "%s" does not exist.', $class));
     }
 
-    public function getStorages()
+    /**
+     * @return array<class-string, StorageInterface<object>>
+     */
+    public function getStorages(): array
     {
         // @deprecated It will return empty array here
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {

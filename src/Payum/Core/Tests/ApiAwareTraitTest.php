@@ -13,7 +13,7 @@ class ApiAwareTraitTest extends TestCase
     public function testThrowIfSetApiButApiClassNotConfigured()
     {
         $object = new ApiAwareClass();
-        $object->setApiClass(null);
+        $object->setApiClass('');
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You must configure apiClass in __constructor method of the class the trait is applied to.');

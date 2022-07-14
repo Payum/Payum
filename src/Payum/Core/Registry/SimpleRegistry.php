@@ -6,6 +6,10 @@ use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayInterface;
 
+/**
+ * @template T of object
+ * @extends AbstractRegistry<T>
+ */
 class SimpleRegistry extends AbstractRegistry
 {
     /**

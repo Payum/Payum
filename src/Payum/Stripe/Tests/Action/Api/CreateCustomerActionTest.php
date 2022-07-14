@@ -33,7 +33,7 @@ class CreateCustomerActionTest extends TestCase
         $this->expectException(UnsupportedApiException::class);
         $action = new CreateCustomerAction();
 
-        $action->setApi('not keys instance');
+        $action->setApi(new \stdClass());
     }
 
     public function testShouldSupportCreateCustomerRequestWithArrayAccessModel()

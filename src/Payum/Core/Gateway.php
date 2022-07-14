@@ -18,37 +18,26 @@ class Gateway implements GatewayInterface
     /**
      * @var Action\ActionInterface[]
      */
-    protected $actions;
+    protected array $actions = [];
 
     /**
-     * @var mixed[]
+     * @var object[]
      */
-    protected $apis;
+    protected array $apis = [];
 
-    /**
-     * @var ExtensionCollection
-     */
-    protected $extensions;
+    protected ExtensionCollection $extensions;
 
     /**
      * @var Context[]
      */
-    protected $stack;
+    protected array $stack = [];
 
     public function __construct()
     {
-        $this->stack = [];
-        $this->actions = [];
-        $this->apis = [];
-
         $this->extensions = new ExtensionCollection();
     }
 
-    /**
-     * @param mixed $api
-     * @param bool  $forcePrepend
-     */
-    public function addApi($api, $forcePrepend = false)
+    public function addApi(object $api, bool $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->apis, $api) :
@@ -56,11 +45,7 @@ class Gateway implements GatewayInterface
         ;
     }
 
-    /**
-     * @param Action\ActionInterface $action
-     * @param bool                   $forcePrepend
-     */
-    public function addAction(ActionInterface $action, $forcePrepend = false)
+    public function addAction(ActionInterface $action, bool $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->actions, $action) :
@@ -68,25 +53,23 @@ class Gateway implements GatewayInterface
         ;
     }
 
-    /**
-     * @param bool                                     $forcePrepend
-     */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, bool $forcePrepend = false): void
     {
         $this->extensions->addExtension($extension, $forcePrepend);
     }
 
-    public function execute($request, $catchReply = false)
+    public function execute(mixed $request, bool $catchReply = false): ?ReplyInterface
     {
         $context = new Context($this, $request, $this->stack);
 
-        array_push($this->stack, $context);
+        $this->stack[] = $context;
 
         try {
             $this->extensions->onPreExecute($context);
 
-            if (false == $context->getAction()) {
-                if (false == $action = $this->findActionSupported($context->getRequest())) {
+            if (! $context->getAction()) {
+                $action = $this->findActionSupported($context->getRequest());
+                if (! $action) {
                     throw RequestNotSupportedException::create($context->getRequest());
                 }
 
@@ -120,10 +103,13 @@ class Gateway implements GatewayInterface
             $this->onPostExecuteWithException($context);
         }
 
-        return;
+        return null;
     }
 
-    protected function onPostExecuteWithException(Context $context)
+    /**
+     * @throws Exception
+     */
+    protected function onPostExecuteWithException(Context $context): void
     {
         array_pop($this->stack);
 
@@ -135,7 +121,8 @@ class Gateway implements GatewayInterface
             // logic is similar to one in Symfony's ExceptionListener::onKernelException
             $wrapper = $e;
             while ($prev = $wrapper->getPrevious()) {
-                if ($exception === $wrapper = $prev) {
+                $wrapper = $prev;
+                if ($exception === $wrapper) {
                     throw $e;
                 }
             }
@@ -152,12 +139,7 @@ class Gateway implements GatewayInterface
         }
     }
 
-    /**
-     * @param mixed $request
-     *
-     * @return ActionInterface|false
-     */
-    protected function findActionSupported($request)
+    protected function findActionSupported(mixed $request): ?ActionInterface
     {
         foreach ($this->actions as $action) {
             if ($action instanceof GatewayAwareInterface) {
@@ -187,6 +169,6 @@ class Gateway implements GatewayInterface
             }
         }
 
-        return false;
+        return null;
     }
 }

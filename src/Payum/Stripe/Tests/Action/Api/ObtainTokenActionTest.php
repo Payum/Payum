@@ -41,7 +41,7 @@ class ObtainTokenActionTest extends TestCase
         $this->expectException(UnsupportedApiException::class);
         $action = new ObtainTokenAction('aTemplateName');
 
-        $action->setApi('not keys instance');
+        $action->setApi(new \stdClass());
     }
 
     public function testShouldSupportObtainTokenRequestWithArrayAccessModel()

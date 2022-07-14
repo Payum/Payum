@@ -18,7 +18,7 @@ class CreditPartAction extends BaseApiAwareAction implements GatewayAwareInterfa
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

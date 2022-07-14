@@ -143,25 +143,30 @@ class GenericTest extends TestCase
         $identity = new class() implements IdentityInterface {
             public function serialize()
             {
+                return serialize(null);
             }
 
             public function unserialize($data)
             {
             }
 
-            public function getClass()
+            public function getClass(): string
             {
+                return \stdClass::class;
             }
 
-            public function getId()
+            public function getId(): mixed
             {
+                return 1;
             }
 
+            /** @return array<string, mixed> */
             public function __serialize(): array
             {
                 return [];
             }
 
+            /** @param array<string, mixed> $data */
             public function __unserialize(array $data): void
             {
             }
@@ -198,25 +203,30 @@ class GenericTest extends TestCase
         $identity = new class() implements IdentityInterface {
             public function serialize()
             {
+                return serialize(null);
             }
 
             public function unserialize($data)
             {
             }
 
-            public function getClass()
+            public function getClass(): string
             {
+                return \stdClass::class;
             }
 
-            public function getId()
+            public function getId(): mixed
             {
+                return 1;
             }
 
+            /** @return array<string, mixed> */
             public function __serialize(): array
             {
                 return [];
             }
 
+            /** @param array<string, mixed> $data */
             public function __unserialize(array $data): void
             {
             }

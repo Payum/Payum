@@ -79,7 +79,8 @@
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
         "rector/rector": "^0.13.7",
-        "symplify/easy-coding-standard": "^11.0"
+        "symplify/easy-coding-standard": "^11.0",
+        "phpstan/phpstan": "^1.8"
     },
     "replace": {
         "payum/core": "^1",

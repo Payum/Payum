@@ -9,7 +9,7 @@ use Payum\Core\Storage\StorageInterface;
 class StorageExtension implements ExtensionInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<object>
      */
     protected $storage;
 
@@ -18,6 +18,9 @@ class StorageExtension implements ExtensionInterface
      */
     protected $scheduledForUpdateModels = [];
 
+    /**
+     * @param StorageInterface<object> $storage
+     */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
@@ -32,7 +35,7 @@ class StorageExtension implements ExtensionInterface
         }
 
         if ($request->getModel() instanceof IdentityInterface) {
-            /** @var IdentityInterface $identity */
+            /** @var IdentityInterface<object> $identity */
             $identity = $request->getModel();
             if (false == $model = $this->storage->find($identity)) {
                 return;

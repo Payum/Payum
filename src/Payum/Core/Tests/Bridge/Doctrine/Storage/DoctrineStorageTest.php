@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Bridge\Doctrine\Storage;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Tests\Mocks\Model\TestModel;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -95,7 +96,7 @@ class DoctrineStorageTest extends TestCase
     public function testShouldFindModelById()
     {
         $expectedModelClass = TestModel::class;
-        $expectedModelId = 123;
+        $expectedModelId = new Identity(123, TestModel::class);
         $expectedFoundModel = new TestModel();
 
         $objectManagerMock = $this->createObjectManagerMock();

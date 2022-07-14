@@ -9,7 +9,7 @@ use Payum\Core\Storage\IdentityInterface;
 class Token implements TokenInterface
 {
     /**
-     * @var IdentityInterface
+     * @var IdentityInterface<TokenInterface>
      */
     protected $details;
 
@@ -39,7 +39,7 @@ class Token implements TokenInterface
     }
 
     /**
-     * @return Identity
+     * @return Identity<TokenInterface>
      */
     public function getDetails()
     {

@@ -14,10 +14,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
+    /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;

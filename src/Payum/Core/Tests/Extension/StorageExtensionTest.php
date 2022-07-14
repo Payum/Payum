@@ -304,7 +304,7 @@ class StorageExtensionTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
     protected function createStorageMock()
     {

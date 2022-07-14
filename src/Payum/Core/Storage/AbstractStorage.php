@@ -4,59 +4,58 @@ namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
+/**
+ * @template T of object
+ * @implements StorageInterface<T>
+ */
 abstract class AbstractStorage implements StorageInterface
 {
     /**
-     * @var string
+     * @var class-string<T>
      */
-    protected $modelClass;
+    protected string $modelClass;
 
-    /**
-     * @param $modelClass
-     */
-    public function __construct($modelClass)
+    public function __construct(string $modelClass)
     {
         $this->modelClass = $modelClass;
     }
 
-    public function create()
+    public function create(): object
     {
         return new $this->modelClass();
     }
 
-    public function support($model)
+    public function support(object $model): bool
     {
         return $model instanceof $this->modelClass;
     }
 
-    public function update($model)
+    public function update(object $model): object
     {
         $this->assertModelSupported($model);
 
         $this->doUpdateModel($model);
+
+        return $model;
     }
 
-    public function find($id)
+    public function find(IdentityInterface $id): ?object
     {
-        if ($id instanceof IdentityInterface) {
-            if (ltrim($id->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
-                return $this->doFind($id->getId());
-            }
-
-            return;
+        if (ltrim($id->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
+            return $this->doFind($id->getId());
         }
 
-        return $this->doFind($id);
+        return null;
     }
 
-    public function delete($model)
+    public function delete(object $model): void
     {
         $this->assertModelSupported($model);
 
         $this->doDeleteModel($model);
     }
 
-    public function identify($model)
+    public function identify(object $model): IdentityInterface
     {
         $this->assertModelSupported($model);
 
@@ -64,37 +63,35 @@ abstract class AbstractStorage implements StorageInterface
     }
 
     /**
-     * @param object $model
+     * @param T $model
      */
-    abstract protected function doUpdateModel($model);
+    abstract protected function doUpdateModel(object $model): object;
 
     /**
-     * @param object $model
+     * @param T $model
      */
-    abstract protected function doDeleteModel($model);
+    abstract protected function doDeleteModel(object $model): void;
 
     /**
-     * @param object $model
+     * @param T $model
      *
-     * @return IdentityInterface
+     * @return IdentityInterface<T>
      */
-    abstract protected function doGetIdentity($model);
+    abstract protected function doGetIdentity(object $model): IdentityInterface;
 
     /**
-     * @param mixed $id
-     *
-     * @return object|null
+     * @return ?T
      */
-    abstract protected function doFind($id);
+    abstract protected function doFind(mixed $id): ?object;
 
     /**
-     * @param object $model
+     * @param T $model
      *
      * @throws InvalidArgumentException
      */
-    protected function assertModelSupported($model)
+    protected function assertModelSupported(object $model)
     {
-        if (false == $this->support($model)) {
+        if (! $this->support($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,

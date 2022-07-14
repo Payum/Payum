@@ -5,30 +5,35 @@ namespace Payum\Core;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 class Payum implements RegistryInterface
 {
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<StorageType>
      */
-    protected $registry;
+    protected RegistryInterface $registry;
+
+    protected HttpRequestVerifierInterface $httpRequestVerifier;
+
+    protected GenericTokenFactoryInterface $tokenFactory;
 
     /**
-     * @var HttpRequestVerifierInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $httpRequestVerifier;
+    protected StorageInterface $tokenStorage;
 
     /**
-     * @var GenericTokenFactoryInterface
+     * @param RegistryInterface<StorageType> $registry
+     * @param HttpRequestVerifierInterface $httpRequestVerifier
+     * @param GenericTokenFactoryInterface $tokenFactory
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    protected $tokenFactory;
-
-    /**
-     * @var StorageInterface
-     */
-    protected $tokenStorage;
-
     public function __construct(
         RegistryInterface $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
@@ -61,12 +66,16 @@ class Payum implements RegistryInterface
         return $this->registry->getGateways();
     }
 
-    public function getStorage($class)
+    /**
+     * @param class-string<StorageType> $class
+     * @return StorageInterface<StorageType>
+     */
+    public function getStorage($class): StorageInterface
     {
         return $this->registry->getStorage($class);
     }
 
-    public function getStorages()
+    public function getStorages(): array
     {
         return $this->registry->getStorages();
     }
@@ -88,7 +97,7 @@ class Payum implements RegistryInterface
     }
 
     /**
-     * @return StorageInterface
+     * @return StorageInterface<TokenInterface>
      */
     public function getTokenStorage()
     {

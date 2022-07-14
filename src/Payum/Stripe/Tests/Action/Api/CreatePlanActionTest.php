@@ -33,7 +33,7 @@ class CreatePlanActionTest extends TestCase
         $this->expectException(UnsupportedApiException::class);
         $action = new CreatePlanAction();
 
-        $action->setApi('not keys instance');
+        $action->setApi(new \stdClass());
     }
 
     public function testShouldSupportCreatePlanRequestWithArrayAccessModel()

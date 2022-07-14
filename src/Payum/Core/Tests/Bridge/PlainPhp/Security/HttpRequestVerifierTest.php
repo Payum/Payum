@@ -6,6 +6,7 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Token;
 use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -177,7 +178,7 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<TokenInterface>
      */
     protected function createStorageMock()
     {

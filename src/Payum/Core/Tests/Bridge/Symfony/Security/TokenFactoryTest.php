@@ -485,7 +485,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
     protected function createStorageMock()
     {
@@ -493,7 +493,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface
+     * @return MockObject | StorageRegistryInterface<stdClass>
      */
     protected function createStorageRegistryMock()
     {

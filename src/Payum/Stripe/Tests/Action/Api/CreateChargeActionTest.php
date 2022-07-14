@@ -34,7 +34,7 @@ class CreateChargeActionTest extends TestCase
         $this->expectException(UnsupportedApiException::class);
         $action = new CreateChargeAction();
 
-        $action->setApi('not keys instance');
+        $action->setApi(new \stdClass());
     }
 
     public function testShouldSupportCreateChargeRequestWithArrayAccessModel()

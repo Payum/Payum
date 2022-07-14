@@ -127,7 +127,7 @@ class FallbackRegistryTest extends TestCase
         $mailRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willReturn($expectedStorage)
         ;
 
@@ -139,7 +139,7 @@ class FallbackRegistryTest extends TestCase
 
         $registry = new FallbackRegistry($mailRegistryMock, $fallbackRegistryMock);
 
-        $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
+        $this->assertSame($expectedStorage, $registry->getStorage(\stdClass::class));
     }
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetStorage()
@@ -150,7 +150,7 @@ class FallbackRegistryTest extends TestCase
         $mailRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willThrowException(new InvalidArgumentException())
         ;
 
@@ -158,13 +158,13 @@ class FallbackRegistryTest extends TestCase
         $fallbackRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willReturn($expectedStorage)
         ;
 
         $registry = new FallbackRegistry($mailRegistryMock, $fallbackRegistryMock);
 
-        $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
+        $this->assertSame($expectedStorage, $registry->getStorage(\stdClass::class));
     }
 
     public function testThrowIfBothRegistriesNotContainsStorage()
@@ -177,7 +177,7 @@ class FallbackRegistryTest extends TestCase
         $mailRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willThrowException(new InvalidArgumentException('first'))
         ;
 
@@ -185,13 +185,13 @@ class FallbackRegistryTest extends TestCase
         $fallbackRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willThrowException(new InvalidArgumentException('second'))
         ;
 
         $registry = new FallbackRegistry($mailRegistryMock, $fallbackRegistryMock);
 
-        $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
+        $this->assertSame($expectedStorage, $registry->getStorage(\stdClass::class));
     }
 
     public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetStorage()
@@ -203,7 +203,7 @@ class FallbackRegistryTest extends TestCase
         $mailRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theStorageName')
+            ->with(\stdClass::class)
             ->willThrowException(new Exception())
         ;
 
@@ -215,7 +215,7 @@ class FallbackRegistryTest extends TestCase
 
         $registry = new FallbackRegistry($mailRegistryMock, $fallbackRegistryMock);
 
-        $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
+        $this->assertSame($expectedStorage, $registry->getStorage(\stdClass::class));
     }
 
     public function testShouldReturnGatewayFactoryFromMainRegistry()
@@ -417,7 +417,7 @@ class FallbackRegistryTest extends TestCase
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject | RegistryInterface<stdClass>
      */
     protected function createRegistryMock()
     {

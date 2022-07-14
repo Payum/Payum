@@ -3,19 +3,28 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 class FallbackRegistry implements RegistryInterface
 {
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<StorageType>
      */
     private $registry;
 
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<StorageType>
      */
     private $fallbackRegistry;
 
+    /**
+     * @param RegistryInterface<StorageType> $registry
+     * @param RegistryInterface<StorageType> $fallbackRegistry
+     */
     public function __construct(RegistryInterface $registry, RegistryInterface $fallbackRegistry)
     {
         $this->registry = $registry;
@@ -50,7 +59,7 @@ class FallbackRegistry implements RegistryInterface
         return array_replace($this->fallbackRegistry->getGateways(), $this->registry->getGateways());
     }
 
-    public function getStorage($class)
+    public function getStorage($class): StorageInterface
     {
         try {
             return $this->registry->getStorage($class);
@@ -59,7 +68,7 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    public function getStorages()
+    public function getStorages(): array
     {
         return array_replace($this->fallbackRegistry->getStorages(), $this->registry->getStorages());
     }

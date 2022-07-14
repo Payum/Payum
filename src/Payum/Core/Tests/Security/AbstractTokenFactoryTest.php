@@ -7,6 +7,7 @@ use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -483,9 +484,12 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return AbstractTokenFactory|MockObject
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<TokenInterface> $registry
+     *
+     * @return MockObject | AbstractTokenFactory
      */
-    protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
+    protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry): MockObject | AbstractTokenFactory
     {
         $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, [$tokenStorage, $registry]);
         $factoryMock
@@ -499,17 +503,17 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface
+     * @return MockObject | StorageRegistryInterface<stdClass>
      */
-    protected function createStorageRegistryMock()
+    protected function createStorageRegistryMock(): MockObject | StorageRegistryInterface
     {
         return $this->createMock(StorageRegistryInterface::class);
     }

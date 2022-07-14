@@ -7,6 +7,8 @@ use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
+use Payum\Core\Storage\StorageInterface;
 use ReflectionProperty;
 use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 
@@ -44,6 +46,9 @@ use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
  *                                                           string passed in parameter two of TableGateway above).
  *        },
  *    ]
+ *
+ * @template T of object
+ * @extends AbstractStorage<T>
  */
 class TableGatewayStorage extends AbstractStorage
 {
@@ -78,19 +83,19 @@ class TableGatewayStorage extends AbstractStorage
         $this->idField = $idField;
     }
 
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
 
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         return $this->tableGateway->select([
             "{$this->idField} = ?" => $id,
         ])->current();
     }
 
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): object
     {
         if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
@@ -102,16 +107,18 @@ class TableGatewayStorage extends AbstractStorage
         } else {
             $this->tableGateway->insert($this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model));
         }
+
+        return $model;
     }
 
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $this->tableGateway->delete([
             "{$this->idField} = ?" => $this->getModelId($model),
         ]);
     }
 
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): IdentityInterface
     {
         $id = $this->getModelId($model);
 

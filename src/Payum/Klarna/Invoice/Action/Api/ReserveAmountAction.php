@@ -19,7 +19,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }
