@@ -16,4 +16,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Run subtree-split
-        run: bin/subtree-split
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          bin/subtree-split
