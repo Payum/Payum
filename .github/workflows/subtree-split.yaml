@@ -49,26 +49,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-        #  ref: master
           fetch-depth: 0
 
-      - uses: FranzDiebold/github-env-vars-action@v2
       - uses: symplify/github-action-monorepo-split@2.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           package-directory: '${{ matrix.package.path }}'
           split-repository-organization: 'Payum'
           split-repository-name: '${{ matrix.package.name }}'
           user-name: "GitHub Action"
           user-email: "action@github.com"
-          branch: 'master'
-
-      #- name: Download splitsh-lite
-      #  run: |
-      #    wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
-      #    tar -xvf lite_linux_amd64.tar.gz
-      #    mv  ./splitsh-lite bin/splitsh-lite
-
-      #- name: Run subtree-split
-      #  run: bin/subtree-split
