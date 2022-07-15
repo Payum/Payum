@@ -135,7 +135,7 @@ class CreateOrderActionTest extends GenericActionTest
 
         $connector = $this->createConnectorMock();
         $connector
-            ->expects($this->once(0))
+            ->expects($this->once())
             ->method('apply')
             ->with('POST')
             ->willReturnCallback(function ($method, $order) use (&$expectedOrder): void {
@@ -222,6 +222,6 @@ class CreateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock(Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class);
     }
 }

@@ -94,12 +94,10 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
-            ->willReturnCallback(function () {
-                return [
-                    'PROFILEID' => 'theId',
-                    'PROFILESTATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'PROFILEID' => 'theId',
+                'PROFILESTATUS' => 'theStatus',
+            ])
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
@@ -124,6 +122,6 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

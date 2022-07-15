@@ -14,12 +14,12 @@ class FallbackRegistry implements RegistryInterface
     /**
      * @var RegistryInterface<StorageType>
      */
-    private $registry;
+    private RegistryInterface $registry;
 
     /**
      * @var RegistryInterface<StorageType>
      */
-    private $fallbackRegistry;
+    private RegistryInterface $fallbackRegistry;
 
     /**
      * @param RegistryInterface<StorageType> $registry

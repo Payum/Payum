@@ -6,10 +6,7 @@ use Payum\Core\GatewayFactoryInterface;
 
 class GatewayFactoryBuilder
 {
-    /**
-     * @var string
-     */
-    private $gatewayFactoryClass;
+    private string $gatewayFactoryClass;
 
     /**
      * @param string $gatewayFactoryClass

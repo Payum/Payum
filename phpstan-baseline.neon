@@ -16,11 +16,6 @@ parameters:
 			path: src/Payum/AuthorizeNet/Aim/Bridge/AuthorizeNet/AuthorizeNetAIM.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 2
-			path: src/Payum/AuthorizeNet/Aim/Tests/Action/CaptureActionTest.php
-
-		-
 			message: "#^Property Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/AuthorizeNet/Aim/Tests/Action/CaptureActionTest.php
@@ -141,19 +136,9 @@ parameters:
 			path: src/Payum/Be2Bill/Api.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/CaptureActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Be2Bill/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/CaptureOffsiteActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\CaptureOffsiteActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -164,11 +149,6 @@ parameters:
 			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Be2Bill/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/NotifyActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -423,11 +403,6 @@ parameters:
 		-
 			message: "#^Result of method ArrayObject\\<\\(int\\|string\\),mixed\\>\\:\\:offsetUnset\\(\\) \\(void\\) is used\\.$#"
 			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Result of \\|\\| is always true\\.$#"
-			count: 2
 			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
 
 		-
@@ -1541,11 +1516,6 @@ parameters:
 			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Symfony/Action/ObtainCreditCardActionTest.php
-
-		-
 			message: "#^PHPDoc type string of property Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Action\\\\RenderTemplateActionTest\\:\\:\\$requestClass is not covariant with PHPDoc type Payum\\\\Core\\\\Request\\\\Generic of overridden property Payum\\\\Core\\\\Tests\\\\GenericActionTest\\:\\:\\$requestClass\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Symfony/Action/RenderTemplateActionTest.php
@@ -1584,16 +1554,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Validator\\\\Constraints\\\\CreditCardDateValidatorTest\\:\\:createValidator\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Symfony/Validator/Constraints/CreditCardDateValidatorTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Twig/Action/RenderTemplateActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Extension/ExtensionCollectionTest.php
 
 		-
 			message: "#^Result of method Payum\\\\Core\\\\Extension\\\\ExtensionCollection\\:\\:onExecute\\(\\) \\(void\\) is used\\.$#"
@@ -2141,11 +2101,6 @@ parameters:
 			path: src/Payum/Core/Tests/Request/GetHumanStatusTest.php
 
 		-
-			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createNotifyToken\\(\\) invoked with 4 parameters, 1\\-2 required\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Security/GenericTokenFactoryTest.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Security\\\\Util\\\\MaskTest\\:\\:testShouldAllowGenerateToken\\(\\) has parameter \\$expected with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Security/Util/MaskTest.php
@@ -2176,17 +2131,7 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Checkout\\\\Action\\\\Api\\\\BaseApiAwareAction\\:\\:addMerchantId\\(\\) has parameter \\$details with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
 
@@ -2216,34 +2161,9 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Action/AuthorizeRecurringAction.php
 
 		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Config\\:\\:\\$baseUri \\(int\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Config.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Config\\:\\:\\$baseUri \\(int\\) does not accept string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/KlarnaCheckoutGatewayFactory.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/CreateOrderActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/CreateOrderActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\CreateOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/Api/CreateOrderActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/FetchOrderActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\FetchOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -2251,28 +2171,13 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Tests/Action/Api/FetchOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/UpdateOrderActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\UpdateOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/Api/UpdateOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/AuthorizeRecurringActionTest.php
-
-		-
 			message: "#^PHPDoc type Payum\\\\Klarna\\\\Checkout\\\\Action\\\\AuthorizeRecurringAction of property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\AuthorizeRecurringActionTest\\:\\:\\$actionClass is not covariant with PHPDoc type string of overridden property Payum\\\\Core\\\\Tests\\\\GenericActionTest\\:\\:\\$actionClass\\.$#"
 			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/AuthorizeRecurringActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Config\\:\\:\\$baseUri \\(int\\) does not accept string\\.$#"
-			count: 2
 			path: src/Payum/Klarna/Checkout/Tests/Action/AuthorizeRecurringActionTest.php
 
 		-
@@ -2291,11 +2196,6 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Tests/Action/ConvertPaymentActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/NotifyActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/NotifyActionTest.php
@@ -2306,29 +2206,14 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Tests/Action/StatusActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 2
-			path: src/Payum/Klarna/Checkout/Tests/Action/SyncActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\SyncActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/SyncActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Config\\:\\:\\$baseUri \\(int\\) does not accept string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/ConfigTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\KlarnaCheckoutGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/KlarnaCheckoutGatewayFactoryTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Request/Api/BaseOrderTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Request\\\\Api\\\\BaseOrderTest\\:\\:createBaseOrderMock\\(\\) has parameter \\$model with no type specified\\.$#"
@@ -2396,19 +2281,9 @@ parameters:
 			path: src/Payum/Klarna/Invoice/Request/Api/PopulateKlarnaFromDetails.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ActivateActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\ActivateActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ActivateActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CancelReservationActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\CancelReservationActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
@@ -2416,24 +2291,9 @@ parameters:
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CancelReservationActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CheckOrderStatusActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CreditInvoiceActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\CreditInvoiceActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CreditInvoiceActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CreditPartActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\CreditPartActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
@@ -2441,19 +2301,9 @@ parameters:
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/CreditPartActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/EmailInvoiceActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\EmailInvoiceActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/EmailInvoiceActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/GetAddressesActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\GetAddressesActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
@@ -2466,19 +2316,9 @@ parameters:
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/GetAddressesActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ReserveAmountActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\ReserveAmountActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ReserveAmountActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ReturnAmountActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\ReturnAmountActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
@@ -2486,19 +2326,9 @@ parameters:
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/ReturnAmountActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/SendInvoiceActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\SendInvoiceActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/Action/Api/SendInvoiceActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Tests/Action/Api/UpdateActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\Action\\\\Api\\\\UpdateActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
@@ -2856,11 +2686,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/AutoPayAgreementActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/AutoPayAgreementActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\AutoPayAgreementActionTest\\:\\:provideRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/AutoPayAgreementActionTest.php
@@ -2877,11 +2702,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/CheckAgreementActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/CheckAgreementActionTest.php
 
@@ -2906,11 +2726,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/CheckOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/CheckOrderActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CheckOrderActionTest\\:\\:provideRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/CheckOrderActionTest.php
@@ -2927,11 +2742,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckRecurringPaymentAction constructor invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/CheckRecurringPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/CheckRecurringPaymentActionTest.php
 
@@ -2956,11 +2766,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/CompleteOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/CompleteOrderActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CompleteOrderActionTest\\:\\:provideRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/CompleteOrderActionTest.php
@@ -2977,11 +2782,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CreateAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/CreateAgreementActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/CreateAgreementActionTest.php
 
@@ -3021,11 +2821,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/DeleteAgreementActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/DeleteAgreementActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\DeleteAgreementActionTest\\:\\:provideRequiredNotEmptyFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/DeleteAgreementActionTest.php
@@ -3051,11 +2846,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\InitializeOrderActionTest\\:\\:provideRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
@@ -3072,11 +2862,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StartRecurringPaymentAction constructor invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/StartRecurringPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/StartRecurringPaymentActionTest.php
 
@@ -3101,11 +2886,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/Api/StopRecurringPaymentActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/Api/StopRecurringPaymentActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\StopRecurringPaymentActionTest\\:\\:provideRequiredFields\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/Api/StopRecurringPaymentActionTest.php
@@ -3124,21 +2904,6 @@ parameters:
 			message: "#^Property Payum\\\\Payex\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 4
-			path: src/Payum/Payex/Tests/Api/AgreementApiTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 3
-			path: src/Payum/Payex/Tests/Api/OrderApiTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 3
-			path: src/Payum/Payex/Tests/Api/RecurringApiTest.php
 
 		-
 			message: "#^Method Payum\\\\Payex\\\\Tests\\\\PayexGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -3546,16 +3311,6 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/BaseApiAwareActionTest.php
-
-		-
 			message: "#^Anonymous function has an unused use \\$model\\.$#"
 			count: 2
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
@@ -3576,79 +3331,9 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/CreateBillingAgreementActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/CreateRecurringPaymentProfileActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/DoCaptureActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/DoExpressCheckoutPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/DoReferenceTransactionActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/DoVoidActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/GetExpressCheckoutDetailsActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/GetRecurringPaymentsProfileDetailsActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/GetTransactionDetailsActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ManageRecurringPaymentsProfileStatusActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/RefundTransactionActionTest.php
-
-		-
 			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\SetExpressCheckoutAction constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/SetExpressCheckoutActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/SetExpressCheckoutActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/TransactionSearchActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/UpdateRecurringPaymentProfileActionTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$details of method Payum\\\\Core\\\\Model\\\\Token\\:\\:setDetails\\(\\) expects object, array given\\.$#"
@@ -3721,11 +3406,6 @@ parameters:
 			path: src/Payum/Paypal/Ipn/Api.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Ipn/Tests/ApiTest.php
-
-		-
 			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Action\\\\Api\\\\MasspayAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Paypal/Masspay/Nvp/Action/Api/MasspayAction.php
@@ -3792,11 +3472,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Request\\\\Api\\\\Masspay constructor invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/Api/MasspayActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/Api/MasspayActionTest.php
 
@@ -3891,11 +3566,6 @@ parameters:
 			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/CaptureActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/CaptureActionTest.php
@@ -3904,11 +3574,6 @@ parameters:
 			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/RefundActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\RefundActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -3999,21 +3664,6 @@ parameters:
 			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/Api/CreateButtonPaymentActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/Api/GetTransactionDetailsActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/CaptureActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -4246,18 +3896,8 @@ parameters:
 			path: src/Payum/Sofort/Tests/Action/Api/CreateTransactionActionTest.php
 
 		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Payum/Sofort/Tests/Action/Api/CreateTransactionActionTest.php
-
-		-
 			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\GetTransactionDataAction constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 2
-			path: src/Payum/Sofort/Tests/Action/Api/GetTransactionDataActionTest.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) invoked with 5 parameters, 1 required\\.$#"
-			count: 1
 			path: src/Payum/Sofort/Tests/Action/Api/GetTransactionDataActionTest.php
 
 		-
@@ -4296,22 +3936,12 @@ parameters:
 			path: src/Payum/Stripe/Action/Api/CreateChargeAction.php
 
 		-
-			message: "#^Method Stripe\\\\StripeObject\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Action/Api/CreateChargeAction.php
-
-		-
 			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateCustomerAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateCustomerAction.php
 
 		-
 			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateCustomerAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
-			count: 1
-			path: src/Payum/Stripe/Action/Api/CreateCustomerAction.php
-
-		-
-			message: "#^Method Stripe\\\\StripeObject\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateCustomerAction.php
 
@@ -4326,11 +3956,6 @@ parameters:
 			path: src/Payum/Stripe/Action/Api/CreatePlanAction.php
 
 		-
-			message: "#^Method Stripe\\\\StripeObject\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Action/Api/CreatePlanAction.php
-
-		-
 			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateSubscriptionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateSubscriptionAction.php
@@ -4341,22 +3966,12 @@ parameters:
 			path: src/Payum/Stripe/Action/Api/CreateSubscriptionAction.php
 
 		-
-			message: "#^Method Stripe\\\\StripeObject\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Action/Api/CreateSubscriptionAction.php
-
-		-
 			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateTokenAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateTokenAction.php
 
 		-
 			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateTokenAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
-			count: 1
-			path: src/Payum/Stripe/Action/Api/CreateTokenAction.php
-
-		-
-			message: "#^Method Stripe\\\\StripeObject\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateTokenAction.php
 

@@ -125,6 +125,6 @@ class CheckOrderActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(OrderApi::class, [], [], '', false);
+        return $this->createMock(OrderApi::class);
     }
 }

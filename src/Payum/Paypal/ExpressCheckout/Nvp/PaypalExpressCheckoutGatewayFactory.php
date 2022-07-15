@@ -66,9 +66,7 @@ class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.authorize_token' => new AuthorizeTokenAction(),
             'payum.action.api.do_void' => new DoVoidAction(),
             'payum.action.api.refund_transaction' => new RefundTransactionAction(),
-            'payum.action.api.confirm_order' => function (ArrayObject $config) {
-                return new ConfirmOrderAction($config['payum.template.confirm_order']);
-            },
+            'payum.action.api.confirm_order' => fn (ArrayObject $config) => new ConfirmOrderAction($config['payum.template.confirm_order']),
             'payum.action.api.transaction_search' => new TransactionSearchAction(),
         ]);
 

@@ -25,10 +25,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
      */
     protected $config;
 
-    /**
-     * @var Klarna
-     */
-    private $klarna;
+    private \Klarna $klarna;
 
     /**
      * @param Klarna $klarna

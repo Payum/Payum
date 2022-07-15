@@ -9,15 +9,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ObtainCreditCardActionBuilder
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     public function __construct(FormFactoryInterface $formFactory, RequestStack $requestStack)
     {

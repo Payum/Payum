@@ -25,7 +25,7 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::REMOVE_MOCKS,
         PHPUnitLevelSetList::UP_TO_PHPUNIT_100,
-        LevelSetList::UP_TO_PHP_70,
+        LevelSetList::UP_TO_PHP_74,
     ]);
 
     $services = $rectorConfig->services();

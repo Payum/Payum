@@ -138,17 +138,13 @@ class GatewayConfigTest extends TestCase
         $mock
             ->method('encrypt')
             ->with($this->anything())
-            ->willReturnCallback(function ($value) {
-                return 'encrypted-' . $value;
-            })
+            ->willReturnCallback(fn ($value) => 'encrypted-' . $value)
         ;
 
         $mock
             ->method('decrypt')
             ->with($this->anything())
-            ->willReturnCallback(function ($value) {
-                return 'decrypted-' . $value;
-            })
+            ->willReturnCallback(fn ($value) => 'decrypted-' . $value)
         ;
 
         return $mock;

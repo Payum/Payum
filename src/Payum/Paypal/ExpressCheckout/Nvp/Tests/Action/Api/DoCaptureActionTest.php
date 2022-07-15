@@ -139,12 +139,10 @@ class DoCaptureActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -192,7 +190,7 @@ class DoCaptureActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 
     /**

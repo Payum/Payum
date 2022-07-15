@@ -14,10 +14,7 @@ class RenderTemplateAction implements ActionInterface
      */
     protected $layout;
 
-    /**
-     * @var EngineInterface
-     */
-    private $templating;
+    private EngineInterface $templating;
 
     public function __construct(EngineInterface $templating, $layout = null)
     {

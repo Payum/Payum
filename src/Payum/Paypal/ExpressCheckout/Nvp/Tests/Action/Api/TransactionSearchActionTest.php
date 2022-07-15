@@ -133,21 +133,19 @@ class TransactionSearchActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('transactionSearch')
-            ->willReturnCallback(function () {
-                return [
-                    'L_TIMESTAMP0' => 'theTransactionTimestamp',
-                    'L_TIMEZONE0' => 'TheTimezone',
-                    'L_TYPE0' => 'theTransactionType',
-                    'L_EMAIL1' => 'theEmail',
-                    'L_NAME0' => 'theName',
-                    'L_TRANSACTIONID0' => 'theProfileId',
-                    'L_STATUS0' => 'theStatus',
-                    'TIMESTAMP' => 'theTimestamp',
-                    'ACK' => 'TheAckStatus',
-                    'VERSION' => 'theVersion',
-                    'BUILD' => 'TheVersionBuild',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'L_TIMESTAMP0' => 'theTransactionTimestamp',
+                'L_TIMEZONE0' => 'TheTimezone',
+                'L_TYPE0' => 'theTransactionType',
+                'L_EMAIL1' => 'theEmail',
+                'L_NAME0' => 'theName',
+                'L_TRANSACTIONID0' => 'theProfileId',
+                'L_STATUS0' => 'theStatus',
+                'TIMESTAMP' => 'theTimestamp',
+                'ACK' => 'TheAckStatus',
+                'VERSION' => 'theVersion',
+                'BUILD' => 'TheVersionBuild',
+            ])
         ;
 
         $action = new TransactionSearchAction();
@@ -180,6 +178,6 @@ class TransactionSearchActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

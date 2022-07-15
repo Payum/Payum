@@ -15,7 +15,7 @@ class Config
     public $secret;
 
     /**
-     * @var int
+     * @var string
      */
     public $baseUri = Constants::BASE_URI_SANDBOX;
 

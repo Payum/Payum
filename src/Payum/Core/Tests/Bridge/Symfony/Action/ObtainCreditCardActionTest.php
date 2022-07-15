@@ -360,7 +360,7 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createFormMock()
     {
-        return $this->createMock(Form::class, [], [], '', false);
+        return $this->createMock(Form::class);
     }
 
     /**

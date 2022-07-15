@@ -68,6 +68,6 @@ class GetTransactionDataActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

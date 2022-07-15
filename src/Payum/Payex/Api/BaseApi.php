@@ -97,8 +97,10 @@ abstract class BaseApi
     protected function convertSimpleXmlToArray(SimpleXMLElement $element)
     {
         return json_decode(
-            json_encode((array) $element),
-            $assoc = true
+            json_encode((array) $element, JSON_THROW_ON_ERROR),
+            $assoc = true,
+            512,
+            JSON_THROW_ON_ERROR
         );
     }
 

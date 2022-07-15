@@ -256,7 +256,7 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        $result = json_decode($response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), null, 512, JSON_THROW_ON_ERROR);
         if (null === $result) {
             throw new LogicException("Response content is not valid json: \n\n{$response->getBody()->getContents()}");
         }

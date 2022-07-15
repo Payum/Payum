@@ -125,6 +125,6 @@ class StopRecurringPaymentActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(RecurringApi::class, [], [], '', false);
+        return $this->createMock(RecurringApi::class);
     }
 }

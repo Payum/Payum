@@ -16,12 +16,12 @@ class DynamicRegistry implements RegistryInterface
     /**
      * @var GatewayInterface[]
      */
-    private $gateways = [];
+    private array $gateways = [];
 
     /**
      * @var StorageInterface<GatewayConfigInterface>
      */
-    private $gatewayConfigStore;
+    private StorageInterface $gatewayConfigStore;
 
     /**
      * @var GatewayFactoryRegistryInterface|RegistryInterface<StorageType>|null
@@ -30,10 +30,8 @@ class DynamicRegistry implements RegistryInterface
 
     /**
      * @deprecated since 1.3.3 will be removed in 2.0
-     *
-     * @var bool
      */
-    private $backwardCompatibility = true;
+    private bool $backwardCompatibility = true;
 
     /**
      * @param StorageInterface<GatewayConfigInterface> $gatewayConfigStore

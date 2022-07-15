@@ -174,7 +174,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock = $this->createMock(Klarna::class, ['config', 'activate', 'cancelReservation', 'checkOrderStatus', 'reserveAmount']);
+        $klarnaMock = $this->createMock(Klarna::class);
 
         $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

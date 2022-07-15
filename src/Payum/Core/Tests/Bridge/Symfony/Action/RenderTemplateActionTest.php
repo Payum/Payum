@@ -23,10 +23,7 @@ class RenderTemplateActionTest extends GenericActionTest
      */
     protected $actionClass = RenderTemplateAction::class;
 
-    /**
-     * @var MockObject
-     */
-    private $templating;
+    private MockObject $templating;
 
     protected function setUp(): void
     {

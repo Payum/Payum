@@ -36,9 +36,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.get_credit_card_token' => new GetCreditCardTokenAction(),
-            'payum.action.obtain_token' => function (ArrayObject $config) {
-                return new ObtainTokenAction($config['payum.template.obtain_token']);
-            },
+            'payum.action.obtain_token' => fn (ArrayObject $config) => new ObtainTokenAction($config['payum.template.obtain_token']),
             'payum.action.create_charge' => new CreateChargeAction(),
             'payum.action.create_customer' => new CreateCustomerAction(),
             'payum.action.create_plan' => new CreatePlanAction(),

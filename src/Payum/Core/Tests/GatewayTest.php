@@ -764,9 +764,7 @@ class GatewayTest extends TestCase
         $actionMock = $this->createActionMock();
         $actionMock
             ->method('supports')
-            ->willReturnCallback(function ($request) use ($secondRequest) {
-                return $secondRequest === $request;
-            })
+            ->willReturnCallback(fn ($request) => $secondRequest === $request)
         ;
         $gateway->addAction($actionMock);
 

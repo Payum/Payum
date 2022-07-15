@@ -94,12 +94,10 @@ class CreateBillingAgreementActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new CreateBillingAgreementAction();
@@ -125,6 +123,6 @@ class CreateBillingAgreementActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

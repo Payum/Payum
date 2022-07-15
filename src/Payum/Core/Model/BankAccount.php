@@ -9,45 +9,34 @@ class BankAccount implements BankAccountInterface
 {
     /**
      * Name of the account holder
-     *
-     * @var string
      */
-    private $holder;
+    private ?string $holder = null;
 
     /**
      * The account number (BBAN)
-     *
-     * @var string
      */
-    private $number;
+    private ?string $number = null;
 
     /**
      * Code that identifies the bank where the account is held
-     *
-     * @var string
      */
-    private $bankCode;
+    private ?string $bankCode = null;
 
     /**
      * The bank's country code (ISO 3166-1 ALPHA-2)
      *
      * @link https://en.wikipedia.org/wiki/ISO_3166-1
-     * @var string
      */
-    private $bankCountryCode;
+    private ?string $bankCountryCode = null;
 
-    /**
-     * @var string
-     */
-    private $iban;
+    private ?string $iban = null;
 
     /**
      * The bank's BIC code
      *
      * @link https://en.wikipedia.org/wiki/ISO_9362
-     * @var string
      */
-    private $bic;
+    private ?string $bic = null;
 
     /**
      * @return string

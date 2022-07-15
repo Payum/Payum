@@ -98,12 +98,10 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getExpressCheckoutDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new GetExpressCheckoutDetailsAction();
@@ -129,6 +127,6 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

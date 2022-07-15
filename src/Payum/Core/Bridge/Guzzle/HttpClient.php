@@ -14,10 +14,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 class HttpClient implements HttpClientInterface
 {
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+    private ClientInterface $client;
 
     public function __construct(ClientInterface $client)
     {

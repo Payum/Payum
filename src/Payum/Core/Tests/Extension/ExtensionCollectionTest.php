@@ -142,7 +142,7 @@ class ExtensionCollectionTest extends TestCase
      */
     protected function createContextMock()
     {
-        return $this->createMock(Context::class, [], [], '', false);
+        return $this->createMock(Context::class);
     }
 
     /**

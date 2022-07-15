@@ -8,10 +8,7 @@ use Payum\Core\Security\CypherInterface;
 
 class DefuseCypher implements CypherInterface
 {
-    /**
-     * @var string
-     */
-    private $key;
+    private string $key;
 
     public function __construct($secret)
     {

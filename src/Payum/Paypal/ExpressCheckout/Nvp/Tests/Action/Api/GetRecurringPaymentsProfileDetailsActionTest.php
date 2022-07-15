@@ -98,11 +98,9 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'STATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'STATUS' => 'theStatus',
+            ])
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
@@ -125,6 +123,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }
