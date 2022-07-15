@@ -10,11 +10,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Run subtree-split
-        env:
-            GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: bin/subtree-split
