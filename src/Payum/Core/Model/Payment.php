@@ -56,85 +56,70 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         $this->details = [];
     }
 
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
 
-    /**
-     * @param string $number
-     */
-    public function setNumber($number): void
+    public function setNumber(string $number): void
     {
         $this->number = $number;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    public function getClientEmail()
+    public function getClientEmail(): string
     {
         return $this->clientEmail;
     }
 
-    /**
-     * @param string $clientEmail
-     */
-    public function setClientEmail($clientEmail): void
+    public function setClientEmail(string $clientEmail): void
     {
         $this->clientEmail = $clientEmail;
     }
 
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->clientId;
     }
 
-    /**
-     * @param string $clientId
-     */
-    public function setClientId($clientId): void
+    public function setClientId(string $clientId): void
     {
         $this->clientId = $clientId;
     }
 
-    public function getTotalAmount()
+    public function getTotalAmount(): int
     {
         return $this->totalAmount;
     }
 
-    /**
-     * @param int $totalAmount
-     */
-    public function setTotalAmount($totalAmount): void
+    public function setTotalAmount(int $totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
 
-    public function getCurrencyCode()
+    public function getCurrencyCode(): string
     {
         return $this->currencyCode;
     }
 
-    /**
-     * @param string $currencyCode
-     */
-    public function setCurrencyCode($currencyCode): void
+    public function setCurrencyCode(string $currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
 
-    public function getDetails()
+    /**
+     * @return mixed[]
+     */
+    public function getDetails(): array
     {
         return $this->details;
     }
@@ -151,10 +136,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         $this->details = $details;
     }
 
-    /**
-     * @return CreditCardInterface|null
-     */
-    public function getCreditCard()
+    public function getCreditCard(): ?CreditCardInterface
     {
         return $this->creditCard;
     }
@@ -164,10 +146,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         $this->creditCard = $creditCard;
     }
 
-    /**
-     * @return BankAccountInterface|null
-     */
-    public function getBankAccount()
+    public function getBankAccount(): ?BankAccountInterface
     {
         return $this->bankAccount;
     }

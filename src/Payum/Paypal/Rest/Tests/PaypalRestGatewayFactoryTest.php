@@ -128,6 +128,9 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         return PaypalRestGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

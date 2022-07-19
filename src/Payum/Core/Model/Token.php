@@ -2,36 +2,25 @@
 
 namespace Payum\Core\Model;
 
+use ArrayObject;
+use InvalidArgumentException;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\Random;
-use Payum\Core\Storage\IdentityInterface;
 
 class Token implements TokenInterface
 {
     /**
-     * @var IdentityInterface<TokenInterface>
+     * @var ArrayObject<string, mixed>
      */
-    protected $details;
+    protected ArrayObject $details;
 
-    /**
-     * @var string
-     */
-    protected $hash;
+    protected string $hash;
 
-    /**
-     * @var string
-     */
-    protected $afterUrl;
+    protected string $afterUrl;
 
-    /**
-     * @var string
-     */
-    protected $targetUrl;
+    protected string $targetUrl;
 
-    /**
-     * @var string
-     */
-    protected $gatewayName;
+    protected string $gatewayName;
 
     public function __construct()
     {
@@ -39,54 +28,58 @@ class Token implements TokenInterface
     }
 
     /**
-     * @return Identity<TokenInterface>
+     * @return ArrayObject<string, mixed>
      */
-    public function getDetails()
+    public function getDetails(): ArrayObject
     {
         return $this->details;
     }
 
-    public function setDetails($details): void
+    public function setDetails(mixed $details): void
     {
+        if (! $details instanceof ArrayObject) {
+            throw new InvalidArgumentException('Details must be an instance of ArrayObject');
+        }
+
         $this->details = $details;
     }
 
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
 
-    public function setHash($hash): void
+    public function setHash(string $hash): void
     {
         $this->hash = $hash;
     }
 
-    public function getTargetUrl()
+    public function getTargetUrl(): ?string
     {
         return $this->targetUrl;
     }
 
-    public function setTargetUrl($targetUrl): void
+    public function setTargetUrl(?string $targetUrl): void
     {
         $this->targetUrl = $targetUrl;
     }
 
-    public function getAfterUrl()
+    public function getAfterUrl(): string
     {
         return $this->afterUrl;
     }
 
-    public function setAfterUrl($afterUrl): void
+    public function setAfterUrl(string $afterUrl): void
     {
         $this->afterUrl = $afterUrl;
     }
 
-    public function getGatewayName()
+    public function getGatewayName(): string
     {
         return $this->gatewayName;
     }
 
-    public function setGatewayName($gatewayName): void
+    public function setGatewayName(string $gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }

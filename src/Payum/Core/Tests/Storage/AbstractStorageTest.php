@@ -51,6 +51,7 @@ class AbstractStorageTest extends TestCase
 
             /**
              * @param array<string, mixed> $criteria
+             * @return mixed[]
              */
             public function findBy(array $criteria): array
             {

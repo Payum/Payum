@@ -238,7 +238,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @dataProvider pathDataProvider
      */
-    public function testShouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result): void
+    public function testShouldCreateTokenForBaseUrlWithPathAndScriptFile(string $hostname, string $target, string $result): void
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -616,6 +616,9 @@ class TokenFactoryTest extends TestCase
         );
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public function pathDataProvider(): array
     {
         return [

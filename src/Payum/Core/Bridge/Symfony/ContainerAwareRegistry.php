@@ -14,7 +14,7 @@ class ContainerAwareRegistry extends AbstractRegistry implements ContainerAwareI
 {
     use ContainerAwareTrait;
 
-    protected function getService($id)
+    protected function getService(string $id): object
     {
         return $this->container->get($id);
     }

@@ -24,6 +24,9 @@ class Context
      */
     protected array $previous = [];
 
+    /**
+     * @param \Payum\Core\Extension\Context[] $previous
+     */
     public function __construct(GatewayInterface $gateway, mixed $request, array $previous)
     {
         $this->gateway = $gateway;

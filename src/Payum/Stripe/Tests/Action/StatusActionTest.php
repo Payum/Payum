@@ -9,8 +9,14 @@ use Payum\Stripe\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
     public function testShouldMarkNewIfDetailsEmpty(): void

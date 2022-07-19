@@ -18,8 +18,14 @@ use stdClass;
 
 class CreateOrderActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<CreateOrder>
+     */
     protected $requestClass = CreateOrder::class;
 
+    /**
+     * @var class-string<CreateOrderAction>
+     */
     protected $actionClass = CreateOrderAction::class;
 
     public function provideNotSupportedRequests(): Iterator

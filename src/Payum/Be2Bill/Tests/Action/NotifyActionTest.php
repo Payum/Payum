@@ -19,8 +19,14 @@ use stdClass;
 
 class NotifyActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<NotifyAction>
+     */
     protected $actionClass = NotifyAction::class;
 
+    /**
+     * @var class-string<Notify>
+     */
     protected $requestClass = Notify::class;
 
     public function testShouldImplementGatewayAwareInterface(): void

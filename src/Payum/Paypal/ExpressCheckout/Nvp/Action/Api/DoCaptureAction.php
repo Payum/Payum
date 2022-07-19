@@ -52,10 +52,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         ;
     }
 
-    /**
-     * @return array
-     */
-    protected function getPaymentRequestNFields()
+    protected function getPaymentRequestNFields(): array
     {
         return [
             'TRANSACTIONID',

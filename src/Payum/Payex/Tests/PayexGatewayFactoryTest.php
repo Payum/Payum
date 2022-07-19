@@ -71,6 +71,9 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         return PayexGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

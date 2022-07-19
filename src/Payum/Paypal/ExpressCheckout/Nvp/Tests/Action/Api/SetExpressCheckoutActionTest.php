@@ -77,7 +77,7 @@ class SetExpressCheckoutActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->willReturnCallback(function (array $fields) use ($testCase, $expectedAmount) {
+            ->willReturnCallback(function (array $fields) use ($testCase, $expectedAmount): array {
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
                 $testCase->assertSame($expectedAmount, $fields['PAYMENTREQUEST_0_AMT']);
 

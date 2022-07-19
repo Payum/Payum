@@ -44,87 +44,60 @@ class Payout implements PayoutInterface
         $this->details = [];
     }
 
-    /**
-     * @return string
-     */
-    public function getRecipientId()
+    public function getRecipientId(): string
     {
         return $this->recipientId;
     }
 
-    /**
-     * @param string $recipientId
-     */
-    public function setRecipientId($recipientId): void
+    public function setRecipientId(string $recipientId): void
     {
         $this->recipientId = $recipientId;
     }
 
-    /**
-     * @return string
-     */
-    public function getRecipientEmail()
+    public function getRecipientEmail(): string
     {
         return $this->recipientEmail;
     }
 
-    /**
-     * @param string $recipientEmail
-     */
-    public function setRecipientEmail($recipientEmail): void
+    public function setRecipientEmail(string $recipientEmail): void
     {
         $this->recipientEmail = $recipientEmail;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalAmount()
+    public function getTotalAmount(): int
     {
         return $this->totalAmount;
     }
 
-    /**
-     * @param int $totalAmount
-     */
-    public function setTotalAmount($totalAmount): void
+    public function setTotalAmount(int $totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrencyCode()
+    public function getCurrencyCode(): string
     {
         return $this->currencyCode;
     }
 
-    /**
-     * @param string $currencyCode
-     */
-    public function setCurrencyCode($currencyCode): void
+    public function setCurrencyCode(string $currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    public function getDetails()
+    /**
+     * @return mixed[]
+     */
+    public function getDetails(): array
     {
         return $this->details;
     }

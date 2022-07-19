@@ -19,8 +19,14 @@ use stdClass;
 
 class FetchOrderActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<FetchOrder>
+     */
     protected $requestClass = FetchOrder::class;
 
+    /**
+     * @var class-string<FetchOrderAction>
+     */
     protected $actionClass = FetchOrderAction::class;
 
     public function provideNotSupportedRequests(): Iterator

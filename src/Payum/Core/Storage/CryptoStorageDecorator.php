@@ -73,6 +73,9 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
+    /**
+     * @return T[]
+     */
     public function findBy(array $criteria): array
     {
         $models = $this->decoratedStorage->findBy($criteria);

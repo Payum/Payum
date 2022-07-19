@@ -148,7 +148,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         return UpdateAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

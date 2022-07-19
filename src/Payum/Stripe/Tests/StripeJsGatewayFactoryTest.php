@@ -91,6 +91,9 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         return StripeJsGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

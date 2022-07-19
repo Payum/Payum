@@ -16,6 +16,9 @@ use stdClass;
 
 class GenericTest extends TestCase
 {
+    /**
+     * @return Iterator<int[]|float[]|string[]|bool[]|resource[]|\stdClass[]>
+     */
     public static function provideDifferentPhpTypes(): Iterator
     {
         yield 'object' => [new stdClass()];
@@ -141,7 +144,7 @@ class GenericTest extends TestCase
     public function testShouldNotSetIdentityAsFirstModelOnConstruct(): void
     {
         $identity = new class() implements IdentityInterface {
-            public function serialize()
+            public function serialize(): string
             {
                 return serialize(null);
             }
@@ -155,7 +158,7 @@ class GenericTest extends TestCase
                 return \stdClass::class;
             }
 
-            public function getId(): mixed
+            public function getId(): int
             {
                 return 1;
             }
@@ -205,7 +208,7 @@ class GenericTest extends TestCase
     public function testShouldNotSetIdentityAsFirstModelOnSetModel(): void
     {
         $identity = new class() implements IdentityInterface {
-            public function serialize()
+            public function serialize(): string
             {
                 return serialize(null);
             }
@@ -219,7 +222,7 @@ class GenericTest extends TestCase
                 return \stdClass::class;
             }
 
-            public function getId(): mixed
+            public function getId(): int
             {
                 return 1;
             }

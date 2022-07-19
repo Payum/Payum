@@ -2,7 +2,6 @@
 
 namespace Payum\Be2Bill\Tests;
 
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Be2Bill\Api;
 use Payum\Core\Exception\LogicException;
@@ -165,10 +164,7 @@ class ApiTest extends TestCase
         return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }

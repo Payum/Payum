@@ -18,11 +18,17 @@ use stdClass;
 
 class CheckOrderActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{transactionNumber: string}
+     */
+    protected array $requiredFields = [
         'transactionNumber' => 'aNum',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

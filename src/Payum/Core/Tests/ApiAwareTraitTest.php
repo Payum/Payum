@@ -45,7 +45,7 @@ class ApiAwareClass
 {
     use ApiAwareTrait;
 
-    public function setApiClass($apiClass): void
+    public function setApiClass(string $apiClass): void
     {
         $this->apiClass = $apiClass;
     }

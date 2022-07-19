@@ -41,7 +41,7 @@ class PaypalRestGatewayFactory extends GatewayFactory
             $config->defaults($config['payum.default_options']);
 
             $config['payum.required_options'] = ['client_id', 'client_secret'];
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): ApiContext {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 if (isset($config['config_path']) && '' !== $config['config_path']) {

@@ -6,6 +6,7 @@ use ArrayAccess;
 use Iterator;
 use LogicException;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\DetailsAggregateInterface;
@@ -18,10 +19,19 @@ use stdClass;
 
 class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<ExecuteSameRequestWithModelDetailsAction>
+     */
     protected $actionClass = ExecuteSameRequestWithModelDetailsAction::class;
 
-    protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
+    /**
+     * @var class-string<ModelAggregateAwareRequest>
+     */
+    protected $requestClass = ModelAggregateAwareRequest::class;
 
+    /**
+     * @return \Iterator<ModelAggregateAwareRequest[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new DetailsAggregateAndAwareModel())];
@@ -37,22 +47,22 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
     public function testShouldExecuteSameRequestWithModelDetails(): void
     {
-        $expectedDetails = new stdClass();
+        $expectedDetails = (array) new stdClass();
 
         $model = new DetailsAggregateModel();
         $model->details = $expectedDetails;
 
         $request = new ModelAggregateAwareRequest($model);
 
-        $testCase = $this;
-
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
-                $testCase->assertSame($expectedDetails, $request->getModel());
+            ->willReturnCallback(function ($request) use ($expectedDetails): void {
+                $model = $request->getModel();
+                self::assertInstanceOf(ArrayObject::class, $model);
+                self::assertSame($expectedDetails, iterator_to_array($model->getIterator()));
             })
         ;
 
@@ -225,9 +235,15 @@ class ModelAggregateAwareRequest implements ModelAwareInterface, ModelAggregateI
 
 class DetailsAggregateModel implements DetailsAggregateInterface
 {
-    public $details = [];
+    /**
+     * @var array<string, mixed>
+     */
+    public array $details = [];
 
-    public function getDetails()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getDetails(): array
     {
         return $this->details;
     }
@@ -235,14 +251,14 @@ class DetailsAggregateModel implements DetailsAggregateInterface
 
 class DetailsAggregateAndAwareModel implements DetailsAggregateInterface, DetailsAwareInterface
 {
-    public $details = [];
+    public mixed $details;
 
-    public function getDetails()
+    public function getDetails(): mixed
     {
         return $this->details;
     }
 
-    public function setDetails($details): void
+    public function setDetails(mixed $details): void
     {
         $this->details = $details;
     }

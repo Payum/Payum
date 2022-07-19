@@ -16,10 +16,19 @@ use stdClass;
 
 class ConvertPayoutActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<ConvertPayoutAction>
+     */
     protected $actionClass = ConvertPayoutAction::class;
 
+    /**
+     * @var class-string<Convert>
+     */
     protected $requestClass = Convert::class;
 
+    /**
+     * @return \Iterator<Convert[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payout(), 'array')];

@@ -3,7 +3,6 @@
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
@@ -94,7 +93,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -119,7 +118,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -144,10 +143,7 @@ class ApiTest extends TestCase
         return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }

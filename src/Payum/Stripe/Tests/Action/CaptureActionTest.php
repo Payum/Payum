@@ -16,8 +16,14 @@ use ReflectionClass;
 
 class CaptureActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Capture>
+     */
     protected $requestClass = Capture::class;
 
+    /**
+     * @var class-string<CaptureAction>
+     */
     protected $actionClass = CaptureAction::class;
 
     public function testShouldImplementGatewayAwareInterface(): void

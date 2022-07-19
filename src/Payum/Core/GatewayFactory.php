@@ -10,6 +10,9 @@ class GatewayFactory implements GatewayFactoryInterface
 
     protected array $defaultConfig;
 
+    /**
+     * @param mixed[] $defaultConfig
+     */
     public function __construct(array $defaultConfig = [], ?GatewayFactoryInterface $coreGatewayFactory = null)
     {
         $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
@@ -21,6 +24,9 @@ class GatewayFactory implements GatewayFactoryInterface
         return $this->coreGatewayFactory->create($this->createConfig($config));
     }
 
+    /**
+     * @return mixed[]
+     */
     public function createConfig(array $config = []): array
     {
         $config = ArrayObject::ensureArrayObject($config);

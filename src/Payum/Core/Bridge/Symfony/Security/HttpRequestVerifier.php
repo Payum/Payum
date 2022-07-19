@@ -26,7 +26,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
         if (false == $httpRequest instanceof Request) {
             throw new InvalidArgumentException(sprintf(

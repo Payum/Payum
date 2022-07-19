@@ -18,7 +18,10 @@ use stdClass;
 
 class CreateAgreementActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{merchantRef: string, description: string, purchaseOperation: string, maxAmount: int, startDate: string, stopDate: string}
+     */
+    protected array $requiredFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
@@ -27,13 +30,19 @@ class CreateAgreementActionTest extends TestCase
         'stopDate' => '',
     ];
 
-    protected $requiredNotEmptyFields = [
+    /**
+     * @var array{merchantRef: string, description: string, maxAmount: int}
+     */
+    protected array $requiredNotEmptyFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'maxAmount' => 100000,
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 
@@ -44,7 +53,10 @@ class CreateAgreementActionTest extends TestCase
         return $fields;
     }
 
-    public function provideRequiredNotEmptyFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredNotEmptyFields(): array
     {
         $fields = [];
 

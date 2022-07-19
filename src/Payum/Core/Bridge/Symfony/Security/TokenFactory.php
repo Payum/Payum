@@ -27,12 +27,7 @@ class TokenFactory extends AbstractTokenFactory
         parent::__construct($tokenStorage, $storageRegistry);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    protected function generateUrl($path, array $parameters = [])
+    protected function generateUrl(string $path, array $parameters = []): string
     {
         return $this->urlGenerator->generate($path, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }

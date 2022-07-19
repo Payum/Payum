@@ -9,8 +9,14 @@ use Payum\Core\Tests\GenericActionTest;
 
 class StatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
     public function testShouldMarkNewIfDetailsEmpty(): void

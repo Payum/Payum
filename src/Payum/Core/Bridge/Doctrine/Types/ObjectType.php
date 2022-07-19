@@ -17,7 +17,7 @@ use LogicException;
  */
 class ObjectType extends Type
 {
-    public function convertToDatabaseValue($value)
+    public function convertToDatabaseValue($value): string
     {
         return serialize($value);
     }

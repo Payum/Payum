@@ -80,7 +80,8 @@
         "ext-soap": "*",
         "rector/rector": "^0.13.7",
         "symplify/easy-coding-standard": "^11.0",
-        "phpstan/phpstan": "^1.8"
+        "phpstan/phpstan": "^1.8",
+        "nyholm/psr7": "^1.5"
     },
     "replace": {
         "payum/core": "^1",

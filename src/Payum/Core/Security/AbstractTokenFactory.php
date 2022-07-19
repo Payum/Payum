@@ -31,7 +31,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         $this->storageRegistry = $storageRegistry;
     }
 
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
+    /**
+     * @param array<string, ?string> $targetParameters
+     * @param array<string, ?string> $afterParameters
+     */
+    public function createToken(string $gatewayName, ?object $model, string $targetPath, array $targetParameters = [], ?string $afterPath = null, array $afterParameters = []): TokenInterface
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
@@ -49,7 +53,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setDetails($this->storageRegistry->getStorage($model::class)->identify($model));
         }
 
-        if (0 === strpos($targetPath, 'http')) {
+        if (str_starts_with($targetPath, 'http')) {
             $targetUri = HttpUri::createFromString($targetPath);
             $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
 
@@ -58,7 +62,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
-        if ($afterPath && 0 === strpos($afterPath, 'http')) {
+        if ($afterPath && str_starts_with($afterPath, 'http')) {
             $afterUri = HttpUri::createFromString($afterPath);
             $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
@@ -73,9 +77,9 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     }
 
     /**
-     * @return HttpUri
+     * @param array<string, string> $query
      */
-    protected function addQueryToUri(HttpUri $uri, array $query)
+    protected function addQueryToUri(HttpUri $uri, array $query): HttpUri
     {
         $uriQuery = Query::createFromUri($uri)->withoutEmptyPairs();
 
@@ -84,10 +88,5 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         return $uri->withQuery((string) Query::createFromParams($query));
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    abstract protected function generateUrl($path, array $parameters = []);
+    abstract protected function generateUrl(string $path, array $parameters = []): string;
 }

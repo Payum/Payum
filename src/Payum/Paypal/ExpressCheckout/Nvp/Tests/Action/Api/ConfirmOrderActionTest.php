@@ -17,8 +17,14 @@ use stdClass;
 
 class ConfirmOrderActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<ConfirmOrder>
+     */
     protected $requestClass = ConfirmOrder::class;
 
+    /**
+     * @var class-string<ConfirmOrderAction>
+     */
     protected $actionClass = ConfirmOrderAction::class;
 
     protected function setUp(): void

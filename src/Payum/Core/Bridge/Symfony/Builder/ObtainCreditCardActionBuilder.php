@@ -24,10 +24,7 @@ class ObtainCreditCardActionBuilder
         return call_user_func_array([$this, 'build'], func_get_args());
     }
 
-    /**
-     * @return ObtainCreditCardAction
-     */
-    public function build(ArrayObject $config)
+    public function build(ArrayObject $config): ObtainCreditCardAction
     {
         $action = new ObtainCreditCardAction($this->formFactory, $config['payum.template.obtain_credit_card']);
         $action->setRequestStack($this->requestStack);

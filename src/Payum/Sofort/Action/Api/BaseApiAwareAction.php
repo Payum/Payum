@@ -20,6 +20,9 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     protected Api $api;
 
+    /**
+     * @param Api $api
+     */
     public function setApi(object $api): void
     {
         if (! $api instanceof Api) {

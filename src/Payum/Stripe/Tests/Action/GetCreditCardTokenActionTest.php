@@ -10,8 +10,14 @@ use ReflectionClass;
 
 class GetCreditCardTokenActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetCreditCardToken>
+     */
     protected $requestClass = GetCreditCardToken::class;
 
+    /**
+     * @var class-string<GetCreditCardTokenAction>
+     */
     protected $actionClass = GetCreditCardTokenAction::class;
 
     public function testShouldImplementActionInterface(): void

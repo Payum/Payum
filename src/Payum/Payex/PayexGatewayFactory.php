@@ -51,7 +51,7 @@ class PayexGatewayFactory extends GatewayFactory
 
             'soap.client_factory' => new SoapClientFactory(),
 
-            'payum.api.order' => function (ArrayObject $config) {
+            'payum.api.order' => function (ArrayObject $config): OrderApi {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = [
@@ -62,7 +62,7 @@ class PayexGatewayFactory extends GatewayFactory
 
                 return new OrderApi($config['soap.client_factory'], $payexConfig);
             },
-            'payum.api.agreement' => function (ArrayObject $config) {
+            'payum.api.agreement' => function (ArrayObject $config): AgreementApi {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = [
@@ -73,7 +73,7 @@ class PayexGatewayFactory extends GatewayFactory
 
                 return new AgreementApi($config['soap.client_factory'], $payexConfig);
             },
-            'payum.api.recurring' => function (ArrayObject $config) {
+            'payum.api.recurring' => function (ArrayObject $config): RecurringApi {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $payexConfig = [

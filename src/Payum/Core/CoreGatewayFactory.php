@@ -14,6 +14,8 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Message\ResponseFactory;
+use Http\Message\StreamFactory;
 use Http\Message\StreamFactory\DiactorosStreamFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
 use LogicException;
@@ -38,6 +40,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 {
     protected array $defaultConfig;
 
+    /**
+     * @param mixed[] $defaultConfig
+     */
     public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
@@ -59,13 +64,16 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return $gateway;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function createConfig(array $config = []): array
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
 
         $config->defaults([
-            'httplug.message_factory' => static function (ArrayObject $config) {
+            'httplug.message_factory' => static function (ArrayObject $config): ResponseFactory {
                 if (class_exists(MessageFactoryDiscovery::class)) {
                     return MessageFactoryDiscovery::find();
                 }
@@ -84,7 +92,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
-            'httplug.stream_factory' => static function (ArrayObject $config) {
+            'httplug.stream_factory' => static function (ArrayObject $config): StreamFactory {
                 if (class_exists(StreamFactoryDiscovery::class)) {
                     return StreamFactoryDiscovery::find();
                 }

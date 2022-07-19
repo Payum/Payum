@@ -156,7 +156,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         return CreditPartAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

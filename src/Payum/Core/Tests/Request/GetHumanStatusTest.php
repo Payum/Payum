@@ -58,7 +58,7 @@ class GetHumanStatusTest extends TestCase
     /**
      * @dataProvider provideMarkXXXMethods
      */
-    public function testShouldAllowGetMarkedStatus($markXXXMethod): void
+    public function testShouldAllowGetMarkedStatus(string $markXXXMethod): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -70,7 +70,7 @@ class GetHumanStatusTest extends TestCase
     /**
      * @dataProvider provideIsXXXMethods
      */
-    public function testShouldCallIsXXXStatus($isXXXMethod): void
+    public function testShouldCallIsXXXStatus(string $isXXXMethod): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 

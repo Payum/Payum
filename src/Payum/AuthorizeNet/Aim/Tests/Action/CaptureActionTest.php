@@ -24,8 +24,14 @@ use stdClass;
 
 class CaptureActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<CaptureAction>
+     */
     protected $actionClass = CaptureAction::class;
 
+    /**
+     * @var class-string<Capture>
+     */
     protected $requestClass = Capture::class;
 
     public function testShouldImplementActionInterface(): void

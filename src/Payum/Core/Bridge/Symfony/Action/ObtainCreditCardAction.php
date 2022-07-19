@@ -52,7 +52,6 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     }
 
     /**
-     * @param Request $request
      * @deprecated
      */
     public function setRequest(Request $request = null): void
@@ -121,10 +120,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         return $request instanceof ObtainCreditCard;
     }
 
-    /**
-     * @return FormInterface
-     */
-    protected function createCreditCardForm()
+    protected function createCreditCardForm(): FormInterface
     {
         return $this->formFactory->create(CreditCardType::class);
     }

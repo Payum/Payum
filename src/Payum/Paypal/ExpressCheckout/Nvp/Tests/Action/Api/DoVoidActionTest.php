@@ -98,7 +98,7 @@ class DoVoidActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
                 $testCase->assertSame('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 

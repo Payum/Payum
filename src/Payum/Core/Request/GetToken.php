@@ -18,18 +18,12 @@ class GetToken
         $this->hash = $hash;
     }
 
-    /**
-     * @return string
-     */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @return TokenInterface
-     */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }

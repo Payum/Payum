@@ -70,7 +70,7 @@ class CreateBillingAgreementActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertSame('theToken', $fields['TOKEN']);
 

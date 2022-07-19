@@ -151,9 +151,9 @@ class Api
      *
      * @throws RuntimeException
      *
-     * @return array
+     * @return mixed[]
      */
-    public function doCreateButton(array $fields)
+    public function doCreateButton(array $fields): array
     {
         if (false == isset($fields['return'])) {
             if (false == $this->options['return']) {
@@ -188,11 +188,10 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @param array $fields
-     *
-     * @return array
+     * @param mixed[] $fields
+     * @return mixed[]
      */
-    public function getTransactionDetails($fields)
+    public function getTransactionDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
@@ -202,10 +201,7 @@ class Api
         return $this->doRequest($fields);
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnvironnementTest()
+    public function isEnvironnementTest(): bool
     {
         return $this->options['sandbox'];
     }
@@ -213,9 +209,9 @@ class Api
     /**
      * @throws HttpException
      *
-     * @return array
+     * @return mixed[]
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
@@ -238,10 +234,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
     }

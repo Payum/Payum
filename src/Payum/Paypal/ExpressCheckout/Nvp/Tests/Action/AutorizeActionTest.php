@@ -23,8 +23,14 @@ use ReflectionClass;
 
 class AutorizeActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Authorize>
+     */
     protected $requestClass = Authorize::class;
 
+    /**
+     * @var class-string<AuthorizeAction>
+     */
     protected $actionClass = AuthorizeAction::class;
 
     public function testShouldImplementActionInterface(): void

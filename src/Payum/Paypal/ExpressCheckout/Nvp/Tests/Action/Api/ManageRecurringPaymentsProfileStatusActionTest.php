@@ -87,7 +87,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 

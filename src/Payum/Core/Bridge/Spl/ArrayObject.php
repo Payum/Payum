@@ -16,10 +16,10 @@ class ArrayObject extends \ArrayObject
 
     public function __construct($input = [], $flags = 0, $iterator_class = ArrayIterator::class)
     {
-        if ($input instanceof ArrayAccess && false == $input instanceof \ArrayObject) {
+        if ($input instanceof ArrayAccess && ! $input instanceof \ArrayObject) {
             $this->input = $input;
 
-            if (false == $input instanceof Traversable) {
+            if (! $input instanceof Traversable) {
                 throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
@@ -29,55 +29,38 @@ class ArrayObject extends \ArrayObject
         parent::__construct($input, $flags, $iterator_class);
     }
 
-    /**
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get($key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         return $this[$key] ?? $default;
     }
 
     /**
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return static
+     * @param array<string, mixed> $default
      */
-    public function getArray($key, $default = [])
+    public function getArray(string $key, array $default = []): self
     {
         return static::ensureArrayObject($this->get($key, $default));
     }
 
     /**
-     * @param array|Traversable $input
+     * @param array<string, mixed>|Traversable<string, mixed> $input
      *
      * @throws InvalidArgumentException
      */
-    public function replace($input): void
+    public function replace(iterable $input): void
     {
-        if (false == (is_iterable($input))) {
-            throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
-        }
-
         foreach ($input as $index => $value) {
             $this[$index] = $value;
         }
     }
 
     /**
-     * @param array|Traversable $input
+     * @param iterable<mixed> $input
      *
      * @throws InvalidArgumentException
      */
-    public function defaults($input): void
+    public function defaults(iterable $input): void
     {
-        if (false == (is_iterable($input))) {
-            throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
-        }
-
         foreach ($input as $index => $value) {
             if (null === $this[$index]) {
                 $this[$index] = $value;
@@ -86,20 +69,15 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array   $required
-     * @param boolean $throwOnInvalid
-     *
      * @throws LogicException when one of the required fields is empty
      *
-     * @return bool
+     * @param string | list<mixed> $required
      */
-    public function validateNotEmpty($required, $throwOnInvalid = true)
+    public function validateNotEmpty(array | string $required, bool $throwOnInvalid = true): bool
     {
-        $required = is_array($required) ? $required : [$required];
-
         $empty = [];
 
-        foreach ($required as $r) {
+        foreach ((array) $required as $r) {
             $value = $this[$r];
 
             if (empty($value)) {
@@ -119,21 +97,16 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array   $required
-     * @param boolean $throwOnInvalid
-     *
      * @throws LogicException when one of the required fields present
      *
-     * @return bool
+     * @param string | list<mixed> $required
      */
-    public function validatedKeysSet($required, $throwOnInvalid = true)
+    public function validatedKeysSet(array | string $required, bool $throwOnInvalid = true): bool
     {
-        $required = is_array($required) ? $required : [$required];
-
-        foreach ($required as $required) {
-            if (false == $this->offsetExists($required)) {
+        foreach ((array) $required as $require) {
+            if (! $this->offsetExists($require)) {
                 if ($throwOnInvalid) {
-                    throw new LogicException(sprintf('The %s fields is not set.', $required));
+                    throw new LogicException(sprintf('The %s fields is not set.', $require));
                 }
 
                 return false;
@@ -188,9 +161,9 @@ class ArrayObject extends \ArrayObject
     /**
      * @experimental
      *
-     * @return array
+     * @return mixed[]
      */
-    public function toUnsafeArray()
+    public function toUnsafeArray(): array
     {
         $array = [];
         foreach ($this as $name => $value) {
@@ -209,9 +182,9 @@ class ArrayObject extends \ArrayObject
     /**
      * @experimental
      *
-     * @return array
+     * @return mixed[]
      */
-    public function toUnsafeArrayWithoutLocal()
+    public function toUnsafeArrayWithoutLocal(): array
     {
         $array = $this->toUnsafeArray();
         unset($array['local']);
@@ -221,10 +194,8 @@ class ArrayObject extends \ArrayObject
 
     /**
      * @param mixed $input
-     *
-     * @return ArrayObject
      */
-    public static function ensureArrayObject($input)
+    public static function ensureArrayObject($input): self
     {
         return $input instanceof static ? $input : new static($input);
     }

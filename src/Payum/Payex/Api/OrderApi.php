@@ -80,9 +80,9 @@ class OrderApi extends BaseApi
      *
      * @var array
      *
-     * @return array
+     * @return mixed[]
      */
-    public function initialize(array $parameters)
+    public function initialize(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -122,9 +122,9 @@ class OrderApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
      *
-     * @return array
+     * @return mixed[]
      */
-    public function complete(array $parameters)
+    public function complete(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -139,9 +139,9 @@ class OrderApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxorder/check2/
      *
-     * @return array
+     * @return mixed[]
      */
-    public function check(array $parameters)
+    public function check(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -153,7 +153,7 @@ class OrderApi extends BaseApi
         return $this->call('Check2', $parameters, $this->getPxOrderWsdl());
     }
 
-    protected function getPxOrderWsdl()
+    protected function getPxOrderWsdl(): string
     {
         return $this->options['sandbox'] ?
             'https://test-external.payex.com/pxorder/pxorder.asmx?wsdl' :

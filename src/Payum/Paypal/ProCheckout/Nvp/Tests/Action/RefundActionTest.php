@@ -16,8 +16,14 @@ use stdClass;
 
 class RefundActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<RefundAction>
+     */
     protected $actionClass = RefundAction::class;
 
+    /**
+     * @var class-string<Refund>
+     */
     protected $requestClass = Refund::class;
 
     public function testShouldImplementApiAwareInterface(): void

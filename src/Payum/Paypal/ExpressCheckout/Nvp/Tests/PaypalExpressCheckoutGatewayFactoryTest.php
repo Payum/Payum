@@ -96,6 +96,9 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         return PaypalExpressCheckoutGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

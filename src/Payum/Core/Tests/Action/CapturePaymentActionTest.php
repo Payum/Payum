@@ -12,6 +12,7 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
@@ -19,10 +20,19 @@ use ReflectionClass;
 
 class CapturePaymentActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Capture>
+     */
     protected $requestClass = Capture::class;
 
+    /**
+     * @var class-string<CapturePaymentAction>
+     */
     protected $actionClass = CapturePaymentAction::class;
 
+    /**
+     * @return \Iterator<Generic[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         $capture = new $this->requestClass($this->createMock(TokenInterface::class));

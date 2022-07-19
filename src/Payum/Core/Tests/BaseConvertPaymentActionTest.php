@@ -26,6 +26,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
      */
     protected $actionClass;
 
+    /**
+     * @return \Iterator<Generic[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment())];
@@ -51,7 +54,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     /**
      * @dataProvider provideSupportedRequests
      */
-    public function testShouldSupportRequest($request): void
+    public function testShouldSupportRequest(Generic $request): void
     {
         $action = new $this->actionClass();
 

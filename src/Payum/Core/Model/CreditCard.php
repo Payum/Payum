@@ -9,73 +9,41 @@ use Payum\Core\Security\Util\Mask;
 
 class CreditCard implements CreditCardInterface
 {
-    /**
-     * @var string
-     */
-    protected $token;
+    protected string $token;
+
+    protected string $brand;
+
+    protected string $holder;
 
     /**
-     * @var string
-     */
-    protected $brand;
-
-    /**
-     * @var string
-     */
-    protected $holder;
-
-    /**
-     * @var SensitiveValue
-     *
      * @deprecated
      */
-    protected $securedHolder;
+    protected SensitiveValue $securedHolder;
+
+    protected string $maskedHolder;
+
+    protected string $number;
 
     /**
-     * @var string
-     */
-    protected $maskedHolder;
-
-    /**
-     * @var string
-     */
-    protected $number;
-
-    /**
-     * @var SensitiveValue
-     *
      * @deprecated
      */
-    protected $securedNumber;
+    protected SensitiveValue $securedNumber;
+
+    protected string $maskedNumber;
+
+    protected ?string $securityCode = null;
 
     /**
-     * @var string
-     */
-    protected $maskedNumber;
-
-    /**
-     * @var string
-     */
-    protected $securityCode;
-
-    /**
-     * @var SensitiveValue
-     *
      * @deprecated
      */
-    protected $securedSecurityCode;
+    protected SensitiveValue $securedSecurityCode;
+
+    protected ?DateTime $expireAt = null;
 
     /**
-     * @var DateTime
-     */
-    protected $expireAt;
-
-    /**
-     * @var SensitiveValue
-     *
      * @deprecated
      */
-    protected $securedExpireAt;
+    protected SensitiveValue $securedExpireAt;
 
     public function __construct()
     {
@@ -85,27 +53,27 @@ class CreditCard implements CreditCardInterface
         $this->securedExpireAt = SensitiveValue::ensureSensitive(null);
     }
 
-    public function setToken($token): void
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
 
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
 
-    public function setBrand($brand): void
+    public function setBrand(string $brand): void
     {
         $this->brand = $brand;
     }
 
-    public function getBrand()
+    public function getBrand(): string
     {
         return $this->brand;
     }
 
-    public function setHolder($holder): void
+    public function setHolder(SensitiveValue | string $holder): void
     {
         $this->securedHolder = SensitiveValue::ensureSensitive($holder);
         $this->maskedHolder = Mask::mask($this->securedHolder->peek());
@@ -114,22 +82,22 @@ class CreditCard implements CreditCardInterface
         $this->holder = $this->securedHolder->peek();
     }
 
-    public function getHolder()
+    public function getHolder(): string
     {
         return $this->securedHolder->peek();
     }
 
-    public function setMaskedHolder($maskedHolder): void
+    public function setMaskedHolder(string $maskedHolder): void
     {
         $this->maskedHolder = $maskedHolder;
     }
 
-    public function getMaskedHolder()
+    public function getMaskedHolder(): string
     {
         return $this->maskedHolder;
     }
 
-    public function setNumber($number): void
+    public function setNumber(SensitiveValue | string $number): void
     {
         $this->securedNumber = SensitiveValue::ensureSensitive($number);
         $this->maskedNumber = Mask::mask($this->securedNumber->peek());
@@ -138,22 +106,22 @@ class CreditCard implements CreditCardInterface
         $this->number = $this->securedNumber->peek();
     }
 
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->securedNumber->peek();
     }
 
-    public function setMaskedNumber($maskedNumber)
+    public function setMaskedNumber(string $maskedNumber): string
     {
         return $this->maskedNumber = $maskedNumber;
     }
 
-    public function getMaskedNumber()
+    public function getMaskedNumber(): string
     {
         return $this->maskedNumber;
     }
 
-    public function setSecurityCode($securityCode): void
+    public function setSecurityCode(SensitiveValue | string $securityCode): void
     {
         $this->securedSecurityCode = SensitiveValue::ensureSensitive($securityCode);
 
@@ -161,21 +129,21 @@ class CreditCard implements CreditCardInterface
         $this->securityCode = $this->securedSecurityCode->peek();
     }
 
-    public function getSecurityCode()
+    public function getSecurityCode(): string
     {
         return $this->securedSecurityCode->peek();
     }
 
-    public function getExpireAt()
+    public function getExpireAt(): DateTime
     {
         return $this->securedExpireAt->peek();
     }
 
-    public function setExpireAt($date = null): void
+    public function setExpireAt(DateTime | SensitiveValue $date = null): void
     {
         $date = SensitiveValue::ensureSensitive($date);
 
-        if (false == (null === $date->peek() || $date->peek() instanceof DateTime)) {
+        if (! (null === $date->peek() || $date->peek() instanceof DateTime)) {
             throw new InvalidArgumentException('The date argument must be either instance of DateTime or null');
         }
 

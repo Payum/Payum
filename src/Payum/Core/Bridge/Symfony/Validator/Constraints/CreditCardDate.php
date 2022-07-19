@@ -14,9 +14,9 @@ use Symfony\Component\Validator\Exception\MissingOptionsException;
  */
 class CreditCardDate extends Constraint
 {
-    public $minMessage = 'validator.credit_card.invalidDate';
+    public string $minMessage = 'validator.credit_card.invalidDate';
 
-    public $invalidMessage = 'validator.credit_card.invalidDate';
+    public string $invalidMessage = 'validator.credit_card.invalidDate';
 
     public $min;
 

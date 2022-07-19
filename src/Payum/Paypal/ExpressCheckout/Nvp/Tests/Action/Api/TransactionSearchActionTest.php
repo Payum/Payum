@@ -62,7 +62,7 @@ class TransactionSearchActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('transactionSearch')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('STARTDATE', $fields);
                 $testCase->assertSame('theStartDate', $fields['STARTDATE']);
 

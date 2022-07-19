@@ -28,10 +28,7 @@ class ObtainCreditCard extends Generic
         $this->creditCard = $creditCard;
     }
 
-    /**
-     * @return CreditCardInterface
-     */
-    public function obtain()
+    public function obtain(): CreditCardInterface
     {
         if (false == $this->creditCard) {
             throw new LogicException('Credit card could not be obtained. It has to be set before obtain.');

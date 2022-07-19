@@ -15,8 +15,14 @@ use ReflectionClass;
 
 class PayoutActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Payout>
+     */
     protected $requestClass = Payout::class;
 
+    /**
+     * @var class-string<PayoutAction>
+     */
     protected $actionClass = PayoutAction::class;
 
     public function testShouldImplementActionInterface(): void

@@ -23,7 +23,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
         $this->request = $request;
     }
 
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
@@ -33,15 +33,12 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
         $this->response = $response;
     }
 
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
 
-    /**
-     * @return HttpException
-     */
-    public static function factory(RequestInterface $request, ResponseInterface $response)
+    public static function factory(RequestInterface $request, ResponseInterface $response): self
     {
         if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
             $label = 'Client error response';

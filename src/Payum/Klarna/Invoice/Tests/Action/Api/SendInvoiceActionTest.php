@@ -116,7 +116,7 @@ class SendInvoiceActionTest extends GenericApiAwareActionTest
         return SendInvoiceAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

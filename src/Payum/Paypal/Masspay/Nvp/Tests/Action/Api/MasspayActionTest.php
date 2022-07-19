@@ -13,8 +13,14 @@ use ReflectionClass;
 
 class MasspayActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Masspay>
+     */
     protected $requestClass = Masspay::class;
 
+    /**
+     * @var class-string<MasspayAction>
+     */
     protected $actionClass = MasspayAction::class;
 
     public function testShouldImplementsApiAwareAction(): void
@@ -41,7 +47,7 @@ class MasspayActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->willReturnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields): array {
                 $this->assertEquals([
                     'foo' => 'fooVal',
                 ], $fields);
@@ -66,7 +72,7 @@ class MasspayActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->willReturnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields): array {
                 $this->assertEquals([
                     'foo' => 'fooVal',
                 ], $fields);

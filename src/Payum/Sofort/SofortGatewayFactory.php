@@ -54,7 +54,7 @@ class SofortGatewayFactory extends GatewayFactory
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['config_key'];
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Api {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 if (false == preg_match('/.*\:.*\:.*/', $config['config_key'])) {

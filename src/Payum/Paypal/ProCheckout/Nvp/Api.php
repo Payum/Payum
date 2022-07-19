@@ -205,9 +205,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function doSale(array $fields)
+    public function doSale(array $fields): array
     {
         $fields['TRXTYPE'] = self::TRXTYPE_SALE;
         $this->addAuthorizeFields($fields);
@@ -219,9 +219,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function doCredit(array $fields)
+    public function doCredit(array $fields): array
     {
         $fields['TRXTYPE'] = self::TRXTYPE_CREDIT;
         $this->addAuthorizeFields($fields);
@@ -233,9 +233,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
@@ -258,10 +258,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://pilot-payflowpro.paypal.com/' :

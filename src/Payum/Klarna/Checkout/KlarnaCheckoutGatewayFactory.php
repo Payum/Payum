@@ -59,7 +59,7 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['merchant_id', 'secret'];
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Config {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $klarnaConfig = new Config();

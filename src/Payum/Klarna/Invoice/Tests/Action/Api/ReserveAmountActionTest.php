@@ -164,7 +164,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         return ReserveAmountAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

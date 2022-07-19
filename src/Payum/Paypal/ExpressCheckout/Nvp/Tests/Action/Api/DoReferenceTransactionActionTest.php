@@ -97,7 +97,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('REFERENCEID', $fields);
                 $testCase->assertSame('theReferenceId', $fields['REFERENCEID']);
 

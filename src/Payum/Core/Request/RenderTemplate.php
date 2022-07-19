@@ -23,6 +23,7 @@ class RenderTemplate
 
     /**
      * @param string $templateName
+     * @param mixed[] $parameters
      */
     public function __construct($templateName, array $parameters = [])
     {
@@ -31,52 +32,41 @@ class RenderTemplate
         $this->result = '';
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->templateName;
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @return string
-     */
-    public function getResult()
+    public function getResult(): string
     {
         return $this->result;
     }
 
-    /**
-     * @param string $result
-     */
-    public function setResult($result): void
+    public function setResult(string $result): void
     {
         $this->result = $result;
     }
 
     /**
-     * @param string $name
      * @param mixed  $value
      */
-    public function setParameter($name, $value): void
+    public function setParameter(string $name, $value): void
     {
         $this->parameters[$name] = $value;
     }
 
     /**
-     * @param string $name
      * @param mixed  $value
      */
-    public function addParameter($name, $value): void
+    public function addParameter(string $name, $value): void
     {
         if (array_key_exists($name, $this->parameters)) {
             throw new InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));

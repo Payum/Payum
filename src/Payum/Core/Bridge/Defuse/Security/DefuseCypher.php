@@ -15,12 +15,12 @@ class DefuseCypher implements CypherInterface
         $this->key = Key::loadFromAsciiSafeString($secret);
     }
 
-    public function decrypt($value)
+    public function decrypt(string $value): string
     {
         return Crypto::decrypt($value, $this->key);
     }
 
-    public function encrypt($value)
+    public function encrypt(string $value): string
     {
         return Crypto::encrypt($value, $this->key);
     }

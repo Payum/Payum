@@ -7,27 +7,19 @@ use Payum\Core\Security\CypherInterface;
 
 class GatewayConfig implements GatewayConfigInterface, CryptedInterface
 {
-    /**
-     * @var string
-     */
-    protected $factoryName;
+    protected string $factoryName;
+
+    protected string $gatewayName;
 
     /**
-     * @var string
+     * @var array<string, mixed>
      */
-    protected $gatewayName;
-
-    /**
-     * @var array
-     */
-    protected $config;
+    protected array $config;
 
     /**
      * Note: This should not be persisted to database
-     *
-     * @var array
      */
-    protected $decryptedConfig;
+    protected array $decryptedConfig;
 
     public function __construct()
     {
@@ -35,33 +27,30 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         $this->decryptedConfig = [];
     }
 
-    public function getFactoryName()
+    public function getFactoryName(): string
     {
         return $this->factoryName;
     }
 
-    public function setFactoryName($factoryName): void
+    public function setFactoryName(string $name): void
     {
-        $this->factoryName = $factoryName;
+        $this->factoryName = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getGatewayName()
+    public function getGatewayName(): string
     {
         return $this->gatewayName;
     }
 
-    /**
-     * @param string $gatewayName
-     */
-    public function setGatewayName($gatewayName): void
+    public function setGatewayName(string $gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }
 
-    public function getConfig()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
     {
         if (isset($this->config['encrypted'])) {
             return $this->decryptedConfig;
@@ -70,6 +59,9 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->config;
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setConfig(array $config): void
     {
         $this->config = $config;
@@ -83,7 +75,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         }
 
         foreach ($this->config as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->decryptedConfig[$name] = $value;
 
                 continue;
@@ -98,7 +90,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         $this->decryptedConfig['encrypted'] = true;
 
         foreach ($this->decryptedConfig as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->config[$name] = $value;
 
                 continue;

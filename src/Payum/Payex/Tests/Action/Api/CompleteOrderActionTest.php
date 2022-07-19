@@ -18,11 +18,17 @@ use stdClass;
 
 class CompleteOrderActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{orderRef: string}
+     */
+    protected array $requiredFields = [
         'orderRef' => 'aRef',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

@@ -7,12 +7,7 @@ use League\Uri\Http;
 
 class RequestTokenVerifier
 {
-    /**
-     * @param string $requestUri
-     * @param string $tokenUri
-     * @return bool
-     */
-    public static function isValid($requestUri, $tokenUri)
+    public static function isValid(string $requestUri, string $tokenUri): bool
     {
         $uri = Http::createFromString($requestUri);
         $altUri = Http::createFromString($tokenUri);

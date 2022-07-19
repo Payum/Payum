@@ -18,7 +18,7 @@ class TwigFactory
     /**
      * @return string[]
      */
-    public static function createGenericPaths()
+    public static function createGenericPaths(): array
     {
         return array_flip(array_filter([
             'PayumCore' => self::guessViewsPath(Gateway::class),
@@ -28,10 +28,7 @@ class TwigFactory
         ]));
     }
 
-    /**
-     * @return Environment
-     */
-    public static function createGeneric()
+    public static function createGeneric(): Environment
     {
         $loader = new FilesystemLoader();
         foreach (static::createGenericPaths() as $path => $namespace) {
@@ -42,11 +39,9 @@ class TwigFactory
     }
 
     /**
-     * @param string $gatewayFactoryOrRootClass
-     *
      * @return string|null
      */
-    public static function guessViewsPath($gatewayFactoryOrRootClass)
+    public static function guessViewsPath(string $gatewayFactoryOrRootClass)
     {
         if (false == class_exists($gatewayFactoryOrRootClass)) {
             return;

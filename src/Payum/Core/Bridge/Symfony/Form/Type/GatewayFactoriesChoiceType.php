@@ -28,10 +28,7 @@ class GatewayFactoriesChoiceType extends AbstractType
         ]);
     }
 
-    /**
-     * @return ?string
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

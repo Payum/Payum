@@ -19,10 +19,7 @@ class GatewayConfig extends BaseGatewayConfig
      */
     protected $id;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

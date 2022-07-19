@@ -129,11 +129,9 @@ class TableGatewayStorage extends AbstractStorage
     }
 
     /**
-     * @param object $model
-     *
      * @return mixed
      */
-    protected function getModelId($model)
+    protected function getModelId(object $model)
     {
         $rp = new ReflectionProperty($model, $this->idField);
         $rp->setAccessible(true);

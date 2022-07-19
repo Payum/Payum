@@ -5,7 +5,6 @@ namespace Payum\Core\Bridge\Guzzle;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use LogicException;
-use Payum\Core\HttpClientInterface;
 
 /**
  * @deprecated This will be removed in 2.0. Consider using Http\Discovery\HttpClientDiscovery.
@@ -14,10 +13,8 @@ class HttpClientFactory
 {
     /**
      * Create a Guzzle client.
-     *
-     * @return Client
      */
-    public static function createGuzzle()
+    public static function createGuzzle(): Client
     {
         $client = null;
         if (! class_exists(Client::class)) {
@@ -41,10 +38,7 @@ class HttpClientFactory
         ]);
     }
 
-    /**
-     * @return HttpClientInterface
-     */
-    public static function create()
+    public static function create(): HttpClient
     {
         return new HttpClient(static::createGuzzle());
     }

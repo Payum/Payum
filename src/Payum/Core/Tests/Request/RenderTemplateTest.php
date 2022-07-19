@@ -46,11 +46,8 @@ class RenderTemplateTest extends TestCase
 
     /**
      * @dataProvider provideParameters
-     *
-     * @param string $name
-     * @param mixed  $value
      */
-    public function testShouldAllowSetParameter($name, $value): void
+    public function testShouldAllowSetParameter(string $name, string $value): void
     {
         $request = new RenderTemplate('aTemplate', []);
 
@@ -65,11 +62,8 @@ class RenderTemplateTest extends TestCase
 
     /**
      * @dataProvider provideParameters
-     *
-     * @param string $name
-     * @param mixed  $value
      */
-    public function testShouldAllowAddParameter($name, $value): void
+    public function testShouldAllowAddParameter(string $name, string $value): void
     {
         $request = new RenderTemplate('aTemplate', []);
 

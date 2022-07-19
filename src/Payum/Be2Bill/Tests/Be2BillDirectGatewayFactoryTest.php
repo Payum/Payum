@@ -72,6 +72,9 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         return Be2BillDirectGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

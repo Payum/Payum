@@ -81,7 +81,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
                 'sandbox' => true,
             ]);
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Config {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $config['mode'] = $config['sandbox'] ? Klarna::BETA : Klarna::LIVE;

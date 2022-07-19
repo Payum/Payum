@@ -109,7 +109,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
         return GetAddressesAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

@@ -9,7 +9,7 @@ class_exists(AuthorizeNetException::class, true);
 
 class AuthorizeNetAIM extends \AuthorizeNetAIM
 {
-    public $ignore_not_x_fields = false;
+    public bool $ignore_not_x_fields = false;
 
     public function setField($name, $value): void
     {

@@ -33,6 +33,7 @@ abstract class BaseApi
 
     /**
      * @throws InvalidArgumentException if an option is invalid
+     * @param mixed[] $options
      */
     public function __construct(SoapClientFactory $clientFactory, array $options)
     {
@@ -53,12 +54,9 @@ abstract class BaseApi
     }
 
     /**
-     * @param string $operation
-     * @param string $serviceWsdl
-     *
      * @return array
      */
-    protected function call($operation, array $parameters, $serviceWsdl)
+    protected function call(string $operation, array $parameters, string $serviceWsdl)
     {
         $client = $this->clientFactory->createWsdlClient($serviceWsdl);
 

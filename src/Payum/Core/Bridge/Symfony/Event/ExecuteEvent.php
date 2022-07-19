@@ -17,10 +17,7 @@ class ExecuteEvent extends Event
         $this->context = $context;
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext(): Context
     {
         return $this->context;
     }

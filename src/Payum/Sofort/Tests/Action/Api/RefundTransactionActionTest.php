@@ -81,7 +81,7 @@ class RefundTransactionActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->willReturnCallback(function ($details) {
+            ->willReturnCallback(function ($details): array {
                 $this->assertSame(100, $details['refund_amount']);
 
                 return [];
@@ -104,7 +104,7 @@ class RefundTransactionActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->willReturnCallback(function ($details) {
+            ->willReturnCallback(function ($details): array {
                 $this->assertSame(50, $details['refund_amount']);
 
                 return [];

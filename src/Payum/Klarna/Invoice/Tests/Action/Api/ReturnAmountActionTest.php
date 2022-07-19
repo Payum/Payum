@@ -132,7 +132,7 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
         return ReturnAmountAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

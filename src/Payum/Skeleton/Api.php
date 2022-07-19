@@ -6,6 +6,7 @@ use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\HttpClientInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Api
 {
@@ -26,6 +27,7 @@ class Api
 
     /**
      * @throws InvalidArgumentException if an option is invalid
+     * @param mixed[] $options
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
@@ -34,10 +36,7 @@ class Api
         $this->messageFactory = $messageFactory;
     }
 
-    /**
-     * @return array
-     */
-    protected function doRequest($method, array $fields)
+    protected function doRequest($method, array $fields): ResponseInterface
     {
         $headers = [];
 
@@ -52,10 +51,7 @@ class Api
         return $response;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ? 'http://sandbox.example.com' : 'http://example.com';
     }

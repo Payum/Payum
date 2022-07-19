@@ -20,9 +20,6 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
      */
     protected $nullLogger;
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->nullLogger = new NullLogger();

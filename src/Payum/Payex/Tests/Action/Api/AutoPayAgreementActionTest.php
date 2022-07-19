@@ -18,7 +18,10 @@ use stdClass;
 
 class AutoPayAgreementActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{agreementRef: string, price: int, productNumber: string, description: string, orderId: string, purchaseOperation: string, currency: string}
+     */
+    protected array $requiredFields = [
         'agreementRef' => 'aRef',
         'price' => 1000,
         'productNumber' => 'aNum',
@@ -28,7 +31,10 @@ class AutoPayAgreementActionTest extends TestCase
         'currency' => 'NOK',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

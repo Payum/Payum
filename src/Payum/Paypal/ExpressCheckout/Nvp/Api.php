@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
+use function array_merge;
 use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
@@ -299,25 +300,23 @@ class Api
      */
     protected $messageFactory;
 
-    protected $options = [
-        'username' => null,
-        'password' => null,
-        'signature' => null,
-        'subject' => null,
-        'return_url' => null,
-        'cancel_url' => null,
-        'sandbox' => null,
-        'useraction' => null,
-        'cmd' => self::CMD_EXPRESS_CHECKOUT,
-    ];
+    protected ArrayObject $options;
 
-    /**
-     * @param HttpClientInterface|null $client
-     * @param MessageFactory|null      $messageFactory
-     */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
-        $options = ArrayObject::ensureArrayObject($options);
+        $options = ArrayObject::ensureArrayObject(
+            array_merge([
+                'username' => null,
+                'password' => null,
+                'signature' => null,
+                'subject' => null,
+                'return_url' => null,
+                'cancel_url' => null,
+                'sandbox' => null,
+                'useraction' => null,
+                'cmd' => self::CMD_EXPRESS_CHECKOUT,
+            ], $options)
+        );
         $options->defaults($this->options);
         $options->validateNotEmpty([
             'username',
@@ -325,7 +324,7 @@ class Api
             'signature',
         ]);
 
-        if (false == is_bool($options['sandbox'])) {
+        if (! is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
@@ -337,9 +336,9 @@ class Api
     /**
      * Require: PAYMENTREQUEST_0_AMT
      *
-     * @return array
+     * @return mixed[]
      */
-    public function setExpressCheckout(array $fields)
+    public function setExpressCheckout(array $fields): array
     {
         if (false == isset($fields['RETURNURL'])) {
             if (false == $this->options['return_url']) {
@@ -368,9 +367,9 @@ class Api
     /**
      * Require: TOKEN
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getExpressCheckoutDetails(array $fields)
+    public function getExpressCheckoutDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetExpressCheckoutDetails';
 
@@ -383,9 +382,9 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getTransactionDetails(array $fields)
+    public function getTransactionDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
@@ -398,9 +397,9 @@ class Api
     /**
      * Require: STARTDATE
      *
-     * @return array
+     * @return mixed[]
      */
-    public function transactionSearch(array $fields)
+    public function transactionSearch(array $fields): array
     {
         $fields['METHOD'] = 'TransactionSearch';
 
@@ -413,9 +412,9 @@ class Api
     /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
-     * @return array
+     * @return mixed[]
      */
-    public function doExpressCheckoutPayment(array $fields)
+    public function doExpressCheckoutPayment(array $fields): array
     {
         $fields['METHOD'] = 'DoExpressCheckoutPayment';
 
@@ -426,9 +425,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function createRecurringPaymentsProfile(array $fields)
+    public function createRecurringPaymentsProfile(array $fields): array
     {
         $fields['METHOD'] = 'CreateRecurringPaymentsProfile';
 
@@ -439,9 +438,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function updateRecurringPaymentsProfile(array $fields)
+    public function updateRecurringPaymentsProfile(array $fields): array
     {
         $fields['METHOD'] = 'UpdateRecurringPaymentsProfile';
 
@@ -452,9 +451,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function getRecurringPaymentsProfileDetails(array $fields)
+    public function getRecurringPaymentsProfileDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetRecurringPaymentsProfileDetails';
 
@@ -465,9 +464,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function manageRecurringPaymentsProfileStatus(array $fields)
+    public function manageRecurringPaymentsProfileStatus(array $fields): array
     {
         $fields['METHOD'] = 'ManageRecurringPaymentsProfileStatus';
 
@@ -480,9 +479,9 @@ class Api
     /**
      * Require: PAYERID, TOKEN
      *
-     * @return array
+     * @return mixed[]
      */
-    public function createBillingAgreement(array $fields)
+    public function createBillingAgreement(array $fields): array
     {
         $fields['METHOD'] = 'CreateBillingAgreement';
 
@@ -495,9 +494,9 @@ class Api
     /**
      * Require: AMT, PAYMENTACTION, REFERENCEID
      *
-     * @return array
+     * @return mixed[]
      */
-    public function doReferenceTransaction(array $fields)
+    public function doReferenceTransaction(array $fields): array
     {
         $fields['METHOD'] = 'DoReferenceTransaction';
 
@@ -510,9 +509,9 @@ class Api
     /**
      * Require: AUTHORIZATIONID, AMT, COMPLETETYPE
      *
-     * @return array
+     * @return mixed[]
      */
-    public function doCapture(array $fields)
+    public function doCapture(array $fields): array
     {
         $fields['METHOD'] = 'DoCapture';
 
@@ -525,9 +524,9 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @return array
+     * @return mixed[]
      */
-    public function refundTransaction(array $fields)
+    public function refundTransaction(array $fields): array
     {
         $fields['METHOD'] = 'RefundTransaction';
 
@@ -540,9 +539,9 @@ class Api
     /**
      * Require: AUTHORIZATIONID
      *
-     * @return array
+     * @return mixed[]
      */
-    public function doVoid(array $fields)
+    public function doVoid(array $fields): array
     {
         $fields['METHOD'] = 'DoVoid';
 
@@ -552,12 +551,7 @@ class Api
         return $this->doRequest($fields);
     }
 
-    /**
-     * @param string $token
-     *
-     * @return string
-     */
-    public function getAuthorizeTokenUrl($token, array $query = [])
+    public function getAuthorizeTokenUrl(string $token, array $query = []): string
     {
         $defaultQuery = array_filter([
             'useraction' => $this->options['useraction'],
@@ -577,9 +571,9 @@ class Api
     /**
      * @throws HttpException
      *
-     * @return array
+     * @return mixed[]
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
@@ -602,10 +596,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :

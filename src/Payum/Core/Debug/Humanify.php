@@ -14,9 +14,8 @@ abstract class Humanify
 
     /**
      * @param  mixed  $request
-     * @return string
      */
-    public static function request($request)
+    public static function request($request): string
     {
         $return = self::value($request);
 
@@ -38,11 +37,10 @@ abstract class Humanify
 
     /**
      * @param mixed $value
-     * @param bool  $shortClass
      *
      * @return string
      */
-    public static function value($value, $shortClass = true)
+    public static function value($value, bool $shortClass = true)
     {
         if (is_object($value)) {
             if ($shortClass) {

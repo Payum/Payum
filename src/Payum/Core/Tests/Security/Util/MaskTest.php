@@ -25,7 +25,7 @@ class MaskTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testShouldAllowGenerateToken($value, $expected): void
+    public function testShouldAllowGenerateToken(string $value, string $expected): void
     {
         $this->assertSame($expected, Mask::mask($value));
     }

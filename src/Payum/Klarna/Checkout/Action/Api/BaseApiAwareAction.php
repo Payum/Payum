@@ -43,10 +43,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         $this->config = $this->api;
     }
 
-    /**
-     * @return Klarna_Checkout_ConnectorInterface
-     */
-    protected function getConnector()
+    protected function getConnector(): \Klarna_Checkout_ConnectorInterface
     {
         if ($this->connector) {
             return $this->connector;
@@ -76,13 +73,10 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param int $maxRetry
-     *
      * @throws Klarna_Checkout_ConnectionErrorException
-     *
      * @return mixed
      */
-    protected function callWithRetry(Closure $function, $maxRetry = 3)
+    protected function callWithRetry(Closure $function, int $maxRetry = 3)
     {
         $attempts = 1;
         while (true) {

@@ -9,10 +9,7 @@ class ExtensionCollection implements ExtensionInterface
      */
     protected $extensions = [];
 
-    /**
-     * @param bool               $forcePrepend
-     */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
+    public function addExtension(ExtensionInterface $extension, bool $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->extensions, $extension) :

@@ -17,8 +17,14 @@ use stdClass;
 
 class SyncActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<SyncAction>
+     */
     protected $actionClass = SyncAction::class;
 
+    /**
+     * @var class-string<Sync>
+     */
     protected $requestClass = Sync::class;
 
     public function testShouldImplementGatewayAwareInterface(): void

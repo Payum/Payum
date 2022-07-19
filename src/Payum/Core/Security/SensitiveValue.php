@@ -10,16 +10,16 @@ use Serializable;
 
 final class SensitiveValue implements Serializable, JsonSerializable
 {
-    private $value;
+    private mixed $value;
 
-    /**
-     * @param mixed $value
-     */
-    final public function __construct($value)
+    final public function __construct(mixed $value)
     {
         $this->value = $value;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function __serialize(): array
     {
         return [];
@@ -46,18 +46,12 @@ final class SensitiveValue implements Serializable, JsonSerializable
         ];
     }
 
-    /**
-     * @return mixed
-     */
-    public function peek()
+    public function peek(): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @return mixed
-     */
-    public function get()
+    public function get(): mixed
     {
         $value = $this->value;
 
@@ -88,12 +82,7 @@ final class SensitiveValue implements Serializable, JsonSerializable
     {
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return SensitiveValue
-     */
-    public static function ensureSensitive($value)
+    public static function ensureSensitive(mixed $value): self
     {
         return $value instanceof self ? $value : new self($value);
     }

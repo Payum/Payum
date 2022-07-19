@@ -29,7 +29,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         $this->tokenParameter = (string) $tokenParameter;
     }
 
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
         if (false == is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');

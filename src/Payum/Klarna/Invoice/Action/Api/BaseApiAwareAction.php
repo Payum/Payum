@@ -27,9 +27,6 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
 
     private \Klarna $klarna;
 
-    /**
-     * @param Klarna $klarna
-     */
     public function __construct(Klarna $klarna = null)
     {
         $this->klarna = $klarna ?: new Klarna();
@@ -48,10 +45,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         $this->config = $this->api;
     }
 
-    /**
-     * @return Klarna
-     */
-    protected function getKlarna()
+    protected function getKlarna(): \Klarna
     {
         $this->klarna->config(
             $this->config->eid,
@@ -75,10 +69,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         return $this->klarna;
     }
 
-    /**
-     * @param object           $request
-     */
-    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, $request): void
+    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, object $request): void
     {
         $details['error_request'] = get_class($request);
         $details['error_file'] = $e->getFile();

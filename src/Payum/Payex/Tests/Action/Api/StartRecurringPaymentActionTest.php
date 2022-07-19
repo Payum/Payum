@@ -18,7 +18,10 @@ use stdClass;
 
 class StartRecurringPaymentActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{agreementRef: string, startDate: string, periodType: int, period: int, alertPeriod: int, price: int, productNumber: string, orderId: string, description: string}
+     */
+    protected array $requiredFields = [
         'agreementRef' => 'aRef',
         'startDate' => '2013-10-10 12:21:21',
         'periodType' => RecurringApi::PERIODTYPE_HOURS,
@@ -30,7 +33,10 @@ class StartRecurringPaymentActionTest extends TestCase
         'description' => 'aDesc',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

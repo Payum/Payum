@@ -22,15 +22,18 @@ use stdClass;
 class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 {
     /**
-     * @var Generic
+     * @var class-string<Cancel>
      */
     protected $requestClass = Cancel::class;
 
     /**
-     * @var ActionInterface
+     * @var class-string<CancelRecurringPaymentsProfileAction>
      */
     protected $actionClass = CancelRecurringPaymentsProfileAction::class;
 
+    /**
+     * @return \Iterator<Cancel[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [

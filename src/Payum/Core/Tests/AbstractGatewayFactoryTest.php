@@ -77,6 +77,9 @@ abstract class AbstractGatewayFactoryTest extends TestCase
 
     abstract protected function getGatewayFactoryClass(): string;
 
+    /**
+     * @return mixed[]
+     */
     protected function getRequiredOptions(): array
     {
         return [];

@@ -66,8 +66,5 @@ abstract class BaseOrmTest extends TestCase
         $schemaTool->createSchema($this->em->getMetadataFactory()->getAllMetadata());
     }
 
-    /**
-     * @return MappingDriver
-     */
-    abstract protected function getMetadataDriverImpl(Configuration $config);
+    abstract protected function getMetadataDriverImpl(Configuration $config): MappingDriver;
 }

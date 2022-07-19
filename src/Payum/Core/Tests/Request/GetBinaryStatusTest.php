@@ -58,7 +58,7 @@ class GetBinaryStatusTest extends TestCase
     /**
      * @dataProvider provideMarkXXXMethods
      */
-    public function testShouldAllowGetMarkedStatus($markXXXMethod): void
+    public function testShouldAllowGetMarkedStatus(string $markXXXMethod): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 
@@ -70,7 +70,7 @@ class GetBinaryStatusTest extends TestCase
     /**
      * @dataProvider provideIsXXXMethods
      */
-    public function testShouldCallIsXXXStatus($isXXXMethod): void
+    public function testShouldCallIsXXXStatus(string $isXXXMethod): void
     {
         $getStatus = new GetBinaryStatus(new stdClass());
 

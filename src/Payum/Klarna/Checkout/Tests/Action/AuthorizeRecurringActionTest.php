@@ -22,15 +22,18 @@ use stdClass;
 class AuthorizeRecurringActionTest extends GenericActionTest
 {
     /**
-     * @var Authorize
+     * @var class-string<Authorize>
      */
     protected $requestClass = Authorize::class;
 
     /**
-     * @var AuthorizeRecurringAction
+     * @var class-string<AuthorizeRecurringAction>
      */
     protected $actionClass = AuthorizeRecurringAction::class;
 
+    /**
+     * @return \Iterator<Authorize[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass([

@@ -11,8 +11,14 @@ class StatusActionTest extends GenericActionTest
 {
     public const TRANSACTION_ID = '1597-FS16-234D-A324';
 
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
     public function testShouldMarkExpiredIfPaymentExpirationTimePassed(): void
@@ -142,10 +148,9 @@ class StatusActionTest extends GenericActionTest
     }
 
     /**
-     * @param array $details
-     * @return GetHumanStatus
+     * @param mixed[] $details
      */
-    private function executeRequestWithDetails($details)
+    private function executeRequestWithDetails(array $details): GetHumanStatus
     {
         $action = new StatusAction();
         $request = new GetHumanStatus($details);

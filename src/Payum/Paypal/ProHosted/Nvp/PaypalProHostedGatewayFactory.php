@@ -44,7 +44,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
                 'signature',
             ];
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Api {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $paypalConfig = [

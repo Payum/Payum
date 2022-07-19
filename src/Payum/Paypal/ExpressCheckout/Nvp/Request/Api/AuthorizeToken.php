@@ -22,10 +22,7 @@ class AuthorizeToken extends Generic
         $this->force = $force;
     }
 
-    /**
-     * @return bool
-     */
-    public function isForced()
+    public function isForced(): bool
     {
         return $this->force;
     }

@@ -18,11 +18,17 @@ use stdClass;
 
 class CheckRecurringPaymentActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{agreementRef: string}
+     */
+    protected array $requiredFields = [
         'agreementRef' => 'aRef',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

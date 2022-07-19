@@ -20,10 +20,7 @@ class Payment extends BasePayment
      */
     protected $id;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

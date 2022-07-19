@@ -78,6 +78,9 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         return PaypalMasspayGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

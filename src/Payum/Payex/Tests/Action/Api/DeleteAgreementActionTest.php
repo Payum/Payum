@@ -18,11 +18,17 @@ use stdClass;
 
 class DeleteAgreementActionTest extends TestCase
 {
-    protected $requiredNotEmptyFields = [
+    /**
+     * @var array{agreementRef: string}
+     */
+    protected array $requiredNotEmptyFields = [
         'agreementRef' => 'anAgreementRef',
     ];
 
-    public function provideRequiredNotEmptyFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredNotEmptyFields(): array
     {
         $fields = [];
 

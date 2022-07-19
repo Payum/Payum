@@ -12,10 +12,19 @@ use stdClass;
 
 class GetCurrencyActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetCurrency>
+     */
     protected $requestClass = GetCurrency::class;
 
+    /**
+     * @var class-string<GetCurrencyAction>
+     */
     protected $actionClass = GetCurrencyAction::class;
 
+    /**
+     * @return \Iterator<GetCurrency[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass('USD')];

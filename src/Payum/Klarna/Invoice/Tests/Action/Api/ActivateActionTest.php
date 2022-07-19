@@ -140,7 +140,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         return ActivateAction::class;
     }
 
-    protected function getApiClass()
+    protected function getApiClass(): Config
     {
         return new Config();
     }

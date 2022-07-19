@@ -12,58 +12,40 @@ interface BankAccountInterface
      */
     public function getHolder();
 
-    /**
-     * @param string $holder
-     */
-    public function setHolder($holder);
+    public function setHolder(string $holder);
 
     /**
      * @return string
      */
     public function getNumber();
 
-    /**
-     * @param string $number
-     */
-    public function setNumber($number);
+    public function setNumber(string $number);
 
     /**
      * @return string
      */
     public function getBankCode();
 
-    /**
-     * @param string $bankCode
-     */
-    public function setBankCode($bankCode);
+    public function setBankCode(string $bankCode);
 
     /**
      * @return string
      */
     public function getBankCountryCode();
 
-    /**
-     * @param string $bankCountryCode
-     */
-    public function setBankCountryCode($bankCountryCode);
+    public function setBankCountryCode(string $bankCountryCode);
 
     /**
      * @return string
      */
     public function getIban();
 
-    /**
-     * @param string $iban
-     */
-    public function setIban($iban);
+    public function setIban(string $iban);
 
     /**
      * @return string
      */
     public function getBic();
 
-    /**
-     * @param string $bic
-     */
-    public function setBic($bic);
+    public function setBic(string $bic);
 }

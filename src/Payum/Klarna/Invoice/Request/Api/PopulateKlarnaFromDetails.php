@@ -20,10 +20,7 @@ class PopulateKlarnaFromDetails extends Generic
         $this->klarna = $klarna;
     }
 
-    /**
-     * @return Klarna
-     */
-    public function getKlarna()
+    public function getKlarna(): \Klarna
     {
         return $this->klarna;
     }

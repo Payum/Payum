@@ -15,8 +15,14 @@ use stdClass;
 
 class GetTokenActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetToken>
+     */
     protected $requestClass = GetToken::class;
 
+    /**
+     * @var class-string<GetTokenAction>
+     */
     protected $actionClass = GetTokenAction::class;
 
     /**
@@ -29,6 +35,9 @@ class GetTokenActionTest extends GenericActionTest
         $this->action = new $this->actionClass($this->createMock(StorageInterface::class));
     }
 
+    /**
+     * @return \Iterator<GetToken[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass('aHash')];

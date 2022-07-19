@@ -106,7 +106,7 @@ class DoCaptureActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->willReturnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields): array {
                 $this->assertArrayHasKey('TRANSACTIONID', $fields);
                 $this->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 

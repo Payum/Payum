@@ -4,7 +4,6 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Payum\Core\Tests\Mocks\Entity\TestModel;
 use ReflectionClass;
@@ -12,10 +11,7 @@ use RuntimeException;
 
 abstract class OrmTest extends BaseOrmTest
 {
-    /**
-     * @return MappingDriver
-     */
-    protected function getMetadataDriverImpl(Configuration $config)
+    protected function getMetadataDriverImpl(Configuration $config): MappingDriverChain
     {
         $rootDir = realpath(__DIR__ . '/../../../..');
         if (false === $rootDir || false === is_file($rootDir . '/Gateway.php')) {

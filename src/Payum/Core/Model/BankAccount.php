@@ -38,10 +38,7 @@ class BankAccount implements BankAccountInterface
      */
     private ?string $bic = null;
 
-    /**
-     * @return string
-     */
-    public function getHolder()
+    public function getHolder(): ?string
     {
         return $this->holder;
     }
@@ -54,10 +51,7 @@ class BankAccount implements BankAccountInterface
         $this->holder = $holder;
     }
 
-    /**
-     * @return string
-     */
-    public function getNumber()
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -70,10 +64,7 @@ class BankAccount implements BankAccountInterface
         $this->number = $number;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCode()
+    public function getBankCode(): ?string
     {
         return $this->bankCode;
     }
@@ -86,10 +77,7 @@ class BankAccount implements BankAccountInterface
         $this->bankCode = $bankCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCountryCode()
+    public function getBankCountryCode(): ?string
     {
         return $this->bankCountryCode;
     }
@@ -102,10 +90,7 @@ class BankAccount implements BankAccountInterface
         $this->bankCountryCode = $bankCountryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -118,10 +103,7 @@ class BankAccount implements BankAccountInterface
         $this->iban = $iban;
     }
 
-    /**
-     * @return string
-     */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }

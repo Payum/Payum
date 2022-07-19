@@ -17,12 +17,12 @@ use stdClass;
 abstract class GenericActionTest extends TestCase
 {
     /**
-     * @var Generic
+     * @var class-string
      */
     protected $requestClass;
 
     /**
-     * @var string
+     * @var class-string
      */
     protected $actionClass;
 
@@ -62,7 +62,7 @@ abstract class GenericActionTest extends TestCase
     /**
      * @dataProvider provideSupportedRequests
      */
-    public function testShouldSupportRequest($request): void
+    public function testShouldSupportRequest(object $request): void
     {
         $this->assertTrue($this->action->supports($request));
     }

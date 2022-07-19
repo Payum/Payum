@@ -4,8 +4,5 @@ namespace Payum\Core\Model;
 
 interface DetailsAwareInterface
 {
-    /**
-     * @param object $details
-     */
-    public function setDetails($details);
+    public function setDetails(mixed $details): void;
 }

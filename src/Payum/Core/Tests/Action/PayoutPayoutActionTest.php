@@ -11,6 +11,7 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payout as PayoutModel;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Payout;
 use Payum\Core\Security\TokenInterface;
@@ -19,10 +20,19 @@ use ReflectionClass;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<\Payum\Core\Request\Payout>
+     */
     protected $requestClass = Payout::class;
 
+    /**
+     * @var class-string<PayoutPayoutAction>
+     */
     protected $actionClass = PayoutPayoutAction::class;
 
+    /**
+     * @return \Iterator<Generic[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         $payout = new $this->requestClass($this->createMock(TokenInterface::class));

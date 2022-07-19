@@ -14,12 +14,12 @@ use Symfony\Component\Templating\EngineInterface;
 class RenderTemplateActionTest extends GenericActionTest
 {
     /**
-     * @var string
+     * @var class-string<RenderTemplate>
      */
     protected $requestClass = RenderTemplate::class;
 
     /**
-     * @var string
+     * @var class-string<RenderTemplateAction>
      */
     protected $actionClass = RenderTemplateAction::class;
 

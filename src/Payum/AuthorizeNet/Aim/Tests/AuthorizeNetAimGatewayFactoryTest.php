@@ -71,6 +71,9 @@ class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         return AuthorizeNetAimGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

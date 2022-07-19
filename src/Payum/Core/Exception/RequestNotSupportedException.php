@@ -27,10 +27,7 @@ class RequestNotSupportedException extends InvalidArgumentException
         return $this->request;
     }
 
-    /**
-     * @return ActionInterface|null
-     */
-    public function getAction()
+    public function getAction(): ?ActionInterface
     {
         return $this->action;
     }
@@ -42,17 +39,15 @@ class RequestNotSupportedException extends InvalidArgumentException
      */
     public static function assertSupports(ActionInterface $action, $request): void
     {
-        if (false == $action->supports($request)) {
+        if (! $action->supports($request)) {
             throw static::createActionNotSupported($action, $request);
         }
     }
 
     /**
      * @param mixed $request
-     *
-     * @return RequestNotSupportedException
      */
-    public static function create($request)
+    public static function create($request): self
     {
         $exception = new self(sprintf(
             'Request %s is not supported. %s',
@@ -67,10 +62,8 @@ class RequestNotSupportedException extends InvalidArgumentException
 
     /**
      * @param mixed                              $request
-     *
-     * @return RequestNotSupportedException
      */
-    public static function createActionNotSupported(ActionInterface $action, $request)
+    public static function createActionNotSupported(ActionInterface $action, $request): self
     {
         $exception = new self(sprintf(
             'Action %s is not supported the request %s. %s',
@@ -90,7 +83,7 @@ class RequestNotSupportedException extends InvalidArgumentException
      *
      * @return string[]
      */
-    protected static function suggestions($request)
+    protected static function suggestions($request): array
     {
         $suggestions = [];
 

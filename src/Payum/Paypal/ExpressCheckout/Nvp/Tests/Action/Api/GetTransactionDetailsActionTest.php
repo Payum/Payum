@@ -74,7 +74,7 @@ class GetTransactionDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
                 $testCase->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 

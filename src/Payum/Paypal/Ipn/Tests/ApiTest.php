@@ -3,7 +3,6 @@
 namespace Payum\Paypal\Ipn\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -67,7 +66,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest) {
+            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest): Response {
                 $actualRequest = $request;
 
                 return new Response(200);
@@ -152,10 +151,7 @@ class ApiTest extends TestCase
         return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }

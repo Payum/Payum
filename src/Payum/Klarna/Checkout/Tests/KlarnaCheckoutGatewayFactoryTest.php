@@ -97,6 +97,9 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         return KlarnaCheckoutGatewayFactory::class;
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getRequiredOptions(): array
     {
         return [

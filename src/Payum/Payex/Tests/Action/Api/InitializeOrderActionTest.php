@@ -19,7 +19,10 @@ use stdClass;
 
 class InitializeOrderActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{price: int, priceArgList: string, vat: int, currency: string, orderId: int, productNumber: int, purchaseOperation: string, view: string, description: string, additionalValues: string, returnUrl: string, cancelUrl: string, clientIPAddress: string, clientIdentifier: string, agreementRef: string, clientLanguage: string}
+     */
+    protected array $requiredFields = [
         'price' => 1000,
         'priceArgList' => '',
         'vat' => 0,
@@ -38,7 +41,10 @@ class InitializeOrderActionTest extends TestCase
         'clientLanguage' => 'en-US',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 

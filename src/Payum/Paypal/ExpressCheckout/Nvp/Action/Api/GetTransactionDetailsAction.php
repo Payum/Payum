@@ -50,10 +50,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         ;
     }
 
-    /**
-     * @return array
-     */
-    protected function getPaymentRequestNFields()
+    protected function getPaymentRequestNFields(): array
     {
         return [
             'TRANSACTIONID',

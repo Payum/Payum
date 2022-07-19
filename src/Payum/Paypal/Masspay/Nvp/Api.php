@@ -40,8 +40,7 @@ class Api
     ];
 
     /**
-     * @param HttpClientInterface|null $client
-     * @param MessageFactory|null      $messageFactory
+     * @param mixed[] $options
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
@@ -63,9 +62,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function massPay(array $fields)
+    public function massPay(array $fields): array
     {
         $fields['METHOD'] = 'MassPay';
 
@@ -78,9 +77,9 @@ class Api
     /**
      * @throws HttpException
      *
-     * @return array
+     * @return mixed[]
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
@@ -103,10 +102,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :

@@ -44,22 +44,28 @@ class Payum implements RegistryInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function getGatewayFactory($name)
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         return $this->registry->getGatewayFactory($name);
     }
 
-    public function getGatewayFactories()
+    /**
+     * @return GatewayFactoryInterface[]
+     */
+    public function getGatewayFactories(): array
     {
         return $this->registry->getGatewayFactories();
     }
 
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         return $this->registry->getGateway($name);
     }
 
-    public function getGateways()
+    /**
+     * @return GatewayInterface[]
+     */
+    public function getGateways(): array
     {
         return $this->registry->getGateways();
     }
@@ -73,23 +79,20 @@ class Payum implements RegistryInterface
         return $this->registry->getStorage($class);
     }
 
+    /**
+     * @return array<class-string, StorageInterface<StorageType>>
+     */
     public function getStorages(): array
     {
         return $this->registry->getStorages();
     }
 
-    /**
-     * @return HttpRequestVerifierInterface
-     */
-    public function getHttpRequestVerifier()
+    public function getHttpRequestVerifier(): HttpRequestVerifierInterface
     {
         return $this->httpRequestVerifier;
     }
 
-    /**
-     * @return GenericTokenFactoryInterface
-     */
-    public function getTokenFactory()
+    public function getTokenFactory(): GenericTokenFactoryInterface
     {
         return $this->tokenFactory;
     }
@@ -97,7 +100,7 @@ class Payum implements RegistryInterface
     /**
      * @return StorageInterface<TokenInterface>
      */
-    public function getTokenStorage()
+    public function getTokenStorage(): StorageInterface
     {
         return $this->tokenStorage;
     }
