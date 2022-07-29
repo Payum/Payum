@@ -39,3 +39,9 @@ If you have any questions and inquires about our open source development, this p
 ## License
 
 Payum is released under the [MIT License](LICENSE).
+
+## Sponsors
+
+<a href="https://www.blackfire.io">
+    <img src="https://user-images.githubusercontent.com/144858/181812588-428a0f5e-fedc-4400-a909-4e5eb4d3fe9e.png" width="200" />
+</a>
