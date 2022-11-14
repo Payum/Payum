@@ -29,6 +29,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 
 ## Community
 
+* [PayU India and PayUBiz (knit-pay/payum-payu-india)](https://github.com/knit-pay/payum-payu-india)
 * [r3s7/PayumDineroMail](https://github.com/r3s7/PayumDineroMail)
 * [r3s7/PayumBitPay](https://github.com/r3s7/PayumBitPay)
 * [kayue/Paydollar](https://github.com/kayue/Paydollar)
