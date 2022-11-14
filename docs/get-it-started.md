@@ -122,6 +122,7 @@ It has to work for all gateways without any modification from your side.
 
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpPostRedirect;
 
 include __DIR__.'/config.php';
 
