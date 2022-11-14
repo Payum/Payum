@@ -134,6 +134,9 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
         die();
+    } elseif ($reply instanceof HttpPostRedirect) {
+        echo $reply->getContent();
+        die();
     }
 
     throw new \LogicException('Unsupported reply', null, $reply);
