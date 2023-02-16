@@ -155,7 +155,7 @@ class ArrayObject extends \ArrayObject
             $this->input[$index] = $value;
         }
 
-        return parent::offsetSet($index, $value);
+        parent::offsetSet($index, $value);
     }
 
     /**
@@ -168,7 +168,7 @@ class ArrayObject extends \ArrayObject
             unset($this->input[$index]);
         }
 
-        return parent::offsetUnset($index);
+        parent::offsetUnset($index);
     }
 
     /**
@@ -184,7 +184,7 @@ class ArrayObject extends \ArrayObject
             return parent::offsetGet($index);
         }
 
-        return;
+        return null;
     }
 
     /**
