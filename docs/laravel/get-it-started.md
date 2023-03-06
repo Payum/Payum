@@ -93,7 +93,7 @@ Lets create a controller where we prepare the payment details.
 ```php
 <?php
 // app/controllers/PaypalController.php
-
+namespace App\Http\Controllers; // the path of the controller
 use Payum\LaravelPackage\Controller\PayumController;
 
 class PaypalController extends PayumController
