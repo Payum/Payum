@@ -11,21 +11,21 @@ use ReflectionClass;
 
 class RegistryInterfaceTest extends TestCase
 {
-    public function testShouldImplementGatewayRegistryInterface()
+    public function testShouldImplementGatewayRegistryInterface(): void
     {
         $rc = new ReflectionClass(RegistryInterface::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayRegistryInterface::class));
     }
 
-    public function testShouldImplementStorageRegistryInterface()
+    public function testShouldImplementStorageRegistryInterface(): void
     {
         $rc = new ReflectionClass(RegistryInterface::class);
 
         $this->assertTrue($rc->isSubclassOf(StorageRegistryInterface::class));
     }
 
-    public function testShouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface(): void
     {
         $rc = new ReflectionClass(RegistryInterface::class);
 

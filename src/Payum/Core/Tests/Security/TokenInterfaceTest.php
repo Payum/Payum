@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class TokenInterfaceTest extends TestCase
 {
-    public function testShouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface(): void
     {
         $rc = new ReflectionClass(TokenInterface::class);
 
         $this->assertTrue($rc->implementsInterface(DetailsAwareInterface::class));
     }
 
-    public function testShouldExtendDetailsAggregateInterface()
+    public function testShouldExtendDetailsAggregateInterface(): void
     {
         $rc = new ReflectionClass(TokenInterface::class);
 

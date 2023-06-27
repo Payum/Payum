@@ -21,17 +21,14 @@ class GatewayFactoriesChoiceType extends AbstractType
         $this->defaultChoices = $defaultChoices;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choices' => $this->defaultChoices,
         ]);
     }
 
-    /**
-     * @return ?string
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

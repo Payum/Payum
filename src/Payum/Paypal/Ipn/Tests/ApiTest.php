@@ -3,7 +3,6 @@
 namespace Payum\Paypal\Ipn\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -15,14 +14,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
+    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor(): void
     {
         $api = new Api([
             'sandbox' => true,
@@ -31,7 +30,7 @@ class ApiTest extends TestCase
         $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
+    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor(): void
     {
         $api = new Api([
             'sandbox' => false,
@@ -40,7 +39,7 @@ class ApiTest extends TestCase
         $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    public function testThrowIfResponseStatusNotOk()
+    public function testThrowIfResponseStatusNotOk(): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Client error response');
@@ -48,9 +47,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(404);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(404))
         ;
 
         $api = new Api([
@@ -60,7 +57,7 @@ class ApiTest extends TestCase
         $api->notifyValidate([]);
     }
 
-    public function testShouldProxyWholeNotificationToClientSend()
+    public function testShouldProxyWholeNotificationToClientSend(): void
     {
         /** @var RequestInterface $actualRequest */
         $actualRequest = null;
@@ -69,7 +66,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest) {
+            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest): Response {
                 $actualRequest = $request;
 
                 return new Response(200);
@@ -98,15 +95,13 @@ class ApiTest extends TestCase
         $this->assertSame('POST', $actualRequest->getMethod());
     }
 
-    public function testShouldReturnVerifiedIfResponseContentVerified()
+    public function testShouldReturnVerifiedIfResponseContentVerified(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], Api::NOTIFY_VERIFIED);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_VERIFIED))
         ;
 
         $api = new Api([
@@ -116,15 +111,13 @@ class ApiTest extends TestCase
         $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate([]));
     }
 
-    public function testShouldReturnInvalidIfResponseContentInvalid()
+    public function testShouldReturnInvalidIfResponseContentInvalid(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], Api::NOTIFY_INVALID);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_INVALID))
         ;
 
         $api = new Api([
@@ -134,15 +127,13 @@ class ApiTest extends TestCase
         $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate([]));
     }
 
-    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
+    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], 'foobarbaz');
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], 'foobarbaz'))
         ;
 
         $api = new Api([
@@ -157,13 +148,10 @@ class ApiTest extends TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(HttpClientInterface::class, ['send']);
+        return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }
@@ -176,9 +164,7 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200))
         ;
 
         return $clientMock;

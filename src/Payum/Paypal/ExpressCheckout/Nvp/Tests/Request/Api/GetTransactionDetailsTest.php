@@ -10,14 +10,14 @@ use stdClass;
 
 class GetTransactionDetailsTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(GetTransactionDetails::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldAllowGetPaymentRequestNSetInConstructor()
+    public function testShouldAllowGetPaymentRequestNSetInConstructor(): void
     {
         $expectedPaymentRequestN = 7;
 

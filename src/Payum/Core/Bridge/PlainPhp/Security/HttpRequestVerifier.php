@@ -11,7 +11,7 @@ use Payum\Core\Storage\StorageInterface;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
     protected $tokenStorage;
 
@@ -21,15 +21,15 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
     protected $tokenParameter;
 
     /**
-     * @param string           $tokenParameter
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
+    public function __construct(StorageInterface $tokenStorage, string $tokenParameter = 'payum_token')
     {
         $this->tokenStorage = $tokenStorage;
         $this->tokenParameter = (string) $tokenParameter;
     }
 
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
         if (false == is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
@@ -55,7 +55,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         return $token;
     }
 
-    public function invalidate(TokenInterface $token)
+    public function invalidate(TokenInterface $token): void
     {
         $this->tokenStorage->delete($token);
     }

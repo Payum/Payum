@@ -12,21 +12,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardTypeTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType(): void
     {
         $rc = new ReflectionClass(CreditCardType::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
-    public function testShouldExtendFormType()
+    public function testShouldExtendFormType(): void
     {
         $type = new CreditCardType();
 
         $this->assertSame(FormType::class, $type->getParent());
     }
 
-    public function testShouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions(): void
     {
         $type = new CreditCardType();
 

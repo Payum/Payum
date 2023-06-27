@@ -15,14 +15,14 @@ use stdClass;
 
 class AutoPayPaymentDetailsCaptureActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AutoPayPaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportCaptureWithArrayAsModelIfAutoPaySetToTrue()
+    public function testShouldSupportCaptureWithArrayAsModelIfAutoPaySetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -31,14 +31,14 @@ class AutoPayPaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture([])));
     }
 
-    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -48,7 +48,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportCaptureayAsModelIfAutoPaySetToFalse()
+    public function testShouldNotSupportCaptureayAsModelIfAutoPaySetToFalse(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -57,21 +57,21 @@ class AutoPayPaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel(): void
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsCaptureAction();
@@ -79,7 +79,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoSubExecuteAutoPayAgreementApiRequest()
+    public function testShouldDoSubExecuteAutoPayAgreementApiRequest(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

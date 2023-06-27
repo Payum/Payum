@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class GatewayFactoryBuilderTest extends TestCase
 {
-    public function testShouldBuildContainerAwareCoreGatewayFactory()
+    public function testShouldBuildContainerAwareCoreGatewayFactory(): void
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */
         $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
@@ -24,7 +24,7 @@ class GatewayFactoryBuilderTest extends TestCase
         $this->assertInstanceOf(GatewayFactory::class, $gatewayFactory);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */
         $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);

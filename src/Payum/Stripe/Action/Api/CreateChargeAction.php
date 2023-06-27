@@ -37,7 +37,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -45,7 +45,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateCharge $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -73,13 +73,13 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($charge->toArray(true));
+            $model->replace($charge->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateCharge &&
             $request->getModel() instanceof ArrayAccess

@@ -20,7 +20,7 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var AutoPayAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -42,7 +42,7 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof AutoPayAgreement &&
             $request->getModel() instanceof ArrayAccess

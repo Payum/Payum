@@ -17,35 +17,35 @@ use stdClass;
 
 class CreateRecurringPaymentProfileActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CreateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(CreateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldCreateRecurringPaymentProfileRequestAndArrayAccessAsModel()
+    public function testShouldCreateRecurringPaymentProfileRequestAndArrayAccessAsModel(): void
     {
         $action = new CreateRecurringPaymentProfileAction();
 
         $this->assertTrue($action->supports(new CreateRecurringPaymentProfile($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCreateRecurringPaymentProfileRequest()
+    public function testShouldNotSupportAnythingNotCreateRecurringPaymentProfileRequest(): void
     {
         $action = new CreateRecurringPaymentProfileAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreateRecurringPaymentProfileAction();
@@ -53,7 +53,7 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The TOKEN, PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
@@ -62,7 +62,7 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
         $action->execute(new CreateRecurringPaymentProfile([]));
     }
 
-    public function testThrowIfRequiredFieldMissing()
+    public function testThrowIfRequiredFieldMissing(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILESTARTDATE, DESC, BILLINGPERIOD, BILLINGFREQUENCY, AMT, CURRENCYCODE fields are required.');
@@ -73,7 +73,7 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
         ]));
     }
 
-    public function testShouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiCreateRecurringPaymentsProfileMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -81,7 +81,7 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertSame('theToken', $fields['TOKEN']);
 
@@ -143,18 +143,16 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiCreateRecurringPaymentsProfileMethodAndUpdateModelFromResponse()
+    public function testShouldCallApiCreateRecurringPaymentsProfileMethodAndUpdateModelFromResponse(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->willReturnCallback(function () {
-                return [
-                    'PROFILEID' => 'theId',
-                    'PROFILESTATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'PROFILEID' => 'theId',
+                'PROFILESTATUS' => 'theStatus',
+            ])
         ;
 
         $action = new CreateRecurringPaymentProfileAction();
@@ -190,6 +188,6 @@ class CreateRecurringPaymentProfileActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

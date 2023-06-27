@@ -9,11 +9,17 @@ use Payum\Core\Tests\GenericActionTest;
 
 class StatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
-    public function testShouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
@@ -22,7 +28,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkNewIfExecCodeNotSet()
+    public function testShouldMarkNewIfExecCodeNotSet(): void
     {
         $action = new StatusAction();
 
@@ -31,7 +37,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkCapturedIfExecCodeSuccessful()
+    public function testShouldMarkCapturedIfExecCodeSuccessful(): void
     {
         $action = new StatusAction();
 
@@ -42,7 +48,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkFailedIfExecCodeFailed()
+    public function testShouldMarkFailedIfExecCodeFailed(): void
     {
         $action = new StatusAction();
 
@@ -53,7 +59,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkUnknownIfExecCodeTimeOut()
+    public function testShouldMarkUnknownIfExecCodeTimeOut(): void
     {
         $action = new StatusAction();
 

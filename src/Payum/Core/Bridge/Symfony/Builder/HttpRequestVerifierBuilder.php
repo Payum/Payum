@@ -3,7 +3,7 @@
 namespace Payum\Core\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier;
-use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class HttpRequestVerifierBuilder
@@ -14,9 +14,9 @@ class HttpRequestVerifierBuilder
     }
 
     /**
-     * @return HttpRequestVerifierInterface
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    public function build(StorageInterface $tokenStorage)
+    public function build(StorageInterface $tokenStorage): HttpRequestVerifier
     {
         return new HttpRequestVerifier($tokenStorage);
     }

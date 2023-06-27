@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class ManageRecurringPaymentsProfileStatusTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(ManageRecurringPaymentsProfileStatus::class);
 

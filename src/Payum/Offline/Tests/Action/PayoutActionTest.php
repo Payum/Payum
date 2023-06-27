@@ -15,14 +15,14 @@ use stdClass;
 
 class PayoutActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportPayoutWithArrayAccessAsModel()
+    public function testShouldSupportPayoutWithArrayAccessAsModel(): void
     {
         $action = new PayoutAction();
 
@@ -31,7 +31,7 @@ class PayoutActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportNotPayout()
+    public function testShouldNotSupportNotPayout(): void
     {
         $action = new PayoutAction();
 
@@ -40,7 +40,7 @@ class PayoutActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportPayoutAndNotArrayAccessAsModel()
+    public function testShouldNotSupportPayoutAndNotArrayAccessAsModel(): void
     {
         $action = new PayoutAction();
 
@@ -49,7 +49,7 @@ class PayoutActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PayoutAction();
@@ -57,7 +57,7 @@ class PayoutActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSetStatusPendingIfPayoutNotSet()
+    public function testShouldSetStatusPendingIfPayoutNotSet(): void
     {
         $action = new PayoutAction();
 
@@ -74,7 +74,7 @@ class PayoutActionTest extends TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    public function testShouldSetStatusPendingIfPayoutSetToFalse()
+    public function testShouldSetStatusPendingIfPayoutSetToFalse(): void
     {
         $action = new PayoutAction();
 
@@ -92,7 +92,7 @@ class PayoutActionTest extends TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    public function testShouldSetStatusPayedoutIfPayoutSetToTrue()
+    public function testShouldSetStatusPayedoutIfPayoutSetToTrue(): void
     {
         $action = new PayoutAction();
 

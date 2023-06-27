@@ -38,7 +38,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -46,7 +46,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -66,13 +66,13 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
 
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($subscription->toArray(true));
+            $model->replace($subscription->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateSubscription &&
             $request->getModel() instanceof ArrayAccess

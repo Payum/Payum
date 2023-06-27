@@ -37,7 +37,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -45,7 +45,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -65,13 +65,13 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
             $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($token->toArray(true));
+            $model->replace($token->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateToken &&
             $request->getModel() instanceof ArrayAccess

@@ -17,21 +17,21 @@ use stdClass;
 
 class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetRecurringPaymentsProfileDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(GetRecurringPaymentsProfileDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportGetRecurringPaymentsProfileDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetRecurringPaymentsProfileDetailsRequestAndArrayAccessAsModel(): void
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();
 
@@ -40,14 +40,14 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         );
     }
 
-    public function testShouldNotSupportAnythingNotGetRecurringPaymentsProfileDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetRecurringPaymentsProfileDetailsRequest(): void
     {
         $action = new GetRecurringPaymentsProfileDetailsAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetRecurringPaymentsProfileDetailsAction();
@@ -55,7 +55,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
@@ -66,7 +66,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetRecurringPaymentsProfileDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetRecurringPaymentsProfileDetailsMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -74,7 +74,7 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
@@ -92,17 +92,15 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetRecurringPaymentsProfileDetailsMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetRecurringPaymentsProfileDetailsMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getRecurringPaymentsProfileDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'STATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'STATUS' => 'theStatus',
+            ])
         ;
 
         $action = new GetRecurringPaymentsProfileDetailsAction();
@@ -125,6 +123,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

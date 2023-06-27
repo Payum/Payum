@@ -144,9 +144,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function payment(array $params)
+    public function payment(array $params): array
     {
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
 
@@ -160,10 +160,8 @@ class Api
 
     /**
      * Verify if the hash of the given parameter is correct
-     *
-     * @return bool
      */
-    public function verifyHash(array $params)
+    public function verifyHash(array $params): bool
     {
         if (empty($params['HASH'])) {
             return false;
@@ -175,10 +173,7 @@ class Api
         return $hash === $this->calculateHash($params);
     }
 
-    /**
-     * @return string
-     */
-    public function getOffsiteUrl()
+    public function getOffsiteUrl(): string
     {
         return $this->options['sandbox'] ?
             'https://secure-test.be2bill.com/front/form/process.php' :
@@ -187,9 +182,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function prepareOffsitePayment(array $params)
+    public function prepareOffsitePayment(array $params): array
     {
         $supportedParams = [
             'CLIENTIDENT' => null,
@@ -223,10 +218,7 @@ class Api
         return $params;
     }
 
-    /**
-     * @return string
-     */
-    public function calculateHash(array $params)
+    public function calculateHash(array $params): string
     {
         #Alpha sort
         ksort($params);
@@ -240,9 +232,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded',
@@ -256,7 +248,7 @@ class Api
             throw HttpException::factory($request, $response);
         }
 
-        $result = json_decode($response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), null, 512, JSON_THROW_ON_ERROR);
         if (null === $result) {
             throw new LogicException("Response content is not valid json: \n\n{$response->getBody()->getContents()}");
         }
@@ -264,17 +256,14 @@ class Api
         return $result;
     }
 
-    protected function addGlobalParams(array &$params)
+    protected function addGlobalParams(array &$params): void
     {
         $params['VERSION'] = self::VERSION;
         $params['IDENTIFIER'] = $this->options['identifier'];
         $params['HASH'] = $this->calculateHash($params);
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://secure-test.be2bill.com/front/service/rest/process' :

@@ -17,7 +17,7 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -44,7 +44,7 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == $request instanceof Sync) {
             return false;

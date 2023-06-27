@@ -31,9 +31,9 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
      *
-     * @return array
+     * @return mixed[]
      */
-    public function start(array $parameters)
+    public function start(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -65,9 +65,9 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
-     * @return array
+     * @return mixed[]
      */
-    public function stop(array $parameters)
+    public function stop(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -82,9 +82,9 @@ class RecurringApi extends BaseApi
     /**
      * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
-     * @return array
+     * @return mixed[]
      */
-    public function check(array $parameters)
+    public function check(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -96,7 +96,7 @@ class RecurringApi extends BaseApi
         return $this->call('Check', $parameters, $this->getPxRecurringWsdl());
     }
 
-    protected function getPxRecurringWsdl()
+    protected function getPxRecurringWsdl(): string
     {
         return $this->options['sandbox'] ?
             'https://test-external.payex.com/pxagreement/pxrecurring.asmx?wsdl' :

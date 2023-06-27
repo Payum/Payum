@@ -12,10 +12,7 @@ use Payum\Payex\Api\RecurringApi;
 
 class PaymentDetailsStatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -137,7 +134,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == (
             $request instanceof GetStatusInterface &&

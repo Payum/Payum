@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class GetExpressCheckoutDetailsTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(GetExpressCheckoutDetails::class);
 

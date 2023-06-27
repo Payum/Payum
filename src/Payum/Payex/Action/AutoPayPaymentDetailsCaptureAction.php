@@ -15,7 +15,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -23,7 +23,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
         $this->gateway->execute(new AutoPayAgreement($request->getModel()));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         if (false == (
             $request instanceof Capture &&

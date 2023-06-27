@@ -25,14 +25,8 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
      */
     protected $config;
 
-    /**
-     * @var Klarna
-     */
-    private $klarna;
+    private \Klarna $klarna;
 
-    /**
-     * @param Klarna $klarna
-     */
     public function __construct(Klarna $klarna = null)
     {
         $this->klarna = $klarna ?: new Klarna();
@@ -41,11 +35,9 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @param mixed $api
-     *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -53,10 +45,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         $this->config = $this->api;
     }
 
-    /**
-     * @return Klarna
-     */
-    protected function getKlarna()
+    protected function getKlarna(): \Klarna
     {
         $this->klarna->config(
             $this->config->eid,
@@ -80,10 +69,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         return $this->klarna;
     }
 
-    /**
-     * @param object           $request
-     */
-    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, $request)
+    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, object $request): void
     {
         $details['error_request'] = get_class($request);
         $details['error_file'] = $e->getFile();

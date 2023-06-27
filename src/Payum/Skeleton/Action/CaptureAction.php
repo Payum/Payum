@@ -14,10 +14,7 @@ class CaptureAction implements ActionInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -26,7 +23,7 @@ class CaptureAction implements ActionInterface
         throw new LogicException('Not implemented');
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

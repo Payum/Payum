@@ -10,18 +10,24 @@ use ReflectionClass;
 
 class GetCreditCardTokenActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetCreditCardToken>
+     */
     protected $requestClass = GetCreditCardToken::class;
 
+    /**
+     * @var class-string<GetCreditCardTokenAction>
+     */
     protected $actionClass = GetCreditCardTokenAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetCreditCardTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldDoNothingIfPaymentHasNoCustomerSet()
+    public function testShouldDoNothingIfPaymentHasNoCustomerSet(): void
     {
         $model = [
         ];
@@ -33,7 +39,7 @@ class GetCreditCardTokenActionTest extends GenericActionTest
         self::assertEmpty($getCreditCardToken->token);
     }
 
-    public function testShouldSetCustomerIdAsCardToken()
+    public function testShouldSetCustomerIdAsCardToken(): void
     {
         $model = [
             'customer' => 'theToken',

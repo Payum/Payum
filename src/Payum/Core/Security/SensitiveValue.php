@@ -10,22 +10,22 @@ use Serializable;
 
 final class SensitiveValue implements Serializable, JsonSerializable
 {
-    private $value;
+    private mixed $value;
 
-    /**
-     * @param mixed $value
-     */
-    final public function __construct($value)
+    final public function __construct(mixed $value)
     {
         $this->value = $value;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function __serialize(): array
     {
         return [];
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
     }
 
@@ -46,18 +46,12 @@ final class SensitiveValue implements Serializable, JsonSerializable
         ];
     }
 
-    /**
-     * @return mixed
-     */
-    public function peek()
+    public function peek(): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @return mixed
-     */
-    public function get()
+    public function get(): mixed
     {
         $value = $this->value;
 
@@ -66,17 +60,17 @@ final class SensitiveValue implements Serializable, JsonSerializable
         return $value;
     }
 
-    public function erase()
+    public function erase(): void
     {
         $this->value = null;
     }
 
-    public function serialize()
+    public function serialize(): void
     {
         return;
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
     }
 
@@ -84,16 +78,11 @@ final class SensitiveValue implements Serializable, JsonSerializable
      * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): void
     {
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return SensitiveValue
-     */
-    public static function ensureSensitive($value)
+    public static function ensureSensitive(mixed $value): self
     {
         return $value instanceof self ? $value : new self($value);
     }

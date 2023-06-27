@@ -4,12 +4,9 @@ namespace Payum\Core;
 
 trait GatewayAwareTrait
 {
-    /**
-     * @var GatewayInterface
-     */
-    protected $gateway;
+    protected GatewayInterface $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

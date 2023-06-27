@@ -3,7 +3,6 @@
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
@@ -15,14 +14,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -33,7 +32,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldAddMethodOnMasspayCall()
+    public function testShouldAddMethodOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -50,7 +49,7 @@ class ApiTest extends TestCase
         $this->assertSame('MassPay', $result['METHOD']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnMasspayCall()
+    public function testShouldAddAuthorizeFieldsOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'the_username',
@@ -71,7 +70,7 @@ class ApiTest extends TestCase
         $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    public function testShouldAddVersionOnMasspayCall()
+    public function testShouldAddVersionOnMasspayCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -86,7 +85,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -94,7 +93,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -111,7 +110,7 @@ class ApiTest extends TestCase
         $api->massPay([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 
@@ -119,7 +118,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -144,10 +143,7 @@ class ApiTest extends TestCase
         return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }
@@ -160,9 +156,7 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], $request->getBody()))
         ;
 
         return $clientMock;

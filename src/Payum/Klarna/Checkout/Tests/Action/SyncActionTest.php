@@ -17,39 +17,45 @@ use stdClass;
 
 class SyncActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<SyncAction>
+     */
     protected $actionClass = SyncAction::class;
 
+    /**
+     * @var class-string<Sync>
+     */
     protected $requestClass = Sync::class;
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncWithArrayAsModel()
+    public function testShouldSupportSyncWithArrayAsModel(): void
     {
         $action = new SyncAction();
 
         $this->assertTrue($action->supports(new Sync([])));
     }
 
-    public function testShouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
@@ -57,9 +63,9 @@ class SyncActionTest extends GenericActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
+    public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet(): void
     {
-        $orderMock = $this->createMock(Klarna_Checkout_Order::class, ['marshal'], [], '', false);
+        $orderMock = $this->createMock(Klarna_Checkout_Order::class);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
@@ -74,7 +80,7 @@ class SyncActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(FetchOrder::class))
-            ->willReturnCallback(function (FetchOrder $request) use ($orderMock) {
+            ->willReturnCallback(function (FetchOrder $request) use ($orderMock): void {
                 $request->setOrder($orderMock);
             })
         ;
@@ -96,7 +102,7 @@ class SyncActionTest extends GenericActionTest
         $this->assertSame('barVal', $model['bar']);
     }
 
-    public function testShouldDoNothingIfModelHasNotLocationSet()
+    public function testShouldDoNothingIfModelHasNotLocationSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -125,6 +131,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

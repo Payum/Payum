@@ -16,28 +16,28 @@ use stdClass;
 
 class PopulateKlarnaFromDetailsActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(PopulateKlarnaFromDetailsAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldSupportPopulateKlarnaFromDetails()
+    public function testShouldSupportPopulateKlarnaFromDetails(): void
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
         $this->assertTrue($action->supports(new PopulateKlarnaFromDetails(new ArrayObject(), new Klarna())));
     }
 
-    public function testShouldNotSupportAnythingNotPopulateKlarnaFromDetails()
+    public function testShouldNotSupportAnythingNotPopulateKlarnaFromDetails(): void
     {
         $action = new PopulateKlarnaFromDetailsAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PopulateKlarnaFromDetailsAction();
@@ -45,7 +45,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldPopulateKlarnaFromDetails()
+    public function testShouldPopulateKlarnaFromDetails(): void
     {
         $details = new ArrayObject([
             'pno' => '410321-9202',
@@ -130,7 +130,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
-    public function testShouldNotFaileIfEmptyDetailsGiven()
+    public function testShouldNotFaileIfEmptyDetailsGiven(): void
     {
         $klarna = $this->createMock(Klarna::class);
 
@@ -147,7 +147,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
-    public function testShouldCorrectlyPutPartialArticles()
+    public function testShouldCorrectlyPutPartialArticles(): void
     {
         $details = new ArrayObject([
             'partial_articles' => [

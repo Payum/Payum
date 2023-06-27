@@ -11,11 +11,17 @@ class StatusActionTest extends GenericActionTest
 {
     public const TRANSACTION_ID = '1597-FS16-234D-A324';
 
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
-    public function testShouldMarkExpiredIfPaymentExpirationTimePassed()
+    public function testShouldMarkExpiredIfPaymentExpirationTimePassed(): void
     {
         $expires = time();
         $request = $this->executeRequestWithDetails([
@@ -26,7 +32,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isExpired());
     }
 
-    public function testShouldMarkNewIfPaymentWithoutTransactionId()
+    public function testShouldMarkNewIfPaymentWithoutTransactionId(): void
     {
         $request = $this->executeRequestWithDetails([]);
 
@@ -37,7 +43,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkNewIfPaymentWithoutStatus()
+    public function testShouldMarkNewIfPaymentWithoutStatus(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -46,7 +52,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkFailedIfPaymentLoss()
+    public function testShouldMarkFailedIfPaymentLoss(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -56,7 +62,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    public function testShouldMarkPendingIfPaymentPending()
+    public function testShouldMarkPendingIfPaymentPending(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -66,7 +72,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPending());
     }
 
-    public function testShouldMarkUnknownIfPaymentReceivedAndPartiallyCredited()
+    public function testShouldMarkUnknownIfPaymentReceivedAndPartiallyCredited(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -77,7 +83,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isUnknown());
     }
 
-    public function testShouldMarkCapturedIfPaymentReceivedAndCredited()
+    public function testShouldMarkCapturedIfPaymentReceivedAndCredited(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -88,7 +94,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkCapturedIfPaymentReceivedWithOverpayment()
+    public function testShouldMarkCapturedIfPaymentReceivedWithOverpayment(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -99,7 +105,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkUnknownIfPaymentRefundedPartially()
+    public function testShouldMarkUnknownIfPaymentRefundedPartially(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -110,7 +116,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isUnknown());
     }
 
-    public function testShouldMarkRefundedIfPaymentRefunded()
+    public function testShouldMarkRefundedIfPaymentRefunded(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -121,7 +127,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isRefunded());
     }
 
-    public function testShouldMarkCapturedIfPaymentUntraceable()
+    public function testShouldMarkCapturedIfPaymentUntraceable(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -131,7 +137,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkUnknownIfPaymentWithUnsupportedStatus()
+    public function testShouldMarkUnknownIfPaymentWithUnsupportedStatus(): void
     {
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
@@ -142,10 +148,9 @@ class StatusActionTest extends GenericActionTest
     }
 
     /**
-     * @param array $details
-     * @return GetHumanStatus
+     * @param mixed[] $details
      */
-    private function executeRequestWithDetails($details)
+    private function executeRequestWithDetails(array $details): GetHumanStatus
     {
         $action = new StatusAction();
         $request = new GetHumanStatus($details);

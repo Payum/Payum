@@ -10,17 +10,17 @@ use stdClass;
 
 class ApiAwareTraitTest extends TestCase
 {
-    public function testThrowIfSetApiButApiClassNotConfigured()
+    public function testThrowIfSetApiButApiClassNotConfigured(): void
     {
         $object = new ApiAwareClass();
-        $object->setApiClass(null);
+        $object->setApiClass('');
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You must configure apiClass in __constructor method of the class the trait is applied to.');
         $object->setApi(new stdClass());
     }
 
-    public function testThrowIfSetApiButApiClassIsNotValidClass()
+    public function testThrowIfSetApiButApiClassIsNotValidClass(): void
     {
         $object = new ApiAwareClass();
         $object->setApiClass('invalidClass');
@@ -30,7 +30,7 @@ class ApiAwareTraitTest extends TestCase
         $object->setApi(new stdClass());
     }
 
-    public function testThrowUnsupportedApi()
+    public function testThrowUnsupportedApi(): void
     {
         $object = new ApiAwareClass();
         $object->setApiClass($this->getMockClass(stdClass::class));
@@ -45,7 +45,7 @@ class ApiAwareClass
 {
     use ApiAwareTrait;
 
-    public function setApiClass($apiClass)
+    public function setApiClass(string $apiClass): void
     {
         $this->apiClass = $apiClass;
     }

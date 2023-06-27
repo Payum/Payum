@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class CreditPartTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
         $rc = new ReflectionClass(CreditPart::class);
 

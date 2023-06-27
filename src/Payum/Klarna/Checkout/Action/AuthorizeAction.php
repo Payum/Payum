@@ -43,10 +43,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
         $this->apiClass = Config::class;
     }
 
-    /**
-     * @param Authorize $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -98,7 +95,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Authorize &&
             $request->getModel() instanceof ArrayAccess

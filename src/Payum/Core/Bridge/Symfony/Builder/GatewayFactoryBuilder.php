@@ -6,10 +6,7 @@ use Payum\Core\GatewayFactoryInterface;
 
 class GatewayFactoryBuilder
 {
-    /**
-     * @var string
-     */
-    private $gatewayFactoryClass;
+    private string $gatewayFactoryClass;
 
     /**
      * @param string $gatewayFactoryClass
@@ -24,10 +21,7 @@ class GatewayFactoryBuilder
         return call_user_func_array([$this, 'build'], func_get_args());
     }
 
-    /**
-     * @return GatewayFactoryInterface
-     */
-    public function build(array $defaultConfig, GatewayFactoryInterface $coreGatewayFactory)
+    public function build(array $defaultConfig, GatewayFactoryInterface $coreGatewayFactory): object
     {
         $gatewayFactoryClass = $this->gatewayFactoryClass;
 

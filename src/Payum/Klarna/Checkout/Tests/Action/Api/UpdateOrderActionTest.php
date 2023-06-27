@@ -18,8 +18,14 @@ use stdClass;
 
 class UpdateOrderActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<UpdateOrder>
+     */
     protected $requestClass = UpdateOrder::class;
 
+    /**
+     * @var class-string<UpdateOrderAction>
+     */
     protected $actionClass = UpdateOrderAction::class;
 
     public function provideNotSupportedRequests(): Iterator
@@ -30,14 +36,14 @@ class UpdateOrderActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(UpdateOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
+    public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute(): void
     {
         $model = [
             'location' => 'theLocation',
@@ -58,7 +64,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(1))
             ->method('apply')
             ->with('POST')
-            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model): void {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
                 $testCase->assertEquals([
@@ -75,7 +81,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf(Klarna_Checkout_Order::class, $request->getOrder());
     }
 
-    public function testShouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout(): void
     {
         $this->expectException(Klarna_Checkout_ConnectionErrorException::class);
         $model = [
@@ -102,7 +108,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $action->execute(new UpdateOrder($model));
     }
 
-    public function testShouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout(): void
     {
         $model = [
             'location' => 'theLocation',
@@ -121,7 +127,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->withConsecutive(['POST'], ['POST'])
             ->willReturnOnConsecutiveCalls(
                 $this->throwException(new Klarna_Checkout_ConnectionErrorException()),
-                $this->returnCallback(function ($method, $order, $options) use ($model) {
+                $this->returnCallback(function ($method, $order, $options) use ($model): void {
                     $this->assertIsArray($options);
                     $this->assertArrayHasKey('data', $options);
                     $this->assertEquals([
@@ -144,6 +150,6 @@ class UpdateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock(Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class);
     }
 }

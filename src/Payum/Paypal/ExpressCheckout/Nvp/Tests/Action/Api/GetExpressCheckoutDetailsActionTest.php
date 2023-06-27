@@ -17,21 +17,21 @@ use stdClass;
 
 class GetExpressCheckoutDetailsActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(GetExpressCheckoutDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetExpressCheckoutDetailsRequestAndArrayAccessAsModel(): void
     {
         $action = new GetExpressCheckoutDetailsAction();
 
@@ -40,14 +40,14 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         );
     }
 
-    public function testShouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetExpressCheckoutDetailsRequest(): void
     {
         $action = new GetExpressCheckoutDetailsAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetExpressCheckoutDetailsAction();
@@ -55,7 +55,7 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -66,7 +66,7 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetExpressCheckoutDetailsMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -74,7 +74,7 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getExpressCheckoutDetails')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertSame('theToken', $fields['TOKEN']);
 
@@ -92,18 +92,16 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetExpressCheckoutDetailsMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetExpressCheckoutDetailsMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getExpressCheckoutDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new GetExpressCheckoutDetailsAction();
@@ -129,6 +127,6 @@ class GetExpressCheckoutDetailsActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

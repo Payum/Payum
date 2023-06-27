@@ -13,21 +13,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayConfigTypeTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType(): void
     {
         $rc = new ReflectionClass(GatewayConfigType::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
-    public function testShouldExtendFormType()
+    public function testShouldExtendFormType(): void
     {
         $type = new GatewayConfigType($this->createMock(GatewayFactoryRegistryInterface::class));
 
         $this->assertSame(FormType::class, $type->getParent());
     }
 
-    public function testShouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions(): void
     {
         $type = new GatewayConfigType($this->createMock(GatewayFactoryRegistryInterface::class));
 

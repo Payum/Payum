@@ -17,35 +17,35 @@ use stdClass;
 
 class DoReferenceTransactionActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel(): void
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertTrue($action->supports(new DoReferenceTransaction($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotDoReferenceTransactionRequest()
+    public function testShouldNotSupportAnythingNotDoReferenceTransactionRequest(): void
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new DoReferenceTransactionAction();
@@ -53,7 +53,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfReferenceIdNotSetInModel()
+    public function testThrowIfReferenceIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('REFERENCEID must be set.');
@@ -62,7 +62,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $action->execute(new DoReferenceTransaction([]));
     }
 
-    public function testThrowIfPaymentActionNotSet()
+    public function testThrowIfPaymentActionNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTACTION must be set.');
@@ -75,7 +75,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfAmtNotSet()
+    public function testThrowIfAmtNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('AMT must be set.');
@@ -89,7 +89,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -97,7 +97,7 @@ class DoReferenceTransactionActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('REFERENCEID', $fields);
                 $testCase->assertSame('theReferenceId', $fields['REFERENCEID']);
 
@@ -123,18 +123,16 @@ class DoReferenceTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new DoReferenceTransactionAction();
@@ -162,6 +160,6 @@ class DoReferenceTransactionActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

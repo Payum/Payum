@@ -21,15 +21,11 @@ class Convert
      */
     protected $to;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token;
 
     /**
      * @param mixed $source
      * @param string $to
-     * @param TokenInterface $token
      */
     public function __construct($source, $to, TokenInterface $token = null)
     {
@@ -46,18 +42,12 @@ class Convert
         return $this->source;
     }
 
-    /**
-     * @return string
-     */
-    public function getTo()
+    public function getTo(): string
     {
         return $this->to;
     }
 
-    /**
-     * @return TokenInterface
-     */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }
@@ -73,7 +63,7 @@ class Convert
     /**
      * @param mixed $result
      */
-    public function setResult($result)
+    public function setResult($result): void
     {
         $this->result = $result;
     }

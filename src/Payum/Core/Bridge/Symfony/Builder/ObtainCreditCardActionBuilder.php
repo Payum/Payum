@@ -9,15 +9,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ObtainCreditCardActionBuilder
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     public function __construct(FormFactoryInterface $formFactory, RequestStack $requestStack)
     {
@@ -30,10 +24,7 @@ class ObtainCreditCardActionBuilder
         return call_user_func_array([$this, 'build'], func_get_args());
     }
 
-    /**
-     * @return ObtainCreditCardAction
-     */
-    public function build(ArrayObject $config)
+    public function build(ArrayObject $config): ObtainCreditCardAction
     {
         $action = new ObtainCreditCardAction($this->formFactory, $config['payum.template.obtain_credit_card']);
         $action->setRequestStack($this->requestStack);

@@ -9,11 +9,17 @@ use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class StatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
-    public function testShouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
@@ -27,7 +33,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkFailedIfResultNotSupported()
+    public function testShouldMarkFailedIfResultNotSupported(): void
     {
         $action = new StatusAction();
 
@@ -43,7 +49,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkCapturedIfResultSuccess()
+    public function testShouldMarkCapturedIfResultSuccess(): void
     {
         $action = new StatusAction();
 
@@ -60,7 +66,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess()
+    public function testShouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess(): void
     {
         $action = new StatusAction();
 
@@ -78,7 +84,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isRefunded());
     }
 
-    public function testShouldMarkFailedIfResultGreaterThenZero()
+    public function testShouldMarkFailedIfResultGreaterThenZero(): void
     {
         $action = new StatusAction();
 
@@ -105,7 +111,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne()
+    public function testShouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne(): void
     {
         $action = new StatusAction();
 

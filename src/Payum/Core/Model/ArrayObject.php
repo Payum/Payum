@@ -10,51 +10,39 @@ use ReturnTypeWillChange;
 class ArrayObject implements ArrayAccess, IteratorAggregate
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $details = [];
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->details[$offset];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->details[$offset] = $value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->details[$offset]);
     }
 
     /**
-     * {@inheritDoc}
+     * @return ArrayIterator<string, string>
      */
     #[ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->details);
     }

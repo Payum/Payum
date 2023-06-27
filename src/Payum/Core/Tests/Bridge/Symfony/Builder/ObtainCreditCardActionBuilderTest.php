@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ObtainCreditCardActionBuilderTest extends TestCase
 {
-    public function testShouldBuildObtainCreditCardWithGivenTemplate()
+    public function testShouldBuildObtainCreditCardWithGivenTemplate(): void
     {
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
@@ -25,7 +25,7 @@ class ObtainCreditCardActionBuilderTest extends TestCase
         $this->assertInstanceOf(ObtainCreditCardAction::class, $action);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $requestStack = $this->createMock(RequestStack::class);

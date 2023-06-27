@@ -15,14 +15,14 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         if ($this->logger) {
             $this->logger->debug('I can log something here');
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return 'a request' == $request;
     }

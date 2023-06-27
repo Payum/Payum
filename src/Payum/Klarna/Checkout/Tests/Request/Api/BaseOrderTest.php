@@ -12,28 +12,28 @@ use ReflectionClass;
 
 class BaseOrderTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(BaseOrder::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
         $rc = new ReflectionClass(BaseOrder::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testThrowIfTryConstructWithNotArrayModel()
+    public function testThrowIfTryConstructWithNotArrayModel(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
 
-    public function testShouldAllowGetPreviouslySetOrder()
+    public function testShouldAllowGetPreviouslySetOrder(): void
     {
         $request = $this->createBaseOrderMock([]);
 
@@ -49,7 +49,7 @@ class BaseOrderTest extends TestCase
      */
     protected function createOrderMock()
     {
-        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 
     /**

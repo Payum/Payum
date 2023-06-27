@@ -11,10 +11,7 @@ use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
 
 class ReturnAmountAction extends BaseApiAwareAction
 {
-    /**
-     * @param ReturnAmount $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -35,7 +32,7 @@ class ReturnAmountAction extends BaseApiAwareAction
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ReturnAmount &&
             $request->getModel() instanceof ArrayAccess

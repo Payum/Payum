@@ -14,25 +14,31 @@ use ReflectionClass;
 
 class NotifyActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Notify>
+     */
     protected $requestClass = Notify::class;
 
+    /**
+     * @var class-string<NotifyAction>
+     */
     protected $actionClass = NotifyAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSubExecuteSyncWithSameModel()
+    public function testShouldSubExecuteSyncWithSameModel(): void
     {
         $expectedModel = [
             'foo' => 'fooVal',

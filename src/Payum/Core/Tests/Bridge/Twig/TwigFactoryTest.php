@@ -9,14 +9,14 @@ use Twig\Environment;
 
 class TwigFactoryTest extends TestCase
 {
-    public function testShouldAllowCreateATwigEnvironment()
+    public function testShouldAllowCreateATwigEnvironment(): void
     {
         $twig = TwigFactory::createGeneric();
 
         $this->assertInstanceOf(Environment::class, $twig);
     }
 
-    public function testShouldGuessCorrectCorePathByGatewayClass()
+    public function testShouldGuessCorrectCorePathByGatewayClass(): void
     {
         $path = TwigFactory::guessViewsPath(Gateway::class);
 
@@ -24,12 +24,12 @@ class TwigFactoryTest extends TestCase
         $this->assertStringEndsWith('Payum/Core/Resources/views', $path);
     }
 
-    public function testShouldNotGuessPathIfFileNotExist()
+    public function testShouldNotGuessPathIfFileNotExist(): void
     {
         $this->assertNull(TwigFactory::guessViewsPath('Foo\Bar\Baz'));
     }
 
-    public function testShouldAllowCreateGenericPaths()
+    public function testShouldAllowCreateGenericPaths(): void
     {
         $paths = TwigFactory::createGenericPaths();
 

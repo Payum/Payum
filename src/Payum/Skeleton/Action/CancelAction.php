@@ -14,10 +14,7 @@ class CancelAction implements ActionInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Cancel $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -26,7 +23,7 @@ class CancelAction implements ActionInterface
         throw new LogicException('Not implemented');
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Cancel &&
             $request->getModel() instanceof ArrayAccess

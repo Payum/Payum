@@ -16,14 +16,14 @@ use stdClass;
 
 class GetTransactionDetailsActionTest extends TestCase
 {
-    public function testShouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction(): void
     {
         $rc = new ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel(): void
     {
         $action = new GetTransactionDetailsAction();
 
@@ -32,14 +32,14 @@ class GetTransactionDetailsActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest(): void
     {
         $action = new GetTransactionDetailsAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetTransactionDetailsAction();
@@ -47,7 +47,7 @@ class GetTransactionDetailsActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel()
+    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TRANSACTIONID must be set.');
@@ -58,17 +58,15 @@ class GetTransactionDetailsActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'PAYMENTSTATUS' => 'theStatus',
-                ];
-            });
+            ->willReturnCallback(fn () => [
+                'PAYMENTSTATUS' => 'theStatus',
+            ]);
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
@@ -90,6 +88,6 @@ class GetTransactionDetailsActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

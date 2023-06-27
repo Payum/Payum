@@ -8,7 +8,7 @@ use SoapClient;
 
 class SoapClientFactoryTest extends TestCase
 {
-    public function testShouldAllowCreateSoapClientWithDefaultClassAndOptions()
+    public function testShouldAllowCreateSoapClientWithDefaultClassAndOptions(): void
     {
         $factory = new SoapClientFactory();
 
@@ -17,7 +17,7 @@ class SoapClientFactoryTest extends TestCase
         $this->assertInstanceOf(SoapClient::class, $client);
     }
 
-    public function testShouldAllowCreateSoapClientWithCustomClassAndOptions()
+    public function testShouldAllowCreateSoapClientWithCustomClassAndOptions(): void
     {
         $options = [
             'trace' => true,

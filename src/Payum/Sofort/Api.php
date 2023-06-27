@@ -34,7 +34,10 @@ class Api
 
     public const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
 
-    protected $options = [
+    /**
+     * @var array{config_key: ?string, abort_url?: ?string, disable_notification?: bool}
+     */
+    protected array $options = [
         'config_key' => null,
     ];
 
@@ -48,9 +51,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    public function createTransaction(array $fields)
+    public function createTransaction(array $fields): array
     {
         $fields = (array_replace([
             'success_url' => null,
@@ -87,9 +90,9 @@ class Api
     /**
      * @param $transactionId
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getTransactionData($transactionId)
+    public function getTransactionData($transactionId): array
     {
         $transactionData = new TransactionData($this->options['config_key']);
         $transactionData->addTransaction($transactionId);
@@ -150,9 +153,9 @@ class Api
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function refundTransaction(array $fields)
+    public function refundTransaction(array $fields): array
     {
         $refund = new Refund($this->options['config_key']);
         $refund->setSenderSepaAccount($fields['recipient_bic'], $fields['recipient_iban'], $fields['recipient_holder']);

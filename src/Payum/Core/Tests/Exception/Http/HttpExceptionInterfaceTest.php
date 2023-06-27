@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class HttpExceptionInterfaceTest extends TestCase
 {
-    public function testShouldImplementPayumExceptionInterface()
+    public function testShouldImplementPayumExceptionInterface(): void
     {
         $rc = new ReflectionClass(HttpExceptionInterface::class);
 

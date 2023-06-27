@@ -9,7 +9,7 @@ use stdClass;
 
 class TokenTest extends MongoTest
 {
-    public function testShouldAllowPersist()
+    public function testShouldAllowPersist(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -21,7 +21,7 @@ class TokenTest extends MongoTest
         $this->assertSame([$token], $this->dm->getRepository(Token::class)->findAll());
     }
 
-    public function testShouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');

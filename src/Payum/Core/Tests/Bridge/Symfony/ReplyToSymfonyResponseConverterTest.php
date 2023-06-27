@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReplyToSymfonyResponseConverterTest extends TestCase
 {
-    public function testShouldReturnRedirectResponseIfPayumHttpRedirectReply()
+    public function testShouldReturnRedirectResponseIfPayumHttpRedirectReply(): void
     {
         $expectedUrl = '/foo/bar';
 
@@ -34,7 +34,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($expectedUrl, $headers['location'][0]);
     }
 
-    public function testShouldReturnResponseIfPayumHttpResponseReply()
+    public function testShouldReturnResponseIfPayumHttpResponseReply(): void
     {
         $reply = new HttpResponse('theContent');
 
@@ -47,7 +47,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
     }
 
-    public function testShouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders()
+    public function testShouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders(): void
     {
         $reply = new HttpResponse('theContent', 418, [
             'foo' => 'fooVal',
@@ -65,7 +65,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertArrayHasKey('bar', $response->headers->all());
     }
 
-    public function testShouldReturnResponseIfPayumHttpPostRedirectReply()
+    public function testShouldReturnResponseIfPayumHttpPostRedirectReply(): void
     {
         $reply = new HttpPostRedirect('anUrl', [
             'foo' => 'foo',
@@ -80,7 +80,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($reply->getContent(), $response->getContent());
     }
 
-    public function testShouldReturnResponseIfSymfonyHttpResponseReply()
+    public function testShouldReturnResponseIfSymfonyHttpResponseReply(): void
     {
         $expectedResponse = new Response('foobar');
 
@@ -93,7 +93,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($expectedResponse, $actualResponse);
     }
 
-    public function testShouldChangeReplyToLogicExceptionIfNotSupported()
+    public function testShouldChangeReplyToLogicExceptionIfNotSupported(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot convert reply Mock_Base_');

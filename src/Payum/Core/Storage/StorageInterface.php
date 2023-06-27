@@ -4,52 +4,57 @@ namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
+/**
+ * @template T of object
+ */
 interface StorageInterface
 {
     /**
-     * @return object
+     * @return T
      */
-    public function create();
+    public function create(): object;
 
     /**
-     * @param object $model
+     * @param T $model
      *
      * @return boolean
      */
-    public function support($model);
+    public function support(object $model): bool;
 
     /**
-     * @param object $model
+     * @param T $model
+     *
+     * @return T
      *
      * @throws InvalidArgumentException if not supported model given.
      */
-    public function update($model);
+    public function update(object $model): object;
 
     /**
-     * @param object $model
+     * @param T $model
      *
      * @throws InvalidArgumentException if not supported model given.
      */
-    public function delete($model);
+    public function delete(object $model): void;
 
     /**
-     * @param mixed|IdentityInterface $id
+     * @param IdentityInterface<T> $id
      *
-     * @return object|null
+     * @return ?T
      */
-    public function find($id);
+    public function find(IdentityInterface $id): ?object;
 
     /**
-     * @return object[]
+     * @return T[]
      */
-    public function findBy(array $criteria);
+    public function findBy(array $criteria): array;
 
     /**
-     * @param object $model
+     * @param T $model
+     *
+     * @return IdentityInterface<T>
      *
      * @throws InvalidArgumentException if not supported model given.
-     *
-     * @return IdentityInterface
      */
-    public function identify($model);
+    public function identify(object $model): IdentityInterface;
 }

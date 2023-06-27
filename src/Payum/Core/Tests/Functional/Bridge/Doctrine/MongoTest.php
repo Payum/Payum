@@ -15,10 +15,8 @@ abstract class MongoTest extends BaseMongoTest
 {
     /**
      * @throws RuntimeException
-     *
-     * @return MappingDriverChain
      */
-    protected function getMetadataDriverImpl()
+    protected function getMetadataDriverImpl(): MappingDriverChain
     {
         $rootDir = realpath(__DIR__ . '/../../../..');
         if (false === $rootDir || false === is_file($rootDir . '/Gateway.php')) {

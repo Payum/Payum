@@ -8,7 +8,7 @@ use Payum\Paypal\ProHosted\Nvp\PaypalProHostedGatewayFactory;
 
 class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PaypalProHostedGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalProHostedGatewayFactory();
 
@@ -48,7 +48,7 @@ class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalProHostedGatewayFactory();
 
@@ -63,7 +63,7 @@ class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Paypal Pro Hosted', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');

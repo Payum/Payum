@@ -15,10 +15,7 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param ModelAggregateInterface|ModelAwareInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -40,7 +37,7 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof ModelAggregateInterface &&
             $request instanceof ModelAwareInterface &&

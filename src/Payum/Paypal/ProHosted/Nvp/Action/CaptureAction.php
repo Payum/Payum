@@ -19,10 +19,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         $newResponse = [];
         /** @var Capture $request */
@@ -63,7 +60,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture && $request->getModel() instanceof ArrayAccess;
     }

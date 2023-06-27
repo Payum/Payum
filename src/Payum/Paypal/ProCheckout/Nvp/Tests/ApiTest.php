@@ -3,7 +3,6 @@
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\HttpClientInterface;
@@ -14,14 +13,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -35,7 +34,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldAddTRXTYPEOnDoSaleCall()
+    public function testShouldAddTRXTYPEOnDoSaleCall(): void
     {
         $api = new Api([
             'username' => 'aUsername',
@@ -51,7 +50,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
-    public function testShouldAddTRXTYPEOnDoCreditCall()
+    public function testShouldAddTRXTYPEOnDoCreditCall(): void
     {
         $api = new Api([
             'username' => 'aUsername',
@@ -67,7 +66,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnDoSaleCall()
+    public function testShouldAddAuthorizeFieldsOnDoSaleCall(): void
     {
         $api = new Api([
             'username' => 'theUsername',
@@ -95,7 +94,7 @@ class ApiTest extends TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnDoCreditCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreditCall(): void
     {
         $api = new Api([
             'username' => 'theUsername',
@@ -123,7 +122,7 @@ class ApiTest extends TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -131,7 +130,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -150,7 +149,7 @@ class ApiTest extends TestCase
         $api->doCredit([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 
@@ -158,7 +157,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase): Response {
                 $testCase->assertSame('https://pilot-payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
@@ -185,10 +184,7 @@ class ApiTest extends TestCase
         return $this->createMock(HttpClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): GuzzleMessageFactory
     {
         return new GuzzleMessageFactory();
     }
@@ -201,9 +197,7 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], $request->getBody()))
         ;
 
         return $clientMock;

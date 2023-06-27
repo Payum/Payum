@@ -27,7 +27,7 @@ class TokenFactory extends AbstractTokenFactory
         $this->baseUrl = $baseUrl ? HttpUri::createFromString($baseUrl) : HttpUri::createFromServer($_SERVER);
     }
 
-    protected function generateUrl($path, array $parameters = [])
+    protected function generateUrl(string $path, array $parameters = []): string
     {
         $hierarchicalPath = HierarchicalPath::createFromUri($this->baseUrl);
         if ('php' === pathinfo($hierarchicalPath->getBasename(), PATHINFO_EXTENSION)) {

@@ -11,7 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class AuthorizeAction extends PurchaseAction
 {
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -23,7 +23,7 @@ class AuthorizeAction extends PurchaseAction
         parent::execute($request);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Authorize &&
             $request->getModel() instanceof ArrayAccess

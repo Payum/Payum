@@ -23,25 +23,31 @@ use ReflectionClass;
 
 class AutorizeActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Authorize>
+     */
     protected $requestClass = Authorize::class;
 
+    /**
+     * @var class-string<AuthorizeAction>
+     */
     protected $actionClass = AuthorizeAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSetZeroGatewayActionAsSell()
+    public function testShouldSetZeroGatewayActionAsSell(): void
     {
         $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
@@ -53,7 +59,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertSame(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
-    public function testShouldForcePaymentActionAuthorization()
+    public function testShouldForcePaymentActionAuthorization(): void
     {
         $action = new AuthorizeAction();
         $action->setGateway($this->createGatewayMock());
@@ -67,7 +73,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertSame(Api::PAYMENTACTION_AUTHORIZATION, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
-    public function testShouldRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenNotSetInModel()
+    public function testShouldRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenNotSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -87,7 +93,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute(new Authorize([]));
     }
 
-    public function testShouldRequestAuthorizeActionIfPayerIdNotSetInModel()
+    public function testShouldRequestAuthorizeActionIfPayerIdNotSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -109,7 +115,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotRequestAuthorizeActionIfPayerIdSetInModel()
+    public function testShouldNotRequestAuthorizeActionIfPayerIdSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -130,7 +136,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotExecuteAnythingIfSetExpressCheckoutActionFails()
+    public function testShouldNotExecuteAnythingIfSetExpressCheckoutActionFails(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -142,7 +148,7 @@ class AutorizeActionTest extends GenericActionTest
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function (SetExpressCheckout $request) {
+                $this->returnCallback(function (SetExpressCheckout $request): void {
                     $model = $request->getModel();
 
                     $model['L_ERRORCODE0'] = 'aCode';
@@ -156,7 +162,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute(new Authorize([]));
     }
 
-    public function testShouldSetTokenTargetUrlAsReturnUrlIfCapturePassedWithToken()
+    public function testShouldSetTokenTargetUrlAsReturnUrlIfCapturePassedWithToken(): void
     {
         $testCase = $this;
 
@@ -176,7 +182,7 @@ class AutorizeActionTest extends GenericActionTest
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
+                $this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl): void {
                     $model = $request->getModel();
 
                     $testCase->assertSame($expectedTargetUrl, $model['RETURNURL']);
@@ -193,7 +199,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldSetTokenTargetUrlAsCancelUrlIfCapturePassedWithToken()
+    public function testShouldSetTokenTargetUrlAsCancelUrlIfCapturePassedWithToken(): void
     {
         $testCase = $this;
 
@@ -214,7 +220,7 @@ class AutorizeActionTest extends GenericActionTest
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl): void {
                     $model = $request->getModel();
 
                     $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
@@ -231,7 +237,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldNotLooseExistingGetParamWhenSettingTargetUrlAsCancelUrl()
+    public function testShouldNotLooseExistingGetParamWhenSettingTargetUrlAsCancelUrl(): void
     {
         $testCase = $this;
 
@@ -253,7 +259,7 @@ class AutorizeActionTest extends GenericActionTest
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+                $this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl): void {
                     $model = $request->getModel();
 
                     $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
@@ -270,7 +276,7 @@ class AutorizeActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldNotRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenSetInModel()
+    public function testShouldNotRequestSetExpressCheckoutActionAndAuthorizeActionIfTokenSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -290,7 +296,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit()
+    public function testShouldRequestDoExpressCheckoutGatewayActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionCommit(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -316,7 +322,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit()
+    public function testShouldRequestConfirmOrderActionIfCheckoutStatusNotInitiatedAndPayerIdSetInModelAndUserActionNotCommit(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -343,7 +349,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldRequestAuthorizeTokenIfPayerIdNotSetInModel()
+    public function testShouldRequestAuthorizeTokenIfPayerIdNotSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -367,7 +373,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotRequestDoExpressCheckoutGatewayActionIfCheckoutStatusOtherThenNotInitiatedSetInModel()
+    public function testShouldNotRequestDoExpressCheckoutGatewayActionIfCheckoutStatusOtherThenNotInitiatedSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -390,7 +396,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotRequestDoExpressCheckoutGatewayActionIfAmountZero()
+    public function testShouldNotRequestDoExpressCheckoutGatewayActionIfAmountZero(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -414,7 +420,7 @@ class AutorizeActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed()
+    public function testShouldAddNotifyUrlIfTokenFactorySetAndCaptureTokenPassed(): void
     {
         $details = new ArrayObject([
             'foo' => 'fooVal',
@@ -451,7 +457,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    public function testShouldNotAddNotifyUrlIfAlreadySet()
+    public function testShouldNotAddNotifyUrlIfAlreadySet(): void
     {
         $details = new ArrayObject([
             'PAYMENTREQUEST_0_NOTIFYURL' => 'alreadySetUrl',
@@ -480,7 +486,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertSame('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
     }
 
-    public function testShouldNotAddNotifyUrlIfPaypalTokenAlreadySet()
+    public function testShouldNotAddNotifyUrlIfPaypalTokenAlreadySet(): void
     {
         $details = new ArrayObject([
             'TOKEN' => 'foo',
@@ -508,7 +514,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertArrayNotHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
     }
 
-    public function testShouldNotAddNotifyUrlIfTokenFactoryNotSet()
+    public function testShouldNotAddNotifyUrlIfTokenFactoryNotSet(): void
     {
         $details = new ArrayObject([
         ]);
@@ -528,7 +534,7 @@ class AutorizeActionTest extends GenericActionTest
         $this->assertArrayNotHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
     }
 
-    public function testShouldNotAddNotifyUrlIfCaptureTokenNotSet()
+    public function testShouldNotAddNotifyUrlIfCaptureTokenNotSet(): void
     {
         $details = new ArrayObject();
 

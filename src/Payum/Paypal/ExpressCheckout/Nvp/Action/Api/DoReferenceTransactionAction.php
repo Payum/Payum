@@ -21,7 +21,7 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var DoReferenceTransaction $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -43,7 +43,7 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof DoReferenceTransaction &&
             $request->getModel() instanceof ArrayAccess

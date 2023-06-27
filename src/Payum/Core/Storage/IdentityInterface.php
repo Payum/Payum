@@ -4,15 +4,15 @@ namespace Payum\Core\Storage;
 
 use Serializable;
 
+/**
+ * @template-covariant T of object
+ */
 interface IdentityInterface extends Serializable
 {
     /**
-     * @return string
+     * @return class-string<T>
      */
-    public function getClass();
+    public function getClass(): string;
 
-    /**
-     * @return mixed
-     */
-    public function getId();
+    public function getId(): mixed;
 }

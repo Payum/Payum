@@ -4,23 +4,23 @@ namespace Payum\Core\Model;
 
 use Payum\Core\Storage\IdentityInterface;
 
+/**
+ * @template T of object
+ * @implements IdentityInterface<T>
+ */
 class Identity implements IdentityInterface
 {
     /**
-     * @var string
+     * @var class-string<T>
      */
-    protected $class;
+    protected string $class;
+
+    protected mixed $id;
 
     /**
-     * @var mixed
+     * @param class-string<T> | T $class
      */
-    protected $id;
-
-    /**
-     * @param mixed         $id
-     * @param string|object $class
-     */
-    public function __construct($id, $class)
+    public function __construct(mixed $id, string | object $class)
     {
         $this->id = $id;
         $this->class = is_object($class) ? get_class($class) : $class;
@@ -31,9 +31,9 @@ class Identity implements IdentityInterface
         return [$this->id, $this->class];
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
-        list($this->id, $this->class) = $data;
+        [$this->id, $this->class] = $data;
     }
 
     /**
@@ -44,23 +44,26 @@ class Identity implements IdentityInterface
         return $this->class . '#' . $this->id;
     }
 
-    public function getClass()
+    /**
+     * @return class-string<T>
+     */
+    public function getClass(): string
     {
         return $this->class;
     }
 
-    public function getId()
+    public function getId(): mixed
     {
         return $this->id;
     }
 
-    public function serialize()
+    public function serialize(): ?string
     {
         return serialize([$this->id, $this->class]);
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->class) = unserialize($serialized);
+        [$this->id, $this->class] = unserialize($serialized);
     }
 }

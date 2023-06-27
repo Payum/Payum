@@ -15,10 +15,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * @param Authorize $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -29,7 +26,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Authorize &&
             $request->getModel() instanceof ArrayAccess

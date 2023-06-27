@@ -13,18 +13,24 @@ use ReflectionClass;
 
 class MasspayActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Masspay>
+     */
     protected $requestClass = Masspay::class;
 
+    /**
+     * @var class-string<MasspayAction>
+     */
     protected $actionClass = MasspayAction::class;
 
-    public function testShouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction(): void
     {
         $rc = new ReflectionClass(MasspayAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testThrowIfPayoutAlreadyAcknowledged()
+    public function testThrowIfPayoutAlreadyAcknowledged(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Payout has already been acknowledged');
@@ -35,13 +41,13 @@ class MasspayActionTest extends GenericActionTest
         ], 0));
     }
 
-    public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->willReturnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields): array {
                 $this->assertEquals([
                     'foo' => 'fooVal',
                 ], $fields);
@@ -60,13 +66,13 @@ class MasspayActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->willReturnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields): array {
                 $this->assertEquals([
                     'foo' => 'fooVal',
                 ], $fields);
@@ -97,6 +103,6 @@ class MasspayActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

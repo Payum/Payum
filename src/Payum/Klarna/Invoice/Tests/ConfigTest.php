@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    public function testShouldAllowGetDefaultPublicProperties()
+    public function testShouldAllowGetDefaultPublicProperties(): void
     {
         $config = new Config();
 
@@ -24,7 +24,7 @@ class ConfigTest extends TestCase
         $this->assertSame('./pclasses.json', $config->pClassStoragePath);
     }
 
-    public function testShouldAllowSetExpectedPublicProperties()
+    public function testShouldAllowSetExpectedPublicProperties(): void
     {
         $config = new Config();
 

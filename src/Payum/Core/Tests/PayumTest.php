@@ -9,20 +9,22 @@ use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Tests\Storage\MockStorage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 
 class PayumTest extends TestCase
 {
-    public function testShouldImplementRegistryInterface()
+    public function testShouldImplementRegistryInterface(): void
     {
         $rc = new ReflectionClass(Payum::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
-    public function testShouldAllowGetHttpRequestVerifierSetInConstructor()
+    public function testShouldAllowGetHttpRequestVerifierSetInConstructor(): void
     {
         $httpRequestVerifier = $this->createHttpRequestVerifierMock();
 
@@ -36,7 +38,7 @@ class PayumTest extends TestCase
         $this->assertSame($httpRequestVerifier, $payum->getHttpRequestVerifier());
     }
 
-    public function testShouldAllowGetGenericTokenFactorySetInConstructor()
+    public function testShouldAllowGetGenericTokenFactorySetInConstructor(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -50,7 +52,7 @@ class PayumTest extends TestCase
         $this->assertSame($tokenFactory, $payum->getTokenFactory());
     }
 
-    public function testShouldAllowGetTokenStorageSetInConstructor()
+    public function testShouldAllowGetTokenStorageSetInConstructor(): void
     {
         $tokenStorage = $this->createTokenStorage();
 
@@ -64,16 +66,22 @@ class PayumTest extends TestCase
         $this->assertSame($tokenStorage, $payum->getTokenStorage());
     }
 
-    public function testShouldAllowGetGatewayFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFromRegistryInConstructor(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOne */
+        $storageOne = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestCase> $storageTwo */
+        $storageTwo = $this->createMock(StorageInterface::class);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => $fooGateway = $this->createMock(GatewayInterface::class),
                 'bar' => $barGateway = $this->createMock(GatewayInterface::class),
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                stdClass::class => $storageOne,
+                TestCase::class => $storageTwo,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -96,16 +104,22 @@ class PayumTest extends TestCase
         ], $payum->getGateways());
     }
 
-    public function testShouldAllowGetStoragesFromRegistryInConstructor()
+    public function testShouldAllowGetStoragesFromRegistryInConstructor(): void
     {
+        $barModel = (new class() {
+        })::class;
+
+        $fooStorage = new MockStorage(stdClass::class);
+        $barStorage = new MockStorage($barModel);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => 'fooGateway',
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                stdClass::class => $fooStorage,
+                $barModel => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -120,24 +134,30 @@ class PayumTest extends TestCase
             $this->createTokenStorage()
         );
 
-        $this->assertSame('fooStorage', $payum->getStorage('foo'));
-        $this->assertSame('barStorage', $payum->getStorage('bar'));
+        $this->assertSame($fooStorage, $payum->getStorage(stdClass::class));
+        $this->assertSame($barStorage, $payum->getStorage($barModel));
         $this->assertSame([
-            'foo' => 'fooStorage',
-            'bar' => 'barStorage',
+            stdClass::class => $fooStorage,
+            $barModel => $barStorage,
         ], $payum->getStorages());
     }
 
-    public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOne */
+        $storageOne = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestCase> $storageTwo */
+        $storageTwo = $this->createMock(StorageInterface::class);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => 'fooGateway',
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                stdClass::class => $storageOne,
+                TestCase::class => $storageTwo,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -161,7 +181,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject | RegistryInterface<stdClass>
      */
     protected function createRegistryMock()
     {
@@ -185,9 +205,9 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
-    protected function createTokenStorage()
+    protected function createTokenStorage(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }

@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateType extends AbstractType
 {
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         if ('choice' == $options['widget']) {
             if (empty($view['day']->vars['value'])) {
@@ -27,21 +27,16 @@ class CreditCardExpirationDateType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'max_expiration_year' => date('Y') + 10,
             'min_expiration_year' => date('Y'),
-            'years' => function (Options $options) {
-                return range($options['min_expiration_year'], $options['max_expiration_year']);
-            },
+            'years' => fn (Options $options) => range($options['min_expiration_year'], $options['max_expiration_year']),
         ]);
     }
 
-    /**
-     * @return ?string
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return DateType::class;
     }

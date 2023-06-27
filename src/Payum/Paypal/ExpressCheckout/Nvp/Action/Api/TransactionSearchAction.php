@@ -20,7 +20,7 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var TransactionSearch $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -34,7 +34,7 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof TransactionSearch &&
             $request->getModel() instanceof ArrayAccess

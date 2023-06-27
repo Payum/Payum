@@ -14,19 +14,16 @@ use Symfony\Component\Templating\EngineInterface;
 class RenderTemplateActionTest extends GenericActionTest
 {
     /**
-     * @var string
+     * @var class-string<RenderTemplate>
      */
     protected $requestClass = RenderTemplate::class;
 
     /**
-     * @var string
+     * @var class-string<RenderTemplateAction>
      */
     protected $actionClass = RenderTemplateAction::class;
 
-    /**
-     * @var MockObject
-     */
-    private $templating;
+    private MockObject $templating;
 
     protected function setUp(): void
     {
@@ -42,7 +39,7 @@ class RenderTemplateActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldCallRenderWithCorrectArguments()
+    public function testShouldCallRenderWithCorrectArguments(): void
     {
         $this->templating
             ->expects($this->once())

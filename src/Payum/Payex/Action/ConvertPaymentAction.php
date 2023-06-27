@@ -11,10 +11,7 @@ use Payum\Payex\Api\OrderApi;
 
 class ConvertPaymentAction implements ActionInterface
 {
-    /**
-     * @param Convert $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -34,13 +31,13 @@ class ConvertPaymentAction implements ActionInterface
         $details['clientIdentifier'] = '';
         $details['additionalValues'] = '';
         $details['agreementRef'] = '';
-        $details['clientLanguage'] = $details['clientLanguage'] ?? 'en-US';
+        $details['clientLanguage'] ??= 'en-US';
         $details['autoPay'] = false;
 
         $request->setResult((array) $details);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&

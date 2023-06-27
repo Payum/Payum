@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class KeysTest extends TestCase
 {
-    public function testSouldAllowGetPublishableKeySetInConstructor()
+    public function testSouldAllowGetPublishableKeySetInConstructor(): void
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');
 
         $this->assertSame('thePublishableKey', $keys->getPublishableKey());
     }
 
-    public function testShouldAllowGetSecretKeySetInConstructor()
+    public function testShouldAllowGetSecretKeySetInConstructor(): void
     {
         $keys = new Keys('aPublishableKey', 'theSecretKey');
 

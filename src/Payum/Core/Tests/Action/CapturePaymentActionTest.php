@@ -12,6 +12,7 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
@@ -19,10 +20,19 @@ use ReflectionClass;
 
 class CapturePaymentActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Capture>
+     */
     protected $requestClass = Capture::class;
 
+    /**
+     * @var class-string<CapturePaymentAction>
+     */
     protected $actionClass = CapturePaymentAction::class;
 
+    /**
+     * @return \Iterator<Generic[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         $capture = new $this->requestClass($this->createMock(TokenInterface::class));
@@ -31,14 +41,14 @@ class CapturePaymentActionTest extends GenericActionTest
         yield [$capture];
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldExecuteConvertRequestIfStatusNew()
+    public function testShouldExecuteConvertRequestIfStatusNew(): void
     {
         $payment = new Payment();
 
@@ -50,10 +60,10 @@ class CapturePaymentActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Convert::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHumanStatus $request) {
+                $this->returnCallback(function (GetHumanStatus $request): void {
                     $request->markNew();
                 }),
-                $this->returnCallback(function (Convert $request) use ($testCase, $payment) {
+                $this->returnCallback(function (Convert $request) use ($testCase, $payment): void {
                     $testCase->assertSame($payment, $request->getSource());
                     $testCase->assertSame('array', $request->getTo());
                     $testCase->assertNull($request->getToken());
@@ -73,7 +83,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertNull($capture->getToken());
     }
 
-    public function testShouldSetConvertedResultToPaymentAsDetails()
+    public function testShouldSetConvertedResultToPaymentAsDetails(): void
     {
         $payment = new Payment();
 
@@ -83,10 +93,10 @@ class CapturePaymentActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Convert::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHumanStatus $request) {
+                $this->returnCallback(function (GetHumanStatus $request): void {
                     $request->markNew();
                 }),
-                $this->returnCallback(function (Convert $request) {
+                $this->returnCallback(function (Convert $request): void {
                     $request->setResult([
                         'foo' => 'fooVal',
                     ]);
@@ -109,7 +119,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame('fooVal', $details['foo']);
     }
 
-    public function testShouldExecuteConvertRequestWithTokenIfOnePresent()
+    public function testShouldExecuteConvertRequestWithTokenIfOnePresent(): void
     {
         $payment = new Payment();
         $token = $this->createTokenMock();
@@ -122,10 +132,10 @@ class CapturePaymentActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Convert::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHumanStatus $request) {
+                $this->returnCallback(function (GetHumanStatus $request): void {
                     $request->markNew();
                 }),
-                $this->returnCallback(function (Convert $request) use ($testCase, $payment, $token) {
+                $this->returnCallback(function (Convert $request) use ($testCase, $payment, $token): void {
                     $testCase->assertSame($payment, $request->getSource());
                     $testCase->assertSame($token, $request->getToken());
 
@@ -147,7 +157,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $this->assertSame($token, $capture->getToken());
     }
 
-    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution()
+    public function testShouldSetDetailsBackToPaymentAfterCaptureDetailsExecution(): void
     {
         $expectedDetails = [
             'foo' => 'fooVal',
@@ -164,10 +174,10 @@ class CapturePaymentActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Capture::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHumanStatus $request) {
+                $this->returnCallback(function (GetHumanStatus $request): void {
                     $request->markPending();
                 }),
-                $this->returnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
+                $this->returnCallback(function (Capture $request) use ($testCase, $expectedDetails): void {
                     $details = $request->getModel();
 
                     $testCase->assertInstanceOf(ArrayAccess::class, $details);
@@ -191,7 +201,7 @@ class CapturePaymentActionTest extends GenericActionTest
         ], $payment->getDetails());
     }
 
-    public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown()
+    public function testShouldSetDetailsBackToPaymentEvenIfExceptionThrown(): void
     {
         $expectedDetails = [
             'foo' => 'fooVal',
@@ -206,10 +216,10 @@ class CapturePaymentActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(GetHumanStatus::class)], [$this->isInstanceOf(Capture::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHumanStatus $request) {
+                $this->returnCallback(function (GetHumanStatus $request): void {
                     $request->markPending();
                 }),
-                $this->returnCallback(function (Capture $request) {
+                $this->returnCallback(function (Capture $request): void {
                     $details = $request->getModel();
                     $details['bar'] = 'barVal';
 

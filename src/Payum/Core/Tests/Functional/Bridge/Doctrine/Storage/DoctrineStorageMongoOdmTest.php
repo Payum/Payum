@@ -9,7 +9,7 @@ use Payum\Core\Tests\Mocks\Document\TestModel;
 
 class DoctrineStorageMongoOdmTest extends MongoTest
 {
-    public function testShouldUpdateModelAndSetId()
+    public function testShouldUpdateModelAndSetId(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -23,7 +23,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertNotNull($model->getId());
     }
 
-    public function testShouldGetModelIdentifier()
+    public function testShouldGetModelIdentifier(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -43,7 +43,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($model->getId(), $identity->getId());
     }
 
-    public function testShouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -64,7 +64,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($requestId, $model->getId());
     }
 
-    public function testShouldFindModelByIdentity()
+    public function testShouldFindModelByIdentity(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -87,7 +87,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($requestId, $foundModel->getId());
     }
 
-    public function testShouldFindByCurrency()
+    public function testShouldFindByCurrency(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -124,7 +124,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertContainsOnly(TestModel::class, $result);
     }
 
-    public function testShouldFindByAllIfCriteriaIsEmpty()
+    public function testShouldFindByAllIfCriteriaIsEmpty(): void
     {
         $storage = new DoctrineStorage(
             $this->dm,

@@ -18,30 +18,27 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
      */
     protected $response;
 
-    public function setRequest(RequestInterface $request)
+    public function setRequest(RequestInterface $request): void
     {
         $this->request = $request;
     }
 
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
 
-    public function setResponse(ResponseInterface $response)
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }
 
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
 
-    /**
-     * @return HttpException
-     */
-    public static function factory(RequestInterface $request, ResponseInterface $response)
+    public static function factory(RequestInterface $request, ResponseInterface $response): self
     {
         if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 500) {
             $label = 'Client error response';

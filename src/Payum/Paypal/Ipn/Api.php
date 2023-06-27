@@ -39,6 +39,9 @@ class Api
      */
     protected $options;
 
+    /**
+     * @param mixed[] $options
+     */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
     {
         $this->client = $client;
@@ -51,10 +54,7 @@ class Api
         }
     }
 
-    /**
-     * @return string
-     */
-    public function notifyValidate(array $fields)
+    public function notifyValidate(array $fields): string
     {
         $fields['cmd'] = self::CMD_NOTIFY_VALIDATE;
 
@@ -75,10 +75,7 @@ class Api
         return self::NOTIFY_VERIFIED === $result ? self::NOTIFY_VERIFIED : self::NOTIFY_INVALID;
     }
 
-    /**
-     * @return string
-     */
-    public function getIpnEndpoint()
+    public function getIpnEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://www.sandbox.paypal.com/cgi-bin/webscr' :

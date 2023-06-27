@@ -14,14 +14,14 @@ use stdClass;
 
 class StatusActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(StatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldNotSupportStatusRequestWithNoPaymentAsModel()
+    public function testShouldNotSupportStatusRequestWithNoPaymentAsModel(): void
     {
         $action = new StatusAction();
 
@@ -30,7 +30,7 @@ class StatusActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldSupportStatusRequestWithArrayObjectAsModel()
+    public function testShouldSupportStatusRequestWithArrayObjectAsModel(): void
     {
         $action = new StatusAction();
 
@@ -39,14 +39,14 @@ class StatusActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new StatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -54,7 +54,7 @@ class StatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkPendingIfStateCreated()
+    public function testShouldMarkPendingIfStateCreated(): void
     {
         $action = new StatusAction();
 
@@ -77,7 +77,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isPending());
     }
 
-    public function testShouldMarkNewIfStateNotSet()
+    public function testShouldMarkNewIfStateNotSet(): void
     {
         $action = new StatusAction();
 
@@ -97,7 +97,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkCapturedIfStateApproved()
+    public function testShouldMarkCapturedIfStateApproved(): void
     {
         $action = new StatusAction();
 
@@ -120,7 +120,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkCanceledIfStateCanceled()
+    public function testShouldMarkCanceledIfStateCanceled(): void
     {
         $action = new StatusAction();
 
@@ -143,7 +143,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    public function testShouldMarkUnknownIfStateIsSetAndSetUnknown()
+    public function testShouldMarkUnknownIfStateIsSetAndSetUnknown(): void
     {
         $action = new StatusAction();
 

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class GetHttpRequestTest extends TestCase
 {
-    public function testShouldSetExpectedDefaultValuesInConstructor()
+    public function testShouldSetExpectedDefaultValuesInConstructor(): void
     {
         $request = new GetHttpRequest();
 

@@ -22,7 +22,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var InitializeOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -61,7 +61,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof InitializeOrder &&
             $request->getModel() instanceof ArrayAccess

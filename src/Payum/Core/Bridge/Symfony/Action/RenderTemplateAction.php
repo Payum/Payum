@@ -14,10 +14,7 @@ class RenderTemplateAction implements ActionInterface
      */
     protected $layout;
 
-    /**
-     * @var EngineInterface
-     */
-    private $templating;
+    private EngineInterface $templating;
 
     public function __construct(EngineInterface $templating, $layout = null)
     {
@@ -26,11 +23,9 @@ class RenderTemplateAction implements ActionInterface
     }
 
     /**
-     * @param mixed $request
-     *
      * @throws RequestNotSupportedException if the action dose not support the request.
      */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -49,11 +44,9 @@ class RenderTemplateAction implements ActionInterface
     }
 
     /**
-     * @param mixed $request
-     *
      * @return boolean
      */
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof RenderTemplate;
     }

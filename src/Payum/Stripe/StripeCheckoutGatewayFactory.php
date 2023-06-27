@@ -20,7 +20,7 @@ use Stripe\Stripe;
 
 class StripeCheckoutGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (false == class_exists(Stripe::class)) {
             throw new LogicException('You must install "stripe/stripe-php:~2.0|~3.0" library.');
@@ -36,9 +36,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.get_credit_card_token' => new GetCreditCardTokenAction(),
-            'payum.action.obtain_token' => function (ArrayObject $config) {
-                return new ObtainTokenAction($config['payum.template.obtain_token']);
-            },
+            'payum.action.obtain_token' => fn (ArrayObject $config) => new ObtainTokenAction($config['payum.template.obtain_token']),
             'payum.action.create_charge' => new CreateChargeAction(),
             'payum.action.create_customer' => new CreateCustomerAction(),
             'payum.action.create_plan' => new CreatePlanAction(),
@@ -56,7 +54,7 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['publishable_key', 'secret_key'];
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Keys {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 return new Keys($config['publishable_key'], $config['secret_key']);

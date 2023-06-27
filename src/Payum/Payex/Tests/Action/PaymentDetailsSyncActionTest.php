@@ -16,14 +16,14 @@ use stdClass;
 
 class PaymentDetailsSyncActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet(): void
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -38,21 +38,21 @@ class PaymentDetailsSyncActionTest extends TestCase
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    public function testShouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
@@ -60,7 +60,7 @@ class PaymentDetailsSyncActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoSubExecuteCheckOrderApiRequest()
+    public function testShouldDoSubExecuteCheckOrderApiRequest(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

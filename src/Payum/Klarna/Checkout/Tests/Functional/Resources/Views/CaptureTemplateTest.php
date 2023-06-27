@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CaptureTemplateTest extends TestCase
 {
-    public function testShouldRenderExpectedResult()
+    public function testShouldRenderExpectedResult(): void
     {
         $twig = TwigFactory::createGeneric();
 

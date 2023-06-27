@@ -18,11 +18,17 @@ use stdClass;
 
 class CheckRecurringPaymentActionTest extends TestCase
 {
-    protected $requiredFields = [
+    /**
+     * @var array{agreementRef: string}
+     */
+    protected array $requiredFields = [
         'agreementRef' => 'aRef',
     ];
 
-    public function provideRequiredFields()
+    /**
+     * @return array<int, mixed[]>
+     */
+    public function provideRequiredFields(): array
     {
         $fields = [];
 
@@ -33,21 +39,21 @@ class CheckRecurringPaymentActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CheckRecurringPaymentAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CheckRecurringPaymentAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotRecurringApiAsApi()
+    public function testThrowOnTryingSetNotRecurringApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\RecurringApi');
@@ -56,28 +62,28 @@ class CheckRecurringPaymentActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCheckRecurringPaymentRequestWithArrayAccessAsModel()
+    public function testShouldSupportCheckRecurringPaymentRequestWithArrayAccessAsModel(): void
     {
         $action = new CheckRecurringPaymentAction();
 
         $this->assertTrue($action->supports(new CheckRecurringPayment($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCheckRecurringPaymentRequest()
+    public function testShouldNotSupportAnythingNotCheckRecurringPaymentRequest(): void
     {
         $action = new CheckRecurringPaymentAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCheckRecurringPaymentRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckRecurringPaymentRequestWithNotArrayAccessModel(): void
     {
         $action = new CheckRecurringPaymentAction();
 
         $this->assertFalse($action->supports(new CheckRecurringPayment(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CheckRecurringPaymentAction($this->createApiMock());
@@ -88,7 +94,7 @@ class CheckRecurringPaymentActionTest extends TestCase
     /**
      * @dataProvider provideRequiredFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
         $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -98,7 +104,7 @@ class CheckRecurringPaymentActionTest extends TestCase
         $action->execute(new CheckRecurringPayment($this->requiredFields));
     }
 
-    public function testShouldCheckRecurringPayment()
+    public function testShouldCheckRecurringPayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -125,6 +131,6 @@ class CheckRecurringPaymentActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(RecurringApi::class, [], [], '', false);
+        return $this->createMock(RecurringApi::class);
     }
 }

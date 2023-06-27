@@ -20,42 +20,42 @@ use stdClass;
 
 class DoVoidActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(DoVoidAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(DoVoidAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(DoVoidAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldUseApiAwareTrait()
+    public function testShouldUseApiAwareTrait(): void
     {
         $rc = new ReflectionClass(DoVoidAction::class);
 
         $this->assertContains(ApiAwareTrait::class, $rc->getTraitNames());
     }
 
-    public function testShouldUseGatewayAwareTrait()
+    public function testShouldUseGatewayAwareTrait(): void
     {
         $rc = new ReflectionClass(DoVoidAction::class);
 
         $this->assertContains(GatewayAwareTrait::class, $rc->getTraitNames());
     }
 
-    public function testShouldSupportDoVoidRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoVoidRequestAndArrayAccessAsModel(): void
     {
         $action = new DoVoidAction();
 
@@ -64,14 +64,14 @@ class DoVoidActionTest extends TestCase
         );
     }
 
-    public function testShouldNotSupportAnythingNotDoVoidRequest()
+    public function testShouldNotSupportAnythingNotDoVoidRequest(): void
     {
         $action = new DoVoidAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new DoVoidAction();
@@ -79,7 +79,7 @@ class DoVoidActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfAuthorizationIdNotSetInModel()
+    public function testThrowIfAuthorizationIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('AUTHORIZATIONID must be set. Has user not authorized this transaction?');
@@ -90,7 +90,7 @@ class DoVoidActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoVoidMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoVoidMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -98,7 +98,7 @@ class DoVoidActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
                 $testCase->assertSame('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 
@@ -116,18 +116,16 @@ class DoVoidActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoVoidMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoVoidMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->willReturnCallback(function () {
-                return [
-                    'AUTHORIZATIONID' => 'theTransactionId',
-                    'MSGSUBID' => 'aMessageId',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'AUTHORIZATIONID' => 'theTransactionId',
+                'MSGSUBID' => 'aMessageId',
+            ])
         ;
 
         $action = new DoVoidAction();
@@ -153,6 +151,6 @@ class DoVoidActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

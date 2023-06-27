@@ -10,10 +10,7 @@ use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 
 class CheckOrderStatusAction extends BaseApiAwareAction
 {
-    /**
-     * @param CheckOrderStatus $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -34,7 +31,7 @@ class CheckOrderStatusAction extends BaseApiAwareAction
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CheckOrderStatus &&
             $request->getModel() instanceof ArrayAccess

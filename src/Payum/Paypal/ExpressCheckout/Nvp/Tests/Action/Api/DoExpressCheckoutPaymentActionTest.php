@@ -17,35 +17,35 @@ use stdClass;
 
 class DoExpressCheckoutPaymentActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(DoExpressCheckoutPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(DoExpressCheckoutPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel(): void
     {
         $action = new DoExpressCheckoutPaymentAction();
 
         $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest()
+    public function testShouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest(): void
     {
         $action = new DoExpressCheckoutPaymentAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new DoExpressCheckoutPaymentAction();
@@ -53,7 +53,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -62,7 +62,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute(new DoExpressCheckoutPayment([]));
     }
 
-    public function testThrowIfPayerIdNotSetInModel()
+    public function testThrowIfPayerIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYERID must be set.');
@@ -75,7 +75,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfZeroPaymentRequestActionNotSet()
+    public function testThrowIfZeroPaymentRequestActionNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_0_PAYMENTACTION must be set.');
@@ -89,7 +89,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfZeroPaymentRequestAmtNotSet()
+    public function testThrowIfZeroPaymentRequestAmtNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_0_AMT must be set.');
@@ -104,7 +104,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -112,7 +112,7 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
                 $testCase->assertSame('theToken', $fields['TOKEN']);
 
@@ -142,18 +142,16 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoExpressCheckoutMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoExpressCheckoutMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
@@ -182,6 +180,6 @@ class DoExpressCheckoutPaymentActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

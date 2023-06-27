@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class CompleteOrderTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(CompleteOrder::class);
 

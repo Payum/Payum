@@ -15,14 +15,14 @@ use stdClass;
 
 class AutoPayPaymentDetailsStatusActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AutoPayPaymentDetailsStatusAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
+    public function testShouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -31,14 +31,14 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus([])));
     }
 
-    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -48,7 +48,7 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -57,21 +57,21 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportAnythingNotBinaryMaskStatusRequest()
+    public function testShouldNotSupportAnythingNotBinaryMaskStatusRequest(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsStatusAction();
@@ -79,7 +79,7 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkNewIfTransactionStatusNotSet()
+    public function testShouldMarkNewIfTransactionStatusNotSet(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -95,7 +95,7 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree()
+    public function testShouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -113,7 +113,7 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero()
+    public function testShouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
@@ -131,7 +131,7 @@ class AutoPayPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkFailedIfTransactionStatusNeitherZeroOrThree()
+    public function testShouldMarkFailedIfTransactionStatusNeitherZeroOrThree(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 

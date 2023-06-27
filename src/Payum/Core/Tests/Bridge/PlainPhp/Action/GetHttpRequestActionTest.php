@@ -11,10 +11,19 @@ use stdClass;
 
 class GetHttpRequestActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetHttpRequest>
+     */
     protected $requestClass = GetHttpRequest::class;
 
+    /**
+     * @var class-string<GetHttpRequestAction>
+     */
     protected $actionClass = GetHttpRequestAction::class;
 
+    /**
+     * @return \Iterator<GetHttpRequest[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass()];
@@ -28,7 +37,7 @@ class GetHttpRequestActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldFillRequestDetails()
+    public function testShouldFillRequestDetails(): void
     {
         $action = new GetHttpRequestAction();
 

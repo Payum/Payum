@@ -26,10 +26,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     protected $config;
 
-    /**
-     * @var Klarna_Checkout_ConnectorInterface
-     */
-    private $connector;
+    private ?\Klarna_Checkout_ConnectorInterface $connector;
 
     public function __construct(Klarna_Checkout_ConnectorInterface $connector = null)
     {
@@ -39,17 +36,14 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Config::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
         $this->config = $this->api;
     }
 
-    /**
-     * @return Klarna_Checkout_ConnectorInterface
-     */
-    protected function getConnector()
+    protected function getConnector(): \Klarna_Checkout_ConnectorInterface
     {
         if ($this->connector) {
             return $this->connector;
@@ -64,7 +58,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         return Klarna_Checkout_Connector::create($this->config->secret);
     }
 
-    protected function addMerchantId(ArrayAccess $details)
+    protected function addMerchantId(ArrayAccess $details): void
     {
         if (false == isset($details['merchant'])) {
             $details['merchant'] = [];
@@ -79,13 +73,10 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param int $maxRetry
-     *
      * @throws Klarna_Checkout_ConnectionErrorException
-     *
      * @return mixed
      */
-    protected function callWithRetry(Closure $function, $maxRetry = 3)
+    protected function callWithRetry(Closure $function, int $maxRetry = 3)
     {
         $attempts = 1;
         while (true) {

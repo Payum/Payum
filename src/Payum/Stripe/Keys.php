@@ -24,18 +24,12 @@ class Keys
         $this->secret = $secret;
     }
 
-    /**
-     * @return string
-     */
-    public function getSecretKey()
+    public function getSecretKey(): string
     {
         return $this->secret;
     }
 
-    /**
-     * @return string
-     */
-    public function getPublishableKey()
+    public function getPublishableKey(): string
     {
         return $this->publishable;
     }

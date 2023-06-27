@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 {
-    public function testValidate()
+    public function testValidate(): void
     {
         $options = [
             'min' => 'today',
@@ -21,7 +21,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
         $this->assertNull($this->validator->validate($value, $constraint));
     }
 
-    public function testValidateWrongDate()
+    public function testValidateWrongDate(): void
     {
         $options = [
             'min' => 'today',
@@ -40,7 +40,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    protected function createValidator()
+    protected function createValidator(): CreditCardDateValidator
     {
         return new CreditCardDateValidator();
     }

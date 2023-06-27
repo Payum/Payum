@@ -11,21 +11,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType(): void
     {
         $rc = new ReflectionClass(GatewayFactoriesChoiceType::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
-    public function testShouldExtendChoice()
+    public function testShouldExtendChoice(): void
     {
         $type = new GatewayFactoriesChoiceType([]);
 
         $this->assertSame(ChoiceType::class, $type->getParent());
     }
 
-    public function testShouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions(): void
     {
         $expectedChoices = [
             'foo' => 'Foo Factory',

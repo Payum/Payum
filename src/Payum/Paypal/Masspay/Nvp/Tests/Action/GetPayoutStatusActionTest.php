@@ -11,18 +11,24 @@ use ReflectionClass;
 
 class GetPayoutStatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
+    /**
+     * @var class-string<GetPayoutStatusAction>
+     */
     protected $actionClass = GetPayoutStatusAction::class;
 
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(GetPayoutStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldMarkNewIfAckNotSet()
+    public function testShouldMarkNewIfAckNotSet(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -35,7 +41,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkPayedoutIfAckSuccess()
+    public function testShouldMarkPayedoutIfAckSuccess(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -50,7 +56,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPayedout());
     }
 
-    public function testShouldMarkPayedoutIfAckSuccessWithWarning()
+    public function testShouldMarkPayedoutIfAckSuccessWithWarning(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -65,7 +71,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPayedout());
     }
 
-    public function testShouldMarkFailedIfAckFailure()
+    public function testShouldMarkFailedIfAckFailure(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -80,7 +86,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    public function testShouldMarkFailedIfAckFailureWithWarning()
+    public function testShouldMarkFailedIfAckFailureWithWarning(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -95,7 +101,7 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    public function testShouldMarkUnknownIfAckNotRecognized()
+    public function testShouldMarkUnknownIfAckNotRecognized(): void
     {
         $action = new GetPayoutStatusAction();
 

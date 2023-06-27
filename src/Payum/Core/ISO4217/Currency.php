@@ -8,25 +8,13 @@ use Alcohol\ISO4217;
 
 final class Currency
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $alpha3;
+    private string $alpha3;
 
-    /**
-     * @var string
-     */
-    private $numeric;
+    private string $numeric;
 
-    /**
-     * @var int
-     */
-    private $exp;
+    private int $exp;
 
     /**
      * @var string|string[]

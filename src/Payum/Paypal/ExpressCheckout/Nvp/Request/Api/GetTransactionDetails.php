@@ -22,10 +22,7 @@ class GetTransactionDetails extends Generic
         $this->paymentRequestN = $paymentRequestN;
     }
 
-    /**
-     * @return int
-     */
-    public function getPaymentRequestN()
+    public function getPaymentRequestN(): int
     {
         return $this->paymentRequestN;
     }

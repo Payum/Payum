@@ -13,14 +13,14 @@ use stdClass;
 
 class RecurringPaymentDetailsStatusActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(RecurringPaymentDetailsStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -33,7 +33,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -42,14 +42,14 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsStatusAction();
@@ -57,7 +57,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -71,7 +71,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    public function testShouldMarkNewIfProfileStatusAndStatusNotSet()
+    public function testShouldMarkNewIfProfileStatusAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -84,7 +84,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkUnknownIfProfileStatusAndStatusNotRecognized()
+    public function testShouldMarkUnknownIfProfileStatusAndStatusNotRecognized(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -99,7 +99,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-    public function testShouldStatusHasGreaterPriorityOverProfileStatus()
+    public function testShouldStatusHasGreaterPriorityOverProfileStatus(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -114,7 +114,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isExpired());
     }
 
-    public function testShouldMarkPendingIfProfileStatusPendingAndStatusNotSet()
+    public function testShouldMarkPendingIfProfileStatusPendingAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -128,7 +128,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isPending());
     }
 
-    public function testShouldMarkCapturedIfProfileStatusActiveAndStatusNotSet()
+    public function testShouldMarkCapturedIfProfileStatusActiveAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -142,7 +142,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkCapturedIfStatusActive()
+    public function testShouldMarkCapturedIfStatusActive(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -156,7 +156,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkCanceledIfStatusCanceled()
+    public function testShouldMarkCanceledIfStatusCanceled(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -170,7 +170,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    public function testShouldMarkPendingIfStatusPending()
+    public function testShouldMarkPendingIfStatusPending(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -184,7 +184,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isPending());
     }
 
-    public function testShouldMarkExpiredIfStatusExpired()
+    public function testShouldMarkExpiredIfStatusExpired(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
@@ -198,7 +198,7 @@ class RecurringPaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($request->isExpired());
     }
 
-    public function testShouldMarkSuspendedIfStatusSuspended()
+    public function testShouldMarkSuspendedIfStatusSuspended(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 

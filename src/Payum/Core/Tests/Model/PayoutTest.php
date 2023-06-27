@@ -9,14 +9,14 @@ use ReflectionClass;
 
 class PayoutTest extends TestCase
 {
-    public function testShouldExtendPayoutInterface()
+    public function testShouldExtendPayoutInterface(): void
     {
         $rc = new ReflectionClass(Payout::class);
 
         $this->assertTrue($rc->implementsInterface(PayoutInterface::class));
     }
 
-    public function testShouldAllowGetRecipientIdPreviouslySet()
+    public function testShouldAllowGetRecipientIdPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setRecipientId('theVal');
@@ -24,7 +24,7 @@ class PayoutTest extends TestCase
         $this->assertSame('theVal', $payout->getRecipientId());
     }
 
-    public function testShouldAllowGetRecipientEmailPreviouslySet()
+    public function testShouldAllowGetRecipientEmailPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setRecipientEmail('theVal');
@@ -32,7 +32,7 @@ class PayoutTest extends TestCase
         $this->assertSame('theVal', $payout->getRecipientEmail());
     }
 
-    public function testShouldAllowGetTotalAmountPreviouslySet()
+    public function testShouldAllowGetTotalAmountPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setTotalAmount('theVal');
@@ -40,7 +40,7 @@ class PayoutTest extends TestCase
         $this->assertSame('theVal', $payout->getTotalAmount());
     }
 
-    public function testShouldAllowGetCurrencyCodePreviouslySet()
+    public function testShouldAllowGetCurrencyCodePreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setCurrencyCode('theVal');
@@ -48,7 +48,7 @@ class PayoutTest extends TestCase
         $this->assertSame('theVal', $payout->getCurrencyCode());
     }
 
-    public function testShouldAllowGetDescriptionPreviouslySet()
+    public function testShouldAllowGetDescriptionPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setDescription('theVal');
@@ -56,7 +56,7 @@ class PayoutTest extends TestCase
         $this->assertSame('theVal', $payout->getDescription());
     }
 
-    public function testShouldAllowGetDetailsPreviouslySet()
+    public function testShouldAllowGetDetailsPreviouslySet(): void
     {
         $payout = new Payout();
 

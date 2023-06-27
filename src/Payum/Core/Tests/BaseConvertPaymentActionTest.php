@@ -26,6 +26,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
      */
     protected $actionClass;
 
+    /**
+     * @return \Iterator<Generic[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment())];
@@ -41,7 +44,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass($this->actionClass);
 
@@ -51,7 +54,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     /**
      * @dataProvider provideSupportedRequests
      */
-    public function testShouldSupportRequest($request)
+    public function testShouldSupportRequest(Generic $request): void
     {
         $action = new $this->actionClass();
 
@@ -61,7 +64,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     /**
      * @dataProvider provideNotSupportedRequests
      */
-    public function testShouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request): void
     {
         $action = new $this->actionClass();
 
@@ -71,7 +74,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     /**
      * @dataProvider provideNotSupportedRequests
      */
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new $this->actionClass();

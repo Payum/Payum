@@ -8,7 +8,7 @@ use Payum\Core\Tests\Mocks\Document\Payment;
 
 class PaymentTest extends MongoTest
 {
-    public function testShouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty(): void
     {
         $document = new Payment();
         $this->dm->persist($document);
@@ -17,7 +17,7 @@ class PaymentTest extends MongoTest
         $this->assertSame([$document], $this->dm->getRepository(Payment::class)->findAll());
     }
 
-    public function testShouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $order = new Payment();
         $order->setTotalAmount(100);
@@ -37,7 +37,7 @@ class PaymentTest extends MongoTest
         $this->assertSame([$order], $this->dm->getRepository(Payment::class)->findAll());
     }
 
-    public function testShouldAllowFindPersistedOrder()
+    public function testShouldAllowFindPersistedOrder(): void
     {
         $order = new Payment();
 
@@ -56,7 +56,7 @@ class PaymentTest extends MongoTest
         $this->assertEquals($order->getId(), $foundOrder->getId());
     }
 
-    public function testShouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue(): void
     {
         $order = new Payment();
         $order->setDetails([

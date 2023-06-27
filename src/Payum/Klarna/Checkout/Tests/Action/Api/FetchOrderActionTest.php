@@ -19,8 +19,14 @@ use stdClass;
 
 class FetchOrderActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<FetchOrder>
+     */
     protected $requestClass = FetchOrder::class;
 
+    /**
+     * @var class-string<FetchOrderAction>
+     */
     protected $actionClass = FetchOrderAction::class;
 
     public function provideNotSupportedRequests(): Iterator
@@ -31,14 +37,14 @@ class FetchOrderActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(FetchOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowIfLocationNotSetOnExecute()
+    public function testThrowIfLocationNotSetOnExecute(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Location has to be provided to fetch an order');
@@ -47,7 +53,7 @@ class FetchOrderActionTest extends GenericActionTest
         $action->execute(new FetchOrder([]));
     }
 
-    public function testShouldFetchOrderWhenLocationSetOnExecute()
+    public function testShouldFetchOrderWhenLocationSetOnExecute(): void
     {
         $model = [
             'location' => 'theKlarnaOrderLocation',
@@ -63,7 +69,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('apply')
             ->with('GET')
-            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model): void {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('url', $options);
                 $testCase->assertSame($model['location'], $options['url']);
@@ -78,7 +84,7 @@ class FetchOrderActionTest extends GenericActionTest
         $this->assertInstanceOf(Klarna_Checkout_Order::class, $request->getOrder());
     }
 
-    public function testShouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
+    public function testShouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute(): void
     {
         $model = [
             'location' => 'theKlarnaOrderLocation',
@@ -99,7 +105,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('apply')
             ->with('GET')
-            ->willReturnCallback(function ($method, $order) use (&$expectedOrder) {
+            ->willReturnCallback(function ($method, $order) use (&$expectedOrder): void {
                 $expectedOrder = $order;
             })
         ;
@@ -112,7 +118,7 @@ class FetchOrderActionTest extends GenericActionTest
         $this->assertSame($expectedOrder, $request->getOrder());
     }
 
-    public function testShouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout(): void
     {
         $this->expectException(Klarna_Checkout_ConnectionErrorException::class);
         $model = [
@@ -139,7 +145,7 @@ class FetchOrderActionTest extends GenericActionTest
         $action->execute(new FetchOrder($model));
     }
 
-    public function testShouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout(): void
     {
         $model = [
             'location' => 'theLocation',
@@ -160,7 +166,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->withConsecutive(['GET'], ['GET'])
             ->willReturnOnConsecutiveCalls(
                 $this->throwException(new Klarna_Checkout_ConnectionErrorException()),
-                $this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+                $this->returnCallback(function ($method, $order, $options) use (&$expectedOrder): void {
                     $expectedOrder = $order;
                 })
             )
@@ -179,6 +185,6 @@ class FetchOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock(Klarna_Checkout_ConnectorInterface::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class);
     }
 }

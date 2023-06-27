@@ -11,10 +11,7 @@ use Payum\Offline\Constants;
 
 class ConvertPaymentAction implements ActionInterface
 {
-    /**
-     * @param Convert $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -36,7 +33,7 @@ class ConvertPaymentAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&

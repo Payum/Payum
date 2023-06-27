@@ -19,25 +19,31 @@ use ReflectionClass;
 
 class CaptureActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<Capture>
+     */
     protected $requestClass = Capture::class;
 
+    /**
+     * @var class-string<CaptureAction>
+     */
     protected $actionClass = CaptureAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldRequestApiCreateButtonPaymentMethodWithExpectedRequiredArguments()
+    public function testShouldRequestApiCreateButtonPaymentMethodWithExpectedRequiredArguments(): void
     {
         $gatewayMock = $this->createGatewayMock();
 
@@ -57,7 +63,7 @@ class CaptureActionTest extends GenericActionTest
         ]));
     }
 
-    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet()
+    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet(): void
     {
         $this->expectException(LogicException::class);
         $action = new CreateButtonPaymentAction();
@@ -72,7 +78,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 
     /**

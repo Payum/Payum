@@ -14,10 +14,19 @@ use stdClass;
 
 class ConvertActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<ConvertAction>
+     */
     protected $actionClass = ConvertAction::class;
 
+    /**
+     * @var class-string<Convert>
+     */
     protected $requestClass = Convert::class;
 
+    /**
+     * @return \Iterator<Convert[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment(), 'array')];
@@ -36,7 +45,7 @@ class ConvertActionTest extends GenericActionTest
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
 
-    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack(): void
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -81,7 +90,7 @@ class ConvertActionTest extends GenericActionTest
         $this->assertSame('https://example.com', $details['return_url']);
     }
 
-    public function testShouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails(): void
     {
         $payment = new Payment();
         $payment->setCurrencyCode('USD');

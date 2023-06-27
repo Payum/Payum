@@ -31,10 +31,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -47,7 +44,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);
         } else {
-            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA'], true) : [];
+            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA'], true, 512, JSON_THROW_ON_ERROR) : [];
 
             if (false == isset($extradata['capture_token']) && $request->getToken()) {
                 $extradata['capture_token'] = $request->getToken()->getHash();
@@ -62,7 +59,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
                 $extradata['notify_token'] = $notifyToken->getHash();
             }
 
-            $model['EXTRADATA'] = json_encode($extradata);
+            $model['EXTRADATA'] = json_encode($extradata, JSON_THROW_ON_ERROR);
 
             throw new HttpPostRedirect(
                 $this->api->getOffsiteUrl(),
@@ -71,7 +68,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

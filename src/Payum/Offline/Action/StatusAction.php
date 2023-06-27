@@ -11,7 +11,7 @@ use Payum\Offline\Constants;
 
 class StatusAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var GetStatusInterface $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -63,7 +63,7 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess

@@ -9,14 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class RenderTemplateTest extends TestCase
 {
-    public function testShouldAllowGetTemplateNameSetInConstructor()
+    public function testShouldAllowGetTemplateNameSetInConstructor(): void
     {
         $request = new RenderTemplate('theTemplate', []);
 
         $this->assertSame('theTemplate', $request->getTemplateName());
     }
 
-    public function testShouldAllowGetParametersSetInConstructor()
+    public function testShouldAllowGetParametersSetInConstructor(): void
     {
         $request = new RenderTemplate('aTemplate', [
             'foo' => 'fooVal',
@@ -29,7 +29,7 @@ class RenderTemplateTest extends TestCase
         ], $request->getParameters());
     }
 
-    public function testShouldAllowGetResultPreviouslySet()
+    public function testShouldAllowGetResultPreviouslySet(): void
     {
         $request = new RenderTemplate('aTemplate', []);
 
@@ -46,11 +46,8 @@ class RenderTemplateTest extends TestCase
 
     /**
      * @dataProvider provideParameters
-     *
-     * @param string $name
-     * @param mixed  $value
      */
-    public function testShouldAllowSetParameter($name, $value)
+    public function testShouldAllowSetParameter(string $name, string $value): void
     {
         $request = new RenderTemplate('aTemplate', []);
 
@@ -65,11 +62,8 @@ class RenderTemplateTest extends TestCase
 
     /**
      * @dataProvider provideParameters
-     *
-     * @param string $name
-     * @param mixed  $value
      */
-    public function testShouldAllowAddParameter($name, $value)
+    public function testShouldAllowAddParameter(string $name, string $value): void
     {
         $request = new RenderTemplate('aTemplate', []);
 
@@ -82,7 +76,7 @@ class RenderTemplateTest extends TestCase
         $this->assertSame($value, $result[$name]);
     }
 
-    public function testShouldAllowOverwriteExistingParameterOnSetParameter()
+    public function testShouldAllowOverwriteExistingParameterOnSetParameter(): void
     {
         $request = new RenderTemplate('aTemplate', []);
 
@@ -93,7 +87,7 @@ class RenderTemplateTest extends TestCase
         $this->assertSame('barVal', $result['foo']);
     }
 
-    public function testShouldThrowExceptionIfParameterExistsOnAddParameter()
+    public function testShouldThrowExceptionIfParameterExistsOnAddParameter(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $request = new RenderTemplate('aTemplate', []);

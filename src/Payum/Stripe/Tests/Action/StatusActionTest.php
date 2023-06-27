@@ -9,11 +9,17 @@ use Payum\Stripe\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<GetHumanStatus>
+     */
     protected $requestClass = GetHumanStatus::class;
 
+    /**
+     * @var class-string<StatusAction>
+     */
     protected $actionClass = StatusAction::class;
 
-    public function testShouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
@@ -24,7 +30,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkFailedIfDetailsHasErrorSet()
+    public function testShouldMarkFailedIfDetailsHasErrorSet(): void
     {
         $action = new StatusAction();
 
@@ -41,7 +47,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkPendingIfModelHasNotStatusButHasCard()
+    public function testShouldMarkPendingIfModelHasNotStatusButHasCard(): void
     {
         $action = new StatusAction();
 
@@ -54,7 +60,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isPending());
     }
 
-    public function testShouldMarkFailedIfStatusFailed()
+    public function testShouldMarkFailedIfStatusFailed(): void
     {
         $action = new StatusAction();
 
@@ -67,7 +73,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkRefundedIfStatusSetAndRefundedTrue()
+    public function testShouldMarkRefundedIfStatusSetAndRefundedTrue(): void
     {
         $action = new StatusAction();
 
@@ -81,7 +87,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isRefunded());
     }
 
-    public function testShouldNotMarkRefundedIfStatusNotSetAndRefundedTrue()
+    public function testShouldNotMarkRefundedIfStatusNotSetAndRefundedTrue(): void
     {
         $action = new StatusAction();
 
@@ -95,7 +101,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkCapturedIfStatusSucceededAndCaptureAndPaidSetTrue()
+    public function testShouldMarkCapturedIfStatusSucceededAndCaptureAndPaidSetTrue(): void
     {
         $action = new StatusAction();
 
@@ -110,7 +116,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldNotMarkCapturedIfStatusSucceededAndCaptureSetTrueButPaidNotTrue()
+    public function testShouldNotMarkCapturedIfStatusSucceededAndCaptureSetTrueButPaidNotTrue(): void
     {
         $action = new StatusAction();
 
@@ -126,7 +132,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isUnknown());
     }
 
-    public function testShouldMarkCapturedIfStatusPaidAndCaptureAndPaidSetTrue()
+    public function testShouldMarkCapturedIfStatusPaidAndCaptureAndPaidSetTrue(): void
     {
         $action = new StatusAction();
 
@@ -141,7 +147,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldNotMarkCapturedIfStatusPaidAndCaptureSetTrueButPaidNotTrue()
+    public function testShouldNotMarkCapturedIfStatusPaidAndCaptureSetTrueButPaidNotTrue(): void
     {
         $action = new StatusAction();
 
@@ -157,7 +163,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isUnknown());
     }
 
-    public function testShouldMarkAuthorizedIfStatusSucceededAndCaptureSetFalse()
+    public function testShouldMarkAuthorizedIfStatusSucceededAndCaptureSetFalse(): void
     {
         $action = new StatusAction();
 
@@ -171,7 +177,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isAuthorized());
     }
 
-    public function testShouldMarkAuthorizedIfStatusPaidAndCaptureSetFalse()
+    public function testShouldMarkAuthorizedIfStatusPaidAndCaptureSetFalse(): void
     {
         $action = new StatusAction();
 
@@ -185,7 +191,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isAuthorized());
     }
 
-    public function testShouldMarkUnknownIfStatusCouldBeGuessed()
+    public function testShouldMarkUnknownIfStatusCouldBeGuessed(): void
     {
         $action = new StatusAction();
 

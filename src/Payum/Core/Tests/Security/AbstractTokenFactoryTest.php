@@ -7,6 +7,7 @@ use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,21 +16,21 @@ use stdClass;
 
 class AbstractTokenFactoryTest extends TestCase
 {
-    public function testShouldImplementsGenericTokenFactoryInterface()
+    public function testShouldImplementsGenericTokenFactoryInterface(): void
     {
         $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
 
-    public function testShouldCreateTokenWithoutAfterPath()
+    public function testShouldCreateTokenWithoutAfterPath(): void
     {
         $token = new Token();
 
@@ -86,7 +87,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertNull($token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenWithAfterUrl()
+    public function testShouldCreateTokenWithAfterUrl(): void
     {
         $token = new Token();
 
@@ -147,7 +148,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenWithIdentityAsModel()
+    public function testShouldCreateTokenWithIdentityAsModel(): void
     {
         $token = new Token();
 
@@ -191,7 +192,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame($identity, $token->getDetails());
     }
 
-    public function testShouldCreateTokenWithoutModel()
+    public function testShouldCreateTokenWithoutModel(): void
     {
         $token = new Token();
 
@@ -234,7 +235,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertNull($token->getDetails());
     }
 
-    public function testShouldCreateTokenWithTargetPathAlreadyUrl()
+    public function testShouldCreateTokenWithTargetPathAlreadyUrl(): void
     {
         $token = new Token();
 
@@ -295,7 +296,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldNotOverwritePayumTokenHashInAfterUrl()
+    public function testShouldNotOverwritePayumTokenHashInAfterUrl(): void
     {
         $authorizeToken = new Token();
 
@@ -357,7 +358,7 @@ class AbstractTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithoutPayumToken()
+    public function testShouldAllowCreateAfterUrlWithoutPayumToken(): void
     {
         $authorizeToken = new Token();
 
@@ -420,7 +421,7 @@ class AbstractTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithFragment()
+    public function testShouldAllowCreateAfterUrlWithFragment(): void
     {
         $authorizeToken = new Token();
 
@@ -483,33 +484,34 @@ class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return AbstractTokenFactory|MockObject
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<TokenInterface> $registry
+     *
+     * @return MockObject | AbstractTokenFactory
      */
-    protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry)
+    protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry): MockObject | AbstractTokenFactory
     {
         $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, [$tokenStorage, $registry]);
         $factoryMock
             ->method('generateUrl')
-            ->willReturnCallback(function ($path, array $args) {
-                return $path . '?' . http_build_query($args);
-            })
+            ->willReturnCallback(fn ($path, array $args) => $path . '?' . http_build_query($args))
         ;
 
         return $factoryMock;
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject | StorageInterface<stdClass>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface
+     * @return MockObject | StorageRegistryInterface<stdClass>
      */
-    protected function createStorageRegistryMock()
+    protected function createStorageRegistryMock(): MockObject | StorageRegistryInterface
     {
         return $this->createMock(StorageRegistryInterface::class);
     }

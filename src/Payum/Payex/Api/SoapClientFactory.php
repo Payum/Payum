@@ -18,6 +18,7 @@ class SoapClientFactory
 
     /**
      * @param string $soapClientClass
+     * @param mixed[] $soapClientOptions
      */
     public function __construct(array $soapClientOptions = [], $soapClientClass = null)
     {
@@ -33,12 +34,7 @@ class SoapClientFactory
         $this->soapClientOptions = $soapClientOptions;
     }
 
-    /**
-     * @param string $wsdl
-     *
-     * @return SoapClient
-     */
-    public function createWsdlClient($wsdl)
+    public function createWsdlClient(string $wsdl): object
     {
         return new $this->soapClientClass($wsdl, $this->soapClientOptions);
     }

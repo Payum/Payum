@@ -10,21 +10,21 @@ use ReflectionClass;
 
 class BaseGetStatusTest extends TestCase
 {
-    public function testShouldImplementGetStatusInterface()
+    public function testShouldImplementGetStatusInterface(): void
     {
         $rc = new ReflectionClass(BaseGetStatus::class);
 
         $this->assertTrue($rc->implementsInterface(GetStatusInterface::class));
     }
 
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(BaseGetStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(BaseGetStatus::class);
 

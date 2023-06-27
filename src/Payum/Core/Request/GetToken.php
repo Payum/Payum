@@ -6,15 +6,9 @@ use Payum\Core\Security\TokenInterface;
 
 class GetToken
 {
-    /**
-     * @var string
-     */
-    private $hash;
+    private string $hash;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token = null;
 
     /**
      * @param string $hash
@@ -24,23 +18,17 @@ class GetToken
         $this->hash = $hash;
     }
 
-    /**
-     * @return string
-     */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @return TokenInterface
-     */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }
 
-    public function setToken(TokenInterface $token)
+    public function setToken(TokenInterface $token): void
     {
         $this->token = $token;
     }

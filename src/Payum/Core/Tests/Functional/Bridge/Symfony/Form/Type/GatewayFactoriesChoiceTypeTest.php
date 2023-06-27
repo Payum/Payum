@@ -27,7 +27,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         ;
     }
 
-    public function testShouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
@@ -35,7 +35,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $this->assertInstanceOf(FormView::class, $form->createView());
     }
 
-    public function testShouldCorrectlyBindValidValue()
+    public function testShouldCorrectlyBindValidValue(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
@@ -46,7 +46,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $this->assertSame('foo', $form->getData());
     }
 
-    public function testShouldNotBindInvalidValue()
+    public function testShouldNotBindInvalidValue(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 

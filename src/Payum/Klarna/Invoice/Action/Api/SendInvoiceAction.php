@@ -10,10 +10,7 @@ use Payum\Klarna\Invoice\Request\Api\SendInvoice;
 
 class SendInvoiceAction extends BaseApiAwareAction
 {
-    /**
-     * @param SendInvoice $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,7 +25,7 @@ class SendInvoiceAction extends BaseApiAwareAction
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof SendInvoice &&
             $request->getModel() instanceof ArrayAccess

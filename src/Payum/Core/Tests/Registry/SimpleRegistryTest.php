@@ -9,20 +9,21 @@ use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Model\TestModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
 class SimpleRegistryTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractRegistry()
+    public function testShouldBeSubClassOfAbstractRegistry(): void
     {
         $rc = new ReflectionClass(SimpleRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    public function testShouldAllowGetGatewaySetInConstructor()
+    public function testShouldAllowGetGatewaySetInConstructor(): void
     {
         $gatewayFooMock = $this->createMock(GatewayInterface::class);
         $gatewayBarMock = $this->createMock(GatewayInterface::class);
@@ -38,7 +39,7 @@ class SimpleRegistryTest extends TestCase
         $this->assertSame($gatewayBarMock, $registry->getGateway('bar'));
     }
 
-    public function testShouldAllowGetGatewaysSetInConstructor()
+    public function testShouldAllowGetGatewaysSetInConstructor(): void
     {
         $gatewayFooMock = $this->createMock(GatewayInterface::class);
         $gatewayBarMock = $this->createMock(GatewayInterface::class);
@@ -56,9 +57,12 @@ class SimpleRegistryTest extends TestCase
         $this->assertContains($gatewayBarMock, $gateways);
     }
 
-    public function testShouldAllowGetStorageForGivenClass()
+    public function testShouldAllowGetStorageForGivenClass(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageFooMock */
         $storageFooMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestModel> $storageBarMock */
         $storageBarMock = $this->createMock(StorageInterface::class);
 
         $registry = new SimpleRegistry(
@@ -73,9 +77,12 @@ class SimpleRegistryTest extends TestCase
         $this->assertSame($storageBarMock, $registry->getStorage(TestModel::class));
     }
 
-    public function testShouldAllowGetStorages()
+    public function testShouldAllowGetStorages(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageFooMock */
         $storageFooMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestModel> $storageBarMock */
         $storageBarMock = $this->createMock(StorageInterface::class);
 
         $storages = [
@@ -91,8 +98,9 @@ class SimpleRegistryTest extends TestCase
         $this->assertEquals($storages, $registry->getStorages());
     }
 
-    public function testShouldInitializeStorageExtensionOnlyOnFirstCallGetGateway()
+    public function testShouldInitializeStorageExtensionOnlyOnFirstCallGetGateway(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageMock */
         $storageMock = $this->createMock(StorageInterface::class);
 
         $gatewayMock = $this->createMock(Gateway::class);
@@ -116,7 +124,7 @@ class SimpleRegistryTest extends TestCase
         $this->assertSame($gatewayMock, $registry->getGateway('foo'));
     }
 
-    public function testShouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithGateway()
+    public function testShouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithGateway(): void
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
 
@@ -127,10 +135,15 @@ class SimpleRegistryTest extends TestCase
         $this->assertSame($gatewayMock, $registry->getGateway('foo'));
     }
 
-    public function testShouldInitializeStorageExtensionsForEachStorageInRegistry()
+    public function testShouldInitializeStorageExtensionsForEachStorageInRegistry(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOneMock */
         $storageOneMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestModel> $storageTwoMock */
         $storageTwoMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestCase> $storageThreeMock */
         $storageThreeMock = $this->createMock(StorageInterface::class);
 
         $gatewayFooMock = $this->createMock(Gateway::class);
@@ -151,9 +164,9 @@ class SimpleRegistryTest extends TestCase
                 'bar' => $gatewayBarMock,
             ],
             [
-                'fooClass' => $storageOneMock,
-                'barClass' => $storageTwoMock,
-                'ololClass' => $storageThreeMock,
+                stdClass::class => $storageOneMock,
+                TestModel::class => $storageTwoMock,
+                TestCase::class => $storageThreeMock,
             ]
         );
 
@@ -161,10 +174,15 @@ class SimpleRegistryTest extends TestCase
         $this->assertSame($gatewayBarMock, $registry->getGateway('bar'));
     }
 
-    public function testShouldNotInitializeStorageExtensionsIfAddStorageExtensionsSetFalse()
+    public function testShouldNotInitializeStorageExtensionsIfAddStorageExtensionsSetFalse(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOneMock */
         $storageOneMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestModel> $storageTwoMock */
         $storageTwoMock = $this->createMock(StorageInterface::class);
+
+        /** @var MockObject | StorageInterface<TestCase> $storageThreeMock */
         $storageThreeMock = $this->createMock(StorageInterface::class);
 
         $gatewayFooMock = $this->createMock(Gateway::class);
@@ -185,9 +203,9 @@ class SimpleRegistryTest extends TestCase
                 'bar' => $gatewayBarMock,
             ],
             [
-                'fooClass' => $storageOneMock,
-                'barClass' => $storageTwoMock,
-                'ololClass' => $storageThreeMock,
+                stdClass::class => $storageOneMock,
+                TestModel::class => $storageTwoMock,
+                TestCase::class => $storageThreeMock,
             ]
         );
         $registry->setAddStorageExtensions(false);
@@ -196,8 +214,9 @@ class SimpleRegistryTest extends TestCase
         $registry->getGateway('bar');
     }
 
-    public function testShouldInitializeStorageExtensionsOnGetGateways()
+    public function testShouldInitializeStorageExtensionsOnGetGateways(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOneMock */
         $storageOneMock = $this->createMock(StorageInterface::class);
 
         $gatewayFooMock = $this->createMock(Gateway::class);
@@ -218,7 +237,7 @@ class SimpleRegistryTest extends TestCase
                 'bar' => $gatewayBarMock,
             ],
             [
-                'fooClass' => $storageOneMock,
+                stdClass::class => $storageOneMock,
             ]
         );
 
@@ -226,8 +245,9 @@ class SimpleRegistryTest extends TestCase
         $registry->getGateways();
     }
 
-    public function testShouldNotInitializeStorageExtensionsOnGetGatewaysIfNotGenericGateway()
+    public function testShouldNotInitializeStorageExtensionsOnGetGatewaysIfNotGenericGateway(): void
     {
+        /** @var MockObject | StorageInterface<stdClass> $storageOneMock */
         $storageOneMock = $this->createMock(StorageInterface::class);
 
         $gatewayFooMock = $this->createMock(GatewayInterface::class);
@@ -240,7 +260,7 @@ class SimpleRegistryTest extends TestCase
                 'bar' => $gatewayBarMock,
             ],
             [
-                'fooClass' => $storageOneMock,
+                stdClass::class => $storageOneMock,
             ]
         );
 
@@ -250,7 +270,7 @@ class SimpleRegistryTest extends TestCase
         ], $registry->getGateways());
 
         $this->assertSame([
-            'fooClass' => $storageOneMock,
+            stdClass::class => $storageOneMock,
         ], $registry->getStorages());
     }
 }

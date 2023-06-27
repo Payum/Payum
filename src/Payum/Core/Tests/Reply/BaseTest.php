@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class BaseTest extends TestCase
 {
-    public function testShouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
         $rc = new ReflectionClass(Base::class);
 
         $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    public function testShouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException(): void
     {
         $rc = new ReflectionClass(Base::class);
 

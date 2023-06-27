@@ -21,10 +21,7 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * @param GetTransactionData $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -37,7 +34,7 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
         $details->replace($this->api->getTransactionData($details['transaction_id']));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetTransactionData &&
             $request->getModel() instanceof ArrayAccess

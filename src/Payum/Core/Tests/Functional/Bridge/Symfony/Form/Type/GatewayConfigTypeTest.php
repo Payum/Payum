@@ -46,7 +46,7 @@ class GatewayConfigTypeTest extends TestCase
         ;
     }
 
-    public function testShouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory(): void
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -54,7 +54,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertInstanceOf(FormView::class, $form->createView());
     }
 
-    public function testShouldAddDefaultFieldsIfFactoryNameChosen()
+    public function testShouldAddDefaultFieldsIfFactoryNameChosen(): void
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -63,7 +63,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertFalse($form->has('config'));
     }
 
-    public function testShouldMarkFormInvalidAndAddConfigFields()
+    public function testShouldMarkFormInvalidAndAddConfigFields(): void
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -98,7 +98,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(true, $form->get('config')->get('sandbox')->getData());
     }
 
-    public function testShouldSubmitWholeGatewayConfig()
+    public function testShouldSubmitWholeGatewayConfig(): void
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -139,7 +139,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    public function testShouldSetSandboxToFalseIfCheckboxUnset()
+    public function testShouldSetSandboxToFalseIfCheckboxUnset(): void
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -179,7 +179,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    public function testShouldAddConfigFieldsIfGatewayConfigHasFactorySet()
+    public function testShouldAddConfigFieldsIfGatewayConfigHasFactorySet(): void
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())

@@ -25,20 +25,15 @@ class HttpRedirect extends HttpResponse
         parent::__construct($this->prepareContent($url), $statusCode, $headers);
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
      * @param $url
-     *
-     * @return string
      */
-    protected function prepareContent($url)
+    protected function prepareContent($url): string
     {
         if (empty($url)) {
             throw new InvalidArgumentException('Cannot redirect to an empty URL.');

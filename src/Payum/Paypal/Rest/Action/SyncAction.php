@@ -13,7 +13,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -26,7 +26,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
         $model->fromArray($payment->toArray());
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Sync &&
             $request->getModel() instanceof PaypalPayment

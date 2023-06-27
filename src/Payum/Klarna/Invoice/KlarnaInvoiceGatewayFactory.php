@@ -30,7 +30,7 @@ use Payum\Klarna\Invoice\Action\SyncAction;
 
 class KlarnaInvoiceGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (! class_exists(KlarnaCurrency::class)) {
             throw new \LogicException('You must install "fp/klarna-invoice" library.');
@@ -81,7 +81,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
                 'sandbox' => true,
             ]);
 
-            $config['payum.api'] = function (ArrayObject $config) {
+            $config['payum.api'] = function (ArrayObject $config): Config {
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 $config['mode'] = $config['sandbox'] ? Klarna::BETA : Klarna::LIVE;

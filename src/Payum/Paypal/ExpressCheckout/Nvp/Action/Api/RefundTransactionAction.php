@@ -20,7 +20,7 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var RefundTransaction $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -33,7 +33,7 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof RefundTransaction &&
             $request->getModel() instanceof ArrayAccess

@@ -14,7 +14,7 @@ use stdClass;
 
 class CaptureActionTest extends TestCase
 {
-    public function testShouldSupportCaptureWithPaymentSdkModel()
+    public function testShouldSupportCaptureWithPaymentSdkModel(): void
     {
         $action = new CaptureAction();
 
@@ -25,7 +25,7 @@ class CaptureActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldSupportCaptureWithArrayObjectModel()
+    public function testShouldSupportCaptureWithArrayObjectModel(): void
     {
         $action = new CaptureAction();
 
@@ -36,7 +36,7 @@ class CaptureActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportCapturePaymentSdkModel()
+    public function testShouldNotSupportCapturePaymentSdkModel(): void
     {
         $action = new CaptureAction();
 
@@ -45,7 +45,7 @@ class CaptureActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -53,14 +53,14 @@ class CaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture(): void
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldSupportCapture()
+    public function testShouldSupportCapture(): void
     {
         $action = new CaptureAction();
 
@@ -70,7 +70,7 @@ class CaptureActionTest extends TestCase
         $this->assertTrue($action->supports(new Capture(new ArrayObject())));
     }
 
-    public function testThrowIfNotSupportedApiContext()
+    public function testThrowIfNotSupportedApiContext(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();

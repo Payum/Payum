@@ -7,15 +7,12 @@ use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
-    /**
-     * @param GetStatusInterface $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         $request->markCaptured();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetStatusInterface;
     }

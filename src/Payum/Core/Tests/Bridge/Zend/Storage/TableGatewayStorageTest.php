@@ -13,14 +13,14 @@ use stdClass;
 
 class TableGatewayStorageTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new ReflectionClass(TableGatewayStorage::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractStorage::class));
     }
 
-    public function testThrowIfTryToUseNotSupportedFindByMethod()
+    public function testThrowIfTryToUseNotSupportedFindByMethod(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Method is not supported by the storage.');

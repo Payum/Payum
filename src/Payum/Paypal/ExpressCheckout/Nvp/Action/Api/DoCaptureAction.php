@@ -24,7 +24,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var DoCapture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -45,17 +45,14 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         $this->gateway->execute(new GetTransactionDetails($model, $paymentRequestN));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof DoCapture &&
             $request->getModel() instanceof ArrayAccess
         ;
     }
 
-    /**
-     * @return array
-     */
-    protected function getPaymentRequestNFields()
+    protected function getPaymentRequestNFields(): array
     {
         return [
             'TRANSACTIONID',

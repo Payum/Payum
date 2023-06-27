@@ -9,14 +9,14 @@ use ReflectionClass;
 
 class GatewayFactoryTest extends TestCase
 {
-    public function testShouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface(): void
     {
         $rc = new ReflectionClass(GatewayFactory::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
-    public function testShouldAllowCreateGateway()
+    public function testShouldAllowCreateGateway(): void
     {
         $factory = new GatewayFactory();
 
@@ -25,7 +25,7 @@ class GatewayFactoryTest extends TestCase
         $this->assertInstanceOf(Gateway::class, $gateway);
     }
 
-    public function testShouldAllowCreateGatewayConfig()
+    public function testShouldAllowCreateGatewayConfig(): void
     {
         $factory = new GatewayFactory();
 

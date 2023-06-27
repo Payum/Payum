@@ -11,9 +11,9 @@ class AgreementApi extends BaseApi
     public const AGREEMENTSTATUS_DELETED = 2;
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function create(array $parameters)
+    public function create(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -35,9 +35,9 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function check(array $parameters)
+    public function check(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -50,9 +50,9 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function delete(array $parameters)
+    public function delete(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -65,9 +65,9 @@ class AgreementApi extends BaseApi
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function autoPay(array $parameters)
+    public function autoPay(array $parameters): array
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
@@ -85,7 +85,7 @@ class AgreementApi extends BaseApi
         return $this->call('AutoPay3', $parameters, $this->getPxAgreementWsdl());
     }
 
-    protected function getPxAgreementWsdl()
+    protected function getPxAgreementWsdl(): string
     {
         return $this->options['sandbox'] ?
             'https://test-external.payex.com/pxagreement/pxagreement.asmx?wsdl' :

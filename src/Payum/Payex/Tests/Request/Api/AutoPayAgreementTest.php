@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class AutoPayAgreementTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(AutoPayAgreement::class);
 

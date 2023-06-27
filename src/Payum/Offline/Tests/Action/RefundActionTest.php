@@ -15,14 +15,14 @@ use stdClass;
 
 class RefundActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(RefundAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportRefundWithArrayAccessAsModel()
+    public function testShouldSupportRefundWithArrayAccessAsModel(): void
     {
         $action = new RefundAction();
 
@@ -31,7 +31,7 @@ class RefundActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportNotRefund()
+    public function testShouldNotSupportNotRefund(): void
     {
         $action = new RefundAction();
 
@@ -40,7 +40,7 @@ class RefundActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportRefundAndNotArrayAccessAsModel()
+    public function testShouldNotSupportRefundAndNotArrayAccessAsModel(): void
     {
         $action = new RefundAction();
 
@@ -49,7 +49,7 @@ class RefundActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RefundAction();
@@ -57,7 +57,7 @@ class RefundActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSetStatusRefundedIfStatusSetToCaptured()
+    public function testShouldSetStatusRefundedIfStatusSetToCaptured(): void
     {
         $action = new RefundAction();
 
@@ -75,7 +75,7 @@ class RefundActionTest extends TestCase
         $this->assertSame(Constants::STATUS_REFUNDED, $details[Constants::FIELD_STATUS]);
     }
 
-    public function testShouldNotSetStatusRefundedIfStatusNotSetToCaptured()
+    public function testShouldNotSetStatusRefundedIfStatusNotSetToCaptured(): void
     {
         $action = new RefundAction();
 

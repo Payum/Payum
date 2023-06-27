@@ -41,7 +41,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -49,7 +49,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreatePlan $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -69,13 +69,13 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
 
             $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($plan->toArray(true));
+            $model->replace($plan->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreatePlan &&
             $request->getModel() instanceof ArrayAccess

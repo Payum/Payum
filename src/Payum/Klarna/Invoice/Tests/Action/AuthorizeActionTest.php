@@ -15,35 +15,35 @@ use stdClass;
 
 class AuthorizeActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportAuthorizeWithArrayAsModel()
+    public function testShouldSupportAuthorizeWithArrayAsModel(): void
     {
         $action = new AuthorizeAction();
 
         $this->assertTrue($action->supports(new Authorize([])));
     }
 
-    public function testShouldNotSupportAnythingNotAuthorize()
+    public function testShouldNotSupportAnythingNotAuthorize(): void
     {
         $action = new AuthorizeAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel()
+    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel(): void
     {
         $action = new AuthorizeAction();
 
         $this->assertFalse($action->supports(new Authorize(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AuthorizeAction();
@@ -51,7 +51,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSubExecuteReserveAmountIfRnoNotSet()
+    public function testShouldSubExecuteReserveAmountIfRnoNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -68,7 +68,7 @@ class AuthorizeActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldNotSubExecuteReserveAmountIfRnoAlreadySet()
+    public function testShouldNotSubExecuteReserveAmountIfRnoAlreadySet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

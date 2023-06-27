@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CurrencyTest extends TestCase
 {
-    public function testShouldAllowGetInfoSetInConstructor()
+    public function testShouldAllowGetInfoSetInConstructor(): void
     {
         $currency = new Currency('theName', 'theAlpha3', 'theNumeric', 2, 'theCountry');
 
@@ -18,7 +18,7 @@ class CurrencyTest extends TestCase
         $this->assertSame('theCountry', $currency->getCountry());
     }
 
-    public function testItShouldCreateCurrencyByAlpha3Code()
+    public function testItShouldCreateCurrencyByAlpha3Code(): void
     {
         $currency = Currency::createFromIso4217Alpha3('USD');
 
@@ -30,7 +30,7 @@ class CurrencyTest extends TestCase
         $this->assertSame(['AS', 'BQ', 'EC', 'FM', 'GU', 'MF', 'MH', 'MP', 'PR', 'PW', 'SV', 'TC', 'TL', 'UM', 'US', 'VG', 'VI', 'ZW'], $currency->getCountry());
     }
 
-    public function testItShouldCreateCurrencyByNumeric()
+    public function testItShouldCreateCurrencyByNumeric(): void
     {
         $currency = Currency::createFromIso4217Numeric('840');
 

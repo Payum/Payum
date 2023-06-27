@@ -15,10 +15,19 @@ use stdClass;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
+    /**
+     * @var class-string<ConvertPaymentAction>
+     */
     protected $actionClass = ConvertPaymentAction::class;
 
+    /**
+     * @var class-string<Convert>
+     */
     protected $requestClass = Convert::class;
 
+    /**
+     * @return \Iterator<Convert[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass(new Payment(), 'array')];
@@ -37,7 +46,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
 
-    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack(): void
     {
         $order = new Payment();
         $order->setNumber('theNumber');
@@ -77,7 +86,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertEquals(true, $details[Constants::FIELD_PAID]);
     }
 
-    public function testShouldForcePaidFalseIfAlreadySet()
+    public function testShouldForcePaidFalseIfAlreadySet(): void
     {
         $order = new Payment();
         $order->setDetails([
@@ -96,7 +105,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertEquals(false, $details[Constants::FIELD_PAID]);
     }
 
-    public function testShouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails(): void
     {
         $order = new Payment();
         $order->setCurrencyCode('USD');

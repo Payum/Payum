@@ -25,15 +25,12 @@ class GetAddresses
         $this->addresses = [];
     }
 
-    /**
-     * @return string
-     */
-    public function getPno()
+    public function getPno(): string
     {
         return $this->pno;
     }
 
-    public function addAddress(KlarnaAddr $address)
+    public function addAddress(KlarnaAddr $address): void
     {
         $this->addresses[] = $address;
     }
@@ -41,15 +38,12 @@ class GetAddresses
     /**
      * @return KlarnaAddr[]
      */
-    public function getAddresses()
+    public function getAddresses(): array
     {
         return $this->addresses;
     }
 
-    /**
-     * @return KlarnaAddr|null
-     */
-    public function getFirstAddress()
+    public function getFirstAddress(): ?\KlarnaAddr
     {
         return $this->addresses[0] ?? null;
     }

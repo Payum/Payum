@@ -23,7 +23,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     /**
      * @var GetStatusInterface
      */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -59,7 +59,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $request->markUnknown();
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof GetStatusInterface &&
             ($request->getModel() instanceof Payment || $request->getModel() instanceof ArrayAccess)

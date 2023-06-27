@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReplyToSymfonyResponseConverter
 {
-    /**
-     * @return Response
-     */
-    public function convert(ReplyInterface $reply)
+    public function convert(ReplyInterface $reply): Response
     {
         if ($reply instanceof SymfonyHttpResponse) {
             return $reply->getResponse();

@@ -22,15 +22,18 @@ use stdClass;
 class AuthorizeRecurringActionTest extends GenericActionTest
 {
     /**
-     * @var Authorize
+     * @var class-string<Authorize>
      */
     protected $requestClass = Authorize::class;
 
     /**
-     * @var AuthorizeRecurringAction
+     * @var class-string<AuthorizeRecurringAction>
      */
     protected $actionClass = AuthorizeRecurringAction::class;
 
+    /**
+     * @return \Iterator<Authorize[]>
+     */
     public function provideSupportedRequests(): Iterator
     {
         yield [new $this->requestClass([
@@ -67,21 +70,21 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         ])];
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeRecurringAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
         $rc = new ReflectionClass(AuthorizeRecurringAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testThrowIfNotKlarnaConfigGivenAsApi()
+    public function testThrowIfNotKlarnaConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Checkout\Config');
@@ -89,7 +92,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldDoNothingIfReservationAlreadySet()
+    public function testShouldDoNothingIfReservationAlreadySet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -106,7 +109,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldCreateOrderIfReservationNotSet()
+    public function testShouldCreateOrderIfReservationNotSet(): void
     {
         $orderMock = $this->createOrderMock();
         $orderMock
@@ -122,7 +125,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateOrder::class))
-            ->willReturnCallback(function (CreateOrder $request) use ($orderMock) {
+            ->willReturnCallback(function (CreateOrder $request) use ($orderMock): void {
                 $request->setOrder($orderMock);
             })
         ;
@@ -142,7 +145,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $this->assertSame('theToken', $model['recurring_token']);
     }
 
-    public function testShouldForceRecurringConfigAndRollbackBackAfterExecution()
+    public function testShouldForceRecurringConfigAndRollbackBackAfterExecution(): void
     {
         $config = new Config();
         $config->acceptHeader = 'anAcceptHeader';
@@ -167,7 +170,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateOrder::class))
-            ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
+            ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase): void {
                 $request->setOrder($orderMock);
 
                 $testCase->assertSame(Constants::ACCEPT_HEADER_RECURRING_ORDER_ACCEPTED_V1, $config->acceptHeader);
@@ -195,7 +198,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $testCase->assertSame('aSecret', $config->secret);
     }
 
-    public function testShouldUseLiveRecurringBaseUriIfConfigHasLiveBaseUri()
+    public function testShouldUseLiveRecurringBaseUriIfConfigHasLiveBaseUri(): void
     {
         $config = new Config();
         $config->acceptHeader = 'anAcceptHeader';
@@ -220,7 +223,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(CreateOrder::class))
-            ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
+            ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase): void {
                 $request->setOrder($orderMock);
 
                 $testCase->assertSame('https://checkout.klarna.com/checkout/recurring/theToken/orders', $config->baseUri);
@@ -249,6 +252,6 @@ class AuthorizeRecurringActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

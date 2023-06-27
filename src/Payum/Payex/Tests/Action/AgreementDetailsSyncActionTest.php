@@ -16,14 +16,14 @@ use stdClass;
 
 class AgreementDetailsSyncActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(AgreementDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -38,7 +38,7 @@ class AgreementDetailsSyncActionTest extends TestCase
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    public function testShouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -53,21 +53,21 @@ class AgreementDetailsSyncActionTest extends TestCase
         $this->assertFalse($action->supports(new Sync($array)));
     }
 
-    public function testShouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AgreementDetailsSyncAction();
@@ -75,7 +75,7 @@ class AgreementDetailsSyncActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoSubExecuteCheckAgreementApiRequest()
+    public function testShouldDoSubExecuteCheckAgreementApiRequest(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

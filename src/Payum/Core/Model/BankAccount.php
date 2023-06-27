@@ -9,50 +9,36 @@ class BankAccount implements BankAccountInterface
 {
     /**
      * Name of the account holder
-     *
-     * @var string
      */
-    private $holder;
+    private ?string $holder = null;
 
     /**
      * The account number (BBAN)
-     *
-     * @var string
      */
-    private $number;
+    private ?string $number = null;
 
     /**
      * Code that identifies the bank where the account is held
-     *
-     * @var string
      */
-    private $bankCode;
+    private ?string $bankCode = null;
 
     /**
      * The bank's country code (ISO 3166-1 ALPHA-2)
      *
      * @link https://en.wikipedia.org/wiki/ISO_3166-1
-     * @var string
      */
-    private $bankCountryCode;
+    private ?string $bankCountryCode = null;
 
-    /**
-     * @var string
-     */
-    private $iban;
+    private ?string $iban = null;
 
     /**
      * The bank's BIC code
      *
      * @link https://en.wikipedia.org/wiki/ISO_9362
-     * @var string
      */
-    private $bic;
+    private ?string $bic = null;
 
-    /**
-     * @return string
-     */
-    public function getHolder()
+    public function getHolder(): ?string
     {
         return $this->holder;
     }
@@ -60,15 +46,12 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $holder
      */
-    public function setHolder($holder)
+    public function setHolder($holder): void
     {
         $this->holder = $holder;
     }
 
-    /**
-     * @return string
-     */
-    public function getNumber()
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -76,15 +59,12 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $number
      */
-    public function setNumber($number)
+    public function setNumber($number): void
     {
         $this->number = $number;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCode()
+    public function getBankCode(): ?string
     {
         return $this->bankCode;
     }
@@ -92,15 +72,12 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bankCode
      */
-    public function setBankCode($bankCode)
+    public function setBankCode($bankCode): void
     {
         $this->bankCode = $bankCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getBankCountryCode()
+    public function getBankCountryCode(): ?string
     {
         return $this->bankCountryCode;
     }
@@ -108,15 +85,12 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bankCountryCode
      */
-    public function setBankCountryCode($bankCountryCode)
+    public function setBankCountryCode($bankCountryCode): void
     {
         $this->bankCountryCode = $bankCountryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
@@ -124,15 +98,12 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $iban
      */
-    public function setIban($iban)
+    public function setIban($iban): void
     {
         $this->iban = $iban;
     }
 
-    /**
-     * @return string
-     */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
@@ -140,7 +111,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bic
      */
-    public function setBic($bic)
+    public function setBic($bic): void
     {
         $this->bic = $bic;
     }

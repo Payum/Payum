@@ -14,16 +14,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
+    /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
         if (false == $httpRequest instanceof Request) {
             throw new InvalidArgumentException(sprintf(
@@ -52,7 +55,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         return $token;
     }
 
-    public function invalidate(TokenInterface $token)
+    public function invalidate(TokenInterface $token): void
     {
         $this->tokenStorage->delete($token);
     }

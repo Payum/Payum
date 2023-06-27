@@ -13,14 +13,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventDispatcherExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(EventDispatcherExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldTriggerEventWhenCallOnPreExecute()
+    public function testShouldTriggerEventWhenCallOnPreExecute(): void
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock
@@ -34,7 +34,7 @@ class EventDispatcherExtensionTest extends TestCase
         $extension->onPreExecute($this->createContextMock());
     }
 
-    public function testShouldTriggerEventWhenCallOnExecute()
+    public function testShouldTriggerEventWhenCallOnExecute(): void
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock
@@ -48,7 +48,7 @@ class EventDispatcherExtensionTest extends TestCase
         $extension->onExecute($this->createContextMock());
     }
 
-    public function testShouldTriggerEventWhenCallOnPostExecute()
+    public function testShouldTriggerEventWhenCallOnPostExecute(): void
     {
         $dispatcherMock = $this->createEventDispatcherMock();
         $dispatcherMock

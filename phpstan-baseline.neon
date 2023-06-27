@@ -1,0 +1,2881 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Class Payum\\\\AuthorizeNet\\\\Aim\\\\Action\\\\CaptureAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/AuthorizeNet/Aim/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\AuthorizeNet\\\\Aim\\\\Action\\\\CaptureAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/AuthorizeNet/Aim/Action/CaptureAction.php
+
+		-
+			message: "#^Method Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:createGetStatusStub\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/AuthorizeNet/Aim/Tests/Action/StatusActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\CaptureAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\CaptureAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\CaptureOffsiteAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/CaptureOffsiteAction.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\CaptureOffsiteAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/CaptureOffsiteAction.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/CaptureOffsiteAction.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\NotifyAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/NotifyAction.php
+
+		-
+			message: "#^Class Payum\\\\Be2Bill\\\\Action\\\\NotifyAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Be2Bill/Action/NotifyAction.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:addGlobalParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:calculateHash\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:payment\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:prepareOffsitePayment\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:verifyHash\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Property Payum\\\\Be2Bill\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^Property Payum\\\\Be2Bill\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Be2Bill/Api.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$api with type T is not subtype of native type object\\.$#"
+			count: 1
+			path: src/Payum/Core/ApiAwareInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Defuse\\\\Security\\\\DefuseCypher\\:\\:__construct\\(\\) has parameter \\$secret with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Defuse/Security/DefuseCypher.php
+
+		-
+			message: "#^Parameter \\#2 \\$key of static method Defuse\\\\Crypto\\\\Crypto\\:\\:decrypt\\(\\) expects Defuse\\\\Crypto\\\\Key, string given\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Defuse/Security/DefuseCypher.php
+
+		-
+			message: "#^Parameter \\#2 \\$key of static method Defuse\\\\Crypto\\\\Crypto\\:\\:encrypt\\(\\) expects Defuse\\\\Crypto\\\\Key, string given\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Defuse/Security/DefuseCypher.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Defuse\\\\Security\\\\DefuseCypher\\:\\:\\$key \\(string\\) does not accept Defuse\\\\Crypto\\\\Key\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Defuse/Security/DefuseCypher.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Storage\\\\DoctrineStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
+
+		-
+			message: "#^Call to an undefined method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Types\\\\ObjectType\\:\\:getName\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Types\\\\ObjectType\\:\\:convertToDatabaseValue\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Types\\\\ObjectType\\:\\:convertToPHPValue\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Types\\\\ObjectType\\:\\:convertToPHPValue\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
+
+		-
+			message: "#^Call to an undefined method Laminas\\\\Db\\\\ResultSet\\\\ResultSetInterface\\:\\:current\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to an undefined method Laminas\\\\Db\\\\ResultSet\\\\ResultSetInterface\\:\\:getHydrator\\(\\)\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to method delete\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to method getResultSetPrototype\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to method insert\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to method select\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Call to method update\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Class Zend\\\\Db\\\\TableGateway\\\\TableGateway not found\\.$#"
+			count: 3
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Parameter \\$tableGateway of method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:__construct\\(\\) has invalid type Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:\\$tableGateway has unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway as its type\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\PlainPhp\\\\Security\\\\TokenFactory\\:\\:generateUrl\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/PlainPhp/Security/TokenFactory.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject extends generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$flags with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$input with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$iterator_class with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:offsetSet\\(\\) with return type void returns void but should not return anything\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:offsetUnset\\(\\) with return type void returns void but should not return anything\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:\\$input has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Result of method ArrayObject\\<\\(int\\|string\\),mixed\\>\\:\\:offsetSet\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Result of method ArrayObject\\<\\(int\\|string\\),mixed\\>\\:\\:offsetUnset\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
+
+		-
+			message: "#^Access to an undefined property Payum\\\\Core\\\\Request\\\\GetHttpRequest\\:\\:\\$headers\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
+
+		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
+
+		-
+			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Action/ObtainCreditCardAction.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Action\\\\RenderTemplateAction\\:\\:__construct\\(\\) has parameter \\$layout with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Action/RenderTemplateAction.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\CoreGatewayFactoryBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/CoreGatewayFactoryBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\CoreGatewayFactoryBuilder\\:\\:build\\(\\) has parameter \\$defaultConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/CoreGatewayFactoryBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\GatewayFactoryBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/GatewayFactoryBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\GatewayFactoryBuilder\\:\\:build\\(\\) has parameter \\$defaultConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/GatewayFactoryBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\HttpRequestVerifierBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/HttpRequestVerifierBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\ObtainCreditCardActionBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/ObtainCreditCardActionBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\TokenFactoryBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Builder/TokenFactoryBuilder.php
+
+		-
+			message: "#^Call to function is_null\\(\\) with array will always evaluate to false\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Form/Type/GatewayConfigType.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Symfony/Form/Type/GatewayConfigType.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$data has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Form/Type/GatewayConfigType.php
+
+		-
+			message: "#^Parameter \\#3 \\$previous of class Payum\\\\Core\\\\Exception\\\\LogicException constructor expects Throwable\\|null, Payum\\\\Core\\\\Reply\\\\ReplyInterface given\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/ReplyToSymfonyResponseConverter.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Security\\\\TokenFactory\\:\\:generateUrl\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Security/TokenFactory.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Security\\\\TokenFactory\\:\\:\\$urlGenerator \\(Symfony\\\\Component\\\\Routing\\\\RouterInterface\\) does not accept Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Security/TokenFactory.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Validator\\\\Constraints\\\\CreditCardDate\\:\\:\\$min has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDate.php
+
+		-
+			message: "#^Access to an undefined property Symfony\\\\Component\\\\Validator\\\\Constraint\\:\\:\\$invalidMessage\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDateValidator.php
+
+		-
+			message: "#^Access to an undefined property Symfony\\\\Component\\\\Validator\\\\Constraint\\:\\:\\$min\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDateValidator.php
+
+		-
+			message: "#^Access to an undefined property Symfony\\\\Component\\\\Validator\\\\Constraint\\:\\:\\$minMessage\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDateValidator.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Validator\\\\Context\\\\ExecutionContextInterface\\:\\:addViolationAt\\(\\)\\.$#"
+			count: 2
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDateValidator.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Validator\\\\Constraints\\\\CreditCardDateValidator\\:\\:validate\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Symfony/Validator/Constraints/CreditCardDateValidator.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Twig\\\\TwigFactory\\:\\:guessViewsPath\\(\\) should return string\\|null but empty return statement found\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Twig/TwigFactory.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Twig/TwigUtil.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Twig\\\\TwigUtil\\:\\:\\$storage with generic class SplObjectStorage does not specify its types\\: TObject, TData$#"
+			count: 1
+			path: src/Payum/Core/Bridge/Twig/TwigUtil.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/CoreGatewayFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:createConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/CoreGatewayFactory.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\CoreGatewayFactory\\:\\:\\$defaultConfig type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/CoreGatewayFactory.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/Exception/Http/HttpException.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Exception\\\\Http\\\\HttpExceptionInterface\\:\\:setRequest\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Exception/Http/HttpExceptionInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Exception\\\\Http\\\\HttpExceptionInterface\\:\\:setResponse\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Exception/Http/HttpExceptionInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Exception\\\\RequestNotSupportedException\\:\\:suggestions\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Exception/RequestNotSupportedException.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Extension\\\\ExtensionInterface\\:\\:onExecute\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Extension/ExtensionInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Extension\\\\ExtensionInterface\\:\\:onPostExecute\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Extension/ExtensionInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Extension\\\\ExtensionInterface\\:\\:onPreExecute\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Extension/ExtensionInterface.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 3
+			path: src/Payum/Core/Extension/ExtensionInterface.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 3
+			path: src/Payum/Core/Extension/ExtensionInterface.php
+
+		-
+			message: "#^Call to an undefined method Payum\\\\Core\\\\Model\\\\ModelAggregateInterface\\:\\:setModel\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/Extension/StorageExtension.php
+
+		-
+			message: "#^Invalid type Payum\\\\Core\\\\Reply\\\\ReplyInterface to throw\\.$#"
+			count: 1
+			path: src/Payum/Core/Gateway.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\GatewayFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\GatewayFactory\\:\\:createConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactory.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\GatewayFactory\\:\\:\\$defaultConfig type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\GatewayFactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\GatewayFactoryInterface\\:\\:createConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\GatewayFactoryInterface\\:\\:createConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/GatewayFactoryInterface.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Payum\\\\Core\\\\Exception\\\\RequestNotSupportedException\\|Payum\\\\Core\\\\Reply\\\\ReplyInterface is not subtype of Throwable$#"
+			count: 1
+			path: src/Payum/Core/GatewayInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\ISO4217\\\\Currency\\:\\:getCountry\\(\\) has invalid return type string\\.$#"
+			count: 1
+			path: src/Payum/Core/ISO4217/Currency.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Model\\\\ArrayObject implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Core/Model/ArrayObject.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Model\\\\ArrayObject implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Core/Model/ArrayObject.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setBankCode\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setBankCountryCode\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setBic\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setHolder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setIban\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setNumber\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/BankAccountInterface.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Model\\\\CreditCard\\:\\:\\$holder \\(string\\) does not accept null\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCard.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Model\\\\CreditCard\\:\\:\\$number \\(string\\) does not accept null\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCard.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setBrand\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setExpireAt\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setHolder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setMaskedHolder\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setMaskedNumber\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setNumber\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setSecurityCode\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\CreditCardInterface\\:\\:setToken\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/CreditCardInterface.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Model\\\\GatewayConfig\\:\\:\\$decryptedConfig type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfig.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\GatewayConfigInterface\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfigInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\GatewayConfigInterface\\:\\:setConfig\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfigInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\GatewayConfigInterface\\:\\:setConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfigInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\GatewayConfigInterface\\:\\:setFactoryName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfigInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\GatewayConfigInterface\\:\\:setGatewayName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/GatewayConfigInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Identity\\:\\:__serialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Identity.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Identity\\:\\:__unserialize\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Identity.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\ModelAwareInterface\\:\\:setModel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/ModelAwareInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payment\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type Traversable\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payment.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payment\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payment.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payment\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type array\\|Traversable\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payment.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Model\\\\Payment\\:\\:\\$details type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payment.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payout\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type Traversable\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payout.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payout\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payout.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Model\\\\Payout\\:\\:setDetails\\(\\) has parameter \\$details with no value type specified in iterable type array\\|Traversable\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payout.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Model\\\\Payout\\:\\:\\$details type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Model/Payout.php
+
+		-
+			message: "#^Call to an undefined method Omnipay\\\\Common\\\\GatewayFactory\\:\\:getSupportedGateways\\(\\)\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 2
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Instantiated class Payum\\\\OmnipayBridge\\\\OmnipayGatewayFactory not found\\.$#"
+			count: 4
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addCoreGatewayFactoryConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addGateway\\(\\) has parameter \\$gateway with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addGatewayFactoryConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildCoreGatewayFactory\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildOmnipayGatewayFactories\\(\\) should return array\\<Payum\\\\Core\\\\GatewayFactoryInterface\\> but returns array\\<string, Payum\\\\OmnipayBridge\\\\OmnipayGatewayFactory\\>\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Parameter \\$paths of method Payum\\\\Core\\\\PayumBuilder\\:\\:setGenericTokenFactoryPaths\\(\\) has invalid type string\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$coreGatewayFactoryConfig type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$gatewayConfigs type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$gatewayFactoryConfigs type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$genericTokenFactoryPaths \\(array\\<string\\>\\) does not accept array\\<string\\>\\.$#"
+			count: 1
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Result of \\|\\| is always true\\.$#"
+			count: 5
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 5
+			path: src/Payum/Core/PayumBuilder.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:\\$gatewayFactories type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Registry/AbstractRegistry.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:\\$gateways type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Registry/AbstractRegistry.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Reply\\\\HttpPostRedirect\\:\\:prepareContent\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Reply/HttpPostRedirect.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Reply\\\\HttpPostRedirect\\:\\:\\$fields type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Reply/HttpPostRedirect.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Reply\\\\HttpRedirect\\:\\:prepareContent\\(\\) has parameter \\$url with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Reply/HttpRedirect.php
+
+		-
+			message: "#^PHPDoc type string of property Payum\\\\Core\\\\Request\\\\GetCreditCardToken\\:\\:\\$token is not covariant with PHPDoc type Payum\\\\Core\\\\Security\\\\TokenInterface of overridden property Payum\\\\Core\\\\Request\\\\Generic\\:\\:\\$token\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetCreditCardToken.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Request\\\\GetHttpRequest\\:\\:\\$query type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetHttpRequest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Request\\\\GetHttpRequest\\:\\:\\$request type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetHttpRequest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markAuthorized\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markCanceled\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markCaptured\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markExpired\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markFailed\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markNew\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markPayedout\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markPending\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markRefunded\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markSuspended\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markUnknown\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/GetStatusInterface.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Request\\\\RenderTemplate\\:\\:\\$parameters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Request/RenderTemplate.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\AbstractTokenFactory\\:\\:generateUrl\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/AbstractTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\CryptedInterface\\:\\:decrypt\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/CryptedInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\CryptedInterface\\:\\:encrypt\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/CryptedInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createAuthorizeToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createCancelToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createCancelToken\\(\\) has parameter \\$afterPath with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createCancelToken\\(\\) has parameter \\$gatewayName with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createCancelToken\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createCaptureToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createPayoutToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactory\\:\\:createRefundToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactory.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactoryAwareInterface\\:\\:setGenericTokenFactory\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactoryAwareInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactoryInterface\\:\\:createAuthorizeToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactoryInterface\\:\\:createCaptureToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactoryInterface\\:\\:createPayoutToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\GenericTokenFactoryInterface\\:\\:createRefundToken\\(\\) has parameter \\$afterParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/GenericTokenFactoryInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\HttpRequestVerifierInterface\\:\\:invalidate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/HttpRequestVerifierInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\SensitiveValue\\:\\:__debugInfo\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/SensitiveValue.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Security\\\\SensitiveValue\\:\\:__unserialize\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Security/SensitiveValue.php
+
+		-
+			message: "#^Return type \\(void\\) of method Payum\\\\Core\\\\Security\\\\SensitiveValue\\:\\:serialize\\(\\) should be compatible with return type \\(string\\|null\\) of method Serializable\\:\\:serialize\\(\\)$#"
+			count: 1
+			path: src/Payum/Core/Security/SensitiveValue.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Storage\\\\CryptoStorageDecorator\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Storage/CryptoStorageDecorator.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Storage\\\\FilesystemStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Storage/FilesystemStorage.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Storage\\\\FilesystemStorage\\:\\:\\$identityMap type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Storage/FilesystemStorage.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Storage\\\\StorageInterface\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Storage/StorageInterface.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\AbstractGatewayFactoryTest\\:\\:getPropertyValue\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/AbstractGatewayFactoryTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Action\\\\ModelAggregateAwareRequest\\:\\:__construct\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\ModelAggregateAwareRequest\\:\\:\\$model has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\ApiAwareClass uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Core/Tests/ApiAwareTraitTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\BaseConvertPaymentActionTest\\:\\:testShouldNotSupportRequest\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/BaseConvertPaymentActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\BaseConvertPaymentActionTest\\:\\:testThrowIfNotSupportedRequestGivenAsArgumentForExecute\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/BaseConvertPaymentActionTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\BaseConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/BaseConvertPaymentActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Doctrine\\\\Storage\\\\DoctrineStorageTest\\:\\:createObjectRepositoryMock\\(\\) return type with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Doctrine/Storage/DoctrineStorageTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Bridge\\\\Psr\\\\Log\\\\LoggerAwareAction\\:\\:\\$logger has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Psr/Log/LoggerExtensionTest.php
+
+		-
+			message: "#^ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\> does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Spl\\\\CustomArrayObject implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Spl\\\\CustomArrayObject implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Bridge\\\\Spl\\\\CustomArrayObject\\:\\:\\$foo has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Extension\\\\EventDispatcherExtensionTest\\:\\:createContextMock\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Symfony/Extension/EventDispatcherExtensionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Extension\\\\EventDispatcherExtensionTest\\:\\:createEventDispatcherMock\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Symfony/Extension/EventDispatcherExtensionTest.php
+
+		-
+			message: "#^Call to method expects\\(\\) on an unknown class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\MockObject\\.$#"
+			count: 8
+			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\HttpRequestVerifierTest\\:\\:createStorageMock\\(\\) has invalid return type Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\MockObject\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Symfony\\\\Component\\\\HttpFoundation\\\\InputBag\\:\\:set\\(\\) expects array\\|bool\\|float\\|int\\|string\\|null, Payum\\\\Core\\\\Model\\\\Token given\\.$#"
+			count: 3
+			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Validator\\\\Constraints\\\\CreditCardDateValidatorTest extends generic class Symfony\\\\Component\\\\Validator\\\\Test\\\\ConstraintValidatorTestCase but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Core/Tests/Bridge/Symfony/Validator/Constraints/CreditCardDateValidatorTest.php
+
+		-
+			message: "#^Result of method Payum\\\\Core\\\\Extension\\\\ExtensionCollection\\:\\:onExecute\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/ExtensionCollectionTest.php
+
+		-
+			message: "#^Result of method Payum\\\\Core\\\\Extension\\\\ExtensionCollection\\:\\:onPostExecute\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/ExtensionCollectionTest.php
+
+		-
+			message: "#^Result of method Payum\\\\Core\\\\Extension\\\\ExtensionCollection\\:\\:onPreExecute\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/ExtensionCollectionTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Extension\\\\ActionGenericTokenFactoryAware\\:\\:\\$tokenFactory has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/GenericTokenFactoryExtensionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Extension\\\\StorageExtensionTest\\:\\:createModelRequestWithModel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/StorageExtensionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Extension\\\\StorageExtensionTest\\:\\:createModelRequestWithModel\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Extension/StorageExtensionTest.php
+
+		-
+			message: "#^Call to method setDefaultDB\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setHydratorDir\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setHydratorNamespace\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setMetadataCache\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setMetadataCacheImpl\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setMetadataDriverImpl\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setProxyDir\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to method setProxyNamespace\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to static method addType\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Types\\\\Type\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to static method create\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to static method hasType\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Types\\\\Type\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Call to static method overrideType\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\Types\\\\Type\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\Common\\\\Cache\\\\ArrayCache not found\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\ODM\\\\MongoDB\\\\Configuration not found\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Functional\\\\Bridge\\\\Doctrine\\\\BaseMongoTest\\:\\:\\$dm has unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager as its type\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\Common\\\\Cache\\\\ArrayCache not found\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$cacheImpl of method Doctrine\\\\ORM\\\\Configuration\\:\\:setMetadataCacheImpl\\(\\) expects Doctrine\\\\Common\\\\Cache\\\\Cache, Doctrine\\\\Common\\\\Cache\\\\ArrayCache given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$cacheImpl of method Doctrine\\\\ORM\\\\Configuration\\:\\:setQueryCacheImpl\\(\\) expects Doctrine\\\\Common\\\\Cache\\\\Cache, Doctrine\\\\Common\\\\Cache\\\\ArrayCache given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
+
+		-
+			message: "#^Call to method clear\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method find\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method flush\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method getRepository\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method persist\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method refresh\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
+
+		-
+			message: "#^Call to method clear\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method find\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method flush\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 3
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method getRepository\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method persist\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 3
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method refresh\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
+
+		-
+			message: "#^Call to method clear\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method find\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method flush\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method getRepository\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method persist\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method refresh\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$details of method Payum\\\\Core\\\\Model\\\\Payment\\:\\:setDetails\\(\\) expects array\\|Traversable, string given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
+
+		-
+			message: "#^Call to method clear\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
+
+		-
+			message: "#^Call to method find\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
+
+		-
+			message: "#^Call to method flush\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
+
+		-
+			message: "#^Call to method getRepository\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
+
+		-
+			message: "#^Call to method persist\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$details of method Payum\\\\Core\\\\Model\\\\Payment\\:\\:setDetails\\(\\) expects array\\|Traversable, string given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Entity/PaymentTest.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\ODM\\\\MongoDB\\\\Mapping\\\\Driver\\\\AnnotationDriver not found\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\ODM\\\\MongoDB\\\\Mapping\\\\Driver\\\\XmlDriver not found\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$nestedDriver of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriverChain\\:\\:addDriver\\(\\) expects Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver, Doctrine\\\\ODM\\\\MongoDB\\\\Mapping\\\\Driver\\\\AnnotationDriver given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$nestedDriver of method Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriverChain\\:\\:addDriver\\(\\) expects Doctrine\\\\Persistence\\\\Mapping\\\\Driver\\\\MappingDriver, Doctrine\\\\ODM\\\\MongoDB\\\\Mapping\\\\Driver\\\\XmlDriver given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
+
+		-
+			message: "#^Call to method clear\\(\\) on an unknown class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager\\.$#"
+			count: 2
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Storage/DoctrineStorageMongoOdmTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$objectManager of class Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Storage\\\\DoctrineStorage constructor expects Doctrine\\\\Persistence\\\\ObjectManager, Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager given\\.$#"
+			count: 6
+			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Storage/DoctrineStorageMongoOdmTest.php
+
+		-
+			message: "#^Call to method expects\\(\\) on an unknown class Payum\\\\Bundle\\\\PayumBundle\\\\DependencyInjection\\\\Factory\\\\Gateway\\\\GatewayFactoryInterface\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/Functional/Bridge/Symfony/Form/Type/GatewayConfigTypeTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Functional\\\\Bridge\\\\Symfony\\\\Form\\\\Type\\\\GatewayConfigTypeTest\\:\\:\\$fooGatewayFactoryMock has unknown class Payum\\\\Bundle\\\\PayumBundle\\\\DependencyInjection\\\\Factory\\\\Gateway\\\\GatewayFactoryInterface as its type\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Symfony/Form/Type/GatewayConfigTypeTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Functional\\\\Bridge\\\\Symfony\\\\Form\\\\Type\\\\GatewayConfigTypeTest\\:\\:\\$formFactory \\(Symfony\\\\Component\\\\Form\\\\FormFactory\\) does not accept Symfony\\\\Component\\\\Form\\\\FormFactoryInterface\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Symfony/Form/Type/GatewayConfigTypeTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Functional\\\\Bridge\\\\Symfony\\\\Form\\\\Type\\\\GatewayFactoriesChoiceTypeTest\\:\\:\\$formFactory \\(Symfony\\\\Component\\\\Form\\\\FormFactory\\) does not accept Symfony\\\\Component\\\\Form\\\\FormFactoryInterface\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Functional/Bridge/Symfony/Form/Type/GatewayFactoriesChoiceTypeTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$actionMock\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$exception\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$newException\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\ApiAwareAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\RequireOtherRequestAction\\:\\:setRequiredRequest\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\RequireOtherRequestAction\\:\\:setSupportedRequest\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\ThrowReplyAction\\:\\:setSupportedRequest\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$exception of method PHPUnit\\\\Framework\\\\MockObject\\\\Builder\\\\InvocationMocker\\:\\:willThrowException\\(\\) expects Throwable, Payum\\\\Core\\\\Reply\\\\ReplyInterface\\|PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 4
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\RequireOtherRequestAction\\:\\:\\$requiredRequest has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\RequireOtherRequestAction\\:\\:\\$supportedRequest has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\ThrowReplyAction\\:\\:\\$reply has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\ThrowReplyAction\\:\\:\\$supportedRequest has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GatewayTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\GenericActionTest\\:\\:testShouldNotSupportRequest\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GenericActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\GenericActionTest\\:\\:testThrowIfNotSupportedRequestGivenAsArgumentForExecute\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GenericActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\GenericApiAwareActionTest\\:\\:getApiClass\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/GenericApiAwareActionTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Action\\\\LoggerAwareAction\\:\\:\\$logger has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Action/LoggerAwareAction.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Document\\\\ArrayObject\\:\\:\\$id has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Document/ArrayObject.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Document\\\\GatewayConfig\\:\\:\\$id has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Document/GatewayConfig.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Document\\\\Payment\\:\\:\\$id has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Document/Payment.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Document\\\\TestModel\\:\\:\\$currency has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Document/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Document\\\\TestModel\\:\\:\\$price has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Document/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Entity\\\\TestModel\\:\\:\\$currency has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Entity/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Entity\\\\TestModel\\:\\:\\$price has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Entity/TestModel.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:getCurrency\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:getId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:getPrice\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:setCurrency\\(\\) has parameter \\$currency with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:setPrice\\(\\) has parameter \\$price with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:\\$currency has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:\\$id has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Tests\\\\Mocks\\\\Model\\\\TestModel\\:\\:\\$price has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Mocks/Model/TestModel.php
+
+		-
+			message: "#^Parameter \\#1 \\$totalAmount of method Payum\\\\Core\\\\Model\\\\Payout\\:\\:setTotalAmount\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Model/PayoutTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$expectedFactory\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/PayumBuilderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$paths of method Payum\\\\Core\\\\PayumBuilder\\:\\:setGenericTokenFactoryPaths\\(\\) expects array\\<string\\>, array\\<string, string\\> given\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/PayumBuilderTest.php
+
+		-
+			message: "#^Class Payum\\\\Core\\\\Tests\\\\Registry\\\\DoctrineProxy implements generic interface Doctrine\\\\Persistence\\\\Proxy but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Core/Tests/Registry/AbstractRegistryTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Registry\\\\AbstractRegistryTest\\:\\:createAbstractRegistryMock\\(\\) has parameter \\$constructorArguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Registry/AbstractRegistryTest.php
+
+		-
+			message: "#^Return type \\(void\\) of method Payum\\\\Core\\\\Tests\\\\Registry\\\\DoctrineProxy\\:\\:__isInitialized\\(\\) should be compatible with return type \\(bool\\) of method Doctrine\\\\Persistence\\\\Proxy\\<object\\>\\:\\:__isInitialized\\(\\)$#"
+			count: 1
+			path: src/Payum/Core/Tests/Registry/AbstractRegistryTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Reply\\\\BaseModeAwareTest\\:\\:testShouldAllowGetModelSetInConstructor\\(\\) has parameter \\$phpType with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Reply/BaseModeAwareTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Reply\\\\BaseModeAwareTest\\:\\:testShouldAllowSetModelAndGetIt\\(\\) has parameter \\$phpType with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Reply/BaseModeAwareTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Request\\\\GenericTest\\:\\:testCouldBeConstructedWithModelOfAnyType\\(\\) has parameter \\$phpType with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GenericTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Request\\\\GenericTest\\:\\:testShouldAllowGetModelSetInConstructor\\(\\) has parameter \\$phpType with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GenericTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\Request\\\\GenericTest\\:\\:testShouldAllowSetModelAndGetIt\\(\\) has parameter \\$phpType with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GenericTest.php
+
+		-
+			message: "#^Variable \\$request in PHPDoc tag @var does not match assigned variable \\$token\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GenericTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Request\\\\GetCurrency\\:\\:\\$exp \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GetCurrencyTest.php
+
+		-
+			message: "#^Property Payum\\\\Core\\\\Request\\\\GetCurrency\\:\\:\\$numeric \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/Request/GetCurrencyTest.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\TestCase\\:\\:readAttribute\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/TestCase.php
+
+		-
+			message: "#^Method Payum\\\\Core\\\\Tests\\\\TestCase\\:\\:readAttribute\\(\\) has parameter \\$object with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Core/Tests/TestCase.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\Api\\\\BaseApiAwareAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\Api\\\\BaseApiAwareAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Method Payum\\\\Klarna\\\\Checkout\\\\Action\\\\Api\\\\BaseApiAwareAction\\:\\:addMerchantId\\(\\) has parameter \\$details with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\AuthorizeAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/AuthorizeAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\AuthorizeAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/AuthorizeAction.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/AuthorizeAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\AuthorizeRecurringAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/AuthorizeRecurringAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Checkout\\\\Action\\\\AuthorizeRecurringAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Action/AuthorizeRecurringAction.php
+
+		-
+			message: "#^Method Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Request\\\\Api\\\\BaseOrderTest\\:\\:createBaseOrderMock\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Checkout/Tests/Request/Api/BaseOrderTest.php
+
+		-
+			message: "#^Access to offset 0 on an unknown class A\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/ActivateAction.php
+
+		-
+			message: "#^Access to offset 1 on an unknown class A\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/ActivateAction.php
+
+		-
+			message: "#^Access to property \\$verifyhost on an unknown class xmlrpc_client\\.$#"
+			count: 2
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Access to property \\$verifypeer on an unknown class xmlrpc_client\\.$#"
+			count: 2
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Invoice\\\\Action\\\\Api\\\\BaseApiAwareAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Klarna\\\\Invoice\\\\Action\\\\Api\\\\BaseApiAwareAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Action\\\\Api\\\\BaseApiAwareAction\\:\\:populateDetailsWithError\\(\\) has parameter \\$details with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$xmlrpc contains unknown class xmlrpc_client\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$eid of method Klarna\\:\\:config\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$country of method KlarnaAddr\\:\\:setCountry\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/GetAddressesAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function utf8_encode expects string, int given\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Action/Api/GetAddressesAction.php
+
+		-
+			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Request\\\\Api\\\\PopulateKlarnaFromDetails\\:\\:__construct\\(\\) has parameter \\$details with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Request/Api/PopulateKlarnaFromDetails.php
+
+		-
+			message: "#^Parameter \\#1 \\$country of method KlarnaAddr\\:\\:setCountry\\(\\) expects int, string given\\.$#"
+			count: 2
+			path: src/Payum/Klarna/Invoice/Tests/Action/Api/GetAddressesActionTest.php
+
+		-
+			message: "#^Property Payum\\\\Klarna\\\\Invoice\\\\Config\\:\\:\\$country \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Tests/ConfigTest.php
+
+		-
+			message: "#^Property Payum\\\\Klarna\\\\Invoice\\\\Config\\:\\:\\$currency \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Tests/ConfigTest.php
+
+		-
+			message: "#^Property Payum\\\\Klarna\\\\Invoice\\\\Config\\:\\:\\$language \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Tests/ConfigTest.php
+
+		-
+			message: "#^Property Payum\\\\Klarna\\\\Invoice\\\\Config\\:\\:\\$mode \\(int\\) does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Klarna/Invoice/Tests/ConfigTest.php
+
+		-
+			message: "#^Method Payum\\\\Offline\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:createGetStatusStub\\(\\) has parameter \\$model with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Offline/Tests/Action/StatusActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\AutoPayAgreementAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/AutoPayAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\AutoPayAgreementAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/AutoPayAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckAgreementAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckAgreementAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckOrderAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckOrderAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckRecurringPaymentAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckRecurringPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckRecurringPaymentAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CheckRecurringPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CompleteOrderAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CompleteOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CompleteOrderAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CompleteOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CreateAgreementAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CreateAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CreateAgreementAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/CreateAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\DeleteAgreementAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/DeleteAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\DeleteAgreementAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/DeleteAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\InitializeOrderAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/InitializeOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\InitializeOrderAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/InitializeOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StartRecurringPaymentAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/StartRecurringPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StartRecurringPaymentAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/StartRecurringPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StopRecurringPaymentAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/StopRecurringPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StopRecurringPaymentAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Payex/Action/Api/StopRecurringPaymentAction.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\AgreementApi\\:\\:autoPay\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/AgreementApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\AgreementApi\\:\\:check\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/AgreementApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\AgreementApi\\:\\:create\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/AgreementApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\AgreementApi\\:\\:delete\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/AgreementApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:calculateHash\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:calculateHash\\(\\) has parameter \\$parametersKeys with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:call\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:call\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:convertSimpleXmlToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:normalizeStatusFields\\(\\) has parameter \\$inputResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:normalizeStatusFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:removeHeader\\(\\) has parameter \\$inputResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:removeHeader\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:removeObsolete\\(\\) has parameter \\$inputResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:removeObsolete\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Property Payum\\\\Payex\\\\Api\\\\BaseApi\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/BaseApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\OrderApi\\:\\:check\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\OrderApi\\:\\:complete\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\OrderApi\\:\\:initialize\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^PHPDoc tag @var has no value type specified in iterable type array\\.$#"
+			count: 2
+			path: src/Payum/Payex/Api/OrderApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\RecurringApi\\:\\:check\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/RecurringApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\RecurringApi\\:\\:start\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/RecurringApi.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Api\\\\RecurringApi\\:\\:stop\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/RecurringApi.php
+
+		-
+			message: "#^Property Payum\\\\Payex\\\\Api\\\\SoapClientFactory\\:\\:\\$soapClientOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Payex/Api/SoapClientFactory.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\AutoPayAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/AutoPayAgreementActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\AutoPayAgreementActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/AutoPayAgreementActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckAgreementActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CheckAgreementActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldEmpty\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckAgreementActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckOrderAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckOrderActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CheckOrderActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckOrderActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CheckRecurringPaymentAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckRecurringPaymentActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CheckRecurringPaymentActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CheckRecurringPaymentActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CompleteOrderAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CompleteOrderActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CompleteOrderActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CompleteOrderActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\CreateAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CreateAgreementActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CreateAgreementActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldEmpty\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CreateAgreementActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\CreateAgreementActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/CreateAgreementActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\DeleteAgreementAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/DeleteAgreementActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\DeleteAgreementActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldEmpty\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/DeleteAgreementActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\InitializeOrderAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
+
+		-
+			message: "#^Dead catch \\- Payum\\\\Core\\\\Reply\\\\HttpRedirect is never thrown in the try block\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\InitializeOrderActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/InitializeOrderActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StartRecurringPaymentAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/StartRecurringPaymentActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\StartRecurringPaymentActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/StartRecurringPaymentActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Payex\\\\Action\\\\Api\\\\StopRecurringPaymentAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/StopRecurringPaymentActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Payex\\\\Tests\\\\Action\\\\Api\\\\StopRecurringPaymentActionTest\\:\\:testThrowIfTryInitializeWithRequiredFieldNotPresent\\(\\) has parameter \\$requiredField with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Payex/Tests/Action/Api/StopRecurringPaymentActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\AuthorizeTokenAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/AuthorizeTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\AuthorizeTokenAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/AuthorizeTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\BaseApiAwareAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CancelRecurringPaymentsProfileAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CancelRecurringPaymentsProfileAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CancelRecurringPaymentsProfileAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CancelRecurringPaymentsProfileAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\ConfirmOrderAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/ConfirmOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\ConfirmOrderAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/ConfirmOrderAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\ConfirmOrderAction\\:\\:__construct\\(\\) has parameter \\$templateName with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/ConfirmOrderAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CreateBillingAgreementAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CreateBillingAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CreateBillingAgreementAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CreateBillingAgreementAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CreateRecurringPaymentProfileAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CreateRecurringPaymentProfileAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\CreateRecurringPaymentProfileAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/CreateRecurringPaymentProfileAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoCaptureAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoCaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoCaptureAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoCaptureAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoCaptureAction\\:\\:getPaymentRequestNFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoCaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoExpressCheckoutPaymentAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoExpressCheckoutPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoExpressCheckoutPaymentAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoExpressCheckoutPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoReferenceTransactionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoReferenceTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoReferenceTransactionAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoReferenceTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoVoidAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoVoidAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoVoidAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoVoidAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetExpressCheckoutDetailsAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetExpressCheckoutDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetExpressCheckoutDetailsAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetExpressCheckoutDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetRecurringPaymentsProfileDetailsAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetRecurringPaymentsProfileDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetRecurringPaymentsProfileDetailsAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetRecurringPaymentsProfileDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetTransactionDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetTransactionDetailsAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction\\:\\:getPaymentRequestNFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetTransactionDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\ManageRecurringPaymentsProfileStatusAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/ManageRecurringPaymentsProfileStatusAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\ManageRecurringPaymentsProfileStatusAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/ManageRecurringPaymentsProfileStatusAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\RefundTransactionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/RefundTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\RefundTransactionAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/RefundTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\SetExpressCheckoutAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/SetExpressCheckoutAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\SetExpressCheckoutAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/SetExpressCheckoutAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\TransactionSearchAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/TransactionSearchAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\TransactionSearchAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/TransactionSearchAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\UpdateRecurringPaymentProfileAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/UpdateRecurringPaymentProfileAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\UpdateRecurringPaymentProfileAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/UpdateRecurringPaymentProfileAction.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/PurchaseAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createBillingAgreement\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createRecurringPaymentsProfile\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doCapture\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doExpressCheckoutPayment\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doReferenceTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doVoid\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getAuthorizeTokenUrl\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getExpressCheckoutDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getRecurringPaymentsProfileDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getTransactionDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:manageRecurringPaymentsProfileStatus\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:refundTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:setExpressCheckout\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:transactionSearch\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:updateRecurringPaymentsProfile\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
+
+		-
+			message: "#^ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\> does not accept string\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\AuthorizeTokenAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 3
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$model\\.$#"
+			count: 2
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
+
+		-
+			message: "#^Call to an undefined method Payum\\\\Core\\\\Action\\\\ActionInterface\\:\\:setGateway\\(\\)\\.$#"
+			count: 3
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
+
+		-
+			message: "#^Dead catch \\- Payum\\\\Core\\\\Reply\\\\HttpResponse is never thrown in the try block\\.$#"
+			count: 2
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\SetExpressCheckoutAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/SetExpressCheckoutActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\CancelRecurringPaymentsProfileActionTest\\:\\:testThrowIfNotSupportedRequestGivenAsArgumentForExecute\\(\\) has parameter \\$request with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/CancelRecurringPaymentsProfileActionTest.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Ipn\\\\Api\\:\\:notifyValidate\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Ipn/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\Ipn\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Ipn/Api.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Action\\\\Api\\\\MasspayAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Action/Api/MasspayAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Action\\\\Api\\\\MasspayAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Action/Api/MasspayAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:massPay\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Api.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Request\\\\Api\\\\Masspay constructor invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/Api/MasspayActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Action\\\\CaptureAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Action\\\\CaptureAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Action\\\\RefundAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Action/RefundAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doCredit\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doSale\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Action\\\\Api\\\\CreateButtonPaymentAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Action/Api/CreateButtonPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Action\\\\Api\\\\CreateButtonPaymentAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Action/Api/CreateButtonPaymentAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Action/Api/GetTransactionDetailsAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Action/Api/GetTransactionDetailsAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doCreateButton\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
+
+		-
+			message: "#^Access to an undefined property PayPal\\\\Api\\\\Payment\\:\\:\\$links\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Access to an undefined property PayPal\\\\Api\\\\PaymentExecution\\:\\:\\$payer_id\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Call to an undefined method ArrayAccess\\:\\:replace\\(\\)\\.$#"
+			count: 3
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Rest\\\\Action\\\\CaptureAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Rest\\\\Action\\\\CaptureAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Method Payum\\\\Paypal\\\\Rest\\\\Action\\\\CaptureAction\\:\\:captureArrayAccess\\(\\) has parameter \\$model with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$model contains generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/CaptureAction.php
+
+		-
+			message: "#^Access to an undefined property PayPal\\\\Api\\\\Payment\\:\\:\\$state\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Rest\\\\Action\\\\StatusAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^Class Payum\\\\Paypal\\\\Rest\\\\Action\\\\StatusAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$model contains generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/StatusAction.php
+
+		-
+			message: "#^Access to an undefined property PayPal\\\\Api\\\\Payment\\:\\:\\$id\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Action/SyncAction.php
+
+		-
+			message: "#^Property Payum\\\\Paypal\\\\Rest\\\\Model\\\\PaymentDetails\\:\\:\\$idStorage has no type specified\\.$#"
+			count: 1
+			path: src/Payum/Paypal/Rest/Model/PaymentDetails.php
+
+		-
+			message: "#^Class Payum\\\\Skeleton\\\\Action\\\\Api\\\\BaseApiAwareAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Skeleton/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Class Payum\\\\Skeleton\\\\Action\\\\Api\\\\BaseApiAwareAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Skeleton/Action/Api/BaseApiAwareAction.php
+
+		-
+			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Skeleton/Api.php
+
+		-
+			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) has parameter \\$method with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Skeleton/Api.php
+
+		-
+			message: "#^Property Payum\\\\Skeleton\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Skeleton/Api.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\CreateTransactionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/CreateTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\CreateTransactionAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/CreateTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\GetTransactionDataAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/GetTransactionDataAction.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\GetTransactionDataAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/GetTransactionDataAction.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\RefundTransactionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/RefundTransactionAction.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\RefundTransactionAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Sofort/Action/Api/RefundTransactionAction.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Action/CaptureAction.php
+
+		-
+			message: "#^Method Payum\\\\Sofort\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Api.php
+
+		-
+			message: "#^Method Payum\\\\Sofort\\\\Api\\:\\:createTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Api.php
+
+		-
+			message: "#^Method Payum\\\\Sofort\\\\Api\\:\\:getTransactionData\\(\\) has parameter \\$transactionId with no type specified\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Api.php
+
+		-
+			message: "#^Method Payum\\\\Sofort\\\\Api\\:\\:refundTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Api.php
+
+		-
+			message: "#^Right side of && is always true\\.$#"
+			count: 1
+			path: src/Payum/Sofort/Api.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\CreateTransactionAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: src/Payum/Sofort/Tests/Action/Api/CreateTransactionActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\GetTransactionDataAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: src/Payum/Sofort/Tests/Action/Api/GetTransactionDataActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\RefundTransactionAction constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: src/Payum/Sofort/Tests/Action/Api/RefundTransactionActionTest.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateChargeAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateChargeAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateChargeAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateChargeAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateCustomerAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateCustomerAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateCustomerAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateCustomerAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreatePlanAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreatePlanAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreatePlanAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreatePlanAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateSubscriptionAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateSubscriptionAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateSubscriptionAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateSubscriptionAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateTokenAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateTokenAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/CreateTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\ObtainTokenAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/ObtainTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\ObtainTokenAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/ObtainTokenAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\ObtainTokenForCreditCardAction implements generic interface Payum\\\\Core\\\\ApiAwareInterface but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/ObtainTokenForCreditCardAction.php
+
+		-
+			message: "#^Class Payum\\\\Stripe\\\\Action\\\\Api\\\\ObtainTokenForCreditCardAction uses generic trait Payum\\\\Core\\\\ApiAwareTrait but does not specify its types\\: T$#"
+			count: 1
+			path: src/Payum/Stripe/Action/Api/ObtainTokenForCreditCardAction.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^Instanceof between Payum\\\\Core\\\\Request\\\\Capture and Payum\\\\Stripe\\\\Request\\\\Api\\\\ObtainToken will always evaluate to false\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 3
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 3
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
+
+		-
+			message: "#^Method Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:getToken\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Method Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:getToken\\(\\) return type with generic interface ArrayAccess does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Method Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:setToken\\(\\) has parameter \\$token with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Method Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:setToken\\(\\) has parameter \\$token with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^PHPDoc type array\\|ArrayAccess of property Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:\\$token is not covariant with PHPDoc type Payum\\\\Core\\\\Security\\\\TokenInterface of overridden property Payum\\\\Core\\\\Request\\\\Generic\\:\\:\\$token\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Property Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:\\$token type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Property Payum\\\\Stripe\\\\Request\\\\Api\\\\CreateTokenForCreditCard\\:\\:\\$token with generic interface ArrayAccess does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Payum/Stripe/Request/Api/CreateTokenForCreditCard.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$model\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Tests/Action/Api/ObtainTokenActionTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$model\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Tests/Action/CaptureActionTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$securityCode of method Payum\\\\Core\\\\Model\\\\CreditCard\\:\\:setSecurityCode\\(\\) expects Payum\\\\Core\\\\Security\\\\SensitiveValue\\|string, int given\\.$#"
+			count: 1
+			path: src/Payum/Stripe/Tests/Action/ConvertPaymentActionTest.php

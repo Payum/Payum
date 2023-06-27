@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class UnsupportedApiExceptionTest extends TestCase
 {
-    public function testShouldBeSubClassOfInvalidArgumentException()
+    public function testShouldBeSubClassOfInvalidArgumentException(): void
     {
         $rc = new ReflectionClass(UnsupportedApiException::class);
 

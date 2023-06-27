@@ -41,7 +41,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi(object $api): void
     {
         $this->_setApi($api);
 
@@ -49,7 +49,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         /** @var CreateCustomer $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -69,13 +69,13 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
 
             $customer = Customer::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($customer->toArray(true));
+            $model->replace($customer->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof CreateCustomer &&
             $request->getModel() instanceof ArrayAccess

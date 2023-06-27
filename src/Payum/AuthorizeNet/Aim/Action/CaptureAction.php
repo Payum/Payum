@@ -29,10 +29,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $this->apiClass = AuthorizeNetAIM::class;
     }
 
-    /**
-     * @param Capture $request
-     */
-    public function execute($request)
+    public function execute(mixed $request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -67,7 +64,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $model->replace(get_object_vars($response));
     }
 
-    public function supports($request)
+    public function supports(mixed $request): bool
     {
         return $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess

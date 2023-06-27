@@ -17,35 +17,35 @@ use stdClass;
 
 class UpdateRecurringPaymentProfileActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(UpdateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(UpdateRecurringPaymentProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldUpdateRecurringPaymentProfileRequestAndArrayAccessAsModel()
+    public function testShouldUpdateRecurringPaymentProfileRequestAndArrayAccessAsModel(): void
     {
         $action = new UpdateRecurringPaymentProfileAction();
 
         $this->assertTrue($action->supports(new UpdateRecurringPaymentProfile($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotUpdateRecurringPaymentProfileRequest()
+    public function testShouldNotSupportAnythingNotUpdateRecurringPaymentProfileRequest(): void
     {
         $action = new UpdateRecurringPaymentProfileAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new UpdateRecurringPaymentProfileAction();
@@ -53,7 +53,7 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfProfileIdNotSetInModel()
+    public function testThrowIfProfileIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
@@ -62,7 +62,7 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
         $action->execute(new UpdateRecurringPaymentProfile([]));
     }
 
-    public function testShouldCallApiUpdateRecurringPaymentsProfileMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiUpdateRecurringPaymentsProfileMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -70,7 +70,7 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
-            ->willReturnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase): array {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
                 $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
@@ -88,18 +88,16 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiUpdateRecurringPaymentsProfileMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiUpdateRecurringPaymentsProfileMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('updateRecurringPaymentsProfile')
-            ->willReturnCallback(function () {
-                return [
-                    'PROFILEID' => 'theId',
-                    'PROFILESTATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'PROFILEID' => 'theId',
+                'PROFILESTATUS' => 'theStatus',
+            ])
         ;
 
         $action = new UpdateRecurringPaymentProfileAction();
@@ -124,6 +122,6 @@ class UpdateRecurringPaymentProfileActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 }

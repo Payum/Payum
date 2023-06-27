@@ -18,6 +18,7 @@ class HttpPostRedirect extends HttpResponse
      * @param string   $url
      * @param int      $statusCode
      * @param string[] $headers
+     * @param mixed[] $fields
      */
     public function __construct($url, array $fields = [], $statusCode = 200, array $headers = [])
     {
@@ -27,28 +28,20 @@ class HttpPostRedirect extends HttpResponse
         parent::__construct($this->prepareContent($url, $fields), $statusCode, $headers);
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
-    protected function prepareContent($url, array $fields)
+    protected function prepareContent(string $url, array $fields): string
     {
         $formInputs = '';
         foreach ($fields as $name => $value) {
