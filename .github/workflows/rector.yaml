@@ -1,0 +1,30 @@
+# github action that checks code with Rector
+name: Rector
+
+on:
+    pull_request: null
+
+jobs:
+    rector:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@v4
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.1
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v2"
+
+            -   run: bin/rector --ansi
+
+            -
+                # commit only to core contributors who have repository access
+                uses: stefanzweifel/git-auto-commit-action@v4
+                with:
+                    commit_message: '[rector] Rector fixes'
+                    commit_author: 'GitHub Action <actions@github.com>'
+                    commit_user_email: 'action@github.com'
