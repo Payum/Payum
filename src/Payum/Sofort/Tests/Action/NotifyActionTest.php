@@ -16,20 +16,14 @@ class NotifyActionTest extends GenericActionTest
 
     protected $actionClass = NotifyAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteSyncWithSameModelAndThrowHttpResponse()
+    public function testShouldSubExecuteSyncWithSameModelAndThrowHttpResponse()
     {
         $expectedModel = array('foo' => 'fooVal');
 

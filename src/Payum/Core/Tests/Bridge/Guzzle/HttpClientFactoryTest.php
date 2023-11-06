@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class HttpClientFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldReturnHttpClient()
+    public function testShouldReturnHttpClient()
     {
         $client = HttpClientFactory::create();
 

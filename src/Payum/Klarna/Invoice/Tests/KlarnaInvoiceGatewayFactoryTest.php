@@ -22,10 +22,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new KlarnaInvoiceGatewayFactory(array(
             'foo' => 'fooVal',
@@ -43,10 +40,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new KlarnaInvoiceGatewayFactory();
 
@@ -61,10 +55,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new KlarnaInvoiceGatewayFactory();
 
@@ -79,10 +70,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Klarna Invoice', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The eid, secret, country, language, currency fields are required.');

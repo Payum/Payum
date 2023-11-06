@@ -12,10 +12,7 @@ class StatusActionTest extends GenericActionTest
 
     protected $requestClass = GetHumanStatus::class;
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
@@ -24,10 +21,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfExecCodeNotSet()
+    public function testShouldMarkNewIfExecCodeNotSet()
     {
         $action = new StatusAction();
 
@@ -36,10 +30,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfExecCodeSuccessful()
+    public function testShouldMarkCapturedIfExecCodeSuccessful()
     {
         $action = new StatusAction();
 
@@ -50,10 +41,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfExecCodeFailed()
+    public function testShouldMarkFailedIfExecCodeFailed()
     {
         $action = new StatusAction();
 
@@ -64,10 +52,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfExecCodeTimeOut()
+    public function testShouldMarkUnknownIfExecCodeTimeOut()
     {
         $action = new StatusAction();
 

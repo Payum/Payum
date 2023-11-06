@@ -6,10 +6,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 class SetExpressCheckoutTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(SetExpressCheckout::class);
 

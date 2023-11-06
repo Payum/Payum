@@ -8,50 +8,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement;
 
 class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
+    public function testShouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertTrue($action->supports(new CreateBillingAgreement($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateBillingAgreementRequest()
+    public function testShouldNotSupportAnythingNotCreateBillingAgreementRequest()
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateBillingAgreementAction();
@@ -59,10 +44,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -71,10 +53,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CreateBillingAgreement(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -100,10 +79,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

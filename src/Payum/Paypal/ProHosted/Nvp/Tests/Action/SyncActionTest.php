@@ -9,30 +9,21 @@ use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
 class SyncActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new SyncAction();
 
@@ -45,10 +36,7 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
         $action = new SyncAction();
 
@@ -61,20 +49,14 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
@@ -82,10 +64,7 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel()
+    public function testShouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

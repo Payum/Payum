@@ -9,30 +9,21 @@ use Payum\Stripe\Request\Api\CreateCharge;
 
 class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass(CreateChargeAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface()
     {
         $rc = new \ReflectionClass(CreateChargeAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function throwNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CreateChargeAction();
@@ -40,40 +31,28 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi('not keys instance');
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreateChargeRequestWithArrayAccessModel()
+    public function testShouldSupportCreateChargeRequestWithArrayAccessModel()
     {
         $action = new CreateChargeAction();
 
         $this->assertTrue($action->supports(new CreateCharge(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreateChargeRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreateChargeRequestWithNotArrayAccessModel()
     {
         $action = new CreateChargeAction();
 
         $this->assertFalse($action->supports(new CreateCharge(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCreateChargeRequest()
+    public function testShouldNotSupportNotCreateChargeRequest()
     {
         $action = new CreateChargeAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreateChargeAction is not supported the request stdClass.');
@@ -82,10 +61,7 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotCardNorCustomerSet()
+    public function testThrowIfNotCardNorCustomerSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The either card token or customer id has to be set.');
@@ -94,10 +70,7 @@ class CreateChargeActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CreateCharge([]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCardAlreadyUsed()
+    public function testThrowIfCardAlreadyUsed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The token has already been used.');

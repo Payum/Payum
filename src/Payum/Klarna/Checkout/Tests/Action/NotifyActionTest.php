@@ -15,20 +15,14 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
+    public function testShouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
     {
         $testCase = $this;
 
@@ -68,10 +62,7 @@ class NotifyActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -89,10 +80,7 @@ class NotifyActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

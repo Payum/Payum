@@ -5,20 +5,14 @@ use PHPUnit\Framework\TestCase;
 
 class TokenInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Model\DetailsAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAggregateInterface()
+    public function testShouldExtendDetailsAggregateInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
 

@@ -22,30 +22,21 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
         return $fields;
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckAgreementAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckAgreementAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function throwOnTryingSetNotAgreementApiAsApi()
+    public function testThrowOnTryingSetNotAgreementApiAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
@@ -54,40 +45,28 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCheckAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportCheckAgreementRequestWithArrayAccessAsModel()
     {
         $action = new CheckAgreementAction();
 
         $this->assertTrue($action->supports(new CheckAgreement($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCheckAgreementRequest()
+    public function testShouldNotSupportAnythingNotCheckAgreementRequest()
     {
         $action = new CheckAgreementAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCheckAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckAgreementRequestWithNotArrayAccessModel()
     {
         $action = new CheckAgreementAction();
 
         $this->assertFalse($action->supports(new CheckAgreement(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CheckAgreementAction($this->createApiMock());
@@ -96,11 +75,9 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideRequiredNotEmptyFields
      */
-    public function throwIfTryInitializeWithRequiredFieldEmpty($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $fields = $this->requiredNotEmptyFields;
@@ -112,10 +89,7 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CheckAgreement($fields));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCheckAgreementAndSetAgreementStatusAsResult()
+    public function testShouldCheckAgreementAndSetAgreementStatusAsResult()
     {
         $apiMock = $this->createApiMock();
         $apiMock

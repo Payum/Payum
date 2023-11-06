@@ -9,20 +9,14 @@ use Payum\Core\Tests\TestCase;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
+    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
@@ -39,10 +33,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
+    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
     {
         $this->expectNotToPerformAssertions();
 

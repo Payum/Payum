@@ -9,20 +9,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
+    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
     {
         $api = new Api(array(
             'sandbox' => true,
@@ -31,10 +25,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
+    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
     {
         $api = new Api(array(
             'sandbox' => false,
@@ -43,10 +34,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfResponseStatusNotOk()
+    public function testThrowIfResponseStatusNotOk()
     {
         $this->expectException(\Payum\Core\Exception\Http\HttpException::class);
         $this->expectExceptionMessage('Client error response');
@@ -66,10 +54,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->notifyValidate(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldProxyWholeNotificationToClientSend()
+    public function testShouldProxyWholeNotificationToClientSend()
     {
         /** @var RequestInterface $actualRequest */
         $actualRequest = null;
@@ -105,10 +90,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('POST', $actualRequest->getMethod());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnVerifiedIfResponseContentVerified()
+    public function testShouldReturnVerifiedIfResponseContentVerified()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
@@ -126,10 +108,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnInvalidIfResponseContentInvalid()
+    public function testShouldReturnInvalidIfResponseContentInvalid()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
@@ -147,10 +126,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
+    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock

@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CaptureTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(Capture::class);
 

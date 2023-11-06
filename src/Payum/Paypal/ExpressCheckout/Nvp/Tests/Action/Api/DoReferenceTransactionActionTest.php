@@ -8,50 +8,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction;
 
 class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertTrue($action->supports(new DoReferenceTransaction($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoReferenceTransactionRequest()
+    public function testShouldNotSupportAnythingNotDoReferenceTransactionRequest()
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DoReferenceTransactionAction();
@@ -59,10 +44,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReferenceIdNotSetInModel()
+    public function testThrowIfReferenceIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('REFERENCEID must be set.');
@@ -71,10 +53,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new DoReferenceTransaction(array()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfPaymentActionNotSet()
+    public function testThrowIfPaymentActionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('PAYMENTACTION must be set.');
@@ -87,10 +66,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmtNotSet()
+    public function testThrowIfAmtNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('AMT must be set.');
@@ -104,10 +80,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -141,10 +114,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

@@ -25,10 +25,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory()
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
@@ -36,10 +33,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyBindValidValue()
+    public function testShouldCorrectlyBindValidValue()
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
@@ -50,10 +44,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $this->assertSame('foo', $form->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotBindInvalidValue()
+    public function testShouldNotBindInvalidValue()
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 

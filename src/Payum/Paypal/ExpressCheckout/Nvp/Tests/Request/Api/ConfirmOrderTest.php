@@ -6,10 +6,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
 
 class ConfirmOrderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(ConfirmOrder::class);
 

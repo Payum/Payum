@@ -6,20 +6,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
 class DoCaptureTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(DoCapture::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentRequestNSetInConstructor()
+    public function testShouldAllowGetPaymentRequestNSetInConstructor()
     {
         $expectedPaymentRequestN = 7;
 

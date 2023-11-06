@@ -13,10 +13,7 @@ class StatusActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
@@ -27,10 +24,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfResponseCodeNotSetInModel()
+    public function testShouldMarkNewIfResponseCodeNotSetInModel()
     {
         $action = new StatusAction();
 
@@ -41,10 +35,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfResponseCodeUnknown()
+    public function testShouldMarkUnknownIfResponseCodeUnknown()
     {
         $action = new StatusAction();
 
@@ -58,10 +49,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedStatusIfArrayObjectHasResponseCodeApproved()
+    public function testShouldMarkCapturedStatusIfArrayObjectHasResponseCodeApproved()
     {
         $action = new StatusAction();
 
@@ -75,10 +63,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedStatusIfArrayObjectHasResponseCodeError()
+    public function testShouldMarkFailedStatusIfArrayObjectHasResponseCodeError()
     {
         $action = new StatusAction();
 
@@ -92,10 +77,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingStatusIfArrayObjectHasResponseCodeHeld()
+    public function testShouldMarkPendingStatusIfArrayObjectHasResponseCodeHeld()
     {
         $action = new StatusAction();
 
@@ -109,10 +91,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledStatusIfArrayObjectHasResponseCodeDeclined()
+    public function testShouldMarkCanceledStatusIfArrayObjectHasResponseCodeDeclined()
     {
         $action = new StatusAction();
 

@@ -17,40 +17,28 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureOffsiteAction();
@@ -58,10 +46,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
+    public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
         $this->expectException(\Payum\Core\Reply\HttpPostRedirect::class);
         $model = array(
@@ -100,10 +85,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelWhenComeBackFromBe2billSite()
+    public function testShouldUpdateModelWhenComeBackFromBe2billSite()
     {
         $model = array(
             'AMOUNT' => 1000,

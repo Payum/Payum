@@ -32,10 +32,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $order = new Payout();
         $order->setCurrencyCode('USD');
@@ -71,10 +68,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         $this->assertEquals(true, $details[Constants::FIELD_PAYOUT]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldForcePayedoutFalseIfAlreadySet()
+    public function testShouldForcePayedoutFalseIfAlreadySet()
     {
         $order = new Payout();
         $order->setDetails(array(
@@ -93,10 +87,7 @@ class ConvertPayoutActionTest extends GenericActionTest
         $this->assertEquals(false, $details[Constants::FIELD_PAYOUT]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $order = new Payout();
         $order->setCurrencyCode('USD');

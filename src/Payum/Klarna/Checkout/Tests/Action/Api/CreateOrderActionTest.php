@@ -20,20 +20,14 @@ class CreateOrderActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\CreateOrderAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateOrderOnExecute()
+    public function testShouldCreateOrderOnExecute()
     {
         $request = new CreateOrder(array());
 
@@ -52,10 +46,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseModelAsDataToCreateOrderOnExecute()
+    public function testShouldUseModelAsDataToCreateOrderOnExecute()
     {
         $model = array(
             'foo' => 'fooVal',
@@ -87,10 +78,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
+    public function testShouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
     {
         $config = new Config();
         $config->merchantId = 'theMerchantId';
@@ -127,10 +115,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
+    public function testShouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
     {
         $request = new CreateOrder(array());
 
@@ -155,10 +140,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertSame($expectedOrder, $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
@@ -187,10 +169,7 @@ class CreateOrderActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout()
     {
         $model = array(
             'location' => 'theLocation',

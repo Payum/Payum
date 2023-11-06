@@ -44,7 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
         RemoveExtraParametersRector::class,
         PublicConstantVisibilityRector::class,
 
-        ReplaceTestAnnotationWithPrefixedFunctionRector::class,
         AddSeeTestAnnotationRector::class,
         RenameClassRector::class,
     ]);

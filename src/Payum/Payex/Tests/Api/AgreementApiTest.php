@@ -6,30 +6,21 @@ use Payum\Payex\Api\SoapClientFactory;
 
 class AgreementApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi()
     {
         $rc = new \ReflectionClass('Payum\Payex\Api\AgreementApi');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new AgreementApi(new SoapClientFactory(), array());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -41,10 +32,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -58,10 +46,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->CreateAgreement3Result = '<foo>fooValue</foo>';
@@ -95,10 +80,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
@@ -132,10 +114,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->DeleteAgreementResult = '<foo>fooValue</foo>';
@@ -169,10 +148,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(array('fooValue'), $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
+    public function testShouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
     {
         $response = new \stdClass();
         $response->AutoPay3Result = '<foo>fooValue</foo>';

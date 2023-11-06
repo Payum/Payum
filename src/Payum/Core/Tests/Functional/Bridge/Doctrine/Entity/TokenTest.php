@@ -8,20 +8,14 @@ use Payum\Core\Tests\Mocks\Entity\Token;
 
 class TokenTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllSchemasBeValid()
+    public function testShouldAllSchemasBeValid()
     {
         $schemaValidator = new SchemaValidator($this->em);
 
         $this->assertEmpty($schemaValidator->validateMapping());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersist()
+    public function testShouldAllowPersist()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -34,10 +28,7 @@ class TokenTest extends OrmTest
         $this->assertSame([$token], $repository->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');

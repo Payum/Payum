@@ -3,40 +3,28 @@ namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 class BaseApiAwareActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstract()
+    public function testShouldBeAbstract()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = $this->getMockForAbstractClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\BaseApiAwareAction');

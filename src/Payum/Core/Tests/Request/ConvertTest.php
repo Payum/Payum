@@ -27,10 +27,7 @@ class ConvertTest extends TestCase
         $this->assertNull($request->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetResult()
+    public function testShouldAllowGetPreviouslySetResult()
     {
         $request = new Convert(new \stdClass(), 'array');
 

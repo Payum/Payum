@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReplyToSymfonyResponseConverterTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldReturnRedirectResponseIfPayumHttpRedirectReply()
+    public function testShouldReturnRedirectResponseIfPayumHttpRedirectReply()
     {
         $expectedUrl = '/foo/bar';
 
@@ -34,10 +31,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($expectedUrl, $headers['location'][0]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnResponseIfPayumHttpResponseReply()
+    public function testShouldReturnResponseIfPayumHttpResponseReply()
     {
         $reply = new HttpResponse('theContent');
 
@@ -50,10 +44,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders()
+    public function testShouldReturnResponseIfPayumHttpResponseReplyWithCustomStatusCodeAndHeaders()
     {
         $reply = new HttpResponse('theContent', 418, array(
             'foo' => 'fooVal',
@@ -71,10 +62,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertArrayHasKey('bar', $response->headers->all());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnResponseIfPayumHttpPostRedirectReply()
+    public function testShouldReturnResponseIfPayumHttpPostRedirectReply()
     {
         $reply = new HttpPostRedirect('anUrl', array('foo' => 'foo'));
 
@@ -87,10 +75,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($reply->getContent(), $response->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnResponseIfSymfonyHttpResponseReply()
+    public function testShouldReturnResponseIfSymfonyHttpResponseReply()
     {
         $expectedResponse = new Response('foobar');
 
@@ -103,10 +88,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $this->assertSame($expectedResponse, $actualResponse);
     }
 
-    /**
-     * @test
-     */
-    public function shouldChangeReplyToLogicExceptionIfNotSupported()
+    public function testShouldChangeReplyToLogicExceptionIfNotSupported()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Cannot convert reply Mock_Base_');

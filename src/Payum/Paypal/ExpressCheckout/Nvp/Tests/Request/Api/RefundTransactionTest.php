@@ -7,10 +7,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\RefundTransaction;
 
 class RefundTransactionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(RefundTransaction::class);
 

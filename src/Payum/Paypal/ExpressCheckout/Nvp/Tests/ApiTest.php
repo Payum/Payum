@@ -9,20 +9,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -33,10 +27,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -50,10 +41,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -69,10 +57,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInOptions()
+    public function testShouldUseReturnUrlSetInOptions()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -88,10 +73,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('optionReturnUrl', $result['RETURNURL']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCancelUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfCancelUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -105,10 +87,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInFormRequest()
+    public function testShouldUseCancelUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -124,10 +103,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInOptions()
+    public function testShouldUseCancelUrlSetInOptions()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -143,10 +119,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('optionCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnSetExpressCheckoutCall()
+    public function testShouldAddMethodOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -163,10 +136,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('SetExpressCheckout', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
+    public function testShouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'the_username',
@@ -189,10 +159,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnSetExpressCheckoutCall()
+    public function testShouldAddVersionOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -209,10 +176,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetSandboxAuthorizeUrlIfSandboxTrue()
+    public function testShouldGetSandboxAuthorizeUrlIfSandboxTrue()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -227,10 +191,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserAction()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserAction()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -246,10 +207,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -265,10 +223,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmd()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmd()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -284,10 +239,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -303,10 +255,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -321,10 +270,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -339,10 +285,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetRealAuthorizeUrlIfSandboxFalse()
+    public function testShouldGetRealAuthorizeUrlIfSandboxFalse()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -357,10 +300,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -387,10 +327,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 

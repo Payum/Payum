@@ -8,30 +8,21 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetTransactionDetailsAction();
 
@@ -40,20 +31,14 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotGetTransactionDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest()
     {
         $action = new GetTransactionDetailsAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetTransactionDetailsAction();
@@ -61,10 +46,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfZeroPaymentRequestTransactionIdNotSetInModel()
+    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_5_TRANSACTIONID must be set.');
@@ -75,10 +57,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetTransactionDetailsMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiGetTransactionDetailsMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -104,10 +83,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

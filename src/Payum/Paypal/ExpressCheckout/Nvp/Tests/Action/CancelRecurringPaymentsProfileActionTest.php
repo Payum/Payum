@@ -38,30 +38,21 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
+    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
@@ -74,20 +65,14 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest()
+    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest()
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request = null)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request = null)
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CancelRecurringPaymentsProfileAction();
@@ -95,10 +80,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfProfileIdNotSetInModel()
+    public function testThrowIfProfileIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
@@ -109,10 +91,7 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteManageAndSyncActions()
+    public function testShouldExecuteManageAndSyncActions()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

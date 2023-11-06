@@ -7,20 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class Propel2StorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel2\Storage\Propel2Storage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\Propel2Model';
 
@@ -43,10 +37,7 @@ class Propel2StorageTest extends TestCase
         $storage->update($model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelById()
+    public function testShouldFindModelById()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -59,10 +50,7 @@ class Propel2StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelByCriterion()
+    public function testShouldFindModelByCriterion()
     {
         $expectedModelId = 123;
         $expectedModelQuery = new Propel2ModelQuery();
@@ -75,10 +63,7 @@ class Propel2StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelByCriteria()
+    public function testShouldFindModelByCriteria()
     {
         $expectedModelId = 123;
         $expectedModelCurrency = "USD";

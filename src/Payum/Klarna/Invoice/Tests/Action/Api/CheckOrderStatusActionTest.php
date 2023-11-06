@@ -19,20 +19,14 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         return new Config();
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -41,40 +35,28 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCheckOrderStatusWithArrayAsModel()
+    public function testShouldSupportCheckOrderStatusWithArrayAsModel()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertTrue($action->supports(new CheckOrderStatus(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCheckOrderStatus()
+    public function testShouldNotSupportAnythingNotCheckOrderStatus()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CheckOrderStatusAction();
@@ -82,10 +64,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -94,10 +73,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->execute(new CheckOrderStatus(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCheckOrderStatusMethod()
+    public function testShouldCallKlarnaCheckOrderStatusMethod()
     {
         $details = array(
             'rno' => 'theRno',
@@ -121,10 +97,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $this->assertSame('theStatus', $activatedDetails['status']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',
@@ -148,10 +121,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfAlreadyActivated()
+    public function testShouldDoNothingIfAlreadyActivated()
     {
         $details = array(
             'rno' => 'theRno',

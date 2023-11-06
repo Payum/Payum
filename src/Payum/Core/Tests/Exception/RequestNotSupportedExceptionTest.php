@@ -10,20 +10,14 @@ use PHPUnit\Framework\TestCase;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfInvalidArgumentException()
+    public function testShouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass(RequestNotSupportedException::class);
 
         $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithNoneObjectRequest()
+    public function testShouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');
 
@@ -34,10 +28,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithObjectRequest()
+    public function testShouldCreateWithObjectRequest()
     {
         $request = new \stdClass();
 
@@ -50,10 +41,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithActionAndStringRequest()
+    public function testShouldCreateWithActionAndStringRequest()
     {
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -71,10 +59,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithActionAndObjectRequest()
+    public function testShouldCreateWithActionAndObjectRequest()
     {
         $request = new \stdClass();
 
@@ -93,10 +78,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithSuggestions()
+    public function testShouldCreateWithSuggestions()
     {
         $request = new \stdClass();
 
@@ -109,10 +91,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithSuggestionsOnIdentityAsModel()
+    public function testShouldCreateWithSuggestionsOnIdentityAsModel()
     {
         $request = new Capture(new Identity('theId', \stdClass::class));
 

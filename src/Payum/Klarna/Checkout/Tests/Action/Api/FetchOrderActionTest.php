@@ -20,20 +20,14 @@ class FetchOrderActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfLocationNotSetOnExecute()
+    public function testThrowIfLocationNotSetOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Location has to be provided to fetch an order');
@@ -42,10 +36,7 @@ class FetchOrderActionTest extends GenericActionTest
         $action->execute(new FetchOrder(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldFetchOrderWhenLocationSetOnExecute()
+    public function testShouldFetchOrderWhenLocationSetOnExecute()
     {
         $model = array(
             'location' => 'theKlarnaOrderLocation',
@@ -76,10 +67,7 @@ class FetchOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
+    public function testShouldReturnSameOrderUsedWhileFetchAndUpdateCallsOnExecute()
     {
         $model = array(
             'location' => 'theKlarnaOrderLocation',
@@ -114,10 +102,7 @@ class FetchOrderActionTest extends GenericActionTest
         $this->assertSame($expectedOrder, $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
@@ -144,10 +129,7 @@ class FetchOrderActionTest extends GenericActionTest
         $action->execute(new FetchOrder($model));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout()
     {
         $model = array(
             'location' => 'theLocation',

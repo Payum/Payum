@@ -7,20 +7,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HttpResponseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseReply()
+    public function testShouldBeSubClassOfBaseReply()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Reply\HttpResponse');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\Base'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetResponseSetInConstructor()
+    public function testShouldAllowGetResponseSetInConstructor()
     {
         $expectedResponse = new Response();
 

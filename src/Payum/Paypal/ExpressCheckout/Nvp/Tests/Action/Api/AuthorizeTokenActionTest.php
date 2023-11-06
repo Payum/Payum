@@ -9,50 +9,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
 
 class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(AuthorizeTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(AuthorizeTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
+    public function testShouldSupportAuthorizeTokenRequestWithArrayAccessAsModel()
     {
         $action = new AuthorizeTokenAction();
 
         $this->assertTrue($action->supports(new AuthorizeToken($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotAuthorizeTokenRequest()
+    public function testShouldNotSupportAnythingNotAuthorizeTokenRequest()
     {
         $action = new AuthorizeTokenAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AuthorizeTokenAction($this->createApiMock());
@@ -60,10 +45,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfModelNotHaveTokenSet()
+    public function testThrowIfModelNotHaveTokenSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information');
@@ -72,10 +54,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new AuthorizeToken(new \ArrayObject()));
     }
 
-    /**
-     * @test
-     */
-    public function throwRedirectUrlRequestIfModelNotHavePayerIdSet()
+    public function testThrowRedirectUrlRequestIfModelNotHavePayerIdSet()
     {
         $expectedToken = 'theAuthToken';
         $expectedRedirectUrl = 'theRedirectUrl';
@@ -109,10 +88,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldPassAuthorizeTokenCustomParametersToApi()
+    public function testShouldPassAuthorizeTokenCustomParametersToApi()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -145,10 +121,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $this->fail('HttpRedirect reply was expected to be thrown.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfUserAlreadyAuthorizedToken()
+    public function testShouldDoNothingIfUserAlreadyAuthorizedToken()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -169,10 +142,7 @@ class AuthorizeTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwRedirectUrlRequestIfForceTrue()
+    public function testThrowRedirectUrlRequestIfForceTrue()
     {
         $apiMock = $this->createApiMock();
         $apiMock

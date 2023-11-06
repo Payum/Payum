@@ -15,20 +15,14 @@ use PHPUnit\Framework\TestCase;
 
 class PayumTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementRegistryInterface()
+    public function testShouldImplementRegistryInterface()
     {
         $rc = new \ReflectionClass(Payum::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetHttpRequestVerifierSetInConstructor()
+    public function testShouldAllowGetHttpRequestVerifierSetInConstructor()
     {
         $httpRequestVerifier = $this->createHttpRequestVerifierMock();
 
@@ -42,10 +36,7 @@ class PayumTest extends TestCase
         $this->assertSame($httpRequestVerifier, $payum->getHttpRequestVerifier());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGenericTokenFactorySetInConstructor()
+    public function testShouldAllowGetGenericTokenFactorySetInConstructor()
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -59,10 +50,7 @@ class PayumTest extends TestCase
         $this->assertSame($tokenFactory, $payum->getTokenFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetTokenStorageSetInConstructor()
+    public function testShouldAllowGetTokenStorageSetInConstructor()
     {
         $tokenStorage = $this->createTokenStorage();
 
@@ -76,10 +64,7 @@ class PayumTest extends TestCase
         $this->assertSame($tokenStorage, $payum->getTokenStorage());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFromRegistryInConstructor()
     {
         $registry = new SimpleRegistry(
             [
@@ -111,10 +96,7 @@ class PayumTest extends TestCase
         ], $payum->getGateways());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStoragesFromRegistryInConstructor()
+    public function testShouldAllowGetStoragesFromRegistryInConstructor()
     {
         $registry = new SimpleRegistry(
             [
@@ -146,10 +128,7 @@ class PayumTest extends TestCase
         ], $payum->getStorages());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayFactoriesFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor()
     {
         $registry = new SimpleRegistry(
             [

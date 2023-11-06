@@ -21,10 +21,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomConfig()
+    public function testShouldAllowCreateGatewayWithCustomConfig()
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -59,10 +56,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         }
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new PaypalRestGatewayFactory([
             'foo' => 'fooVal',
@@ -80,10 +74,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -95,10 +86,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame(['client_id' => '', 'client_secret' => '', 'config_path' => '', 'config' => []], $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -113,10 +101,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('PayPal Rest', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The client_id, client_secret fields are required.');
@@ -125,10 +110,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfConfigPathOptionsNotEqualPaypalPath()
+    public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         define('PP_CONFIG_PATH', __DIR__);
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
