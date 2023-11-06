@@ -36,10 +36,7 @@ class Identity implements IdentityInterface
         list($this->id, $this->class) = $data;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->class . '#' . $this->id;
     }
