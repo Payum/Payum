@@ -80,9 +80,6 @@ final class SensitiveValue implements Serializable, JsonSerializable
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
     public function jsonSerialize()
     {

@@ -40,7 +40,7 @@ class CreditCardTypeTest extends TestCase
         $this->assertSame(CreditCard::class, $options['data_class']);
 
         $this->assertArrayHasKey('validation_groups', $options);
-        $this->assertEquals(['Payum'], $options['validation_groups']);
+        $this->assertSame(['Payum'], $options['validation_groups']);
 
         $this->assertArrayHasKey('label', $options);
         $this->assertFalse($options['label']);

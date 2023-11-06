@@ -5,7 +5,6 @@ namespace Payum\Core\Tests\Action;
 use ArrayAccess;
 use Exception;
 use Iterator;
-use function iterator_to_array;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payout as PayoutModel;
@@ -16,6 +15,7 @@ use Payum\Core\Request\Payout;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
+use function iterator_to_array;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {
@@ -174,7 +174,7 @@ class PayoutPayoutActionTest extends GenericActionTest
                     $details = $request->getModel();
 
                     $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                    $testCase->assertEquals($expectedDetails, iterator_to_array($details));
+                    $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
                 })
@@ -188,7 +188,7 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
         $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ], $payoutModel->getDetails());
@@ -224,7 +224,7 @@ class PayoutPayoutActionTest extends GenericActionTest
 
         $this->assertSame($payoutModel, $payout->getFirstModel());
         $this->assertInstanceOf(ArrayAccess::class, $payout->getModel());
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ], $payoutModel->getDetails());

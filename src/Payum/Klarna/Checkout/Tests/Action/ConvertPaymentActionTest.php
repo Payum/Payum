@@ -52,7 +52,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([
+        $this->assertSame([
             'cart' => [
                 'items' => [
                     [
@@ -88,7 +88,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([], $details);
+        $this->assertSame([], $details);
     }
 
     public function testShouldNotOverwriteAlreadySetExtraDetails()

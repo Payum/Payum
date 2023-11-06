@@ -64,7 +64,7 @@ class PayoutTest extends TestCase
             'foo' => 'fooVal',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $payout->getDetails());
     }

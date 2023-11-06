@@ -78,7 +78,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($model, $options['data']);
+                $testCase->assertSame($model, $options['data']);
             })
         ;
 
@@ -115,7 +115,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->willReturnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($expectedModel, $options['data']);
+                $testCase->assertSame($expectedModel, $options['data']);
             })
         ;
 

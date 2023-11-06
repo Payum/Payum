@@ -38,7 +38,7 @@ class RenderTemplateTest extends TestCase
         $this->assertSame('theResult', $request->getResult());
     }
 
-    public function provideParameters(): Iterator
+    public static function provideParameters(): Iterator
     {
         yield ['foo', 'fooVal'];
         yield ['bar', 'barVal'];

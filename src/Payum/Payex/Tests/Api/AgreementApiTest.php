@@ -85,7 +85,7 @@ class AgreementApiTest extends TestCase
 
         $result = $agreementApi->create([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
@@ -119,7 +119,7 @@ class AgreementApiTest extends TestCase
 
         $result = $agreementApi->check([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
@@ -153,7 +153,7 @@ class AgreementApiTest extends TestCase
 
         $result = $agreementApi->delete([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
@@ -187,7 +187,7 @@ class AgreementApiTest extends TestCase
 
         $result = $agreementApi->autoPay([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     /**

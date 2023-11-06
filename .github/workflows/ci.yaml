@@ -104,9 +104,10 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: intl, opcache, mysql, pdo_mysql, mongodb, :xdebug
 
-      - name: Start Mongodb
-        run: |
-          sudo systemctl start mongod.service
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: 6.0
 
       - name: Get composer cache directory
         id: composercache

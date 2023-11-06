@@ -116,7 +116,7 @@ HTML;
     {
         $request = new HttpPostRedirect('anUrl');
 
-        $this->assertEquals([], $request->getHeaders());
+        $this->assertSame([], $request->getHeaders());
     }
 
     public function testShouldAllowGetCustomHeadersSetInConstructor()
@@ -128,6 +128,6 @@ HTML;
 
         $request = new HttpPostRedirect('anUrl', [], 200, $expectedHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

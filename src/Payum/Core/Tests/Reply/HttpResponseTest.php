@@ -43,7 +43,7 @@ class HttpResponseTest extends TestCase
     {
         $request = new HttpResponse('html page');
 
-        $this->assertEquals([], $request->getHeaders());
+        $this->assertSame([], $request->getHeaders());
     }
 
     public function testShouldAllowGetCustomHeadersSetInConstructor()
@@ -55,6 +55,6 @@ class HttpResponseTest extends TestCase
 
         $request = new HttpResponse('html page', 200, $expectedHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

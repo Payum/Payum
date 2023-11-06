@@ -41,6 +41,6 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('choices', $options);
-        $this->assertEquals($expectedChoices, $options['choices']);
+        $this->assertSame($expectedChoices, $options['choices']);
     }
 }

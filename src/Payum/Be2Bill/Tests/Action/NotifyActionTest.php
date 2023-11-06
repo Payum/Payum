@@ -154,7 +154,7 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals([
+            $this->assertSame([
                 'AMOUNT' => 1.0,
                 'FOO' => 'FOO',
                 'BAR' => 'BAR',

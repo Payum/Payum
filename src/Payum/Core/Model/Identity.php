@@ -33,13 +33,10 @@ class Identity implements IdentityInterface
 
     public function __unserialize(array $data)
     {
-        list($this->id, $this->class) = $data;
+        [$this->id, $this->class] = $data;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->class . '#' . $this->id;
     }
@@ -61,6 +58,6 @@ class Identity implements IdentityInterface
 
     public function unserialize($serialized)
     {
-        list($this->id, $this->class) = unserialize($serialized);
+        [$this->id, $this->class] = unserialize($serialized);
     }
 }

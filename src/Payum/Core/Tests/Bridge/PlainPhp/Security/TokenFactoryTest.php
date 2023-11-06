@@ -615,25 +615,20 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function pathDataProvider(): array
+    public static function pathDataProvider(): \Iterator
     {
-        return [
-            ['http://example.com', 'capture.php', 'http://example.com/capture.php'],
-            ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'],
-            ['http://example.com/path/anotherPath', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
-
-            ['http://example.com', 'capture', 'http://example.com/capture'],
-            ['http://example.com/path', 'capture', 'http://example.com/path/capture'],
-            ['http://example.com/path/anotherPath', 'capture', 'http://example.com/path/anotherPath/capture'],
-
-            ['http://example.com/index.php', 'capture.php', 'http://example.com/capture.php'],
-            ['http://example.com/path/index.php', 'capture.php', 'http://example.com/path/capture.php'],
-            ['http://example.com/path/anotherPath/index.php', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
-
-            ['http://example.com/index.php', 'capture', 'http://example.com/capture'],
-            ['http://example.com/path/index.php', 'capture', 'http://example.com/path/capture'],
-            ['http://example.com/path/anotherPath/index.php', 'capture', 'http://example.com/path/anotherPath/capture'],
-        ];
+        yield ['http://example.com', 'capture.php', 'http://example.com/capture.php'];
+        yield ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'];
+        yield ['http://example.com/path/anotherPath', 'capture.php', 'http://example.com/path/anotherPath/capture.php'];
+        yield ['http://example.com', 'capture', 'http://example.com/capture'];
+        yield ['http://example.com/path', 'capture', 'http://example.com/path/capture'];
+        yield ['http://example.com/path/anotherPath', 'capture', 'http://example.com/path/anotherPath/capture'];
+        yield ['http://example.com/index.php', 'capture.php', 'http://example.com/capture.php'];
+        yield ['http://example.com/path/index.php', 'capture.php', 'http://example.com/path/capture.php'];
+        yield ['http://example.com/path/anotherPath/index.php', 'capture.php', 'http://example.com/path/anotherPath/capture.php'];
+        yield ['http://example.com/index.php', 'capture', 'http://example.com/capture'];
+        yield ['http://example.com/path/index.php', 'capture', 'http://example.com/path/capture'];
+        yield ['http://example.com/path/anotherPath/index.php', 'capture', 'http://example.com/path/anotherPath/capture'];
     }
 
     /**

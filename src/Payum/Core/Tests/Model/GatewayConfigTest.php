@@ -48,7 +48,7 @@ class GatewayConfigTest extends TestCase
     {
         $config = new GatewayConfig();
 
-        $this->assertEquals([], $config->getConfig());
+        $this->assertSame([], $config->getConfig());
     }
 
     public function testShouldAllowGetPreviouslySetConfig()
@@ -59,7 +59,7 @@ class GatewayConfigTest extends TestCase
             'foo' => 'fooVal',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $config->getConfig());
     }

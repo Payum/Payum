@@ -40,7 +40,6 @@ class Context
     protected $previous;
 
     /**
-     * @param $request
      * @param Context[] $previous
      */
     public function __construct(GatewayInterface $gateway, $request, array $previous)

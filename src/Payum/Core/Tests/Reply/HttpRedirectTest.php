@@ -73,7 +73,7 @@ HTML;
     {
         $request = new HttpRedirect('anUrl');
 
-        $this->assertEquals([
+        $this->assertSame([
             'Location' => 'anUrl',
         ], $request->getHeaders());
     }
@@ -90,6 +90,6 @@ HTML;
 
         $request = new HttpRedirect('anUrl', 302, $customHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

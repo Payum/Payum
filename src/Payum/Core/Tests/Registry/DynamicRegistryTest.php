@@ -41,7 +41,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals(['theGateways'], $registry->getGateways());
+        $this->assertSame(['theGateways'], $registry->getGateways());
     }
 
     public function testShouldReturnEmptyArrayOnGetGatewaysIfNothingFound()
@@ -347,7 +347,7 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $this->assertEquals([], $registry->getGatewayFactories());
+        $this->assertSame([], $registry->getGatewayFactories());
     }
 
     /**
@@ -412,7 +412,7 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $this->assertEquals([], $registry->getStorages());
+        $this->assertSame([], $registry->getStorages());
     }
 
     /**

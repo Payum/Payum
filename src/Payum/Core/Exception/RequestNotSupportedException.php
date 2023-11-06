@@ -86,8 +86,6 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param $request
-     *
      * @return string[]
      */
     protected static function suggestions($request)

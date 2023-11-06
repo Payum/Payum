@@ -30,7 +30,7 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
         $action->execute($getCreditCardToken = new GetCreditCardToken($model));
 
-        self::assertEmpty($getCreditCardToken->token);
+        $this->assertEmpty($getCreditCardToken->token);
     }
 
     public function testShouldSetCustomerIdAsCardToken()
@@ -43,6 +43,6 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
         $action->execute($getCreditCardToken = new GetCreditCardToken($model));
 
-        self::assertSame('theToken', $getCreditCardToken->token);
+        $this->assertSame('theToken', $getCreditCardToken->token);
     }
 }

@@ -120,11 +120,11 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']);
 
         $this->assertSame('@PayumCore/layout.html.twig', $config['payum.template.layout']);
-        $this->assertEquals([], $config['payum.prepend_actions']);
-        $this->assertEquals([], $config['payum.prepend_extensions']);
-        $this->assertEquals([], $config['payum.prepend_apis']);
-        $this->assertEquals([], $config['payum.default_options']);
-        $this->assertEquals([], $config['payum.required_options']);
+        $this->assertSame([], $config['payum.prepend_actions']);
+        $this->assertSame([], $config['payum.prepend_extensions']);
+        $this->assertSame([], $config['payum.prepend_apis']);
+        $this->assertSame([], $config['payum.default_options']);
+        $this->assertSame([], $config['payum.required_options']);
     }
 
     public function testShouldConfigurePaths()

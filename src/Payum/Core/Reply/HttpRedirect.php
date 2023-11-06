@@ -34,8 +34,6 @@ class HttpRedirect extends HttpResponse
     }
 
     /**
-     * @param $url
-     *
      * @return string
      */
     protected function prepareContent($url)

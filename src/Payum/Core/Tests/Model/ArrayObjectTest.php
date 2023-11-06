@@ -74,7 +74,7 @@ class ArrayObjectTest extends TestCase
         $iterator = $model->getIterator();
 
         $this->assertInstanceOf(ArrayIterator::class, $iterator);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'foo' => 'theFoo',
                 'bar' => 'theBar',

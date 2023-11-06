@@ -17,21 +17,21 @@ class GetHttpRequestActionTest extends TestCase
     {
         $rc = new ReflectionClass(GetHttpRequestAction::class);
 
-        self::assertTrue($rc->implementsInterface(ActionInterface::class));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     public function testShouldSupportGetHttpRequest()
     {
         $action = new GetHttpRequestAction();
 
-        self::assertTrue($action->supports(new GetHttpRequest()));
+        $this->assertTrue($action->supports(new GetHttpRequest()));
     }
 
     public function testShouldNotSupportAnythingNotGetHttpRequest()
     {
         $action = new GetHttpRequestAction();
 
-        self::assertFalse($action->supports('foo'));
+        $this->assertFalse($action->supports('foo'));
     }
 
     public function testThrowIfNotSupportedRequestPassedToExecute()
@@ -50,10 +50,10 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([], $request->query);
-        self::assertSame([], $request->request);
-        self::assertSame('', $request->method);
-        self::assertSame('', $request->uri);
+        $this->assertSame([], $request->query);
+        $this->assertSame([], $request->request);
+        $this->assertSame('', $request->method);
+        $this->assertSame('', $request->uri);
     }
 
     public function testShouldDoNothingIfHttpRequestStackIsEmpty()
@@ -64,10 +64,10 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([], $request->query);
-        self::assertSame([], $request->request);
-        self::assertSame('', $request->method);
-        self::assertSame('', $request->uri);
+        $this->assertSame([], $request->query);
+        $this->assertSame([], $request->request);
+        $this->assertSame('', $request->method);
+        $this->assertSame('', $request->uri);
     }
 
     public function testShouldPopulateFromGetMainRequestOnStack()
@@ -87,14 +87,14 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $request->query);
-        self::assertSame([], $request->request);
-        self::assertSame('GET', $request->method);
-        self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
-        self::assertStringStartsWith('Symfony', $request->userAgent);
-        self::assertSame('127.0.0.1', $request->clientIp);
+        $this->assertSame([], $request->request);
+        $this->assertSame('GET', $request->method);
+        $this->assertSame('http://request.uri/?foo=fooVal', $request->uri);
+        $this->assertStringStartsWith('Symfony', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
     public function testShouldPopulateFromPostMainRequestOnStack()
@@ -114,14 +114,14 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([], $request->query);
-        self::assertSame([
+        $this->assertSame([], $request->query);
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $request->request);
-        self::assertSame('POST', $request->method);
-        self::assertSame('http://request.uri/', $request->uri);
-        self::assertStringStartsWith('Symfony', $request->userAgent);
-        self::assertSame('127.0.0.1', $request->clientIp);
+        $this->assertSame('POST', $request->method);
+        $this->assertSame('http://request.uri/', $request->uri);
+        $this->assertStringStartsWith('Symfony', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
     public function testShouldPopulateFromMainRequestIgnoringSubRequestsOnStack()
@@ -145,7 +145,7 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame('GET', $request->method);
+        $this->assertSame('GET', $request->method);
     }
 
     /**
@@ -165,14 +165,14 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $request->query);
-        self::assertSame([], $request->request);
-        self::assertSame('GET', $request->method);
-        self::assertSame('http://request.uri/?foo=fooVal', $request->uri);
-        self::assertStringStartsWith('Symfony', $request->userAgent);
-        self::assertSame('127.0.0.1', $request->clientIp);
+        $this->assertSame([], $request->request);
+        $this->assertSame('GET', $request->method);
+        $this->assertSame('http://request.uri/?foo=fooVal', $request->uri);
+        $this->assertStringStartsWith('Symfony', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
     /**
@@ -192,13 +192,13 @@ class GetHttpRequestActionTest extends TestCase
         $request = new GetHttpRequest();
         $action->execute($request);
 
-        self::assertSame([], $request->query);
-        self::assertSame([
+        $this->assertSame([], $request->query);
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $request->request);
-        self::assertSame('POST', $request->method);
-        self::assertSame('http://request.uri/', $request->uri);
-        self::assertStringStartsWith('Symfony', $request->userAgent);
-        self::assertSame('127.0.0.1', $request->clientIp);
+        $this->assertSame('POST', $request->method);
+        $this->assertSame('http://request.uri/', $request->uri);
+        $this->assertStringStartsWith('Symfony', $request->userAgent);
+        $this->assertSame('127.0.0.1', $request->clientIp);
     }
 }

@@ -3,7 +3,6 @@
 namespace Payum\Core\Tests\Action;
 
 use Iterator;
-use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\Generic;
@@ -19,9 +18,6 @@ class GetTokenActionTest extends GenericActionTest
 
     protected $actionClass = GetTokenAction::class;
 
-    /**
-     * @var ActionInterface
-     */
     protected $action;
 
     protected function setUp(): void

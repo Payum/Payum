@@ -86,7 +86,7 @@ final class CryptoStorageDecorator implements StorageInterface
      */
     private function assertCrypted($model)
     {
-        if (false == $model instanceof  CryptedInterface) {
+        if (false == $model instanceof CryptedInterface) {
             throw new LogicException(sprintf(
                 'The model %s must implement %s interface. It is required for this decorator.',
                 get_class($model),

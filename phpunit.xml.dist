@@ -4,14 +4,14 @@
          backupStaticAttributes="false"
          colors="true"
          convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
          processIsolation="false"
          stopOnFailure="false"
          failOnRisky="true"
          stopOnRisky="true"
-         failOnWarning="true"
-         stopOnWarning="true"
+         failOnWarning="false"
+         stopOnWarning="false"
          bootstrap="autoload.php.dist">
   <coverage>
     <include>

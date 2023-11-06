@@ -56,9 +56,9 @@ class PayoutActionTest extends GenericActionTest
 
         $action->execute(new Payout($payoutModel));
 
-        $this->assertEquals([
-            'foo' => 'fooVal',
+        $this->assertSame([
             'bar' => 'barVal',
+            'foo' => 'fooVal',
         ], (array) $payoutModel);
     }
 

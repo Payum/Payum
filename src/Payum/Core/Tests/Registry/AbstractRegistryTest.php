@@ -263,7 +263,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertEquals($storages, $registry->getStorages());
+        $this->assertSame($storages, $registry->getStorages());
     }
 
     /**

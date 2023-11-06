@@ -5,7 +5,6 @@ namespace Payum\Core\Tests\Action;
 use ArrayAccess;
 use Exception;
 use Iterator;
-use function iterator_to_array;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payment;
@@ -16,6 +15,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
+use function iterator_to_array;
 
 class AuthorizePaymentActionTest extends GenericActionTest
 {
@@ -171,7 +171,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
                     $details = $request->getModel();
 
                     $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                    $testCase->assertEquals($expectedDetails, iterator_to_array($details));
+                    $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                     $details['bar'] = 'barVal';
                 })
@@ -185,7 +185,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $authorize->getFirstModel());
         $this->assertInstanceOf(ArrayAccess::class, $authorize->getModel());
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ], $payment->getDetails());
@@ -226,7 +226,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $authorize->getFirstModel());
         $this->assertInstanceOf(ArrayAccess::class, $authorize->getModel());
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ], $payment->getDetails());

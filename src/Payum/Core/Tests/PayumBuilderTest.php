@@ -198,7 +198,7 @@ class PayumBuilderTest extends TestCase
                 $this->assertInstanceOf(TokenFactoryInterface::class, $tokenFactory);
 
                 $this->assertIsArray($paths);
-                $this->assertEquals([
+                $this->assertSame([
                     'capture' => 'capture.php',
                     'notify' => 'notify.php',
                     'authorize' => 'authorize.php',
@@ -406,7 +406,7 @@ class PayumBuilderTest extends TestCase
                 'foo' => 'fooVal',
             ])
             ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
-                $this->assertEquals([
+                $this->assertSame([
                     'foo' => 'fooVal',
                 ], $config);
 

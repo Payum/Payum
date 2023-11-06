@@ -34,7 +34,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals([], $config['payum.default_options']);
+        $this->assertSame([], $config['payum.default_options']);
     }
 
     public function testShouldConfigContainFactoryNameAndTitle()

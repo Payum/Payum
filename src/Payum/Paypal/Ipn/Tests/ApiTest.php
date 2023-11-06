@@ -91,9 +91,9 @@ class ApiTest extends TestCase
         parse_str($actualRequest->getBody()->getContents(), $content);
 
         $this->assertInstanceOf(RequestInterface::class, $actualRequest);
-        $this->assertEquals([
+        $this->assertSame($expectedNotification + [
             'cmd' => Api::CMD_NOTIFY_VALIDATE,
-        ] + $expectedNotification, $content);
+        ], $content);
         $this->assertSame($api->getIpnEndpoint(), (string) $actualRequest->getUri());
         $this->assertSame('POST', $actualRequest->getMethod());
     }

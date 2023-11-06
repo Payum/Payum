@@ -85,7 +85,7 @@ class RecurringApiTest extends TestCase
 
         $result = $recurringApi->start([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
@@ -119,7 +119,7 @@ class RecurringApiTest extends TestCase
 
         $result = $recurringApi->stop([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
@@ -153,7 +153,7 @@ class RecurringApiTest extends TestCase
 
         $result = $recurringApi->check([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     /**

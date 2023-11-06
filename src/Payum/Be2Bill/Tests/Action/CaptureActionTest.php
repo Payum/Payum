@@ -254,7 +254,7 @@ class CaptureActionTest extends GenericActionTest
 
         $model = iterator_to_array($request->getModel());
 
-        $this->assertEquals([
+        $this->assertSame([
             'AMOUNT' => 10,
             'CLIENTUSERAGENT' => 'anAgent',
             'CLIENTIP' => '127.0.0.1',

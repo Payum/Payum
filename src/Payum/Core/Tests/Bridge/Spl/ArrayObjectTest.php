@@ -69,7 +69,7 @@ class ArrayObjectTest extends TestCase
             'baz' => 'bazNew',
         ]);
 
-        $this->assertEquals($expectedArray, (array) $array);
+        $this->assertSame($expectedArray, (array) $array);
     }
 
     public function testShouldReplaceFromTraversable()
@@ -95,7 +95,7 @@ class ArrayObjectTest extends TestCase
 
         $array->replace($traversable);
 
-        $this->assertEquals($expectedArray, (array) $array);
+        $this->assertSame($expectedArray, (array) $array);
     }
 
     public function testThrowIfInvalidArgumentGivenForReplace()
@@ -117,7 +117,7 @@ class ArrayObjectTest extends TestCase
         $array = (array) $arrayObject;
 
         $this->assertIsArray($array);
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'barbaz',
         ], $array);
     }
@@ -175,7 +175,7 @@ class ArrayObjectTest extends TestCase
         $array = iterator_to_array($arrayObject);
 
         $this->assertIsArray($array);
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'barbaz',
         ], $array);
     }
@@ -327,7 +327,7 @@ class ArrayObjectTest extends TestCase
         $subArray = $array->getArray('foo');
 
         $this->assertInstanceOf(ArrayObject::class, $subArray);
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], (array) $subArray);
     }
@@ -339,7 +339,7 @@ class ArrayObjectTest extends TestCase
         $subArray = $array->getArray('foo');
 
         $this->assertInstanceOf(ArrayObject::class, $subArray);
-        $this->assertEquals([], (array) $subArray);
+        $this->assertSame([], (array) $subArray);
     }
 
     public function shouldAllowToArrayWithoutSensitiveValuesAdnLocal()
@@ -350,7 +350,7 @@ class ArrayObjectTest extends TestCase
             'foo' => 'fooVal',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'foo' => 'fooVal',
         ], $array->toUnsafeArrayWithoutLocal());
     }

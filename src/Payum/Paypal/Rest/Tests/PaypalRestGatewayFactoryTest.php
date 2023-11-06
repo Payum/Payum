@@ -72,7 +72,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals([
+        $this->assertSame([
             'client_id' => '',
             'client_secret' => '',
             'config_path' => '',
@@ -107,13 +107,9 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
     public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         define('PP_CONFIG_PATH', __DIR__);
-        $this->expectException(InvalidArgumentException::class);
 
-        if (method_exists($this, 'expectExceptionMessageMatches')) {
-            $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
-        } else {
-            $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
 
         $factory = new PaypalRestGatewayFactory();
         $factory->create([

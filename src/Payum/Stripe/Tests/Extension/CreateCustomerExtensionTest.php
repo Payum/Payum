@@ -45,7 +45,7 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
+                $this->assertSame([
                     'card' => 'theCardToken',
                 ], (array) $model);
 
@@ -93,10 +93,10 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
-                    'card' => 'theCardToken',
+                $this->assertSame([
                     'foo' => 'fooVal',
                     'bar' => 'barVal',
+                    'card' => 'theCardToken',
                 ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
@@ -141,7 +141,7 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
+                $this->assertSame([
                     'card' => 'theCardToken',
                 ], (array) $model);
 
@@ -213,7 +213,7 @@ class CreateCustomerExtensionTest extends TestCase
         $extension = new CreateCustomerExtension();
         $extension->onPreExecute($context);
 
-        $this->assertEquals([
+        $this->assertSame([
             'card' => 'theCardToken',
         ], (array) $request->getModel());
     }
@@ -327,7 +327,7 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
+                $this->assertSame([
                     'card' => 'theCardToken',
                 ], (array) $model);
 
@@ -375,10 +375,10 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
-                    'card' => 'theCardToken',
+                $this->assertSame([
                     'foo' => 'fooVal',
                     'bar' => 'barVal',
+                    'card' => 'theCardToken',
                 ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
@@ -423,7 +423,7 @@ class CreateCustomerExtensionTest extends TestCase
 
                 $this->assertInstanceOf(ArrayObject::class, $model);
 
-                $this->assertEquals([
+                $this->assertSame([
                     'card' => 'theCardToken',
                 ], (array) $model);
 
@@ -495,7 +495,7 @@ class CreateCustomerExtensionTest extends TestCase
         $extension = new CreateCustomerExtension();
         $extension->onPostExecute($context);
 
-        $this->assertEquals([
+        $this->assertSame([
             'card' => 'theCardToken',
         ], (array) $request->getModel());
     }

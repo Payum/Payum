@@ -191,7 +191,7 @@ class AuthorizeActionTest extends TestCase
                 null,
                 $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
                     $testCase->assertSame($expectedTemplateName, $request->getTemplateName());
-                    $testCase->assertEquals($expectedContext, $request->getParameters());
+                    $testCase->assertSame($expectedContext, $request->getParameters());
 
                     $request->setResult($expectedContent);
                 })

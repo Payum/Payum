@@ -35,7 +35,7 @@ class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals([
+        $this->assertSame([
             'publishable_key' => '',
             'secret_key' => '',
         ], $config['payum.default_options']);

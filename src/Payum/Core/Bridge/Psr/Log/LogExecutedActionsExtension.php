@@ -16,9 +16,6 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     protected $logger;
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();

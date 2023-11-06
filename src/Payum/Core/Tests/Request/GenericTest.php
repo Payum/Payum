@@ -110,7 +110,7 @@ class GenericTest extends TestCase
         $request = $this->getMockForAbstractClass(Generic::class, [$model]);
 
         $this->assertInstanceOf(ArrayObject::class, $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
     public function testShouldConvertArrayToArrayObjectSetWithSetter()
@@ -125,7 +125,7 @@ class GenericTest extends TestCase
         $request->setModel($model);
 
         $this->assertInstanceOf(ArrayObject::class, $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
     public function testShouldNotSetTokenAsFirstModelOnConstruct()

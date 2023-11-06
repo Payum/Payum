@@ -85,7 +85,7 @@ class OrderApiTest extends TestCase
 
         $result = $orderApi->initialize([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCompleteAndConvertItsResponse()
@@ -119,7 +119,7 @@ class OrderApiTest extends TestCase
 
         $result = $orderApi->complete([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     public function testShouldUseSoapClientOnCheckAndConvertItsResponse()
@@ -153,7 +153,7 @@ class OrderApiTest extends TestCase
 
         $result = $orderApi->check([]);
 
-        $this->assertEquals(['fooValue'], $result);
+        $this->assertSame(['fooValue'], $result);
     }
 
     /**
