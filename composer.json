@@ -57,7 +57,7 @@
         "doctrine/dbal": "^2.7 || ^3.0",
         "doctrine/orm": "^2.5",
         "doctrine/persistence": "^1.3.3 || ^2.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.6.11",
         "psr/log": "~1.0",
         "laminas/laminas-db": "^2.0",
         "symfony/cache": "^4.4 || ^5.0 || ^6.0",
@@ -67,7 +67,7 @@
         "symfony/form": "^4.4 || ^5.0 || ^6.0",
         "symfony/templating": "^4.4 || ^5.0 || ^6.0",
         "symfony/validator": "^4.4 || ^5.0 || ^6.0",
-        "symfony/phpunit-bridge": "^4.4 || ^5.0 || ^6.0",
+        "symfony/phpunit-bridge": "^5.4 || ^6.0",
         "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
         "authorizenet/authorizenet": "^1.8.1",
         "sofort/sofortlib-php": "^3.0",
@@ -97,7 +97,8 @@
         "payum/sofort": "self.version"
     },
     "conflict": {
-        "league/uri-components": "<1.7.1"
+        "league/uri-components": "<1.7.1",
+        "jms/serializer": "<3.15.0"
     },
     "config": {
         "bin-dir": "bin",
