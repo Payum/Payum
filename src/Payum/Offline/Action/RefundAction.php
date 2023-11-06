@@ -27,6 +27,6 @@ class RefundAction implements ActionInterface
     {
         return $request instanceof Refund &&
             $request->getModel() instanceof ArrayAccess
-            ;
+        ;
     }
 }

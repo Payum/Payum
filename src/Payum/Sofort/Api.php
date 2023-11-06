@@ -85,8 +85,6 @@ class Api
     }
 
     /**
-     * @param $transactionId
-     *
      * @return array
      */
     public function getTransactionData($transactionId)

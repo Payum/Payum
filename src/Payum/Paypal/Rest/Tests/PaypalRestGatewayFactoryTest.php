@@ -107,13 +107,9 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
     public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath()
     {
         define('PP_CONFIG_PATH', __DIR__);
-        $this->expectException(InvalidArgumentException::class);
 
-        if (method_exists($this, 'expectExceptionMessageRegExp')) {
-            $this->expectExceptionMessageRegExp('/Given \"config_path\" is invalid. \w+/');
-        } else {
-            $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
 
         $factory = new PaypalRestGatewayFactory();
         $factory->create([

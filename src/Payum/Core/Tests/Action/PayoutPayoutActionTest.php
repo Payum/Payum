@@ -5,7 +5,6 @@ namespace Payum\Core\Tests\Action;
 use ArrayAccess;
 use Exception;
 use Iterator;
-use function iterator_to_array;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Model\Payout as PayoutModel;
@@ -16,6 +15,7 @@ use Payum\Core\Request\Payout;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
+use function iterator_to_array;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {

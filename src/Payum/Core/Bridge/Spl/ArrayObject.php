@@ -143,9 +143,6 @@ class ArrayObject extends \ArrayObject
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
     public function offsetSet($index, $value)
     {
@@ -156,9 +153,6 @@ class ArrayObject extends \ArrayObject
         return parent::offsetSet($index, $value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     #[ReturnTypeWillChange]
     public function offsetUnset($index)
     {

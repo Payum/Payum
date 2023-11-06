@@ -17,7 +17,7 @@ class MasspayActionTest extends GenericActionTest
 
     protected $actionClass = MasspayAction::class;
 
-        public function testShouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction()
     {
         $rc = new ReflectionClass(MasspayAction::class);
 

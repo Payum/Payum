@@ -57,7 +57,6 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param Action\ActionInterface $action
      * @param bool                   $forcePrepend
      */
     public function addAction(ActionInterface $action, $forcePrepend = false)

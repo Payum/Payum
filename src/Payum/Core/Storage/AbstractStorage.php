@@ -11,9 +11,6 @@ abstract class AbstractStorage implements StorageInterface
      */
     protected $modelClass;
 
-    /**
-     * @param $modelClass
-     */
     public function __construct($modelClass)
     {
         $this->modelClass = $modelClass;

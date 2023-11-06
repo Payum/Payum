@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
-use function get_class;
 use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
@@ -19,6 +18,7 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionObject;
 use stdClass;
+use function get_class;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {

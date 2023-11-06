@@ -40,7 +40,7 @@ class DynamicRegistry implements RegistryInterface
     public function getGatewayFactory($name)
     {
         // @deprecated It will throw invalid argument exception in 2.x
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactory($name);
         }
 
@@ -50,7 +50,7 @@ class DynamicRegistry implements RegistryInterface
     public function getGatewayFactories()
     {
         // @deprecated It will return empty array here
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactories();
         }
 
@@ -83,7 +83,7 @@ class DynamicRegistry implements RegistryInterface
     public function getGateways()
     {
         // @deprecated It will return empty array here
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGateways();
         }
 

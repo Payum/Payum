@@ -279,8 +279,6 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $tokenStorage
-     *
      * @return static
      */
     public function setTokenStorage(StorageInterface $tokenStorage = null)
@@ -310,8 +308,6 @@ class PayumBuilder
     }
 
     /**
-     * @param array $config
-     *
      * @return static
      */
     public function setCoreGatewayFactoryConfig(array $config = null)
@@ -333,8 +329,6 @@ class PayumBuilder
     }
 
     /**
-     * @param StorageInterface $gatewayConfigStorage
-     *
      * @return static
      */
     public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null)
@@ -345,8 +339,6 @@ class PayumBuilder
     }
 
     /**
-     * @param RegistryInterface $mainRegistry
-     *
      * @return static
      */
     public function setMainRegistry(RegistryInterface $mainRegistry = null)
@@ -357,8 +349,6 @@ class PayumBuilder
     }
 
     /**
-     * @param HttpClientInterface $httpClient
-     *
      * @deprecated this method will be removed in 2.0 Use self::addCoreGatewayFactoryConfig to overwrite http client.
      *
      * @return static

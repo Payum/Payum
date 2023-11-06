@@ -29,6 +29,6 @@ class PayoutAction implements ActionInterface
     {
         return $request instanceof Payout &&
             $request->getModel() instanceof ArrayAccess
-            ;
+        ;
     }
 }

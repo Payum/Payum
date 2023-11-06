@@ -836,17 +836,11 @@ class RequireOtherRequestAction implements ActionInterface, GatewayAwareInterfac
 
     protected $requiredRequest;
 
-    /**
-     * @param $request
-     */
     public function setSupportedRequest($request)
     {
         $this->supportedRequest = $request;
     }
 
-    /**
-     * @param $request
-     */
     public function setRequiredRequest($request)
     {
         $this->requiredRequest = $request;
@@ -869,17 +863,11 @@ class ThrowReplyAction implements ActionInterface
 
     protected $reply;
 
-    /**
-     * @param $request
-     */
     public function setSupportedRequest($request)
     {
         $this->supportedRequest = $request;
     }
 
-    /**
-     * @param $request
-     */
     public function setReply(ReplyInterface $request)
     {
         $this->reply = $request;
