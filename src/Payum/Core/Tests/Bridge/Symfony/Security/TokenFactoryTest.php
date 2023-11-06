@@ -454,7 +454,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -462,7 +462,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageRegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageRegistryInterface
      */
     protected function createStorageRegistryMock()
     {
@@ -470,7 +470,7 @@ class TokenFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UrlGeneratorInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|UrlGeneratorInterface
      */
     protected function createUrlGeneratorStub()
     {

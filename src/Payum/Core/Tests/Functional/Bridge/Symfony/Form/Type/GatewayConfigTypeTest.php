@@ -17,7 +17,7 @@ class GatewayConfigTypeTest extends TestCase
     protected $formFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GatewayFactoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|GatewayFactoryInterface
      */
     protected $fooGatewayFactoryMock;
 

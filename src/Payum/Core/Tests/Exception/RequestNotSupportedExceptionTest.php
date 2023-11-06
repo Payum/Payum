@@ -105,7 +105,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Action\ActionInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\Action\ActionInterface
      */
     protected function createActionMock()
     {

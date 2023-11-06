@@ -161,7 +161,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
      */
     protected function createRegistryMock()
     {
@@ -169,7 +169,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequestVerifierInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|HttpRequestVerifierInterface
      */
     protected function createHttpRequestVerifierMock()
     {
@@ -177,7 +177,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GenericTokenFactoryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GenericTokenFactoryInterface
      */
     protected function createGenericTokenFactoryMock()
     {
@@ -185,7 +185,7 @@ class PayumTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     protected function createTokenStorage()
     {

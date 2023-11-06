@@ -159,7 +159,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GetStatusInterface
      */
     protected function createGetStatusStub($model)
     {

@@ -271,7 +271,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     protected function createLoggerMock()
     {
@@ -279,7 +279,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|ReplyInterface
      */
     protected function createReplyMock()
     {
@@ -287,7 +287,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Action\ActionInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\Action\ActionInterface
      */
     protected function createActionMock()
     {
@@ -295,7 +295,7 @@ class LogExecutedActionsExtensionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

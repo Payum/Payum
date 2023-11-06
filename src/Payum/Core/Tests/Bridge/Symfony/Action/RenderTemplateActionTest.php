@@ -21,7 +21,7 @@ class RenderTemplateActionTest extends GenericActionTest
     protected $actionClass = RenderTemplateAction::class;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $templating;
 

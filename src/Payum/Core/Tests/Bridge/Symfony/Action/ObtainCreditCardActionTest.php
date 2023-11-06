@@ -341,7 +341,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|FormFactoryInterface
      */
     protected function createFormFactoryMock()
     {
@@ -349,7 +349,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FormInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|FormInterface
      */
     protected function createFormMock()
     {
@@ -357,7 +357,7 @@ class ObtainCreditCardActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

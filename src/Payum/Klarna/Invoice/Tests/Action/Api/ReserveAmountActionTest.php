@@ -160,7 +160,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Klarna
      */
     protected function createKlarnaMock()
     {
@@ -175,7 +175,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

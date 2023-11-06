@@ -135,7 +135,7 @@ class ExtensionCollectionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Context
+     * @return \PHPUnit\Framework\MockObject\MockObject|Context
      */
     protected function createContextMock()
     {
@@ -143,7 +143,7 @@ class ExtensionCollectionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|ExtensionInterface
      */
     protected function createExtensionMock()
     {

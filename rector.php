@@ -45,6 +45,5 @@ return static function (RectorConfig $rectorConfig): void {
         PublicConstantVisibilityRector::class,
 
         AddSeeTestAnnotationRector::class,
-        RenameClassRector::class,
     ]);
 };

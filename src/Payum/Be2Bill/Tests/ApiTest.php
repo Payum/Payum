@@ -154,7 +154,7 @@ class ApiTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|HttpClientInterface
      */
     protected function createHttpClientMock()
     {

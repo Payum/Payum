@@ -110,7 +110,7 @@ class DoctrineStorageTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @return \PHPUnit\Framework\MockObject\MockObject|ObjectManager
      */
     protected function createObjectManagerMock()
     {
@@ -118,7 +118,7 @@ class DoctrineStorageTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ObjectRepository
+     * @return \PHPUnit\Framework\MockObject\MockObject|ObjectRepository
      */
     protected function createObjectRepositoryMock()
     {

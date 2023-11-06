@@ -109,7 +109,7 @@ class CheckOrderActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Payex\Api\OrderApi
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Payex\Api\OrderApi
      */
     protected function createApiMock()
     {

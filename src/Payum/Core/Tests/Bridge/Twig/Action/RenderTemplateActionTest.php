@@ -89,7 +89,7 @@ class RenderTemplateActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Environment
+     * @return \PHPUnit\Framework\MockObject\MockObject|Environment
      */
     protected function createTwigMock()
     {

@@ -122,7 +122,7 @@ class GatewayConfigTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CypherInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|CypherInterface
      */
     private function createDummyCypher()
     {

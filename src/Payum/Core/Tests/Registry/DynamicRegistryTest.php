@@ -435,7 +435,7 @@ class DynamicRegistryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     protected function createStorageMock()
     {
@@ -443,7 +443,7 @@ class DynamicRegistryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|RegistryInterface
      */
     protected function createRegistryMock()
     {
@@ -451,7 +451,7 @@ class DynamicRegistryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayFactoryRegistryInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayFactoryRegistryInterface
      */
     protected function createGatewayFactoryRegistryMock()
     {

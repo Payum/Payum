@@ -213,7 +213,7 @@ class AbstractRegistryTest extends TestCase
     /**
      * @param array $constructorArguments
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Registry\AbstractRegistry
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\Registry\AbstractRegistry
      */
     protected function createAbstractRegistryMock(array $constructorArguments)
     {

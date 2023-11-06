@@ -149,7 +149,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\SoapClient
+     * @return \PHPUnit\Framework\MockObject\MockObject|\SoapClient
      */
     private function createSoapClientMock()
     {

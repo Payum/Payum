@@ -791,7 +791,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ReplyInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|ReplyInterface
      */
     protected function createReplyMock()
     {
@@ -799,7 +799,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|ExtensionInterface
      */
     protected function createExtensionMock()
     {
@@ -807,7 +807,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ActionInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|ActionInterface
      */
     protected function createActionMock()
     {

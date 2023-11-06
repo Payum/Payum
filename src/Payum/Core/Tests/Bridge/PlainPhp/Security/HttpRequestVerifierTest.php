@@ -159,7 +159,7 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\Storage\StorageInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Payum\Core\Storage\StorageInterface
      */
     protected function createStorageMock()
     {

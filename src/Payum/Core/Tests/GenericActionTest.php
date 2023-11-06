@@ -78,7 +78,7 @@ abstract class GenericActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
@@ -86,7 +86,7 @@ abstract class GenericActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|TokenInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|TokenInterface
      */
     protected function createTokenMock()
     {
