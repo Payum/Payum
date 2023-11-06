@@ -40,7 +40,6 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         LongArrayToShortArrayRector::class,
-        StringClassNameToClassConstantRector::class,
         RemoveExtraParametersRector::class,
         PublicConstantVisibilityRector::class,
 

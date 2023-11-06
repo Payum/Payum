@@ -10,9 +10,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\Rest\Action\StatusAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\Rest\Action\StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldNotSupportStatusRequestWithNoPaymentAsModel()

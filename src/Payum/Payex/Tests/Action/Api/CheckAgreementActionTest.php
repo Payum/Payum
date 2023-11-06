@@ -24,16 +24,16 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckAgreementAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotAgreementApiAsApi()
@@ -116,6 +116,6 @@ class CheckAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock(\Payum\Payex\Api\AgreementApi::class, array(), array(), '', false);
     }
 }

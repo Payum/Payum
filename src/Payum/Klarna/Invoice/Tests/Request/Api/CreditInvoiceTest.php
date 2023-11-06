@@ -7,8 +7,8 @@ class CreditInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\CreditInvoice');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\CreditInvoice::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

@@ -484,7 +484,7 @@ class AuthorizeActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**

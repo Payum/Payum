@@ -16,12 +16,12 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     /**
      * @var Generic
      */
-    protected $requestClass = 'Payum\Core\Request\Cancel';
+    protected $requestClass = \Payum\Core\Request\Cancel::class;
 
     /**
      * @var ActionInterface
      */
-    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction';
+    protected $actionClass = \Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction::class;
 
     public function provideSupportedRequests(): \Iterator
     {

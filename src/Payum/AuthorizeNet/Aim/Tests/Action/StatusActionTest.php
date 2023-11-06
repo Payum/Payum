@@ -9,9 +9,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\StatusAction';
+    protected $actionClass = \Payum\AuthorizeNet\Aim\Action\StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = \Payum\Core\Request\GetHumanStatus::class;
 
     public function testShouldMarkNewIfDetailsEmpty()
     {
@@ -110,7 +110,7 @@ class StatusActionTest extends GenericActionTest
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
+        $status = $this->createMock(\Payum\Core\Request\GetStatusInterface::class);
 
         $status
             ->method('getModel')

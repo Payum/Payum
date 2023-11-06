@@ -22,9 +22,9 @@ class ReturnAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReturnAmountAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\ReturnAmountAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()

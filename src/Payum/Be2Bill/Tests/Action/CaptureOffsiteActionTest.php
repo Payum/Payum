@@ -73,7 +73,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHttpRequest::class))
         ;
 
         $action = new CaptureOffsiteAction();
@@ -104,7 +104,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';

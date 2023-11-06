@@ -419,6 +419,6 @@ class FallbackRegistryTest extends TestCase
      */
     protected function createRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\RegistryInterface');
+        return $this->createMock(\Payum\Core\Registry\RegistryInterface::class);
     }
 }

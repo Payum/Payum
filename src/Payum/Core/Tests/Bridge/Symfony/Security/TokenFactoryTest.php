@@ -13,16 +13,16 @@ class TokenFactoryTest extends TestCase
 {
     public function testShouldImplementsTokenFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Security\TokenFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\TokenFactoryInterface::class));
     }
 
     public function testShouldBeSubClassOfAbtractTokenFactory()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Security\TokenFactory');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Security\TokenFactory::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Security\AbstractTokenFactory'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Security\AbstractTokenFactory::class));
     }
 
     public function testShouldCreateTokenWithoutAfterPath()
@@ -458,7 +458,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 
     /**
@@ -466,7 +466,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createStorageRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
+        return $this->createMock(\Payum\Core\Registry\StorageRegistryInterface::class);
     }
 
     /**
@@ -474,7 +474,7 @@ class TokenFactoryTest extends TestCase
      */
     protected function createUrlGeneratorStub()
     {
-        $urlGenerator = $this->createMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(\Symfony\Component\Routing\Generator\UrlGeneratorInterface::class);
 
         $urlGenerator
             ->method('generate')

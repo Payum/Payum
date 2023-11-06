@@ -12,7 +12,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     /**
      * @var Generic
      */
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = \Payum\Core\Request\Convert::class;
 
     /**
      * @var ActionInterface
@@ -23,7 +23,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     {
         yield array(new $this->requestClass(new Payment()));
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class)));
-        yield array(new $this->requestClass(new Payment(), $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield array(new $this->requestClass(new Payment(), $this->createMock(\Payum\Core\Security\TokenInterface::class)));
     }
 
     public function provideNotSupportedRequests(): \Iterator
@@ -31,14 +31,14 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         yield array('foo');
         yield array(array('foo'));
         yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, array(array())));
     }
 
     public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     /**

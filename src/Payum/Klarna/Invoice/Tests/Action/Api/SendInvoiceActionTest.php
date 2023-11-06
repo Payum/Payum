@@ -22,9 +22,9 @@ class SendInvoiceActionTest extends GenericApiAwareActionTest
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\SendInvoiceAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\SendInvoiceAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()

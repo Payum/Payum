@@ -8,9 +8,9 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfBaseApi()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Api\RecurringApi');
+        $rc = new \ReflectionClass(\Payum\Payex\Api\RecurringApi::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Payex\Api\BaseApi'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Payex\Api\BaseApi::class));
     }
 
     public function testThrowIfAccountNumberOptionNotSet()
@@ -59,7 +59,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -93,7 +93,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -127,7 +127,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')

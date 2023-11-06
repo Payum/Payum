@@ -10,9 +10,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\PaymentDetailsStatusAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\PaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportGetStatusRequestWithEmptyArrayAsModel()

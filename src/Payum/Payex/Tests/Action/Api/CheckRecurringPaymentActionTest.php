@@ -24,16 +24,16 @@ class CheckRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckRecurringPaymentAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CheckRecurringPaymentAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\Api\CheckRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testThrowOnTryingSetNotRecurringApiAsApi()
@@ -114,6 +114,6 @@ class CheckRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        return $this->createMock(\Payum\Payex\Api\RecurringApi::class, array(), array(), '', false);
     }
 }

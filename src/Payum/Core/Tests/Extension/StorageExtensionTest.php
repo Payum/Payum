@@ -16,9 +16,9 @@ class StorageExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\StorageExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Extension\StorageExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testShouldDoNothingOnPreExecuteIfNoModelRequest()
@@ -305,7 +305,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 
     /**
@@ -313,7 +313,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
     }
 
     /**
@@ -321,7 +321,7 @@ class StorageExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }
 

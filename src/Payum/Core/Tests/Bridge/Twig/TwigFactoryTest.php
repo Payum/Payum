@@ -16,7 +16,7 @@ class TwigFactoryTest extends TestCase
 
     public function testShouldGuessCorrectCorePathByGatewayClass()
     {
-        $path = TwigFactory::guessViewsPath('Payum\Core\Gateway');
+        $path = TwigFactory::guessViewsPath(\Payum\Core\Gateway::class);
 
         $this->assertFileExists($path);
         $this->assertStringEndsWith('Payum/Core/Resources/views', $path);

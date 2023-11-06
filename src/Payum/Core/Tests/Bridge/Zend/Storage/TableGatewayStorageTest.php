@@ -10,9 +10,9 @@ class TableGatewayStorageTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractStorage()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Zend\Storage\TableGatewayStorage');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Zend\Storage\TableGatewayStorage::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Storage\AbstractStorage::class));
     }
 
     public function testThrowIfTryToUseNotSupportedFindByMethod()

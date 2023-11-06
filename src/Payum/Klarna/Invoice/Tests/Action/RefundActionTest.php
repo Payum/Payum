@@ -51,7 +51,7 @@ class RefundActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CreditPart'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\CreditPart::class))
         ;
 
         $action = new RefundAction();
@@ -106,6 +106,6 @@ class RefundActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

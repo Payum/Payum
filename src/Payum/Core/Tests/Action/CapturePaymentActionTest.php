@@ -12,9 +12,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class CapturePaymentActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = \Payum\Core\Request\Capture::class;
 
-    protected $actionClass = 'Payum\Core\Action\CapturePaymentAction';
+    protected $actionClass = \Payum\Core\Action\CapturePaymentAction::class;
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -28,7 +28,7 @@ class CapturePaymentActionTest extends GenericActionTest
     {
         $rc = new \ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
     }
 
     public function testShouldExecuteConvertRequestIfStatusNew()
@@ -41,7 +41,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHumanStatus::class))
             ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
             })
@@ -49,7 +49,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Convert::class))
             ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame('array', $request->getTo());
@@ -79,7 +79,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHumanStatus::class))
             ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
             })
@@ -87,7 +87,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Convert::class))
             ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
                 $details['foo'] = 'fooVal';
 
@@ -123,7 +123,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHumanStatus::class))
             ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
             })
@@ -131,7 +131,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Convert'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Convert::class))
             ->willReturnCallback(function (Convert $request) use ($testCase, $payment, $token) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
@@ -166,7 +166,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHumanStatus::class))
             ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
             })
@@ -174,7 +174,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Capture::class))
             ->willReturnCallback(function (Capture $request) use ($testCase, $expectedDetails) {
                 $details = $request->getModel();
 
@@ -206,7 +206,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHumanStatus'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHumanStatus::class))
             ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
             })
@@ -214,7 +214,7 @@ class CapturePaymentActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Capture'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Capture::class))
             ->willReturnCallback(function (Capture $request) {
                 $details = $request->getModel();
                 $details['bar'] = 'barVal';

@@ -10,9 +10,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\StatusAction');
+        $rc = new \ReflectionClass(\Payum\Offline\Action\StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAccessAsModel()
@@ -163,7 +163,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
+        $status = $this->createMock(\Payum\Core\Request\GetStatusInterface::class);
 
         $status
             ->method('getModel')

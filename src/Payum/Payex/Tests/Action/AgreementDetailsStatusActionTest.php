@@ -10,9 +10,9 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsStatusAction');
+        $rc = new \ReflectionClass(\Payum\Payex\Action\AgreementDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
@@ -168,6 +168,6 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

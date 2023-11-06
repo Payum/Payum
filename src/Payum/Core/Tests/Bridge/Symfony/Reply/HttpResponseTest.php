@@ -9,9 +9,9 @@ class HttpResponseTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseReply()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Reply\HttpResponse');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Symfony\Reply\HttpResponse::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\Base'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Reply\Base::class));
     }
 
     public function testShouldAllowGetResponseSetInConstructor()

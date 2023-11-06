@@ -7,7 +7,7 @@ class DoExpressCheckoutPaymentTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

@@ -20,9 +20,9 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $class = $this->getGatewayFactoryClass();
         $this->assertInstanceOf(GatewayFactoryInterface::class, new $class);
 
-        $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
+        $rc = new \ReflectionClass(\Payum\Core\GatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayFactoryInterface::class));
     }
 
     public function testGatewayUsesCoreGatewayFactory()

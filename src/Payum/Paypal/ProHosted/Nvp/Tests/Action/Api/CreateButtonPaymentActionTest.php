@@ -53,6 +53,6 @@ class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ProHosted\Nvp\Api::class, array(), array(), '', false);
     }
 }

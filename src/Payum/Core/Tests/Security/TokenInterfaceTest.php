@@ -7,15 +7,15 @@ class TokenInterfaceTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
+        $rc = new \ReflectionClass(\Payum\Core\Security\TokenInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\DetailsAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Model\DetailsAwareInterface::class));
     }
 
     public function testShouldExtendDetailsAggregateInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
+        $rc = new \ReflectionClass(\Payum\Core\Security\TokenInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\DetailsAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Model\DetailsAggregateInterface::class));
     }
 }

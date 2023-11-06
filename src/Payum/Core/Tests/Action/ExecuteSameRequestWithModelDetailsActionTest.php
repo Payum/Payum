@@ -11,9 +11,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction';
+    protected $actionClass = \Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction::class;
 
-    protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
+    protected $requestClass = \Payum\Core\Tests\Action\ModelAggregateAwareRequest::class;
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -39,7 +39,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -68,7 +68,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -103,7 +103,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
@@ -142,7 +142,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $testCase = $this;
 
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')

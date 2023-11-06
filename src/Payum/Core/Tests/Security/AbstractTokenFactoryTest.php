@@ -477,7 +477,7 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageMock()
     {
-        return $this->createMock('Payum\Core\Storage\StorageInterface');
+        return $this->createMock(\Payum\Core\Storage\StorageInterface::class);
     }
 
     /**
@@ -485,6 +485,6 @@ class AbstractTokenFactoryTest extends TestCase
      */
     protected function createStorageRegistryMock()
     {
-        return $this->createMock('Payum\Core\Registry\StorageRegistryInterface');
+        return $this->createMock(\Payum\Core\Registry\StorageRegistryInterface::class);
     }
 }

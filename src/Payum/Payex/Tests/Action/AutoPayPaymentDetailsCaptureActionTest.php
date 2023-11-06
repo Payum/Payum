@@ -77,7 +77,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\AutoPayAgreement'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\AutoPayAgreement::class))
         ;
 
         $action = new AutoPayPaymentDetailsCaptureAction();
@@ -95,6 +95,6 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

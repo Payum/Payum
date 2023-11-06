@@ -11,15 +11,15 @@ use Payum\Core\Request\Convert;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction';
+    protected $actionClass = \Payum\Paypal\ExpressCheckout\Nvp\Action\ConvertPaymentAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = \Payum\Core\Request\Convert::class;
 
     public function provideSupportedRequests(): \Iterator
     {
         yield array(new $this->requestClass(new Payment(), 'array'));
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array'));
-        yield array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield array(new $this->requestClass(new Payment(), 'array', $this->createMock(\Payum\Core\Security\TokenInterface::class)));
     }
 
     public function provideNotSupportedRequests(): \Iterator
@@ -35,11 +35,11 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetCurrency::class))
             ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
@@ -78,11 +78,11 @@ class ConvertPaymentActionTest extends GenericActionTest
 
     public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(\Payum\Core\GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetCurrency::class))
             ->willReturnCallback(function (GetCurrency $request) {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';

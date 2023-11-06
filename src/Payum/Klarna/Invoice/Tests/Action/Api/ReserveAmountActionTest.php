@@ -24,16 +24,16 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\ReserveAmountAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testShouldImplementsGatewayAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReserveAmountAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\ReserveAmountAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayAwareInterface::class));
     }
 
     public function testShouldAllowSetGateway()
@@ -92,7 +92,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
@@ -132,7 +132,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class))
         ;
 
         $klarnaMock = $this->createKlarnaMock();
@@ -179,6 +179,6 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

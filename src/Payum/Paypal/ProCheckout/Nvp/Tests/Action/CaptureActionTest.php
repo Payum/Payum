@@ -40,7 +40,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willThrowException(new RequestNotSupportedException())
         ;
 
@@ -128,7 +128,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
@@ -191,7 +191,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
@@ -218,7 +218,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ProCheckout\Nvp\Api::class, array(), array(), '', false);
     }
 
     /**
@@ -226,6 +226,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

@@ -66,7 +66,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetRecurringPaymentsProfileDetails::class))
         ;
 
         $action = new RecurringPaymentDetailsSyncAction();
@@ -83,6 +83,6 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

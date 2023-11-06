@@ -8,8 +8,8 @@ class ActivateTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\Activate');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\Activate::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

@@ -10,23 +10,23 @@ class HttpExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfRuntimeException()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\Http\HttpException::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\RuntimeException'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Exception\RuntimeException::class));
     }
 
     public function testShouldImplementHttpExceptionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
+        $rc = new \ReflectionClass(\Payum\Core\Exception\Http\HttpException::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\Http\HttpExceptionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Exception\Http\HttpExceptionInterface::class));
     }
 
     public function testShouldAllowSetRequest()
     {
         $exception = new HttpException();
 
-        $request = $this->createMock('Psr\Http\Message\RequestInterface');
+        $request = $this->createMock(\Psr\Http\Message\RequestInterface::class);
         $exception->setRequest($request);
         $this->assertSame($request, $exception->getRequest());
     }
@@ -35,7 +35,7 @@ class HttpExceptionTest extends TestCase
     {
         $exception = new HttpException();
 
-        $exception->setRequest($expectedRequest = $this->createMock('Psr\Http\Message\RequestInterface'));
+        $exception->setRequest($expectedRequest = $this->createMock(\Psr\Http\Message\RequestInterface::class));
 
         $this->assertSame($expectedRequest, $exception->getRequest());
     }
@@ -44,7 +44,7 @@ class HttpExceptionTest extends TestCase
     {
         $exception = new HttpException();
 
-        $response = $this->createMock('Psr\Http\Message\ResponseInterface');
+        $response = $this->createMock(\Psr\Http\Message\ResponseInterface::class);
         $exception->setResponse($response);
         $this->assertSame($response, $exception->getResponse());
     }
@@ -53,7 +53,7 @@ class HttpExceptionTest extends TestCase
     {
         $exception = new HttpException();
 
-        $exception->setResponse($expectedResponse = $this->createMock('Psr\Http\Message\ResponseInterface'));
+        $exception->setResponse($expectedResponse = $this->createMock(\Psr\Http\Message\ResponseInterface::class));
 
         $this->assertSame($expectedResponse, $exception->getResponse());
     }
@@ -66,7 +66,7 @@ class HttpExceptionTest extends TestCase
 
         $httpException = HttpException::factory($request, $response);
 
-        $this->assertInstanceOf('Payum\Core\Exception\Http\HttpException', $httpException);
+        $this->assertInstanceOf(\Payum\Core\Exception\Http\HttpException::class, $httpException);
         $this->assertSame($request, $httpException->getRequest());
         $this->assertSame($response, $httpException->getResponse());
 

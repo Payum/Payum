@@ -98,7 +98,7 @@ class ObtainCreditCardActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals(array(
@@ -182,7 +182,7 @@ class ObtainCreditCardActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals(array(
@@ -313,7 +313,7 @@ class ObtainCreditCardActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\RenderTemplate'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel) {
                 $this->assertSame('theTemplateName', $request->getTemplateName());
                 $this->assertEquals(array(
@@ -345,7 +345,7 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createFormFactoryMock()
     {
-        return $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+        return $this->createMock(\Symfony\Component\Form\FormFactoryInterface::class);
     }
 
     /**
@@ -353,7 +353,7 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createFormMock()
     {
-        return $this->createMock('Symfony\Component\Form\Form', array(), array(), '', false);
+        return $this->createMock(\Symfony\Component\Form\Form::class, array(), array(), '', false);
     }
 
     /**
@@ -361,6 +361,6 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

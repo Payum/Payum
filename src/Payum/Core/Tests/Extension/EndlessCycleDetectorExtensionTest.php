@@ -11,9 +11,9 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Extension\EndlessCycleDetectorExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
@@ -59,6 +59,6 @@ class EndlessCycleDetectorExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

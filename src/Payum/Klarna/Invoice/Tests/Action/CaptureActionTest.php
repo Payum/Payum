@@ -51,7 +51,7 @@ class CaptureActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Authorize'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Authorize::class))
         ;
 
         $action = new CaptureAction();
@@ -68,7 +68,7 @@ class CaptureActionTest extends TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\Activate'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Invoice\Request\Api\Activate::class))
         ;
 
         $action = new CaptureAction();
@@ -105,6 +105,6 @@ class CaptureActionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

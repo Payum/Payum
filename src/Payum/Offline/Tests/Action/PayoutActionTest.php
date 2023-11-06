@@ -10,9 +10,9 @@ class PayoutActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\PayoutAction');
+        $rc = new \ReflectionClass(\Payum\Offline\Action\PayoutAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportPayoutWithArrayAccessAsModel()

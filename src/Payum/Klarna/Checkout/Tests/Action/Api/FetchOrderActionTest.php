@@ -8,23 +8,23 @@ use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 
 class FetchOrderActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Klarna\Checkout\Request\Api\FetchOrder';
+    protected $requestClass = \Payum\Klarna\Checkout\Request\Api\FetchOrder::class;
 
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\Api\FetchOrderAction';
+    protected $actionClass = \Payum\Klarna\Checkout\Action\Api\FetchOrderAction::class;
 
     public function provideNotSupportedRequests(): \Iterator
     {
         yield array('foo');
         yield array(array('foo'));
         yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, array(array())));
     }
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\FetchOrderAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\FetchOrderAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testThrowIfLocationNotSetOnExecute()

@@ -32,7 +32,7 @@ abstract class MongoTest extends BaseMongoTest
         );
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
-        $rc = new \ReflectionClass('Payum\Core\Tests\Mocks\Document\TestModel');
+        $rc = new \ReflectionClass(\Payum\Core\Tests\Mocks\Document\TestModel::class);
         $annotationDriver = new AnnotationDriver(new AnnotationReader(), array(
             dirname($rc->getFileName()),
         ));

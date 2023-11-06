@@ -7,9 +7,9 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 
     public function testShouldAllowGetModelSetInConstructor()

@@ -7,7 +7,7 @@ class CreateRecurringPaymentProfileTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

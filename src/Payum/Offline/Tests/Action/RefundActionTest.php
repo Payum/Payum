@@ -10,9 +10,9 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\RefundAction');
+        $rc = new \ReflectionClass(\Payum\Offline\Action\RefundAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportRefundWithArrayAccessAsModel()

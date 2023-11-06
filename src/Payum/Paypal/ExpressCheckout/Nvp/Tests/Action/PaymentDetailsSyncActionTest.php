@@ -82,7 +82,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails::class))
             ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
@@ -113,7 +113,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetExpressCheckoutDetails::class))
             ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
@@ -144,7 +144,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails::class))
             ->willReturnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
@@ -153,7 +153,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails'))
+            ->with($this->isInstanceOf(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails::class))
             ->willReturnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['bar'] = 'barVal';
@@ -184,6 +184,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

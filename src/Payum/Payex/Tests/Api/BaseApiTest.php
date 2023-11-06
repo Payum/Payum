@@ -7,7 +7,7 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Api\BaseApi');
+        $rc = new \ReflectionClass(\Payum\Payex\Api\BaseApi::class);
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -16,7 +16,7 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
-        $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
+        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, array(
             new SoapClientFactory(),
             array(),
         ));
@@ -26,7 +26,7 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
-        $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
+        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, array(
             new SoapClientFactory(),
             array(
                 'account_number' => 'aNumber',
@@ -38,7 +38,7 @@ class BaseApiTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        $this->getMockForAbstractClass('Payum\Payex\Api\BaseApi', array(
+        $this->getMockForAbstractClass(\Payum\Payex\Api\BaseApi::class, array(
             new SoapClientFactory(),
             array(
                 'account_number' => 'aNumber',

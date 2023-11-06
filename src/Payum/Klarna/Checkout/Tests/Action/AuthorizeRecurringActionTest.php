@@ -15,12 +15,12 @@ class AuthorizeRecurringActionTest extends GenericActionTest
     /**
      * @var Authorize
      */
-    protected $requestClass = 'Payum\Core\Request\Authorize';
+    protected $requestClass = \Payum\Core\Request\Authorize::class;
 
     /**
      * @var AuthorizeRecurringAction
      */
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\AuthorizeRecurringAction';
+    protected $actionClass = \Payum\Klarna\Checkout\Action\AuthorizeRecurringAction::class;
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -47,7 +47,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         yield array(new \stdClass());
         yield array(new $this->requestClass('foo'));
         yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, array(array())));
         yield array(new $this->requestClass(array(
             'recurring' => true,
             'recurring_token' => 'aToken',
@@ -112,7 +112,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             })
@@ -157,7 +157,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 
@@ -210,7 +210,7 @@ class AuthorizeRecurringActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\CreateOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class))
             ->willReturnCallback(function (CreateOrder $request) use ($orderMock, $config, $testCase) {
                 $request->setOrder($orderMock);
 

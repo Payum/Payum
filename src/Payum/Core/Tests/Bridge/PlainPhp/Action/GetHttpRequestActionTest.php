@@ -7,9 +7,9 @@ use Payum\Core\Tests\GenericActionTest;
 
 class GetHttpRequestActionTest extends GenericActionTest
 {
-    protected $requestClass = 'Payum\Core\Request\GetHttpRequest';
+    protected $requestClass = \Payum\Core\Request\GetHttpRequest::class;
 
-    protected $actionClass = 'Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction';
+    protected $actionClass = \Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction::class;
 
     public function provideSupportedRequests(): \Iterator
     {
@@ -21,7 +21,7 @@ class GetHttpRequestActionTest extends GenericActionTest
         yield array('foo');
         yield array(array('foo'));
         yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield array($this->getMockForAbstractClass(\Payum\Core\Request\Generic::class, array(array())));
     }
 
     public function testShouldFillRequestDetails()

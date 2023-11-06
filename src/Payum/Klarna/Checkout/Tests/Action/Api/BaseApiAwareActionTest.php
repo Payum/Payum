@@ -17,21 +17,21 @@ class BaseApiAwareActionTest extends TestCase
 
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testShouldBeAbstract()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class);
 
         $this->assertTrue($rc->isAbstract());
     }
@@ -39,7 +39,7 @@ class BaseApiAwareActionTest extends TestCase
     public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
-        $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $action = $this->getMockForAbstractClass(\Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction::class);
 
         $action->setApi(new \stdClass());
     }

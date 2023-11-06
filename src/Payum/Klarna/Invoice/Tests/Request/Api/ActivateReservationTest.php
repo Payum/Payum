@@ -8,8 +8,8 @@ class ActivateReservationTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\ActivateReservation');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Request\Api\ActivateReservation::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

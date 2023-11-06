@@ -21,7 +21,7 @@ class SoapClientFactoryTest extends \PHPUnit\Framework\TestCase
             'exceptions' => true,
         );
 
-        $factory = new SoapClientFactory($options, 'Payum\Payex\Tests\Api\CustomSoapClient');
+        $factory = new SoapClientFactory($options, \Payum\Payex\Tests\Api\CustomSoapClient::class);
 
         $client = $factory->createWsdlClient('https://external.externaltest.payex.com/pxorder/pxorder.asmx?WSDL');
 

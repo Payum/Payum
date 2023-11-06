@@ -8,8 +8,8 @@ class CreateOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\CreateOrder');
+        $rc = new \ReflectionClass(\Payum\Klarna\Checkout\Request\Api\CreateOrder::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Request\Api\BaseOrder'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Checkout\Request\Api\BaseOrder::class));
     }
 }

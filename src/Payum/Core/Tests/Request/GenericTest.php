@@ -27,21 +27,21 @@ class GenericTest extends TestCase
     {
         $rc = new \ReflectionClass(Generic::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Model\ModelAwareInterface::class));
     }
 
     public function testShouldImplementModelAggregateInterface()
     {
         $rc = new \ReflectionClass(Generic::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Model\ModelAggregateInterface::class));
     }
 
     public function testShouldImplementTokenAggregateInterface()
     {
         $rc = new \ReflectionClass(Generic::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Security\TokenAggregateInterface::class));
     }
 
     /**
@@ -80,7 +80,7 @@ class GenericTest extends TestCase
 
     public function testShouldAllowGetTokenSetInConstructor()
     {
-        $tokenMock = $this->createMock('Payum\Core\Security\TokenInterface');
+        $tokenMock = $this->createMock(\Payum\Core\Security\TokenInterface::class);
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, array($tokenMock));
@@ -116,7 +116,7 @@ class GenericTest extends TestCase
     public function testShouldNotSetTokenAsFirstModelOnConstruct()
     {
         /** @var Generic $request */
-        $token = $this->createMock('Payum\Core\Security\TokenInterface');
+        $token = $this->createMock(\Payum\Core\Security\TokenInterface::class);
 
         $request = $this->getMockForAbstractClass(Generic::class, array($token));
 
@@ -126,7 +126,7 @@ class GenericTest extends TestCase
     public function testShouldNotSetIdentityAsFirstModelOnConstruct()
     {
         /** @var Generic $request */
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class, array(), array(), '', false);
 
         $request = $this->getMockForAbstractClass(Generic::class, array($identity));
 
@@ -145,7 +145,7 @@ class GenericTest extends TestCase
 
     public function testShouldNotSetTokenAsFirstModelOnSetModel()
     {
-        $token = $this->createMock('Payum\Core\Security\TokenInterface');
+        $token = $this->createMock(\Payum\Core\Security\TokenInterface::class);
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, array(null));
@@ -156,7 +156,7 @@ class GenericTest extends TestCase
 
     public function testShouldNotSetIdentityAsFirstModelOnSetModel()
     {
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class, array(), array(), '', false);
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, array(null));

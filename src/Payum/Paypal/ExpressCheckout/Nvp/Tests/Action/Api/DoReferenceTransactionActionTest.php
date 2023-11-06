@@ -153,6 +153,6 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, array(), array(), '', false);
     }
 }

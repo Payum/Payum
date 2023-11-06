@@ -5,8 +5,8 @@ class StartRecurringPaymentTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\StartRecurringPayment');
+        $rc = new \ReflectionClass(\Payum\Payex\Request\Api\StartRecurringPayment::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

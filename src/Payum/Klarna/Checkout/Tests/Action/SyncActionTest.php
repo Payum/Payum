@@ -64,7 +64,7 @@ class SyncActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\FetchOrder::class))
             ->willReturnCallback(function (FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
             })
@@ -108,7 +108,7 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**

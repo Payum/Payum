@@ -16,16 +16,16 @@ class LogExecutedActionsExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Extension\ExtensionInterface::class));
     }
 
     public function testShouldImplementLoggerAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Psr\Log\LoggerAwareInterface::class));
     }
 
     public function testShouldAllowSetLogger()
@@ -275,7 +275,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createLoggerMock()
     {
-        return $this->createMock('Psr\Log\LoggerInterface');
+        return $this->createMock(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -283,7 +283,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createReplyMock()
     {
-        return $this->createMock('Payum\Core\Reply\ReplyInterface');
+        return $this->createMock(\Payum\Core\Reply\ReplyInterface::class);
     }
 
     /**
@@ -291,7 +291,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createActionMock()
     {
-        return $this->createMock('Payum\Core\Action\ActionInterface');
+        return $this->createMock(\Payum\Core\Action\ActionInterface::class);
     }
 
     /**
@@ -299,7 +299,7 @@ class LogExecutedActionsExtensionTest extends TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }
 

@@ -58,7 +58,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willThrowException(new RequestNotSupportedException())
         ;
 
@@ -152,7 +152,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
@@ -208,7 +208,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) {
                 $card = new CreditCard();
                 $card->setToken('theCreditCardToken');
@@ -277,7 +277,7 @@ class CaptureActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\ObtainCreditCard::class))
             ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());

@@ -9,9 +9,9 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\PopulateKlarnaFromDetailsAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportPopulateKlarnaFromDetails()

@@ -10,14 +10,14 @@ class Propel1StorageTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractStorage()
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\Propel1Storage');
+        $rc = new \ReflectionClass(\Payum\Core\Bridge\Propel\Storage\Propel1Storage::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Storage\AbstractStorage::class));
     }
 
     public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\PropelModel';
+        $expectedModelClass = \Payum\Core\Tests\Mocks\Model\PropelModel::class;
 
         $storage = new PropelStorage($expectedModelClass);
 
@@ -31,7 +31,7 @@ class Propel1StorageTest extends TestCase
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Save method was triggered.');
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
+        $storage = new PropelStorage(\Payum\Core\Tests\Mocks\Model\PropelModel::class);
 
         $model = $storage->create();
 
@@ -44,7 +44,7 @@ class Propel1StorageTest extends TestCase
         $expectedFoundModel = new PropelModel();
         $expectedFoundModel->findPk($expectedModelId);
 
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
+        $storage = new PropelStorage(\Payum\Core\Tests\Mocks\Model\PropelModel::class);
 
         $actualModel = $storage->find($expectedModelId);
 
@@ -57,7 +57,7 @@ class Propel1StorageTest extends TestCase
         $expectedFoundModel = new PropelModel();
         $expectedFoundModel->findPk($expectedModelId);
 
-        $storage = new PropelStorage('Payum\Core\Tests\Mocks\Model\PropelModel');
+        $storage = new PropelStorage(\Payum\Core\Tests\Mocks\Model\PropelModel::class);
 
         $actualModel = $storage->findBy(array('id' => $expectedModelId));
 

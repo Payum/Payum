@@ -29,8 +29,8 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
-        $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
-        $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
+        $this->assertInstanceOf(\Symfony\Component\Form\Form::class, $form);
+        $this->assertInstanceOf(\Symfony\Component\Form\FormView::class, $form->createView());
     }
 
     public function testShouldCorrectlyBindValidValue()

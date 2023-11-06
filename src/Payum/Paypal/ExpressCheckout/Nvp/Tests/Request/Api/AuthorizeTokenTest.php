@@ -8,7 +8,7 @@ class AuthorizeTokenTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

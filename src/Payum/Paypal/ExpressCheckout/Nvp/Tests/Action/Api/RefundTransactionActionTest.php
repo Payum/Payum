@@ -11,23 +11,23 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldImplementApiAwareInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\ApiAwareInterface::class));
     }
 
     public function testShouldUseApiAwareTrait()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction::class);
 
-        $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
+        $this->assertContains(\Payum\Core\ApiAwareTrait::class, $rc->getTraitNames());
     }
 
     public function testShouldSupportRefundTransactionRequestAndArrayAccessAsModel()
@@ -129,6 +129,6 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, array(), array(), '', false);
     }
 }

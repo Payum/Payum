@@ -5,8 +5,8 @@ class DeleteAgreementTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldBeSubClassOfGeneric()
     {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\DeleteAgreement');
+        $rc = new \ReflectionClass(\Payum\Payex\Request\Api\DeleteAgreement::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Request\Generic::class));
     }
 }

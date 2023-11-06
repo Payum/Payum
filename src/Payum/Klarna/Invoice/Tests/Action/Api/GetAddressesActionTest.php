@@ -22,9 +22,9 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
 
     public function testShouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\GetAddressesAction');
+        $rc = new \ReflectionClass(\Payum\Klarna\Invoice\Action\Api\GetAddressesAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction::class));
     }
 
     public function testThrowApiNotSupportedIfNotConfigGivenAsApi()

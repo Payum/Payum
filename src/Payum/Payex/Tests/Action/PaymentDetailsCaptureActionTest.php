@@ -79,7 +79,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\InitializeOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -98,7 +98,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\CompleteOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -118,7 +118,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\StartRecurringPayment::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -139,7 +139,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\GetHttpRequest::class))
             ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->clientIp = 'expectedClientIp';
             })
@@ -163,6 +163,6 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

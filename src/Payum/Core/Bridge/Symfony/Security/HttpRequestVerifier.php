@@ -33,7 +33,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         if (false == $httpRequest instanceof Request) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid request given. Expected %s but it is %s',
-                'Symfony\Component\HttpFoundation\Request',
+                \Symfony\Component\HttpFoundation\Request::class,
                 is_object($httpRequest) ? get_class($httpRequest) : gettype($httpRequest)
             ));
         }

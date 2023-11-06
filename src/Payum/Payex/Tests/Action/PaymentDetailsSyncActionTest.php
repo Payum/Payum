@@ -58,7 +58,7 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckOrder'))
+            ->with($this->isInstanceOf(\Payum\Payex\Request\Api\CheckOrder::class))
         ;
 
         $action = new PaymentDetailsSyncAction();
@@ -74,6 +74,6 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 }

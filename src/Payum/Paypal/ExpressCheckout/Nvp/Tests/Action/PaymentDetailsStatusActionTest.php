@@ -9,9 +9,9 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
     public function testShouldImplementsActionInterface()
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
+        $rc = new \ReflectionClass(\Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Action\ActionInterface::class));
     }
 
     public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()

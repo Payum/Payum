@@ -23,8 +23,8 @@ abstract class BaseMongoTest extends TestCase
         }
 
         Type::hasType('object') ?
-            Type::overrideType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType') :
-            Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType')
+            Type::overrideType('object', \Payum\Core\Bridge\Doctrine\Types\ObjectType::class) :
+            Type::addType('object', \Payum\Core\Bridge\Doctrine\Types\ObjectType::class)
         ;
 
         $config = new Configuration();

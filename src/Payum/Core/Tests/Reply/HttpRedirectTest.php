@@ -8,16 +8,16 @@ class HttpRedirectTest extends TestCase
 {
     public function testShouldReplyInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
+        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpRedirect::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\Reply\ReplyInterface::class));
     }
 
     public function testShouldBeSubClassOfHttpResponseClass()
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
+        $rc = new \ReflectionClass(\Payum\Core\Reply\HttpRedirect::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
+        $this->assertTrue($rc->isSubclassOf(\Payum\Core\Reply\HttpResponse::class));
     }
 
     public function testShouldAllowGetUrlSetInConstructor()

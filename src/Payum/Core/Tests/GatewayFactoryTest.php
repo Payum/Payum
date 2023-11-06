@@ -7,9 +7,9 @@ class GatewayFactoryTest extends TestCase
 {
     public function testShouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
+        $rc = new \ReflectionClass(\Payum\Core\GatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(\Payum\Core\GatewayFactoryInterface::class));
     }
 
     public function testShouldAllowCreateGateway()
@@ -18,7 +18,7 @@ class GatewayFactoryTest extends TestCase
 
         $gateway = $factory->create(array());
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(\Payum\Core\Gateway::class, $gateway);
     }
 
     public function testShouldAllowCreateGatewayConfig()

@@ -30,12 +30,12 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
+            ->with($this->isInstanceOf(\Payum\Klarna\Checkout\Request\Api\UpdateOrder::class))
             ->willReturnCallback(function (UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 
@@ -47,7 +47,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(2))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -68,7 +68,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -86,7 +86,7 @@ class NotifyActionTest extends GenericActionTest
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\Sync'))
+            ->with($this->isInstanceOf(\Payum\Core\Request\Sync::class))
         ;
 
         $action = new NotifyAction();
@@ -103,7 +103,7 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(\Payum\Core\GatewayInterface::class);
     }
 
     /**
