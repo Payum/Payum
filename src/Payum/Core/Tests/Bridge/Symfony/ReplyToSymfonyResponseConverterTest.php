@@ -26,12 +26,12 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         $this->assertStringContainsString('Redirecting to /foo/bar', $response->getContent());
-        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
 
         $headers = $response->headers->all();
         $this->assertArrayHasKey('location', $headers);
         $this->assertNotEmpty($headers['location']);
-        $this->assertEquals($expectedUrl, $headers['location'][0]);
+        $this->assertSame($expectedUrl, $headers['location'][0]);
     }
 
     /**
@@ -46,8 +46,8 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $response = $converter->convert($reply);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals('theContent', $response->getContent());
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame('theContent', $response->getContent());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     /**
@@ -65,8 +65,8 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $response = $converter->convert($reply);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals('theContent', $response->getContent());
-        $this->assertEquals(418, $response->getStatusCode());
+        $this->assertSame('theContent', $response->getContent());
+        $this->assertSame(418, $response->getStatusCode());
         $this->assertArrayHasKey('foo', $response->headers->all());
         $this->assertArrayHasKey('bar', $response->headers->all());
     }
@@ -83,8 +83,8 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $response = $converter->convert($reply);
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($reply->getContent(), $response->getContent());
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame($reply->getContent(), $response->getContent());
     }
 
     /**

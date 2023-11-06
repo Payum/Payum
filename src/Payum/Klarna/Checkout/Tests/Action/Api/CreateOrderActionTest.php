@@ -72,11 +72,11 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($model, $options['data']);
-            }))
+                $testCase->assertSame($model, $options['data']);
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -112,11 +112,11 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($expectedModel, $options['data']);
-            }))
+                $testCase->assertSame($expectedModel, $options['data']);
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -142,9 +142,9 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -178,7 +178,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new CreateOrderAction($connector);
@@ -211,15 +211,15 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
         $connector
             ->expects($this->at(1))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use (&$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);

@@ -49,21 +49,21 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
+            ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame('array', $request->getTo());
                 $testCase->assertNull($request->getToken());
 
                 $request->setResult(array());
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();
@@ -90,21 +90,21 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment) {
+            ->willReturnCallback(function (Convert $request) use ($testCase, $payment) {
                 $details['foo'] = 'fooVal';
 
                 $request->setResult(array(
                     'foo' => 'fooVal',
                 ));
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();
@@ -119,7 +119,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
     /**
@@ -137,20 +137,20 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markNew();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Convert::class))
-            ->will($this->returnCallback(function (Convert $request) use ($testCase, $payment, $token) {
+            ->willReturnCallback(function (Convert $request) use ($testCase, $payment, $token) {
                 $testCase->assertSame($payment, $request->getSource());
                 $testCase->assertSame($token, $request->getToken());
 
                 $request->setResult(array());
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();
@@ -183,22 +183,22 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Authorize::class))
-            ->will($this->returnCallback(function (Authorize $request) use ($testCase, $expectedDetails) {
+            ->willReturnCallback(function (Authorize $request) use ($testCase, $expectedDetails) {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf('ArrayAccess', $details);
-                $testCase->assertEquals($expectedDetails, iterator_to_array($details));
+                $testCase->assertSame($expectedDetails, iterator_to_array($details));
 
                 $details['bar'] = 'barVal';
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();
@@ -208,7 +208,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $authorize->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
+        $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 
     /**
@@ -226,20 +226,20 @@ class AuthorizePaymentActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHumanStatus::class))
-            ->will($this->returnCallback(function (GetHumanStatus $request) {
+            ->willReturnCallback(function (GetHumanStatus $request) {
                 $request->markPending();
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(Authorize::class))
-            ->will($this->returnCallback(function (Authorize $request) {
+            ->willReturnCallback(function (Authorize $request) {
                 $details = $request->getModel();
                 $details['bar'] = 'barVal';
 
                 throw new \Exception();
-            }))
+            })
         ;
 
         $action = new AuthorizePaymentAction();
@@ -250,6 +250,6 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $authorize->getFirstModel());
         $this->assertInstanceOf('ArrayAccess', $authorize->getModel());
-        $this->assertEquals(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
+        $this->assertSame(array('foo' => 'fooVal', 'bar' => 'barVal'), $payment->getDetails());
     }
 }

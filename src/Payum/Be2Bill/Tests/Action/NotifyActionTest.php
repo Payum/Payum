@@ -58,9 +58,9 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['expected be2bill query'];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -96,9 +96,9 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 2.0];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -136,9 +136,9 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 1.0, 'FOO' => 'FOO', 'BAR' => 'BAR'];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -160,7 +160,7 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals([
+            $this->assertSame([
                 'AMOUNT' => 1.0,
                 'FOO' => 'FOO',
                 'BAR' => 'BAR',

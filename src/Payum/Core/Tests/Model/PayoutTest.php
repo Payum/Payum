@@ -25,7 +25,7 @@ class PayoutTest extends TestCase
         $payout = new Payout();
         $payout->setRecipientId('theVal');
 
-        $this->assertEquals('theVal', $payout->getRecipientId());
+        $this->assertSame('theVal', $payout->getRecipientId());
     }
 
     /**
@@ -36,7 +36,7 @@ class PayoutTest extends TestCase
         $payout = new Payout();
         $payout->setRecipientEmail('theVal');
 
-        $this->assertEquals('theVal', $payout->getRecipientEmail());
+        $this->assertSame('theVal', $payout->getRecipientEmail());
     }
 
     /**
@@ -47,7 +47,7 @@ class PayoutTest extends TestCase
         $payout = new Payout();
         $payout->setTotalAmount('theVal');
 
-        $this->assertEquals('theVal', $payout->getTotalAmount());
+        $this->assertSame('theVal', $payout->getTotalAmount());
     }
 
     /**
@@ -58,7 +58,7 @@ class PayoutTest extends TestCase
         $payout = new Payout();
         $payout->setCurrencyCode('theVal');
 
-        $this->assertEquals('theVal', $payout->getCurrencyCode());
+        $this->assertSame('theVal', $payout->getCurrencyCode());
     }
 
     /**
@@ -69,7 +69,7 @@ class PayoutTest extends TestCase
         $payout = new Payout();
         $payout->setDescription('theVal');
 
-        $this->assertEquals('theVal', $payout->getDescription());
+        $this->assertSame('theVal', $payout->getDescription());
     }
 
     /**
@@ -81,6 +81,6 @@ class PayoutTest extends TestCase
 
         $payout->setDetails(['foo' => 'fooVal']);
 
-        $this->assertEquals(['foo' => 'fooVal'], $payout->getDetails());
+        $this->assertSame(['foo' => 'fooVal'], $payout->getDetails());
     }
 }

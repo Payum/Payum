@@ -159,9 +159,9 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'agreementRef' => 'theRef',
-            )));
+            ));
 
         $action = new CreateAgreementAction();
         $action->setApi($apiMock);
@@ -171,7 +171,7 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theRef', $model['agreementRef']);
+        $this->assertSame('theRef', $model['agreementRef']);
     }
 
     /**

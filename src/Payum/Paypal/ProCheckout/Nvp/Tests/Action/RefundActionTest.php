@@ -117,10 +117,10 @@ class RefundActionTest extends GenericActionTest
                 'PURCHASE_RESULT' => 0,
                 'ORIGID' => 'aRef',
             ))
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'RESULT' => 'aResult',
                 'FOO' => 'aVal',
-            )))
+            ))
         ;
 
         $action = new RefundAction();
@@ -129,13 +129,13 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund($details));
 
         $this->assertArrayHasKey('FOO', $details);
-        $this->assertEquals('aVal', $details['FOO']);
+        $this->assertSame('aVal', $details['FOO']);
 
         $this->assertArrayHasKey('RESULT', $details);
-        $this->assertEquals('aResult', $details['RESULT']);
+        $this->assertSame('aResult', $details['RESULT']);
 
         $this->assertArrayHasKey('ORIGID', $details);
-        $this->assertEquals('aRef', $details['ORIGID']);
+        $this->assertSame('aRef', $details['ORIGID']);
     }
 
     /**

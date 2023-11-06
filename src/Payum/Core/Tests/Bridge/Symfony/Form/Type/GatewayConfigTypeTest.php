@@ -25,7 +25,7 @@ class GatewayConfigTypeTest extends TestCase
     {
         $type = new GatewayConfigType($this->createMock('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
 
-        $this->assertEquals(FormType::class, $type->getParent());
+        $this->assertSame(FormType::class, $type->getParent());
     }
 
     /**
@@ -42,6 +42,6 @@ class GatewayConfigTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('data_class', $options);
-        $this->assertEquals('Payum\Core\Model\GatewayConfig', $options['data_class']);
+        $this->assertSame('Payum\Core\Model\GatewayConfig', $options['data_class']);
     }
 }

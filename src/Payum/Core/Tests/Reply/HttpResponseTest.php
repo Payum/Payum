@@ -25,7 +25,7 @@ class HttpResponseTest extends TestCase
 
         $request = new HttpResponse($expectedContent);
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
     /**
@@ -35,7 +35,7 @@ class HttpResponseTest extends TestCase
     {
         $request = new HttpResponse('html page');
 
-        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertSame(200, $request->getStatusCode());
     }
 
     /**
@@ -45,7 +45,7 @@ class HttpResponseTest extends TestCase
     {
         $request = new HttpResponse('html page', 301);
 
-        $this->assertEquals(301, $request->getStatusCode());
+        $this->assertSame(301, $request->getStatusCode());
     }
 
     /**
@@ -55,7 +55,7 @@ class HttpResponseTest extends TestCase
     {
         $request = new HttpResponse('html page');
 
-        $this->assertEquals(array(), $request->getHeaders());
+        $this->assertSame(array(), $request->getHeaders());
     }
 
     /**
@@ -70,6 +70,6 @@ class HttpResponseTest extends TestCase
 
         $request = new HttpResponse('html page', 200, $expectedHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

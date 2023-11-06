@@ -71,7 +71,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('CreateAgreement3')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -92,7 +92,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $agreementApi->create(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -108,7 +108,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Check')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -129,7 +129,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $agreementApi->check(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -145,7 +145,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('DeleteAgreement')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -166,7 +166,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $agreementApi->delete(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -182,7 +182,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('AutoPay3')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -203,7 +203,7 @@ class AgreementApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $agreementApi->autoPay(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**

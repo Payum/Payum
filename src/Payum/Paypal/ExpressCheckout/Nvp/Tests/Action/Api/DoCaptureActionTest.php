@@ -128,18 +128,18 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->will($this->returnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields) {
                 $this->assertArrayHasKey('TRANSACTIONID', $fields);
-                $this->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
+                $this->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 
                 $this->assertArrayHasKey('AMT', $fields);
-                $this->assertEquals('theAmt', $fields['AMT']);
+                $this->assertSame('theAmt', $fields['AMT']);
 
                 $this->assertArrayHasKey('COMPLETETYPE', $fields);
-                $this->assertEquals('Complete', $fields['COMPLETETYPE']);
+                $this->assertSame('Complete', $fields['COMPLETETYPE']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoCaptureAction();
@@ -164,12 +164,12 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -177,7 +177,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetTransactionDetails::class))
-            ->will($this->returnCallback(function (GetTransactionDetails $request) {
+            ->willReturnCallback(function (GetTransactionDetails $request) {
                 $this->assertSame(0, $request->getPaymentRequestN());
                 $this->assertSame(array(
                     'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
@@ -189,7 +189,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
                 $model = $request->getModel();
                 $model['FIRSTNAME'] = 'theFirstname';
                 $model['EMAIL'] = 'the@example.com';
-            }))
+            })
         ;
 
         $action = new DoCaptureAction();
@@ -207,10 +207,10 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

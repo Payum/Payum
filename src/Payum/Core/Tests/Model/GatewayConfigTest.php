@@ -38,7 +38,7 @@ class GatewayConfigTest extends TestCase
 
         $config->setFactoryName('theName');
 
-        $this->assertEquals('theName', $config->getFactoryName());
+        $this->assertSame('theName', $config->getFactoryName());
     }
 
     /**
@@ -50,7 +50,7 @@ class GatewayConfigTest extends TestCase
 
         $config->setGatewayName('theName');
 
-        $this->assertEquals('theName', $config->getGatewayName());
+        $this->assertSame('theName', $config->getGatewayName());
     }
 
     /**
@@ -60,7 +60,7 @@ class GatewayConfigTest extends TestCase
     {
         $config = new GatewayConfig();
 
-        $this->assertEquals([], $config->getConfig());
+        $this->assertSame([], $config->getConfig());
     }
 
     /**
@@ -72,7 +72,7 @@ class GatewayConfigTest extends TestCase
 
         $config->setConfig(array('foo' => 'fooVal'));
 
-        $this->assertEquals(array('foo' => 'fooVal'), $config->getConfig());
+        $this->assertSame(array('foo' => 'fooVal'), $config->getConfig());
     }
 
     public function testShouldDecryptConfigValuesOnDecrypt()

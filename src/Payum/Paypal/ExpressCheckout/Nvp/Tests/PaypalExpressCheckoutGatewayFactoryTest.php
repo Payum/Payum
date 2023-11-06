@@ -35,10 +35,10 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
     /**
@@ -71,10 +71,10 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('paypal_express_checkout_nvp', $config['payum.factory_name']);
+        $this->assertSame('paypal_express_checkout_nvp', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('PayPal ExpressCheckout', $config['payum.factory_title']);
+        $this->assertSame('PayPal ExpressCheckout', $config['payum.factory_title']);
     }
 
     /**

@@ -55,7 +55,7 @@ class CaptureActionTest extends GenericActionTest
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertSame(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -72,7 +72,7 @@ class CaptureActionTest extends GenericActionTest
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $model);
-        $this->assertEquals(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
+        $this->assertSame(Api::PAYMENTACTION_SALE, $model['PAYMENTREQUEST_0_PAYMENTACTION']);
     }
 
     /**
@@ -180,11 +180,11 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function (SetExpressCheckout $request) {
+            ->willReturnCallback(function (SetExpressCheckout $request) {
                 $model = $request->getModel();
 
                 $model['L_ERRORCODE0'] = 'aCode';
-            }))
+            })
         ;
 
         $action = new CaptureAction();
@@ -216,11 +216,11 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
+            ->willReturnCallback(function ($request) use ($testCase, $expectedTargetUrl) {
                 $model = $request->getModel();
 
-                $testCase->assertEquals($expectedTargetUrl, $model['RETURNURL']);
-            }))
+                $testCase->assertSame($expectedTargetUrl, $model['RETURNURL']);
+            })
         ;
 
         $action = new CaptureAction();
@@ -256,11 +256,11 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+            ->willReturnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
                 $model = $request->getModel();
 
-                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
-            }))
+                $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
+            })
         ;
 
         $action = new CaptureAction();
@@ -292,11 +292,11 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(SetExpressCheckout::class))
-            ->will($this->returnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
+            ->willReturnCallback(function ($request) use ($testCase, $expectedCancelUrl) {
                 $model = $request->getModel();
 
-                $testCase->assertEquals($expectedCancelUrl, $model['CANCELURL']);
-            }))
+                $testCase->assertSame($expectedCancelUrl, $model['CANCELURL']);
+            })
         ;
 
         $action = new CaptureAction();
@@ -552,10 +552,10 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
-        $this->assertEquals('theNotifyUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+        $this->assertSame('theNotifyUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
     /**
@@ -587,7 +587,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_NOTIFYURL', $details);
-        $this->assertEquals('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
+        $this->assertSame('alreadySetUrl', $details['PAYMENTREQUEST_0_NOTIFYURL']);
     }
 
     /**

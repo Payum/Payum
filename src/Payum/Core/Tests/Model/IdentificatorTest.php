@@ -23,7 +23,7 @@ class IdentificatorTest extends TestCase
     {
         $id = new Identificator('theId', new \stdClass());
 
-        $this->assertEquals('theId', $id->getId());
+        $this->assertSame('theId', $id->getId());
     }
 
     /**
@@ -33,7 +33,7 @@ class IdentificatorTest extends TestCase
     {
         $id = new Identificator('theId', new \stdClass());
 
-        $this->assertEquals('stdClass', $id->getClass());
+        $this->assertSame('stdClass', $id->getClass());
     }
 
     /**

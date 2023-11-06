@@ -149,15 +149,15 @@ class AuthorizeActionTest extends TestCase
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'foo' => 'fooVal',
                 'bar' => 'barVal',
-            )))
+            ))
         ;
         $orderMock
             ->expects($this->once())
             ->method('getLocation')
-            ->will($this->returnValue('theLocation'))
+            ->willReturn('theLocation')
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -165,9 +165,9 @@ class AuthorizeActionTest extends TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(CreateOrder::class))
-            ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
+            ->willReturnCallback(function (CreateOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
@@ -190,9 +190,9 @@ class AuthorizeActionTest extends TestCase
 
         $action->execute(new Authorize($model));
 
-        $this->assertEquals('fooVal', $model['foo']);
-        $this->assertEquals('barVal', $model['bar']);
-        $this->assertEquals('theLocation', $model['location']);
+        $this->assertSame('fooVal', $model['foo']);
+        $this->assertSame('barVal', $model['bar']);
+        $this->assertSame('theLocation', $model['location']);
     }
 
     /**
@@ -212,12 +212,12 @@ class AuthorizeActionTest extends TestCase
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
-            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
-                $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
-                $testCase->assertEquals($expectedContext, $request->getParameters());
+            ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
+                $testCase->assertSame($expectedTemplateName, $request->getTemplateName());
+                $testCase->assertSame($expectedContext, $request->getParameters());
 
                 $request->setResult($expectedContent);
-            }))
+            })
         ;
 
         $action = new AuthorizeAction($expectedTemplateName);
@@ -236,7 +236,7 @@ class AuthorizeActionTest extends TestCase
                 ]
             )));
         } catch (HttpResponse $reply) {
-            $this->assertEquals($expectedContent, $reply->getContent());
+            $this->assertSame($expectedContent, $reply->getContent());
 
             return;
         }

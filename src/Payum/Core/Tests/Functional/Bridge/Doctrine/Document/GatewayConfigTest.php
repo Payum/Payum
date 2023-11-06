@@ -67,7 +67,7 @@ class GatewayConfigTest extends MongoTest
         $this->dm->flush();
         $this->dm->refresh($gatewayConfig);
 
-        $this->assertEquals(array(
+        $this->assertSame(array(
             'foo' => 'fooVal',
             'bar' => 'barVal',
         ), $gatewayConfig->getConfig());

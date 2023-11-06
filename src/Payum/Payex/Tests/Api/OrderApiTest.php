@@ -71,7 +71,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Initialize8')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -92,7 +92,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $orderApi->initialize(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -108,7 +108,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Complete')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -129,7 +129,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $orderApi->complete(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -145,7 +145,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Check2')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -166,7 +166,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $orderApi->check(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**

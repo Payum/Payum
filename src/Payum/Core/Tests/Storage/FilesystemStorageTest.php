@@ -72,7 +72,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         $this->assertInstanceOf('stdClass', $model);
-        $this->assertTrue(property_exists($model, 'notExistProperty'));
+        $this->assertObjectHasAttribute('notExistProperty', $model);
     }
 
     /**
@@ -191,7 +191,7 @@ class FilesystemStorageTest extends TestCase
         $identity = $storage->identify($model);
 
         $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
-        $this->assertEquals('stdClass', $identity->getClass());
+        $this->assertSame('stdClass', $identity->getClass());
         $this->assertEquals($model->payum_id, $identity->getId());
     }
 
@@ -282,8 +282,8 @@ class FilesystemStorageTest extends TestCase
         $foundModel = $storage->find($model->getId());
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
     }
 
     /**
@@ -300,16 +300,16 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertTrue(property_exists($model, 'payum_id'));
+        $this->assertObjectHasAttribute('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
         $foundModel = $storage->find($model->payum_id);
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
 
-        $this->assertTrue(property_exists($foundModel, 'payum_id'));
+        $this->assertObjectHasAttribute('payum_id', $foundModel);
         $this->assertNotEmpty($foundModel->payum_id);
     }
 
@@ -327,7 +327,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertTrue(property_exists($model, 'payum_id'));
+        $this->assertObjectHasAttribute('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
         $storage->delete($model);

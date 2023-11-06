@@ -24,7 +24,7 @@ class IdentityTest extends TestCase
     {
         $id = new Identity('theId', new \stdClass());
 
-        $this->assertEquals('theId', $id->getId());
+        $this->assertSame('theId', $id->getId());
     }
 
     /**
@@ -34,7 +34,7 @@ class IdentityTest extends TestCase
     {
         $id = new Identity('theId', new \stdClass());
 
-        $this->assertEquals('stdClass', $id->getClass());
+        $this->assertSame('stdClass', $id->getClass());
     }
 
     /**

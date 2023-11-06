@@ -42,13 +42,13 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
-            ->will($this->returnCallback(function (UpdateOrder $request) use ($testCase) {
+            ->willReturnCallback(function (UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 
-                $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
-                $testCase->assertEquals('theLocation', $model['location']);
-                $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
-            }))
+                $testCase->assertSame(Constants::STATUS_CREATED, $model['status']);
+                $testCase->assertSame('theLocation', $model['location']);
+                $testCase->assertSame('theOrderId', $model['merchant_reference']['orderid1']);
+            })
         ;
         $gatewayMock
             ->expects($this->at(2))

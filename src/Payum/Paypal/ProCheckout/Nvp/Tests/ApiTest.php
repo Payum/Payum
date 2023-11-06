@@ -52,7 +52,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doSale(array());
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_SALE, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
     /**
@@ -71,7 +71,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCredit(array());
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
     /**
@@ -90,19 +90,19 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doSale(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
     /**
@@ -121,19 +121,19 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCredit(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
     /**
@@ -147,11 +147,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://payflowpro.paypal.com/', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -177,11 +177,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://pilot-payflowpro.paypal.com/', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://pilot-payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -220,9 +220,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

@@ -108,7 +108,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->returnValue('theStatus'))
+            ->willReturn('theStatus')
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -118,7 +118,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 
         $activatedDetails = $check->getModel();
 
-        $this->assertEquals('theStatus', $activatedDetails['status']);
+        $this->assertSame('theStatus', $activatedDetails['status']);
     }
 
     /**
@@ -135,7 +135,7 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -144,8 +144,8 @@ class CheckOrderStatusActionTest extends GenericApiAwareActionTest
         $action->execute($activate = new CheckOrderStatus($details));
 
         $activatedDetails = $activate->getModel();
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
     /**

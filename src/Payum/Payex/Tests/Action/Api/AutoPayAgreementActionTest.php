@@ -126,9 +126,9 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('autoPay')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'transactionStatus' => 'theStatus',
-            )));
+            ));
 
         $action = new AutoPayAgreementAction();
         $action->setApi($apiMock);
@@ -138,7 +138,7 @@ class AutoPayAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theStatus', $model['transactionStatus']);
+        $this->assertSame('theStatus', $model['transactionStatus']);
     }
 
     /**

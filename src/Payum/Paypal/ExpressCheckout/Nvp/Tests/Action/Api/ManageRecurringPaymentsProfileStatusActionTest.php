@@ -102,18 +102,18 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('PROFILEID', $fields);
-                $testCase->assertEquals('theProfileId', $fields['PROFILEID']);
+                $testCase->assertSame('theProfileId', $fields['PROFILEID']);
 
                 $testCase->assertArrayHasKey('ACTION', $fields);
-                $testCase->assertEquals('theAction', $fields['ACTION']);
+                $testCase->assertSame('theAction', $fields['ACTION']);
 
                 $testCase->assertArrayHasKey('NOTE', $fields);
-                $testCase->assertEquals('theNote', $fields['NOTE']);
+                $testCase->assertSame('theNote', $fields['NOTE']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new ManageRecurringPaymentsProfileStatusAction();
@@ -137,11 +137,11 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
         $apiMock
             ->expects($this->once())
             ->method('manageRecurringPaymentsProfileStatus')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PROFILEID' => 'theResponseProfileId',
                 );
-            }))
+            })
         ;
 
         $action = new ManageRecurringPaymentsProfileStatusAction();
@@ -158,7 +158,7 @@ class ManageRecurringPaymentsProfileStatusActionTest extends \PHPUnit\Framework\
         $model = $request->getModel();
 
         $this->assertArrayHasKey('PROFILEID', $model);
-        $this->assertEquals('theResponseProfileId', $model['PROFILEID']);
+        $this->assertSame('theResponseProfileId', $model['PROFILEID']);
     }
 
     /**

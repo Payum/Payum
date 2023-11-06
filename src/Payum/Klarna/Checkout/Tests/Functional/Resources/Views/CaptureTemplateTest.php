@@ -29,6 +29,6 @@ class CaptureTemplateTest extends TestCase
 
 HTML;
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

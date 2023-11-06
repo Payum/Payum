@@ -136,7 +136,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
             ->expects($this->once())
             ->method('creditPart')
             ->with($details['invoice_number'])
-            ->will($this->returnValue('theRefundInvoiceNumber'))
+            ->willReturn('theRefundInvoiceNumber')
         ;
 
         $action = new CreditPartAction($klarnaMock);
@@ -169,7 +169,7 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $klarnaMock
             ->expects($this->once())
             ->method('creditPart')
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new CreditPartAction($klarnaMock);
@@ -179,8 +179,8 @@ class CreditPartActionTest extends GenericApiAwareActionTest
         $action->execute($creditPart = new CreditPart($details));
 
         $actualDetails = $creditPart->getModel();
-        $this->assertEquals(123, $actualDetails['error_code']);
-        $this->assertEquals('theMessage', $actualDetails['error_message']);
+        $this->assertSame(123, $actualDetails['error_code']);
+        $this->assertSame('theMessage', $actualDetails['error_message']);
     }
 
     /**

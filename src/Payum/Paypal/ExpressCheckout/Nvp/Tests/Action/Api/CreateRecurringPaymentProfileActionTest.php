@@ -96,45 +96,45 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
-                $testCase->assertEquals('theToken', $fields['TOKEN']);
+                $testCase->assertSame('theToken', $fields['TOKEN']);
 
                 $testCase->assertArrayHasKey('PROFILESTARTDATE', $fields);
-                $testCase->assertEquals('theStartDate', $fields['PROFILESTARTDATE']);
+                $testCase->assertSame('theStartDate', $fields['PROFILESTARTDATE']);
 
                 $testCase->assertArrayHasKey('DESC', $fields);
-                $testCase->assertEquals('theDesc', $fields['DESC']);
+                $testCase->assertSame('theDesc', $fields['DESC']);
 
                 $testCase->assertArrayHasKey('BILLINGPERIOD', $fields);
-                $testCase->assertEquals('thePeriod', $fields['BILLINGPERIOD']);
+                $testCase->assertSame('thePeriod', $fields['BILLINGPERIOD']);
 
                 $testCase->assertArrayHasKey('BILLINGFREQUENCY', $fields);
-                $testCase->assertEquals('theFrequency', $fields['BILLINGFREQUENCY']);
+                $testCase->assertSame('theFrequency', $fields['BILLINGFREQUENCY']);
 
                 $testCase->assertArrayHasKey('AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['AMT']);
+                $testCase->assertSame('theAmt', $fields['AMT']);
 
                 $testCase->assertArrayHasKey('CURRENCYCODE', $fields);
-                $testCase->assertEquals('theCurr', $fields['CURRENCYCODE']);
+                $testCase->assertSame('theCurr', $fields['CURRENCYCODE']);
 
                 $testCase->assertArrayHasKey('EMAIL', $fields);
-                $testCase->assertEquals('theEmail', $fields['EMAIL']);
+                $testCase->assertSame('theEmail', $fields['EMAIL']);
 
                 $testCase->assertArrayHasKey('STREET', $fields);
-                $testCase->assertEquals('theStreet', $fields['STREET']);
+                $testCase->assertSame('theStreet', $fields['STREET']);
 
                 $testCase->assertArrayHasKey('CITY', $fields);
-                $testCase->assertEquals('theCity', $fields['CITY']);
+                $testCase->assertSame('theCity', $fields['CITY']);
 
                 $testCase->assertArrayHasKey('COUNTRYCODE', $fields);
-                $testCase->assertEquals('theCountry', $fields['COUNTRYCODE']);
+                $testCase->assertSame('theCountry', $fields['COUNTRYCODE']);
 
                 $testCase->assertArrayHasKey('ZIP', $fields);
-                $testCase->assertEquals('theZip', $fields['ZIP']);
+                $testCase->assertSame('theZip', $fields['ZIP']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new CreateRecurringPaymentProfileAction();
@@ -167,12 +167,12 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
         $apiMock
             ->expects($this->once())
             ->method('createRecurringPaymentsProfile')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PROFILEID' => 'theId',
                     'PROFILESTATUS' => 'theStatus',
                 );
-            }))
+            })
         ;
 
         $action = new CreateRecurringPaymentProfileAction();
@@ -197,10 +197,10 @@ class CreateRecurringPaymentProfileActionTest extends \PHPUnit\Framework\TestCas
 
         $model = $request->getModel();
         $this->assertArrayHasKey('PROFILEID', $model);
-        $this->assertEquals('theId', $model['PROFILEID']);
+        $this->assertSame('theId', $model['PROFILEID']);
 
         $this->assertArrayHasKey('PROFILESTATUS', $model);
-        $this->assertEquals('theStatus', $model['PROFILESTATUS']);
+        $this->assertSame('theStatus', $model['PROFILESTATUS']);
     }
 
     /**

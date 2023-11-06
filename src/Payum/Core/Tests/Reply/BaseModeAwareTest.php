@@ -102,7 +102,7 @@ class BaseModeAwareTest extends TestCase
         $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($model));
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
     /**
@@ -117,6 +117,6 @@ class BaseModeAwareTest extends TestCase
         $request->setModel($model);
 
         $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 }

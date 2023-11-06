@@ -13,13 +13,13 @@ class ConfigTest extends TestCase
     {
         $config = new Config();
 
-        $this->assertEquals(\KlarnaCountry::SE, $config->country);
-        $this->assertEquals(\KlarnaLanguage::SV, $config->language);
-        $this->assertEquals(\KlarnaCurrency::SEK, $config->currency);
-        $this->assertEquals(\Klarna::BETA, $config->mode);
-        $this->assertEquals(\Klarna::BETA, $config->mode);
-        $this->assertEquals('json', $config->pClassStorage);
-        $this->assertEquals('./pclasses.json', $config->pClassStoragePath);
+        $this->assertSame(\KlarnaCountry::SE, $config->country);
+        $this->assertSame(\KlarnaLanguage::SV, $config->language);
+        $this->assertSame(\KlarnaCurrency::SEK, $config->currency);
+        $this->assertSame(\Klarna::BETA, $config->mode);
+        $this->assertSame(\Klarna::BETA, $config->mode);
+        $this->assertSame('json', $config->pClassStorage);
+        $this->assertSame('./pclasses.json', $config->pClassStoragePath);
     }
 
     /**
@@ -38,13 +38,13 @@ class ConfigTest extends TestCase
         $config->pClassStorage = 'storage';
         $config->pClassStoragePath = 'storagePath';
 
-        $this->assertEquals('country', $config->country);
-        $this->assertEquals('eid', $config->eid);
-        $this->assertEquals('secret', $config->secret);
-        $this->assertEquals('lang', $config->language);
-        $this->assertEquals('currency', $config->currency);
-        $this->assertEquals('mode', $config->mode);
-        $this->assertEquals('storage', $config->pClassStorage);
-        $this->assertEquals('storagePath', $config->pClassStoragePath);
+        $this->assertSame('country', $config->country);
+        $this->assertSame('eid', $config->eid);
+        $this->assertSame('secret', $config->secret);
+        $this->assertSame('lang', $config->language);
+        $this->assertSame('currency', $config->currency);
+        $this->assertSame('mode', $config->mode);
+        $this->assertSame('storage', $config->pClassStorage);
+        $this->assertSame('storagePath', $config->pClassStoragePath);
     }
 }
