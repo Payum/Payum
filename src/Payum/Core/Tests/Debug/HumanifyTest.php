@@ -49,7 +49,7 @@ class HumanifyTest extends TestCase
      */
     public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
     {
-        $this->assertEquals(__CLASS__, Humanify::value($this, false));
+        $this->assertEquals(self::class, Humanify::value($this, false));
     }
 
     /**
