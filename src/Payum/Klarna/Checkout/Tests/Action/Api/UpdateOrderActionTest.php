@@ -124,7 +124,7 @@ class UpdateOrderActionTest extends GenericActionTest
                 $this->returnCallback(function ($method, $order, $options) use ($model) {
                     $this->assertIsArray($options);
                     $this->assertArrayHasKey('data', $options);
-                    $this->assertEquals([
+                    $this->assertSame([
                         'cart' => $model['cart'],
                     ], $options['data']);
                 })

@@ -33,7 +33,7 @@ class Identity implements IdentityInterface
 
     public function __unserialize(array $data)
     {
-        list($this->id, $this->class) = $data;
+        [$this->id, $this->class] = $data;
     }
 
     public function __toString(): string
