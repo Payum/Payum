@@ -7,10 +7,7 @@ use Payum\Core\Tests\Mocks\Document\TestModel;
 
 class DoctrineStorageMongoOdmTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldUpdateModelAndSetId()
+    public function testShouldUpdateModelAndSetId()
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -24,10 +21,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertNotNull($model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetModelIdentifier()
+    public function testShouldGetModelIdentifier()
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -47,10 +41,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($model->getId(), $identity->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelById()
+    public function testShouldFindModelById()
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -71,10 +62,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($requestId, $model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelByIdentity()
+    public function testShouldFindModelByIdentity()
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -97,10 +85,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertEquals($requestId, $foundModel->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindByCurrency()
+    public function testShouldFindByCurrency()
     {
         $storage = new DoctrineStorage(
             $this->dm,
@@ -138,10 +123,7 @@ class DoctrineStorageMongoOdmTest extends MongoTest
         $this->assertContainsOnly('Payum\Core\Tests\Mocks\Document\TestModel', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindByAllIfCriteriaIsEmpty()
+    public function testShouldFindByAllIfCriteriaIsEmpty()
     {
         $storage = new DoctrineStorage(
             $this->dm,

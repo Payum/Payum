@@ -9,20 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class GenericTokenFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGenericTokenFactoryInterface()
+    public function testShouldImplementGenericTokenFactoryInterface()
     {
         $rc = new \ReflectionClass(GenericTokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(GenericTokenFactoryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateCustomTokenWithAfterPath()
+    public function testShouldAllowCreateCustomTokenWithAfterPath()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -63,10 +57,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($token, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateCustomTokenWithoutAfterPath()
+    public function testShouldAllowCreateCustomTokenWithoutAfterPath()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -103,10 +94,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($token, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCapturePathNotConfigured()
+    public function testThrowIfCapturePathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "capture" is not found. Possible paths are foo, bar');
@@ -132,10 +120,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateCaptureToken()
+    public function testShouldAllowCreateCaptureToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -192,10 +177,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($captureToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAuthorizePathNotConfigured()
+    public function testThrowIfAuthorizePathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "authorize" is not found. Possible paths are foo, bar');
@@ -221,10 +203,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateAuthorizeToken()
+    public function testShouldAllowCreateAuthorizeToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -281,10 +260,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($authorizeToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRefundPathNotConfigured()
+    public function testThrowIfRefundPathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "refund" is not found. Possible paths are foo, bar');
@@ -310,10 +286,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateRefundToken()
+    public function testShouldAllowCreateRefundToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -370,10 +343,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($refundToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateRefundTokenWithoutAfterPath()
+    public function testShouldAllowCreateRefundTokenWithoutAfterPath()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -405,10 +375,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($refundToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCancelPathNotConfigured()
+    public function testThrowIfCancelPathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "cancel" is not found. Possible paths are foo, bar');
@@ -434,10 +401,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateCancelToken()
+    public function testShouldAllowCreateCancelToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -494,10 +458,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($cancelToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateCancelTokenWithoutAfterPath()
+    public function testShouldAllowCreateCancelTokenWithoutAfterPath()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -529,10 +490,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($cancelToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotifyPathNotConfigured()
+    public function testThrowIfNotifyPathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "notify" is not found. Possible paths are foo, bar');
@@ -558,10 +516,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateNotifyToken()
+    public function testShouldAllowCreateNotifyToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();
@@ -593,10 +548,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($notifyToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateNotifyTokenWithoutModel()
+    public function testShouldAllowCreateNotifyTokenWithoutModel()
     {
         $gatewayName = 'theGatewayName';
         $notifyPath = 'theNotifyPath';
@@ -627,10 +579,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($notifyToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfPayoutPathNotConfigured()
+    public function testThrowIfPayoutPathNotConfigured()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The path "payout" is not found. Possible paths are foo, bar');
@@ -656,10 +605,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreatePayoutToken()
+    public function testShouldAllowCreatePayoutToken()
     {
         $gatewayName = 'theGatewayName';
         $model = new \stdClass();

@@ -39,10 +39,7 @@ class RenderTemplateActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass(Generic::class, array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallRenderWithCorrectArguments()
+    public function testShouldCallRenderWithCorrectArguments()
     {
         $this->templating
             ->expects($this->once())

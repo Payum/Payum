@@ -8,20 +8,14 @@ use Payum\Payex\Action\AgreementDetailsStatusAction;
 
 class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -42,10 +36,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports(new GetBinaryStatus($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -66,30 +57,21 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports(new GetBinaryStatus($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest()
     {
         $action = new AgreementDetailsStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel()
     {
         $action = new AgreementDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AgreementDetailsStatusAction();
@@ -97,10 +79,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfTransactionStatusNotSet()
+    public function testShouldMarkUnknownIfTransactionStatusNotSet()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -116,10 +95,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfAgreementStatusNotVerified()
+    public function testShouldMarkNewIfAgreementStatusNotVerified()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -136,10 +112,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfAgreementStatusVerified()
+    public function testShouldMarkCapturedIfAgreementStatusVerified()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -156,10 +129,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfAgreementStatusDeleted()
+    public function testShouldMarkCanceledIfAgreementStatusDeleted()
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -176,10 +146,7 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeNotOk()
+    public function testShouldMarkFailedIfErrorCodeNotOk()
     {
         $action = new AgreementDetailsStatusAction();
 

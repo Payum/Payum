@@ -5,20 +5,14 @@ use PHPUnit\Framework\TestCase;
 
 class BaseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\Base');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\Base');
 

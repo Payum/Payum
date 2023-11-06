@@ -8,20 +8,14 @@ use Payum\Core\Request\GetBinaryStatus;
 
 class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\Rest\Action\StatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoPaymentAsModel()
+    public function testShouldNotSupportStatusRequestWithNoPaymentAsModel()
     {
         $action = new StatusAction();
 
@@ -30,10 +24,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayObjectAsModel()
+    public function testShouldSupportStatusRequestWithArrayObjectAsModel()
     {
         $action = new StatusAction();
 
@@ -42,20 +33,14 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest()
     {
         $action = new StatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -63,10 +48,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStateCreated()
+    public function testShouldMarkPendingIfStateCreated()
     {
         $action = new StatusAction();
 
@@ -87,10 +69,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfStateNotSet()
+    public function testShouldMarkNewIfStateNotSet()
     {
         $action = new StatusAction();
 
@@ -110,10 +89,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStateApproved()
+    public function testShouldMarkCapturedIfStateApproved()
     {
         $action = new StatusAction();
 
@@ -134,10 +110,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfStateCanceled()
+    public function testShouldMarkCanceledIfStateCanceled()
     {
         $action = new StatusAction();
 
@@ -158,10 +131,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfStateIsSetAndSetUnknown()
+    public function testShouldMarkUnknownIfStateIsSetAndSetUnknown()
     {
         $action = new StatusAction();
 

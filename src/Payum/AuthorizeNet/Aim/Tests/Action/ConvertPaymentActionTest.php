@@ -32,10 +32,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertPaymentToArray()
+    public function testShouldCorrectlyConvertPaymentToArray()
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
@@ -85,10 +82,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertSame('theClientEmail', $result['email']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock

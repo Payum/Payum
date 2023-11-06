@@ -5,10 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class ReplyInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\ReplyInterface');
 

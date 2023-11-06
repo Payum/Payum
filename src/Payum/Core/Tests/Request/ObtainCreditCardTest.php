@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class ObtainCreditCardTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGenericRequest()
+    public function testShouldBeSubClassOfGenericRequest()
     {
         $rc = new \ReflectionClass(ObtainCreditCard::class);
 
@@ -42,10 +39,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertSame($currentModel, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetCreditCard()
+    public function testShouldAllowSetCreditCard()
     {
         $request = new ObtainCreditCard();
 
@@ -54,10 +48,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertSame($creditCard, $request->obtain());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowObtainPreviouslySetCreditCard()
+    public function testShouldAllowObtainPreviouslySetCreditCard()
     {
         $request = new ObtainCreditCard();
 
@@ -68,10 +59,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertSame($card, $request->obtain());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfObtainCalledBeforeCreditCardSet()
+    public function testThrowIfObtainCalledBeforeCreditCardSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Credit card could not be obtained. It has to be set before obtain.');

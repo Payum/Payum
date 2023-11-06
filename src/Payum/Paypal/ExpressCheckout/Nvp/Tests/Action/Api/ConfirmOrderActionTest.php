@@ -21,20 +21,14 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->action = new ConfirmOrderAction('theConfirmOrderTemplate');
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function testShouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass(ConfirmOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
+    public function testShouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
@@ -81,10 +75,7 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
+    public function testShouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
@@ -131,10 +122,7 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldGiveControllBackIfHttpRequestPostWithConfirm()
+    public function testShouldGiveControllBackIfHttpRequestPostWithConfirm()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);

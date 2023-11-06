@@ -33,10 +33,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -72,10 +69,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         ], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfCurrencyNotSEK()
+    public function testShouldDoNothingIfCurrencyNotSEK()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -94,10 +88,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertSame([], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $payment = new Payment();
         $payment->setCurrencyCode('USD');

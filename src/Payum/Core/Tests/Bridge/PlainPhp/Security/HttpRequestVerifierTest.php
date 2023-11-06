@@ -7,20 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class HttpRequestVerifierTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementHttpRequestVerifierInterface()
+    public function testShouldImplementHttpRequestVerifierInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Security\HttpRequestVerifierInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequestIsNotArrayOnVerify()
+    public function testThrowIfRequestIsNotArrayOnVerify()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request given. In most cases you have to pass $_REQUEST array.');
@@ -29,10 +23,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify('not array');
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequestNotContainTokenParameterOnVerify()
+    public function testThrowIfRequestNotContainTokenParameterOnVerify()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Token parameter `payum_token` was not found in in the http request.');
@@ -41,10 +32,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify(array());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfStorageCouldNotFindTokenByGivenHashOnVerify()
+    public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('A token with hash `invalidHash` could not be found.');
@@ -63,10 +51,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify(array('payum_token' => $invalidHash));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
+    public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
@@ -89,10 +74,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify(array('payum_token' => 'theHash'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnExpectedTokenIfAllCheckPassedOnVerify()
+    public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify()
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/foo';
 
@@ -115,10 +97,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify()
+    public function testShouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify()
     {
         $_SERVER['REQUEST_URI'] = 'http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
 
@@ -141,10 +120,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
+    public function testShouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks()
     {
         $expectedToken = new Token();
 
@@ -155,10 +131,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCustomizeTokenParameterInConstructor()
+    public function testShouldAllowCustomizeTokenParameterInConstructor()
     {
         $expectedToken = new Token();
 
@@ -169,10 +142,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallStorageDeleteModelMethodOnInvalidate()
+    public function testShouldCallStorageDeleteModelMethodOnInvalidate()
     {
         $token = new Token();
 

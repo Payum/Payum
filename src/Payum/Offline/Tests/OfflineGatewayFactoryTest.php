@@ -11,10 +11,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         return OfflineGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new OfflineGatewayFactory(array(
             'foo' => 'fooVal',
@@ -32,10 +29,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new OfflineGatewayFactory();
 
@@ -47,10 +41,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame(array(), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new OfflineGatewayFactory();
 

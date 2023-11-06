@@ -7,20 +7,14 @@ use Payum\Paypal\ProHosted\Nvp\Api;
 
 class StatusActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ProHosted\Nvp\Action\StatusAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
     {
         $action = new StatusAction();
 
@@ -33,10 +27,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNotFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportEmptyModel()
+    public function testShouldSupportEmptyModel()
     {
         $action = new StatusAction();
 
@@ -45,10 +36,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNotFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
     {
         $action = new StatusAction();
 
@@ -61,10 +49,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNotFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel()
     {
         $action = new StatusAction();
 
@@ -73,20 +58,14 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest()
     {
         $action = new StatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -94,10 +73,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfDetailsContainCanceledKey()
+    public function testShouldMarkCanceledIfDetailsContainCanceledKey()
     {
         $action = new StatusAction();
 
@@ -110,10 +86,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel()
     {
         $action = new StatusAction();
 
@@ -127,10 +100,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
@@ -141,10 +111,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentStatusNotSet()
+    public function testShouldMarkUnknownIfPaymentStatusNotSet()
     {
         $action = new StatusAction();
 
@@ -159,10 +126,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfPaymentStatusPending()
+    public function testShouldMarkPendingIfPaymentStatusPending()
     {
         $action = new StatusAction();
 
@@ -176,10 +140,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfPaymentStatusFailed()
+    public function testShouldMarkFailedIfPaymentStatusFailed()
     {
         $action = new StatusAction();
 
@@ -193,10 +154,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfPaymentStatusRefund()
+    public function testShouldMarkRefundedIfPaymentStatusRefund()
     {
         $action = new StatusAction();
 
@@ -210,10 +168,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfPaymentStatusPartiallyRefund()
+    public function testShouldMarkRefundedIfPaymentStatusPartiallyRefund()
     {
         $action = new StatusAction();
 
@@ -227,10 +182,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPaymentStatusCompleted()
+    public function testShouldMarkCapturedIfPaymentStatusCompleted()
     {
         $action = new StatusAction();
 
@@ -244,10 +196,7 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfPaymentStatusPendingAndReasonAuthorization()
+    public function testShouldMarkAuthorizedIfPaymentStatusPendingAndReasonAuthorization()
     {
         $action = new StatusAction();
 

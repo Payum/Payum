@@ -9,10 +9,7 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -24,10 +21,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -43,10 +37,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('return=formRequestReturnUrl', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoCreateButtonCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'the_username',
@@ -76,10 +67,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('the_business', $result['SUBJECT']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnDoCreateButtonCall()
+    public function testShouldAddVersionOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -96,10 +84,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -124,10 +109,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 
@@ -152,10 +134,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnDoCreateButtonCall()
+    public function testShouldAddMethodOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -172,10 +151,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('BMCreateButton', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return must be set either to FormRequest or to options.');
@@ -190,10 +166,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');

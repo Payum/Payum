@@ -41,10 +41,7 @@ class GatewayConfigTypeTest extends TestCase
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory()
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -52,10 +49,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultFieldsIfFactoryNameChosen()
+    public function testShouldAddDefaultFieldsIfFactoryNameChosen()
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -64,10 +58,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertFalse($form->has('config'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFormInvalidAndAddConfigFields()
+    public function testShouldMarkFormInvalidAndAddConfigFields()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -102,10 +93,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(true, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubmitWholeGatewayConfig()
+    public function testShouldSubmitWholeGatewayConfig()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -146,10 +134,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetSandboxToFalseIfCheckboxUnset()
+    public function testShouldSetSandboxToFalseIfCheckboxUnset()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -189,10 +174,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddConfigFieldsIfGatewayConfigHasFactorySet()
+    public function testShouldAddConfigFieldsIfGatewayConfigHasFactorySet()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())

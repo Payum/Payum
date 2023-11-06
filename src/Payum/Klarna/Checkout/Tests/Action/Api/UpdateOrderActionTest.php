@@ -20,20 +20,14 @@ class UpdateOrderActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateOrderIfModelHasCartItemsSetOnExecute()
+    public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
     {
         $model = array(
             'location' => 'theLocation',
@@ -69,10 +63,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
@@ -99,10 +90,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $action->execute(new UpdateOrder($model));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout()
     {
         $model = array(
             'location' => 'theLocation',

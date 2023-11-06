@@ -18,30 +18,21 @@ class CaptureActionTest extends GenericActionTest
 
     protected $actionClass = CaptureAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestApiCreateButtonPaymentMethodWithExpectedRequiredArguments()
+    public function testShouldRequestApiCreateButtonPaymentMethodWithExpectedRequiredArguments()
     {
         $gatewayMock = $this->createGatewayMock();
 
@@ -62,10 +53,7 @@ class CaptureActionTest extends GenericActionTest
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfModelNotHavePaymentAmountOrCurrencySet()
+    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $action = new CreateButtonPaymentAction();

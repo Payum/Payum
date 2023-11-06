@@ -7,20 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowGetHashSetInConstructor()
+    public function testShouldAllowGetHashSetInConstructor()
     {
         $request = new GetToken('theHash');
 
         $this->assertSame('theHash', $request->getHash());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetToken()
+    public function testShouldAllowGetPreviouslySetToken()
     {
         /** @var TokenInterface $token */
         $token = $this->createMock(TokenInterface::class);

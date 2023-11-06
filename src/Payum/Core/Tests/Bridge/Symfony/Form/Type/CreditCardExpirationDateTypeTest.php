@@ -8,30 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType');
 
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendDateType()
+    public function testShouldExtendDateType()
     {
         $type = new CreditCardExpirationDateType();
 
         $this->assertSame(DateType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions()
     {
         $type = new CreditCardExpirationDateType();
 
@@ -51,10 +42,7 @@ class CreditCardExpirationDateTypeTest extends TestCase
         $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
+    public function testShouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
     {
         $type = new CreditCardExpirationDateType();
 

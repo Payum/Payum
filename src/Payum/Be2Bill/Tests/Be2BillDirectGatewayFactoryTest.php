@@ -20,10 +20,7 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new Be2BillDirectGatewayFactory(array(
             'foo' => 'fooVal',
@@ -41,10 +38,7 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new Be2BillDirectGatewayFactory();
 
@@ -56,10 +50,7 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertEquals(array('identifier' => '', 'password' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new Be2BillDirectGatewayFactory();
 
@@ -74,10 +65,7 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Be2Bill Direct', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');

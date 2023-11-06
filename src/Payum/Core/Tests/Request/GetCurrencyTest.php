@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class GetCurrencyTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowGetCodeSetInConstructor()
+    public function testShouldAllowGetCodeSetInConstructor()
     {
         $request = new GetCurrency('theCode');
 

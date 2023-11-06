@@ -12,10 +12,7 @@ class StatusActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfStatusNotSupported()
+    public function testShouldMarkUnknownIfStatusNotSupported()
     {
         $action = new StatusAction();
 
@@ -31,10 +28,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty()
     {
         $action = new StatusAction();
 
@@ -48,10 +42,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfOrderStatusNotSet()
+    public function testShouldMarkNewIfOrderStatusNotSet()
     {
         $action = new StatusAction();
 
@@ -65,10 +56,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfStatusCheckoutIncomplete()
+    public function testShouldMarkNewIfStatusCheckoutIncomplete()
     {
         $action = new StatusAction();
 
@@ -84,10 +72,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusCheckoutComplete()
+    public function testShouldMarkPendingIfStatusCheckoutComplete()
     {
         $action = new StatusAction();
 
@@ -103,10 +88,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfReservationSet()
+    public function testShouldMarkAuthorizedIfReservationSet()
     {
         $action = new StatusAction();
 
@@ -122,10 +104,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isAuthorized());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfInvoiceNumberSet()
+    public function testShouldMarkCapturedIfInvoiceNumberSet()
     {
         $action = new StatusAction();
 
@@ -141,10 +120,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSet()
+    public function testShouldMarkFailedIfErrorCodeSet()
     {
         $action = new StatusAction();
 
@@ -160,10 +136,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedEvenIfInvoceNumberAndErrorCodeSet()
+    public function testShouldMarkFailedEvenIfInvoceNumberAndErrorCodeSet()
     {
         $action = new StatusAction();
 
@@ -180,10 +153,7 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedEvenIfStatusCreatedAndErrorCodeSet()
+    public function testShouldMarkFailedEvenIfStatusCreatedAndErrorCodeSet()
     {
         $action = new StatusAction();
 

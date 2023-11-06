@@ -19,10 +19,7 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new KlarnaCheckoutGatewayFactory(array(
             'foo' => 'fooVal',
@@ -40,10 +37,7 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 
@@ -64,10 +58,7 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 
@@ -82,10 +73,7 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Klarna Checkout', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The merchant_id, secret fields are required.');
@@ -94,10 +82,7 @@ class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigurePaths()
+    public function testShouldConfigurePaths()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 

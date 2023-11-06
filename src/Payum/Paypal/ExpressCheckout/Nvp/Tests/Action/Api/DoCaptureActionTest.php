@@ -12,60 +12,42 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportDoCaptureRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoCaptureRequestAndArrayAccessAsModel()
     {
         $action = new DoCaptureAction();
 
         $this->assertTrue($action->supports(new DoCapture(new \ArrayObject(), 0)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoCaptureRequest()
+    public function testShouldNotSupportAnythingNotDoCaptureRequest()
     {
         $action = new DoCaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DoCaptureAction();
@@ -73,10 +55,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdNorAuthorizationIdNotSetInModel()
+    public function testThrowIfTransactionIdNorAuthorizationIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The AMT, COMPLETETYPE, AUTHORIZATIONID fields are required.');
@@ -85,10 +64,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new DoCapture([], 0));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCompleteTypeNotSet()
+    public function testThrowIfCompleteTypeNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The COMPLETETYPE fields are required.');
@@ -102,10 +78,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmtNotSet()
+    public function testThrowIfAmtNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The AMT fields are required.');
@@ -119,10 +92,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoCaptureMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoCaptureMethodWithExpectedRequiredArguments()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -155,10 +125,7 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock

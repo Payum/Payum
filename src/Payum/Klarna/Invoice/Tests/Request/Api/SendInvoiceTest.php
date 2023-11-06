@@ -5,10 +5,7 @@ use Payum\Klarna\Invoice\Request\Api\SendInvoice;
 
 class SendInvoiceTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\SendInvoice');
 

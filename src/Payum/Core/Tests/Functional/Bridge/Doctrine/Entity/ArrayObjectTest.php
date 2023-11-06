@@ -7,10 +7,7 @@ use Payum\Core\Tests\Mocks\Entity\ArrayObject;
 
 class ArrayObjectTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty()
     {
         $entity = new ArrayObject();
         $this->em->persist($entity);
@@ -19,10 +16,7 @@ class ArrayObjectTest extends OrmTest
         $this->assertSame([$entity], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet()
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
@@ -34,10 +28,7 @@ class ArrayObjectTest extends OrmTest
         $this->assertSame([$model], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedArrayobject()
+    public function testShouldAllowFindPersistedArrayobject()
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
@@ -58,10 +49,7 @@ class ArrayObjectTest extends OrmTest
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue()
     {
         $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');

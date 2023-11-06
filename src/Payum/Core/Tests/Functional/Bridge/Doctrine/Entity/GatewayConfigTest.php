@@ -6,10 +6,7 @@ use Payum\Core\Tests\Mocks\Entity\GatewayConfig;
 
 class GatewayConfigTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet()
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
@@ -25,10 +22,7 @@ class GatewayConfigTest extends OrmTest
         $this->assertSame([$gatewayConfig], $this->em->getRepository(GatewayConfig::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedGatewayConfig()
+    public function testShouldAllowFindPersistedGatewayConfig()
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');

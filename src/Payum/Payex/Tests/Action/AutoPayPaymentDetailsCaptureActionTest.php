@@ -7,20 +7,14 @@ use Payum\Payex\Action\AutoPayPaymentDetailsCaptureAction;
 
 class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(AutoPayPaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAsModelIfAutoPaySetToTrue()
+    public function testShouldSupportCaptureWithArrayAsModelIfAutoPaySetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -29,20 +23,14 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function testShouldNotSupportCaptureWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -52,10 +40,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureayAsModelIfAutoPaySetToFalse()
+    public function testShouldNotSupportCaptureayAsModelIfAutoPaySetToFalse()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
@@ -64,30 +49,21 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new AutoPayPaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsCaptureAction();
@@ -95,10 +71,7 @@ class AutoPayPaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteAutoPayAgreementApiRequest()
+    public function testShouldDoSubExecuteAutoPayAgreementApiRequest()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

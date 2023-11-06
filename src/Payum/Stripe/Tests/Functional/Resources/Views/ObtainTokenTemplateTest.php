@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ObtainTokenTemplateTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldRenderObtainJsTokenTemplate()
+    public function testShouldRenderObtainJsTokenTemplate()
     {
         $twig = TwigFactory::createGeneric();
 
@@ -20,10 +17,7 @@ class ObtainTokenTemplateTest extends TestCase
         $this->assertStringContainsString('Stripe.setPublishableKey("theKey");', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderObtainCheckoutTokenTemplate()
+    public function testShouldRenderObtainCheckoutTokenTemplate()
     {
         $twig = TwigFactory::createGeneric();
 
@@ -35,10 +29,7 @@ class ObtainTokenTemplateTest extends TestCase
         $this->assertStringContainsString('https://checkout.stripe.com/checkout.js', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderCheckoutTokenWithCurrencySet()
+    public function testShouldRenderCheckoutTokenWithCurrencySet()
     {
         $twig = TwigFactory::createGeneric();
 
@@ -49,10 +40,7 @@ class ObtainTokenTemplateTest extends TestCase
         $this->assertStringContainsString('data-currency="GBP"', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderCheckoutTokenWithDollarsIfNoCurrencySet()
+    public function testShouldRenderCheckoutTokenWithDollarsIfNoCurrencySet()
     {
         $twig = TwigFactory::createGeneric();
 

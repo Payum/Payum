@@ -8,30 +8,21 @@ use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface()
     {
         $rc = new \ReflectionClass(Token::class);
 
         $this->assertTrue($rc->implementsInterface(TokenInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetHashGeneratedInConstructor()
+    public function testShouldAllowGetHashGeneratedInConstructor()
     {
         $token = new Token();
 
         $this->assertNotEmpty($token->getHash());
     }
 
-    /**
-     * @test
-     */
-    public function shouldGenerateDifferentTokensInConstructor()
+    public function testShouldGenerateDifferentTokensInConstructor()
     {
         $tokenOne = new Token();
         $tokenTwo = new Token();
@@ -39,10 +30,7 @@ class TokenTest extends TestCase
         $this->assertNotSame($tokenOne->getHash(), $tokenTwo->getHash());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetHash()
+    public function testShouldAllowGetPreviouslySetHash()
     {
         $token = new Token();
 
@@ -51,10 +39,7 @@ class TokenTest extends TestCase
         $this->assertSame('theToken', $token->getHash());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetGatewayName()
+    public function testShouldAllowGetPreviouslySetGatewayName()
     {
         $token = new Token();
 
@@ -63,10 +48,7 @@ class TokenTest extends TestCase
         $this->assertSame('theName', $token->getGatewayName());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetTargetUrl()
+    public function testShouldAllowGetPreviouslySetTargetUrl()
     {
         $token = new Token();
 
@@ -75,10 +57,7 @@ class TokenTest extends TestCase
         $this->assertSame('theUrl', $token->getTargetUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetAfterUrl()
+    public function testShouldAllowGetPreviouslySetAfterUrl()
     {
         $token = new Token();
 
@@ -87,10 +66,7 @@ class TokenTest extends TestCase
         $this->assertSame('theUrl', $token->getAfterUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetDetails()
+    public function testShouldAllowGetPreviouslySetDetails()
     {
         $expectedIdentity = new Identity('anId', 'stdClass');
 
@@ -101,10 +77,7 @@ class TokenTest extends TestCase
         $this->assertSame($expectedIdentity, $token->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdentityPreviouslySetAsDetails()
+    public function testShouldAllowGetIdentityPreviouslySetAsDetails()
     {
         $expectedIdentity = new Identity('anId', 'stdClass');
 

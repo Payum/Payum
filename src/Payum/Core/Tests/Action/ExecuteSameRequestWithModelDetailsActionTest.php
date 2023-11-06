@@ -21,20 +21,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         yield array(new $this->requestClass(new DetailsAggregateModel()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteSameRequestWithModelDetails()
+    public function testShouldExecuteSameRequestWithModelDetails()
     {
         $expectedDetails = new \stdClass();
 
@@ -63,10 +57,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $this->assertSame($expectedDetails, $model->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldWrapArrayDetailsToArrayObjectAndExecute()
+    public function testShouldWrapArrayDetailsToArrayObjectAndExecute()
     {
         $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
 
@@ -101,10 +92,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $this->assertEquals($details, $model->getDetails());
     }
 
-    /**
-     * @test
-     */
-    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
+    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
     {
         $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
 
@@ -143,10 +131,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
+    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
     {
         $expectedDetails = array('foo' => 'fooVal', 'bar' => 'barVal');
 

@@ -8,20 +8,14 @@ use Payum\Payex\Action\AgreementDetailsSyncAction;
 
 class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(AgreementDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -42,10 +36,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
     {
         $action = new AgreementDetailsSyncAction();
 
@@ -66,30 +57,21 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new AgreementDetailsSyncAction();
 
         $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new AgreementDetailsSyncAction();
@@ -97,10 +79,7 @@ class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCheckAgreementApiRequest()
+    public function testShouldDoSubExecuteCheckAgreementApiRequest()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
