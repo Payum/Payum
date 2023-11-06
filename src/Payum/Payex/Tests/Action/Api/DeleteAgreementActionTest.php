@@ -116,6 +116,6 @@ class DeleteAgreementActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Payex\Api\AgreementApi::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Payex\Api\AgreementApi::class);
     }
 }

@@ -353,7 +353,7 @@ class ObtainCreditCardActionTest extends TestCase
      */
     protected function createFormMock()
     {
-        return $this->createMock(\Symfony\Component\Form\Form::class, array(), array(), '', false);
+        return $this->createMock(\Symfony\Component\Form\Form::class);
     }
 
     /**

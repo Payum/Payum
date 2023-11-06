@@ -133,6 +133,6 @@ class UpdateOrderActionTest extends GenericActionTest
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface', array(), array(), '', false);
+        return $this->createMock('Klarna_Checkout_ConnectorInterface');
     }
 }

@@ -126,7 +126,7 @@ class GenericTest extends TestCase
     public function testShouldNotSetIdentityAsFirstModelOnConstruct()
     {
         /** @var Generic $request */
-        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class, array(), array(), '', false);
+        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class);
 
         $request = $this->getMockForAbstractClass(Generic::class, array($identity));
 
@@ -156,7 +156,7 @@ class GenericTest extends TestCase
 
     public function testShouldNotSetIdentityAsFirstModelOnSetModel()
     {
-        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class, array(), array(), '', false);
+        $identity = $this->createMock(\Payum\Core\Storage\IdentityInterface::class);
 
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, array(null));

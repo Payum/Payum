@@ -116,6 +116,6 @@ class GetRecurringPaymentsProfileDetailsActionTest extends \PHPUnit\Framework\Te
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ExpressCheckout\Nvp\Api::class);
     }
 }

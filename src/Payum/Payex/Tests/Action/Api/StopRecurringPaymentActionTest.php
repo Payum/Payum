@@ -113,6 +113,6 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Payex\Api\RecurringApi::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Payex\Api\RecurringApi::class);
     }
 }

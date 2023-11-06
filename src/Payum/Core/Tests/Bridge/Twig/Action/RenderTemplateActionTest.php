@@ -93,6 +93,6 @@ class RenderTemplateActionTest extends TestCase
      */
     protected function createTwigMock()
     {
-        return $this->createMock(Environment::class, array('render'), array(), '', false);
+        return $this->createMock(Environment::class);
     }
 }

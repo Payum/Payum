@@ -73,7 +73,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
 
             $customer = Customer::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($customer->toArray(true));
+            $model->replace($customer->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }

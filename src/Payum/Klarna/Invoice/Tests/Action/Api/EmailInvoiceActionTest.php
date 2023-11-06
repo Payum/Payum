@@ -116,7 +116,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->createMock('Klarna', array('config', 'emailInvoice'));
+        $klarnaMock =  $this->createMock('Klarna');
 
         $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);

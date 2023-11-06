@@ -70,7 +70,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
 
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($subscription->toArray(true));
+            $model->replace($subscription->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }

@@ -219,7 +219,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMMock()
     {
-        return $this->createMock(\Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM::class, array(), array(), '', false);
+        return $this->createMock(\Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM::class);
     }
 
     /**
@@ -227,6 +227,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMResponseMock()
     {
-        return $this->createMock('AuthorizeNetAIM_Response', array(), array(), '', false);
+        return $this->createMock('AuthorizeNetAIM_Response');
     }
 }

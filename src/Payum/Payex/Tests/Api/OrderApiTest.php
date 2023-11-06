@@ -59,7 +59,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -93,7 +93,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -127,7 +127,7 @@ class OrderApiTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class, array('createWsdlClient'));
+        $clientFactoryMock = $this->createMock(\Payum\Payex\Api\SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')

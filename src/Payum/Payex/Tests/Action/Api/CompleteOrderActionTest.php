@@ -113,6 +113,6 @@ class CompleteOrderActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Payex\Api\OrderApi::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Payex\Api\OrderApi::class);
     }
 }

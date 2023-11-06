@@ -81,6 +81,6 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(\Payum\Paypal\ProHosted\Nvp\Api::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Paypal\ProHosted\Nvp\Api::class);
     }
 }

@@ -139,7 +139,7 @@ class ExtensionCollectionTest extends TestCase
      */
     protected function createContextMock()
     {
-        return $this->createMock(\Payum\Core\Extension\Context::class, array(), array(), '', false);
+        return $this->createMock(\Payum\Core\Extension\Context::class);
     }
 
     /**

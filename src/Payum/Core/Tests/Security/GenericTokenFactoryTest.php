@@ -510,9 +510,7 @@ class GenericTokenFactoryTest extends TestCase
 
         $factory->createNotifyToken(
             $gatewayName,
-            $model,
-            $afterPath,
-            $afterParameters
+            $model
         );
     }
 

@@ -149,7 +149,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(\Payum\Core\HttpClientInterface::class, array('send'));
+        return $this->createMock(\Payum\Core\HttpClientInterface::class);
     }
 
     /**
