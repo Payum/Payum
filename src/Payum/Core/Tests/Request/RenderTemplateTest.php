@@ -38,7 +38,7 @@ class RenderTemplateTest extends TestCase
         $this->assertEquals('theResult', $request->getResult());
     }
 
-    public function provideParameters(): \Iterator
+    public static function provideParameters(): \Iterator
     {
         yield array('foo', 'fooVal');
         yield array('bar', 'barVal');

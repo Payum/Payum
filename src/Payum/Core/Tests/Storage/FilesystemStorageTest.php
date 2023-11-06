@@ -72,7 +72,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         $this->assertInstanceOf('stdClass', $model);
-        $this->assertObjectHasAttribute('notExistProperty', $model);
+        $this->assertTrue(property_exists($model, 'notExistProperty'));
     }
 
     /**
@@ -300,7 +300,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertTrue(property_exists($model, 'payum_id'));
         $this->assertNotEmpty($model->payum_id);
 
         $foundModel = $storage->find($model->payum_id);
@@ -309,7 +309,7 @@ class FilesystemStorageTest extends TestCase
         $this->assertEquals($expectedPrice, $foundModel->getPrice());
         $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
 
-        $this->assertObjectHasAttribute('payum_id', $foundModel);
+        $this->assertTrue(property_exists($foundModel, 'payum_id'));
         $this->assertNotEmpty($foundModel->payum_id);
     }
 
@@ -327,7 +327,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertTrue(property_exists($model, 'payum_id'));
         $this->assertNotEmpty($model->payum_id);
 
         $storage->delete($model);

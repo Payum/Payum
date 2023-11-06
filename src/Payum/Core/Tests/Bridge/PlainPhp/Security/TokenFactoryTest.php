@@ -617,7 +617,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function pathDataProvider(): array
+    public static function pathDataProvider(): array
     {
         return [
             ['http://example.com', 'capture.php', 'http://example.com/capture.php'],
