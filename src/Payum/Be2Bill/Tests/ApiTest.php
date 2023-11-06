@@ -49,7 +49,7 @@ class ApiTest extends TestCase
 
         $this->assertIsArray($post);
         $this->assertArrayHasKey('OPERATIONTYPE', $post);
-        $this->assertEquals(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
+        $this->assertSame(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
     }
 
     /**
@@ -114,10 +114,10 @@ class ApiTest extends TestCase
         $this->assertIsArray($post);
 
         $this->assertArrayHasKey('AMOUNT', $post);
-        $this->assertEquals(100, $post['AMOUNT']);
+        $this->assertSame(100, $post['AMOUNT']);
 
         $this->assertArrayHasKey('DESCRIPTION', $post);
-        $this->assertEquals('a desc', $post['DESCRIPTION']);
+        $this->assertSame('a desc', $post['DESCRIPTION']);
     }
 
     /**
@@ -152,7 +152,7 @@ class ApiTest extends TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         //guard
-        $this->assertNotEquals($invalidHash, $api->calculateHash($params));
+        $this->assertNotSame($invalidHash, $api->calculateHash($params));
 
         $params['HASH'] = $invalidHash;
 

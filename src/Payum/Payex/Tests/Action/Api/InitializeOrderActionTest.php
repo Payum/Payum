@@ -157,9 +157,9 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('initialize')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'orderRef' => 'theRef',
-            )));
+            ));
 
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
@@ -169,7 +169,7 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theRef', $model['orderRef']);
+        $this->assertSame('theRef', $model['orderRef']);
     }
 
     /**
@@ -182,9 +182,9 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('initialize')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'redirectUrl' => 'http://example.com/theUrl',
-            )));
+            ));
 
         $action = new InitializeOrderAction();
         $action->setApi($apiMock);
@@ -194,7 +194,7 @@ class InitializeOrderActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute($request);
         } catch (HttpRedirect $reply) {
-            $this->assertEquals('http://example.com/theUrl', $reply->getUrl());
+            $this->assertSame('http://example.com/theUrl', $reply->getUrl());
 
             return;
         }

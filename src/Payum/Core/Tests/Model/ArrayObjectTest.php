@@ -35,7 +35,7 @@ class ArrayObjectTest extends TestCase
 
         $model['foo'] = 'theFoo';
 
-        $this->assertEquals('theFoo', $model['foo']);
+        $this->assertSame('theFoo', $model['foo']);
     }
 
     /**
@@ -90,7 +90,7 @@ class ArrayObjectTest extends TestCase
         $iterator = $model->getIterator();
 
         $this->assertInstanceOf('ArrayIterator', $iterator);
-        $this->assertEquals(
+        $this->assertSame(
             array(
                 'foo' => 'theFoo',
                 'bar' => 'theBar',

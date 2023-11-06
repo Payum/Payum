@@ -52,7 +52,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([
+        $this->assertSame([
             'cart' => [
                 'items' => [
                     [
@@ -91,7 +91,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([], $details);
+        $this->assertSame([], $details);
     }
 
     /**
@@ -116,6 +116,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

@@ -25,7 +25,7 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setHolder('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getHolder());
+        $this->assertSame('theVal', $bankAccount->getHolder());
     }
 
     /**
@@ -36,7 +36,7 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setNumber('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getNumber());
+        $this->assertSame('theVal', $bankAccount->getNumber());
     }
 
     /**
@@ -47,7 +47,7 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setBankCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCode());
+        $this->assertSame('theVal', $bankAccount->getBankCode());
     }
 
     /**
@@ -58,7 +58,7 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setBankCountryCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCountryCode());
+        $this->assertSame('theVal', $bankAccount->getBankCountryCode());
     }
 
     /**
@@ -69,7 +69,7 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setIban('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getIban());
+        $this->assertSame('theVal', $bankAccount->getIban());
     }
 
     /**
@@ -80,6 +80,6 @@ class BankAccountTest extends TestCase
         $bankAccount = new BankAccount();
         $bankAccount->setBic('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBic());
+        $this->assertSame('theVal', $bankAccount->getBic());
     }
 }

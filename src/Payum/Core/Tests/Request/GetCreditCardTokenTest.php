@@ -34,6 +34,6 @@ class GetCreditCardTokenTest extends TestCase
         $request = new GetCreditCardToken([]);
         $request->token = 'aToken';
 
-        $this->assertEquals('aToken', $request->token);
+        $this->assertSame('aToken', $request->token);
     }
 }

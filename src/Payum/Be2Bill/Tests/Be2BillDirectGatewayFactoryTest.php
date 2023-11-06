@@ -35,10 +35,10 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
     /**
@@ -68,10 +68,10 @@ class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('be2bill_direct', $config['payum.factory_name']);
+        $this->assertSame('be2bill_direct', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('Be2Bill Direct', $config['payum.factory_title']);
+        $this->assertSame('Be2Bill Direct', $config['payum.factory_title']);
     }
 
     /**

@@ -133,21 +133,21 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
-                $testCase->assertEquals('theToken', $fields['TOKEN']);
+                $testCase->assertSame('theToken', $fields['TOKEN']);
 
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
+                $testCase->assertSame('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
 
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $fields);
-                $testCase->assertEquals('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
+                $testCase->assertSame('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
 
                 $testCase->assertArrayHasKey('PAYERID', $fields);
-                $testCase->assertEquals('thePayerId', $fields['PAYERID']);
+                $testCase->assertSame('thePayerId', $fields['PAYERID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
@@ -172,12 +172,12 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
@@ -195,10 +195,10 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

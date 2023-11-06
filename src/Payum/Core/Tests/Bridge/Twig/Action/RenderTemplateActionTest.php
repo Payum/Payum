@@ -67,7 +67,7 @@ class RenderTemplateActionTest extends TestCase
             ->expects($this->once())
             ->method('render')
             ->with($expectedTemplate, $expectedContext)
-            ->will($this->returnValue($expectedView))
+            ->willReturn($expectedView)
         ;
 
         $action = new RenderTemplateAction($twigMock, 'theLayout');
@@ -75,7 +75,7 @@ class RenderTemplateActionTest extends TestCase
         $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
-        $this->assertEquals($expectedView, $renderTemplate->getResult());
+        $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
     /**
@@ -95,7 +95,7 @@ class RenderTemplateActionTest extends TestCase
             ->expects($this->once())
             ->method('render')
             ->with($expectedTemplate, $expectedContext)
-            ->will($this->returnValue($expectedView))
+            ->willReturn($expectedView)
         ;
 
         $action = new RenderTemplateAction($twigMock, 'defaultLayout');
@@ -103,7 +103,7 @@ class RenderTemplateActionTest extends TestCase
         $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
-        $this->assertEquals($expectedView, $renderTemplate->getResult());
+        $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
     /**

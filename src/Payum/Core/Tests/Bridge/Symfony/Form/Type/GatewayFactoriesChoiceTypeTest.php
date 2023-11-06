@@ -25,7 +25,7 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
     {
         $type = new GatewayFactoriesChoiceType(array());
 
-        $this->assertEquals(ChoiceType::class, $type->getParent());
+        $this->assertSame(ChoiceType::class, $type->getParent());
     }
 
     /**
@@ -47,6 +47,6 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('choices', $options);
-        $this->assertEquals($expectedChoices, $options['choices']);
+        $this->assertSame($expectedChoices, $options['choices']);
     }
 }

@@ -115,18 +115,18 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('REFERENCEID', $fields);
-                $testCase->assertEquals('theReferenceId', $fields['REFERENCEID']);
+                $testCase->assertSame('theReferenceId', $fields['REFERENCEID']);
 
                 $testCase->assertArrayHasKey('AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['AMT']);
+                $testCase->assertSame('theAmt', $fields['AMT']);
 
                 $testCase->assertArrayHasKey('PAYMENTACTION', $fields);
-                $testCase->assertEquals('theAction', $fields['PAYMENTACTION']);
+                $testCase->assertSame('theAction', $fields['PAYMENTACTION']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoReferenceTransactionAction();
@@ -150,12 +150,12 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $action = new DoReferenceTransactionAction();
@@ -172,10 +172,10 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

@@ -91,10 +91,10 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($request, $httpException->getRequest());
         $this->assertSame($response, $httpException->getResponse());
 
-        $this->assertEquals(
+        $this->assertSame(
             "Client error response\n[status code] 404\n[reason phrase] Not Found\n[url] http://example.com/foobar",
             $httpException->getMessage()
         );
-        $this->assertEquals(404, $httpException->getCode());
+        $this->assertSame(404, $httpException->getCode());
     }
 }

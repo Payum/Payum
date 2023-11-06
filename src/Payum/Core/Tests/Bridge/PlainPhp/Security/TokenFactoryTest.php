@@ -43,7 +43,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -60,7 +60,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -68,7 +68,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -81,9 +81,9 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($gatewayName, $token->getGatewayName());
+        $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/theTargetPath?payum_token='.$token->getHash().'&target=val',
             $token->getTargetUrl()
         );
@@ -101,7 +101,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -118,7 +118,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -126,7 +126,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -141,13 +141,13 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($gatewayName, $token->getGatewayName());
+        $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/theTargetPath?payum_token='.$token->getHash().'&target=val',
             $token->getTargetUrl()
         );
-        $this->assertEquals('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
+        $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
     }
 
     /**
@@ -162,7 +162,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -188,7 +188,7 @@ class TokenFactoryTest extends TestCase
             ['target' => 'val']
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://aUser@example.com:8080/theTargetPath?payum_token=aHash&target=val',
             $actualToken->getTargetUrl()
         );
@@ -206,7 +206,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -232,7 +232,7 @@ class TokenFactoryTest extends TestCase
             ['target' => 'val']
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/aBase/path/theTargetPath?payum_token=aHash&target=val',
             $actualToken->getTargetUrl()
         );
@@ -251,7 +251,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -277,7 +277,7 @@ class TokenFactoryTest extends TestCase
             ['target' => 'val']
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $result.'?payum_token=aHash&target=val',
             $actualToken->getTargetUrl()
         );
@@ -294,7 +294,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -337,7 +337,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -379,7 +379,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token))
+            ->willReturn($token)
         ;
         $tokenStorageMock
             ->expects($this->once())
@@ -396,7 +396,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -404,7 +404,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -419,13 +419,13 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($token, $actualToken);
-        $this->assertEquals($gatewayName, $token->getGatewayName());
+        $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://google.com/?foo=fooVal&payum_token='.$token->getHash().'&target=val',
             $token->getTargetUrl()
         );
-        $this->assertEquals('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
+        $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
     }
 
     /**
@@ -439,7 +439,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -456,7 +456,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -464,7 +464,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -479,13 +479,13 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
+        $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'http://google.com/?payum_token=foo&afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
@@ -502,7 +502,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -519,7 +519,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -527,7 +527,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -542,13 +542,13 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
+        $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'http://google.com/?afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
@@ -565,7 +565,7 @@ class TokenFactoryTest extends TestCase
         $tokenStorageMock
             ->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($authorizeToken))
+            ->willReturn($authorizeToken)
         ;
         $tokenStorageMock
             ->expects($this->at(1))
@@ -582,7 +582,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($identity))
+            ->willReturn($identity)
         ;
 
         $storageRegistryMock = $this->createStorageRegistryMock();
@@ -590,7 +590,7 @@ class TokenFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getStorage')
             ->with($this->identicalTo($model))
-            ->will($this->returnValue($modelStorage))
+            ->willReturn($modelStorage)
         ;
 
         $factory = new TokenFactory($tokenStorageMock, $storageRegistryMock, 'http://example.com');
@@ -605,37 +605,32 @@ class TokenFactoryTest extends TestCase
         );
 
         $this->assertSame($authorizeToken, $actualToken);
-        $this->assertEquals($gatewayName, $authorizeToken->getGatewayName());
+        $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
-        $this->assertEquals(
+        $this->assertSame(
             'http://example.com/authorize.php?payum_token='.$authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
-        $this->assertEquals(
+        $this->assertSame(
             'http://google.com/foo/bar?foo=fooVal#fragment',
             $authorizeToken->getAfterUrl()
         );
     }
 
-    public static function pathDataProvider(): array
+    public static function pathDataProvider(): \Iterator
     {
-        return [
-            ['http://example.com', 'capture.php', 'http://example.com/capture.php'],
-            ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'],
-            ['http://example.com/path/anotherPath', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
-
-            ['http://example.com', 'capture', 'http://example.com/capture'],
-            ['http://example.com/path', 'capture', 'http://example.com/path/capture'],
-            ['http://example.com/path/anotherPath', 'capture', 'http://example.com/path/anotherPath/capture'],
-
-            ['http://example.com/index.php', 'capture.php', 'http://example.com/capture.php'],
-            ['http://example.com/path/index.php', 'capture.php', 'http://example.com/path/capture.php'],
-            ['http://example.com/path/anotherPath/index.php', 'capture.php', 'http://example.com/path/anotherPath/capture.php'],
-
-            ['http://example.com/index.php', 'capture', 'http://example.com/capture'],
-            ['http://example.com/path/index.php', 'capture', 'http://example.com/path/capture'],
-            ['http://example.com/path/anotherPath/index.php', 'capture', 'http://example.com/path/anotherPath/capture'],
-        ];
+        yield ['http://example.com', 'capture.php', 'http://example.com/capture.php'];
+        yield ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'];
+        yield ['http://example.com/path/anotherPath', 'capture.php', 'http://example.com/path/anotherPath/capture.php'];
+        yield ['http://example.com', 'capture', 'http://example.com/capture'];
+        yield ['http://example.com/path', 'capture', 'http://example.com/path/capture'];
+        yield ['http://example.com/path/anotherPath', 'capture', 'http://example.com/path/anotherPath/capture'];
+        yield ['http://example.com/index.php', 'capture.php', 'http://example.com/capture.php'];
+        yield ['http://example.com/path/index.php', 'capture.php', 'http://example.com/path/capture.php'];
+        yield ['http://example.com/path/anotherPath/index.php', 'capture.php', 'http://example.com/path/anotherPath/capture.php'];
+        yield ['http://example.com/index.php', 'capture', 'http://example.com/capture'];
+        yield ['http://example.com/path/index.php', 'capture', 'http://example.com/path/capture'];
+        yield ['http://example.com/path/anotherPath/index.php', 'capture', 'http://example.com/path/anotherPath/capture'];
     }
 
     /**

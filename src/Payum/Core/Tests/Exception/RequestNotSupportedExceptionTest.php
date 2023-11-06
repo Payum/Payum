@@ -103,7 +103,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $exception = RequestNotSupportedException::create($request);
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
-        $this->assertEquals(
+        $this->assertSame(
             'Request stdClass is not supported. Make sure the gateway supports the requests and there is an action which supports this request (The method returns true). There may be a bug, so look for a related issue on the issue tracker.',
             $exception->getMessage()
         );
@@ -119,7 +119,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $exception = RequestNotSupportedException::create($request);
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
-        $this->assertEquals(
+        $this->assertSame(
             'Request Capture{model: Identity} is not supported. Make sure the storage extension for "stdClass" is registered to the gateway. Make sure the storage find method returns an instance by id "theId". Make sure the gateway supports the requests and there is an action which supports this request (The method returns true). There may be a bug, so look for a related issue on the issue tracker.',
             $exception->getMessage()
         );

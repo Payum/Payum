@@ -214,7 +214,7 @@ class PayumBuilderTest extends TestCase
                 $this->assertInstanceOf(TokenFactoryInterface::class, $tokenFactory);
 
                 $this->assertIsArray($paths);
-                $this->assertEquals([
+                $this->assertSame([
                     'capture' => 'capture.php',
                     'notify' => 'notify.php',
                     'authorize' => 'authorize.php',
@@ -456,7 +456,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addGatewayFactoryConfig('a_factory', ['foo' => 'fooVal'])
             ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
-                $this->assertEquals(['foo' => 'fooVal'], $config);
+                $this->assertSame(['foo' => 'fooVal'], $config);
 
                 return new GatewayFactory($config, $coreGatewayFactory);
             })
@@ -637,7 +637,7 @@ class PayumBuilderTest extends TestCase
         $config = $gatewayFactory->createConfig([]);
 
         $this->assertArrayHasKey('foo', $config, var_export($config, true));
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
     }
 
     /**
@@ -744,7 +744,7 @@ class PayumBuilderTest extends TestCase
 
         $this->assertCount(2, $apis);
         $this->assertInstanceOf(OmnipayGateway::class, $apis[1]);
-        $this->assertEquals('Dummy', $apis[1]->getName());
+        $this->assertSame('Dummy', $apis[1]->getName());
     }
 
     /**

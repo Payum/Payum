@@ -73,11 +73,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PAYMENTSTATUS' => 'theStatus',
                 );
-            }));
+            });
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
@@ -91,7 +91,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('PAYMENTSTATUS', $model);
-        $this->assertEquals('theStatus', $model['PAYMENTSTATUS']);
+        $this->assertSame('theStatus', $model['PAYMENTSTATUS']);
     }
 
     /**

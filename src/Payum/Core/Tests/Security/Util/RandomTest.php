@@ -14,6 +14,6 @@ class RandomTest extends TestCase
         $token = Random::generateToken();
 
         $this->assertIsString($token);
-        $this->assertEquals(43, strlen($token));
+        $this->assertSame(43, strlen($token));
     }
 }

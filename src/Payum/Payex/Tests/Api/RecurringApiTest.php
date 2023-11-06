@@ -71,7 +71,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Start')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -92,7 +92,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $recurringApi->start(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -108,7 +108,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Stop')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -129,7 +129,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $recurringApi->stop(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**
@@ -145,7 +145,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('Check')
             ->with($this->isType('array'))
-            ->will($this->returnValue($response))
+            ->willReturn($response)
         ;
 
         $clientFactoryMock = $this->createMock('Payum\Payex\Api\SoapClientFactory', array('createWsdlClient'));
@@ -166,7 +166,7 @@ class RecurringApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $recurringApi->check(array());
 
-        $this->assertEquals(array('fooValue'), $result);
+        $this->assertSame(array('fooValue'), $result);
     }
 
     /**

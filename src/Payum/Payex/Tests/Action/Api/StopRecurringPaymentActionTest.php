@@ -119,9 +119,9 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('stop')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'errorCode' => 'theCode',
-            )));
+            ));
 
         $action = new StopRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -131,7 +131,7 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theCode', $model['errorCode']);
+        $this->assertSame('theCode', $model['errorCode']);
     }
 
     /**

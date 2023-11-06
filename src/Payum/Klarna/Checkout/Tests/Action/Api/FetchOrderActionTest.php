@@ -61,11 +61,11 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('GET')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('url', $options);
-                $testCase->assertEquals($model['location'], $options['url']);
-            }))
+                $testCase->assertSame($model['location'], $options['url']);
+            })
         ;
 
         $action = new FetchOrderAction($connector);
@@ -101,9 +101,9 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('GET')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new FetchOrderAction($connector);
@@ -135,7 +135,7 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('GET')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new FetchOrderAction($connector);
@@ -166,15 +166,15 @@ class FetchOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('GET')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
         $connector
             ->expects($this->at(1))
             ->method('apply')
             ->with('GET')
-            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use (&$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new FetchOrderAction($connector);

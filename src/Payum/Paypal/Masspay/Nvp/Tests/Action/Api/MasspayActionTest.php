@@ -43,11 +43,11 @@ class MasspayActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->will($this->returnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+            ->willReturnCallback(function (array $fields) {
+                $this->assertSame(['foo' => 'fooVal'], $fields);
 
                 return [];
-            }))
+            })
         ;
 
         $action = new MasspayAction();
@@ -67,13 +67,13 @@ class MasspayActionTest extends GenericActionTest
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->will($this->returnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+            ->willReturnCallback(function (array $fields) {
+                $this->assertSame(['foo' => 'fooVal'], $fields);
 
                 $fields['bar'] = 'barVal';
 
                 return $fields;
-            }))
+            })
         ;
 
         $action = new MasspayAction();
@@ -83,7 +83,7 @@ class MasspayActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getModel());
+        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getModel());
     }
 
     /**

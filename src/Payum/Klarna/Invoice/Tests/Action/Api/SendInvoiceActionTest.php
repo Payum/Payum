@@ -123,7 +123,7 @@ class SendInvoiceActionTest extends GenericApiAwareActionTest
             ->with(
                 $details['invoice_number']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new SendInvoiceAction($klarnaMock);
@@ -132,8 +132,8 @@ class SendInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute($reserve = new SendInvoice($details));
 
         $postDetails = $reserve->getModel();
-        $this->assertEquals(123, $postDetails['error_code']);
-        $this->assertEquals('theMessage', $postDetails['error_message']);
+        $this->assertSame(123, $postDetails['error_code']);
+        $this->assertSame('theMessage', $postDetails['error_message']);
     }
 
     /**

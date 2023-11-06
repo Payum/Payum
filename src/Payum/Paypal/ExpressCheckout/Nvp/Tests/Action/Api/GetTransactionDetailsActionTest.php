@@ -86,12 +86,12 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
-                $testCase->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
+                $testCase->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new GetTransactionDetailsAction();
@@ -113,11 +113,11 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PAYMENTSTATUS' => 'theStatus',
                 );
-            }))
+            })
         ;
 
         $action = new GetTransactionDetailsAction();
@@ -132,7 +132,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('PAYMENTREQUEST_5_PAYMENTSTATUS', $model);
-        $this->assertEquals('theStatus', $model['PAYMENTREQUEST_5_PAYMENTSTATUS']);
+        $this->assertSame('theStatus', $model['PAYMENTREQUEST_5_PAYMENTSTATUS']);
     }
 
     /**

@@ -42,8 +42,8 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('fooVal', $config['foo']);
-                $this->assertEquals('barBazOloloVal', $config['bar']);
+                $this->assertSame('fooVal', $config['foo']);
+                $this->assertSame('barBazOloloVal', $config['bar']);
             },
         ]);
 
@@ -65,7 +65,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('@aTemplate', $config['payum.template.foo']);
+                $this->assertSame('@aTemplate', $config['payum.template.foo']);
             },
         ]);
 
@@ -86,7 +86,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('@anActionService', $config['foo']);
+                $this->assertSame('@anActionService', $config['foo']);
             },
         ]);
 

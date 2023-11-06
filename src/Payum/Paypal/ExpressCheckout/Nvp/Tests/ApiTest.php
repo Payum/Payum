@@ -66,7 +66,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
 
-        $this->assertEquals('formRequestReturnUrl', $result['RETURNURL']);
+        $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
 
     /**
@@ -85,7 +85,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array());
 
-        $this->assertEquals('optionReturnUrl', $result['RETURNURL']);
+        $this->assertSame('optionReturnUrl', $result['RETURNURL']);
     }
 
     /**
@@ -121,7 +121,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
 
-        $this->assertEquals('formRequestCancelUrl', $result['CANCELURL']);
+        $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
 
     /**
@@ -140,7 +140,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array());
 
-        $this->assertEquals('optionCancelUrl', $result['CANCELURL']);
+        $this->assertSame('optionCancelUrl', $result['CANCELURL']);
     }
 
     /**
@@ -160,7 +160,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('SetExpressCheckout', $result['METHOD']);
+        $this->assertSame('SetExpressCheckout', $result['METHOD']);
     }
 
     /**
@@ -180,13 +180,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
     /**
@@ -206,7 +206,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
     /**
@@ -221,7 +221,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
@@ -240,7 +240,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'useraction' => 'aCustomUserAction',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
@@ -259,7 +259,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'useraction' => 'notUsedUseraction',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('useraction' => 'theUseraction'))
         );
@@ -278,7 +278,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cmd' => 'theCmd',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
@@ -297,7 +297,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cmd' => 'thisCmdNotUsed',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('cmd' => 'theCmd'))
         );
@@ -315,7 +315,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
             $api->getAuthorizeTokenUrl('theToken', array('foo' => 'fooVal'))
         );
@@ -333,7 +333,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('foo' => ''))
         );
@@ -351,7 +351,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => false,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
@@ -368,11 +368,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -398,11 +398,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -441,9 +441,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

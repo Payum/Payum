@@ -83,9 +83,9 @@ class SyncActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
-            ->will($this->returnCallback(function (FetchOrder $request) use ($orderMock) {
+            ->willReturnCallback(function (FetchOrder $request) use ($orderMock) {
                 $request->setOrder($orderMock);
-            }))
+            })
         ;
 
         $action = new SyncAction();
@@ -99,10 +99,10 @@ class SyncActionTest extends GenericActionTest
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theLocation', $model['location']);
-        $this->assertEquals(Constants::STATUS_CHECKOUT_INCOMPLETE, $model['status']);
-        $this->assertEquals('fooVal', $model['foo']);
-        $this->assertEquals('barVal', $model['bar']);
+        $this->assertSame('theLocation', $model['location']);
+        $this->assertSame(Constants::STATUS_CHECKOUT_INCOMPLETE, $model['status']);
+        $this->assertSame('fooVal', $model['foo']);
+        $this->assertSame('barVal', $model['bar']);
     }
 
     /**

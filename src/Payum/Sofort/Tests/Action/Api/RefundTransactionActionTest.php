@@ -96,11 +96,11 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->will($this->returnCallback(function ($details) {
-                $this->assertEquals(100, $details['refund_amount']);
+            ->willReturnCallback(function ($details) {
+                $this->assertSame(100, $details['refund_amount']);
 
                 return array();
-            }));
+            });
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
@@ -122,11 +122,11 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('refundTransaction')
-            ->will($this->returnCallback(function ($details) {
-                $this->assertEquals(50, $details['refund_amount']);
+            ->willReturnCallback(function ($details) {
+                $this->assertSame(50, $details['refund_amount']);
 
                 return array();
-            }));
+            });
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);

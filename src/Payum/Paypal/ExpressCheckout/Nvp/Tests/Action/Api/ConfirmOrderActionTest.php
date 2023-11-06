@@ -54,7 +54,7 @@ class ConfirmOrderActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                 $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                 $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
@@ -72,8 +72,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }
@@ -104,7 +104,7 @@ class ConfirmOrderActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                 $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                 $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
@@ -122,8 +122,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }

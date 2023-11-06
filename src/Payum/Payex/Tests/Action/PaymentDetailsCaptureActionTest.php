@@ -176,9 +176,9 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->clientIp = 'expectedClientIp';
-            }))
+            })
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -191,7 +191,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $details = iterator_to_array($request->getModel());
 
         $this->assertArrayHasKey('clientIPAddress', $details);
-        $this->assertEquals('expectedClientIp', $details['clientIPAddress']);
+        $this->assertSame('expectedClientIp', $details['clientIPAddress']);
     }
 
     /**

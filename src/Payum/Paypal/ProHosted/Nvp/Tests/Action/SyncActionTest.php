@@ -92,11 +92,11 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails'))
-            ->will($this->returnCallback(function (GetTransactionDetails $request) {
+            ->willReturnCallback(function (GetTransactionDetails $request) {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['AMT'] = 33;
-            }))
+            })
         ;
 
         $action = new SyncAction();
@@ -110,10 +110,10 @@ class SyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($sync = new Sync($details));
 
         $this->assertArrayHasKey('foo', (array) $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
 
         $this->assertArrayHasKey('AMT', (array) $details);
-        $this->assertEquals(33, $details['AMT']);
+        $this->assertSame(33, $details['AMT']);
     }
 
     /**

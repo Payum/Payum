@@ -132,7 +132,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
                 $details['amount'],
                 $details['reservation_flags']
             )
-            ->will($this->returnValue(array('theRno', 'theStatus')))
+            ->willReturn(array('theRno', 'theStatus'))
         ;
 
         $action = new ReserveAmountAction($klarnaMock);
@@ -142,8 +142,8 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $action->execute($reserve = new ReserveAmount($details));
 
         $reserved = $reserve->getModel();
-        $this->assertEquals('theRno', $reserved['rno']);
-        $this->assertEquals('theStatus', $reserved['status']);
+        $this->assertSame('theRno', $reserved['rno']);
+        $this->assertSame('theStatus', $reserved['status']);
     }
 
     /**
@@ -175,7 +175,7 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
                 $details['amount'],
                 $details['reservation_flags']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new ReserveAmountAction($klarnaMock);
@@ -185,8 +185,8 @@ class ReserveAmountActionTest extends GenericApiAwareActionTest
         $action->execute($reserve = new ReserveAmount($details));
 
         $reserved = $reserve->getModel();
-        $this->assertEquals(123, $reserved['error_code']);
-        $this->assertEquals('theMessage', $reserved['error_message']);
+        $this->assertSame(123, $reserved['error_code']);
+        $this->assertSame('theMessage', $reserved['error_message']);
     }
 
     /**

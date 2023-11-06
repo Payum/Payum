@@ -35,7 +35,7 @@ class SensitiveValueTest extends TestCase
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
-        $this->assertEquals($expectedValue, $sensitiveValue->get());
+        $this->assertSame($expectedValue, $sensitiveValue->get());
         $this->assertNull($sensitiveValue->get());
     }
 
@@ -48,8 +48,8 @@ class SensitiveValueTest extends TestCase
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
-        $this->assertEquals($expectedValue, $sensitiveValue->peek());
-        $this->assertEquals($expectedValue, $sensitiveValue->peek());
+        $this->assertSame($expectedValue, $sensitiveValue->peek());
+        $this->assertSame($expectedValue, $sensitiveValue->peek());
     }
 
     /**
@@ -61,7 +61,7 @@ class SensitiveValueTest extends TestCase
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
-        $this->assertEquals($expectedValue, $sensitiveValue->get());
+        $this->assertSame($expectedValue, $sensitiveValue->get());
 
         $sensitiveValue->erase();
 
@@ -79,10 +79,10 @@ class SensitiveValueTest extends TestCase
 
         if (PHP_VERSION_ID >= 70400) {
             // the object will be unserialized anyway, make sure it's empty
-            $this->assertEquals('O:34:"Payum\Core\Security\SensitiveValue":0:{}', $serializedValue);
+            $this->assertSame('O:34:"Payum\Core\Security\SensitiveValue":0:{}', $serializedValue);
             $this->assertNull(unserialize($serializedValue)->peek());
         } else {
-            $this->assertEquals('N;', $serializedValue);
+            $this->assertSame('N;', $serializedValue);
             $this->assertNull(unserialize($serializedValue));
         }
     }
@@ -94,7 +94,7 @@ class SensitiveValueTest extends TestCase
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
-        $this->assertEquals('', (string) $sensitiveValue);
+        $this->assertSame('', (string) $sensitiveValue);
     }
 
     /**
@@ -104,7 +104,7 @@ class SensitiveValueTest extends TestCase
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
-        $this->assertEquals('null', json_encode($sensitiveValue));
+        $this->assertSame('null', json_encode($sensitiveValue));
     }
 
     /**
