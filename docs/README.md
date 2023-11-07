@@ -1,7 +1,26 @@
+---
+cover: .gitbook/assets/payum-bg.jpeg
+coverY: 0
+layout:
+  cover:
+    visible: true
+    size: full
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+---
+
 # Payum docs
 
 * #### General
-  * [Get it started](get-it-started.md)
+  * [Get started](get-it-started.md)
   * [Architecture](the-architecture.md)
   * [Storages](storages.md)
   * [Configure gateway in backend](configure-gateway-in-backend.md)
@@ -19,38 +38,38 @@
   * [Symfony. The event dispatcher extension](event-dispatcher.md)
   * [How to contribute from sub repository](how-to-contribute-from-subrepository.md)
 * #### Authorize.Net AIM
-  * [Get it started](authorize-net/aim/get-it-started.md)
+  * [Get started](authorize-net/aim/get-it-started.md)
 * #### Be2Bill
   * [Direct](be2bill/direct.md)
   * [Offsite](be2bill/offsite.md)
 * #### Klarna Checkout
-  * [Get it started](klarna/checkout/get-it-started.md)
+  * [Get started](klarna/checkout/get-it-started.md)
 * #### Klarna Invoice
-  * [Get it started](klarna/invoice/get-it-started.md)
+  * [Get started](klarna/invoice/get-it-started.md)
 * #### Offline
-  * [Get it started](offline/get-it-started.md)
+  * [Get started](offline/get-it-started.md)
 * #### Payex
-  * [Get it started](payex/get-it-started.md)
+  * [Get started](payex/get-it-started.md)
 * #### Paypal Express Checkout
-  * [Get it started](paypal/express-checkout/get-it-started.md)
+  * [Get started](paypal/express-checkout/get-it-started.md)
   * [Authorize order](paypal/express-checkout/authorize-order.md)
   * [Confirm order step](paypal/express-checkout/confirm-order-step.md)
   * [Recurring payments basics](paypal/express-checkout/recurring-payments-basics.md)
   * [Cancel recurring payment](paypal/express-checkout/cancel-recurring-payment.md)
   * [Authorize token custom query parameters](paypal/express-checkout/authorize-token-custom-query-parameters.md)
 * #### Paypal Pro Checkout
-  * [Get it started](paypal/pro-checkout/get-it-started.md)
+  * [Get started](paypal/pro-checkout/get-it-started.md)
 * #### Paypal Pro Hosted
-  * [Get it started](paypal/pro-hosted/get-it-started.md)
+  * [Get started](paypal/pro-hosted/get-it-started.md)
 * #### Paypal Masspay
-  * [Get it started](paypal/masspay/get-it-started.md)
+  * [Get started](paypal/masspay/get-it-started.md)
 * #### Paypal Rest
-  * [Get it started](paypal/rest/get-it-started.md)
+  * [Get started](paypal/rest/get-it-started.md)
   * [Credit card purchase](paypal/rest/credit-card-purchase.md)
 * #### Paypal IPN
-  * [Get it started](paypal/ipn/get-it-started.md)
+  * [Get started](paypal/ipn/get-it-started.md)
 * #### Sofort
-  * [Get it started](sofort/get-it-started.md)
+  * [Get started](sofort/get-it-started.md)
   * [Disable notifications](sofort/disable-notifications.md)
 * #### Stripe
   * [Stripe.js](stripe/js.md)
@@ -60,7 +79,7 @@
   * [Store Card and use later](stripe/store-card-and-use-later.md)
   * [Subscription billing](stripe/subscription-billing.md)
 * #### Symfony Payum Bundle
-  * [Get it started. Capture](symfony/get-it-started.md)
+  * [Get started. Capture](symfony/get-it-started.md)
   * [Authorize](symfony/authorize.md)
   * [Refund](symfony/refund.md)
   * [Storages](symfony/storages.md)
@@ -77,17 +96,17 @@
   * [Container tags](symfony/container-tags.md)
   * [ISO4217. Currency details](symfony/iso4217-or-currency-details.md)
 * #### Laravel Payum Package
-  * [Get it started](laravel/get-it-started.md)
+  * [Get started](laravel/get-it-started.md)
   * [Examples](laravel/examples.md)
   * [Eloquent storage](laravel/eloquent-storage.md)
   * [Payment done controller](laravel/payment-done-controller.md)
   * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
   * [Blade templates](laravel/blade-templating.md)
 * #### Silex Payum Provider
-  * [Get it started](silex/get-it-started.md)
+  * [Get started](silex/get-it-started.md)
   * [Payment done controller](silex/payment-done-controller.md)
 * #### Symfony JMS Payment Bridge
-  * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
+  * [Get started. Capture](jms-payment-bridge/get-it-started.md)
 * #### [Zend Payum Module (External)](https://github.com/Payum/PayumModule)
 * #### [Yii Payum Extension (External)](https://github.com/Payum/PayumYiiExtension)
 * #### [Omnipay Bridge (External)](https://github.com/Payum/OmnipayBridge)
