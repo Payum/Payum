@@ -9,6 +9,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -59,25 +60,19 @@ abstract class GenericActionTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @dataProvider provideSupportedRequests
-     */
+    #[DataProvider('provideSupportedRequests')]
     public function testShouldSupportRequest($request)
     {
         $this->assertTrue($this->action->supports($request));
     }
 
-    /**
-     * @dataProvider provideNotSupportedRequests
-     */
+    #[DataProvider('provideNotSupportedRequests')]
     public function testShouldNotSupportRequest($request)
     {
         $this->assertFalse($this->action->supports($request));
     }
 
-    /**
-     * @dataProvider provideNotSupportedRequests
-     */
+    #[DataProvider('provideNotSupportedRequests')]
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
         $this->expectException(RequestNotSupportedException::class);
