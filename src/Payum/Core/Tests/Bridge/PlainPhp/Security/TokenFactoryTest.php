@@ -10,6 +10,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -235,9 +236,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider pathDataProvider
-     */
+    #[DataProvider('pathDataProvider')]
     public function testShouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result)
     {
         $token = new Token();

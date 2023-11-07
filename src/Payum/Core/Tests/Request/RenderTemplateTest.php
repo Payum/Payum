@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Request;
 use InvalidArgumentException;
 use Iterator;
 use Payum\Core\Request\RenderTemplate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RenderTemplateTest extends TestCase
@@ -45,11 +46,10 @@ class RenderTemplateTest extends TestCase
     }
 
     /**
-     * @dataProvider provideParameters
-     *
      * @param string $name
      * @param mixed  $value
      */
+    #[DataProvider('provideParameters')]
     public function testShouldAllowSetParameter($name, $value)
     {
         $request = new RenderTemplate('aTemplate', []);
@@ -64,11 +64,10 @@ class RenderTemplateTest extends TestCase
     }
 
     /**
-     * @dataProvider provideParameters
-     *
      * @param string $name
      * @param mixed  $value
      */
+    #[DataProvider('provideParameters')]
     public function testShouldAllowAddParameter($name, $value)
     {
         $request = new RenderTemplate('aTemplate', []);

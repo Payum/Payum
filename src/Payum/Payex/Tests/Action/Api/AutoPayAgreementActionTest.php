@@ -11,6 +11,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\AutoPayAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\AutoPayAgreement;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -91,9 +92,7 @@ class AutoPayAgreementActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    /**
-     * @dataProvider provideRequiredFields
-     */
+    #[DataProvider('provideRequiredFields')]
     public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
         $this->expectException(LogicException::class);

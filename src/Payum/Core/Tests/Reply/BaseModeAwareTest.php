@@ -9,6 +9,7 @@ use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Reply\BaseModelAware;
 use Payum\Core\Reply\ReplyInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -60,9 +61,7 @@ class BaseModeAwareTest extends TestCase
         yield 'resource' => [tmpfile()];
     }
 
-    /**
-     * @dataProvider provideDifferentPhpTypes
-     */
+    #[DataProvider('provideDifferentPhpTypes')]
     public function testShouldAllowSetModelAndGetIt($phpType)
     {
         $request = new class(123321) extends BaseModelAware {
@@ -73,9 +72,7 @@ class BaseModeAwareTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    /**
-     * @dataProvider provideDifferentPhpTypes
-     */
+    #[DataProvider('provideDifferentPhpTypes')]
     public function testShouldAllowGetModelSetInConstructor($phpType)
     {
         $request = new class($phpType) extends BaseModelAware {
