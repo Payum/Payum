@@ -4,11 +4,11 @@ namespace Payum\Core\Request;
 
 class GetBinaryStatus extends BaseGetStatus
 {
-    public const STATUS_PAYEDOUT = 4194304; //2^22
+    public const STATUS_PAYEDOUT = 4_194_304; //2^22
 
-    public const STATUS_UNKNOWN = 2097152; //2^21
+    public const STATUS_UNKNOWN = 2_097_152; //2^21
 
-    public const STATUS_FAILED = 1048576; //2^20
+    public const STATUS_FAILED = 1_048_576; //2^20
 
     public const STATUS_SUSPENDED = 524288; // 2^19
 

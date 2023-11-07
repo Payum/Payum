@@ -48,7 +48,7 @@ class DoctrineStorage extends AbstractStorage
 
     protected function doGetIdentity($model)
     {
-        $modelMetadata = $this->objectManager->getClassMetadata(get_class($model));
+        $modelMetadata = $this->objectManager->getClassMetadata($model::class);
         $id = $modelMetadata->getIdentifierValues($model);
         if (count($id) > 1) {
             throw new LogicException('Storage not support composite primary ids');

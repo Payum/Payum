@@ -27,7 +27,7 @@ trait ApiAwareTrait
         }
 
         if (! $api instanceof $this->apiClass) {
-            throw new UnsupportedApiException(sprintf('Not supported api given. It must be an instance of %s', is_object($this->apiClass) ? get_class($this->apiClass) : $this->apiClass));
+            throw new UnsupportedApiException(sprintf('Not supported api given. It must be an instance of %s', is_object($this->apiClass) ? $this->apiClass::class : $this->apiClass));
         }
 
         $this->api = $api;

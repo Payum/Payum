@@ -34,7 +34,7 @@ class ConvertPaymentAction implements ActionInterface
         $details['clientIdentifier'] = '';
         $details['additionalValues'] = '';
         $details['agreementRef'] = '';
-        $details['clientLanguage'] = $details['clientLanguage'] ?? 'en-US';
+        $details['clientLanguage'] ??= 'en-US';
         $details['autoPay'] = false;
 
         $request->setResult((array) $details);

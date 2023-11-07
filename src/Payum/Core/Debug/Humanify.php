@@ -51,7 +51,7 @@ abstract class Humanify
                 return $ro->getShortName();
             }
 
-            return get_class($value);
+            return $value::class;
         }
 
         return gettype($value);

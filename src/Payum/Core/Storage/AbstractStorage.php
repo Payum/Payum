@@ -95,7 +95,7 @@ abstract class AbstractStorage implements StorageInterface
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,
-                is_object($model) ? get_class($model) : gettype($model)
+                is_object($model) ? $model::class : gettype($model)
             ));
         }
     }

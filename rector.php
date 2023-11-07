@@ -4,9 +4,22 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
+use Rector\Php80\Rector\Identical\StrStartsWithRector;
+use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\Rector\StmtsAwareInterface\WithConsecutiveRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -15,10 +28,22 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses();
-    $rectorConfig->phpVersion(PhpVersion::PHP_72);
+    $rectorConfig->phpVersion(PhpVersion::PHP_80);
 
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_72,
+        LevelSetList::UP_TO_PHP_80,
+
+        // PHP
+        SetList::PHP_72,
+        SetList::PHP_73,
+        SetList::PHP_74,
+        SetList::PHP_80,
+
+        // Code Quality
+        // SetList::CODE_QUALITY,
+        // SetList::INSTANCEOF,
+        // SetList::STRICT_BOOLEANS,
+        // SetList::TYPE_DECLARATION,
 
         // PHPUnit
         PHPUnitSetList::PHPUNIT_40,
@@ -33,5 +58,18 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         AddSeeTestAnnotationRector::class,
+        WithConsecutiveRector::class,
+        ClosureToArrowFunctionRector::class,
+        ClassPropertyAssignToConstructorPromotionRector::class,
+
+        DataProviderAnnotationToAttributeRector::class,
+        TypedPropertyFromAssignsRector::class,
+        RemoveUnusedVariableInCatchRector::class,
+        AnnotationWithValueToAttributeRector::class,
+        JsonThrowOnErrorRector::class,
+        MixedTypeRector::class,
+        GetDebugTypeRector::class,
+        StrStartsWithRector::class,
+        StringableForToStringRector::class,
     ]);
 };

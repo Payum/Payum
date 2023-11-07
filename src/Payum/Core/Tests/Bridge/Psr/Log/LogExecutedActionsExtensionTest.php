@@ -104,8 +104,8 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->expects($this->exactly(2))
             ->method('debug')
             ->withConsecutive(
-                ['[Payum] 1# ' . get_class($action) . '::execute(string)'],
-                ['[Payum] 1# ' . get_class($action) . '::execute(array)']
+                ['[Payum] 1# ' . $action::class . '::execute(string)'],
+                ['[Payum] 1# ' . $action::class . '::execute(array)']
             )
         ;
 
@@ -133,8 +133,8 @@ class LogExecutedActionsExtensionTest extends TestCase
             ->expects($this->exactly(2))
             ->method('debug')
             ->withConsecutive(
-                ['[Payum] 1# ' . get_class($action) . '::execute(stdClass)'],
-                ['[Payum] 1# ' . get_class($action) . '::execute(NamespacedRequest)']
+                ['[Payum] 1# ' . $action::class . '::execute(stdClass)'],
+                ['[Payum] 1# ' . $action::class . '::execute(NamespacedRequest)']
             )
         ;
 
@@ -161,7 +161,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# ' . get_class($action) . '::execute(Capture{model: ArrayObject})')
+            ->with('[Payum] 1# ' . $action::class . '::execute(Capture{model: ArrayObject})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
@@ -182,7 +182,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('debug')
-            ->with('[Payum] 1# ' . get_class($action) . '::execute(Capture{model: stdClass})')
+            ->with('[Payum] 1# ' . $action::class . '::execute(Capture{model: stdClass})')
         ;
 
         $extension = new LogExecutedActionsExtension($logger);
