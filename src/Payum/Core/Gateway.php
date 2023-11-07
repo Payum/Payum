@@ -12,6 +12,7 @@ use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Reply\ReplyInterface;
 use ReflectionProperty;
+use Throwable;
 
 class Gateway implements GatewayInterface
 {
@@ -129,7 +130,7 @@ class Gateway implements GatewayInterface
         } catch (Exception $e) {
             // logic is similar to one in Symfony's ExceptionListener::onKernelException
             $wrapper = $e;
-            while ($prev = $wrapper->getPrevious()) {
+            while (($prev = $wrapper->getPrevious()) instanceof Throwable) {
                 if ($exception === $wrapper = $prev) {
                     throw $e;
                 }

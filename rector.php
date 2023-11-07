@@ -38,10 +38,7 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::PHP_80,
 
         // Code Quality
-        // SetList::CODE_QUALITY,
-        // SetList::INSTANCEOF,
-        // SetList::STRICT_BOOLEANS,
-        // SetList::TYPE_DECLARATION,
+        SetList::INSTANCEOF,
 
         // PHPUnit
         PHPUnitSetList::PHPUNIT_40,
@@ -50,7 +47,6 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_70,
         PHPUnitSetList::PHPUNIT_80,
         PHPUnitSetList::PHPUNIT_90,
-        // PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     ]);
 
