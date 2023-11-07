@@ -59,7 +59,7 @@ class SyncActionTest extends GenericActionTest
 
     public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
     {
-        $orderMock = $this->createMock(Klarna_Checkout_Order::class, ['marshal'], [], '', false);
+        $orderMock = $this->createMock(Klarna_Checkout_Order::class);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
@@ -125,6 +125,6 @@ class SyncActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

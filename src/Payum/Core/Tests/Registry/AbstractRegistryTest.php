@@ -180,7 +180,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage',
+            \Payum\Core\Tests\Registry\DoctrineModel::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -188,7 +188,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
+        $this->assertSame('barStorage', $registry->getStorage(\Payum\Core\Tests\Registry\DoctrineProxy::class));
     }
 
     public function testShouldAllowGetStorageIfDoctrineProxyObjectGiven()
@@ -198,7 +198,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            'Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage',
+            \Payum\Core\Tests\Registry\DoctrineModel::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([

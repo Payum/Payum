@@ -73,7 +73,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($charge->toArray(true));
+            $model->replace($charge->toArray());
         } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }

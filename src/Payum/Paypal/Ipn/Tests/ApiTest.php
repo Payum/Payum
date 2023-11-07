@@ -157,7 +157,7 @@ class ApiTest extends TestCase
      */
     protected function createHttpClientMock()
     {
-        return $this->createMock(HttpClientInterface::class, ['send']);
+        return $this->createMock(HttpClientInterface::class);
     }
 
     /**

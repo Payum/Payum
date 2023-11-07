@@ -114,6 +114,6 @@ class NotifyActionTest extends GenericActionTest
      */
     protected function createOrderMock()
     {
-        return $this->createMock(Klarna_Checkout_Order::class, [], [], '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

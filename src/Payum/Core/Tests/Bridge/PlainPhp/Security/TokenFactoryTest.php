@@ -2,6 +2,7 @@
 
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
+use Iterator;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
@@ -615,7 +616,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public static function pathDataProvider(): \Iterator
+    public static function pathDataProvider(): Iterator
     {
         yield ['http://example.com', 'capture.php', 'http://example.com/capture.php'];
         yield ['http://example.com/path', 'capture.php', 'http://example.com/path/capture.php'];

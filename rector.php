@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
-use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
-use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -18,8 +13,8 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src',
     ]);
 
-    //$rectorConfig->importNames();
-    //$rectorConfig->importShortClasses();
+    $rectorConfig->importNames();
+    $rectorConfig->importShortClasses();
     $rectorConfig->phpVersion(PhpVersion::PHP_72);
 
     $rectorConfig->sets([
@@ -37,12 +32,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        LongArrayToShortArrayRector::class,
-        StringClassNameToClassConstantRector::class,
-        RemoveExtraParametersRector::class,
-        PublicConstantVisibilityRector::class,
-
         AddSeeTestAnnotationRector::class,
-        RenameClassRector::class,
     ]);
 };
