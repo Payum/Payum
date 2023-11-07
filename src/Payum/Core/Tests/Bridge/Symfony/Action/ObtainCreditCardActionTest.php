@@ -340,7 +340,7 @@ class ObtainCreditCardActionTest extends TestCase
 
         try {
             $action->execute(new ObtainCreditCard($firstModel, $currentModel));
-        } catch (HttpResponse $e) {
+        } catch (HttpResponse) {
             return;
         }
 

@@ -53,7 +53,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
                 $model['exp_date'] = SensitiveValue::ensureSensitive($card->getExpireAt()->format('m/y'));
                 $model['card_num'] = SensitiveValue::ensureSensitive($card->getNumber());
                 $model['card_code'] = SensitiveValue::ensureSensitive($card->getSecurityCode());
-            } catch (RequestNotSupportedException $e) {
+            } catch (RequestNotSupportedException) {
                 throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
             }
         }

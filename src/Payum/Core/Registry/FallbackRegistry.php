@@ -26,7 +26,7 @@ class FallbackRegistry implements RegistryInterface
     {
         try {
             return $this->registry->getGatewayFactory($name);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getGatewayFactory($name);
         }
     }
@@ -40,7 +40,7 @@ class FallbackRegistry implements RegistryInterface
     {
         try {
             return $this->registry->getGateway($name);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getGateway($name);
         }
     }
@@ -54,7 +54,7 @@ class FallbackRegistry implements RegistryInterface
     {
         try {
             return $this->registry->getStorage($class);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getStorage($class);
         }
     }

@@ -54,7 +54,7 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 
         try {
             $extension->onPreExecute($context);
-        } catch (LogicException $e) {
+        } catch (LogicException) {
             $this->fail('Exception should not be thrown');
         }
     }

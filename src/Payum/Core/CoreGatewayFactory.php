@@ -141,14 +141,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
             },
-            'payum.http_client' => function (ArrayObject $config) {
-                return new HttplugClient($config['httplug.client']);
-            },
+            'payum.http_client' => fn (ArrayObject $config) => new HttplugClient($config['httplug.client']),
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
-            'twig.env' => function () {
-                return new Environment(new ChainLoader());
-            },
+            'twig.env' => fn () => new Environment(new ChainLoader()),
             'twig.register_paths' => function (ArrayObject $config) {
                 $twig = $config['twig.env'];
                 if (false == $twig instanceof Environment) {
@@ -167,30 +163,22 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'payum.action.authorize_payment' => new AuthorizePaymentAction(),
             'payum.action.payout_payout' => new PayoutPayoutAction(),
             'payum.action.execute_same_request_with_model_details' => new ExecuteSameRequestWithModelDetailsAction(),
-            'payum.action.render_template' => function (ArrayObject $config) {
-                return new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']);
-            },
+            'payum.action.render_template' => fn (ArrayObject $config) => new RenderTemplateAction($config['twig.env'], $config['payum.template.layout']),
             'payum.extension.endless_cycle_detector' => new EndlessCycleDetectorExtension(),
-            'payum.action.get_currency' => function (ArrayObject $config) {
-                return new GetCurrencyAction();
-            },
+            'payum.action.get_currency' => fn (ArrayObject $config) => new GetCurrencyAction(),
             'payum.prepend_actions' => [],
             'payum.prepend_extensions' => [],
             'payum.prepend_apis' => [],
             'payum.default_options' => [],
             'payum.required_options' => [],
 
-            'payum.api.http_client' => function (ArrayObject $config) {
-                return $config['payum.http_client'];
-            },
+            'payum.api.http_client' => fn (ArrayObject $config) => $config['payum.http_client'],
 
             'payum.security.token_storage' => null,
         ]);
 
         if ($config['payum.security.token_storage']) {
-            $config['payum.action.get_token'] = function (ArrayObject $config) {
-                return new GetTokenAction($config['payum.security.token_storage']);
-            };
+            $config['payum.action.get_token'] = fn (ArrayObject $config) => new GetTokenAction($config['payum.security.token_storage']);
         }
 
         $config['payum.paths'] = array_replace([

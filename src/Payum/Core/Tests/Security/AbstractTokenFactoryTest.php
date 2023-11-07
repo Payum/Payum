@@ -490,9 +490,7 @@ class AbstractTokenFactoryTest extends TestCase
         $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, [$tokenStorage, $registry]);
         $factoryMock
             ->method('generateUrl')
-            ->willReturnCallback(function ($path, array $args) {
-                return $path . '?' . http_build_query($args);
-            })
+            ->willReturnCallback(fn ($path, array $args) => $path . '?' . http_build_query($args))
         ;
 
         return $factoryMock;
