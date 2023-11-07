@@ -1,2 +1,2 @@
-# silex
+# Silex
 

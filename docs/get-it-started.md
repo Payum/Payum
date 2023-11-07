@@ -1,47 +1,42 @@
-<h2 align="center">Supporting Payum</h2>
+# Get started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on. All that stuff will be used later.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+{% hint style="info" %}
+_**Note**: If you are working with **Symfony framework** look read the bundle's_ [_documentation_](./#symfony-payum-bundle) _instead._
+{% endhint %}
 
----
+{% hint style="info" %}
+_**Note**: If you are working with **Laravel framework** look read the_ [_documentation_](./#laravel-payum-package) _instead._
+{% endhint %}
 
-# Get it started.
+### Install
 
-Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on.
-All that stuff will be used later.
-
-_**Note**: If you are working with Symfony2 framework look read the bundle's [documentation](index.md#symfony-payum-bundle) instead._
-
-_**Note**: If you are working with Laravel5 framework look read the bundle's [documentation](index.md#laravel-payum-package) instead._
-
-## Install
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
 php composer.phar require payum/offline php-http/guzzle7-adapter
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](supported-gateways.md) to find out what you can use._
+{% hint style="info" %}
+_**Note**: Where **payum/offline** is a php payum extension, you can for example change it to **payum/paypal-express-checkout-nvp** or **payum/stripe**. Look at_ [_supported gateways_](supported-gateways.md) _to find out what you can use._
+{% endhint %}
 
-_**Note**: Use payum/payum if you want to install all gateways at once._
+{% hint style="info" %}
+_**Note**: Use **payum/payum** if you want to install all gateways at once._
+{% endhint %}
 
-_**Note**: Use php-http/guzzle6-adapter is just an example. You can use any of [these adapters](https://packagist.org/providers/php-http/client-implementation)._
+{% hint style="info" %}
+_**Note**: Use **php-http/guzzle7-adapter** is just an example. You can use any of_ [_these adapters_](https://packagist.org/providers/php-http/client-implementation)_._
+{% endhint %}
 
-Before we configure the payum let's look at the flow diagram.
-This flow is same for all gateways so once you familiar with it any other gateways could be added easily.
+Before we configure payum, let's look at the flow diagram. This flow is same for all gateways so once you familiar with it any other gateways could be added easily.
 
-![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg&s=default)
+![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg\&s=default)
 
-As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`.
-At the end you will have the complete solution and 
-it would be [much easier to add](paypal/express-checkout/get-it-started.md) other gateways.
-Let's start from the `config.php` and continue with rest after:
+As you can see we have to create some php files: `config.php`, `prepare.php`, `capture.php` and `done.php`. At the end you will have the complete solution and it would be [much easier to add](paypal/express-checkout/get-it-started.md) other gateways. Let's start from the `config.php` and continue with rest after:
 
-## config.php
+### config.php
 
 Here we can put our gateways, storages. Also we can configure security components. The `config.php` has to be included to all left files.
 
@@ -66,15 +61,13 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-_**Note**: There are other [storages](storages.md) available. Such as Doctrine ORM\MongoODM._
+_**Note**: There are other_ [_storages_](storages.md) _available. Such as Doctrine ORM\MongoODM._
 
 _**Note**: Consider using something other than `FilesystemStorage` in production._
 
-## prepare.php
+### prepare.php
 
-At this stage we have to create an order. Add some information into it. 
-Create a capture token and delegate the job to [capture.php](examples/capture-script.md) script.
-Here's an offline gateway example:
+At this stage we have to create an order. Add some information into it. Create a capture token and delegate the job to [capture.php](examples/capture-script.md) script. Here's an offline gateway example:
 
 ```php
 <?php
@@ -109,12 +102,11 @@ $captureToken = $payum->getTokenFactory()->createCaptureToken($gatewayName, $pay
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-_**Note**: There are examples for all [supported gateways](supported-gateways.md)._
+_**Note**: There are examples for all_ [_supported gateways_](supported-gateways.md)_._
 
-## capture.php
+### capture.php
 
-When the preparation is done a user is redirect to `capture.php`. Here's an example of this file. You can just copy\past the code. 
-It has to work for all gateways without any modification from your side. 
+When the preparation is done a user is redirect to `capture.php`. Here's an example of this file. You can just copy\past the code. It has to work for all gateways without any modification from your side.
 
 ```php
 <?php
@@ -149,13 +141,11 @@ $payum->getHttpRequestVerifier()->invalidate($token);
 header("Location: ".$token->getAfterUrl());
 ```
 
-_**Note**: Find out more about capture script in the [dedicated chapter](examples/capture-script.md)._
+_**Note**: Find out more about capture script in the_ [_dedicated chapter_](examples/capture-script.md)_._
 
-## done.php
+### done.php
 
-After the capture did its job you will be redirected to [done.php](examples/done-script.md).
-The [capture.php](examples/capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not.
-In `done.php` we may check the payment status, update the model, dispatch events and so on.
+After the capture did its job you will be redirected to [done.php](examples/done-script.md). The [capture.php](examples/capture-script.md) script always redirects you to `done.php` no matter the payment was a success or not. In `done.php` we may check the payment status, update the model, dispatch events and so on.
 
 ```php
 <?php
@@ -191,6 +181,12 @@ echo json_encode([
 ]);
 ```
 
-_**Note**: Find out more about done script in the [dedicated chapter](examples/done-script.md)._
+_**Note**: Find out more about done script in the_ [_dedicated chapter_](examples/done-script.md)_._
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

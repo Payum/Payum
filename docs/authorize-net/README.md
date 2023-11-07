@@ -1,2 +1,2 @@
-# authorize-net
+# Authorize-NET
 

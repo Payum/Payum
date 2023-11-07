@@ -1,17 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Laravel Package. Eloquent Storage
+# Eloquent Storage
 
 Here we show how to store data in database using [Eloquent ORM](http://laravel.com/docs/4.2/eloquent).
 
-## Usage
+### Usage
 
 Create an eloquent model:
 
@@ -23,7 +14,7 @@ class Payment extends Illuminate\Database\Eloquent\Model
 }
 ```
 
-Register a storage for it 
+Register a storage for it
 
 ```php
 // bootstrap/start.php
@@ -37,10 +28,9 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 });
 ```
 
-## Models 
+### Models
 
-The package provides two models `Payum\LaravelPackage\Model\Token` and `Payum\LaravelPackage\Model\Payment` which may be reused directly or extend with some custom logic.
-Here's the models schemas:
+The package provides two models `Payum\LaravelPackage\Model\Token` and `Payum\LaravelPackage\Model\Payment` which may be reused directly or extend with some custom logic. Here's the models schemas:
 
 Payment:
 
@@ -78,7 +68,6 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 });
 ```
 
-
 Token:
 
 The database schema could be generated like this
@@ -112,4 +101,10 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 });
 ```
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

@@ -1,15 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Refund Payment
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Refund payment
-
-Let's say you already purchased an order and now you want to refund it. 
+Let's say you already purchased an order and now you want to refund it.
 
 ```php
 <?php
@@ -31,4 +22,10 @@ if ($status->isRefunded()) {
 }
 ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

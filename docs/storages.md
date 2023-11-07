@@ -1,19 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
 # Storages
 
-Storage allow you save,fetch payment related information. 
-They could be used explicitly, it means you have to call save or fetch methods when it is required. 
-Or you can integrate a storage to a gateway using `StorageExtension`. 
-In this case every time gateway finish to execute a request it stores the information. 
-`StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
+Storage allow you save,fetch payment related information. They could be used explicitly, it means you have to call save or fetch methods when it is required. Or you can integrate a storage to a gateway using `StorageExtension`. In this case every time gateway finish to execute a request it stores the information. `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
 Explicitly used example:
 
@@ -32,7 +19,7 @@ $storage->update($order);
 $foundOrder = $storage->find($order->getNumber());
 ```
 
-Implicitly used example: 
+Implicitly used example:
 
 ```php
 <?php
@@ -69,7 +56,7 @@ echo get_class($capture->getModel());
 // -> Payum\Core\Model\Payment
 ```
 
-## Doctrine ORM
+### Doctrine ORM
 
 ```
 php composer.phar install "doctrine/orm"
@@ -163,7 +150,7 @@ $tokenStorage = new DoctrineStorage(
 );
 ```
 
-### Doctrine MongoODM.
+#### Doctrine MongoODM.
 
 ```
 php composer.phar require "doctrine/mongodb-odm:^2.1"
@@ -256,9 +243,9 @@ $documentManager = DocumentManager::create(null, $config);
 
 $orderStorage = new DoctrineStorage($documentManager, 'Acme\Document\Payment');
 $tokenStorage = new DoctrineStorage($documentManager, 'Acme\Document\SecurityToken');
-```        
+```
 
-## Filesystem.
+### Filesystem.
 
 ```php
 <?php
@@ -271,7 +258,7 @@ $storage = new FilesystemStorage(
 );
 ```
 
-## Custom.
+### Custom.
 
 You can create your own custom storage. To do so just implement `StorageInterface`.
 
@@ -285,9 +272,15 @@ class CustomStorage implements StorageInterface
 }
 ```
 
-## TODO
+### TODO
 
 * [Pdo](http://php.net/manual/en/book.pdo.php) Storage - https://github.com/Payum/Payum/issues/205
 * [Yii ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar) Storage - https://github.com/Payum/PayumYiiExtension/pull/4
 
-* [Back to index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

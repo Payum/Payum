@@ -1,17 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Stripe. Subscription billing.
+# Subscription Billing
 
 In this chapter we show how to create subscription plan and use it in future to charge a customer.
 
-## Create a plan
+### Create a plan
 
 ```php
 <?php
@@ -31,7 +22,7 @@ $plan = new \ArrayObject([
 $payum->getGateway('gatewayName')->execute(new CreatePlan($plan));
 ```
 
-## Subscribing a customer to a plan
+### Subscribing a customer to a plan
 
 This is a usual charge as we showed it in [get-it-started](../get-it-started.md) with only these additions:
 
@@ -53,8 +44,14 @@ $payment->setDetails(new \ArrayObject([
 ]));
 ```
 
-## Links
+### Links
 
-* https://stripe.com/docs/subscriptions/tutorial
+* [https://stripe.com/docs/subscriptions/tutorial](https://stripe.com/docs/subscriptions/tutorial)
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

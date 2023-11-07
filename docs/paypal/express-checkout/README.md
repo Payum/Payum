@@ -1,2 +1,2 @@
-# express-checkout
+# Express Checkout
 

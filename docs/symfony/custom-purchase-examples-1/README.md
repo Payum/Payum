@@ -1,2 +1,2 @@
-# custom-purchase-examples
+# Custom Purchase Examples
 

@@ -1,33 +1,24 @@
-<h2 align="center">Supporting Payum</h2>
+# Supported Gateways
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+### Official
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+* [Paypal Express Checkout](./#paypal-express-checkout)
+* [Paypal Pro Checkout](./#paypal-pro-checkout)
+* [Paypal Pro Hosted](./#paypal-pro-hosted)
+* [Paypal Masspay](./#paypal-masspay)
+* [Paypal Rest](./#paypal-rest)
+* [Stripe.js](./#stripe)
+* [Stripe Checkout](./#stripe)
+* [Authorize.Net AIM](./#authorizenet-aim)
+* [Be2Bill CreditCard](./#be2bill)
+* [Be2Bill Offsite](./#be2bill)
+* [Payex](./#payex)
+* [Offline](./#offline)
+* [Klarna Checkout](./#klarna-checkout)
+* [Klarna Invoice](./#klarna-invoice)
+* [Sofort](./#sofort)
 
----
-
-# Supported gateways.
-
-## Official
-
-* [Paypal Express Checkout](index.md#paypal-express-checkout)
-* [Paypal Pro Checkout](index.md#paypal-pro-checkout)
-* [Paypal Pro Hosted](index.md#paypal-pro-hosted)
-* [Paypal Masspay](index.md#paypal-masspay)
-* [Paypal Rest](index.md#paypal-rest)
-* [Stripe.js](index.md#stripe)
-* [Stripe Checkout](index.md#stripe)
-* [Authorize.Net AIM](index.md#authorizenet-aim)
-* [Be2Bill CreditCard](index.md#be2bill)
-* [Be2Bill Offsite](index.md#be2bill)
-* [Payex](index.md#payex)
-* [Offline](index.md#offline)
-* [Klarna Checkout](index.md#klarna-checkout)
-* [Klarna Invoice](index.md#klarna-invoice)
-* [Sofort](index.md#sofort)
-
-## Community
+### Community
 
 * [PayU India and PayUBiz (knit-pay/payum-payu-india)](https://github.com/knit-pay/payum-payu-india)
 * [r3s7/PayumDineroMail](https://github.com/r3s7/PayumDineroMail)
@@ -40,12 +31,12 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [invit/payum-sofortueberweisung (abandoned)](https://github.com/invit/payum-sofortueberweisung)
 * [wiseape/payum-sofortuberweisung (abandoned)](https://github.com/wiseape/payum-sofortuberweisung)
 * [wiseape/payum-paymill](https://github.com/wiseape/payum-paymill)
-* [gdaws/payum_braintree](https://github.com/gdaws/payum_braintree)
+* [gdaws/payum\_braintree](https://github.com/gdaws/payum\_braintree)
 * [peterfox/Payum-Bitpay](https://github.com/peterfox/Payum-Bitpay)
 * [winzou/payum-limonetik](https://github.com/winzou/payum-limonetik)
 * [ekipower/payum-nganluong](https://github.com/ekipower/payum-nganluong)
 * [tmconsulting/payum-uniteller-gateway](https://github.com/tmconsulting/payum-uniteller-gateway) (^1.4)
-* [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller) (0.14.*)
+* [fullpipe/payum-uniteller](https://github.com/fullpipe/payum-uniteller) (0.14.\*)
 * [fullpipe/payum-flexidengi](https://github.com/fullpipe/payum-flexidengi)
 * [paradigm/payum-trustly](https://github.com/Paradigmfi/PayumTrustly)
 * [paradigm/payum-paytrail](https://github.com/Paradigmfi/PayumPaytrail)
@@ -65,7 +56,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [Setono/payum-quickpay](https://github.com/Setono/payum-quickpay)
 * [ilcleme/payum-tinkl](https://github.com/ilCleme/payum-tinkl)
 
-## Omnipay gateways.
+### Omnipay gateways.
 
 * [thephpleague/omnipay-2checkout](https://github.com/thephpleague/omnipay-2checkout)
 * [lokielse/omnipay-alipay](https://github.com/lokielse/omnipay-alipay)
@@ -105,10 +96,10 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [thephpleague/omnipay-stripe](https://github.com/thephpleague/omnipay-stripe)
 * [thephpleague/omnipay-targetpay](https://github.com/thephpleague/omnipay-targetpay)
 * [thephpleague/omnipay-worldpay](https://github.com/thephpleague/omnipay-worldpay)
-* [aTastyCookie/yandexmoney_omnipay](https://github.com/aTastyCookie/yandexmoney_omnipay)
+* [aTastyCookie/yandexmoney\_omnipay](https://github.com/aTastyCookie/yandexmoney\_omnipay)
 * [antqa/payum-perfectmoney](https://github.com/antqa/payum-perfectmoney)
 
-## JMS payment plugins
+### JMS payment plugins
 
 * [Paypal Express Checkout](http://jmsyst.com/bundles/JMSPaymentPaypalBundle)
 * [Slim CD](https://github.com/mpoplin/TPMPaymentSlimCDBundle)
@@ -127,4 +118,10 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * [Multisafepay](https://github.com/ruudk/PaymentMultisafepayBundle)
 * [Sips](https://github.com/KptiveStudio/KptivePaymentSipsBundle)
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

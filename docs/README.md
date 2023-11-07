@@ -1,110 +1,102 @@
-<h2 align="center">Supporting Payum</h2>
+# Payum docs
+
+* #### General
+  * [Get it started](get-it-started.md)
+  * [Architecture](the-architecture.md)
+  * [Storages](storages.md)
+  * [Configure gateway in backend](configure-gateway-in-backend.md)
+  * [Encrypt gateway configs stored in database](encrypt-gateway-configs-stored-in-database.md)
+  * [Working with sensitive information](working-with-sensitive-information.md)
+  * [Mask credit card number](mask-credit-card-number.md)
+  * [Instant payment notification](instant-payment-notification.md)
+  * [Develop gateway with payum](develop-gateway-with-payum.md)
+  * [Supported gateways](supported-gateways.md)
+  * [Frameworks and e-commerce integration](frameworks-and-e-commerce-integration.md)
+  * [Logger](logger.md)
+  * [Debugging](debugging.md)
+  * [ISO4217. Currency details](iso4217-or-currency-details.md)
+  * [Payum vs Omnipay](payum-vs-omnipay.md)
+  * [Symfony. The event dispatcher extension](event-dispatcher.md)
+  * [How to contribute from sub repository](how-to-contribute-from-subrepository.md)
+* #### Authorize.Net AIM
+  * [Get it started](authorize-net/aim/get-it-started.md)
+* #### Be2Bill
+  * [Direct](be2bill/direct.md)
+  * [Offsite](be2bill/offsite.md)
+* #### Klarna Checkout
+  * [Get it started](klarna/checkout/get-it-started.md)
+* #### Klarna Invoice
+  * [Get it started](klarna/invoice/get-it-started.md)
+* #### Offline
+  * [Get it started](offline/get-it-started.md)
+* #### Payex
+  * [Get it started](payex/get-it-started.md)
+* #### Paypal Express Checkout
+  * [Get it started](paypal/express-checkout/get-it-started.md)
+  * [Authorize order](paypal/express-checkout/authorize-order.md)
+  * [Confirm order step](paypal/express-checkout/confirm-order-step.md)
+  * [Recurring payments basics](paypal/express-checkout/recurring-payments-basics.md)
+  * [Cancel recurring payment](paypal/express-checkout/cancel-recurring-payment.md)
+  * [Authorize token custom query parameters](paypal/express-checkout/authorize-token-custom-query-parameters.md)
+* #### Paypal Pro Checkout
+  * [Get it started](paypal/pro-checkout/get-it-started.md)
+* #### Paypal Pro Hosted
+  * [Get it started](paypal/pro-hosted/get-it-started.md)
+* #### Paypal Masspay
+  * [Get it started](paypal/masspay/get-it-started.md)
+* #### Paypal Rest
+  * [Get it started](paypal/rest/get-it-started.md)
+  * [Credit card purchase](paypal/rest/credit-card-purchase.md)
+* #### Paypal IPN
+  * [Get it started](paypal/ipn/get-it-started.md)
+* #### Sofort
+  * [Get it started](sofort/get-it-started.md)
+  * [Disable notifications](sofort/disable-notifications.md)
+* #### Stripe
+  * [Stripe.js](stripe/js.md)
+  * [Checkout](stripe/checkout.md)
+  * [Direct](stripe/direct.md)
+  * [Raw capture](stripe/raw-capture.md)
+  * [Store Card and use later](stripe/store-card-and-use-later.md)
+  * [Subscription billing](stripe/subscription-billing.md)
+* #### Symfony Payum Bundle
+  * [Get it started. Capture](symfony/get-it-started.md)
+  * [Authorize](symfony/authorize.md)
+  * [Refund](symfony/refund.md)
+  * [Storages](symfony/storages.md)
+  * [Done action](symfony/purchase-done-action.md)
+  * [Configure payment in backend](symfony/configure-payment-in-backend.md)
+  * [Encrypt gateway configs stored in database](symfony/encrypt-gateway-configs-stored-in-database.md)
+  * [Custom action usage](symfony/custom-action-usage.md)
+  * [Custom api usage](symfony/custom-api-usage.md)
+  * [Custom purchase examples](symfony/custom-purchase-examples.md)
+  * [Sandbox](symfony/sandbox.md)
+  * [Console commands](symfony/console-commands.md)
+  * [Debugging](symfony/debugging.md)
+  * [Configuration reference](symfony/configuration-reference.md)
+  * [Container tags](symfony/container-tags.md)
+  * [ISO4217. Currency details](symfony/iso4217-or-currency-details.md)
+* #### Laravel Payum Package
+  * [Get it started](laravel/get-it-started.md)
+  * [Examples](laravel/examples.md)
+  * [Eloquent storage](laravel/eloquent-storage.md)
+  * [Payment done controller](laravel/payment-done-controller.md)
+  * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
+  * [Blade templates](laravel/blade-templating.md)
+* #### Silex Payum Provider
+  * [Get it started](silex/get-it-started.md)
+  * [Payment done controller](silex/payment-done-controller.md)
+* #### Symfony JMS Payment Bridge
+  * [Get it started. Capture](jms-payment-bridge/get-it-started.md)
+* #### [Zend Payum Module (External)](https://github.com/Payum/PayumModule)
+* #### [Yii Payum Extension (External)](https://github.com/Payum/PayumYiiExtension)
+* #### [Omnipay Bridge (External)](https://github.com/Payum/OmnipayBridge)
+* #### [Payum Server (External)](https://github.com/Payum/PayumServer)
+
+***
+
+### Supporting Payum
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Configure gateway in backend
-
-In [get it started](get-it-started.md) we showed you how to configure gateways in the code. 
-Sometimes you may asked to store gateways (mostly gateway credentials) to a database for example. 
-So the admin can edit them in the backend. Here's the basic example how to do it in plain php. 
-   
-## Configure
-
-First we have to create an entity where we store information about a gateway. 
-The model must implement `Payum\Core\Model\GatewayConfigInterface`.
-
-_**Note**: In this chapter we use DoctrineStorage._
-
-```php
-<?php
-namespace Acme\Payment\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\GatewayConfig as BaseGatewayConfig;
-
-/**
- * @ORM\Table
- * @ORM\Entity
- */
-class GatewayConfig extends BaseGatewayConfig
-{
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     * @var integer $id
-     */
-    protected $id;
-}
-```
-
-Now, we have to create a storage for it and build payum with gateway config storage.
-
-```php
-<?php
-//config.php
-
-use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
-use Payum\Core\PayumBuilder;
-use Payum\Core\Payum;
-use Payum\Core\Registry\DynamicRegistry;
-
-// $objectManager is an instance of doctrine object manager.
-
-$gatewayConfigStorage = new DoctrineStorage($objectManager, 'Acme\Payment\Entity\GatewayConfig');
-
-/** @var Payum $payum */
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-    ->setGatewayConfigStorage($gatewayConfigStorage)
-
-    ->getPayum()
-;
-```
-
-## Store gateway config
-
-```php
-<?php
-//create_config.php
-
-include __DIR__.'/config.php';
-
-/** @var \Payum\Core\Storage\StorageInterface $gatewayConfigStorage */
-
-$gatewayConfig = $gatewayConfigStorage->create();
-$gatewayConfig->setGatewayName('paypal');
-$gatewayConfig->setFactoryName('paypal_express_checkout_nvp');
-$gatewayConfig->setConfig(array(
-    'username' => 'EDIT ME',
-    'password' => 'EDIT ME',
-    'signature' => 'EDIT ME',
-    'sandbox' => true,
-));
-
-$gatewayConfigStorage->update($gatewayConfig);
-```
-
-## Use gateway
-
-```php
-<?php
-// prepare.php
-
-include __DIR__.'/config.php';
-
-/** @var \Payum\Core\Payum $payum */
-$gateway = $payum->getGateway('paypal');
-```
-
-Back to [index](index.md).
-
- 
- 
-
+* [Become a sponsor](https://github.com/sponsors/Payum)

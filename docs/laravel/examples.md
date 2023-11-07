@@ -1,19 +1,10 @@
-<h2 align="center">Supporting Payum</h2>
+# Examples
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Laravel Package. Examples
-
-## Paypal Express checkout
+Paypal Express checkout
 
 Described in [Get it started](get-it-started.md)
 
-## Payment model
+### Payment model
 
 * Configuration
 
@@ -66,7 +57,7 @@ class PaymentController extends PayumController
 }
 ```
 
-## Stripe.Js
+### Stripe.Js
 
 * Configuration
 
@@ -115,7 +106,7 @@ class StripeController extends PayumController
 }
 ```
 
-## Stripe Checkout
+### Stripe Checkout
 
 * Configuration
 
@@ -164,7 +155,7 @@ class StripeController extends PayumController
 }
 ```
 
-## Stripe Direct (via Omnipay)
+### Stripe Direct (via Omnipay)
 
 * Configuration
 
@@ -215,4 +206,10 @@ class OmnipayController extends PayumController
 }
 ```
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

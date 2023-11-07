@@ -1,30 +1,21 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
 # Frameworks and e-commerce integration.
 
-## Frameworks.
+### Frameworks
 
-* [PayumBundle](index.md#symfony-payum-bundle) for [Symfony2](http://symfony.com/).
-* [PayumSilexProvider](index.md#silex-payum-provider) for [Silex](http://silex.sensiolabs.org/)
-* [PayumLaravelPackage](index.md#laravel-payum-package) for [Laravel](http://laravel.com/)
-* [PayumModule](index.md#zend-payum-module-external) for [Zend2](http://framework.zend.com/)
-* [PayumYiiExtension](index.md#yii-payum-extension-external) for [Yii](http://www.yiiframework.com/)
+* [PayumBundle](./#symfony-payum-bundle) for [Symfony2](http://symfony.com/).
+* [PayumSilexProvider](./#silex-payum-provider) for [Silex](http://silex.sensiolabs.org/)
+* [PayumLaravelPackage](./#laravel-payum-package) for [Laravel](http://laravel.com/)
+* [PayumModule](./#zend-payum-module-external) for [Zend2](http://framework.zend.com/)
+* [PayumYiiExtension](./#yii-payum-extension-external) for [Yii](http://www.yiiframework.com/)
 
-## Storages.
+### Storages
 
 * Doctrine ORM\MongoODM
 * Laminas Db Gateway
 * Elouqent
 * Filesystem
 
-## E-Commerce
+### E-Commerce
 
 * [Sylius](http://sylius.com/).
 
@@ -42,4 +33,10 @@ Speckcommerce is a shop solution for zend framework2 developers. They have [plan
 
 French e-commerce solution. They [mentioned on their blog](http://thelia.net/thelia-attended-the-first-symfonycon-which-took-place-from-10th-to-14th-december-in-warsaw-poland/) that they want to integrate Payum.
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

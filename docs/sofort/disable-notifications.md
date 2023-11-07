@@ -1,17 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
+# Disable Notifications
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+When you are working locally with Sofort you may get
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Sofort. Disable notifications
-
-When you are working locally with Sofort you may get 
-
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <errors>
   <error>
@@ -22,8 +13,7 @@ When you are working locally with Sofort you may get
 </errors>
 ```
 
-That's because the notification URL you sent to Sofort is not reachable and Sofort returns error in this case.
-To work around the problem you can disable notifications by setting the additional option:
+That's because the notification URL you sent to Sofort is not reachable and Sofort returns error in this case. To work around the problem you can disable notifications by setting the additional option:
 
 ```php
 <?php
@@ -52,4 +42,10 @@ payum:
 
 Pay attention that you must do it only for local/dev environments and never in production.
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

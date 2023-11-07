@@ -1,23 +1,14 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Paypal pro checkout
+# Paypal Pro Checkout
 
 Steps:
 
-* [Download libraries](#download-libraries)
-* [Configure gateway](#configure-context)
-* [Prepare payment](#prepare-payment)
+* [Download libraries](paypal-pro-checkout.md#download-libraries)
+* [Configure gateway](paypal-pro-checkout.md#configure-context)
+* [Prepare payment](paypal-pro-checkout.md#prepare-payment)
 
-_**Note**: We assume you followed all steps in [get it started](../get-it-started.md) and your basic configuration same as described there._
+_**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._
 
-## Download libraries
+### Download libraries
 
 Run the following command:
 
@@ -25,7 +16,7 @@ Run the following command:
 $ php composer.phar require "payum/paypal-pro-checkout-nvp"
 ```
 
-## Configure gateway
+### Configure gateway
 
 ```yaml
 #app/config/config.yml
@@ -44,12 +35,11 @@ payum:
 
 _**Attention**: You have to change `your_gateway_name` to something more descriptive and domain related, for example `post_a_job_with_paypal`._
 
-_**Note**: `tender`: `C` for Credit card, `P` for PayPal, `A` for Automated Clearinghouse (ACH). [Read more](https://developer.paypal.com/docs/classic/payflow/recurring-billing/#required-parameters-for-the-modify-and-reactivate-actions)_
+_**Note**: `tender`: `C` for Credit card, `P` for PayPal, `A` for Automated Clearinghouse (ACH)._ [_Read more_](https://developer.paypal.com/docs/classic/payflow/recurring-billing/#required-parameters-for-the-modify-and-reactivate-actions)
 
-## Prepare payment
+### Prepare payment
 
-Now we are ready to prepare the payment. Here we set price, currency, cart items details and so.
-Please note that you have to set details in the payment gateway specific format.
+Now we are ready to prepare the payment. Here we set price, currency, cart items details and so. Please note that you have to set details in the payment gateway specific format.
 
 ```php
 <?php
@@ -83,8 +73,7 @@ class PaymentController extends Controller
 }
 ```
 
-That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
-Check [this chapter](../purchase-done-action.md) to find out how this done action could look like.
+That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action. Check [this chapter](../purchase-done-action.md) to find out how this done action could look like.
 
 If you still able to pass credit card details explicitly:
 
@@ -97,7 +86,14 @@ $details['cvv2'] = new SensitiveValue('123');
 $details['expDate'] = new SensitiveValue('1214');
 ```
 
-## Next Step
+### Next Step
 
 * [Examples list](../custom-purchase-examples.md).
-* [Back to index](../../index.md).
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

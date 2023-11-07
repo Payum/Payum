@@ -1,17 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Purchase done action
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Purchase done action
-
-We assume you already know how to prepare payment details and how to capture them.
-The last thing in this store what to do after?
-This chapter should cover these questions.
+We assume you already know how to prepare payment details and how to capture them. The last thing in this store what to do after? This chapter should cover these questions.
 
 Well, let's assume you created capture token this way while preparing payment.
 
@@ -24,8 +13,7 @@ $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
 );
 ```
 
-Pay attention to third parameter `acme_payment_done`.
-It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
+Pay attention to third parameter `acme_payment_done`. It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
 
 ```php
 <?php
@@ -61,8 +49,12 @@ It is the route of url you will be redirected after capture done its job. Let's 
     }
 ```
 
-In general you have to check status of the payment and do whatever you want depending on it.
-For example if payment success you  would add a user some credits or update expiration date.
-If not you redirect him to homepage and show a flash message with a bad news.
+In general you have to check status of the payment and do whatever you want depending on it. For example if payment success you would add a user some credits or update expiration date. If not you redirect him to homepage and show a flash message with a bad news.
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

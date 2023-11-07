@@ -1,2 +1,2 @@
-# pro-checkout
+# Pro Checkout
 

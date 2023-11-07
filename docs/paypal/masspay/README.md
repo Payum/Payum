@@ -1,2 +1,2 @@
-# masspay
+# Masspay
 

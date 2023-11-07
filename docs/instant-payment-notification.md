@@ -1,26 +1,12 @@
-<h2 align="center">Supporting Payum</h2>
+# Instant payment notification
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+A notification is a callback. A gateway sends it back to you to let you know about changes. It could be due a refund or pending payment acceptance. The diagram shows two examples where notification could be very handy:
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+![notification](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgUGF5cGFsCgAHDGNhcHR1cmUucGhwAAsNbm90aWZ5ABIFCgAZCy0-KwA\_BjogYSBwdXJjYWhzZQoAUgYtPi0AQws6IHBlbmRpbmcAFggtPgBKCjogc3VjY2VzcwBiBmljYXRpb24AMTkARgcAVBZjYW5jZWxlZCAodXNlciB2b2lkIG9uIHAAggcFIHNpZGUp\&s=default)
 
----
+If you follow [get it started](get-it-started.md) and used a payum builder to create paypal gateway, you do not have to care about notify url. Payum does it for you. You just have to make sure [notify script](examples/notify-script.md) is accessible from web.
 
-# Instant payment notification.
-
-A notification is a callback. A gateway sends it back to you to let you know about changes.
-It could be due a refund or pending payment acceptance.
-The diagram shows two examples where notification could be very handy:
-
-![notification](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgUGF5cGFsCgAHDGNhcHR1cmUucGhwAAsNbm90aWZ5ABIFCgAZCy0-KwA_BjogYSBwdXJjYWhzZQoAUgYtPi0AQws6IHBlbmRpbmcAFggtPgBKCjogc3VjY2VzcwBiBmljYXRpb24AMTkARgcAVBZjYW5jZWxlZCAodXNlciB2b2lkIG9uIHAAggcFIHNpZGUp&s=default)
-
-If you follow [get it started](get-it-started.md) and used a payum builder to create paypal gateway,
-you do not have to care about notify url. Payum does it for you.
-You just have to make sure [notify script](examples/notify-script.md) is accessible from web.
-
-The model will be updated automatically once the notification is sent.
-What you have to do is add an extension to detect payment status changes, and act accordingly.
+The model will be updated automatically once the notification is sent. What you have to do is add an extension to detect payment status changes, and act accordingly.
 
 Here's an example of the extension:
 
@@ -75,4 +61,10 @@ class PaymentStatusExtension implements ExtensionInterface
 }
 ```
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

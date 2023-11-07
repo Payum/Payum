@@ -1,20 +1,10 @@
-<h2 align="center">Supporting Payum</h2>
+# Authorize Payment
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In [get it started](get-it-started.md) we showed you an example of how to capture the payment. It is not always the case, sometimes you want to just authorize it and capture a bit later.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Prepare payment
 
----
-
-# Payum Bundle. Authorize payment
-
-In [get it started](get-it-started.md) we showed you an example of how to capture the payment. 
-It is not always the case, sometimes you want to just authorize it and capture a bit later.
-   
-## Prepare payment
-
-We have to caThe only difference from capture one example 
+We have to caThe only difference from capture one example
 
 ```php
 <?php
@@ -57,4 +47,10 @@ class PaymentController extends Controller
 }
 ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

@@ -1,27 +1,16 @@
-<h2 align="center">Supporting Payum</h2>
+# Debugging
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+### Debug payment
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Debugging
-
-## Debug payment
-
-This could be helpful when you want to find out what actions were added to payment and in which order. 
-Also it will show extensions and apis added too.  
+This could be helpful when you want to find out what actions were added to payment and in which order. Also it will show extensions and apis added too.
 
 ```bash
 $ php bin/console debug:payum:gateway
 ```
 
-## Logs
+### Logs
 
-Whenever you have problems, or want to understand Payum internals: _check the log file_.
-It contains the whole stack of called actions including details about a request and a model.
+Whenever you have problems, or want to understand Payum internals: _check the log file_. It contains the whole stack of called actions including details about a request and a model.
 
 _**Note:** The profiler allows to choose from up to 10 last http requests. So find desired one and check the logs section._
 
@@ -52,4 +41,10 @@ DEBUG - [Payum] 4# Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetExpressCheckou
 DEBUG - [Payum] 4# Payum\Paypal\ExpressCheckout\Nvp\Action\Api\GetTransactionDetailsAction::execute(GetTransactionDetails{model: ArrayObject})
 ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

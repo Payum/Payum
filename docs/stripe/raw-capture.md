@@ -1,23 +1,12 @@
-<h2 align="center">Supporting Payum</h2>
+# Raw Capture
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In the basic [get it started](../get-it-started.md) we showed how to use the library with unified interface or in other words Payment model. Sometimes you need completely custom solution.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### prepare.php
 
----
+Installation and configuration are same and we have to modify only a prepare part.
 
-# Stripe. Raw capture 
-
-In the basic [get it started](../get-it-started.md) we showed how to use the library with unified interface or in other words Payment model.
-Sometimes you need completely custom solution.
-
-## prepare.php
-
-Installation and configuration are same and we have to modify only a prepare part. 
-
-Here you have to modify a `gatewayName` value. Set it to `stripe_js` or any other you want.
-The rest remain the same as described in basic [get it started](../get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `stripe_js` or any other you want. The rest remain the same as described in basic [get it started](../get-it-started.md) documentation.
 
 ```php
 <?php
@@ -64,4 +53,10 @@ $captureToken = $payum->getTokenFactory()->createCaptureToken($gatewayName, $det
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)
