@@ -1,15 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Custom purchase examples
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Custom purchase examples
-
-## Configure
+### Configure
 
 ```php
 <?php
@@ -43,7 +34,7 @@ payum:
         Acme\PaymentBundle\Entity\PaymentDetails: { doctrine: orm }
 ```
 
--**Note**: You should use commented path if you install payum/payum package.-
+\-**Note**: You should use commented path if you install payum/payum package.-
 
 * [Paypal express checkout](custom-purchase-examples/paypal-express-checkout.md).
 * [Paypal pro checkout](custom-purchase-examples/paypal-pro-checkout.md).
@@ -58,4 +49,11 @@ payum:
 * [Stripe Direct (via omnipay)](custom-purchase-examples/stripe-via-omnipay.md).
 * [Paypal express checkout (via omnipay)](custom-purchase-examples/paypal-via-omnipay.md).
 * [JMS payment plugins](../jms-payment-bridge/get-it-started.md).
-* [Back to index](../index.md).
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

@@ -1,12 +1,3 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
 # Encrypt gateway configs stored in database
 
 To encrypt (and later decrypt) sensitive configuration details (like payment provider credentials) we have to do four things:
@@ -22,7 +13,7 @@ First, we have to install an encryption library `defuse/php-encryption`:
 $ composer require defuse/php-encryption:^2
 ```
 
-## Generate and Store your Cypher Key
+### Generate and Store your Cypher Key
 
 Once the library is installed, you should generate a cypher key:
 
@@ -31,19 +22,19 @@ $ vendor/bin/generate-defuse-key
 ```
 
 It will output something like this:
+
 ```
 def00000c794ad36e544b9557c098620e19be5f96529a227d4b22874ce16c9cab2ae90a45b07f20b86349c6e1d892ed042562f86ebb50fbb8b6394b8797c63b12d232db4
 ```
 
-For storing your cypher key, the best way is to use a environment variable. 
-If your are using [Symfony Dotenv Component](https://symfony.com/doc/current/components/dotenv.html), you can store your cypher key like this:
+For storing your cypher key, the best way is to use a environment variable. If your are using [Symfony Dotenv Component](https://symfony.com/doc/current/components/dotenv.html), you can store your cypher key like this:
 
 ```dotenv
 #.env
 PAYUM_CYPHER_KEY=def00000c794ad36e544b9557c098620e19be5f96529a227d4b22874ce16c9cab2ae90a45b07f20b86349c6e1d892ed042562f86ebb50fbb8b6394b8797c63b12d232db4
 ```
 
-## Configure
+### Configure
 
 Then, you should configure your dynamic gateways:
 
@@ -58,25 +49,24 @@ payum:
 +              defuse_secret_key: '%env(PAYUM_CYPHER_KEY)%'
 ```
 
-## Usage
+### Usage
 
-### With Sonata Admin
+#### With Sonata Admin
 
-If you are using [Sonata Admin integration](./configure-payment-in-backend.md#with-sonata-admin), you can stop here because everything is done automatically.
+If you are using [Sonata Admin integration](configure-payment-in-backend.md#with-sonata-admin), you can stop here because everything is done automatically.
 
-### The manual way
+#### The manual way
 
-You should tell to Symfony how to encrypt/decrypt your gateway configuration when you use your `PaypalGatewayConfigType` form type (previously done in [Configure gateway in backend](./configure-payment-in-backend.md)).
+You should tell to Symfony how to encrypt/decrypt your gateway configuration when you use your `PaypalGatewayConfigType` form type (previously done in [Configure gateway in backend](configure-payment-in-backend.md)).
 
 For that, you have two solutions:
-  1. update your `PaypalGatewayConfigType` form type
-  2. create a [Form Type Extension](https://symfony.com/doc/current/form/create_form_type_extension.html) that will modify your `PaypalGatewayConfigType` form type
 
-The second solution is better, because if you have a form type for a second gateway (for example [Stripe.js](../index.md#stripe)),
-you won't have to duplicate your logic in your `StripeGatewayConfigType` form type.
+1. update your `PaypalGatewayConfigType` form type
+2. create a [Form Type Extension](https://symfony.com/doc/current/form/create\_form\_type\_extension.html) that will modify your `PaypalGatewayConfigType` form type
 
-We will create a `CryptedGatewayConfigTypeExtension` form type extension in the namespace `Acme\PaymentBundle\Form\Extension`.
-Be sure to follow [this step](https://symfony.com/doc/current/form/create_form_type_extension.html#registering-your-form-type-extension-as-a-service) to register your form type extension as a service.
+The second solution is better, because if you have a form type for a second gateway (for example [Stripe.js](../#stripe)), you won't have to duplicate your logic in your `StripeGatewayConfigType` form type.
+
+We will create a `CryptedGatewayConfigTypeExtension` form type extension in the namespace `Acme\PaymentBundle\Form\Extension`. Be sure to follow [this step](https://symfony.com/doc/current/form/create\_form\_type\_extension.html#registering-your-form-type-extension-as-a-service) to register your form type extension as a service.
 
 ```php
 <?php
@@ -150,4 +140,10 @@ class CryptedGatewayConfigTypeExtension extends AbstractTypeExtension
 }
 ```
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

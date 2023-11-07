@@ -1,30 +1,26 @@
-<h2 align="center">Supporting Payum</h2>
+# Get started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+## Payum Bundle
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Install
 
----
-
-# Payum Bundle. Get it started
-
-## Install
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run `composer require` to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run `composer require` to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle6-adapter"
+php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle7-adapter"
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](../supported-gateways.md) to find out what you can use._
+{% hint style="info" %}
+_**Note**: Where **payum/offline** is a payum gateway, you can for example change it to **payum/paypal-express-checkout-nvp** or **payum/stripe**. Look at_ [_supported gateways_](../supported-gateways.md) _to find out what you can use._
+{% endhint %}
 
-_**Note**: Use payum/payum if you want to install all gateways at once._
+{% hint style="info" %}
+_**Note**: Use **payum/payum** if you want to install all gateways at once._
+{% endhint %}
 
 Enable the bundle in the kernel:
 
-``` php
+```php
 <?php
 // app/AppKernel.php
 
@@ -46,12 +42,12 @@ payum_all:
     resource: "@PayumBundle/Resources/config/routing/all.xml"
 ```
 
-## Configure
+### Configure
 
-First we need two entities: `Token` and `Payment`.  
+First we need two entities: `Token` and `Payment`.\
 The token entity is used to protect your payments, while the payment entity stores all your payment information.
 
-_**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported [storages](storages.md)._
+_**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported_ [_storages_](storages.md)_._
 
 ```php
 <?php
@@ -113,7 +109,7 @@ payum:
 
 _**Note**: You can add other gateways to the gateways section too._
 
-## Prepare order
+### Prepare order
 
 Now we can create an order. In the last line the user is redirected to an URL which is handled by [`CaptureController ::doAction()`](https://github.com/Payum/PayumBundle/blob/fd930cb9516c8a5f19b4eeae35c8e37eea77ce11/Controller/CaptureController.php#L30)
 
@@ -152,12 +148,9 @@ class PaymentController extends Controller
 }
 ```
 
-## Payment is done
+### Payment is done
 
-After setting up the payment, the user will be redirected to `doneAction()`. 
-You can read more about it in its dedicated [chapter](purchase-done-action.md).
-`doneAction()` is always called, no matter if the payment was successful or not.
-Here we may check the payment status, update the model, dispatch events and so on.
+After setting up the payment, the user will be redirected to `doneAction()`. You can read more about it in its dedicated [chapter](purchase-done-action.md). `doneAction()` is always called, no matter if the payment was successful or not. Here we may check the payment status, update the model, dispatch events and so on.
 
 ```php
 <?php
@@ -201,4 +194,10 @@ class PaymentController extends Controller
 }
 ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

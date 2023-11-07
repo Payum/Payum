@@ -1,2 +1,2 @@
-# pro-hosted
+# Pro Hosted
 

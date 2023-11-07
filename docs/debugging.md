@@ -1,12 +1,3 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
 # Debugging
 
 I must admit the architecture of payum is hard to debug (Each action decide whether it supports request or not, an action can delegate some job to another action, etc). To solve this problem we implement `LogExecutedActionsExtension`. It logs all executed actions with some details. Just add the extension with PSR-3 logger and check the log file after.
@@ -44,4 +35,10 @@ DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(Capture{model: P
 
 As you see it shows stack of executed actions. Also it shows some details about the request. For example it could show a model class related with request.
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

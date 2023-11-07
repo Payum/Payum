@@ -1,26 +1,14 @@
-<h2 align="center">Supporting Payum</h2>
+# Configure payment in backend
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Configure gateway in backend
-
-In [get it started](get-it-started.md) we showed you how to configure gateways in the Symfony config.yml file. 
-Though it covers most of the cases sometimes you may want to configure gateways in the backend. 
-For example you will be able to change a gateway credentials, add or delete a gateway.
+In [get it started](get-it-started.md) we showed you how to configure gateways in the Symfony config.yml file. Though it covers most of the cases sometimes you may want to configure gateways in the backend. For example you will be able to change a gateway credentials, add or delete a gateway.
 
 PayumBundle comes with [Sonata Admin](http://sonata-project.org/bundles/admin/2-3/doc/index.html) bundle support out of the box, but you can totally do it manually.
 
-## Configure
+### Configure
 
-First we have to create an entity where we store information about a gateway. 
-The model must implement `Payum\Core\Model\GatewayConfigInterface`.
+First we have to create an entity where we store information about a gateway. The model must implement `Payum\Core\Model\GatewayConfigInterface`.
 
-_**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported [storages](storages.md)._
+_**Note**: In this chapter we show how to use Doctrine ORM entities. There are other supported_ [_storages_](storages.md)_._
 
 ```php
 <?php
@@ -46,7 +34,7 @@ class GatewayConfig extends BaseGatewayConfig
 }
 ```
 
-### With Sonata Admin
+#### With Sonata Admin
 
 Next, you have to add mapping of the basic entity you've just extended, and configure payum's extension:
 
@@ -60,12 +48,11 @@ payum:
             Acme\PaymentBundle\Entity\GatewayConfig: { doctrine: orm }
 ```
 
-#### Backend
+**Backend**
 
-Once you have configured everything doctrine, payum and sonata admin go to `/admin/dashboard`. 
-There you have to see a `Gateways` section. Try to add a gateway there.
+Once you have configured everything doctrine, payum and sonata admin go to `/admin/dashboard`. There you have to see a `Gateways` section. Try to add a gateway there.
 
-### The manual way
+#### The manual way
 
 ```yml
 #app/config/config.yml
@@ -76,14 +63,15 @@ payum:
             Acme\PaymentBundle\Entity\GatewayConfig: { doctrine: orm }
 ```
 
-#### Backend
+**Backend**
 
-The following code is a basic example for configuring a [Paypal Express Checkout](https://github.com/Payum/Payum/blob/master/docs/paypal/express-checkout/get-it-started.md) gateway.
+The following code is a basic example for configuring a [Paypal Express Checkout](../paypal/express-checkout/get-it-started.md) gateway.
 
 We first need to create a FormType with three fields:
-  1. `factoryName`, the name of a factory, in our case it will always be `paypal_express_checkout`
-  2. `gatewayName`, the name you want to give to your gateway
-  3. `config`, the gateway configuration
+
+1. `factoryName`, the name of a factory, in our case it will always be `paypal_express_checkout`
+2. `gatewayName`, the name you want to give to your gateway
+3. `config`, the gateway configuration
 
 ```php
 <?php
@@ -124,12 +112,12 @@ final class PaypalGatewayConfigType extends AbstractType
 
 Then, we should implement a new FormType that will configure your PayPal gateway's config.
 
-By reading [the doc](https://github.com/Payum/Payum/blob/master/docs/paypal/express-checkout/get-it-started.md), we should create four fields:
-  1. `sandbox`
-  2. `username`
-  3. `password`
-  4. `signature`
-  
+By reading [the doc](../paypal/express-checkout/get-it-started.md), we should create four fields:
+
+1. `sandbox`
+2. `username`
+3. `password`
+4. `signature`
 
 ```php
 <?php
@@ -157,7 +145,7 @@ final class ConfigPaypalGatewayConfigType extends AbstractType
 
 For a more advanced example, you can check how Sylius implemented [Paypal and Stripe gateways form types](https://github.com/Sylius/Sylius/tree/master/src/Sylius/Bundle/PayumBundle/Form/Type).
 
-## Use gateway
+### Use gateway
 
 Let's say you created a gateway with name `paypal`. Here we will show you how to use it.
 
@@ -199,9 +187,10 @@ class PaymentController extends Controller
 
 _**Note**: If you configured a gateway in config.yml and in the backend with same name. Backend one will be used._
 
-* [Back to index](../index.md).
+***
 
+### Supporting Payum
 
- 
- 
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
+* [Become a sponsor](https://github.com/sponsors/Payum)

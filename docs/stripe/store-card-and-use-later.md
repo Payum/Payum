@@ -1,18 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
+# Store card and use later
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we show how to store a credit card safely and use in future. A customer enter the card once and billed later without the need to reenter it again.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Stripe. Store credit card and use later.
-
-In this chapter we show how to store a credit card safely and use in future.
-A customer enter the card once and billed later without the need to reenter it again.
-
-## Store card
+### Store card
 
 This is a usual charge as we showed it in [get-it-started](get-it-started.md) with only these additions:
 
@@ -46,7 +36,7 @@ $gateway->execute($getToken = new GetCreditCardToken($payment));
 $token = $getToken->token; // if not null you are done. store it somewhere
 ```
 
-## Use stored card
+### Use stored card
 
 This is a usual charge as we showed it in [get-it-started](get-it-started.md) with only these additions:
 
@@ -65,9 +55,15 @@ $payment->setCreditCard($card);
 // capture the payment
 ```
 
-## Links
+### Links
 
-* https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later
-* https://stripe.com/docs/charges
+* [https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later](https://support.stripe.com/questions/can-i-save-a-card-and-charge-it-later)
+* [https://stripe.com/docs/charges](https://stripe.com/docs/charges)
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

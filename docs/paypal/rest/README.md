@@ -1,2 +1,2 @@
-# rest
+# REST
 

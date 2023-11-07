@@ -1,17 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Store gateway config in database
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Laravel Package. Store gateway config in database
-
-Payum allows you store gateway configuration and credentials in your database.
-Later you may provide a backoffice so the admin can modify gateway through it.
-Payum Laravel Package contains Eloquent GatewayConfig model, which we are going to reuse in this example.
+Payum allows you store gateway configuration and credentials in your database. Later you may provide a backoffice so the admin can modify gateway through it. Payum Laravel Package contains Eloquent GatewayConfig model, which we are going to reuse in this example.
 
 The database schema could be generated like this
 
@@ -43,4 +32,10 @@ App::resolving('payum.builder', function(\Payum\Core\PayumBuilder $payumBuilder)
 });
 ```
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

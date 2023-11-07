@@ -1,23 +1,10 @@
-<h2 align="center">Supporting Payum</h2>
+# Recurring Payments Basics
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we describe the basic steps you have to follow to set up recurring payments. We will use weather subscription as example. Subscription costs $0.05 per day and would last for 7 days.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Configuration
 
----
-
-# Paypal Express Checkout. Recurring payments basics.
-
-In this chapter we describe the basic steps you have to follow to set up recurring payments.
-We will use weather subscription as example.
-Subscription costs $0.05 per day and would last for 7 days.
-
-## Configuration
-
-Recurring payments require two additional models:
-First, one would contain agreement details and the second one recurring payment details.
-Let's define them:
+Recurring payments require two additional models: First, one would contain agreement details and the second one recurring payment details. Let's define them:
 
 ```php
 <?php
@@ -29,7 +16,6 @@ class AgreementDetails extends \ArrayObject
 ```
 
 And recurring payment details model:
-
 
 ```php
 <?php
@@ -61,10 +47,9 @@ $storages[$recurringPaymentClass] = new FilesystemStorage(
 );
 ```
 
-## Establish agreement (prepare.php)
+### Establish agreement (prepare.php)
 
-A user has to agree to be charged periodically.
-For this we have to create an agreement with him.
+A user has to agree to be charged periodically. For this we have to create an agreement with him.
 
 ```php
 <?php
@@ -93,17 +78,11 @@ $storage->update($agreement);
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-This script is pretty similar to an ordinary purchase.
-The only difference here is that we set some special options to agreementDetails.
-The rest is the same. Create capture token.
-The 'done' token in this example is renamed to `createRecurringPaymentToken`.
-This is because we have one more step to do before we can go to `done.php`.
+This script is pretty similar to an ordinary purchase. The only difference here is that we set some special options to agreementDetails. The rest is the same. Create capture token. The 'done' token in this example is renamed to `createRecurringPaymentToken`. This is because we have one more step to do before we can go to `done.php`.
 
-## Create recurring payment
+### Create recurring payment
 
-After capture has done it's job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script.
-Here we will check the status of the agreement and if it has been accepted: create a recurring payment.
-After everything is complete we should redirect the user to a safe page - the page that shows payment details could be a good starting place.
+After capture has done it's job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script. Here we will check the status of the agreement and if it has been accepted: create a recurring payment. After everything is complete we should redirect the user to a safe page - the page that shows payment details could be a good starting place.
 
 ```php
 <?php
@@ -154,4 +133,10 @@ $doneToken = $payum->getTokenFactory()->createToken('paypal', $recurringPayment,
 header("Location: " . $doneToken->getTargetUrl());
 ```
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

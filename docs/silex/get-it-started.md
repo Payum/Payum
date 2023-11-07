@@ -1,30 +1,24 @@
-<h2 align="center">Supporting Payum</h2>
+# Get Started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we are going to setup payum package and do simple purchase using paypal express checkout. Look at sandbox to find more examples.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Silex Provider. Get it started.
-
-In this chapter we are going to setup payum package and do simple purchase using paypal express checkout. 
-Look at sandbox to find more examples.
-
-## Installation
+### Installation
 
 ```bash
 php composer.phar require payum/payum-silex-provider payum/xxx
 ```
 
-_**Note**: Where payum/xxx is a payum package, for example it could be payum/paypal-express-checkout-nvp. Look at [supported gateways](../supported-gateways.md) to find out what you can use._
+{% hint style="info" %}
+_**Note**: Where **payum/xxx** is a payum package, for example it could be **payum/paypal-express-checkout-nvp**. Look at_ [_supported gateways_](../supported-gateways.md) _to find out what you can use._
+{% endhint %}
 
-_**Note**: Use payum/payum if you want to install all gateways at once._
+{% hint style="info" %}
+_**Note**: Use **payum/payum** if you want to install all gateways at once._
+{% endhint %}
 
 Now you have all codes prepared and ready to be used.
 
-## Configuration
+### Configuration
 
 First add PayumProvider to your application:
 
@@ -71,7 +65,7 @@ $app['payum.storages'] = $app->share($app->extend('payum.storages', function ($s
 });
 ```
 
-## Prepare payment
+### Prepare payment
 
 Lets create a controller where we prepare the payment details.
 
@@ -102,8 +96,12 @@ class PaymentController
 }
 ```
 
-Here's you may want to modify a `payment_done` route. 
-It is a controller where the a payer will be redirected after the payment is done, whenever it is success failed or pending. 
-Read a [dedicated chapter](payment-done-controller.md) about how the payment done controller may look like.
+Here's you may want to modify a `payment_done` route. It is a controller where the a payer will be redirected after the payment is done, whenever it is success failed or pending. Read a [dedicated chapter](payment-done-controller.md) about how the payment done controller may look like.
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

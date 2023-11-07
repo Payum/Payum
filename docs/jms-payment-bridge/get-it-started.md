@@ -1,23 +1,14 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# JMS Payment Bridge. Get it started
+# Get Started
 
 Steps:
 
-* [Download libraries](#download-libraries)
-* [Configure context](#configure-context)
-* [Prepare gateway](#prepare-gateway)
+* [Download libraries](get-it-started.md#download-libraries)
+* [Configure context](get-it-started.md#configure-context)
+* [Prepare gateway](get-it-started.md#prepare-gateway)
 
-_**Note** : We assume you followed all steps in basic [get it started](../get-it-started.md) and your basic configuration same as described there._
+_**Note** : We assume you followed all steps in basic_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._
 
-## Download libraries
+### Download libraries
 
 Run the following command:
 
@@ -25,12 +16,9 @@ Run the following command:
 $ php composer.phar require payum/jms-payment-bridge
 ```
 
-## Configure context
+### Configure context
 
-By default PayumBundle knows nothing about jms payment bridge.
-To make payum be aware of it you have to add its factory.
-Let's suppose you have `AcmePaymentBundle`.
-You have to add factory inside its build method:
+By default PayumBundle knows nothing about jms payment bridge. To make payum be aware of it you have to add its factory. Let's suppose you have `AcmePaymentBundle`. You have to add factory inside its build method:
 
 ```php
 <?php
@@ -84,10 +72,9 @@ _**Attention**: You have to changed `your_payment_name` to something more descri
 
 Not so hard so far, let's continue.
 
-## Prepare payment
+### Prepare payment
 
-Now we are ready to prepare the payment. Here we set price, currency, cart items details and so.
-Please note that you have to set details in the jms plugin specific format.
+Now we are ready to prepare the payment. Here we set price, currency, cart items details and so. Please note that you have to set details in the jms plugin specific format.
 
 ```php
 <?php
@@ -141,7 +128,12 @@ public function prepareAction(Request $request)
 }
 ```
 
-That's it. After the payment done you will be redirect to `purchase_done` action.
-Check [bundle's chapter about done action](../symfony/purchase-done-action.md) to find out how this done action could look like.
+That's it. After the payment done you will be redirect to `purchase_done` action. Check [bundle's chapter about done action](../symfony/purchase-done-action.md) to find out how this done action could look like.
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

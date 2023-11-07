@@ -1,19 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# How to contribute from sub repository
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# How to contribute from sub repository.
-
-Some time you do not need the whole payum stuff and decided to install only a single gateway.
-Let's say it was a `payum/stripe`.
-Later on you found a bug fixed it and want to contribute it back to payum main repository.
-The patch could not be accepted on payum/stripe repository. It is readonly subtree split repository.
-Here I show you how to move your fixes to payum/payum repository and push them.
+Some time you do not need the whole payum stuff and decided to install only a single gateway. Let's say it was a `payum/stripe`. Later on you found a bug fixed it and want to contribute it back to payum main repository. The patch could not be accepted on payum/stripe repository. It is readonly subtree split repository. Here I show you how to move your fixes to payum/payum repository and push them.
 
 1. Fork [payum/payum](https://github.com/Payum/Payum) repository on GitHub.
 2. Clone forked repository locally.
@@ -43,4 +30,10 @@ $ git subtree pull --prefix=src/Payum/Stripe/ foo patch1
 $ git push origin patch1
 ```
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

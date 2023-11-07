@@ -1,17 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Authorize order
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Paypal Express Checkout. Authorize order.
-
-Authorization & Capture, or Auth/Capture, allows you to authorize the availability of funds for a transaction but delay the capture of funds until a later time.
-This is often useful for merchants who have a delayed order fulfillment process.
-Authorize & Capture also enables merchants to modify the original authorization amount due to order changes occurring after the initial order is placed, such as taxes, shipping or gratuity.
+Authorization & Capture, or Auth/Capture, allows you to authorize the availability of funds for a transaction but delay the capture of funds until a later time. This is often useful for merchants who have a delayed order fulfillment process. Authorize & Capture also enables merchants to modify the original authorization amount due to order changes occurring after the initial order is placed, such as taxes, shipping or gratuity.
 
 ```php
 <?php
@@ -54,4 +43,10 @@ $authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('paypal', $pay
 header("Location: ".$authorizeToken->getTargetUrl());
 ```
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

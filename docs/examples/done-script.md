@@ -1,22 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
+# Done Script
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+This is the most important script for you, because here you have to decide what to do next. Was the payment successful, or not? What to do in each case? You have to put here your own logic, for example on success you may want to send a welcome mail, and increment points on a user account. Or, You may want notify a delivery company about purchased product, asking for a delivery. Payum allows you easily get the status, validates the url.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-## Done script
-
-This is the most important script for you, because here you have to decide what to do next.
-Was the payment successful, or not?
-What to do in each case?
-You have to put here your own logic, for example on success you may want to send a welcome mail, and increment points on a user account.
-Or, You may want notify a delivery company about purchased product, asking for a delivery.
-Payum allows you easily get the status, validates the url.
-
-## Getting model
+### Getting model
 
 There are two ways to get the model associated with the token:
 
@@ -64,7 +50,7 @@ $gateway = $payum->getGateway($token->getGatewayName());
 $gateway->execute($status = new GetHumanStatus($model));
 ```
 
-## Payment status
+### Payment status
 
 Now, you have a model and status. And you can find out what is the status of a payment.
 
@@ -89,11 +75,9 @@ if ($status->isFailed() || $status->isCanceled()) {
 }
 ```
 
-## Invalidation
+### Invalidation
 
-A good practice is to do some actions and redirect a user to another url.
-This url should not be accessible more than once.
-This way the user is not able to accidentally purchase the same order two times for example.
+A good practice is to do some actions and redirect a user to another url. This url should not be accessible more than once. This way the user is not able to accidentally purchase the same order two times for example.
 
 ```php
 <?php
@@ -107,5 +91,12 @@ $payum->getHttpRequestVerifier()->invalidate($token);
 
 _**Note**: We advice you to invalidate(remove) the token as soon as you do not need it._
 
-Back to [examples](index.md).
-Back to [index](../index.md).
+Back to [examples](index.md)
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

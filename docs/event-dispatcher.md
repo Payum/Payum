@@ -1,15 +1,4 @@
-# event-dispatcher
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://www.patreon.com/makasim)
-* [Become our client](http://forma-pro.com/)
-
-***
-
-## Event Dispatcher
+# Event Dispatcher
 
 The EventDispatcherExtensions provides a Bridge to the [Symfony EventDispatcher Component](http://symfony.com/doc/current/components/event\_dispatcher/index.html). The EventDispatcherComponent allows you to add behaviour without changing Payum.
 
@@ -76,4 +65,10 @@ services:
             - { name: kernel.event_listener, event: payum.gateway.execute }
 ```
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

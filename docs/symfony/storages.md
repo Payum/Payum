@@ -1,15 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Storages
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Storages
-
-## Doctrine ORM
+### Doctrine ORM
 
 Add token and payment details classes:
 
@@ -67,7 +58,7 @@ payum:
         Acme\PaymentBundle\Entity\PaymentDetails: { doctrine: orm }
 ```
 
-### Doctrine MongoODM.
+#### Doctrine MongoODM.
 
 Token use custom mongo type called `ObjectType`, so you have to add it to the kernel boot method:
 
@@ -208,10 +199,9 @@ payum:
 
 _**Note**: If you are using propel2 you can change propel1 to propel2._
 
-## Custom.
+### Custom.
 
-We have several built in storages which cover all your needs. Sometimes you need completely custom storage.
-To have a custom storage you have to implement `StorageInterface` from core:
+We have several built in storages which cover all your needs. Sometimes you need completely custom storage. To have a custom storage you have to implement `StorageInterface` from core:
 
 ```php
 <?php
@@ -237,7 +227,6 @@ services:
 
 When you are done you can use it like this:
 
-
 ```yaml
 # app/config/config.yml
 
@@ -247,7 +236,7 @@ payum:
             custom: acme.payment.payum.storage.custom
 ```
 
-## Filesystem.
+### Filesystem.
 
 _**Attention**: Use filesystem storage only for testing and never in production._
 
@@ -296,5 +285,10 @@ payum:
                 id_property: id
 ```
 
-* [Back to index](../index.md).
+***
 
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

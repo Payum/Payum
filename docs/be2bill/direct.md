@@ -1,31 +1,18 @@
-<h2 align="center">Supporting Payum</h2>
+# Be2Bill Direct
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/). We assume you already read basic [get it started](../get-it-started.md). Here we just show you modifications you have to put to the files shown there.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Installation
 
----
-
-# Be2Bill Direct.
-
-In this chapter we are going to talk about the most common task: purchase of a product using [be2bill](http://www.be2bill.com/).
-We assume you already read basic [get it started](../get-it-started.md).
-Here we just show you modifications you have to put to the files shown there.
-
-## Installation
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
 php composer.phar require payum/be2bill php-http/guzzle6-adapter
 ```
 
-## config.php
+### config.php
 
-Use this when you are going to ask for a credit card details at your side.
-Use [offsite](offsite.md) chapter if you want to redirect user to be2bill side.
+Use this when you are going to ask for a credit card details at your side. Use [offsite](offsite.md) chapter if you want to redirect user to be2bill side.
 
 ```php
 <?php
@@ -49,8 +36,14 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-## prepare.php
+### prepare.php
 
 Here you have to modify a `gatewayName` value. Set it to `be2bill` or `be2bill_offsite`. The rest remain the same as described in basic [get it started](../get-it-started.md) documentation.
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)
