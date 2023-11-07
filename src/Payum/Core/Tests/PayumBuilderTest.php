@@ -165,9 +165,7 @@ class PayumBuilderTest extends TestCase
         $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setHttpRequestVerifier(function () {
-                return new stdClass();
-            })
+            ->setHttpRequestVerifier(fn () => new stdClass())
             ->getPayum()
         ;
     }
@@ -246,9 +244,7 @@ class PayumBuilderTest extends TestCase
         $this->expectExceptionMessage('Builder returned invalid instance');
         (new PayumBuilder())
             ->addDefaultStorages()
-            ->setGenericTokenFactory(function () {
-                return new stdClass();
-            })
+            ->setGenericTokenFactory(fn () => new stdClass())
             ->getPayum()
         ;
     }
@@ -303,9 +299,7 @@ class PayumBuilderTest extends TestCase
         $this->expectExceptionMessage('Builder returned invalid instance');
         (new PayumBuilder())
             ->addDefaultStorages()
-            ->setTokenFactory(function () {
-                return new stdClass();
-            })
+            ->setTokenFactory(fn () => new stdClass())
             ->getPayum()
         ;
     }
@@ -581,9 +575,7 @@ class PayumBuilderTest extends TestCase
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setCoreGatewayFactory(function () {
-                return new stdClass();
-            })
+            ->setCoreGatewayFactory(fn () => new stdClass())
             ->getPayum()
         ;
 

@@ -184,7 +184,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         try {
             $action->execute($request);
-        } catch (LogicException $e) {
+        } catch (LogicException) {
             $details = $model->getDetails();
             $testCase->assertInstanceOf(ArrayAccess::class, $details);
             $testCase->assertSame(

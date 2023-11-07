@@ -509,9 +509,7 @@ class TokenFactoryTest extends TestCase
 
         $urlGenerator
             ->method('generate')
-            ->willReturnCallback(function ($route, $parameters) {
-                return $route . '?' . http_build_query($parameters);
-            })
+            ->willReturnCallback(fn ($route, $parameters) => $route . '?' . http_build_query($parameters))
         ;
 
         return $urlGenerator;

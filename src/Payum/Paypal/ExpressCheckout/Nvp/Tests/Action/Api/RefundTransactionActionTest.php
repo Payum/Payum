@@ -107,12 +107,10 @@ class RefundTransactionActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('RefundTransaction')
-            ->willReturnCallback(function () {
-                return [
-                    'TRANSACTIONID' => 'theTransactionId',
-                    'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'TRANSACTIONID' => 'theTransactionId',
+                'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
+            ])
         ;
 
         $action = new RefundTransactionAction();

@@ -122,12 +122,10 @@ class DoVoidActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->willReturnCallback(function () {
-                return [
-                    'AUTHORIZATIONID' => 'theTransactionId',
-                    'MSGSUBID' => 'aMessageId',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'AUTHORIZATIONID' => 'theTransactionId',
+                'MSGSUBID' => 'aMessageId',
+            ])
         ;
 
         $action = new DoVoidAction();

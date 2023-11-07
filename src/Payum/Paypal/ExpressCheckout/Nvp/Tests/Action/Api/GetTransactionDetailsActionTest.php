@@ -98,11 +98,9 @@ class GetTransactionDetailsActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->willReturnCallback(function () {
-                return [
-                    'PAYMENTSTATUS' => 'theStatus',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'PAYMENTSTATUS' => 'theStatus',
+            ])
         ;
 
         $action = new GetTransactionDetailsAction();

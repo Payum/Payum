@@ -101,12 +101,10 @@ class SetExpressCheckoutActionTest extends TestCase
         $apiMock
             ->expects($this->once())
             ->method('setExpressCheckout')
-            ->willReturnCallback(function () {
-                return [
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                ];
-            })
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new SetExpressCheckoutAction();

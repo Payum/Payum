@@ -48,9 +48,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(404);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(404))
         ;
 
         $api = new Api([
@@ -104,9 +102,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], Api::NOTIFY_VERIFIED);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_VERIFIED))
         ;
 
         $api = new Api([
@@ -122,9 +118,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], Api::NOTIFY_INVALID);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_INVALID))
         ;
 
         $api = new Api([
@@ -140,9 +134,7 @@ class ApiTest extends TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], 'foobarbaz');
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], 'foobarbaz'))
         ;
 
         $api = new Api([
@@ -176,9 +168,7 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200);
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200))
         ;
 
         return $clientMock;

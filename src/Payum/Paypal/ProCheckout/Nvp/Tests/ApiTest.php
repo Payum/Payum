@@ -201,9 +201,7 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            })
+            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], $request->getBody()))
         ;
 
         return $clientMock;
