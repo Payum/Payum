@@ -26,7 +26,7 @@ class TwigUtil
         $storage = static::$storage;
 
         /** @var FilesystemLoader $payumLoader */
-        $payumLoader = $twig && isset($storage[$twig]) ? $storage[$twig] : new FilesystemLoader();
+        $payumLoader = $twig instanceof Environment && isset($storage[$twig]) ? $storage[$twig] : new FilesystemLoader();
         foreach ($paths as $namespace => $path) {
             $payumLoader->addPath($path, $namespace);
         }
