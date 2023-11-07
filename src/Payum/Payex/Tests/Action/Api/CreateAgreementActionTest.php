@@ -11,7 +11,6 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreement;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -108,7 +107,9 @@ class CreateAgreementActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    #[DataProvider('provideRequiredFields')]
+    /**
+     * @dataProvider provideRequiredFields
+     */
     public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
         $this->expectException(LogicException::class);
@@ -119,7 +120,9 @@ class CreateAgreementActionTest extends TestCase
         $action->execute(new CreateAgreement($this->requiredFields));
     }
 
-    #[DataProvider('provideRequiredNotEmptyFields')]
+    /**
+     * @dataProvider provideRequiredNotEmptyFields
+     */
     public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
     {
         $this->expectException(LogicException::class);

@@ -7,7 +7,6 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Token;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -136,7 +135,9 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    #[Group('legacy')]
+    /**
+     * @group legacy
+     */
     public function testShouldReturnExpectedTokenIfTokenSetToRequestAttribute()
     {
         $expectedToken = new Token();
@@ -159,7 +160,9 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    #[Group('legacy')]
+    /**
+     * @group legacy
+     */
     public function testShouldReturnExpectedTokenIfTokenSetToEncodedRequestAttribute()
     {
         $expectedToken = new Token();
@@ -182,7 +185,9 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    #[Group('legacy')]
+    /**
+     * @group legacy
+     */
     public function testShouldNotMatchUriIfTokenSetToRequestAttribute()
     {
         $expectedToken = new Token();

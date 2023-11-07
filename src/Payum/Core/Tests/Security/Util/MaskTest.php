@@ -4,7 +4,6 @@ namespace Payum\Core\Tests\Security\Util;
 
 use Iterator;
 use Payum\Core\Security\Util\Mask;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MaskTest extends TestCase
@@ -23,7 +22,9 @@ class MaskTest extends TestCase
         yield 'short name that masked' => ['Beatrices', 'BXXXXices'];
     }
 
-    #[DataProvider('provideValues')]
+    /**
+     * @dataProvider provideValues
+     */
     public function testShouldAllowGenerateToken($value, $expected)
     {
         $this->assertSame($expected, Mask::mask($value));

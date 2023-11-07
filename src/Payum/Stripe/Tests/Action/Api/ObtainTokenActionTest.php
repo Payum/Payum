@@ -158,7 +158,7 @@ class ObtainTokenActionTest extends TestCase
 
         try {
             $action->execute(new ObtainToken($model));
-        } catch (HttpResponse) {
+        } catch (HttpResponse $reply) {
             return;
         }
 

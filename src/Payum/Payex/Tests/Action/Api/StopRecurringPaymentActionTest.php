@@ -11,7 +11,6 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
 use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Request\Api\StopRecurringPayment;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -86,7 +85,9 @@ class StopRecurringPaymentActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    #[DataProvider('provideRequiredFields')]
+    /**
+     * @dataProvider provideRequiredFields
+     */
     public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
         $this->expectException(LogicException::class);
