@@ -26,7 +26,7 @@ class HttpClientFactory
         }
 
         $version = ClientInterface::VERSION;
-        if (!str_starts_with($version, '6')) {
+        if (! str_starts_with($version, '6')) {
             throw new LogicException('This version of Guzzle is not supported.');
         }
 

@@ -18,7 +18,6 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionObject;
 use stdClass;
-use function get_class;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {

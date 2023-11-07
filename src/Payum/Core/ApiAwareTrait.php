@@ -4,7 +4,6 @@ namespace Payum\Core;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\UnsupportedApiException;
-use function get_class;
 use function is_object;
 
 trait ApiAwareTrait
