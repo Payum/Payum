@@ -13,28 +13,28 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class GetHttpRequestActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetHttpRequestAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportGetHttpRequest()
+    public function testShouldSupportGetHttpRequest(): void
     {
         $action = new GetHttpRequestAction();
 
         $this->assertTrue($action->supports(new GetHttpRequest()));
     }
 
-    public function testShouldNotSupportAnythingNotGetHttpRequest()
+    public function testShouldNotSupportAnythingNotGetHttpRequest(): void
     {
         $action = new GetHttpRequestAction();
 
         $this->assertFalse($action->supports('foo'));
     }
 
-    public function testThrowIfNotSupportedRequestPassedToExecute()
+    public function testThrowIfNotSupportedRequestPassedToExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action GetHttpRequestAction is not supported the request string.');
@@ -43,7 +43,7 @@ class GetHttpRequestActionTest extends TestCase
         $action->execute('foo');
     }
 
-    public function testShouldDoNothingIfHttpRequestNotSet()
+    public function testShouldDoNothingIfHttpRequestNotSet(): void
     {
         $action = new GetHttpRequestAction();
 
@@ -56,7 +56,7 @@ class GetHttpRequestActionTest extends TestCase
         $this->assertSame('', $request->uri);
     }
 
-    public function testShouldDoNothingIfHttpRequestStackIsEmpty()
+    public function testShouldDoNothingIfHttpRequestStackIsEmpty(): void
     {
         $action = new GetHttpRequestAction();
         $action->setHttpRequestStack(new RequestStack());
@@ -70,7 +70,7 @@ class GetHttpRequestActionTest extends TestCase
         $this->assertSame('', $request->uri);
     }
 
-    public function testShouldPopulateFromGetMainRequestOnStack()
+    public function testShouldPopulateFromGetMainRequestOnStack(): void
     {
         $stack = new RequestStack();
         $stack->push(Request::create(
@@ -97,7 +97,7 @@ class GetHttpRequestActionTest extends TestCase
         $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
-    public function testShouldPopulateFromPostMainRequestOnStack()
+    public function testShouldPopulateFromPostMainRequestOnStack(): void
     {
         $stack = new RequestStack();
         $stack->push(Request::create(
@@ -124,7 +124,7 @@ class GetHttpRequestActionTest extends TestCase
         $this->assertSame('127.0.0.1', $request->clientIp);
     }
 
-    public function testShouldPopulateFromMainRequestIgnoringSubRequestsOnStack()
+    public function testShouldPopulateFromMainRequestIgnoringSubRequestsOnStack(): void
     {
         $stack = new RequestStack();
         $stack->push(Request::create(
@@ -151,7 +151,7 @@ class GetHttpRequestActionTest extends TestCase
     /**
      * @deprecated
      */
-    public function testShouldPopulateFromGetHttpRequest()
+    public function testShouldPopulateFromGetHttpRequest(): void
     {
         $action = new GetHttpRequestAction();
         $action->setHttpRequest(Request::create(
@@ -178,7 +178,7 @@ class GetHttpRequestActionTest extends TestCase
     /**
      * @deprecated
      */
-    public function testShouldPopulateFromPostHttpRequest()
+    public function testShouldPopulateFromPostHttpRequest(): void
     {
         $action = new GetHttpRequestAction();
         $action->setHttpRequest(Request::create(

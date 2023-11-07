@@ -269,7 +269,7 @@ class Api
         ;
     }
 
-    protected function addAuthorizeFields(array &$fields)
+    protected function addAuthorizeFields(array &$fields): void
     {
         $fields['USER'] = $this->options['username'];
         $fields['PWD'] = $this->options['password'];

@@ -41,7 +41,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -49,7 +49,7 @@ class CreateCustomerAction implements ActionInterface, ApiAwareInterface, Gatewa
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreateCustomer $request */
         RequestNotSupportedException::assertSupports($this, $request);

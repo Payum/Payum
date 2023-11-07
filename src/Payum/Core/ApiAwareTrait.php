@@ -15,7 +15,7 @@ trait ApiAwareTrait
 
     protected string|object|null $apiClass;
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         if (empty($this->apiClass)) {
             throw new LogicException('You must configure apiClass in __constructor method of the class the trait is applied to.');

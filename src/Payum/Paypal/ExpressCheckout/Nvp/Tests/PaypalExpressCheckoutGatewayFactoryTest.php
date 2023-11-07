@@ -8,7 +8,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\PaypalExpressCheckoutGatewayFactory;
 
 class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PaypalExpressCheckoutGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalExpressCheckoutGatewayFactory();
 
@@ -46,7 +46,7 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalExpressCheckoutGatewayFactory();
 
@@ -61,7 +61,7 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('PayPal ExpressCheckout', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
@@ -70,7 +70,7 @@ class PaypalExpressCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    public function testShouldConfigurePaths()
+    public function testShouldConfigurePaths(): void
     {
         $factory = new PaypalExpressCheckoutGatewayFactory();
 

@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class CancelReservationTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
         $rc = new ReflectionClass(CancelReservation::class);
 

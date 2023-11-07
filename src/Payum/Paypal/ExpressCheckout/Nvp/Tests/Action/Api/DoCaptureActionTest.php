@@ -20,42 +20,42 @@ use stdClass;
 
 class DoCaptureActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportDoCaptureRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoCaptureRequestAndArrayAccessAsModel(): void
     {
         $action = new DoCaptureAction();
 
         $this->assertTrue($action->supports(new DoCapture(new ArrayObject(), 0)));
     }
 
-    public function testShouldNotSupportAnythingNotDoCaptureRequest()
+    public function testShouldNotSupportAnythingNotDoCaptureRequest(): void
     {
         $action = new DoCaptureAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new DoCaptureAction();
@@ -63,7 +63,7 @@ class DoCaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTransactionIdNorAuthorizationIdNotSetInModel()
+    public function testThrowIfTransactionIdNorAuthorizationIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT, COMPLETETYPE, AUTHORIZATIONID fields are required.');
@@ -72,7 +72,7 @@ class DoCaptureActionTest extends TestCase
         $action->execute(new DoCapture([], 0));
     }
 
-    public function testThrowIfCompleteTypeNotSet()
+    public function testThrowIfCompleteTypeNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The COMPLETETYPE fields are required.');
@@ -86,7 +86,7 @@ class DoCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfAmtNotSet()
+    public function testThrowIfAmtNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT fields are required.');
@@ -100,7 +100,7 @@ class DoCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoCaptureMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoCaptureMethodWithExpectedRequiredArguments(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -133,7 +133,7 @@ class DoCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -150,7 +150,7 @@ class DoCaptureActionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetTransactionDetails::class))
-            ->willReturnCallback(function (GetTransactionDetails $request) {
+            ->willReturnCallback(function (GetTransactionDetails $request): void {
                 $this->assertSame(0, $request->getPaymentRequestN());
                 $this->assertSame([
                     'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',

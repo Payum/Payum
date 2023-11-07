@@ -16,14 +16,14 @@ use stdClass;
 
 class AgreementDetailsStatusActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AgreementDetailsStatusAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -38,7 +38,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertTrue($action->supports(new GetBinaryStatus($array)));
     }
 
-    public function testShouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -53,21 +53,21 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertFalse($action->supports(new GetBinaryStatus($array)));
     }
 
-    public function testShouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new AgreementDetailsStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel(): void
     {
         $action = new AgreementDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AgreementDetailsStatusAction();
@@ -75,7 +75,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkUnknownIfTransactionStatusNotSet()
+    public function testShouldMarkUnknownIfTransactionStatusNotSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -91,7 +91,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isUnknown());
     }
 
-    public function testShouldMarkNewIfAgreementStatusNotVerified()
+    public function testShouldMarkNewIfAgreementStatusNotVerified(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -108,7 +108,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkCapturedIfAgreementStatusVerified()
+    public function testShouldMarkCapturedIfAgreementStatusVerified(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -125,7 +125,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkCanceledIfAgreementStatusDeleted()
+    public function testShouldMarkCanceledIfAgreementStatusDeleted(): void
     {
         $action = new AgreementDetailsStatusAction();
 
@@ -142,7 +142,7 @@ class AgreementDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkFailedIfErrorCodeNotOk()
+    public function testShouldMarkFailedIfErrorCodeNotOk(): void
     {
         $action = new AgreementDetailsStatusAction();
 

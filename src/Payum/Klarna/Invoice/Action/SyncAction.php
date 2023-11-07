@@ -18,7 +18,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Sync $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

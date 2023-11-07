@@ -15,14 +15,14 @@ use stdClass;
 
 class CaptureActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportCaptureWithArrayAccessAsModel()
+    public function testShouldSupportCaptureWithArrayAccessAsModel(): void
     {
         $action = new CaptureAction();
 
@@ -31,7 +31,7 @@ class CaptureActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture(): void
     {
         $action = new CaptureAction();
 
@@ -40,7 +40,7 @@ class CaptureActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportCaptureAndNotArrayAccessAsModel()
+    public function testShouldNotSupportCaptureAndNotArrayAccessAsModel(): void
     {
         $action = new CaptureAction();
 
@@ -49,7 +49,7 @@ class CaptureActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -57,7 +57,7 @@ class CaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSetStatusPendingIfPaidNotSet()
+    public function testShouldSetStatusPendingIfPaidNotSet(): void
     {
         $action = new CaptureAction();
 
@@ -74,7 +74,7 @@ class CaptureActionTest extends TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    public function testShouldSetStatusPendingIfPaidSetToFalse()
+    public function testShouldSetStatusPendingIfPaidSetToFalse(): void
     {
         $action = new CaptureAction();
 
@@ -92,7 +92,7 @@ class CaptureActionTest extends TestCase
         $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    public function testShouldSetStatusCapturedIfPaidSetToTrue()
+    public function testShouldSetStatusCapturedIfPaidSetToTrue(): void
     {
         $action = new CaptureAction();
 

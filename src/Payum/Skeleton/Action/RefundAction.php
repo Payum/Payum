@@ -17,7 +17,7 @@ class RefundAction implements ActionInterface
     /**
      * @param Refund $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

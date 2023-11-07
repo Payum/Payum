@@ -11,7 +11,7 @@ use Payum\Offline\Constants;
 
 class RefundAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);

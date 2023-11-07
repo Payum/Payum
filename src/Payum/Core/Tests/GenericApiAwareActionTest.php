@@ -9,14 +9,14 @@ use ReflectionProperty;
 
 abstract class GenericApiAwareActionTest extends TestCase
 {
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass($this->getActionClass());
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldAllowSetApi()
+    public function testShouldAllowSetApi(): void
     {
         $apiClass = $this->getApiClass();
         $class = $this->getActionClass();

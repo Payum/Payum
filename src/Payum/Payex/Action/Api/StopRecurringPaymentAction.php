@@ -20,7 +20,7 @@ class StopRecurringPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = RecurringApi::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var StopRecurringPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -27,7 +27,7 @@ class RenderTemplateAction implements ActionInterface
      *
      * @throws RequestNotSupportedException if the action dose not support the request.
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);

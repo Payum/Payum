@@ -28,7 +28,7 @@ class RenderTemplateAction implements ActionInterface
         $this->layout = $layout;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);

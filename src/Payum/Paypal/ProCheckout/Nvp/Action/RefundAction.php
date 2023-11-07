@@ -19,7 +19,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
      */
     protected $api;
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         if (false == $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
@@ -28,7 +28,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $this->api = $api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);

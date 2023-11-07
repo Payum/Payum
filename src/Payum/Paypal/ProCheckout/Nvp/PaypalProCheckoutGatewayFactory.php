@@ -11,7 +11,7 @@ use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 
 class PaypalProCheckoutGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'paypal_pro_checkout_nvp',

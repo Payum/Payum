@@ -613,7 +613,7 @@ class Api
         ;
     }
 
-    protected function addAuthorizeFields(array &$fields)
+    protected function addAuthorizeFields(array &$fields): void
     {
         $fields['PWD'] = $this->options['password'];
         $fields['USER'] = $this->options['username'];
@@ -624,7 +624,7 @@ class Api
         }
     }
 
-    protected function addVersionField(array &$fields)
+    protected function addVersionField(array &$fields): void
     {
         $fields['VERSION'] = self::VERSION;
     }

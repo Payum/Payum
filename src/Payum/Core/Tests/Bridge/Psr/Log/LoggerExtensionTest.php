@@ -25,27 +25,27 @@ class LoggerExtensionTest extends TestCase
         }
     }
 
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(LoggerExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldImplementLoggerAwareInterface()
+    public function testShouldImplementLoggerAwareInterface(): void
     {
         $rc = new ReflectionClass(LoggerExtension::class);
 
         $this->assertTrue($rc->implementsInterface(LoggerAwareInterface::class));
     }
 
-    public function testShouldAllowSetLogger()
+    public function testShouldAllowSetLogger(): void
     {
         $extension = new LoggerExtension();
         $this->assertInstanceOf(LoggerAwareInterface::class, $extension);
     }
 
-    public function testShouldInjectLoggerToLoggerAwareActionOnExecute()
+    public function testShouldInjectLoggerToLoggerAwareActionOnExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -61,7 +61,7 @@ class LoggerExtensionTest extends TestCase
         $this->assertSame($logger, $action->logger);
     }
 
-    public function testShouldNotInjectLoggerToNotLoggerAwareActionOnExecute()
+    public function testShouldNotInjectLoggerToNotLoggerAwareActionOnExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -78,7 +78,7 @@ class LoggerExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldInjectNullLoggerToLoggerAwareActionOnPostExecute()
+    public function testShouldInjectNullLoggerToLoggerAwareActionOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -94,7 +94,7 @@ class LoggerExtensionTest extends TestCase
         $this->assertInstanceOf(NullLogger::class, $action->logger);
     }
 
-    public function testShouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute()
+    public function testShouldNotInjectNullLoggerToNotLoggerAwareActionOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -112,7 +112,7 @@ class LoggerExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldDoNothingOnPreExecute()
+    public function testShouldDoNothingOnPreExecute(): void
     {
         $logger = $this->createLoggerMock();
 
@@ -162,11 +162,11 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
     }
 
-    public function supports($request)
+    public function supports($request): void
     {
     }
 }

@@ -18,28 +18,28 @@ use stdClass;
 
 class RefundTransactionActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldUseApiAwareTrait()
+    public function testShouldUseApiAwareTrait(): void
     {
         $rc = new ReflectionClass(RefundTransactionAction::class);
 
         $this->assertContains(ApiAwareTrait::class, $rc->getTraitNames());
     }
 
-    public function testShouldSupportRefundTransactionRequestAndArrayAccessAsModel()
+    public function testShouldSupportRefundTransactionRequestAndArrayAccessAsModel(): void
     {
         $action = new RefundTransactionAction();
 
@@ -48,14 +48,14 @@ class RefundTransactionActionTest extends TestCase
         );
     }
 
-    public function testShouldNotSupportAnythingNotRefundTransactionRequest()
+    public function testShouldNotSupportAnythingNotRefundTransactionRequest(): void
     {
         $action = new RefundTransactionAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RefundTransactionAction();
@@ -63,7 +63,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfAuthorizationIdNotSetInModel()
+    public function testThrowIfAuthorizationIdNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The TRANSACTIONID fields are required.');
@@ -75,7 +75,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiRefundTransactionMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiRefundTransactionMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -101,7 +101,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiRefundTransactionMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiRefundTransactionMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

@@ -18,14 +18,14 @@ use stdClass;
 
 class PaymentDetailsSyncActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet(): void
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -38,7 +38,7 @@ class PaymentDetailsSyncActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero(): void
     {
         $action = new PaymentDetailsSyncAction();
 
@@ -51,14 +51,14 @@ class PaymentDetailsSyncActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new PaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
@@ -66,7 +66,7 @@ class PaymentDetailsSyncActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoNothingIfTokenNotSet()
+    public function testShouldDoNothingIfTokenNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -84,14 +84,14 @@ class PaymentDetailsSyncActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel()
+    public function testShouldRequestGetExpressCheckoutDetailsAndUpdateModelIfTokenSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetExpressCheckoutDetails::class))
-            ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
+            ->willReturnCallback(function (GetExpressCheckoutDetails $request): void {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
@@ -115,14 +115,14 @@ class PaymentDetailsSyncActionTest extends TestCase
         $this->assertSame(33, $details['PAYMENTREQUEST_0_AMT']);
     }
 
-    public function testShouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired()
+    public function testShouldRequestGetExpressCheckoutDetailsAndDoNotUpdateModelIfSessionExpired(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetExpressCheckoutDetails::class))
-            ->willReturnCallback(function (GetExpressCheckoutDetails $request) {
+            ->willReturnCallback(function (GetExpressCheckoutDetails $request): void {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['PAYMENTREQUEST_0_AMT'] = 33;
@@ -146,7 +146,7 @@ class PaymentDetailsSyncActionTest extends TestCase
         $this->assertSame(11, $details['PAYMENTREQUEST_0_AMT']);
     }
 
-    public function testShouldRequestGetTransactionDetailsTwice()
+    public function testShouldRequestGetTransactionDetailsTwice(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -158,11 +158,11 @@ class PaymentDetailsSyncActionTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function (GetTransactionDetails $request) {
+                $this->returnCallback(function (GetTransactionDetails $request): void {
                     $model = $request->getModel();
                     $model['foo'] = 'fooVal';
                 }),
-                $this->returnCallback(function (GetTransactionDetails $request) {
+                $this->returnCallback(function (GetTransactionDetails $request): void {
                     $model = $request->getModel();
                     $model['bar'] = 'barVal';
                 })

@@ -26,11 +26,11 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         $this->logger = $logger;
     }
 
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
     }
 
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',
@@ -40,7 +40,7 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         ));
     }
 
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         if ($context->getReply()) {
             $this->logger->debug(sprintf(

@@ -11,7 +11,7 @@ class AuthorizeNetAIM extends \AuthorizeNetAIM
 {
     public $ignore_not_x_fields = false;
 
-    public function setField($name, $value)
+    public function setField($name, $value): void
     {
         // the _all_aim_fields is private so we cannot check that.
         try {

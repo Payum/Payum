@@ -18,6 +18,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -59,6 +60,7 @@ return static function (RectorConfig $rectorConfig): void {
         UnwrapSprintfOneArgumentRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         InlineConstructorDefaultToPropertyRector::class,
+        AddVoidReturnTypeWhereNoReturnRector::class,
     ]);
 
     $rectorConfig->skip([

@@ -17,7 +17,7 @@ class CreateCustomerExtension implements ExtensionInterface
     /**
      * @var Context
      */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         /** @var Capture $request */
         $request = $context->getRequest();
@@ -36,14 +36,14 @@ class CreateCustomerExtension implements ExtensionInterface
     /**
      * @var Context
      */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
     /**
      * @var Context
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $model = null;
         /** @var Capture $request */
@@ -60,7 +60,7 @@ class CreateCustomerExtension implements ExtensionInterface
         $this->createCustomer($context->getGateway(), ArrayObject::ensureArrayObject($model));
     }
 
-    protected function createCustomer(GatewayInterface $gateway, ArrayObject $model)
+    protected function createCustomer(GatewayInterface $gateway, ArrayObject $model): void
     {
         if ($model['customer']) {
             return;

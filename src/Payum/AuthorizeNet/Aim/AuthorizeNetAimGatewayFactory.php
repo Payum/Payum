@@ -12,7 +12,7 @@ use Payum\Core\GatewayFactory;
 
 class AuthorizeNetAimGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (! class_exists(\AuthorizeNetAIM::class)) {
             throw new LogicException('You must install "authorizenet/authorizenet" library.');

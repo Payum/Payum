@@ -17,35 +17,35 @@ use stdClass;
 
 class RefundTransactionActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(RefundTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportRefundTransactionRequestWithArrayAccessAsModel()
+    public function testShouldSupportRefundTransactionRequestWithArrayAccessAsModel(): void
     {
         $action = new RefundTransactionAction();
 
         $this->assertTrue($action->supports(new RefundTransaction($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingRefundTransactionRequest()
+    public function testShouldNotSupportAnythingRefundTransactionRequest(): void
     {
         $action = new RefundTransactionAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RefundTransactionAction($this->createApiMock());
@@ -53,7 +53,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTransactionIdParameterIsNotSet()
+    public function testThrowIfTransactionIdParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
@@ -63,7 +63,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testThrowIfAmountParameterIsNotSet()
+    public function testThrowIfAmountParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('One of the parameters "refund_amount" or "amount" must be set.');
@@ -75,7 +75,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShoulUseAmountAsRefundAmountIfNotSet()
+    public function testShoulUseAmountAsRefundAmountIfNotSet(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -98,7 +98,7 @@ class RefundTransactionActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShoulUseRefundAmountIfAmountSet()
+    public function testShoulUseRefundAmountIfAmountSet(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

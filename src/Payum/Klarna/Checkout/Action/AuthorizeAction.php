@@ -46,7 +46,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     /**
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

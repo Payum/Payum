@@ -15,21 +15,21 @@ use stdClass;
 
 class AbstractTokenFactoryTest extends TestCase
 {
-    public function testShouldImplementsGenericTokenFactoryInterface()
+    public function testShouldImplementsGenericTokenFactoryInterface(): void
     {
         $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(AbstractTokenFactory::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
 
-    public function testShouldCreateTokenWithoutAfterPath()
+    public function testShouldCreateTokenWithoutAfterPath(): void
     {
         $token = new Token();
 
@@ -86,7 +86,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertNull($token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenWithAfterUrl()
+    public function testShouldCreateTokenWithAfterUrl(): void
     {
         $token = new Token();
 
@@ -147,7 +147,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenWithIdentityAsModel()
+    public function testShouldCreateTokenWithIdentityAsModel(): void
     {
         $token = new Token();
 
@@ -191,7 +191,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame($identity, $token->getDetails());
     }
 
-    public function testShouldCreateTokenWithoutModel()
+    public function testShouldCreateTokenWithoutModel(): void
     {
         $token = new Token();
 
@@ -234,7 +234,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertNull($token->getDetails());
     }
 
-    public function testShouldCreateTokenWithTargetPathAlreadyUrl()
+    public function testShouldCreateTokenWithTargetPathAlreadyUrl(): void
     {
         $token = new Token();
 
@@ -295,7 +295,7 @@ class AbstractTokenFactoryTest extends TestCase
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldNotOverwritePayumTokenHashInAfterUrl()
+    public function testShouldNotOverwritePayumTokenHashInAfterUrl(): void
     {
         $authorizeToken = new Token();
 
@@ -357,7 +357,7 @@ class AbstractTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithoutPayumToken()
+    public function testShouldAllowCreateAfterUrlWithoutPayumToken(): void
     {
         $authorizeToken = new Token();
 
@@ -420,7 +420,7 @@ class AbstractTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithFragment()
+    public function testShouldAllowCreateAfterUrlWithFragment(): void
     {
         $authorizeToken = new Token();
 

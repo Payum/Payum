@@ -26,28 +26,28 @@ class GenericTest extends TestCase
         yield 'resource' => [tmpfile()];
     }
 
-    public function testShouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
         $rc = new ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testShouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface(): void
     {
         $rc = new ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
-    public function testShouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface(): void
     {
         $rc = new ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAggregateInterface::class));
     }
 
-    public function testShouldImplementTokenAggregateInterface()
+    public function testShouldImplementTokenAggregateInterface(): void
     {
         $rc = new ReflectionClass(Generic::class);
 
@@ -57,7 +57,7 @@ class GenericTest extends TestCase
     /**
      * @dataProvider provideDifferentPhpTypes
      */
-    public function testCouldBeConstructedWithModelOfAnyType($phpType)
+    public function testCouldBeConstructedWithModelOfAnyType($phpType): void
     {
         $request = new class($phpType) extends Generic {
         };
@@ -68,7 +68,7 @@ class GenericTest extends TestCase
     /**
      * @dataProvider provideDifferentPhpTypes
      */
-    public function testShouldAllowSetModelAndGetIt($phpType)
+    public function testShouldAllowSetModelAndGetIt($phpType): void
     {
         $request = new class(123321) extends Generic {
         };
@@ -81,7 +81,7 @@ class GenericTest extends TestCase
     /**
      * @dataProvider provideDifferentPhpTypes
      */
-    public function testShouldAllowGetModelSetInConstructor($phpType)
+    public function testShouldAllowGetModelSetInConstructor($phpType): void
     {
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, [$phpType]);
@@ -89,7 +89,7 @@ class GenericTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    public function testShouldAllowGetTokenSetInConstructor()
+    public function testShouldAllowGetTokenSetInConstructor(): void
     {
         $tokenMock = $this->createMock(TokenInterface::class);
 
@@ -100,7 +100,7 @@ class GenericTest extends TestCase
         $this->assertSame($tokenMock, $request->getToken());
     }
 
-    public function testShouldConvertArrayToArrayObjectInConstructor()
+    public function testShouldConvertArrayToArrayObjectInConstructor(): void
     {
         $model = [
             'foo' => 'bar',
@@ -113,7 +113,7 @@ class GenericTest extends TestCase
         $this->assertSame($model, (array) $request->getModel());
     }
 
-    public function testShouldConvertArrayToArrayObjectSetWithSetter()
+    public function testShouldConvertArrayToArrayObjectSetWithSetter(): void
     {
         /** @var Generic $request */
         $request = $this->getMockForAbstractClass(Generic::class, [123321]);
@@ -128,7 +128,7 @@ class GenericTest extends TestCase
         $this->assertSame($model, (array) $request->getModel());
     }
 
-    public function testShouldNotSetTokenAsFirstModelOnConstruct()
+    public function testShouldNotSetTokenAsFirstModelOnConstruct(): void
     {
         /** @var Generic $request */
         $token = $this->createMock(TokenInterface::class);
@@ -138,22 +138,22 @@ class GenericTest extends TestCase
         $this->assertNull($request->getFirstModel());
     }
 
-    public function testShouldNotSetIdentityAsFirstModelOnConstruct()
+    public function testShouldNotSetIdentityAsFirstModelOnConstruct(): void
     {
         $identity = new class() implements IdentityInterface {
-            public function serialize()
+            public function serialize(): void
             {
             }
 
-            public function unserialize($data)
+            public function unserialize($data): void
             {
             }
 
-            public function getClass()
+            public function getClass(): void
             {
             }
 
-            public function getId()
+            public function getId(): void
             {
             }
 
@@ -172,7 +172,7 @@ class GenericTest extends TestCase
         $this->assertNull($request->getFirstModel());
     }
 
-    public function testShouldSetAnyObjectAsFirstModelOnConstruct()
+    public function testShouldSetAnyObjectAsFirstModelOnConstruct(): void
     {
         $model = new stdClass();
 
@@ -182,7 +182,7 @@ class GenericTest extends TestCase
         $this->assertSame($model, $request->getFirstModel());
     }
 
-    public function testShouldNotSetTokenAsFirstModelOnSetModel()
+    public function testShouldNotSetTokenAsFirstModelOnSetModel(): void
     {
         $token = $this->createMock(TokenInterface::class);
 
@@ -193,22 +193,22 @@ class GenericTest extends TestCase
         $this->assertNull($request->getFirstModel());
     }
 
-    public function testShouldNotSetIdentityAsFirstModelOnSetModel()
+    public function testShouldNotSetIdentityAsFirstModelOnSetModel(): void
     {
         $identity = new class() implements IdentityInterface {
-            public function serialize()
+            public function serialize(): void
             {
             }
 
-            public function unserialize($data)
+            public function unserialize($data): void
             {
             }
 
-            public function getClass()
+            public function getClass(): void
             {
             }
 
-            public function getId()
+            public function getId(): void
             {
             }
 
@@ -229,7 +229,7 @@ class GenericTest extends TestCase
         $this->assertNull($request->getFirstModel());
     }
 
-    public function testShouldSetAnyObjectAsFirstModelOnSetModel()
+    public function testShouldSetAnyObjectAsFirstModelOnSetModel(): void
     {
         $model = new stdClass();
 
@@ -240,7 +240,7 @@ class GenericTest extends TestCase
         $this->assertSame($model, $request->getFirstModel());
     }
 
-    public function testShouldNotChangeFirstModelOnSecondSetModelCall()
+    public function testShouldNotChangeFirstModelOnSecondSetModelCall(): void
     {
         $firstModel = new stdClass();
         $secondModel = new stdClass();

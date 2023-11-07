@@ -21,7 +21,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var GetTransactionDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);

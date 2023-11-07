@@ -17,35 +17,35 @@ use stdClass;
 
 class GetTransactionDataActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetTransactionDataAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(GetTransactionDataAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportGetTransactionDataRequestWithArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDataRequestWithArrayAccessAsModel(): void
     {
         $action = new GetTransactionDataAction();
 
         $this->assertTrue($action->supports(new GetTransactionData($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingGetTransactionDataRequest()
+    public function testShouldNotSupportAnythingGetTransactionDataRequest(): void
     {
         $action = new GetTransactionDataAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetTransactionDataAction($this->createApiMock());
@@ -53,7 +53,7 @@ class GetTransactionDataActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTransactionIdParameterIsNotSet()
+    public function testThrowIfTransactionIdParameterIsNotSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');

@@ -39,21 +39,21 @@ class AutoPayAgreementActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(AutoPayAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(AutoPayAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotAgreementApiAsApi()
+    public function testThrowOnTryingSetNotAgreementApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
@@ -62,28 +62,28 @@ class AutoPayAgreementActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportAutoPayAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportAutoPayAgreementRequestWithArrayAccessAsModel(): void
     {
         $action = new AutoPayAgreementAction();
 
         $this->assertTrue($action->supports(new AutoPayAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotAutoPayAgreementRequest()
+    public function testShouldNotSupportAnythingNotAutoPayAgreementRequest(): void
     {
         $action = new AutoPayAgreementAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportAutoPayAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportAutoPayAgreementRequestWithNotArrayAccessModel(): void
     {
         $action = new AutoPayAgreementAction();
 
         $this->assertFalse($action->supports(new AutoPayAgreement(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new AutoPayAgreementAction($this->createApiMock());
@@ -94,7 +94,7 @@ class AutoPayAgreementActionTest extends TestCase
     /**
      * @dataProvider provideRequiredFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
         $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -104,7 +104,7 @@ class AutoPayAgreementActionTest extends TestCase
         $action->execute(new AutoPayAgreement($this->requiredFields));
     }
 
-    public function testShouldAutoPayAgreementPayment()
+    public function testShouldAutoPayAgreementPayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

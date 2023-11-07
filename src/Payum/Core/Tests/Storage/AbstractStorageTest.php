@@ -12,40 +12,40 @@ use stdClass;
 
 class AbstractStorageTest extends TestCase
 {
-    public function testShouldImplementStorageInterface()
+    public function testShouldImplementStorageInterface(): void
     {
         $rc = new ReflectionClass(AbstractStorage::class);
 
         $this->assertTrue($rc->implementsInterface(StorageInterface::class));
     }
 
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(AbstractStorage::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testShouldCreateInstanceOfModelClassSetInConstructor()
+    public function testShouldCreateInstanceOfModelClassSetInConstructor(): void
     {
         $storage = new class(stdClass::class) extends AbstractStorage {
-            protected function doUpdateModel($model)
+            protected function doUpdateModel($model): void
             {
             }
 
-            protected function doDeleteModel($model)
+            protected function doDeleteModel($model): void
             {
             }
 
-            protected function doGetIdentity($model)
+            protected function doGetIdentity($model): void
             {
             }
 
-            protected function doFind($id)
+            protected function doFind($id): void
             {
             }
 
-            public function findBy(array $criteria)
+            public function findBy(array $criteria): void
             {
             }
         };
@@ -55,7 +55,7 @@ class AbstractStorageTest extends TestCase
         $this->assertInstanceOf(stdClass::class, $model);
     }
 
-    public function testThrowIfInvalidModelGivenOnUpdate()
+    public function testThrowIfInvalidModelGivenOnUpdate(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
@@ -66,7 +66,7 @@ class AbstractStorageTest extends TestCase
         $storage->update(new stdClass());
     }
 
-    public function testShouldCallDoUpdateModelOnModelUpdate()
+    public function testShouldCallDoUpdateModelOnModelUpdate(): void
     {
         $model = new stdClass();
 
@@ -80,7 +80,7 @@ class AbstractStorageTest extends TestCase
         $storage->update($model);
     }
 
-    public function testThrowIfInvalidModelGivenOnDelete()
+    public function testThrowIfInvalidModelGivenOnDelete(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
@@ -91,7 +91,7 @@ class AbstractStorageTest extends TestCase
         $storage->delete(new stdClass());
     }
 
-    public function testShouldCallDoDeleteModelOnModelDelete()
+    public function testShouldCallDoDeleteModelOnModelDelete(): void
     {
         $model = new stdClass();
 
@@ -105,7 +105,7 @@ class AbstractStorageTest extends TestCase
         $storage->delete($model);
     }
 
-    public function testThrowIfInvalidModelGivenOnGetIdentity()
+    public function testThrowIfInvalidModelGivenOnGetIdentity(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid model given. Should be instance of Mock_stdClass_');
@@ -116,7 +116,7 @@ class AbstractStorageTest extends TestCase
         $storage->identify(new stdClass());
     }
 
-    public function testShouldCallDoGetIdentityOnGetIdentificator()
+    public function testShouldCallDoGetIdentityOnGetIdentificator(): void
     {
         $model = new stdClass();
 
@@ -130,7 +130,7 @@ class AbstractStorageTest extends TestCase
         $storage->identify($model);
     }
 
-    public function testShouldReturnNullIfNotSupportedIdentityGivenOnFindModelByIdentity()
+    public function testShouldReturnNullIfNotSupportedIdentityGivenOnFindModelByIdentity(): void
     {
         $modelClass = $this->createMock(stdClass::class)::class;
         $identity = new Identity('anId', new stdClass());
@@ -140,7 +140,7 @@ class AbstractStorageTest extends TestCase
         $this->assertNull($storage->find($identity));
     }
 
-    public function testShouldCallFindModelByIdOnFindModelByIdentityWithIdFromIdentity()
+    public function testShouldCallFindModelByIdOnFindModelByIdentityWithIdFromIdentity(): void
     {
         $identity = new Identity('theId', new stdClass());
 
@@ -154,7 +154,7 @@ class AbstractStorageTest extends TestCase
         $storage->find($identity);
     }
 
-    public function testShouldCallFindModelByIdOnFindModelByEvenIfModelClassPrependWithSlash()
+    public function testShouldCallFindModelByIdOnFindModelByEvenIfModelClassPrependWithSlash(): void
     {
         $identity = new Identity('theId', new stdClass());
 
@@ -168,7 +168,7 @@ class AbstractStorageTest extends TestCase
         $storage->find($identity);
     }
 
-    public function testShouldProxyFindModelByIdResultOnFindModelByIdentity()
+    public function testShouldProxyFindModelByIdResultOnFindModelByIdentity(): void
     {
         $expectedModel = new stdClass();
         $identity = new Identity('aId', $expectedModel);
@@ -183,7 +183,7 @@ class AbstractStorageTest extends TestCase
         $this->assertSame($expectedModel, $storage->find($identity));
     }
 
-    public function testShouldNotCallDoFindIfIdentityClassNotMatchStorageOne()
+    public function testShouldNotCallDoFindIfIdentityClassNotMatchStorageOne(): void
     {
         $expectedModel = new stdClass();
         $identity = new Identity('aId', $expectedModel);
@@ -199,7 +199,7 @@ class AbstractStorageTest extends TestCase
         $this->assertNull($storage->find($identity));
     }
 
-    public function testShouldReturnTrueIfModelSupportedOnSupportModel()
+    public function testShouldReturnTrueIfModelSupportedOnSupportModel(): void
     {
         $model = $this->createMock(stdClass::class);
 
@@ -208,7 +208,7 @@ class AbstractStorageTest extends TestCase
         $this->assertTrue($storage->support($model));
     }
 
-    public function testShouldReturnFalseIfModelNotSupportedOnSupportModel()
+    public function testShouldReturnFalseIfModelNotSupportedOnSupportModel(): void
     {
         $modelClass = $this->createMock(stdClass::class)::class;
 
@@ -217,7 +217,7 @@ class AbstractStorageTest extends TestCase
         $this->assertFalse($storage->support(new stdClass()));
     }
 
-    public function testShouldReturnFalseIfModelNotObjectOnSupportModel()
+    public function testShouldReturnFalseIfModelNotObjectOnSupportModel(): void
     {
         $storage = $this->getMockForAbstractClass(AbstractStorage::class, [stdClass::class]);
 

@@ -11,7 +11,7 @@ use Payum\Offline\Constants;
 
 class PayoutAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Payout $request */
         RequestNotSupportedException::assertSupports($this, $request);

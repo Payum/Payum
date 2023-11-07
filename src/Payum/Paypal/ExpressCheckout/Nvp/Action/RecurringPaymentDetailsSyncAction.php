@@ -15,7 +15,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -38,7 +38,7 @@ class GatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
     }
 }

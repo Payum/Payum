@@ -34,13 +34,13 @@ class DoctrineStorage extends AbstractStorage
         return $this->objectManager->find($this->modelClass, $id);
     }
 
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): void
     {
         $this->objectManager->persist($model);
         $this->objectManager->flush();
     }
 
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $this->objectManager->remove($model);
         $this->objectManager->flush();

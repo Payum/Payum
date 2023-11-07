@@ -20,7 +20,7 @@ class AutoPayAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var AutoPayAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);

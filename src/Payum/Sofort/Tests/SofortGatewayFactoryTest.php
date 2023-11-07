@@ -8,7 +8,7 @@ use Payum\Sofort\SofortGatewayFactory;
 
 class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new SofortGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new SofortGatewayFactory();
 
@@ -45,7 +45,7 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new SofortGatewayFactory();
 
@@ -60,7 +60,7 @@ class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Sofort', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The config_key fields are required.');

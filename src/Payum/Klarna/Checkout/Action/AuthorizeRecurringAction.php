@@ -39,7 +39,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->apiClass = Config::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -50,7 +50,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     /**
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

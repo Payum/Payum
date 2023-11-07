@@ -55,21 +55,21 @@ class CreateAgreementActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CreateAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CreateAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotAgreementApiAsApi()
+    public function testThrowOnTryingSetNotAgreementApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
@@ -78,28 +78,28 @@ class CreateAgreementActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCreateAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportCreateAgreementRequestWithArrayAccessAsModel(): void
     {
         $action = new CreateAgreementAction();
 
         $this->assertTrue($action->supports(new CreateAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCreateAgreementRequest()
+    public function testShouldNotSupportAnythingNotCreateAgreementRequest(): void
     {
         $action = new CreateAgreementAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCreateAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreateAgreementRequestWithNotArrayAccessModel(): void
     {
         $action = new CreateAgreementAction();
 
         $this->assertFalse($action->supports(new CreateAgreement(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreateAgreementAction($this->createApiMock());
@@ -110,7 +110,7 @@ class CreateAgreementActionTest extends TestCase
     /**
      * @dataProvider provideRequiredFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
         $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -123,7 +123,7 @@ class CreateAgreementActionTest extends TestCase
     /**
      * @dataProvider provideRequiredNotEmptyFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField): void
     {
         $this->expectException(LogicException::class);
         $fields = $this->requiredNotEmptyFields;
@@ -135,7 +135,7 @@ class CreateAgreementActionTest extends TestCase
         $action->execute(new CreateAgreement($fields));
     }
 
-    public function testShouldCreateAgreementPayment()
+    public function testShouldCreateAgreementPayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -157,7 +157,7 @@ class CreateAgreementActionTest extends TestCase
         $this->assertSame('theRef', $model['agreementRef']);
     }
 
-    public function testThrowIfTryCreateAlreadyCreatedAgreement()
+    public function testThrowIfTryCreateAlreadyCreatedAgreement(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The agreement has already been created.');

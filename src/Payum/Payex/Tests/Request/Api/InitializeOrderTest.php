@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class InitializeOrderTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(InitializeOrder::class);
 

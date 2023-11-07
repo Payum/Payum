@@ -14,21 +14,21 @@ use stdClass;
 
 class PaymentDetailsStatusActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(PaymentDetailsStatusAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldSupportGetStatusRequestWithEmptyArrayAsModel()
+    public function testShouldSupportGetStatusRequestWithEmptyArrayAsModel(): void
     {
         $action = new PaymentDetailsStatusAction();
 
         $this->assertTrue($action->supports(new GetHumanStatus([])));
     }
 
-    public function testShouldNotSupportGetStatusRequestWithArrayAsModelIfAutoPaySet()
+    public function testShouldNotSupportGetStatusRequestWithArrayAsModelIfAutoPaySet(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -37,7 +37,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldSupportGetStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function testShouldSupportGetStatusRequestWithArrayAsModelIfAutoPaySetToFalse(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -46,7 +46,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldSupportGetStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet()
+    public function testShouldSupportGetStatusRequestWithArrayAsModelIfRecurringSetToTrueAndAutoPaySet(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -56,21 +56,21 @@ class PaymentDetailsStatusActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel(): void
     {
         $action = new PaymentDetailsStatusAction();
 
         $this->assertFalse($action->supports(new GetHumanStatus(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsStatusAction();
@@ -78,7 +78,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -92,7 +92,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkUnknownIfOrderStatusNotSupported()
+    public function testShouldMarkUnknownIfOrderStatusNotSupported(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -110,7 +110,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isUnknown());
     }
 
-    public function testShouldMarkUnknownIfOrderStatusSupportedButTransactionStatusNotSupported()
+    public function testShouldMarkUnknownIfOrderStatusSupportedButTransactionStatusNotSupported(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -129,7 +129,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isUnknown());
     }
 
-    public function testShouldMarkNewIfOrderStatusNotSet()
+    public function testShouldMarkNewIfOrderStatusNotSet(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -146,7 +146,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isNew());
     }
 
-    public function testShouldMarkCapturedTwoPhaseTransaction()
+    public function testShouldMarkCapturedTwoPhaseTransaction(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -166,7 +166,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkFailedTwoPhaseTransactionIfTransactionStatusNotAuthorize()
+    public function testShouldMarkFailedTwoPhaseTransactionIfTransactionStatusNotAuthorize(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -186,7 +186,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkCapturedOnePhaseTransaction()
+    public function testShouldMarkCapturedOnePhaseTransaction(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -206,7 +206,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkFailedOnePhaseTransactionIfTransactionStatusNotSale()
+    public function testShouldMarkFailedOnePhaseTransactionIfTransactionStatusNotSale(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -226,7 +226,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkCanceledIfTransactionStatusCanceled()
+    public function testShouldMarkCanceledIfTransactionStatusCanceled(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -245,7 +245,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkCanceledIfTransactionStatusFailedButErrorDetailsTellCanceled()
+    public function testShouldMarkCanceledIfTransactionStatusFailedButErrorDetailsTellCanceled(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -267,7 +267,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkFailedIfTransactionStatusFailed()
+    public function testShouldMarkFailedIfTransactionStatusFailed(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -286,7 +286,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkPendingIfOrderStatusProgressing()
+    public function testShouldMarkPendingIfOrderStatusProgressing(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -304,7 +304,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isPending());
     }
 
-    public function testShouldMarkExpiredIfOrderStatusNotFound()
+    public function testShouldMarkExpiredIfOrderStatusNotFound(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -322,7 +322,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isExpired());
     }
 
-    public function testShouldMarkFailedIfErrorCodeNotOk()
+    public function testShouldMarkFailedIfErrorCodeNotOk(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -340,7 +340,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isFailed());
     }
 
-    public function testShouldMarkCapturedIfErrorCodeOk()
+    public function testShouldMarkCapturedIfErrorCodeOk(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -361,7 +361,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByMerchant()
+    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByMerchant(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -379,7 +379,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByAdmin()
+    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByAdmin(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -397,7 +397,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByClient()
+    public function testShouldMarkCanceledIfRecurringStatusIsStoppedByClient(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -415,7 +415,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkCanceledIfRecurringStatusIsStoppedBySystem()
+    public function testShouldMarkCanceledIfRecurringStatusIsStoppedBySystem(): void
     {
         $action = new PaymentDetailsStatusAction();
 
@@ -433,7 +433,7 @@ class PaymentDetailsStatusActionTest extends TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    public function testShouldMarkFailedIfRecurringStatusIsFailed()
+    public function testShouldMarkFailedIfRecurringStatusIsFailed(): void
     {
         $action = new PaymentDetailsStatusAction();
 

@@ -9,7 +9,7 @@ trait GenericTokenFactoryAwareTrait
      */
     protected $tokenFactory;
 
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null): void
     {
         $this->tokenFactory = $genericTokenFactory;
     }

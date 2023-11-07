@@ -8,7 +8,7 @@ use Payum\Core\Tests\Mocks\Request\AuthorizeRequest;
 
 class AuthorizeAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute($request): void
     {
         throw new HttpRedirect('http://login.thePayment.com');
     }

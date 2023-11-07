@@ -8,14 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetTokenTest extends TestCase
 {
-    public function testShouldAllowGetHashSetInConstructor()
+    public function testShouldAllowGetHashSetInConstructor(): void
     {
         $request = new GetToken('theHash');
 
         $this->assertSame('theHash', $request->getHash());
     }
 
-    public function testShouldAllowGetPreviouslySetToken()
+    public function testShouldAllowGetPreviouslySetToken(): void
     {
         /** @var TokenInterface $token */
         $token = $this->createMock(TokenInterface::class);

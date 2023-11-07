@@ -33,21 +33,21 @@ class DeleteAgreementActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(DeleteAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(DeleteAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotAgreementApiAsApi()
+    public function testThrowOnTryingSetNotAgreementApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
@@ -56,28 +56,28 @@ class DeleteAgreementActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportDeleteAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportDeleteAgreementRequestWithArrayAccessAsModel(): void
     {
         $action = new DeleteAgreementAction();
 
         $this->assertTrue($action->supports(new DeleteAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotDeleteAgreementRequest()
+    public function testShouldNotSupportAnythingNotDeleteAgreementRequest(): void
     {
         $action = new DeleteAgreementAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportDeleteAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportDeleteAgreementRequestWithNotArrayAccessModel(): void
     {
         $action = new DeleteAgreementAction();
 
         $this->assertFalse($action->supports(new DeleteAgreement(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new DeleteAgreementAction($this->createApiMock());
@@ -88,7 +88,7 @@ class DeleteAgreementActionTest extends TestCase
     /**
      * @dataProvider provideRequiredNotEmptyFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField): void
     {
         $this->expectException(LogicException::class);
         $fields = $this->requiredNotEmptyFields;
@@ -100,7 +100,7 @@ class DeleteAgreementActionTest extends TestCase
         $action->execute(new DeleteAgreement($fields));
     }
 
-    public function testShouldCheckAgreementAndSetAgreementStatusAsResult()
+    public function testShouldCheckAgreementAndSetAgreementStatusAsResult(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

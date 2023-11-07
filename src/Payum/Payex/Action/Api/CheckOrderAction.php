@@ -20,7 +20,7 @@ class CheckOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CheckOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -17,19 +17,19 @@ class EventDispatcherExtension implements ExtensionInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         $event = new ExecuteEvent($context);
         $this->dispatcher->dispatch($event, PayumEvents::GATEWAY_PRE_EXECUTE);
     }
 
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         $event = new ExecuteEvent($context);
         $this->dispatcher->dispatch($event, PayumEvents::GATEWAY_EXECUTE);
     }
 
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $event = new ExecuteEvent($context);
         $this->dispatcher->dispatch($event, PayumEvents::GATEWAY_POST_EXECUTE);

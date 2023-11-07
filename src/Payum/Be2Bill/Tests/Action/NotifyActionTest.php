@@ -23,21 +23,21 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new NotifyAction();
@@ -45,14 +45,14 @@ class NotifyActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testThrowIfQueryHashDoesNotMatchExpected()
+    public function testThrowIfQueryHashDoesNotMatchExpected(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->query = ['expected be2bill query'];
             })
         ;
@@ -80,14 +80,14 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    public function testThrowIfQueryAmountDoesNotMatchOneFromModel()
+    public function testThrowIfQueryAmountDoesNotMatchOneFromModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->query = [
                     'AMOUNT' => 2.0,
                 ];
@@ -119,14 +119,14 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    public function testShouldUpdateModelIfNotificationValid()
+    public function testShouldUpdateModelIfNotificationValid(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->query = [
                     'AMOUNT' => 1.0,
                     'FOO' => 'FOO',

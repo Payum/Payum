@@ -18,7 +18,7 @@ use Sofort\SofortLib\Sofortueberweisung;
 
 class SofortGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (false == class_exists(Sofortueberweisung::class)) {
             throw new LogicException('You must install "sofort/sofortlib-php:^3.0" library.');

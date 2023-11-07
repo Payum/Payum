@@ -60,7 +60,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $holder
      */
-    public function setHolder($holder)
+    public function setHolder($holder): void
     {
         $this->holder = $holder;
     }
@@ -76,7 +76,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $number
      */
-    public function setNumber($number)
+    public function setNumber($number): void
     {
         $this->number = $number;
     }
@@ -92,7 +92,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bankCode
      */
-    public function setBankCode($bankCode)
+    public function setBankCode($bankCode): void
     {
         $this->bankCode = $bankCode;
     }
@@ -108,7 +108,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bankCountryCode
      */
-    public function setBankCountryCode($bankCountryCode)
+    public function setBankCountryCode($bankCountryCode): void
     {
         $this->bankCountryCode = $bankCountryCode;
     }
@@ -124,7 +124,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $iban
      */
-    public function setIban($iban)
+    public function setIban($iban): void
     {
         $this->iban = $iban;
     }
@@ -140,7 +140,7 @@ class BankAccount implements BankAccountInterface
     /**
      * @param string $bic
      */
-    public function setBic($bic)
+    public function setBic($bic): void
     {
         $this->bic = $bic;
     }

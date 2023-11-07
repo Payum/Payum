@@ -188,7 +188,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    protected function buildClosures(ArrayObject $config)
+    protected function buildClosures(ArrayObject $config): void
     {
         // with higher priority
         foreach (['httplug.message_factory', 'httplug.stream_factory', 'httplug.client', 'payum.http_client', 'payum.paths', 'twig.env', 'twig.register_paths'] as $name) {
@@ -205,7 +205,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildActions(Gateway $gateway, ArrayObject $config)
+    protected function buildActions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.action')) {
@@ -216,7 +216,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildApis(Gateway $gateway, ArrayObject $config)
+    protected function buildApis(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.api')) {
@@ -227,7 +227,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildExtensions(Gateway $gateway, ArrayObject $config)
+    protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.extension')) {

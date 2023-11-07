@@ -14,21 +14,21 @@ use stdClass;
 
 class AgreementApiTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi(): void
     {
         $rc = new ReflectionClass(AgreementApi::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApi::class));
     }
 
-    public function testThrowIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new AgreementApi(new SoapClientFactory(), []);
     }
 
-    public function testThrowIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -40,7 +40,7 @@ class AgreementApiTest extends TestCase
         );
     }
 
-    public function testThrowIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -54,7 +54,7 @@ class AgreementApiTest extends TestCase
         );
     }
 
-    public function testShouldUseSoapClientOnCreateAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCreateAgreementAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->CreateAgreement3Result = '<foo>fooValue</foo>';
@@ -88,7 +88,7 @@ class AgreementApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnCheckAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckAgreementAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
@@ -122,7 +122,7 @@ class AgreementApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnDeleteAgreementAndConvertItsResponse()
+    public function testShouldUseSoapClientOnDeleteAgreementAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->DeleteAgreementResult = '<foo>fooValue</foo>';
@@ -156,7 +156,7 @@ class AgreementApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse()
+    public function testShouldUseSoapClientOnAgreementAutoPayAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->AutoPay3Result = '<foo>fooValue</foo>';
@@ -205,19 +205,19 @@ class AgreementSoapClient extends SoapClient
     {
     }
 
-    public function CreateAgreement3()
+    public function CreateAgreement3(): void
     {
     }
 
-    public function Check()
+    public function Check(): void
     {
     }
 
-    public function DeleteAgreement()
+    public function DeleteAgreement(): void
     {
     }
 
-    public function AutoPay3()
+    public function AutoPay3(): void
     {
     }
 }

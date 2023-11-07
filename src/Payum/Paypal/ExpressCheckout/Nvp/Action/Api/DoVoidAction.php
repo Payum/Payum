@@ -27,7 +27,7 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     /**
      * @param DoVoid $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -16,14 +16,14 @@ use stdClass;
 
 class StatusActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(StatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldSupportStatusRequestWithArrayAccessAsModel()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModel(): void
     {
         $action = new StatusAction();
 
@@ -32,7 +32,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportNotStatusRequest()
+    public function testShouldNotSupportNotStatusRequest(): void
     {
         $action = new StatusAction();
 
@@ -41,7 +41,7 @@ class StatusActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportStatusRequestWithNotArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessAsModel(): void
     {
         $action = new StatusAction();
 
@@ -50,7 +50,7 @@ class StatusActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
@@ -58,7 +58,7 @@ class StatusActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $request = new GetBinaryStatus([]);
         $request->markUnknown();
@@ -70,7 +70,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkNewIfStatusNotSet()
+    public function testShouldMarkNewIfStatusNotSet(): void
     {
         $request = new GetBinaryStatus([]);
         $request->markUnknown();
@@ -82,7 +82,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isNew());
     }
 
-    public function testShouldMarkPendingIfStatusSetToPending()
+    public function testShouldMarkPendingIfStatusSetToPending(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PENDING,
@@ -96,7 +96,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isPending());
     }
 
-    public function testShouldMarkCapturedIfStatusSetToCaptured()
+    public function testShouldMarkCapturedIfStatusSetToCaptured(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CAPTURED,
@@ -110,7 +110,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    public function testShouldMarkPayedoutIfStatusSetToPayedout()
+    public function testShouldMarkPayedoutIfStatusSetToPayedout(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PAYEDOUT,
@@ -124,7 +124,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isPayedout());
     }
 
-    public function testShouldMarkRefundedIfStatusSetToRefunded()
+    public function testShouldMarkRefundedIfStatusSetToRefunded(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_REFUNDED,
@@ -138,7 +138,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    public function testShouldMarkCanceledIfStatusSetToCanceled()
+    public function testShouldMarkCanceledIfStatusSetToCanceled(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
@@ -152,7 +152,7 @@ class StatusActionTest extends TestCase
         $this->assertTrue($request->isCanceled());
     }
 
-    public function testShouldMarkUnknownIfStatusNotRecognized()
+    public function testShouldMarkUnknownIfStatusNotRecognized(): void
     {
         $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => 'some-foo-bar-status',

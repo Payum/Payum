@@ -32,7 +32,7 @@ class Identity implements IdentityInterface, Stringable
         return [$this->id, $this->class];
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
         [$this->id, $this->class] = $data;
     }
@@ -57,7 +57,7 @@ class Identity implements IdentityInterface, Stringable
         return serialize([$this->id, $this->class]);
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         [$this->id, $this->class] = unserialize($serialized);
     }

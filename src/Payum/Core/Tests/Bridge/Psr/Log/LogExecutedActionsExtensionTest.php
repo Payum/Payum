@@ -21,28 +21,28 @@ use stdClass;
 
 class LogExecutedActionsExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(LogExecutedActionsExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldImplementLoggerAwareInterface()
+    public function testShouldImplementLoggerAwareInterface(): void
     {
         $rc = new ReflectionClass(LogExecutedActionsExtension::class);
 
         $this->assertTrue($rc->implementsInterface(LoggerAwareInterface::class));
     }
 
-    public function testShouldAllowSetLogger()
+    public function testShouldAllowSetLogger(): void
     {
         $extension = new LogExecutedActionsExtension();
 
         $this->assertInstanceOf(LoggerAwareInterface::class, $extension);
     }
 
-    public function testShouldNotLogAnythingOnPreExecute()
+    public function testShouldNotLogAnythingOnPreExecute(): void
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -57,7 +57,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    public function testShouldNotLogAnythingOnPostExecute()
+    public function testShouldNotLogAnythingOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -73,7 +73,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldUsePreviousToGetPreviousRequestNumberOnExecute()
+    public function testShouldUsePreviousToGetPreviousRequestNumberOnExecute(): void
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -92,7 +92,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldLogNotObjectActionAndRequestOnExecute()
+    public function testShouldLogNotObjectActionAndRequestOnExecute(): void
     {
         $stringRequest = 'a string';
         $arrayRequest = [];
@@ -121,7 +121,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldLogActionAndObjectRequestOnExecute()
+    public function testShouldLogActionAndObjectRequestOnExecute(): void
     {
         $action = new FooAction();
         $stdRequest = new stdClass();
@@ -150,7 +150,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldLogActionAndModelRequestWithModelNoObjectOnExecute()
+    public function testShouldLogActionAndModelRequestWithModelNoObjectOnExecute(): void
     {
         $action = new FooAction();
         $model = [];
@@ -171,7 +171,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldLogActionAndModelRequestWithObjectModelOnExecute()
+    public function testShouldLogActionAndModelRequestWithObjectModelOnExecute(): void
     {
         $action = new FooAction();
         $stdModel = new stdClass();
@@ -192,7 +192,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onExecute($context);
     }
 
-    public function testShouldLogReplyWhenSetOnPostExecute()
+    public function testShouldLogReplyWhenSetOnPostExecute(): void
     {
         $action = new FooAction();
         $replyMock = $this->createReplyMock();
@@ -215,7 +215,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldLogHttpRedirectReplyWithUrlIncludedOnPostExecute()
+    public function testShouldLogHttpRedirectReplyWithUrlIncludedOnPostExecute(): void
     {
         $action = new FooAction();
         $reply = new HttpRedirect('http://example.com');
@@ -236,7 +236,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldLogExceptionWhenSetOnPostExecute()
+    public function testShouldLogExceptionWhenSetOnPostExecute(): void
     {
         $action = new FooAction();
 
@@ -256,7 +256,7 @@ class LogExecutedActionsExtensionTest extends TestCase
         $extension->onPostExecute($context);
     }
 
-    public function testShouldLogExceptionWhenSetButActionNotSetOnPostExecute()
+    public function testShouldLogExceptionWhenSetButActionNotSetOnPostExecute(): void
     {
         $logger = $this->createLoggerMock();
         $logger
@@ -312,11 +312,11 @@ class NamespacedRequest
 
 class FooAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute($request): void
     {
     }
 
-    public function supports($request)
+    public function supports($request): void
     {
     }
 }

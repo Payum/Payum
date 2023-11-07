@@ -23,7 +23,7 @@ class GatewayConfigType extends AbstractType
         $this->registry = $registry;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('gatewayName')
@@ -34,7 +34,7 @@ class GatewayConfigType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'buildCredentials']);
     }
 
-    public function buildCredentials(FormEvent $event)
+    public function buildCredentials(FormEvent $event): void
     {
         /** @var array $data */
         $data = $event->getData();
@@ -74,7 +74,7 @@ class GatewayConfigType extends AbstractType
         $event->setData($data);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => GatewayConfig::class,

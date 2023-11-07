@@ -41,14 +41,14 @@ class GetHumanStatusTest extends TestCase
         yield ['markExpired'];
     }
 
-    public function testShouldBeSubClassOfBaseStatusRequest()
+    public function testShouldBeSubClassOfBaseStatusRequest(): void
     {
         $rc = new ReflectionClass(GetHumanStatus::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseGetStatus::class));
     }
 
-    public function testShouldMarkUnknownInConstructor()
+    public function testShouldMarkUnknownInConstructor(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -58,7 +58,7 @@ class GetHumanStatusTest extends TestCase
     /**
      * @dataProvider provideMarkXXXMethods
      */
-    public function testShouldAllowGetMarkedStatus($markXXXMethod)
+    public function testShouldAllowGetMarkedStatus($markXXXMethod): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -70,14 +70,14 @@ class GetHumanStatusTest extends TestCase
     /**
      * @dataProvider provideIsXXXMethods
      */
-    public function testShouldCallIsXXXStatus($isXXXMethod)
+    public function testShouldCallIsXXXStatus($isXXXMethod): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
         $this->assertIsBool($getStatus->{$isXXXMethod}());
     }
 
-    public function testShouldNotMatchOthersThenCapturedStatus()
+    public function testShouldNotMatchOthersThenCapturedStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -96,7 +96,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenFailedStatus()
+    public function testShouldNotMatchOthersThenFailedStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -115,7 +115,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenPendingStatus()
+    public function testShouldNotMatchOthersThenPendingStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -134,7 +134,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenCanceledStatus()
+    public function testShouldNotMatchOthersThenCanceledStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -153,7 +153,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenNewStatus()
+    public function testShouldNotMatchOthersThenNewStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -172,7 +172,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenUnknownStatus()
+    public function testShouldNotMatchOthersThenUnknownStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -191,7 +191,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isNew());
     }
 
-    public function testShouldNotMatchOthersThenExpiredStatus()
+    public function testShouldNotMatchOthersThenExpiredStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -210,7 +210,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenSuspendedStatus()
+    public function testShouldNotMatchOthersThenSuspendedStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 
@@ -229,7 +229,7 @@ class GetHumanStatusTest extends TestCase
         $this->assertFalse($getStatus->isUnknown());
     }
 
-    public function testShouldNotMatchOthersThenPayedoutStatus()
+    public function testShouldNotMatchOthersThenPayedoutStatus(): void
     {
         $getStatus = new GetHumanStatus(new stdClass());
 

@@ -13,7 +13,7 @@ class ActivateAction extends BaseApiAwareAction
     /**
      * @param Activate $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

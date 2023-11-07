@@ -23,7 +23,7 @@ class ObtainCreditCard extends Generic
         $this->setModel($currentModel);
     }
 
-    public function set(CreditCardInterface $creditCard)
+    public function set(CreditCardInterface $creditCard): void
     {
         $this->creditCard = $creditCard;
     }

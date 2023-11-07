@@ -18,7 +18,7 @@ use Payum\Klarna\Checkout\Action\SyncAction;
 
 class KlarnaCheckoutGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (! class_exists(Klarna_Checkout_Order::class)) {
             throw new LogicException('You must install "klarna/checkout" library.');

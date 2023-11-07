@@ -23,7 +23,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     /**
      * @var GetStatusInterface
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

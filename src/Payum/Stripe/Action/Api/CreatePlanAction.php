@@ -41,7 +41,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -49,7 +49,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreatePlan $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -24,28 +24,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ObtainCreditCardActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(ObtainCreditCardAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportObtainCreditCardRequest()
+    public function testShouldSupportObtainCreditCardRequest(): void
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $this->assertTrue($action->supports(new ObtainCreditCard()));
     }
 
-    public function testShouldNotSupportAnythingNotObtainCreditCardRequest()
+    public function testShouldNotSupportAnythingNotObtainCreditCardRequest(): void
     {
         $action = new ObtainCreditCardAction($this->createFormFactoryMock(), 'aTemplate');
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotObtainCreditCardRequestGivenOnExecute()
+    public function testThrowIfNotObtainCreditCardRequestGivenOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action ObtainCreditCardAction is not supported the request stdClass.');
@@ -54,7 +54,7 @@ class ObtainCreditCardActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfNotSetBeforeExecute()
+    public function testThrowIfNotSetBeforeExecute(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The action can be run only when http request is set.');
@@ -63,7 +63,7 @@ class ObtainCreditCardActionTest extends TestCase
         $action->execute(new ObtainCreditCard());
     }
 
-    public function testShouldRenderFormWhenNotSubmitted()
+    public function testShouldRenderFormWhenNotSubmitted(): void
     {
         $httpRequest = new Request();
 
@@ -106,7 +106,7 @@ class ObtainCreditCardActionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
+            ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView): void {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals([
                     'form' => $formView,
@@ -140,7 +140,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->fail('Reply exception was expected to be thrown');
     }
 
-    public function testShouldRenderFormWhenSubmittedButNotValid()
+    public function testShouldRenderFormWhenSubmittedButNotValid(): void
     {
         $httpRequest = new Request();
 
@@ -190,7 +190,7 @@ class ObtainCreditCardActionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView) {
+            ->willReturnCallback(function (RenderTemplate $request) use ($testCase, $formView): void {
                 $testCase->assertSame('theTemplateName', $request->getTemplateName());
                 $testCase->assertEquals([
                     'form' => $formView,
@@ -224,7 +224,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->fail('Reply exception was expected to be thrown');
     }
 
-    public function testShouldRenderFormWhenSubmittedAndValid()
+    public function testShouldRenderFormWhenSubmittedAndValid(): void
     {
         $httpRequest = new Request();
 
@@ -270,7 +270,7 @@ class ObtainCreditCardActionTest extends TestCase
         $this->assertSame($creditCard, $obtainCreditCard->obtain());
     }
 
-    public function testShouldPassFirstAndCurrentModelsToTemplate()
+    public function testShouldPassFirstAndCurrentModelsToTemplate(): void
     {
         $firstModel = new stdClass();
         $currentModel = new stdClass();
@@ -321,7 +321,7 @@ class ObtainCreditCardActionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel) {
+            ->willReturnCallback(function (RenderTemplate $request) use ($formView, $firstModel, $currentModel): void {
                 $this->assertSame('theTemplateName', $request->getTemplateName());
                 $this->assertEquals([
                     'form' => $formView,

@@ -50,7 +50,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -58,7 +58,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var ObtainToken $request */
         RequestNotSupportedException::assertSupports($this, $request);

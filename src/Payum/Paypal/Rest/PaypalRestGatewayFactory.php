@@ -15,7 +15,7 @@ use Payum\Paypal\Rest\Action\SyncAction;
 
 class PaypalRestGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (false == class_exists(ApiContext::class)) {
             throw new LogicException('You must install "paypal/rest-api-sdk-php" library.');

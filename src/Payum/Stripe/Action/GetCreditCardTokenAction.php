@@ -13,7 +13,7 @@ class GetCreditCardTokenAction implements ActionInterface
     /**
      * @param GetCreditCardToken $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -14,7 +14,7 @@ use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 
 class PaypalProHostedGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'paypal_pro_hosted',

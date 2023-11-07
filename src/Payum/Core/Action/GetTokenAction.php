@@ -19,7 +19,7 @@ class GetTokenAction implements ActionInterface
     /**
      * @param GetToken $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -11,7 +11,7 @@ use Payum\Offline\Constants;
 
 class StatusAction implements ActionInterface
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var GetStatusInterface $request */
         RequestNotSupportedException::assertSupports($this, $request);

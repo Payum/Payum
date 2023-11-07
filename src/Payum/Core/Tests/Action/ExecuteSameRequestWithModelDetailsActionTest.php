@@ -28,14 +28,14 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         yield [new $this->requestClass(new DetailsAggregateModel())];
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldExecuteSameRequestWithModelDetails()
+    public function testShouldExecuteSameRequestWithModelDetails(): void
     {
         $expectedDetails = new stdClass();
 
@@ -51,7 +51,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
                 $testCase->assertSame($expectedDetails, $request->getModel());
             })
         ;
@@ -64,7 +64,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $this->assertSame($expectedDetails, $model->getDetails());
     }
 
-    public function testShouldWrapArrayDetailsToArrayObjectAndExecute()
+    public function testShouldWrapArrayDetailsToArrayObjectAndExecute(): void
     {
         $expectedDetails = [
             'foo' => 'fooVal',
@@ -83,7 +83,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
@@ -102,7 +102,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $this->assertEquals($details, $model->getDetails());
     }
 
-    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution()
+    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution(): void
     {
         $expectedDetails = [
             'foo' => 'fooVal',
@@ -121,7 +121,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
@@ -148,7 +148,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         );
     }
 
-    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException()
+    public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackEvenOnException(): void
     {
         $expectedDetails = [
             'foo' => 'fooVal',
@@ -167,7 +167,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase) {
+            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
@@ -217,7 +217,7 @@ class ModelAggregateAwareRequest implements ModelAwareInterface, ModelAggregateI
         return $this->model;
     }
 
-    public function setModel($model)
+    public function setModel($model): void
     {
         $this->model = $model;
     }
@@ -242,7 +242,7 @@ class DetailsAggregateAndAwareModel implements DetailsAggregateInterface, Detail
         return $this->details;
     }
 
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         $this->details = $details;
     }

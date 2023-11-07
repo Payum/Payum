@@ -14,21 +14,21 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class ContainerAwareRegistryTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractRegistry()
+    public function testShouldBeSubClassOfAbstractRegistry(): void
     {
         $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    public function testShouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface(): void
     {
         $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testShouldReturnGatewaySetToContainer()
+    public function testShouldReturnGatewaySetToContainer(): void
     {
         $gateways = [
             'fooGateway' => 'fooGatewayServiceId',
@@ -47,7 +47,7 @@ class ContainerAwareRegistryTest extends TestCase
         );
     }
 
-    public function testShouldReturnStorageSetToContainer()
+    public function testShouldReturnStorageSetToContainer(): void
     {
         $gateways = [];
         $storages = [
@@ -63,7 +63,7 @@ class ContainerAwareRegistryTest extends TestCase
         $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage(stdClass::class));
     }
 
-    public function testShouldReturnGatewayFactorySetToContainer()
+    public function testShouldReturnGatewayFactorySetToContainer(): void
     {
         $container = new Container();
         $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));

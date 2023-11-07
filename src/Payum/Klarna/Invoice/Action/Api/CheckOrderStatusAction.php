@@ -13,7 +13,7 @@ class CheckOrderStatusAction extends BaseApiAwareAction
     /**
      * @param CheckOrderStatus $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

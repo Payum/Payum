@@ -16,35 +16,35 @@ use stdClass;
 
 class RefundActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(RefundAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportRefundWithArrayAsModel()
+    public function testShouldSupportRefundWithArrayAsModel(): void
     {
         $action = new RefundAction();
 
         $this->assertTrue($action->supports(new Refund([])));
     }
 
-    public function testShouldNotSupportAnythingNotRefund()
+    public function testShouldNotSupportAnythingNotRefund(): void
     {
         $action = new RefundAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportRefundWithNotArrayAccessModel()
+    public function testShouldNotSupportRefundWithNotArrayAccessModel(): void
     {
         $action = new RefundAction();
 
         $this->assertFalse($action->supports(new Refund(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RefundAction();
@@ -52,7 +52,7 @@ class RefundActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSubExecuteCreditPartIfNotRefundedYet()
+    public function testShouldSubExecuteCreditPartIfNotRefundedYet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -71,7 +71,7 @@ class RefundActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldDoNothingIfAlreadyRefunded()
+    public function testShouldDoNothingIfAlreadyRefunded(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -90,7 +90,7 @@ class RefundActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldThrowsIfDetailsNotHaveInvoiceNumber()
+    public function testShouldThrowsIfDetailsNotHaveInvoiceNumber(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The invoice_number fields are required.');

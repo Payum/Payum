@@ -31,7 +31,7 @@ abstract class BaseOrder extends Generic
         return $this->order;
     }
 
-    public function setOrder(Klarna_Checkout_Order $order)
+    public function setOrder(Klarna_Checkout_Order $order): void
     {
         $this->order = $order;
     }

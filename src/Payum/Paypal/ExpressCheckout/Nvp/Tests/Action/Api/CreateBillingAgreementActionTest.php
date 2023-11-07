@@ -17,35 +17,35 @@ use stdClass;
 
 class CreateBillingAgreementActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
         $rc = new ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testShouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
+    public function testShouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel(): void
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertTrue($action->supports(new CreateBillingAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCreateBillingAgreementRequest()
+    public function testShouldNotSupportAnythingNotCreateBillingAgreementRequest(): void
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreateBillingAgreementAction();
@@ -53,7 +53,7 @@ class CreateBillingAgreementActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -62,7 +62,7 @@ class CreateBillingAgreementActionTest extends TestCase
         $action->execute(new CreateBillingAgreement([]));
     }
 
-    public function testShouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -88,7 +88,7 @@ class CreateBillingAgreementActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

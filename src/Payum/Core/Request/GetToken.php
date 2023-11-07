@@ -37,7 +37,7 @@ class GetToken
         return $this->token;
     }
 
-    public function setToken(TokenInterface $token)
+    public function setToken(TokenInterface $token): void
     {
         $this->token = $token;
     }

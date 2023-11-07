@@ -10,7 +10,7 @@ use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
 class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAllowCreateGatewayWithCustomConfig()
+    public function testShouldAllowCreateGatewayWithCustomConfig(): void
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -45,7 +45,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         }
     }
 
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PaypalRestGatewayFactory([
             'foo' => 'fooVal',
@@ -63,7 +63,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -80,7 +80,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalRestGatewayFactory();
 
@@ -95,7 +95,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('PayPal Rest', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The client_id, client_secret fields are required.');
@@ -104,7 +104,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath()
+    public function testShouldThrowIfConfigPathOptionsNotEqualPaypalPath(): void
     {
         define('PP_CONFIG_PATH', __DIR__);
 
