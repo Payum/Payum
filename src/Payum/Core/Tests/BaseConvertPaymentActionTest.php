@@ -10,7 +10,6 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -49,7 +48,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    #[DataProvider('provideSupportedRequests')]
+    /**
+     * @dataProvider provideSupportedRequests
+     */
     public function testShouldSupportRequest($request)
     {
         $action = new $this->actionClass();
@@ -57,7 +58,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    #[DataProvider('provideNotSupportedRequests')]
+    /**
+     * @dataProvider provideNotSupportedRequests
+     */
     public function testShouldNotSupportRequest($request)
     {
         $action = new $this->actionClass();
@@ -65,7 +68,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    #[DataProvider('provideNotSupportedRequests')]
+    /**
+     * @dataProvider provideNotSupportedRequests
+     */
     public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
         $this->expectException(RequestNotSupportedException::class);

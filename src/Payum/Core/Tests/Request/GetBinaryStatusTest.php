@@ -5,7 +5,6 @@ namespace Payum\Core\Tests\Request;
 use Iterator;
 use Payum\Core\Request\BaseGetStatus;
 use Payum\Core\Request\GetBinaryStatus;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -56,7 +55,9 @@ class GetBinaryStatusTest extends TestCase
         $this->assertTrue($getStatus->isUnknown());
     }
 
-    #[DataProvider('provideMarkXXXMethods')]
+    /**
+     * @dataProvider provideMarkXXXMethods
+     */
     public function testShouldAllowGetMarkedStatus($markXXXMethod)
     {
         $getStatus = new GetBinaryStatus(new stdClass());
@@ -66,7 +67,9 @@ class GetBinaryStatusTest extends TestCase
         $this->assertNotEmpty($getStatus->getValue());
     }
 
-    #[DataProvider('provideIsXXXMethods')]
+    /**
+     * @dataProvider provideIsXXXMethods
+     */
     public function testShouldCallIsXXXStatus($isXXXMethod)
     {
         $getStatus = new GetBinaryStatus(new stdClass());

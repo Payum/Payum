@@ -10,7 +10,6 @@ use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenAggregateInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\IdentityInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -55,7 +54,9 @@ class GenericTest extends TestCase
         $this->assertTrue($rc->implementsInterface(TokenAggregateInterface::class));
     }
 
-    #[DataProvider('provideDifferentPhpTypes')]
+    /**
+     * @dataProvider provideDifferentPhpTypes
+     */
     public function testCouldBeConstructedWithModelOfAnyType($phpType)
     {
         $request = new class($phpType) extends Generic {
@@ -64,7 +65,9 @@ class GenericTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    #[DataProvider('provideDifferentPhpTypes')]
+    /**
+     * @dataProvider provideDifferentPhpTypes
+     */
     public function testShouldAllowSetModelAndGetIt($phpType)
     {
         $request = new class(123321) extends Generic {
@@ -75,7 +78,9 @@ class GenericTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    #[DataProvider('provideDifferentPhpTypes')]
+    /**
+     * @dataProvider provideDifferentPhpTypes
+     */
     public function testShouldAllowGetModelSetInConstructor($phpType)
     {
         /** @var Generic $request */

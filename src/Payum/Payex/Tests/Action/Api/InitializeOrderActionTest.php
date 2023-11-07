@@ -12,7 +12,6 @@ use Payum\Core\Reply\HttpRedirect;
 use Payum\Payex\Action\Api\InitializeOrderAction;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrder;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -120,7 +119,9 @@ class InitializeOrderActionTest extends TestCase
         ]));
     }
 
-    #[DataProvider('provideRequiredFields')]
+    /**
+     * @dataProvider provideRequiredFields
+     */
     public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
     {
         $this->expectException(LogicException::class);

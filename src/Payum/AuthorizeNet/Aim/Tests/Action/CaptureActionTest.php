@@ -18,7 +18,6 @@ use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
@@ -55,7 +54,9 @@ class CaptureActionTest extends GenericActionTest
         $this->assertInstanceOf(ApiAwareInterface::class, new CaptureAction());
     }
 
-    #[Group('legacy')]
+    /**
+     * @group legacy
+     */
     public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(UnsupportedApiException::class);

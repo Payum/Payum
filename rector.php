@@ -6,8 +6,12 @@ use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
+use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Rector\StmtsAwareInterface\WithConsecutiveRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -56,8 +60,12 @@ return static function (RectorConfig $rectorConfig): void {
         ClosureToArrowFunctionRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
 
+        DataProviderAnnotationToAttributeRector::class,
         TypedPropertyFromAssignsRector::class,
+        RemoveUnusedVariableInCatchRector::class,
+        AnnotationWithValueToAttributeRector::class,
         JsonThrowOnErrorRector::class,
         MixedTypeRector::class,
+        GetDebugTypeRector::class,
     ]);
 };
