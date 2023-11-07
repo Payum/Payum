@@ -8,9 +8,7 @@ use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
-use Rector\Php80\Rector\Identical\StrStartsWithRector;
 use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
@@ -69,7 +67,5 @@ return static function (RectorConfig $rectorConfig): void {
         JsonThrowOnErrorRector::class,
         MixedTypeRector::class,
         GetDebugTypeRector::class,
-        StrStartsWithRector::class,
-        StringableForToStringRector::class,
     ]);
 };

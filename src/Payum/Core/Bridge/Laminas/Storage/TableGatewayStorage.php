@@ -72,7 +72,7 @@ class TableGatewayStorage extends AbstractStorage
             @trigger_error(sprintf('Passing an instance of %s as the first argument to %s is deprecated and won\'t be supported in 2.0. Please using Laminas instead.', ZendTableGateway::class, self::class));
             $this->tableGateway = $tableGateway;
         } else {
-            throw new InvalidArgumentException(sprintf('Argument $tableGateway of %s must be an instance of %s or %s, %s given.', self::class, LaminasTableGateway::class, ZendTableGateway::class, (is_object($tableGateway) ? $tableGateway::class : gettype($tableGateway))));
+            throw new InvalidArgumentException(sprintf('Argument $tableGateway of %s must be an instance of %s or %s, %s given.', self::class, LaminasTableGateway::class, ZendTableGateway::class, (get_debug_type($tableGateway))));
         }
 
         $this->idField = $idField;

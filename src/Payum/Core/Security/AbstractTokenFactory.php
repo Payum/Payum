@@ -45,7 +45,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setDetails($this->storageRegistry->getStorage($model)->identify($model));
         }
 
-        if (0 === strpos($targetPath, 'http')) {
+        if (str_starts_with($targetPath, 'http')) {
             $targetUri = HttpUri::createFromString($targetPath);
             $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
 
@@ -54,7 +54,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
-        if ($afterPath && 0 === strpos($afterPath, 'http')) {
+        if ($afterPath && str_starts_with($afterPath, 'http')) {
             $afterUri = HttpUri::createFromString($afterPath);
             $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
