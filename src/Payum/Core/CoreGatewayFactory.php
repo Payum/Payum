@@ -154,7 +154,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 if (false == $twig instanceof Environment) {
                     throw new LogicException(sprintf(
                         'The `twig.env config option must contains instance of Twig\Environment but got %s`',
-                        is_object($twig) ? $twig::class : gettype($twig)
+                        get_debug_type($twig)
                     ));
                 }
 
@@ -220,7 +220,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildActions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
-            if (0 === strpos($name, 'payum.action')) {
+            if (str_starts_with($name, 'payum.action')) {
                 $prepend = in_array($name, $config['payum.prepend_actions']);
 
                 $gateway->addAction($value, $prepend);
@@ -231,7 +231,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildApis(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
-            if (0 === strpos($name, 'payum.api')) {
+            if (str_starts_with($name, 'payum.api')) {
                 $prepend = in_array($name, $config['payum.prepend_apis']);
 
                 $gateway->addApi($value, $prepend);
@@ -242,7 +242,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildExtensions(Gateway $gateway, ArrayObject $config)
     {
         foreach ($config as $name => $value) {
-            if (0 === strpos($name, 'payum.extension')) {
+            if (str_starts_with($name, 'payum.extension')) {
                 $prepend = in_array($name, $config['payum.prepend_extensions']);
 
                 $gateway->addExtension($value, $prepend);

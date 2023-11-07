@@ -2,20 +2,19 @@
 
 namespace Payum\Core\Model;
 
+use Stringable;
 use Payum\Core\Storage\IdentityInterface;
 
-class Identity implements IdentityInterface
+class Identity implements IdentityInterface, Stringable
 {
     /**
      * @var string
      */
     protected $class;
-
     /**
      * @var mixed
      */
     protected $id;
-
     /**
      * @param mixed         $id
      * @param string|object $class
@@ -25,37 +24,30 @@ class Identity implements IdentityInterface
         $this->id = $id;
         $this->class = is_object($class) ? $class::class : $class;
     }
-
     public function __serialize(): array
     {
         return [$this->id, $this->class];
     }
-
     public function __unserialize(array $data)
     {
         [$this->id, $this->class] = $data;
     }
-
     public function __toString(): string
     {
         return $this->class . '#' . $this->id;
     }
-
     public function getClass()
     {
         return $this->class;
     }
-
     public function getId()
     {
         return $this->id;
     }
-
     public function serialize()
     {
         return serialize([$this->id, $this->class]);
     }
-
     public function unserialize($serialized)
     {
         [$this->id, $this->class] = unserialize($serialized);
