@@ -20,7 +20,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
     protected $actionClass = ExecuteSameRequestWithModelDetailsAction::class;
 
-    protected $requestClass = 'Payum\Core\Tests\Action\ModelAggregateAwareRequest';
+    protected $requestClass = \Payum\Core\Tests\Action\ModelAggregateAwareRequest::class;
 
     public function provideSupportedRequests(): Iterator
     {

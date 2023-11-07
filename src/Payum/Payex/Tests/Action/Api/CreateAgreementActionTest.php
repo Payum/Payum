@@ -175,6 +175,6 @@ class CreateAgreementActionTest extends TestCase
      */
     protected function createApiMock()
     {
-        return $this->createMock(AgreementApi::class, [], [], '', false);
+        return $this->createMock(AgreementApi::class);
     }
 }

@@ -67,7 +67,7 @@ class AgreementApiTest extends TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(SoapClientFactory::class, ['createWsdlClient']);
+        $clientFactoryMock = $this->createMock(SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -101,7 +101,7 @@ class AgreementApiTest extends TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(SoapClientFactory::class, ['createWsdlClient']);
+        $clientFactoryMock = $this->createMock(SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -135,7 +135,7 @@ class AgreementApiTest extends TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(SoapClientFactory::class, ['createWsdlClient']);
+        $clientFactoryMock = $this->createMock(SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')
@@ -169,7 +169,7 @@ class AgreementApiTest extends TestCase
             ->willReturn($response)
         ;
 
-        $clientFactoryMock = $this->createMock(SoapClientFactory::class, ['createWsdlClient']);
+        $clientFactoryMock = $this->createMock(SoapClientFactory::class);
         $clientFactoryMock
             ->expects($this->atLeastOnce())
             ->method('createWsdlClient')

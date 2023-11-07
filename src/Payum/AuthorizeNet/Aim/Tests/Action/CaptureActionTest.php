@@ -227,7 +227,7 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMMock()
     {
-        return $this->createMock(AuthorizeNetAIM::class, [], [], '', false);
+        return $this->createMock(AuthorizeNetAIM::class);
     }
 
     /**
@@ -235,6 +235,6 @@ class CaptureActionTest extends GenericActionTest
      */
     protected function createAuthorizeNetAIMResponseMock()
     {
-        return $this->createMock(AuthorizeNetAIM_Response::class, [], [], '', false);
+        return $this->createMock(AuthorizeNetAIM_Response::class);
     }
 }

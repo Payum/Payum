@@ -8,6 +8,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use MongoDB\Client;
+use Payum\Core\Bridge\Doctrine\Types\ObjectType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -25,8 +26,8 @@ abstract class BaseMongoTest extends TestCase
         }
 
         Type::hasType('object') ?
-            Type::overrideType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType') :
-            Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType')
+            Type::overrideType('object', ObjectType::class) :
+            Type::addType('object', ObjectType::class)
         ;
 
         $config = new Configuration();
