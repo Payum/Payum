@@ -8,15 +8,9 @@ use Payum\Core\Security\CypherInterface;
 
 final class CryptoStorageDecorator implements StorageInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    private $decoratedStorage;
+    private StorageInterface $decoratedStorage;
 
-    /**
-     * @var CypherInterface
-     */
-    private $crypto;
+    private CypherInterface $crypto;
 
     public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {

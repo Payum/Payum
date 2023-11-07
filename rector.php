@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
-use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -51,11 +48,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         AddSeeTestAnnotationRector::class,
-        // ClosureToArrowFunctionRector::class,
-        ClassPropertyAssignToConstructorPromotionRector::class,
 
-        TypedPropertyFromAssignsRector::class,
-        JsonThrowOnErrorRector::class,
+        ClassPropertyAssignToConstructorPromotionRector::class,
         MixedTypeRector::class,
     ]);
 };

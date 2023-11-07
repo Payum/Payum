@@ -9,10 +9,7 @@ use Payum\Core\Storage\StorageInterface;
 
 class GetTokenAction implements ActionInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    private $tokenStorage;
+    private StorageInterface $tokenStorage;
 
     public function __construct(StorageInterface $tokenStorage)
     {

@@ -12,24 +12,19 @@ class DynamicRegistry implements RegistryInterface
     /**
      * @var GatewayInterface[]
      */
-    private $gateways = [];
+    private array $gateways = [];
 
-    /**
-     * @var StorageInterface
-     */
-    private $gatewayConfigStore;
+    private StorageInterface $gatewayConfigStore;
 
     /**
      * @var GatewayFactoryRegistryInterface|null
      */
-    private $gatewayFactoryRegistry;
+    private GatewayFactoryRegistryInterface $gatewayFactoryRegistry;
 
     /**
      * @deprecated since 1.3.3 will be removed in 2.0
-     *
-     * @var bool
      */
-    private $backwardCompatibility = true;
+    private bool $backwardCompatibility = true;
 
     public function __construct(StorageInterface $gatewayConfigStore, GatewayFactoryRegistryInterface $gatewayFactoryRegistry)
     {

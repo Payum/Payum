@@ -21,10 +21,7 @@ class Convert
      */
     protected $to;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token = null;
 
     /**
      * @param mixed $source

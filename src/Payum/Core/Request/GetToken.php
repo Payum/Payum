@@ -11,10 +11,7 @@ class GetToken
      */
     private $hash;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token = null;
 
     /**
      * @param string $hash
