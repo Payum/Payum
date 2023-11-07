@@ -89,7 +89,7 @@ final class CryptoStorageDecorator implements StorageInterface
         if (false == $model instanceof CryptedInterface) {
             throw new LogicException(sprintf(
                 'The model %s must implement %s interface. It is required for this decorator.',
-                get_class($model),
+                $model::class,
                 CryptedInterface::class
             ));
         }

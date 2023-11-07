@@ -48,7 +48,7 @@ class RequestNotSupportedExceptionTest extends TestCase
     public function testShouldCreateWithActionAndStringRequest()
     {
         $action = $this->createMock(ActionInterface::class);
-        $actionClass = get_class($action);
+        $actionClass = $action::class;
 
         $exception = RequestNotSupportedException::createActionNotSupported($action, 'anRequest');
 
@@ -67,7 +67,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $request = new stdClass();
 
         $action = $this->createMock(ActionInterface::class);
-        $actionClass = get_class($action);
+        $actionClass = $action::class;
 
         $exception = RequestNotSupportedException::createActionNotSupported($action, $request);
 

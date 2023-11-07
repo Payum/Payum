@@ -37,7 +37,7 @@ class GatewayConfigTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundGatewayConfig = $this->dm->find(get_class($gatewayConfig), $id);
+        $foundGatewayConfig = $this->dm->find($gatewayConfig::class, $id);
 
         //guard
         $this->assertNotSame($gatewayConfig, $foundGatewayConfig);

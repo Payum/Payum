@@ -23,7 +23,7 @@ class Identity implements IdentityInterface
     public function __construct($id, $class)
     {
         $this->id = $id;
-        $this->class = is_object($class) ? get_class($class) : $class;
+        $this->class = is_object($class) ? $class::class : $class;
     }
 
     public function __serialize(): array

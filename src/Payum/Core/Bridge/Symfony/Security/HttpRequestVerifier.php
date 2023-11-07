@@ -29,7 +29,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             throw new InvalidArgumentException(sprintf(
                 'Invalid request given. Expected %s but it is %s',
                 Request::class,
-                is_object($httpRequest) ? get_class($httpRequest) : gettype($httpRequest)
+                is_object($httpRequest) ? $httpRequest::class : gettype($httpRequest)
             ));
         }
 

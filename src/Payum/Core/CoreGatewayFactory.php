@@ -154,7 +154,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                 if (false == $twig instanceof Environment) {
                     throw new LogicException(sprintf(
                         'The `twig.env config option must contains instance of Twig\Environment but got %s`',
-                        is_object($twig) ? get_class($twig) : gettype($twig)
+                        is_object($twig) ? $twig::class : gettype($twig)
                     ));
                 }
 

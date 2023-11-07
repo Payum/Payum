@@ -32,7 +32,7 @@ abstract class AbstractRegistry implements RegistryInterface
 
     public function getStorage($class)
     {
-        $class = is_object($class) ? get_class($class) : $class;
+        $class = is_object($class) ? $class::class : $class;
 
         // TODO: this is a quick fix. I have to find a better\clean solution.
         if (class_exists($class)) {

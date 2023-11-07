@@ -48,7 +48,7 @@ class ArrayObjectTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundModel = $this->dm->find(get_class($model), $id);
+        $foundModel = $this->dm->find($model::class, $id);
 
         //guard
         $this->assertNotSame($model, $foundModel);

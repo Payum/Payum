@@ -37,7 +37,7 @@ class GatewayConfigTest extends OrmTest
 
         $this->em->clear();
 
-        $foundGatewayConfig = $this->em->find(get_class($gatewayConfig), $id);
+        $foundGatewayConfig = $this->em->find($gatewayConfig::class, $id);
 
         //guard
         $this->assertNotSame($gatewayConfig, $foundGatewayConfig);

@@ -36,7 +36,7 @@ class TokenTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundToken = $this->dm->find(get_class($token), $hash);
+        $foundToken = $this->dm->find($token::class, $hash);
 
         $this->assertNotSame($token, $foundToken);
 

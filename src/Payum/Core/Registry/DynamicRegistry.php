@@ -106,7 +106,7 @@ class DynamicRegistry implements RegistryInterface
 
         throw new InvalidArgumentException(sprintf(
             'Storage for given class "%s" does not exist.',
-            is_object($class) ? get_class($class) : $class
+            is_object($class) ? $class::class : $class
         ));
     }
 

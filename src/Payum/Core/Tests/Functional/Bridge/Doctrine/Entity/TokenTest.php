@@ -45,7 +45,7 @@ class TokenTest extends OrmTest
 
         $this->em->clear();
 
-        $foundToken = $this->em->find(get_class($token), $hash);
+        $foundToken = $this->em->find($token::class, $hash);
 
         $this->assertNotSame($token, $foundToken);
 

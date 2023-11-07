@@ -82,7 +82,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
      */
     protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, $request)
     {
-        $details['error_request'] = get_class($request);
+        $details['error_request'] = $request::class;
         $details['error_file'] = $e->getFile();
         $details['error_line'] = $e->getLine();
         $details['error_code'] = (int) $e->getCode();

@@ -48,7 +48,7 @@ class PaymentTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundOrder = $this->dm->find(get_class($order), $id);
+        $foundOrder = $this->dm->find($order::class, $id);
 
         //guard
         $this->assertNotSame($order, $foundOrder);
