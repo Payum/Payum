@@ -180,9 +180,7 @@ class Api
         $this->addVersionField($newFields);
         $this->addAuthorizeFields($newFields);
 
-        $response = $this->doRequest($newFields);
-
-        return $response;
+        return $this->doRequest($newFields);
     }
 
     /**

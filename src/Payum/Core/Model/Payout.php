@@ -37,11 +37,10 @@ class Payout implements PayoutInterface
     /**
      * @var array
      */
-    protected $details;
+    protected $details = [];
 
     public function __construct()
     {
-        $this->details = [];
     }
 
     /**

@@ -18,12 +18,12 @@ class Gateway implements GatewayInterface
     /**
      * @var Action\ActionInterface[]
      */
-    protected $actions;
+    protected $actions = [];
 
     /**
      * @var mixed[]
      */
-    protected $apis;
+    protected $apis = [];
 
     /**
      * @var ExtensionCollection
@@ -33,14 +33,10 @@ class Gateway implements GatewayInterface
     /**
      * @var Context[]
      */
-    protected $stack;
+    protected $stack = [];
 
     public function __construct()
     {
-        $this->stack = [];
-        $this->actions = [];
-        $this->apis = [];
-
         $this->extensions = new ExtensionCollection();
     }
 
@@ -79,7 +75,7 @@ class Gateway implements GatewayInterface
     {
         $context = new Context($this, $request, $this->stack);
 
-        array_push($this->stack, $context);
+        $this->stack[] = $context;
 
         try {
             $this->extensions->onPreExecute($context);

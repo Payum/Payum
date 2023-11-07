@@ -110,12 +110,7 @@ class ArrayObject extends \ArrayObject
         if ($empty && $throwOnInvalid) {
             throw new LogicException(sprintf('The %s fields are required.', implode(', ', $empty)));
         }
-
-        if ($empty) {
-            return false;
-        }
-
-        return true;
+        return ! $empty;
     }
 
     /**

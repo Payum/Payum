@@ -40,18 +40,15 @@ class GetHttpRequestAction implements ActionInterface
 
         if ($this->httpRequest instanceof Request) {
             $this->updateRequest($request, $this->httpRequest);
-        } else {
-            if ($this->httpRequestStack instanceof RequestStack) {
-                # BC Layer for Symfony 4 (Simplify after support for Symfony < 5 is dropped)
-                if (method_exists($this->httpRequestStack, 'getMainRequest')) {
-                    $mainRequest = $this->httpRequestStack->getMainRequest();
-                } else {
-                    $mainRequest = $this->httpRequestStack->getMasterRequest();
-                }
-
-                if (null !== $mainRequest) {
-                    $this->updateRequest($request, $mainRequest);
-                }
+        } elseif ($this->httpRequestStack instanceof RequestStack) {
+            # BC Layer for Symfony 4 (Simplify after support for Symfony < 5 is dropped)
+            if (method_exists($this->httpRequestStack, 'getMainRequest')) {
+                $mainRequest = $this->httpRequestStack->getMainRequest();
+            } else {
+                $mainRequest = $this->httpRequestStack->getMasterRequest();
+            }
+            if (null !== $mainRequest) {
+                $this->updateRequest($request, $mainRequest);
             }
         }
     }

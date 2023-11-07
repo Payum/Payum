@@ -7,52 +7,44 @@ class GetHttpRequest
     /**
      * @var array
      */
-    public $query;
+    public $query = [];
 
     /**
      * @var array
      */
-    public $request;
+    public $request = [];
 
     /**
      * @var string
      */
-    public $method;
+    public $method = '';
 
     /**
      * @var string
      */
-    public $uri;
+    public $uri = '';
 
     /**
      * @var string
      */
-    public $clientIp;
+    public $clientIp = '';
 
     /**
      * @var string
      */
-    public $userAgent;
+    public $userAgent = '';
 
     /**
      * @var string
      */
-    public $content;
+    public $content = '';
 
     /**
      * @var array
      */
-    public $headers;
+    public $headers = [];
 
     public function __construct()
     {
-        $this->query = [];
-        $this->request = [];
-        $this->method = '';
-        $this->uri = '';
-        $this->clientIp = '';
-        $this->userAgent = '';
-        $this->content = '';
-        $this->headers = [];
     }
 }
