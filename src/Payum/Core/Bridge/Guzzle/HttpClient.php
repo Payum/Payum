@@ -13,10 +13,7 @@ use Psr\Http\Message\RequestInterface;
  */
 class HttpClient implements HttpClientInterface
 {
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+    private ClientInterface $client;
 
     public function __construct(ClientInterface $client)
     {

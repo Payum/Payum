@@ -84,7 +84,7 @@ class SensitiveValueTest extends TestCase
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
-        $this->assertSame('null', json_encode($sensitiveValue));
+        $this->assertSame('null', json_encode($sensitiveValue, JSON_THROW_ON_ERROR));
     }
 
     public function testThrowIfTryToCloneValue()

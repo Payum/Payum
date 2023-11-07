@@ -6,15 +6,9 @@ use Payum\Core\Exception\InvalidArgumentException;
 
 class FallbackRegistry implements RegistryInterface
 {
-    /**
-     * @var RegistryInterface
-     */
-    private $registry;
+    private RegistryInterface $registry;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $fallbackRegistry;
+    private RegistryInterface $fallbackRegistry;
 
     public function __construct(RegistryInterface $registry, RegistryInterface $fallbackRegistry)
     {

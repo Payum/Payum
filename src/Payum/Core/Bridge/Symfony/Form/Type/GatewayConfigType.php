@@ -16,10 +16,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class GatewayConfigType extends AbstractType
 {
-    /**
-     * @var GatewayFactoryRegistryInterface
-     */
-    private $registry;
+    private GatewayFactoryRegistryInterface $registry;
 
     public function __construct(GatewayFactoryRegistryInterface $registry)
     {
