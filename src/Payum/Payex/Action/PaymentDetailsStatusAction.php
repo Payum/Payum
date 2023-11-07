@@ -155,12 +155,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         if ($model['recurring']) {
             return true;
         }
-
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        if (isset($model['autoPay']) && false == $model['autoPay']) {
-            return true;
-        }
-
-        return false;
+        return isset($model['autoPay']) && false == $model['autoPay'];
     }
 }

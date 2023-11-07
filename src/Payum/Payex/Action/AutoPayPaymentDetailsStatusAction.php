@@ -70,11 +70,6 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         if (true == $model['recurring']) {
             return false;
         }
-
-        if ($model['autoPay']) {
-            return true;
-        }
-
-        return false;
+        return (bool) $model['autoPay'];
     }
 }

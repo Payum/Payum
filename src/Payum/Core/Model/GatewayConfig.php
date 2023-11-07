@@ -20,19 +20,17 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
     /**
      * @var array
      */
-    protected $config;
+    protected $config = [];
 
     /**
      * Note: This should not be persisted to database
      *
      * @var array
      */
-    protected $decryptedConfig;
+    protected $decryptedConfig = [];
 
     public function __construct()
     {
-        $this->config = [];
-        $this->decryptedConfig = [];
     }
 
     public function getFactoryName()

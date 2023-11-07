@@ -14,7 +14,7 @@ class GetAddresses
     /**
      * @var KlarnaAddr[]
      */
-    protected $addresses;
+    protected $addresses = [];
 
     /**
      * @param string $pno
@@ -22,7 +22,6 @@ class GetAddresses
     public function __construct($pno)
     {
         $this->pno = $pno;
-        $this->addresses = [];
     }
 
     /**

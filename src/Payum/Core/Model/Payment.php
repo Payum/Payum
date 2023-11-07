@@ -39,7 +39,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @var array
      */
-    protected $details;
+    protected $details = [];
 
     /**
      * @var CreditCardInterface|null
@@ -53,7 +53,6 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
 
     public function __construct()
     {
-        $this->details = [];
     }
 
     public function getNumber()

@@ -82,7 +82,7 @@ abstract class AbstractRegistry implements RegistryInterface
     public function getGateways()
     {
         $gateways = [];
-        foreach ($this->gateways as $name => $id) {
+        foreach (array_keys($this->gateways) as $name) {
             $gateways[$name] = $this->getGateway($name);
         }
 
@@ -101,7 +101,7 @@ abstract class AbstractRegistry implements RegistryInterface
     public function getGatewayFactories()
     {
         $gatewayFactories = [];
-        foreach ($this->gatewayFactories as $name => $id) {
+        foreach (array_keys($this->gatewayFactories) as $name) {
             $gatewayFactories[$name] = $this->getGatewayFactory($name);
         }
 

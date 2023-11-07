@@ -30,13 +30,10 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         }
 
         if ($model['customer']) {
-        } else {
-            if (false == $model['card']) {
-                $obtainToken = new ObtainToken($request->getToken());
-                $obtainToken->setModel($model);
-
-                $this->gateway->execute($obtainToken);
-            }
+        } elseif (false == $model['card']) {
+            $obtainToken = new ObtainToken($request->getToken());
+            $obtainToken->setModel($model);
+            $this->gateway->execute($obtainToken);
         }
 
         $this->gateway->execute(new CreateCharge($model));

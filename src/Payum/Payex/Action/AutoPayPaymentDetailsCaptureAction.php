@@ -38,11 +38,6 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
         if (true == $model['recurring']) {
             return false;
         }
-
-        if ($model['autoPay']) {
-            return true;
-        }
-
-        return false;
+        return (bool) $model['autoPay'];
     }
 }

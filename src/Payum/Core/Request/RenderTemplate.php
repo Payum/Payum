@@ -19,7 +19,7 @@ class RenderTemplate
     /**
      * @var string
      */
-    protected $result;
+    protected $result = '';
 
     /**
      * @param string $templateName
@@ -28,7 +28,6 @@ class RenderTemplate
     {
         $this->templateName = $templateName;
         $this->parameters = $parameters;
-        $this->result = '';
     }
 
     /**

@@ -18,7 +18,7 @@ trait ApiAwareTrait
     public function setApi($api)
     {
         if (empty($this->apiClass)) {
-            throw new LogicException(sprintf('You must configure apiClass in __constructor method of the class the trait is applied to.'));
+            throw new LogicException('You must configure apiClass in __constructor method of the class the trait is applied to.');
         }
 
         if (is_string($this->apiClass) && ! (class_exists($this->apiClass) || interface_exists($this->apiClass))) {

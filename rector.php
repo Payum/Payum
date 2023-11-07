@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
+use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
+use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
+use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
+use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -44,6 +52,17 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_90,
         // PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+    ]);
+
+    $rectorConfig->rules([
+        SimplifyUselessVariableRector::class,
+        ShortenElseIfRector::class,
+        SimplifyIfReturnBoolRector::class,
+        UnusedForeachValueToArrayKeysRector::class,
+        ChangeArrayPushToArrayAssignRector::class,
+        UnwrapSprintfOneArgumentRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
+        InlineConstructorDefaultToPropertyRector::class,
     ]);
 
     $rectorConfig->skip([

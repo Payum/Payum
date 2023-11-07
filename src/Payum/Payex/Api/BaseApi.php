@@ -68,9 +68,8 @@ abstract class BaseApi
 
         $result = $this->normalizeStatusFields($result);
         $result = $this->removeHeader($result);
-        $result = $this->removeObsolete($result);
 
-        return $result;
+        return $this->removeObsolete($result);
     }
 
     /**

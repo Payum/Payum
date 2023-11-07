@@ -68,12 +68,7 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
         if ($model['recurring']) {
             return true;
         }
-
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        if (false == $model['autoPay']) {
-            return true;
-        }
-
-        return false;
+        return false == $model['autoPay'];
     }
 }
