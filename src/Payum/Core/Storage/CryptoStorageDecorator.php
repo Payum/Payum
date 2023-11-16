@@ -6,19 +6,29 @@ use LogicException;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 
+/**
+ * @template T of object
+ * @implements StorageInterface<T>
+ */
 final class CryptoStorageDecorator implements StorageInterface
 {
+    /**
+     * @var StorageInterface<T>
+     */
     private StorageInterface $decoratedStorage;
 
     private CypherInterface $crypto;
 
+    /**
+     * @param StorageInterface<T> $decoratedStorage
+     */
     public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {
         $this->decoratedStorage = $decoratedStorage;
         $this->crypto = $crypto;
     }
 
-    public function create()
+    public function create(): object
     {
         $model = $this->decoratedStorage->create();
 
@@ -27,28 +37,34 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
-    public function support($model)
+    public function support(object $model): bool
     {
         return $this->decoratedStorage->support($model);
     }
 
-    public function update($model): void
+    public function update(object $model): object
     {
         $this->assertCrypted($model);
 
         $model->encrypt($this->crypto);
 
         $this->decoratedStorage->update($model);
+
+        return $model;
     }
 
-    public function delete($model): void
+    public function delete(object $model): void
     {
         $this->decoratedStorage->delete($model);
     }
 
-    public function find($id)
+    public function find($id): ?object
     {
         $model = $this->decoratedStorage->find($id);
+
+        if (! $model) {
+            return null;
+        }
 
         $this->assertCrypted($model);
 
@@ -57,7 +73,10 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
-    public function findBy(array $criteria)
+    /**
+     * @return T[]
+     */
+    public function findBy(array $criteria): array
     {
         $models = $this->decoratedStorage->findBy($criteria);
 
@@ -70,7 +89,7 @@ final class CryptoStorageDecorator implements StorageInterface
         return $models;
     }
 
-    public function identify($model)
+    public function identify($model): IdentityInterface
     {
         return $this->decoratedStorage->identify($model);
     }

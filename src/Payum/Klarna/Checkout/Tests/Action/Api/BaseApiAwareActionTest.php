@@ -45,7 +45,7 @@ class BaseApiAwareActionTest extends TestCase
 
     protected function getActionClass(): string
     {
-        return '';
+        return self::class;
     }
 
     protected function getApiClass(): void

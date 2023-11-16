@@ -4,7 +4,6 @@ namespace Payum\Core\Tests;
 
 use Exception;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Payum;
@@ -90,14 +89,17 @@ final class PayumTest extends TestCase
 
     public function testShouldAllowGetGatewayFromRegistryInConstructor(): void
     {
+        $fooStorage = $this->createMock(StorageInterface::class);
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => $fooGateway = $this->createMock(GatewayInterface::class),
                 'bar' => $barGateway = $this->createMock(GatewayInterface::class),
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                $fooStorage::class => $fooStorage,
+                $barStorage::class => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -131,8 +133,8 @@ final class PayumTest extends TestCase
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => $fooStorage,
-                'bar' => $barStorage,
+                $fooStorage::class => $fooStorage,
+                $barStorage::class => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -147,18 +149,18 @@ final class PayumTest extends TestCase
             $this->storageMock,
         );
 
-        $this->assertSame($fooStorage, $payum->getStorage('foo'));
-        $this->assertSame($barStorage, $payum->getStorage('bar'));
+        $this->assertSame($fooStorage, $payum->getStorage($fooStorage::class));
+        $this->assertSame($barStorage, $payum->getStorage($barStorage::class));
         $this->assertSame([
-            'foo' => $fooStorage,
-            'bar' => $barStorage,
+            $fooStorage::class => $fooStorage,
+            $barStorage::class => $barStorage,
         ], $payum->getStorages());
     }
 
     public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor(): void
     {
-        $fooGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-        $barGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+        $fooStorage = $this->createMock(StorageInterface::class);
+        $barStorage = $this->createMock(StorageInterface::class);
 
         $registry = new SimpleRegistry(
             [
@@ -166,8 +168,8 @@ final class PayumTest extends TestCase
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                $fooStorage::class => $fooStorage,
+                $barStorage::class => $barStorage,
             ],
             [
                 'foo' => $fooGatewayFactory,

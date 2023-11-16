@@ -185,7 +185,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            \Payum\Core\Tests\Registry\DoctrineModel::class => 'barStorage',
+            DoctrineModel::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -203,7 +203,7 @@ class AbstractRegistryTest extends TestCase
             'barName' => 'barGateway',
         ];
         $storages = [
-            \Payum\Core\Tests\Registry\DoctrineModel::class => 'barStorage',
+            DoctrineModel::class => 'barStorage',
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -217,7 +217,7 @@ class AbstractRegistryTest extends TestCase
     public function testThrowIfTryToGetStorageWithNotRegisteredModelClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A storage for model notRegisteredModelClass was not registered. There are storages for next models: stdClass.');
+        $this->expectExceptionMessage('A storage for model stdClass was not registered. There are storages for next models: stdClass.');
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
@@ -231,7 +231,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage('notRegisteredModelClass'));
+        $this->assertSame('barStorage', $registry->getStorage(stdClass::class));
     }
 
     public function testShouldAllowGetStorageWithObjectModel(): void
@@ -272,9 +272,9 @@ class AbstractRegistryTest extends TestCase
     }
 
     /**
-     * @return MockObject|AbstractRegistry
+     * @return MockObject|AbstractRegistry<object>
      */
-    protected function createAbstractRegistryMock(array $constructorArguments)
+    protected function createAbstractRegistryMock(array $constructorArguments): AbstractRegistry | MockObject
     {
         $registryMock = $this->getMockForAbstractClass(AbstractRegistry::class, $constructorArguments);
 

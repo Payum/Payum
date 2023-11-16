@@ -427,7 +427,7 @@ class DynamicRegistryTest extends TestCase
         $staticRegistryMock
             ->expects($this->once())
             ->method('getStorage')
-            ->with('theName')
+            ->with(stdClass::class)
             ->willReturn('theStorage')
         ;
 
@@ -436,20 +436,20 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theStorage', $registry->getStorage('theName'));
+        $this->assertSame('theStorage', $registry->getStorage(stdClass::class));
     }
 
     public function testAlwaysThrowOnGetStorageForClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Storage for given class "theClass" does not exist.');
+        $this->expectExceptionMessage('Storage for given class "stdClass" does not exist.');
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
             $this->createGatewayFactoryRegistryMock()
         );
         $registry->setBackwardCompatibility(false);
 
-        $registry->getStorage('theClass');
+        $registry->getStorage(stdClass::class);
     }
 
     public function testAlwaysThrowOnGetStorageForObject(): void
@@ -466,25 +466,22 @@ class DynamicRegistryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface<object>
      */
-    protected function createRegistryMock()
+    protected function createRegistryMock(): MockObject | RegistryInterface
     {
         return $this->createMock(RegistryInterface::class);
     }
 
-    /**
-     * @return MockObject|GatewayFactoryRegistryInterface
-     */
-    protected function createGatewayFactoryRegistryMock()
+    protected function createGatewayFactoryRegistryMock(): MockObject | GatewayFactoryRegistryInterface
     {
         return $this->createMock(GatewayFactoryRegistryInterface::class);
     }

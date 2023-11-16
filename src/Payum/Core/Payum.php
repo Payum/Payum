@@ -16,21 +16,36 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 class Payum implements RegistryInterface
 {
+    /**
+     * @var RegistryInterface<StorageType>
+     */
     protected RegistryInterface $registry;
 
     protected HttpRequestVerifierInterface $httpRequestVerifier;
 
     protected GenericTokenFactoryInterface $tokenFactory;
 
+    /**
+     * @var StorageInterface<TokenInterface>
+     */
     protected StorageInterface $tokenStorage;
 
+    /**
+     * @param RegistryInterface<StorageType> $registry
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     */
     public function __construct(
         RegistryInterface            $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
@@ -66,11 +81,18 @@ class Payum implements RegistryInterface
         return $this->registry->getGateways();
     }
 
+    /**
+     * @param class-string<StorageType> $class
+     * @return StorageInterface<StorageType>
+     */
     public function getStorage($class): StorageInterface
     {
         return $this->registry->getStorage($class);
     }
 
+    /**
+     * @return array<class-string, StorageInterface<StorageType>>
+     */
     public function getStorages(): array
     {
         return $this->registry->getStorages();
@@ -86,6 +108,9 @@ class Payum implements RegistryInterface
         return $this->tokenFactory;
     }
 
+    /**
+     * @return StorageInterface<TokenInterface>
+     */
     public function getTokenStorage(): StorageInterface
     {
         return $this->tokenStorage;

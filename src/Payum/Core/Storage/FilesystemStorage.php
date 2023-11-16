@@ -7,29 +7,19 @@ use Payum\Core\Model\Identity;
 use ReflectionObject;
 use ReflectionProperty;
 
+/**
+ * @template T of object
+ * @extends AbstractStorage<T>
+ */
 class FilesystemStorage extends AbstractStorage
 {
-    /**
-     * @var string
-     */
-    protected $storageDir;
+    protected string $storageDir;
 
-    /**
-     * @var string
-     */
-    protected $idProperty;
+    protected string $idProperty;
 
-    /**
-     * @var array
-     */
-    protected $identityMap;
+    protected array $identityMap;
 
-    /**
-     * @param string $storageDir
-     * @param string $modelClass
-     * @param string $idProperty
-     */
-    public function __construct($storageDir, $modelClass, $idProperty = 'payum_id')
+    public function __construct(string $storageDir, string $modelClass, string $idProperty = 'payum_id')
     {
         parent::__construct($modelClass);
 
@@ -42,7 +32,7 @@ class FilesystemStorage extends AbstractStorage
         throw new LogicException('Method is not supported by the storage.');
     }
 
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         if (isset($this->identityMap[$id])) {
             return $this->identityMap[$id];
@@ -51,9 +41,11 @@ class FilesystemStorage extends AbstractStorage
         if (file_exists($this->storageDir . '/payum-model-' . $id)) {
             return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir . '/payum-model-' . $id));
         }
+
+        return null;
     }
 
-    protected function doUpdateModel($model): void
+    protected function doUpdateModel(object $model): object
     {
         $ro = new ReflectionObject($model);
 
@@ -66,16 +58,18 @@ class FilesystemStorage extends AbstractStorage
 
         $id = $rp->getValue($model);
         if (! $id) {
-            $rp->setValue($model, $id = uniqid());
+            $rp->setValue($model, $id = uniqid('', true));
         }
 
         $rp->setAccessible(false);
 
         $this->identityMap[$id] = $model;
         file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
+
+        return $model;
     }
 
-    protected function doDeleteModel($model): void
+    protected function doDeleteModel(object $model): void
     {
         $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
@@ -86,7 +80,7 @@ class FilesystemStorage extends AbstractStorage
         }
     }
 
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): Identity
     {
         $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);

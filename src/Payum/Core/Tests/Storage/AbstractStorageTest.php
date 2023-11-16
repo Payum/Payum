@@ -30,21 +30,21 @@ class AbstractStorageTest extends TestCase
     public function testShouldCreateInstanceOfModelClassSetInConstructor(): void
     {
         $storage = new class(stdClass::class) extends AbstractStorage {
-            protected function doUpdateModel($model): object
+            protected function doUpdateModel(object $model): object
             {
                 return $model;
             }
 
-            protected function doDeleteModel($model): void
+            protected function doDeleteModel(object $model): void
             {
             }
 
-            protected function doGetIdentity($model): IdentityInterface
+            protected function doGetIdentity(object $model): IdentityInterface
             {
                 return new Identity();
             }
 
-            protected function doFind($id): object
+            protected function doFind(mixed $id): object
             {
                 return new stdClass();
             }
@@ -220,12 +220,5 @@ class AbstractStorageTest extends TestCase
         $storage = $this->getMockForAbstractClass(AbstractStorage::class, [$modelClass]);
 
         $this->assertFalse($storage->support(new stdClass()));
-    }
-
-    public function testShouldReturnFalseIfModelNotObjectOnSupportModel(): void
-    {
-        $storage = $this->getMockForAbstractClass(AbstractStorage::class, [stdClass::class]);
-
-        $this->assertFalse($storage->support('notObject'));
     }
 }

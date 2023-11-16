@@ -13,25 +13,22 @@ use function array_merge;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
+
+    protected string $tokenParameter;
 
     /**
-     * @var string
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    protected $tokenParameter;
-
-    /**
-     * @param string           $tokenParameter
-     */
-    public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
+    public function __construct(StorageInterface $tokenStorage, string $tokenParameter = 'payum_token')
     {
         $this->tokenStorage = $tokenStorage;
-        $this->tokenParameter = (string) $tokenParameter;
+        $this->tokenParameter = $tokenParameter;
     }
 
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
         if ($httpRequest instanceof Request) {
             $httpRequest = array_merge($httpRequest->request->all(), $httpRequest->query->all());

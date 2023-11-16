@@ -304,25 +304,19 @@ class StorageExtensionTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
-    /**
-     * @return MockObject|ActionInterface
-     */
-    protected function createActionMock()
+    protected function createActionMock(): MockObject | ActionInterface
     {
         return $this->createMock(ActionInterface::class);
     }
 
-    /**
-     * @return MockObject|GatewayInterface
-     */
-    protected function createGatewayMock()
+    protected function createGatewayMock(): GatewayInterface | MockObject
     {
         return $this->createMock(GatewayInterface::class);
     }
