@@ -7,7 +7,7 @@ Introduction: [https://developer.paypal.com/docs/classic/products/website-paymen
 The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/paypal-pro-hosted-nvp php-http/guzzle6-adapter
+php composer.phar require payum/paypal-pro-hosted-nvp php-http/guzzle7-adapter
 ```
 
 ### config.php

@@ -7,7 +7,7 @@ In this chapter we are going to talk about the most common task: purchase of a p
 The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/klarna-invoice php-http/guzzle6-adapter
+php composer.phar require payum/klarna-invoice php-http/guzzle7-adapter
 ```
 
 ### config.php
