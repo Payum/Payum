@@ -154,7 +154,7 @@ class GenericTest extends TestCase
 
             public function getClass(): string
             {
-                return __CLASS__;
+                return self::class;
             }
 
             public function getId(): IdentityInterface
