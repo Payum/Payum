@@ -58,7 +58,7 @@ class Payum implements RegistryInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function getGatewayFactory($name): GatewayFactoryInterface
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         return $this->registry->getGatewayFactory($name);
     }

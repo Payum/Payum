@@ -176,32 +176,17 @@ parameters:
 			path: src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
 
 		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\Persistence\\\\ObjectManager\\:\\:find\\(\\)$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\Persistence\\\\ObjectManager\\:\\:getRepository\\(\\)$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php
-
-		-
 			message: "#^Call to an undefined method Payum\\\\Core\\\\Bridge\\\\Doctrine\\\\Types\\\\ObjectType\\:\\:getName\\(\\)\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
 
 		-
-			message: "#^Call to an undefined method Laminas\\\\Db\\\\ResultSet\\\\ResultSetInterface\\:\\:current\\(\\)\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Call to an undefined method Laminas\\\\Db\\\\ResultSet\\\\ResultSetInterface\\:\\:getHydrator\\(\\)\\.$#"
+			message: "#^Call to method extract\\(\\) on an unknown class Laminas\\\\Hydrator\\\\HydratorInterface\\.$#"
 			count: 2
 			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
 
 		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
+			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:doDeleteModel\\(\\) has parameter \\$model with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
 
@@ -241,19 +226,9 @@ parameters:
 			path: src/Payum/Core/Bridge/Symfony/Builder/GatewayFactoryBuilder.php
 
 		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\HttpRequestVerifierBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Builder/HttpRequestVerifierBuilder.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\ObtainCreditCardActionBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Symfony/Builder/ObtainCreditCardActionBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Builder\\\\TokenFactoryBuilder\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Builder/TokenFactoryBuilder.php
 
 		-
 			message: "#^Call to function is_null\\(\\) with array will always evaluate to false\\.$#"
@@ -274,16 +249,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$previous of class Payum\\\\Core\\\\Exception\\\\LogicException constructor expects Throwable\\|null, Payum\\\\Core\\\\Reply\\\\ReplyInterface given\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Symfony/ReplyToSymfonyResponseConverter.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Security\\\\TokenFactory\\:\\:generateUrl\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Security/TokenFactory.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Security\\\\TokenFactory\\:\\:\\$urlGenerator \\(Symfony\\\\Component\\\\Routing\\\\RouterInterface\\) does not accept Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Security/TokenFactory.php
 
 		-
 			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Validator\\\\Constraints\\\\CreditCardDate\\:\\:\\$invalidMessage has no type specified\\.$#"
@@ -736,62 +701,12 @@ parameters:
 			path: src/Payum/Core/PayumBuilder.php
 
 		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildRegistry\\(\\) has parameter \\$gateways with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildRegistry\\(\\) has parameter \\$storages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:setCoreGatewayFactoryConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Parameter \\$paths of method Payum\\\\Core\\\\PayumBuilder\\:\\:setGenericTokenFactoryPaths\\(\\) has invalid type string\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$coreGatewayFactoryConfig type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$gatewayConfigs type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$gatewayFactoryConfigs type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\PayumBuilder\\:\\:\\$genericTokenFactoryPaths \\(array\\<string\\>\\) does not accept array\\<string\\>\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 5
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:__construct\\(\\) has parameter \\$gatewayFactories with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Core/Registry/AbstractRegistry.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:__construct\\(\\) has parameter \\$gateways with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Registry/AbstractRegistry.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:__construct\\(\\) has parameter \\$storages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Core/Registry/AbstractRegistry.php
 
@@ -1101,22 +1016,7 @@ parameters:
 			path: src/Payum/Core/Security/Util/Random.php
 
 		-
-			message: "#^Method Payum\\\\Core\\\\Storage\\\\AbstractStorage\\:\\:__construct\\(\\) has parameter \\$modelClass with no type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Storage/AbstractStorage.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Storage\\\\AbstractStorage\\:\\:doDeleteModel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Storage/AbstractStorage.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Storage\\\\AbstractStorage\\:\\:doUpdateModel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Storage/AbstractStorage.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Storage\\\\AbstractStorage\\:\\:find\\(\\) should return object\\|null but empty return statement found\\.$#"
 			count: 1
 			path: src/Payum/Core/Storage/AbstractStorage.php
 
@@ -1124,11 +1024,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Storage\\\\CryptoStorageDecorator\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Core/Storage/CryptoStorageDecorator.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Storage\\\\FilesystemStorage\\:\\:doFind\\(\\) should return object\\|null but return statement is missing\\.$#"
-			count: 1
-			path: src/Payum/Core/Storage/FilesystemStorage.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Storage\\\\FilesystemStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
@@ -1147,11 +1042,6 @@ parameters:
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Storage\\\\StorageInterface\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Storage/StorageInterface.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Storage\\\\StorageInterface\\:\\:update\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Storage/StorageInterface.php
 
@@ -1314,16 +1204,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Extension\\\\EventDispatcherExtensionTest\\:\\:createEventDispatcherMock\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Symfony/Extension/EventDispatcherExtensionTest.php
-
-		-
-			message: "#^Call to method expects\\(\\) on an unknown class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\MockObject\\.$#"
-			count: 8
-			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\HttpRequestVerifierTest\\:\\:createStorageMock\\(\\) has invalid return type Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Security\\\\MockObject\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
 
 		-
 			message: "#^Parameter \\#2 \\$value of method Symfony\\\\Component\\\\HttpFoundation\\\\InputBag\\:\\:set\\(\\) expects array\\|bool\\|float\\|int\\|string\\|null, Payum\\\\Core\\\\Model\\\\Token given\\.$#"
@@ -1576,11 +1456,6 @@ parameters:
 			path: src/Payum/Core/Tests/PayumBuilderTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$paths of method Payum\\\\Core\\\\PayumBuilder\\:\\:setGenericTokenFactoryPaths\\(\\) expects array\\<string\\>, array\\<string, string\\> given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/PayumBuilderTest.php
-
-		-
 			message: "#^Class Payum\\\\Core\\\\Tests\\\\Registry\\\\DoctrineProxy implements generic interface Doctrine\\\\Persistence\\\\Proxy but does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Core/Tests/Registry/AbstractRegistryTest.php
@@ -1697,11 +1572,6 @@ parameters:
 
 		-
 			message: "#^Method class@anonymous/Payum/Core/Tests/Storage/AbstractStorageTest\\.php\\:32\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Storage/AbstractStorageTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$model of method Payum\\\\Core\\\\Storage\\\\AbstractStorage\\:\\:support\\(\\) expects object, string given\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Storage/AbstractStorageTest.php
 
