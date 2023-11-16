@@ -73,7 +73,7 @@ class DoctrineStorageTest extends TestCase
             ->expects($this->once())
             ->method('findBy')
             ->with($criteria)
-            ->willReturn($model)
+            ->willReturn([$model])
         ;
 
         $objectManagerMock = $this->createObjectManagerMock();
@@ -89,7 +89,7 @@ class DoctrineStorageTest extends TestCase
             TestModel::class
         );
 
-        $this->assertSame($model, $storage->findBy($criteria));
+        $this->assertSame([$model], $storage->findBy($criteria));
     }
 
     public function testShouldFindModelById(): void

@@ -4,11 +4,13 @@ namespace Payum\Core\Tests\Registry;
 
 use Doctrine\Persistence\Proxy;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use Payum\Core\Registry\GatewayRegistryInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -46,10 +48,11 @@ class AbstractRegistryTest extends TestCase
 
     public function testShouldAllowGetGatewayWithNamePassedExplicitly(): void
     {
+        $fooGateway = $this->createMock(GatewayInterface::class);
         $barGateway = $this->createMock(GatewayInterface::class);
 
         $gateways = [
-            'fooName' => 'fooGateway',
+            'fooName' => $fooGateway,
             'barName' => $barGateway,
         ];
 
@@ -64,6 +67,7 @@ class AbstractRegistryTest extends TestCase
     {
         $fooGateway = $this->createMock(GatewayInterface::class);
         $barGateway = $this->createMock(GatewayInterface::class);
+
         $gateways = [
             'fooName' => $fooGateway,
             'barName' => $barGateway,
@@ -103,9 +107,12 @@ class AbstractRegistryTest extends TestCase
 
     public function testShouldAllowGetGatewayFactoryByName(): void
     {
+        $fooGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+        $barGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+
         $gatewayFactories = [
-            'foo' => 'fooGatewayFactory',
-            'bar' => 'barGatewayFactory',
+            'foo' => $fooGatewayFactory,
+            'bar' => $barGatewayFactory,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -114,14 +121,17 @@ class AbstractRegistryTest extends TestCase
             $gatewayFactories,
         ]);
 
-        $this->assertSame('barGatewayFactory', $registry->getGatewayFactory('bar'));
+        $this->assertSame($barGatewayFactory, $registry->getGatewayFactory('bar'));
     }
 
     public function testShouldAllowGetAllGatewayFactories(): void
     {
+        $fooGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+        $barGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+
         $gatewayFactories = [
-            'foo' => 'fooGatewayFactory',
-            'bar' => 'barGatewayFactory',
+            'foo' => $fooGatewayFactory,
+            'bar' => $barGatewayFactory,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -136,10 +146,10 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('foo', $gateways);
-        $this->assertSame('fooGatewayFactory', $gateways['foo']);
+        $this->assertSame($fooGatewayFactory, $gateways['foo']);
 
         $this->assertArrayHasKey('bar', $gateways);
-        $this->assertSame('barGatewayFactory', $gateways['bar']);
+        $this->assertSame($barGatewayFactory, $gateways['bar']);
     }
 
     public function testThrowIfTryToGetGatewayFactoryWithNotExistName(): void
@@ -162,12 +172,14 @@ class AbstractRegistryTest extends TestCase
 
     public function testShouldAllowGetStorageForGivenModelClass(): void
     {
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
         ];
         $storages = [
-            stdClass::class => 'barStorage',
+            stdClass::class => $barStorage,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -175,17 +187,19 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage(stdClass::class));
+        $this->assertSame($barStorage, $registry->getStorage(stdClass::class));
     }
 
     public function testShouldAllowGetStorageIfDoctrineProxyClassGiven(): void
     {
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
         ];
         $storages = [
-            DoctrineModel::class => 'barStorage',
+            DoctrineModel::class => $barStorage,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -193,17 +207,19 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage(\Payum\Core\Tests\Registry\DoctrineProxy::class));
+        $this->assertSame($barStorage, $registry->getStorage(DoctrineProxy::class));
     }
 
     public function testShouldAllowGetStorageIfDoctrineProxyObjectGiven(): void
     {
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
         ];
         $storages = [
-            DoctrineModel::class => 'barStorage',
+            DoctrineModel::class => $barStorage,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -211,19 +227,25 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage(new DoctrineProxy()));
+        $this->assertSame($barStorage, $registry->getStorage(new DoctrineProxy()));
     }
 
     public function testThrowIfTryToGetStorageWithNotRegisteredModelClass(): void
     {
+        $class = new class() {
+        };
+
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A storage for model stdClass was not registered. There are storages for next models: stdClass.');
+        $this->expectExceptionMessage('A storage for model ' . $class::class . ' was not registered. There are storages for next models: stdClass.');
+
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
         ];
         $storages = [
-            stdClass::class => 'barStorage',
+            stdClass::class => $barStorage,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -231,17 +253,19 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage(stdClass::class));
+        $registry->getStorage($class);
     }
 
     public function testShouldAllowGetStorageWithObjectModel(): void
     {
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
             'barName' => 'barGateway',
         ];
         $storages = [
-            stdClass::class => 'barStorage',
+            stdClass::class => $barStorage,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -249,7 +273,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ]);
 
-        $this->assertSame('barStorage', $registry->getStorage(new stdClass()));
+        $this->assertSame($barStorage, $registry->getStorage(new stdClass()));
     }
 
     public function testShouldAllowGetStorages(): void
