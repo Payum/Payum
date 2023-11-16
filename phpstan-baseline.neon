@@ -1226,16 +1226,6 @@ parameters:
 			path: src/Payum/Core/Bridge/Twig/TwigUtil.php
 
 		-
-			message: "#^Property Config\\\\Config\\:\\:\\$captureAction is never read, only written\\.$#"
-			count: 1
-			path: src/Payum/Core/Config/Config.php
-
-		-
-			message: "#^Property Config\\\\Config\\:\\:\\$statusAction is never read, only written\\.$#"
-			count: 1
-			path: src/Payum/Core/Config/Config.php
-
-		-
 			message: "#^Instantiated class Nyholm\\\\Psr7\\\\Factory\\\\HttplugFactory not found\\.$#"
 			count: 2
 			path: src/Payum/Core/CoreGatewayFactory.php
