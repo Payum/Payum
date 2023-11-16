@@ -205,19 +205,23 @@ class AgreementSoapClient extends SoapClient
     {
     }
 
-    public function CreateAgreement3(): void
+    public function CreateAgreement3(): stdClass
     {
+        return new stdClass;
     }
 
-    public function Check(): void
+    public function Check(): stdClass
     {
+        return new stdClass;
     }
 
-    public function DeleteAgreement(): void
+    public function DeleteAgreement(): stdClass
     {
+        return new stdClass;
     }
 
-    public function AutoPay3(): void
+    public function AutoPay3(): stdClass
     {
+        return new stdClass;
     }
 }

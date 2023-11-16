@@ -65,8 +65,11 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         AddSeeTestAnnotationRector::class,
-
         ClassPropertyAssignToConstructorPromotionRector::class,
         MixedTypeRector::class,
+
+        AddVoidReturnTypeWhereNoReturnRector::class => [
+            __DIR__ . '/src/Payum/Core/GatewayFactory.php',
+        ],
     ]);
 };

@@ -54,4 +54,10 @@ return static function (ECSConfig $ecsConfig): void {
         SetList::CLEAN_CODE,
         SetList::ARRAY,
     ]);
+
+    $ecsConfig->skip([
+        VoidReturnFixer::class => [
+            __DIR__ . '/src/Payum/Core/GatewayFactory.php',
+        ]
+    ]);
 };

@@ -8,9 +8,11 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use MongoDB\Client;
+use MongoDB\Driver\Manager;
 use Payum\Core\Bridge\Doctrine\Types\ObjectType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use function sys_get_temp_dir;
 
 abstract class BaseMongoTest extends TestCase
 {
@@ -21,7 +23,7 @@ abstract class BaseMongoTest extends TestCase
 
     protected function setUp(): void
     {
-        if (false === (class_exists(Client::class))) {
+        if (!class_exists(Client::class) || !class_exists(Manager::class)) {
             $this->markTestSkipped('Either mongo extension or\and doctrine/mongodb-odm are not installed.');
         }
 
@@ -31,9 +33,9 @@ abstract class BaseMongoTest extends TestCase
         ;
 
         $config = new Configuration();
-        $config->setProxyDir(\sys_get_temp_dir());
+        $config->setProxyDir(sys_get_temp_dir());
         $config->setProxyNamespace('PayumTestsProxies');
-        $config->setHydratorDir(\sys_get_temp_dir());
+        $config->setHydratorDir(sys_get_temp_dir());
         $config->setHydratorNamespace('PayumTestsHydrators');
         $config->setMetadataDriverImpl($this->getMetadataDriverImpl());
 
