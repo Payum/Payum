@@ -85,7 +85,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory' => function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
@@ -104,7 +104,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.client' => function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
@@ -139,7 +139,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttpBuzzClient();
                 }
 
-                throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client' => fn (ArrayObject $config) => new HttplugClient($config['httplug.client']),
             'payum.template.layout' => '@PayumCore/layout.html.twig',
