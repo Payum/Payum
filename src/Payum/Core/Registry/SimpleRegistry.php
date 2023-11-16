@@ -30,7 +30,7 @@ class SimpleRegistry extends AbstractRegistry
         $this->addStorageExtensions = $bool;
     }
 
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         $gateway = parent::getGateway($name);
 

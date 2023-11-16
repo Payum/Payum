@@ -3,6 +3,7 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayInterface;
 
 class FallbackRegistry implements RegistryInterface
 {
@@ -30,7 +31,7 @@ class FallbackRegistry implements RegistryInterface
         return array_replace($this->fallbackRegistry->getGatewayFactories(), $this->registry->getGatewayFactories());
     }
 
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         try {
             return $this->registry->getGateway($name);
@@ -39,7 +40,7 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    public function getGateways()
+    public function getGateways(): array
     {
         return array_replace($this->fallbackRegistry->getGateways(), $this->registry->getGateways());
     }

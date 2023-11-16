@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Registry;
 
 use Doctrine\Persistence\Proxy;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
 use Payum\Core\Registry\GatewayRegistryInterface;
@@ -45,23 +46,27 @@ class AbstractRegistryTest extends TestCase
 
     public function testShouldAllowGetGatewayWithNamePassedExplicitly()
     {
+        $barGateway = $this->createMock(GatewayInterface::class);
+
         $gateways = [
             'fooName' => 'fooGateway',
-            'barName' => 'barGateway',
+            'barName' => $barGateway,
         ];
 
         $registry = $this->createAbstractRegistryMock([
             $gateways,
         ]);
 
-        $this->assertSame('barGateway', $registry->getGateway('barName'));
+        $this->assertSame($barGateway, $registry->getGateway('barName'));
     }
 
     public function testShouldAllowGetAllGateways()
     {
+        $fooGateway = $this->createMock(GatewayInterface::class);
+        $barGateway = $this->createMock(GatewayInterface::class);
         $gateways = [
-            'fooName' => 'fooGateway',
-            'barName' => 'barGateway',
+            'fooName' => $fooGateway,
+            'barName' => $barGateway,
         ];
 
         $registry = $this->createAbstractRegistryMock([
@@ -74,10 +79,10 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('fooName', $gateways);
-        $this->assertSame('fooGateway', $gateways['fooName']);
+        $this->assertSame($fooGateway, $gateways['fooName']);
 
         $this->assertArrayHasKey('barName', $gateways);
-        $this->assertSame('barGateway', $gateways['barName']);
+        $this->assertSame($barGateway, $gateways['barName']);
     }
 
     public function testThrowIfTryToGetGatewayWithNotExistName()

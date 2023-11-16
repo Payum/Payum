@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Registry;
 
 use Exception;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,7 +23,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldReturnGatewayFromMainRegistry()
     {
-        $expectedGateway = new stdClass();
+        $expectedGateway = $this->createMock(GatewayInterface::class);
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -45,7 +46,7 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGateway()
     {
-        $expectedGateway = new stdClass();
+        $expectedGateway = $this->createMock(GatewayInterface::class);
 
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock

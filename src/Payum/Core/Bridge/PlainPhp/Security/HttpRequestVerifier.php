@@ -7,6 +7,8 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\RequestTokenVerifier;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Request;
+use function array_merge;
 
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
@@ -31,6 +33,10 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
 
     public function verify($httpRequest)
     {
+        if ($httpRequest instanceof Request) {
+            $httpRequest = array_merge($httpRequest->request->all(), $httpRequest->query->all());
+        }
+
         if (false == is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
         }

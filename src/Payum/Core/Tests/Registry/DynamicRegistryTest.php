@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Registry;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Model\GatewayConfig;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
@@ -266,12 +267,14 @@ class DynamicRegistryTest extends TestCase
      */
     public function testShouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway()
     {
+        $gateway = $this->createMock(GatewayInterface::class);
+
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
             ->method('getGateway')
             ->with('theGatewayName')
-            ->willReturn('theGateway')
+            ->willReturn($gateway)
         ;
         $staticRegistryMock
             ->expects($this->never())
@@ -290,7 +293,7 @@ class DynamicRegistryTest extends TestCase
 
         $registry = new DynamicRegistry($storageMock, $staticRegistryMock);
 
-        $this->assertSame('theGateway', $registry->getGateway('theGatewayName'));
+        $this->assertSame($gateway, $registry->getGateway('theGatewayName'));
     }
 
     public function testThrowIfGatewayConfigNotFoundOnGetGateway()

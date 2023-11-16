@@ -4,6 +4,7 @@ namespace Payum\Core\Registry;
 
 use Doctrine\Persistence\Proxy;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayInterface;
 use ReflectionClass;
 
 abstract class AbstractRegistry implements RegistryInterface
@@ -70,7 +71,7 @@ abstract class AbstractRegistry implements RegistryInterface
         return $storages;
     }
 
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         if (! isset($this->gateways[$name])) {
             throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
@@ -79,7 +80,7 @@ abstract class AbstractRegistry implements RegistryInterface
         return $this->getService($this->gateways[$name]);
     }
 
-    public function getGateways()
+    public function getGateways(): array
     {
         $gateways = [];
         foreach (array_keys($this->gateways) as $name) {
