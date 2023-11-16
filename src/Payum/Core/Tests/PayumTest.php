@@ -4,11 +4,13 @@ namespace Payum\Core\Tests;
 
 use Exception;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
@@ -25,15 +27,22 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use function spl_object_hash;
 
 final class PayumTest extends TestCase
 {
+    /**
+     * @var RegistryInterface<StorageRegistryInterface<StorageInterface<TokenInterface>>>|MockObject
+     */
     private RegistryInterface | MockObject $registryMock;
 
     private HttpRequestVerifierInterface | MockObject $httpRequestVerifierMock;
 
     private GenericTokenFactoryInterface | MockObject $tokenFactoryMock;
 
+    /**
+     * @var StorageInterface<TokenInterface>|MockObject
+     */
     private StorageInterface | MockObject $storageMock;
 
     protected function setUp(): void
@@ -133,8 +142,8 @@ final class PayumTest extends TestCase
                 'bar' => 'barGateway',
             ],
             [
-                $fooStorage::class => $fooStorage,
-                $barStorage::class => $barStorage,
+                spl_object_hash($fooStorage) => $fooStorage,
+                spl_object_hash($barStorage) => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -149,11 +158,11 @@ final class PayumTest extends TestCase
             $this->storageMock,
         );
 
-        $this->assertSame($fooStorage, $payum->getStorage($fooStorage::class));
-        $this->assertSame($barStorage, $payum->getStorage($barStorage::class));
+        $this->assertSame($fooStorage, $payum->getStorage(spl_object_hash($fooStorage)));
+        $this->assertSame($barStorage, $payum->getStorage(spl_object_hash($barStorage)));
         $this->assertSame([
-            $fooStorage::class => $fooStorage,
-            $barStorage::class => $barStorage,
+            spl_object_hash($fooStorage) => $fooStorage,
+            spl_object_hash($barStorage) => $barStorage,
         ], $payum->getStorages());
     }
 
@@ -162,14 +171,17 @@ final class PayumTest extends TestCase
         $fooStorage = $this->createMock(StorageInterface::class);
         $barStorage = $this->createMock(StorageInterface::class);
 
+        $fooGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+        $barGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => 'fooGateway',
                 'bar' => 'barGateway',
             ],
             [
-                $fooStorage::class => $fooStorage,
-                $barStorage::class => $barStorage,
+                spl_object_hash($fooStorage) => $fooStorage,
+                spl_object_hash($barStorage) => $barStorage,
             ],
             [
                 'foo' => $fooGatewayFactory,

@@ -67,7 +67,7 @@ class HttpRequestVerifierTest extends TestCase
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('The current url https://target.com/bar not match target url http://target.com/foo set in the token.');
+        $this->expectExceptionMessage('The current url https://target.com/bar not match target url https://target.com/foo set in the token.');
         $token = new Token();
         $token->setHash('theHash');
         $token->setTargetUrl('https://target.com/foo');

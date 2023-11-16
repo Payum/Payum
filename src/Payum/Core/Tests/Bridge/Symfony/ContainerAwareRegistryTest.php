@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\ContainerAwareRegistry;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Storage\StorageInterface;
@@ -66,13 +67,13 @@ class ContainerAwareRegistryTest extends TestCase
     public function testShouldReturnGatewayFactorySetToContainer(): void
     {
         $container = new Container();
-        $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));
+        $container->set(GatewayFactoryInterface::class, $this->createMock(GatewayFactoryInterface::class));
 
         $registry = new ContainerAwareRegistry([], [], [
-            'fooName' => 'fooFactoryServiceId',
+            'fooName' => GatewayFactoryInterface::class,
         ]);
         $registry->setContainer($container);
 
-        $this->assertSame($container->get('fooFactoryServiceId'), $registry->getGatewayFactory('fooName'));
+        $this->assertSame($container->get(GatewayFactoryInterface::class), $registry->getGatewayFactory('fooName'));
     }
 }

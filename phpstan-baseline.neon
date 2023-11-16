@@ -661,41 +661,6 @@ parameters:
 			path: src/Payum/Core/Model/Token.php
 
 		-
-			message: "#^Call to an undefined method Omnipay\\\\Common\\\\GatewayFactory\\:\\:getSupportedGateways\\(\\)\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 2
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addCoreGatewayFactoryConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addGateway\\(\\) has parameter \\$gateway with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:addGatewayFactoryConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildCoreGatewayFactory\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildOmnipayGatewayFactories\\(\\) should return array\\<Payum\\\\Core\\\\GatewayFactoryInterface\\> but returns array\\<string, Payum\\\\OmnipayBridge\\\\OmnipayGatewayFactory\\>\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\PayumBuilder\\:\\:buildRegistry\\(\\) has parameter \\$gatewayFactories with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Core/PayumBuilder.php
@@ -719,21 +684,6 @@ parameters:
 			message: "#^Property Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:\\$gateways type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Core/Registry/AbstractRegistry.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Registry\\\\AbstractRegistry\\:\\:\\$storages type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Registry/AbstractRegistry.php
-
-		-
-			message: "#^PHPDoc tag @var for property Payum\\\\Core\\\\Registry\\\\DynamicRegistry\\:\\:\\$gatewayFactoryRegistry with type Payum\\\\Core\\\\Registry\\\\GatewayFactoryRegistryInterface\\|null is not subtype of native type Payum\\\\Core\\\\Registry\\\\GatewayFactoryRegistryInterface\\.$#"
-			count: 1
-			path: src/Payum/Core/Registry/DynamicRegistry.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Registry\\\\SimpleRegistry\\:\\:getService\\(\\) should return object but returns string\\.$#"
-			count: 1
-			path: src/Payum/Core/Registry/SimpleRegistry.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Reply\\\\HttpPostRedirect\\:\\:__construct\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"

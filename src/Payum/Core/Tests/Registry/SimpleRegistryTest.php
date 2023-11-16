@@ -139,13 +139,13 @@ class SimpleRegistryTest extends TestCase
 
         $gatewayFooMock = $this->createMock(Gateway::class);
         $gatewayFooMock
-            ->expects($this->exactly(3))
+            ->expects(self::once())
             ->method('addExtension')
         ;
 
         $gatewayBarMock = $this->createMock(Gateway::class);
         $gatewayBarMock
-            ->expects($this->exactly(3))
+            ->expects(self::once())
             ->method('addExtension')
         ;
 

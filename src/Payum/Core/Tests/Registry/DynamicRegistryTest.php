@@ -268,7 +268,6 @@ class DynamicRegistryTest extends TestCase
     public function testShouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway(): void
     {
         $gateway = $this->createMock(GatewayInterface::class);
-
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
@@ -331,7 +330,7 @@ class DynamicRegistryTest extends TestCase
         $staticRegistryMock
             ->expects($this->once())
             ->method('getGatewayFactories')
-            ->willReturn('theGatewaysFactories')
+            ->willReturn(['theGatewaysFactories'])
         ;
 
         $registry = new DynamicRegistry(
@@ -339,7 +338,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theGatewaysFactories', $registry->getGatewayFactories());
+        $this->assertSame(['theGatewaysFactories'], $registry->getGatewayFactories());
     }
 
     public function testShouldReturnEmptyArrayOnGetGatewayFactories(): void
@@ -358,12 +357,13 @@ class DynamicRegistryTest extends TestCase
      */
     public function testShouldCallStaticRegistryOnGetGatewayFactory(): void
     {
+        $gatewayFactory = $this->createMock(GatewayFactoryInterface::class);
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
             ->method('getGatewayFactory')
             ->with('theName')
-            ->willReturn('theGatewayFactory')
+            ->willReturn($gatewayFactory)
         ;
 
         $registry = new DynamicRegistry(
@@ -371,7 +371,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theGatewayFactory', $registry->getGatewayFactory('theName'));
+        $this->assertSame($gatewayFactory, $registry->getGatewayFactory('theName'));
     }
 
     public function testAlwaysThrowOnGetGatewayFactory(): void
@@ -392,11 +392,12 @@ class DynamicRegistryTest extends TestCase
      */
     public function testShouldCallStaticRegistryOnGetStorages(): void
     {
+        $storage = $this->createMock(StorageInterface::class);
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
             ->method('getStorages')
-            ->willReturn('theStorages')
+            ->willReturn([$storage])
         ;
 
         $registry = new DynamicRegistry(
@@ -404,7 +405,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theStorages', $registry->getStorages());
+        $this->assertSame([$storage], $registry->getStorages());
     }
 
     public function testShouldReturnEmptyArrayOnGetStorages(): void
@@ -423,12 +424,13 @@ class DynamicRegistryTest extends TestCase
      */
     public function testShouldCallStaticRegistryOnGetStorage(): void
     {
+        $storage = $this->createMock(StorageInterface::class);
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
             ->expects($this->once())
             ->method('getStorage')
             ->with(stdClass::class)
-            ->willReturn('theStorage')
+            ->willReturn($storage)
         ;
 
         $registry = new DynamicRegistry(
@@ -436,7 +438,7 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertSame('theStorage', $registry->getStorage(stdClass::class));
+        $this->assertSame($storage, $registry->getStorage(stdClass::class));
     }
 
     public function testAlwaysThrowOnGetStorageForClass(): void

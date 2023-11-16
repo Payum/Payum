@@ -402,7 +402,7 @@ class TokenFactoryTest extends TestCase
             $model,
             'https://example.com/authorize.php',
             [],
-            'http://googlehttps://ayum_token=foo',
+            'https://google.com/?afterKey=afterVal',
             [
                 'payum_token' => null,
                 'afterKey' => 'afterVal',
