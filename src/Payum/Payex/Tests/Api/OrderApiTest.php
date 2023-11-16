@@ -173,16 +173,16 @@ class OrderSoapClient extends SoapClient
 
     public function Initialize8(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 
     public function Complete(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 
     public function Check2(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 }

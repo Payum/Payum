@@ -173,16 +173,16 @@ class RecurringSoapClient extends SoapClient
 
     public function Start(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 
     public function Stop(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 
     public function Check(): stdClass
     {
-        return new stdClass;
+        return new stdClass();
     }
 }

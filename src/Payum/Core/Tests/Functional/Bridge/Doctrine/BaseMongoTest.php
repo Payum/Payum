@@ -23,7 +23,7 @@ abstract class BaseMongoTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!class_exists(Client::class) || !class_exists(Manager::class)) {
+        if (! class_exists(Client::class) || ! class_exists(Manager::class)) {
             $this->markTestSkipped('Either mongo extension or\and doctrine/mongodb-odm are not installed.');
         }
 
