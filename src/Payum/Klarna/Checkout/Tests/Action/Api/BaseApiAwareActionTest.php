@@ -45,6 +45,7 @@ class BaseApiAwareActionTest extends TestCase
 
     protected function getActionClass(): string
     {
+        return '';
     }
 
     protected function getApiClass()
