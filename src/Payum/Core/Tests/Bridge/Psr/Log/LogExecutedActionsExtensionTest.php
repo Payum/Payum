@@ -316,7 +316,8 @@ class FooAction implements ActionInterface
     {
     }
 
-    public function supports($request): void
+    public function supports($request): bool
     {
+        return true;
     }
 }

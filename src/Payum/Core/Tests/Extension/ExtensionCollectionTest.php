@@ -78,9 +78,7 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPreExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onPreExecute($expectedContext);
     }
 
     public function testShouldCallOnExecuteForAllExtensionsInCollection(): void
@@ -105,9 +103,7 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onExecute($expectedContext);
     }
 
     public function testShouldCallOnPostExecuteForAllExtensionsInCollection(): void
@@ -132,9 +128,7 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPostExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onPostExecute($expectedContext);
     }
 
     /**

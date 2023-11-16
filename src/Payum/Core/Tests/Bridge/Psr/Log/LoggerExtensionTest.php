@@ -166,7 +166,8 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
     {
     }
 
-    public function supports($request): void
+    public function supports($request): bool
     {
+        return true;
     }
 }

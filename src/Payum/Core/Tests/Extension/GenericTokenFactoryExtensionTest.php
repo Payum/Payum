@@ -105,8 +105,9 @@ class ActionGenericTokenFactoryAware implements ActionInterface, GenericTokenFac
     {
     }
 
-    public function supports($request): void
+    public function supports($request): bool
     {
+        return true;
     }
 
     public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null): void

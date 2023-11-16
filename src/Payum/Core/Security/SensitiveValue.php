@@ -72,9 +72,9 @@ final class SensitiveValue implements Serializable, JsonSerializable, Stringable
         $this->value = null;
     }
 
-    public function serialize(): void
+    public function serialize(): ?string
     {
-        return;
+        return null;
     }
 
     public function unserialize($serialized): void

@@ -37,7 +37,7 @@ class FilesystemStorage extends AbstractStorage
         $this->idProperty = $idProperty;
     }
 
-    public function findBy(array $criteria): void
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }

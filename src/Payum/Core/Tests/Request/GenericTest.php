@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Request;
 
 use ArrayObject;
 use Iterator;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Request\Generic;
@@ -141,20 +142,24 @@ class GenericTest extends TestCase
     public function testShouldNotSetIdentityAsFirstModelOnConstruct(): void
     {
         $identity = new class() implements IdentityInterface {
-            public function serialize(): void
+            public function serialize(): string
             {
+                return '';
             }
 
-            public function unserialize($data): void
+            public function unserialize($data): array
             {
+                return [];
             }
 
-            public function getClass(): void
+            public function getClass(): string
             {
+                return __CLASS__;
             }
 
-            public function getId(): void
+            public function getId(): IdentityInterface
             {
+                return new Identity();
             }
 
             public function __serialize(): array

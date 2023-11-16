@@ -5,6 +5,7 @@ namespace Payum\Core\Tests\Storage;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -29,24 +30,28 @@ class AbstractStorageTest extends TestCase
     public function testShouldCreateInstanceOfModelClassSetInConstructor(): void
     {
         $storage = new class(stdClass::class) extends AbstractStorage {
-            protected function doUpdateModel($model): void
+            protected function doUpdateModel($model): object
             {
+                return $model;
             }
 
             protected function doDeleteModel($model): void
             {
             }
 
-            protected function doGetIdentity($model): void
+            protected function doGetIdentity($model): IdentityInterface
             {
+                return new Identity();
             }
 
-            protected function doFind($id): void
+            protected function doFind($id): object
             {
+                return new stdClass();
             }
 
-            public function findBy(array $criteria): void
+            public function findBy(array $criteria): array
             {
+                return [];
             }
         };
 

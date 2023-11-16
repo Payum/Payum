@@ -292,7 +292,8 @@ class DoctrineProxy extends DoctrineModel implements Proxy
     {
     }
 
-    public function __isInitialized(): void
+    public function __isInitialized(): bool
     {
+        return true;
     }
 }
