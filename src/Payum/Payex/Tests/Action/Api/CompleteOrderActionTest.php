@@ -33,21 +33,21 @@ class CompleteOrderActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CompleteOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CompleteOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotOrderApiAsApi()
+    public function testThrowOnTryingSetNotOrderApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\OrderApi');
@@ -56,28 +56,28 @@ class CompleteOrderActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCompleteOrderRequestWithArrayAccessAsModel()
+    public function testShouldSupportCompleteOrderRequestWithArrayAccessAsModel(): void
     {
         $action = new CompleteOrderAction();
 
         $this->assertTrue($action->supports(new CompleteOrder($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCompleteOrderRequest()
+    public function testShouldNotSupportAnythingNotCompleteOrderRequest(): void
     {
         $action = new CompleteOrderAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCompleteOrderRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCompleteOrderRequestWithNotArrayAccessModel(): void
     {
         $action = new CompleteOrderAction();
 
         $this->assertFalse($action->supports(new CompleteOrder(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CompleteOrderAction($this->createApiMock());
@@ -88,7 +88,7 @@ class CompleteOrderActionTest extends TestCase
     /**
      * @dataProvider provideRequiredFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
         $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
@@ -98,7 +98,7 @@ class CompleteOrderActionTest extends TestCase
         $action->execute(new CompleteOrder($this->requiredFields));
     }
 
-    public function testShouldCompletePayment()
+    public function testShouldCompletePayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

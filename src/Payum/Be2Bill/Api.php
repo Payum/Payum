@@ -264,7 +264,7 @@ class Api
         return $result;
     }
 
-    protected function addGlobalParams(array &$params)
+    protected function addGlobalParams(array &$params): void
     {
         $params['VERSION'] = self::VERSION;
         $params['IDENTIFIER'] = $this->options['identifier'];

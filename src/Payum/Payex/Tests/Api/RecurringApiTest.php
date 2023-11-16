@@ -14,21 +14,21 @@ use stdClass;
 
 class RecurringApiTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi(): void
     {
         $rc = new ReflectionClass(RecurringApi::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApi::class));
     }
 
-    public function testThrowIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new RecurringApi(new SoapClientFactory(), []);
     }
 
-    public function testThrowIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -40,7 +40,7 @@ class RecurringApiTest extends TestCase
         );
     }
 
-    public function testThrowIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -54,7 +54,7 @@ class RecurringApiTest extends TestCase
         );
     }
 
-    public function testShouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnStartRecurringPaymentAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->StartResult = '<foo>fooValue</foo>';
@@ -88,7 +88,7 @@ class RecurringApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnStopRecurringPaymentAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->StopResult = '<foo>fooValue</foo>';
@@ -122,7 +122,7 @@ class RecurringApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckRecurringPaymentAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->CheckResult = '<foo>fooValue</foo>';
@@ -171,15 +171,18 @@ class RecurringSoapClient extends SoapClient
     {
     }
 
-    public function Start()
+    public function Start(): stdClass
     {
+        return new stdClass();
     }
 
-    public function Stop()
+    public function Stop(): stdClass
     {
+        return new stdClass();
     }
 
-    public function Check()
+    public function Check(): stdClass
     {
+        return new stdClass();
     }
 }

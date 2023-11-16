@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class StopRecurringPaymentTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(StopRecurringPayment::class);
 

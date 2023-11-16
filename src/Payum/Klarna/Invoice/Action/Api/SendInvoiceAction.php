@@ -13,7 +13,7 @@ class SendInvoiceAction extends BaseApiAwareAction
     /**
      * @param SendInvoice $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

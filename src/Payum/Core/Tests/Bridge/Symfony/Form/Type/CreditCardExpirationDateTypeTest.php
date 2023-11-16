@@ -11,21 +11,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateTypeTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType(): void
     {
         $rc = new ReflectionClass(CreditCardExpirationDateType::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
-    public function testShouldExtendDateType()
+    public function testShouldExtendDateType(): void
     {
         $type = new CreditCardExpirationDateType();
 
         $this->assertSame(DateType::class, $type->getParent());
     }
 
-    public function testShouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions(): void
     {
         $type = new CreditCardExpirationDateType();
 
@@ -45,7 +45,7 @@ class CreditCardExpirationDateTypeTest extends TestCase
         $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
     }
 
-    public function testShouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
+    public function testShouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange(): void
     {
         $type = new CreditCardExpirationDateType();
 

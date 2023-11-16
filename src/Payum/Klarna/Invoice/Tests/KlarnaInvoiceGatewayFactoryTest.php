@@ -8,7 +8,7 @@ use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 
 class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new KlarnaInvoiceGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new KlarnaInvoiceGatewayFactory();
 
@@ -48,7 +48,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new KlarnaInvoiceGatewayFactory();
 
@@ -63,7 +63,7 @@ class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Klarna Invoice', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The eid, secret, country, language, currency fields are required.');

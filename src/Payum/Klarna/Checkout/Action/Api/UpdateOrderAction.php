@@ -13,13 +13,13 @@ class UpdateOrderAction extends BaseApiAwareAction
     /**
      * @param CreateOrder $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $this->callWithRetry(function () use ($model, $request) {
+        $this->callWithRetry(function () use ($model, $request): void {
             $order = new Klarna_Checkout_Order($this->getConnector(), $model['location']);
 
             $data = $model->toUnsafeArray();

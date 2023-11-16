@@ -25,14 +25,14 @@ class CaptureActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();
@@ -40,7 +40,7 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
+    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
@@ -65,7 +65,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldDoNothingIfResultSet()
+    public function testShouldDoNothingIfResultSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -90,7 +90,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldCaptureWithCreditCardSetExplicitly()
+    public function testShouldCaptureWithCreditCardSetExplicitly(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -135,14 +135,14 @@ class CaptureActionTest extends GenericActionTest
         $this->assertSame('FOOVAL', $model['FOO']);
     }
 
-    public function testShouldCaptureWithObtainedCreditCard()
+    public function testShouldCaptureWithObtainedCreditCard(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(ObtainCreditCard::class))
-            ->willReturnCallback(function (ObtainCreditCard $request) {
+            ->willReturnCallback(function (ObtainCreditCard $request): void {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
                 $card->setExpireAt(new DateTime('2014-10-01'));
@@ -187,7 +187,7 @@ class CaptureActionTest extends GenericActionTest
         $this->assertSame('FOOVAL', $model['FOO']);
     }
 
-    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest(): void
     {
         $firstModel = new stdClass();
         $currentModel = new ArrayObject([
@@ -211,7 +211,7 @@ class CaptureActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(ObtainCreditCard::class))
-            ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
+            ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel): void {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
 

@@ -26,7 +26,7 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
      * @throws LogicException if the token not set in the instruction.
      * @throws HttpRedirect if authorization required.
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var AuthorizeToken $request */
         RequestNotSupportedException::assertSupports($this, $request);

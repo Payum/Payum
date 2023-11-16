@@ -11,7 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Api;
 
 class AuthorizeAction extends PurchaseAction
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -7,7 +7,7 @@ use Payum\Offline\OfflineGatewayFactory;
 
 class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new OfflineGatewayFactory([
             'foo' => 'fooVal',
@@ -25,7 +25,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new OfflineGatewayFactory();
 
@@ -37,7 +37,7 @@ class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame([], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new OfflineGatewayFactory();
 

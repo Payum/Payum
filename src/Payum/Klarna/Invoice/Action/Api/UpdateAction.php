@@ -18,7 +18,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }
@@ -26,7 +26,7 @@ class UpdateAction extends BaseApiAwareAction implements GatewayAwareInterface
     /**
      * @param Update $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -21,7 +21,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var GetExpressCheckoutDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -11,14 +11,14 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class CoreGatewayFactoryBuilderTest extends TestCase
 {
-    public function testShouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface(): void
     {
         $rc = new ReflectionClass(CoreGatewayFactoryBuilder::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testShouldBuildContainerAwareCoreGatewayFactory()
+    public function testShouldBuildContainerAwareCoreGatewayFactory(): void
     {
         $container = new Container();
         $defaultConfig = [
@@ -33,7 +33,7 @@ class CoreGatewayFactoryBuilderTest extends TestCase
         $this->assertInstanceOf(ContainerAwareCoreGatewayFactory::class, $gatewayFactory);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         $container = new Container();
         $defaultConfig = [

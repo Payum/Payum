@@ -8,7 +8,7 @@ use Payum\Stripe\StripeJsGatewayFactory;
 
 class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new StripeJsGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new StripeJsGatewayFactory();
 
@@ -41,7 +41,7 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new StripeJsGatewayFactory();
 
@@ -56,7 +56,7 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Stripe.Js', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The publishable_key, secret_key fields are required.');
@@ -65,7 +65,7 @@ class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
-    public function testShouldConfigurePaths()
+    public function testShouldConfigurePaths(): void
     {
         $factory = new StripeJsGatewayFactory();
 

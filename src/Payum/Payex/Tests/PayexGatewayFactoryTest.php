@@ -8,7 +8,7 @@ use Payum\Payex\PayexGatewayFactory;
 
 class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PayexGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PayexGatewayFactory();
 
@@ -42,7 +42,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PayexGatewayFactory();
 
@@ -57,7 +57,7 @@ class PayexGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('Payex', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The account_number, encryption_key fields are required.');

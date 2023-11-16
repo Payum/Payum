@@ -14,7 +14,7 @@ class PopulateKlarnaFromDetailsAction implements ActionInterface
     /**
      * @param PopulateKlarnaFromDetails $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

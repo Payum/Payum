@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    public function testShouldAllowSetOptions()
+    public function testShouldAllowSetOptions(): void
     {
         $config = new Config();
         $config->merchantId = 'aMerhId';

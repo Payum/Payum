@@ -14,21 +14,21 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
-    public function testShouldExtendCoreGatewayFactory()
+    public function testShouldExtendCoreGatewayFactory(): void
     {
         $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(CoreGatewayFactory::class));
     }
 
-    public function testShouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface(): void
     {
         $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testShouldResolveContainerParameter()
+    public function testShouldResolveContainerParameter(): void
     {
         $container = new Container();
         $container->setParameter('foo', 'fooVal');
@@ -42,7 +42,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $factory->create([
             'foo' => '%foo%',
             'bar' => '%bar.baz_ololo%',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
                 $this->assertSame('fooVal', $config['foo']);
@@ -53,7 +53,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
-    public function testShouldResolveTemplateFromContainerParameter()
+    public function testShouldResolveTemplateFromContainerParameter(): void
     {
         $container = new Container();
         $container->setParameter('a_template_parameter', '@aTemplate');
@@ -65,7 +65,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'payum.template.foo' => '%a_template_parameter%',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
                 $this->assertSame('@aTemplate', $config['payum.template.foo']);
@@ -75,7 +75,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
-    public function testShouldSkipContainerServiceIfSuchNotExist()
+    public function testShouldSkipContainerServiceIfSuchNotExist(): void
     {
         $container = new Container();
 
@@ -86,7 +86,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'foo' => '@anActionService',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
                 $this->assertSame('@anActionService', $config['foo']);
@@ -96,7 +96,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
-    public function testShouldResolveContainerServiceIfSuchExist()
+    public function testShouldResolveContainerServiceIfSuchExist(): void
     {
         $service = new stdClass();
 
@@ -110,7 +110,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'foo' => '@anActionService',
-            'test' => function (ArrayObject $config) use (&$called, $service) {
+            'test' => function (ArrayObject $config) use (&$called, $service): void {
                 $called = true;
 
                 $this->assertSame($service, $config['foo']);
@@ -120,7 +120,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
-    public function testShouldSkipEmptyStringValue()
+    public function testShouldSkipEmptyStringValue(): void
     {
         $factory = new ContainerAwareCoreGatewayFactory();
         $factory->setContainer(new Container());

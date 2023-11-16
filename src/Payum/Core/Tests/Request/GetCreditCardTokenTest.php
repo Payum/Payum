@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class GetCreditCardTokenTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(GetCreditCardToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor(): void
     {
         $model = new ArrayObject();
 
@@ -26,7 +26,7 @@ class GetCreditCardTokenTest extends TestCase
         $this->assertSame($model, $request->getModel());
     }
 
-    public function shouldAllowSetAndLaterGetToken()
+    public function shouldAllowSetAndLaterGetToken(): void
     {
         $request = new GetCreditCardToken([]);
         $request->token = 'aToken';

@@ -20,7 +20,7 @@ class CompleteOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CompleteOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -13,28 +13,28 @@ use ReflectionClass;
 
 class PaymentTest extends TestCase
 {
-    public function testShouldImplementsPaymentInterface()
+    public function testShouldImplementsPaymentInterface(): void
     {
         $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(PaymentInterface::class));
     }
 
-    public function testShouldImplementsCreditCardPaymentInterface()
+    public function testShouldImplementsCreditCardPaymentInterface(): void
     {
         $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardPaymentInterface::class));
     }
 
-    public function testShouldImplementsDirectDebitPaymentInterface()
+    public function testShouldImplementsDirectDebitPaymentInterface(): void
     {
         $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(DirectDebitPaymentInterface::class));
     }
 
-    public function testShouldAllowGetCreditCardPreviouslySet()
+    public function testShouldAllowGetCreditCardPreviouslySet(): void
     {
         $order = new Payment();
 
@@ -45,7 +45,7 @@ class PaymentTest extends TestCase
         $this->assertSame($creditCardMock, $order->getCreditCard());
     }
 
-    public function testShouldAllowGetBankAccountPreviouslySet()
+    public function testShouldAllowGetBankAccountPreviouslySet(): void
     {
         $order = new Payment();
 

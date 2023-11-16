@@ -15,14 +15,14 @@ use ReflectionClass;
 
 class PayumTest extends TestCase
 {
-    public function testShouldImplementRegistryInterface()
+    public function testShouldImplementRegistryInterface(): void
     {
         $rc = new ReflectionClass(Payum::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
-    public function testShouldAllowGetHttpRequestVerifierSetInConstructor()
+    public function testShouldAllowGetHttpRequestVerifierSetInConstructor(): void
     {
         $httpRequestVerifier = $this->createHttpRequestVerifierMock();
 
@@ -36,7 +36,7 @@ class PayumTest extends TestCase
         $this->assertSame($httpRequestVerifier, $payum->getHttpRequestVerifier());
     }
 
-    public function testShouldAllowGetGenericTokenFactorySetInConstructor()
+    public function testShouldAllowGetGenericTokenFactorySetInConstructor(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -50,7 +50,7 @@ class PayumTest extends TestCase
         $this->assertSame($tokenFactory, $payum->getTokenFactory());
     }
 
-    public function testShouldAllowGetTokenStorageSetInConstructor()
+    public function testShouldAllowGetTokenStorageSetInConstructor(): void
     {
         $tokenStorage = $this->createTokenStorage();
 
@@ -64,7 +64,7 @@ class PayumTest extends TestCase
         $this->assertSame($tokenStorage, $payum->getTokenStorage());
     }
 
-    public function testShouldAllowGetGatewayFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFromRegistryInConstructor(): void
     {
         $registry = new SimpleRegistry(
             [
@@ -96,7 +96,7 @@ class PayumTest extends TestCase
         ], $payum->getGateways());
     }
 
-    public function testShouldAllowGetStoragesFromRegistryInConstructor()
+    public function testShouldAllowGetStoragesFromRegistryInConstructor(): void
     {
         $registry = new SimpleRegistry(
             [
@@ -128,7 +128,7 @@ class PayumTest extends TestCase
         ], $payum->getStorages());
     }
 
-    public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor()
+    public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor(): void
     {
         $registry = new SimpleRegistry(
             [

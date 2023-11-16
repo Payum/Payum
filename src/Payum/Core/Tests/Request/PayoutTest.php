@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class PayoutTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(Payout::class);
 

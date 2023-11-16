@@ -13,7 +13,7 @@ class CreditInvoiceAction extends BaseApiAwareAction
     /**
      * @param CreditInvoice $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

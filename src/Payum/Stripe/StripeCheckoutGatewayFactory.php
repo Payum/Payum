@@ -20,7 +20,7 @@ use Stripe\Stripe;
 
 class StripeCheckoutGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (false == class_exists(Stripe::class)) {
             throw new LogicException('You must install "stripe/stripe-php:~2.0|~3.0" library.');

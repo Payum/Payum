@@ -28,7 +28,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     /**
      * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

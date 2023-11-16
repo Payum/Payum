@@ -11,7 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
 class CaptureAction extends PurchaseAction
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);

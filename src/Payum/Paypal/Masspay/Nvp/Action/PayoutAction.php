@@ -18,7 +18,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Payout $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

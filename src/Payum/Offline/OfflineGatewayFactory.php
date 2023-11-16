@@ -14,7 +14,7 @@ use Payum\Offline\Action\StatusAction;
 
 class OfflineGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'offline',

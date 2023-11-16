@@ -22,21 +22,21 @@ use stdClass;
 
 class ObtainTokenActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
         $rc = new ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new ObtainTokenAction('aTemplateName');
@@ -44,28 +44,28 @@ class ObtainTokenActionTest extends TestCase
         $action->setApi('not keys instance');
     }
 
-    public function testShouldSupportObtainTokenRequestWithArrayAccessModel()
+    public function testShouldSupportObtainTokenRequestWithArrayAccessModel(): void
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertTrue($action->supports(new ObtainToken([])));
     }
 
-    public function testShouldNotSupportObtainTokenRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportObtainTokenRequestWithNotArrayAccessModel(): void
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertFalse($action->supports(new ObtainToken(new stdClass())));
     }
 
-    public function testShouldNotSupportNotObtainTokenRequest()
+    public function testShouldNotSupportNotObtainTokenRequest(): void
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action ObtainTokenAction is not supported the request stdClass.');
@@ -74,7 +74,7 @@ class ObtainTokenActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfModelAlreadyHaveTokenSet()
+    public function testThrowIfModelAlreadyHaveTokenSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The token has already been set.');
@@ -85,7 +85,7 @@ class ObtainTokenActionTest extends TestCase
         ]));
     }
 
-    public function testShouldRenderExpectedTemplateIfHttpRequestNotPOST()
+    public function testShouldRenderExpectedTemplateIfHttpRequestNotPOST(): void
     {
         $model = new ArrayObject();
         $templateName = 'theTemplateName';
@@ -100,10 +100,10 @@ class ObtainTokenActionTest extends TestCase
                 [$this->isInstanceOf(RenderTemplate::class)]
             )
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHttpRequest $request) {
+                $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->method = 'GET';
                 }),
-                $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
+                $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model): void {
                     $this->assertSame($templateName, $request->getTemplateName());
 
                     $context = $request->getParameters();
@@ -131,7 +131,7 @@ class ObtainTokenActionTest extends TestCase
         $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
-    public function testShouldRenderTemplateIfHttpRequestPOSTButNotContainStripeToken()
+    public function testShouldRenderTemplateIfHttpRequestPOSTButNotContainStripeToken(): void
     {
         $model = [];
         $templateName = 'aTemplateName';
@@ -146,7 +146,7 @@ class ObtainTokenActionTest extends TestCase
                 [$this->isInstanceOf(RenderTemplate::class)]
             )
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHttpRequest $request) {
+                $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->method = 'POST';
                 })
             )
@@ -165,7 +165,7 @@ class ObtainTokenActionTest extends TestCase
         $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
-    public function testShouldSetTokenFromHttpRequestToObtainTokenRequestOnPOST()
+    public function testShouldSetTokenFromHttpRequestToObtainTokenRequestOnPOST(): void
     {
         $model = [];
         $templateName = 'aTemplateName';
@@ -176,7 +176,7 @@ class ObtainTokenActionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->method = 'POST';
                 $request->request = [
                     'stripeToken' => 'theToken',

@@ -30,7 +30,7 @@ class GetCurrencyActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldSetCurrencyByAlpha3()
+    public function testShouldSetCurrencyByAlpha3(): void
     {
         $action = new GetCurrencyAction();
 
@@ -39,7 +39,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $this->assertSame('USD', $getCurrency->alpha3);
     }
 
-    public function testShouldSetCurrencyByNumeric()
+    public function testShouldSetCurrencyByNumeric(): void
     {
         $action = new GetCurrencyAction();
 
@@ -48,7 +48,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
-    public function testThrowsIfCurrencyNotSupported()
+    public function testThrowsIfCurrencyNotSupported(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('ISO 4217 does not contain: 000');

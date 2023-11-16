@@ -7,7 +7,7 @@ use Payum\Stripe\Action\Api\ObtainTokenForCreditCardAction;
 
 class StripeDirectGatewayFactory extends StripeCheckoutGatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'stripe_direct',

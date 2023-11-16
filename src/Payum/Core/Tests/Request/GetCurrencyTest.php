@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetCurrencyTest extends TestCase
 {
-    public function testShouldAllowGetCodeSetInConstructor()
+    public function testShouldAllowGetCodeSetInConstructor(): void
     {
         $request = new GetCurrency('theCode');
 
         $this->assertSame('theCode', $request->code);
     }
 
-    public function shouldAllowGetPreviouslySetCurrency()
+    public function shouldAllowGetPreviouslySetCurrency(): void
     {
         $request = new GetCurrency('aCode');
         $request->numeric = 'aNumeric';

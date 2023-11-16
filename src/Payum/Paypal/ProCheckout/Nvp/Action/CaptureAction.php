@@ -31,7 +31,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);

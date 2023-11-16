@@ -13,14 +13,14 @@ use ReflectionClass;
 
 class DoctrineStorageTest extends TestCase
 {
-    public function testShouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage(): void
     {
         $rc = new ReflectionClass(DoctrineStorage::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractStorage::class));
     }
 
-    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
         $expectedModelClass = TestModel::class;
 
@@ -35,7 +35,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    public function testShouldCallObjectManagerPersistAndFlushOnUpdateModel()
+    public function testShouldCallObjectManagerPersistAndFlushOnUpdateModel(): void
     {
         $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
@@ -58,7 +58,7 @@ class DoctrineStorageTest extends TestCase
         $storage->update($model);
     }
 
-    public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
+    public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall(): void
     {
         $modelClass = TestModel::class;
         $model = new TestModel();
@@ -92,7 +92,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertSame($model, $storage->findBy($criteria));
     }
 
-    public function testShouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $expectedModelClass = TestModel::class;
         $expectedModelId = 123;

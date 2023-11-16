@@ -25,22 +25,22 @@ class MaskTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testShouldAllowGenerateToken($value, $expected)
+    public function testShouldAllowGenerateToken($value, $expected): void
     {
         $this->assertSame($expected, Mask::mask($value));
     }
 
-    public function testShouldAllowChangeMaskedSymbol()
+    public function testShouldAllowChangeMaskedSymbol(): void
     {
         $this->assertSame('1***-****-****-5678', Mask::mask('1234-5678-1234-5678', '*'));
     }
 
-    public function testShouldAllowChangeNumberOfLastShownSymbols()
+    public function testShouldAllowChangeNumberOfLastShownSymbols(): void
     {
         $this->assertSame('1XXX-XXXX-1234-5678', Mask::mask('1234-5678-1234-5678', null, 8));
     }
 
-    public function testShouldNotShowAnythingIfNegativeShowLastGiven()
+    public function testShouldNotShowAnythingIfNegativeShowLastGiven(): void
     {
         $this->assertSame('BXXXXXXXX', Mask::mask('Beatrices', null, -1));
     }

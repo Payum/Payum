@@ -18,21 +18,21 @@ use stdClass;
 
 class CancelActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportEmptyModel()
+    public function testShouldSupportEmptyModel(): void
     {
         $action = new CancelAction();
 
@@ -41,7 +41,7 @@ class CancelActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsAuthorized()
+    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsAuthorized(): void
     {
         $action = new CancelAction();
 
@@ -54,7 +54,7 @@ class CancelActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsOtherThanAuthorized()
+    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsOtherThanAuthorized(): void
     {
         $action = new CancelAction();
 
@@ -67,7 +67,7 @@ class CancelActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportModelWithBillingPeriod()
+    public function testShouldNotSupportModelWithBillingPeriod(): void
     {
         $action = new CancelAction();
 
@@ -80,7 +80,7 @@ class CancelActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportCancelRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportCancelRequestWithNoArrayAccessAsModel(): void
     {
         $action = new CancelAction();
 
@@ -89,14 +89,14 @@ class CancelActionTest extends TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotCancelRequest()
+    public function testShouldNotSupportAnythingNotCancelRequest(): void
     {
         $action = new CancelAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CancelAction();
@@ -104,7 +104,7 @@ class CancelActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldNotExecuteDoVoidIfTransactionIdNotSet()
+    public function testShouldNotExecuteDoVoidIfTransactionIdNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -120,7 +120,7 @@ class CancelActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldExecuteDoVoidIfTransactionIdSet()
+    public function testShouldExecuteDoVoidIfTransactionIdSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

@@ -20,7 +20,7 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var TransactionSearch $request */
         RequestNotSupportedException::assertSupports($this, $request);

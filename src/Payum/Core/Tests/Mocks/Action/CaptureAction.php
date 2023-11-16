@@ -13,7 +13,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         if ($request->getModel() instanceof AuthorizeRequiredModel) {

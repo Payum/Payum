@@ -8,7 +8,7 @@ use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 
 class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PaypalProCheckoutGatewayFactory([
             'foo' => 'fooVal',
@@ -26,7 +26,7 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalProCheckoutGatewayFactory();
 
@@ -45,7 +45,7 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         ], $config['payum.default_options']);
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalProCheckoutGatewayFactory();
 
@@ -60,7 +60,7 @@ class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('PayPal ProCheckout', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor, tender fields are required.');

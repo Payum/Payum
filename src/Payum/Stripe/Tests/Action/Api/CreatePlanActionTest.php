@@ -14,21 +14,21 @@ use stdClass;
 
 class CreatePlanActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CreatePlanAction();
@@ -36,28 +36,28 @@ class CreatePlanActionTest extends TestCase
         $action->setApi('not keys instance');
     }
 
-    public function testShouldSupportCreatePlanRequestWithArrayAccessModel()
+    public function testShouldSupportCreatePlanRequestWithArrayAccessModel(): void
     {
         $action = new CreatePlanAction();
 
         $this->assertTrue($action->supports(new CreatePlan([])));
     }
 
-    public function testShouldNotSupportCreatePlanRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreatePlanRequestWithNotArrayAccessModel(): void
     {
         $action = new CreatePlanAction();
 
         $this->assertFalse($action->supports(new CreatePlan(new stdClass())));
     }
 
-    public function testShouldNotSupportNotCreatePlanRequest()
+    public function testShouldNotSupportNotCreatePlanRequest(): void
     {
         $action = new CreatePlanAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreatePlanAction is not supported the request stdClass.');

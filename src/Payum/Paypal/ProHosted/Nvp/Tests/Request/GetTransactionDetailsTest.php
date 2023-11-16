@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class GetTransactionDetailsTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(GetTransactionDetails::class);
 

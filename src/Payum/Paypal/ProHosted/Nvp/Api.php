@@ -244,7 +244,7 @@ class Api
         return $this->options['sandbox'] ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
     }
 
-    protected function addAuthorizeFields(array &$fields)
+    protected function addAuthorizeFields(array &$fields): void
     {
         $fields['USER'] = $this->options['username'];
         $fields['PWD'] = $this->options['password'];
@@ -256,7 +256,7 @@ class Api
         }
     }
 
-    protected function addVersionField(array &$fields)
+    protected function addVersionField(array &$fields): void
     {
         $fields['VERSION'] = self::VERSION;
     }

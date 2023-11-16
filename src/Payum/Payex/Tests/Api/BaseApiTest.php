@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class BaseApiTest extends TestCase
 {
-    public function testShouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
         $rc = new ReflectionClass(BaseApi::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public function testThrowIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
@@ -27,7 +27,7 @@ class BaseApiTest extends TestCase
         ]);
     }
 
-    public function testThrowIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -39,7 +39,7 @@ class BaseApiTest extends TestCase
         ]);
     }
 
-    public function testThrowIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');

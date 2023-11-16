@@ -8,14 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetAddressesTest extends TestCase
 {
-    public function testShouldAllowGetPnoSetInConstructor()
+    public function testShouldAllowGetPnoSetInConstructor(): void
     {
         $request = new GetAddresses($pno = 'thePno');
 
         $this->assertSame($pno, $request->getPno());
     }
 
-    public function testShouldAllowAddKLarnaAddress()
+    public function testShouldAllowAddKLarnaAddress(): void
     {
         $request = new GetAddresses('aPno');
 
@@ -24,7 +24,7 @@ class GetAddressesTest extends TestCase
         $this->assertSame([$address], $request->getAddresses());
     }
 
-    public function testShouldAllowGetPreviouslyAddedKLarnaAddresses()
+    public function testShouldAllowGetPreviouslyAddedKLarnaAddresses(): void
     {
         $request = new GetAddresses('aPno');
 
@@ -38,14 +38,14 @@ class GetAddressesTest extends TestCase
         $this->assertContains($second, $addresses);
     }
 
-    public function testShouldReturnNullIfAnyAddressAddedOnGetFirstAddress()
+    public function testShouldReturnNullIfAnyAddressAddedOnGetFirstAddress(): void
     {
         $request = new GetAddresses('aPno');
 
         $this->assertNull($request->getFirstAddress());
     }
 
-    public function testShouldAllowGetFirstAddress()
+    public function testShouldAllowGetFirstAddress(): void
     {
         $request = new GetAddresses('aPno');
 

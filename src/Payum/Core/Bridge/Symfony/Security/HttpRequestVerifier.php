@@ -52,7 +52,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         return $token;
     }
 
-    public function invalidate(TokenInterface $token)
+    public function invalidate(TokenInterface $token): void
     {
         $this->tokenStorage->delete($token);
     }

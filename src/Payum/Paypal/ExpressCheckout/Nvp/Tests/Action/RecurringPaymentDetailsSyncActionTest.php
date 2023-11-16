@@ -15,14 +15,14 @@ use stdClass;
 
 class RecurringPaymentDetailsSyncActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(RecurringPaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncAndArrayAsModelWhichHasBillingPeriodSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasBillingPeriodSet(): void
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
@@ -35,14 +35,14 @@ class RecurringPaymentDetailsSyncActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotSyncRequest()
+    public function testShouldNotSupportAnythingNotSyncRequest(): void
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsSyncAction();
@@ -50,7 +50,7 @@ class RecurringPaymentDetailsSyncActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoNothingIfProfileIdNotSet()
+    public function testShouldDoNothingIfProfileIdNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -68,7 +68,7 @@ class RecurringPaymentDetailsSyncActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel()
+    public function testShouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

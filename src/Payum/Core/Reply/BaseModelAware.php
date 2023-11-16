@@ -33,7 +33,7 @@ abstract class BaseModelAware extends LogicException implements ReplyInterface, 
     /**
      * @param mixed $model
      */
-    public function setModel($model)
+    public function setModel($model): void
     {
         if (is_array($model)) {
             $model = new ArrayObject($model);

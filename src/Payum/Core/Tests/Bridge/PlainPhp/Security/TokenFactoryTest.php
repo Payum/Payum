@@ -17,21 +17,21 @@ use stdClass;
 
 class TokenFactoryTest extends TestCase
 {
-    public function testShouldImplementsTokenFactoryInterface()
+    public function testShouldImplementsTokenFactoryInterface(): void
     {
         $rc = new ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(TokenFactoryInterface::class));
     }
 
-    public function testShouldBeSubClassOfAbtractTokenFactory()
+    public function testShouldBeSubClassOfAbtractTokenFactory(): void
     {
         $rc = new ReflectionClass(TokenFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractTokenFactory::class));
     }
 
-    public function testShouldCreateTokenWithoutAfterPath()
+    public function testShouldCreateTokenWithoutAfterPath(): void
     {
         $token = new Token();
 
@@ -88,7 +88,7 @@ class TokenFactoryTest extends TestCase
         $this->assertNull($token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenWithAfterUrl()
+    public function testShouldCreateTokenWithAfterUrl(): void
     {
         $token = new Token();
 
@@ -149,7 +149,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldCreateTokenForSecuredBaseUrl()
+    public function testShouldCreateTokenForSecuredBaseUrl(): void
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -192,7 +192,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldCreateTokenForBaseUrlWithPath()
+    public function testShouldCreateTokenForBaseUrlWithPath(): void
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -238,7 +238,7 @@ class TokenFactoryTest extends TestCase
     /**
      * @dataProvider pathDataProvider
      */
-    public function testShouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result)
+    public function testShouldCreateTokenForBaseUrlWithPathAndScriptFile($hostname, $target, $result): void
     {
         $token = new Token();
         $token->setHash('aHash');
@@ -281,7 +281,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldCreateTokenWithIdentityAsModel()
+    public function testShouldCreateTokenWithIdentityAsModel(): void
     {
         $token = new Token();
 
@@ -325,7 +325,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($identity, $token->getDetails());
     }
 
-    public function testShouldCreateTokenWithoutModel()
+    public function testShouldCreateTokenWithoutModel(): void
     {
         $token = new Token();
 
@@ -368,7 +368,7 @@ class TokenFactoryTest extends TestCase
         $this->assertNull($token->getDetails());
     }
 
-    public function testShouldCreateTokenWithTargetPathAlreadyUrl()
+    public function testShouldCreateTokenWithTargetPathAlreadyUrl(): void
     {
         $token = new Token();
 
@@ -429,7 +429,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame('http://example.com/theAfterPath?after=val', $token->getAfterUrl());
     }
 
-    public function testShouldNotOverwritePayumTokenHashInAfterUrl()
+    public function testShouldNotOverwritePayumTokenHashInAfterUrl(): void
     {
         $authorizeToken = new Token();
 
@@ -491,7 +491,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithoutPayumToken()
+    public function testShouldAllowCreateAfterUrlWithoutPayumToken(): void
     {
         $authorizeToken = new Token();
 
@@ -554,7 +554,7 @@ class TokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAfterUrlWithFragment()
+    public function testShouldAllowCreateAfterUrlWithFragment(): void
     {
         $authorizeToken = new Token();
 

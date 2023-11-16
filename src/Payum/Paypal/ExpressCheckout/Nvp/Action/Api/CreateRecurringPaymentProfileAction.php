@@ -20,7 +20,7 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);

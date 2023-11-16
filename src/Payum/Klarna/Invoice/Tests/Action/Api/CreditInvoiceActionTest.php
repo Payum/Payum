@@ -19,14 +19,14 @@ use stdClass;
 
 class CreditInvoiceActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(CreditInvoiceAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -35,28 +35,28 @@ class CreditInvoiceActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCreditInvoiceWithArrayAsModel()
+    public function testShouldSupportCreditInvoiceWithArrayAsModel(): void
     {
         $action = new CreditInvoiceAction();
 
         $this->assertTrue($action->supports(new CreditInvoice([])));
     }
 
-    public function testShouldNotSupportAnythingNotCreditInvoice()
+    public function testShouldNotSupportAnythingNotCreditInvoice(): void
     {
         $action = new CreditInvoiceAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCreditInvoiceWithNotArrayAccessModel()
+    public function testShouldNotSupportCreditInvoiceWithNotArrayAccessModel(): void
     {
         $action = new CreditInvoiceAction();
 
         $this->assertFalse($action->supports(new CreditInvoice(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CreditInvoiceAction();
@@ -64,7 +64,7 @@ class CreditInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldCallKlarnaCreditInvoice()
+    public function testShouldCallKlarnaCreditInvoice(): void
     {
         $details = [
             'invoice_number' => 'invoice number',
@@ -85,7 +85,7 @@ class CreditInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new CreditInvoice($details));
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'invoice_number' => 'invoice number',

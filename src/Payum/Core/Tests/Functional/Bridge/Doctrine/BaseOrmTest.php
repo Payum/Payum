@@ -35,7 +35,7 @@ abstract class BaseOrmTest extends TestCase
         $this->setUpDatabase();
     }
 
-    protected function setUpEntityManager()
+    protected function setUpEntityManager(): void
     {
         $config = new Configuration();
         $config->setAutoGenerateProxyClasses(true);
@@ -59,7 +59,7 @@ abstract class BaseOrmTest extends TestCase
         $this->em = EntityManager::create($connection, $config);
     }
 
-    protected function setUpDatabase()
+    protected function setUpDatabase(): void
     {
         $schemaTool = new SchemaTool($this->em);
         $schemaTool->dropDatabase();

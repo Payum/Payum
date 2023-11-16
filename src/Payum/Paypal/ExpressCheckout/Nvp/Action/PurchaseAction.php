@@ -25,7 +25,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);

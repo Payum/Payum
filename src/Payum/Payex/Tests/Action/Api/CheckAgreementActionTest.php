@@ -33,21 +33,21 @@ class CheckAgreementActionTest extends TestCase
         return $fields;
     }
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CheckAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CheckAgreementAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowOnTryingSetNotAgreementApiAsApi()
+    public function testThrowOnTryingSetNotAgreementApiAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
@@ -56,28 +56,28 @@ class CheckAgreementActionTest extends TestCase
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportCheckAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportCheckAgreementRequestWithArrayAccessAsModel(): void
     {
         $action = new CheckAgreementAction();
 
         $this->assertTrue($action->supports(new CheckAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    public function testShouldNotSupportAnythingNotCheckAgreementRequest()
+    public function testShouldNotSupportAnythingNotCheckAgreementRequest(): void
     {
         $action = new CheckAgreementAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCheckAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckAgreementRequestWithNotArrayAccessModel(): void
     {
         $action = new CheckAgreementAction();
 
         $this->assertFalse($action->supports(new CheckAgreement(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CheckAgreementAction($this->createApiMock());
@@ -88,7 +88,7 @@ class CheckAgreementActionTest extends TestCase
     /**
      * @dataProvider provideRequiredNotEmptyFields
      */
-    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField): void
     {
         $this->expectException(LogicException::class);
         $fields = $this->requiredNotEmptyFields;
@@ -100,7 +100,7 @@ class CheckAgreementActionTest extends TestCase
         $action->execute(new CheckAgreement($fields));
     }
 
-    public function testShouldCheckAgreementAndSetAgreementStatusAsResult()
+    public function testShouldCheckAgreementAndSetAgreementStatusAsResult(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock

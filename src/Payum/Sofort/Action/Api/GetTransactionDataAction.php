@@ -24,7 +24,7 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
     /**
      * @param GetTransactionData $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -12,7 +12,7 @@ use ReflectionProperty;
 
 abstract class AbstractGatewayFactoryTest extends TestCase
 {
-    public function testFactoryImplementsGatewayFactoryInterface()
+    public function testFactoryImplementsGatewayFactoryInterface(): void
     {
         $class = $this->getGatewayFactoryClass();
         $this->assertInstanceOf(GatewayFactoryInterface::class, new $class());
@@ -22,7 +22,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
-    public function testGatewayUsesCoreGatewayFactory()
+    public function testGatewayUsesCoreGatewayFactory(): void
     {
         $class = $this->getGatewayFactoryClass();
 
@@ -31,7 +31,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $this->assertInstanceOf(CoreGatewayFactory::class, $this->getPropertyValue($factory, 'coreGatewayFactory'));
     }
 
-    public function testShouldUseGatewayFactoryPassedAsSecondArgument()
+    public function testShouldUseGatewayFactoryPassedAsSecondArgument(): void
     {
         $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
@@ -44,7 +44,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $this->assertSame($coreGatewayFactory, $ref->getValue($factory));
     }
 
-    public function testShouldAllowCreateGateway()
+    public function testShouldAllowCreateGateway(): void
     {
         $class = $this->getGatewayFactoryClass();
 
@@ -63,7 +63,7 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $this->assertNotEmpty($this->getPropertyValue($extensions, 'extensions'));
     }
 
-    public function testShouldAllowCreateGatewayConfig()
+    public function testShouldAllowCreateGatewayConfig(): void
     {
         $class = $this->getGatewayFactoryClass();
 

@@ -19,7 +19,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

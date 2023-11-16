@@ -24,7 +24,7 @@ class DoCaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwar
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var DoCapture $request */
         RequestNotSupportedException::assertSupports($this, $request);

@@ -78,7 +78,7 @@ class TableGatewayStorage extends AbstractStorage
         $this->idField = $idField;
     }
 
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
@@ -90,7 +90,7 @@ class TableGatewayStorage extends AbstractStorage
         ])->current();
     }
 
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): void
     {
         if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
@@ -104,7 +104,7 @@ class TableGatewayStorage extends AbstractStorage
         }
     }
 
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $this->tableGateway->delete([
             "{$this->idField} = ?" => $this->getModelId($model),

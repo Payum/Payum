@@ -38,14 +38,14 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
 
-    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack(): void
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -81,14 +81,14 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertSame('USD', $details['PAYMENTREQUEST_0_CURRENCYCODE']);
     }
 
-    public function testShouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails(): void
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;

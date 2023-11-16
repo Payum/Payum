@@ -28,7 +28,7 @@ class GetHttpRequestActionTest extends GenericActionTest
         yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    public function testShouldFillRequestDetails()
+    public function testShouldFillRequestDetails(): void
     {
         $action = new GetHttpRequestAction();
 

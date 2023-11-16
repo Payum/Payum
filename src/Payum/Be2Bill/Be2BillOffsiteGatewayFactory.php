@@ -10,7 +10,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 
 class Be2BillOffsiteGatewayFactory extends Be2BillDirectGatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'be2bill_offsite',

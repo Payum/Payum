@@ -23,7 +23,7 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
     /**
      * [@inheritdoc}
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var ManageRecurringPaymentsProfileStatus $request */
         RequestNotSupportedException::assertSupports($this, $request);

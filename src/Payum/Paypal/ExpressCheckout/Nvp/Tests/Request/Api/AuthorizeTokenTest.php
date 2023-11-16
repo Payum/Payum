@@ -10,21 +10,21 @@ use stdClass;
 
 class AuthorizeTokenTest extends TestCase
 {
-    public function testShouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
         $rc = new ReflectionClass(AuthorizeToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    public function testShouldAllowGetDefaultForceSetToFalseByDefault()
+    public function testShouldAllowGetDefaultForceSetToFalseByDefault(): void
     {
         $request = new AuthorizeToken(new stdClass());
 
         $this->assertFalse($request->isForced());
     }
 
-    public function testShouldAllowGetForceSetInConstructor()
+    public function testShouldAllowGetForceSetInConstructor(): void
     {
         $request = new AuthorizeToken(new stdClass(), $force = true);
 

@@ -26,7 +26,7 @@ abstract class AbstractStorage implements StorageInterface
         return $model instanceof $this->modelClass;
     }
 
-    public function update($model)
+    public function update($model): void
     {
         $this->assertModelSupported($model);
 
@@ -46,7 +46,7 @@ abstract class AbstractStorage implements StorageInterface
         return $this->doFind($id);
     }
 
-    public function delete($model)
+    public function delete($model): void
     {
         $this->assertModelSupported($model);
 
@@ -89,7 +89,7 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @throws InvalidArgumentException
      */
-    protected function assertModelSupported($model)
+    protected function assertModelSupported($model): void
     {
         if (false == $this->support($model)) {
             throw new InvalidArgumentException(sprintf(

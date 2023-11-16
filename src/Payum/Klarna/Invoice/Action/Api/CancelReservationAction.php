@@ -13,7 +13,7 @@ class CancelReservationAction extends BaseApiAwareAction
     /**
      * @param CancelReservation $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
