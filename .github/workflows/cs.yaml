@@ -5,7 +5,7 @@ on:
 
 jobs:
   phpstan:
-    name: Unit ( PHP ${{ matrix.php }} + MongoDB )
+    name: PHPStan
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,6 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+          extensions: mongodb, :xdebug
 
       - name: Get composer cache directory
         id: composercache
@@ -33,6 +34,9 @@ jobs:
 
       - name: Install dependencies
         run: composer update
+
+      - name: Install Doctrine Mongodb ODM
+        run: composer require doctrine/mongodb-odm --with-all-dependencies
 
       - name: Run PHPStan
         run: bin/phpstan
