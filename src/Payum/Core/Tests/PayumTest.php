@@ -30,8 +30,11 @@ use Symfony\Component\HttpFoundation\Request;
 final class PayumTest extends TestCase
 {
     private RegistryInterface | MockObject $registryMock;
+
     private HttpRequestVerifierInterface | MockObject $httpRequestVerifierMock;
+
     private GenericTokenFactoryInterface | MockObject $tokenFactoryMock;
+
     private StorageInterface | MockObject $storageMock;
 
     protected function setUp(): void
@@ -346,12 +349,14 @@ HTML,
         $gateway
             ->expects(self::once())
             ->method('execute')
-            ->willReturnCallback(static fn(GetHumanStatus $status) => $status->setModel($paymentMock));
+            ->willReturnCallback(static fn (GetHumanStatus $status) => $status->setModel($paymentMock));
 
         $this->httpRequestVerifierMock
             ->expects(self::once())
             ->method('verify')
-            ->with(['payum_token' => 'foo'])
+            ->with([
+                'payum_token' => 'foo',
+            ])
             ->willReturn($token);
 
         $registry = new SimpleRegistry(
@@ -367,7 +372,9 @@ HTML,
             $this->storageMock,
         );
 
-        $result = $payum->done(['payum_token' => 'foo']);
+        $result = $payum->done([
+            'payum_token' => 'foo',
+        ]);
 
         $this->assertSame($paymentMock, $result);
     }
@@ -388,7 +395,9 @@ HTML,
         $this->httpRequestVerifierMock
             ->expects(self::once())
             ->method('verify')
-            ->with(['payum_token' => 'foo'])
+            ->with([
+                'payum_token' => 'foo',
+            ])
             ->willReturn($token);
 
         $registry = new SimpleRegistry(
@@ -404,7 +413,9 @@ HTML,
             $this->storageMock,
         );
 
-        $response = $payum->notify(['payum_token' => 'foo']);
+        $response = $payum->notify([
+            'payum_token' => 'foo',
+        ]);
 
         $this->assertSame(204, $response->getStatusCode());
     }
@@ -427,7 +438,9 @@ HTML,
         $this->httpRequestVerifierMock
             ->expects(self::once())
             ->method('verify')
-            ->with(['payum_token' => 'foo'])
+            ->with([
+                'payum_token' => 'foo',
+            ])
             ->willReturn($token);
 
         $registry = new SimpleRegistry(
@@ -443,7 +456,9 @@ HTML,
             $this->storageMock,
         );
 
-        $response = $payum->notify(['payum_token' => 'foo']);
+        $response = $payum->notify([
+            'payum_token' => 'foo',
+        ]);
 
         $this->assertSame(400, $response->getStatusCode());
         $this->assertSame('error content', $response->getContent());
@@ -460,7 +475,7 @@ HTML,
         $gateway->expects(self::once())
             ->method('execute')
             ->willThrowException(
-                new class extends Exception implements ReplyInterface {
+                new class() extends Exception implements ReplyInterface {
                 }
             );
 
@@ -471,7 +486,9 @@ HTML,
         $this->httpRequestVerifierMock
             ->expects(self::once())
             ->method('verify')
-            ->with(['payum_token' => 'foo'])
+            ->with([
+                'payum_token' => 'foo',
+            ])
             ->willReturn($token);
 
         $registry = new SimpleRegistry(
@@ -487,6 +504,8 @@ HTML,
             $this->storageMock,
         );
 
-        $payum->notify(['payum_token' => 'foo']);
+        $payum->notify([
+            'payum_token' => 'foo',
+        ]);
     }
 }

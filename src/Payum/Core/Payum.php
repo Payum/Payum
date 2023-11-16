@@ -20,7 +20,6 @@ use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function header;
 
 class Payum implements RegistryInterface
 {
@@ -37,8 +36,7 @@ class Payum implements RegistryInterface
         HttpRequestVerifierInterface $httpRequestVerifier,
         GenericTokenFactoryInterface $tokenFactory,
         StorageInterface             $tokenStorage
-    )
-    {
+    ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
         $this->tokenFactory = $tokenFactory;
