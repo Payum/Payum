@@ -445,8 +445,8 @@ HTML,
 
         $response = $payum->notify(['payum_token' => 'foo']);
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('error content', $response->getContent());
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame('error content', $response->getContent());
     }
 
     public function testShouldThrowExceptionOnNotifyWithError(): void
