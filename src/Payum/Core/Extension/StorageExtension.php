@@ -9,15 +9,18 @@ use Payum\Core\Storage\StorageInterface;
 class StorageExtension implements ExtensionInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<object>
      */
-    protected $storage;
+    protected StorageInterface $storage;
 
     /**
      * @var object[]
      */
-    protected $scheduledForUpdateModels = [];
+    protected array $scheduledForUpdateModels = [];
 
+    /**
+     * @param StorageInterface<object> $storage
+     */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;

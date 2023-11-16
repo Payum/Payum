@@ -62,12 +62,12 @@ class HttpRequestVerifierTest extends TestCase
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
-        $_SERVER['REQUEST_URI'] = 'http://target.com/bar';
+        $this->expectExceptionMessage('The current url https://target.com/bar not match target url http://target.com/foo set in the token.');
+        $_SERVER['REQUEST_URI'] = 'https://target.com/bar';
 
         $token = new Token();
         $token->setHash('theHash');
-        $token->setTargetUrl('http://target.com/foo');
+        $token->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -86,11 +86,11 @@ class HttpRequestVerifierTest extends TestCase
 
     public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify(): void
     {
-        $_SERVER['REQUEST_URI'] = 'http://target.com/foo';
+        $_SERVER['REQUEST_URI'] = 'https://target.com/foo';
 
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/foo');
+        $expectedToken->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -111,11 +111,11 @@ class HttpRequestVerifierTest extends TestCase
 
     public function testShouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify(): void
     {
-        $_SERVER['REQUEST_URI'] = 'http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
+        $_SERVER['REQUEST_URI'] = 'https://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
 
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
+        $expectedToken->setTargetUrl('https://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -177,9 +177,9 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }

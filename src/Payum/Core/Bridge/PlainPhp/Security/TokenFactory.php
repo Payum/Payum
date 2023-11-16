@@ -8,26 +8,24 @@ use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
 class TokenFactory extends AbstractTokenFactory
 {
-    /**
-     * @var HttpUri
-     */
-    protected $baseUrl;
+    protected HttpUri $baseUrl;
 
     /**
-     * @param string                   $baseUrl
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, $baseUrl = null)
+    public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, string $baseUrl = null)
     {
         parent::__construct($tokenStorage, $storageRegistry);
 
         $this->baseUrl = $baseUrl ? HttpUri::createFromString($baseUrl) : HttpUri::createFromServer($_SERVER);
     }
 
-    protected function generateUrl($path, array $parameters = [])
+    protected function generateUrl(string $path, array $parameters = []): string
     {
         $hierarchicalPath = HierarchicalPath::createFromUri($this->baseUrl);
         if ('php' === pathinfo($hierarchicalPath->getBasename(), PATHINFO_EXTENSION)) {

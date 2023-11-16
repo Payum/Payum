@@ -2,11 +2,14 @@
 
 namespace Payum\Core\Bridge\Laminas\Storage;
 
+use Laminas\Db\ResultSet\HydratingResultSet;
 use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 use ReflectionProperty;
+use function method_exists;
 
 /**
  * A Storage class for use with Payum's StorageExtension, which uses Laminas Framework's TableGateway database abstraction
@@ -42,62 +45,70 @@ use ReflectionProperty;
  *                                                           string passed in parameter two of TableGateway above).
  *        },
  *    ]
+ * @template T of object
+ * @extends AbstractStorage<T>
  */
 class TableGatewayStorage extends AbstractStorage
 {
-    /**
-     * @var LaminasTableGateway
-     */
-    protected $tableGateway;
+    protected LaminasTableGateway $tableGateway;
 
-    /**
-     * @var string
-     */
-    protected $idField;
+    protected string $idField;
 
     public function __construct(LaminasTableGateway $tableGateway, string $modelClass, string $idField = 'id')
     {
         parent::__construct($modelClass);
 
         $this->tableGateway = $tableGateway;
-
         $this->idField = $idField;
+        $this->modelClass = $modelClass;
     }
 
+    /**
+     * @param array<string, mixed> $criteria
+     *
+     * @return T[]
+     */
     public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
 
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         return $this->tableGateway->select([
             "{$this->idField} = ?" => $id,
-        ])->current();
+        ]);
     }
 
-    protected function doUpdateModel($model): void
+    protected function doUpdateModel(object $model): object
     {
+        /** @var HydratingResultSet $resultSet */
+        $resultSet = $this->tableGateway->getResultSetPrototype();
+
         if ($id = $this->getModelId($model)) {
             $this->tableGateway->update(
-                $this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model),
+                $resultSet->getHydrator()->extract($model),
                 [
                     "{$this->idField} = ?" => $id,
                 ]
             );
         } else {
-            $this->tableGateway->insert($this->tableGateway->getResultSetPrototype()->getHydrator()->extract($model));
+            $this->tableGateway->insert($resultSet->getHydrator()->extract($model));
         }
+
+        return $model;
     }
 
     protected function doDeleteModel($model): void
     {
-        $this->tableGateway->delete([
-            "{$this->idField} = ?" => $this->getModelId($model),
-        ]);
+        if (method_exists($this->tableGateway, 'delete')) {
+            $this->tableGateway->delete([
+                "{$this->idField} = ?" => $this->getModelId($model),
+            ]);
+        }
     }
 
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): IdentityInterface
     {
         $id = $this->getModelId($model);
 
@@ -109,11 +120,9 @@ class TableGatewayStorage extends AbstractStorage
     }
 
     /**
-     * @param object $model
-     *
-     * @return mixed
+     * @param T $model
      */
-    protected function getModelId($model)
+    protected function getModelId(object $model): mixed
     {
         $rp = new ReflectionProperty($model, $this->idField);
         $rp->setAccessible(true);
