@@ -16,10 +16,10 @@ class ArrayObject extends \ArrayObject
 
     public function __construct($input = [], $flags = 0, $iterator_class = ArrayIterator::class)
     {
-        if ($input instanceof ArrayAccess && false == $input instanceof \ArrayObject) {
+        if ($input instanceof ArrayAccess && ! $input instanceof \ArrayObject) {
             $this->input = $input;
 
-            if (false == $input instanceof Traversable) {
+            if (! $input instanceof Traversable) {
                 throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
@@ -58,7 +58,7 @@ class ArrayObject extends \ArrayObject
      */
     public function replace($input): void
     {
-        if (false == (is_iterable($input))) {
+        if (! (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -74,7 +74,7 @@ class ArrayObject extends \ArrayObject
      */
     public function defaults($input): void
     {
-        if (false == (is_iterable($input))) {
+        if (! (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -126,7 +126,7 @@ class ArrayObject extends \ArrayObject
         $required = is_array($required) ? $required : [$required];
 
         foreach ($required as $required) {
-            if (false == $this->offsetExists($required)) {
+            if (! $this->offsetExists($required)) {
                 if ($throwOnInvalid) {
                     throw new LogicException(sprintf('The %s fields is not set.', $required));
                 }

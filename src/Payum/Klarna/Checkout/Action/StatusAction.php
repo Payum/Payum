@@ -38,7 +38,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
+        if (! $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
             $request->markNew();
 
             return;

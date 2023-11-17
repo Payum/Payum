@@ -27,7 +27,7 @@ class GetExpressCheckoutDetailsAction implements ActionInterface, ApiAwareInterf
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        if (false == $model['TOKEN']) {
+        if (! $model['TOKEN']) {
             throw new LogicException('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         }
 

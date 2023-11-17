@@ -53,8 +53,7 @@ class SimpleRegistry extends AbstractRegistry
      */
     protected function addStorageToGateway($name, GatewayInterface $gateway): void
     {
-        /** @var Gateway $gateway */
-        if (false == $gateway instanceof Gateway) {
+        if (! $gateway instanceof Gateway) {
             return;
         }
         if (isset($this->initializedStorageExtensions[$name])) {

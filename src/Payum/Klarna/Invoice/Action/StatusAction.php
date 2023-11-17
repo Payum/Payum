@@ -44,7 +44,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == $details['status']) {
+        if (! $details['status']) {
             $request->markNew();
 
             return;

@@ -52,7 +52,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == ($model['card'] || $model['customer'])) {
+        if (! ($model['card'] || $model['customer'])) {
             throw new LogicException('The either card token or customer id has to be set.');
         }
 

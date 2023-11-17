@@ -29,7 +29,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $transactionIndex = 'PAYMENTREQUEST_' . $request->getPaymentRequestN() . '_TRANSACTIONID';
-        if (false == $model[$transactionIndex]) {
+        if (! $model[$transactionIndex]) {
             throw new LogicException($transactionIndex . ' must be set.');
         }
 

@@ -19,7 +19,7 @@ class FetchOrderAction extends BaseApiAwareAction
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['location']) {
+        if (! $model['location']) {
             throw new LogicException('Location has to be provided to fetch an order');
         }
 

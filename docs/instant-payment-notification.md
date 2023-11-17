@@ -28,7 +28,7 @@ class PaymentStatusExtension implements ExtensionInterface
     public function onPostExecute(Context $context)
     {
         $request = $context->getRequest();
-        if (false == $request instanceof Generic) {
+        if (! $request instanceof Generic) {
             return;
         }
         if ($request instanceof GetStatusInterface) {
@@ -36,7 +36,7 @@ class PaymentStatusExtension implements ExtensionInterface
         }
 
         $payment = $request->getModel();
-        if (false == $payment instanceof PaymentInterface) {
+        if (! $payment instanceof PaymentInterface) {
             return;
         }
 

@@ -23,7 +23,7 @@ class GetTokenAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        if (false == $token = $this->tokenStorage->find($request->getHash())) {
+        if (! $token = $this->tokenStorage->find($request->getHash())) {
             throw new LogicException(sprintf('The token %s could not be found', $request->getHash()));
         }
 

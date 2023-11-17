@@ -20,7 +20,7 @@ class GetPayoutStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['ACK']) {
+        if (! $model['ACK']) {
             $request->markNew();
 
             return;

@@ -27,14 +27,14 @@ class StorageExtension implements ExtensionInterface
     {
         $request = $context->getRequest();
 
-        if (false == $request instanceof ModelAggregateInterface) {
+        if (! $request instanceof ModelAggregateInterface) {
             return;
         }
 
         if ($request->getModel() instanceof IdentityInterface) {
             /** @var IdentityInterface $identity */
             $identity = $request->getModel();
-            if (false == $model = $this->storage->find($identity)) {
+            if (! $model = $this->storage->find($identity)) {
                 return;
             }
 
@@ -56,7 +56,7 @@ class StorageExtension implements ExtensionInterface
             $this->scheduleForUpdateIfSupported($request->getModel());
         }
 
-        if (false == $context->getPrevious()) {
+        if (! $context->getPrevious()) {
             foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
                 $this->storage->update($model);
                 unset($this->scheduledForUpdateModels[$modelHash]);

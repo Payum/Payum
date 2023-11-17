@@ -36,7 +36,7 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
 
     public function supports($request)
     {
-        if (false == ($request instanceof Cancel && $request->getModel() instanceof ArrayAccess)) {
+        if (! ($request instanceof Cancel && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 

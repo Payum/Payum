@@ -31,11 +31,11 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
 
     public function verify($httpRequest)
     {
-        if (false == is_array($httpRequest)) {
+        if (! is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
         }
 
-        if (false == isset($httpRequest[$this->tokenParameter])) {
+        if (! isset($httpRequest[$this->tokenParameter])) {
             throw new InvalidArgumentException(sprintf('Token parameter `%s` was not found in in the http request.', $this->tokenParameter));
         }
 
@@ -43,7 +43,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             return $httpRequest[$this->tokenParameter];
         }
 
-        if (false == $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
+        if (! $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
             throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$this->tokenParameter]));
         }
 

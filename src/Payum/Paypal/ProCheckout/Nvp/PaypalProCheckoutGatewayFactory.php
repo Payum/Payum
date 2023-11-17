@@ -23,7 +23,7 @@ class PaypalProCheckoutGatewayFactory extends GatewayFactory
             'payum.action.status' => new StatusAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',

@@ -57,7 +57,7 @@ class FilesystemStorage extends AbstractStorage
     {
         $ro = new ReflectionObject($model);
 
-        if (false == $ro->hasProperty($this->idProperty)) {
+        if (! $ro->hasProperty($this->idProperty)) {
             $model->{$this->idProperty} = null;
         }
 
@@ -65,7 +65,7 @@ class FilesystemStorage extends AbstractStorage
         $rp->setAccessible(true);
 
         $id = $rp->getValue($model);
-        if (false == $id) {
+        if (! $id) {
             $rp->setValue($model, $id = uniqid());
         }
 
@@ -91,7 +91,7 @@ class FilesystemStorage extends AbstractStorage
         $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
-        if (false == $id = $rp->getValue($model)) {
+        if (! $id = $rp->getValue($model)) {
             throw new LogicException('The model must be persisted before usage of this method');
         }
 

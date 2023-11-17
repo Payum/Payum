@@ -177,7 +177,7 @@ class PermissionExtension implements ExtensionInterface
     {
         $request = $context->getRequest();
         
-        if (false == in_array('ROLE_CUSTOMER', $request->getModel()->getRoles())) {
+        if (! in_array('ROLE_CUSTOMER', $request->getModel()->getRoles())) {
             throw new Exception('The user does not have the required roles.');
         }
 

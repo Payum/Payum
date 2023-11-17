@@ -325,7 +325,7 @@ class Api
             'signature',
         ]);
 
-        if (false == is_bool($options['sandbox'])) {
+        if (! is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
@@ -341,16 +341,16 @@ class Api
      */
     public function setExpressCheckout(array $fields)
     {
-        if (false == isset($fields['RETURNURL'])) {
-            if (false == $this->options['return_url']) {
+        if (! isset($fields['RETURNURL'])) {
+            if (! $this->options['return_url']) {
                 throw new RuntimeException('The return_url must be set either to FormRequest or to options.');
             }
 
             $fields['RETURNURL'] = $this->options['return_url'];
         }
 
-        if (false == isset($fields['CANCELURL'])) {
-            if (false == $this->options['cancel_url']) {
+        if (! isset($fields['CANCELURL'])) {
+            if (! $this->options['cancel_url']) {
                 throw new RuntimeException('The cancel_url must be set either to FormRequest or to options.');
             }
 
@@ -589,7 +589,7 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 

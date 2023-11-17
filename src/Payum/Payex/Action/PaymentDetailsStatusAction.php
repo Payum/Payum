@@ -139,7 +139,7 @@ class PaymentDetailsStatusAction implements ActionInterface
 
     public function supports($request)
     {
-        if (false == (
+        if (! (
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess
         )) {
@@ -156,6 +156,6 @@ class PaymentDetailsStatusAction implements ActionInterface
             return true;
         }
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        return isset($model['autoPay']) && false == $model['autoPay'];
+        return isset($model['autoPay']) && ! $model['autoPay'];
     }
 }

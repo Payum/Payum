@@ -25,11 +25,11 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['rno']) {
+        if (! $details['rno']) {
             $this->gateway->execute(new Authorize($details));
         }
 
-        if ($details['rno'] && false == $details['invoice_number']) {
+        if ($details['rno'] && ! $details['invoice_number']) {
             $this->gateway->execute(new Activate($details));
         }
     }

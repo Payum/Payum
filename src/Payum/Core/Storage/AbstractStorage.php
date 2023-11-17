@@ -91,7 +91,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     protected function assertModelSupported($model): void
     {
-        if (false == $this->support($model)) {
+        if (! $this->support($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,

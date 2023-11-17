@@ -22,7 +22,7 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['PROFILEID']) {
+        if (! $model['PROFILEID']) {
             return;
         }
 
@@ -31,12 +31,12 @@ class RecurringPaymentDetailsSyncAction implements ActionInterface, GatewayAware
 
     public function supports($request)
     {
-        if (false == $request instanceof Sync) {
+        if (! $request instanceof Sync) {
             return false;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return false;
         }
 

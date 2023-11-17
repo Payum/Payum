@@ -28,7 +28,7 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
             }
         }
 
-        if (false == $model['PROFILESTATUS'] && false == $model['STATUS']) {
+        if (! $model['PROFILESTATUS'] && ! $model['STATUS']) {
             $request->markNew();
 
             return;
@@ -81,12 +81,12 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
 
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
+        if (! $request instanceof GetStatusInterface) {
             return false;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return false;
         }
 
