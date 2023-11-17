@@ -52,7 +52,7 @@ class DynamicRegistry implements RegistryInterface
         return [];
     }
 
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         if (array_key_exists($name, $this->gateways)) {
             return $this->gateways[$name];
@@ -75,7 +75,7 @@ class DynamicRegistry implements RegistryInterface
         throw new InvalidArgumentException(sprintf('Gateway "%s" does not exist.', $name));
     }
 
-    public function getGateways()
+    public function getGateways(): array
     {
         // @deprecated It will return empty array here
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {

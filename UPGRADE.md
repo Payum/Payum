@@ -7,6 +7,10 @@
 * `Payum\Core\Action\GetCurrencyAction` does not accept any constructor arguments anymore and uses alcohol/iso4217 by default
 * Support for Propel storage has been removed
 * The `Payum\Core\Bridge\Guzzle\HttpClient` and `Payum\Core\Bridge\Guzzle\HttpClientFactory` classes have been removed
+* The signatures in `src/Payum/Core/Registry/GatewayRegistryInterface.php` has been changed to add strict types.
+  * Any custom class implementing this interface should update their signature. The new signatures are:
+    * `public function getGateway(string $name): GatewayInterface;`
+    * `public function getGateways(): array;`
 
 ## 1.5.0
 
