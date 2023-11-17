@@ -6,6 +6,7 @@
 * Twig 1.x is no longer supported
 * `Payum\Core\Action\GetCurrencyAction` does not accept any constructor arguments anymore and uses alcohol/iso4217 by default
 * Support for Propel storage has been removed
+* The `Payum\Core\Bridge\Guzzle\HttpClient` and `Payum\Core\Bridge\Guzzle\HttpClientFactory` classes have been removed
 
 ## 1.5.0
 
