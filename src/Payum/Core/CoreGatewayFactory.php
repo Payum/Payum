@@ -14,7 +14,6 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Http\Message\StreamFactory\DiactorosStreamFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
 use LogicException;
 use Nyholm\Psr7\Factory\HttplugFactory;
@@ -77,7 +76,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new GuzzleMessageFactory();
                 }
 
-                if (class_exists(\Laminas\Diactoros\Request::class) || class_exists(\Zend\Diactoros\Request::class)) {
+                if (class_exists(\Laminas\Diactoros\Request::class)) {
                     return new DiactorosMessageFactory();
                 }
 
@@ -85,7 +84,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory' => function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
@@ -96,15 +95,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new GuzzleStreamFactory();
                 }
 
-                if (class_exists(\Zend\Diactoros\Request::class)) {
-                    return new DiactorosStreamFactory();
-                }
-
                 if (class_exists(\Nyholm\Psr7\Request::class)) {
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
             'httplug.client' => function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {

@@ -107,7 +107,7 @@ layout:
   * [Payment done controller](silex/payment-done-controller.md)
 * #### Symfony JMS Payment Bridge
   * [Get started. Capture](jms-payment-bridge/get-it-started.md)
-* #### [Zend Payum Module (External)](https://github.com/Payum/PayumModule)
+* #### [Laminas Payum Module (External)](https://github.com/Payum/PayumModule)
 * #### [Yii Payum Extension (External)](https://github.com/Payum/PayumYiiExtension)
 * #### [Omnipay Bridge (External)](https://github.com/Payum/OmnipayBridge)
 * #### [Payum Server (External)](https://github.com/Payum/PayumServer)
