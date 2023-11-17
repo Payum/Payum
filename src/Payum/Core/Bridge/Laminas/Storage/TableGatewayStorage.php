@@ -2,13 +2,11 @@
 
 namespace Payum\Core\Bridge\Laminas\Storage;
 
-use InvalidArgumentException;
 use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
 use ReflectionProperty;
-use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 
 /**
  * A Storage class for use with Payum's StorageExtension, which uses Laminas Framework's TableGateway database abstraction
@@ -48,7 +46,7 @@ use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
 class TableGatewayStorage extends AbstractStorage
 {
     /**
-     * @var LaminasTableGateway|ZendTableGateway
+     * @var LaminasTableGateway
      */
     protected $tableGateway;
 
@@ -57,23 +55,11 @@ class TableGatewayStorage extends AbstractStorage
      */
     protected $idField;
 
-    /**
-     * @param LaminasTableGateway|ZendTableGateway $tableGateway
-     * @param string $modelClass
-     * @param string $idField
-     */
-    public function __construct($tableGateway, $modelClass, $idField = 'id')
+    public function __construct(LaminasTableGateway $tableGateway, string $modelClass, string $idField = 'id')
     {
         parent::__construct($modelClass);
 
-        if ($tableGateway instanceof LaminasTableGateway) {
-            $this->tableGateway = $tableGateway;
-        } elseif ($tableGateway instanceof ZendTableGateway) {
-            @trigger_error(sprintf('Passing an instance of %s as the first argument to %s is deprecated and won\'t be supported in 2.0. Please using Laminas instead.', ZendTableGateway::class, self::class));
-            $this->tableGateway = $tableGateway;
-        } else {
-            throw new InvalidArgumentException(sprintf('Argument $tableGateway of %s must be an instance of %s or %s, %s given.', self::class, LaminasTableGateway::class, ZendTableGateway::class, (get_debug_type($tableGateway))));
-        }
+        $this->tableGateway = $tableGateway;
 
         $this->idField = $idField;
     }

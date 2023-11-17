@@ -201,47 +201,7 @@ parameters:
 			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
 
 		-
-			message: "#^Call to method delete\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Call to method getResultSetPrototype\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 2
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Call to method insert\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Call to method select\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Call to method update\\(\\) on an unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Class Zend\\\\Db\\\\TableGateway\\\\TableGateway not found\\.$#"
-			count: 3
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:findBy\\(\\) has parameter \\$criteria with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Parameter \\$tableGateway of method Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:__construct\\(\\) has invalid type Zend\\\\Db\\\\TableGateway\\\\TableGateway\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Laminas\\\\Storage\\\\TableGatewayStorage\\:\\:\\$tableGateway has unknown class Zend\\\\Db\\\\TableGateway\\\\TableGateway as its type\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php
 

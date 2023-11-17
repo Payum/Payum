@@ -5,7 +5,7 @@
 * [PayumBundle](./#symfony-payum-bundle) for [Symfony2](http://symfony.com/).
 * [PayumSilexProvider](./#silex-payum-provider) for [Silex](http://silex.sensiolabs.org/)
 * [PayumLaravelPackage](./#laravel-payum-package) for [Laravel](http://laravel.com/)
-* [PayumModule](./#zend-payum-module-external) for [Zend2](http://framework.zend.com/)
+* [PayumModule](./#laminas-payum-module-external) for [Laminas](https://getlaminas.org/)
 * [PayumYiiExtension](./#yii-payum-extension-external) for [Yii](http://www.yiiframework.com/)
 
 ### Storages
