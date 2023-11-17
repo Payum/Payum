@@ -7,16 +7,9 @@ use Payum\Core\Model\CreditCardInterface;
 
 class ObtainCreditCard extends Generic
 {
-    /**
-     * @var CreditCardInterface
-     */
-    protected $creditCard;
+    protected ?CreditCardInterface $creditCard = null;
 
-    /**
-     * @param object|null $firstModel
-     * @param object|null $currentModel
-     */
-    public function __construct($firstModel = null, $currentModel = null)
+    public function __construct(?object $firstModel = null, ?object $currentModel = null)
     {
         parent::__construct($firstModel);
 
@@ -28,12 +21,9 @@ class ObtainCreditCard extends Generic
         $this->creditCard = $creditCard;
     }
 
-    /**
-     * @return CreditCardInterface
-     */
-    public function obtain()
+    public function obtain(): ?CreditCardInterface
     {
-        if (false == $this->creditCard) {
+        if (! $this->creditCard) {
             throw new LogicException('Credit card could not be obtained. It has to be set before obtain.');
         }
 

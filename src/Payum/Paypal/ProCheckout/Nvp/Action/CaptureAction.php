@@ -43,7 +43,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         }
 
         $cardFields = ['ACCT', 'CVV2', 'EXPDATE'];
-        if (false == $model->validateNotEmpty($cardFields, false)) {
+        if (! $model->validateNotEmpty($cardFields, false)) {
             try {
                 $obtainCreditCard = new ObtainCreditCard($request->getToken());
                 $obtainCreditCard->setModel($request->getFirstModel());

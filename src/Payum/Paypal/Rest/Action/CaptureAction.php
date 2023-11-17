@@ -62,7 +62,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
             'paypal' == $payment->payer->payment_method
         ) {
@@ -80,7 +80,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
             'credit_card' == $payment->payer->payment_method
         ) {
@@ -92,7 +92,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            true == isset($payment->state) &&
+            isset($payment->state) &&
             isset($payment->payer->payment_method) &&
             'paypal' == $payment->payer->payment_method
         ) {

@@ -63,12 +63,12 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 
     protected function addMerchantId(ArrayAccess $details): void
     {
-        if (false == isset($details['merchant'])) {
+        if (! isset($details['merchant'])) {
             $details['merchant'] = [];
         }
 
         $merchant = $details['merchant'];
-        if (false == isset($merchant['id'])) {
+        if (! isset($merchant['id'])) {
             $merchant['id'] = (string) $this->config->merchantId;
         }
 

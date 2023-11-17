@@ -25,7 +25,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
 
     public function verify($httpRequest)
     {
-        if (false == $httpRequest instanceof Request) {
+        if (! $httpRequest instanceof Request) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid request given. Expected %s but it is %s',
                 Request::class,
@@ -40,7 +40,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         if ($hash instanceof TokenInterface) {
             $token = $hash;
         } else {
-            if (false == $token = $this->tokenStorage->find($hash)) {
+            if (! $token = $this->tokenStorage->find($hash)) {
                 throw new NotFoundHttpException(sprintf('A token with hash `%s` could not be found.', $hash));
             }
 

@@ -591,7 +591,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldRegisterOmnipayV3Factories(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -610,7 +610,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldInjectCoreGatewayFactoryToOmnipayV3Factory(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -634,7 +634,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldInjectExpectedOmnipayV3GatewayInstanceAsApi(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 

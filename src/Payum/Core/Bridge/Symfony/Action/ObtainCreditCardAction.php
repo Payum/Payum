@@ -28,7 +28,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     protected $formFactory;
 
     /**
-     * @var Request
+     * @var ?Request
      */
     protected $httpRequest;
 
@@ -83,7 +83,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
             }
         }
 
-        if (false == $httpRequest) {
+        if (! $httpRequest) {
             throw new LogicException('The action can be run only when http request is set.');
         }
 

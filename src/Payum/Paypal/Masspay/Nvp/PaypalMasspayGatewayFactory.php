@@ -23,7 +23,7 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
             'payum.action.get_payout_status' => new GetPayoutStatusAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',

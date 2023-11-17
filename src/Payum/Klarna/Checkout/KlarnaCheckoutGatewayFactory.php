@@ -48,7 +48,7 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.fetch_order' => new FetchOrderAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'merchant_id' => '',
                 'secret' => '',

@@ -19,7 +19,7 @@ class CreditCardExpirationDateType extends AbstractType
             }
 
             $style = 'display:none';
-            if (false == empty($view['day']->vars['attr']['style'])) {
+            if (! empty($view['day']->vars['attr']['style'])) {
                 $style = $view['day']->vars['attr']['style'] . '; ' . $style;
             }
 

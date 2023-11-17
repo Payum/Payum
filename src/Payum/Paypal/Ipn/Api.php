@@ -46,7 +46,7 @@ class Api
 
         $this->options = $options;
 
-        if (false == (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
+        if (! (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
@@ -66,7 +66,7 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 

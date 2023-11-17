@@ -20,7 +20,7 @@ class LoggerExtensionTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        if (false == interface_exists(LoggerInterface::class)) {
+        if (! interface_exists(LoggerInterface::class)) {
             throw new SkippedTestError('To run these tests install psr log lib.');
         }
     }

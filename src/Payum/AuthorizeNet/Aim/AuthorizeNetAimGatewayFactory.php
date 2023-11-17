@@ -26,7 +26,7 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'login_id' => '',
                 'transaction_key' => '',

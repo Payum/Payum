@@ -42,7 +42,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
             return;
         }
 
-        if (false == $model->validateNotEmpty(['card_num', 'exp_date'], false)) {
+        if (! $model->validateNotEmpty(['card_num', 'exp_date'], false)) {
             try {
                 $obtainCreditCard = new ObtainCreditCard($request->getToken());
                 $obtainCreditCard->setModel($request->getFirstModel());

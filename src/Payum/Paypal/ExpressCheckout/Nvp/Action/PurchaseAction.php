@@ -45,12 +45,12 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             return;
         }
 
-        if (false == $details['TOKEN']) {
-            if (false == $details['RETURNURL'] && $request->getToken()) {
+        if (! $details['TOKEN']) {
+            if (! $details['RETURNURL'] && $request->getToken()) {
                 $details['RETURNURL'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $details['CANCELURL'] && $request->getToken()) {
+            if (! $details['CANCELURL'] && $request->getToken()) {
                 $details['CANCELURL'] = $request->getToken()->getTargetUrl();
             }
 
@@ -94,7 +94,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
         }
 
-        if (false == $details['PAYERID']) {
+        if (! $details['PAYERID']) {
             $this->gateway->execute(new AuthorizeToken($details));
         }
 

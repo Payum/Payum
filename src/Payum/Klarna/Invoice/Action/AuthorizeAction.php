@@ -24,7 +24,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['rno']) {
+        if (! $details['rno']) {
             $this->gateway->execute(new ReserveAmount($details));
         }
     }

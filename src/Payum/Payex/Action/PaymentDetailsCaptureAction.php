@@ -27,21 +27,21 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['returnUrl'] && $request->getToken()) {
+        if (! $details['returnUrl'] && $request->getToken()) {
             $details['returnUrl'] = $request->getToken()->getTargetUrl();
         }
 
-        if (false == $details['cancelUrl'] && $request->getToken()) {
+        if (! $details['cancelUrl'] && $request->getToken()) {
             $details['cancelUrl'] = $request->getToken()->getTargetUrl();
         }
 
-        if (false == $details['clientIPAddress']) {
+        if (! $details['clientIPAddress']) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
 
             $details['clientIPAddress'] = $httpRequest->clientIp;
         }
 
-        if (false == $details['orderRef']) {
+        if (! $details['orderRef']) {
             $this->gateway->execute(new InitializeOrder($details));
         }
 
@@ -56,7 +56,7 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
 
     public function supports($request)
     {
-        if (false == (
+        if (! (
             $request instanceof Capture &&
             $request->getModel() instanceof ArrayAccess
         )) {
@@ -69,6 +69,6 @@ class PaymentDetailsCaptureAction implements ActionInterface, GatewayAwareInterf
             return true;
         }
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        return false == $model['autoPay'];
+        return ! $model['autoPay'];
     }
 }

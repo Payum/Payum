@@ -175,7 +175,7 @@ class CreditCard implements CreditCardInterface
     {
         $date = SensitiveValue::ensureSensitive($date);
 
-        if (false == (null === $date->peek() || $date->peek() instanceof DateTime)) {
+        if (! (null === $date->peek() || $date->peek() instanceof DateTime)) {
             throw new InvalidArgumentException('The date argument must be either instance of DateTime or null');
         }
 

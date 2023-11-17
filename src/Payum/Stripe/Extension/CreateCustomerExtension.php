@@ -21,12 +21,12 @@ class CreateCustomerExtension implements ExtensionInterface
     {
         /** @var Capture $request */
         $request = $context->getRequest();
-        if (false == $request instanceof Capture) {
+        if (! $request instanceof Capture) {
             return;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return;
         }
 
@@ -48,12 +48,12 @@ class CreateCustomerExtension implements ExtensionInterface
         $model = null;
         /** @var Capture $request */
         $request = $context->getRequest();
-        if (false == $request instanceof ObtainToken) {
+        if (! $request instanceof ObtainToken) {
             return;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return;
         }
 
@@ -65,12 +65,12 @@ class CreateCustomerExtension implements ExtensionInterface
         if ($model['customer']) {
             return;
         }
-        if (false == ($model['card'] && is_string($model['card']))) {
+        if (! ($model['card'] && is_string($model['card']))) {
             return;
         }
 
         $local = $model->getArray('local');
-        if (false == $local['save_card']) {
+        if (! $local['save_card']) {
             return;
         }
 

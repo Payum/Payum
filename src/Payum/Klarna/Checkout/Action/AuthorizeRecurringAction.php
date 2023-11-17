@@ -100,12 +100,12 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
 
     public function supports($request)
     {
-        if (false == ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
+        if (! ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        return false == $model['recurring'] && $model['recurring_token'];
+        return ! $model['recurring'] && $model['recurring_token'];
     }
 }

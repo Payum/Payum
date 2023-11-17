@@ -16,7 +16,7 @@ abstract class BaseOrder extends Generic
 
     public function __construct($model)
     {
-        if (false == (is_array($model) || $model instanceof ArrayAccess)) {
+        if (! (is_array($model) || $model instanceof ArrayAccess)) {
             throw new InvalidArgumentException('Given model is invalid. Should be an array or ArrayAccess instance.');
         }
 

@@ -28,7 +28,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
             'payum.action.api.create_button_payment' => new CreateButtonPaymentAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',

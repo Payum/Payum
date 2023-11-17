@@ -30,7 +30,7 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['transaction_id']) {
+        if (! $details['transaction_id']) {
             throw new LogicException('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         }
 

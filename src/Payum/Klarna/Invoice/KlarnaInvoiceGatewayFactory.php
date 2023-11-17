@@ -66,7 +66,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
             'payum.action.api.update' => new UpdateAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'eid' => '',
                 'secret' => '',

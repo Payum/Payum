@@ -81,8 +81,8 @@ class Gateway implements GatewayInterface
         try {
             $this->extensions->onPreExecute($context);
 
-            if (false == $context->getAction()) {
-                if (false == $action = $this->findActionSupported($context->getRequest())) {
+            if (! $context->getAction()) {
+                if (! $action = $this->findActionSupported($context->getRequest())) {
                     throw RequestNotSupportedException::create($context->getRequest());
                 }
 
@@ -173,7 +173,7 @@ class Gateway implements GatewayInterface
                     }
                 }
 
-                if (false == $apiSet) {
+                if (! $apiSet) {
                     throw new LogicException(sprintf('Cannot find right api for the action %s', $action::class), 0, $unsupportedException);
                 }
             }

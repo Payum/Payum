@@ -43,7 +43,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            false == $model['PAYERID'] &&
+            ! $model['PAYERID'] &&
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
         ) {
             $request->markPending();
@@ -64,7 +64,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            false == $model['CHECKOUTSTATUS'] ||
+            ! $model['CHECKOUTSTATUS'] ||
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
         ) {
             $request->markNew();
@@ -176,15 +176,15 @@ class PaymentDetailsStatusAction implements ActionInterface
 
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
+        if (! $request instanceof GetStatusInterface) {
             return false;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return false;
         }
 
-        return false == isset($model['BILLINGPERIOD']);
+        return ! isset($model['BILLINGPERIOD']);
     }
 }

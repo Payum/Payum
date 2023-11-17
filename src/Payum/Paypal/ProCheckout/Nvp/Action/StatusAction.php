@@ -29,7 +29,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == is_numeric($model['RESULT'])) {
+        if (! is_numeric($model['RESULT'])) {
             $request->markUnknown();
 
             return;

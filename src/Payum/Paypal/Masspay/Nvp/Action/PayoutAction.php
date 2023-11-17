@@ -24,7 +24,7 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['ACK']) {
+        if (! $model['ACK']) {
             $this->gateway->execute(new Masspay($model));
         }
     }

@@ -50,7 +50,7 @@ class Context
     }
 
     /**
-     * @return ActionInterface
+     * @return ?ActionInterface
      */
     public function getAction()
     {

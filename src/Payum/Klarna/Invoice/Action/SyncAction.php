@@ -24,7 +24,7 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['rno'] && false == $details['invoice_number']) {
+        if ($details['rno'] && ! $details['invoice_number']) {
             $this->gateway->execute(new CheckOrderStatus($request->getModel()));
         }
     }

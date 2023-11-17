@@ -195,7 +195,7 @@ class Api
             'tender',
         ]);
 
-        if (false == is_bool($options['sandbox'])) {
+        if (! is_bool($options['sandbox'])) {
             throw new LogicException('The boolean sandbox option must be set.');
         }
 
@@ -245,7 +245,7 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 

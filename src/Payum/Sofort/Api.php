@@ -71,7 +71,7 @@ class Api
         $sofort->setSuccessUrl($fields['success_url'], $fields['success_link_redirect']);
         $sofort->setAbortUrl($fields['abort_url']);
 
-        if (false == $this->options['disable_notification']) {
+        if (! $this->options['disable_notification']) {
             $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
         }
 

@@ -251,22 +251,12 @@ parameters:
 			path: src/Payum/Core/Bridge/PlainPhp/Security/TokenFactory.php
 
 		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Psr/Log/LogExecutedActionsExtension.php
-
-		-
 			message: "#^Class Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject extends generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
 
 		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
-			count: 2
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^If condition is always false\\.$#"
 			count: 2
 			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
 
@@ -374,16 +364,6 @@ parameters:
 			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
-
-		-
-			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Action/ObtainCreditCardAction.php
-
-		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Action/ObtainCreditCardAction.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Action\\\\RenderTemplateAction\\:\\:__construct\\(\\) has parameter \\$layout with no type specified\\.$#"
@@ -501,16 +481,6 @@ parameters:
 			path: src/Payum/Core/Bridge/Twig/TwigFactory.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Twig/TwigUtil.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Twig\\\\TwigUtil\\:\\:\\$storage with generic class SplObjectStorage does not specify its types\\: TObject, TData$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Twig/TwigUtil.php
-
-		-
 			message: "#^Instantiated class Nyholm\\\\Psr7\\\\Factory\\\\HttplugFactory not found\\.$#"
 			count: 2
 			path: src/Payum/Core/CoreGatewayFactory.php
@@ -594,11 +564,6 @@ parameters:
 			message: "#^Call to an undefined method Payum\\\\Core\\\\Model\\\\ModelAggregateInterface\\:\\:setModel\\(\\)\\.$#"
 			count: 1
 			path: src/Payum/Core/Extension/StorageExtension.php
-
-		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/Gateway.php
 
 		-
 			message: "#^Invalid type Payum\\\\Core\\\\Reply\\\\ReplyInterface to throw\\.$#"
@@ -901,11 +866,6 @@ parameters:
 			path: src/Payum/Core/PayumBuilder.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 2
 			path: src/Payum/Core/PayumBuilder.php
@@ -1021,11 +981,6 @@ parameters:
 			path: src/Payum/Core/Registry/DynamicRegistry.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/Registry/SimpleRegistry.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Registry\\\\SimpleRegistry\\:\\:getService\\(\\) should return object but returns string\\.$#"
 			count: 1
 			path: src/Payum/Core/Registry/SimpleRegistry.php
@@ -1129,11 +1084,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Request\\\\GetStatusInterface\\:\\:markUnknown\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Request/GetStatusInterface.php
-
-		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Core/Request/ObtainCreditCard.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Request\\\\RenderTemplate\\:\\:__construct\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
@@ -3609,16 +3559,6 @@ parameters:
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\ObtainTokenForCreditCardAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/ObtainTokenForCreditCardAction.php
-
-		-
-			message: "#^If condition is always false\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Extension/CreateCustomerExtension.php
 
 		-
 			message: "#^Instanceof between Payum\\\\Core\\\\Request\\\\Capture and Payum\\\\Stripe\\\\Request\\\\Api\\\\ObtainToken will always evaluate to false\\.$#"

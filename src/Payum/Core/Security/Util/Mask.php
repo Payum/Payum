@@ -16,7 +16,7 @@ class Mask
         $maskSymbol = $maskSymbol ?: 'X';
         $showLast = max(0, $showLast);
 
-        if (mb_strlen($value) <= ($showLast + 1) * 2 || false == $showLast) {
+        if (mb_strlen($value) <= ($showLast + 1) * 2 || ! $showLast) {
             $showRegExpPart = '';
         } else {
             $showRegExpPart = "(?!(.){0,${showLast}}$)";

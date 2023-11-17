@@ -137,7 +137,7 @@ class Api
             'signature',
         ]);
 
-        if (false == is_bool($options['sandbox'])) {
+        if (! is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
@@ -155,8 +155,8 @@ class Api
      */
     public function doCreateButton(array $fields)
     {
-        if (false == isset($fields['return'])) {
-            if (false == $this->options['return']) {
+        if (! isset($fields['return'])) {
+            if (! $this->options['return']) {
                 throw new RuntimeException('The return must be set either to FormRequest or to options.');
             }
 
@@ -223,7 +223,7 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 

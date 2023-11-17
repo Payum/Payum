@@ -64,7 +64,7 @@ class AgreementDetailsStatusAction implements ActionInterface
             $request->getModel() instanceof ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&
-            false == $request->getModel()->offsetExists('orderId')
+            ! $request->getModel()->offsetExists('orderId')
         ;
     }
 }
