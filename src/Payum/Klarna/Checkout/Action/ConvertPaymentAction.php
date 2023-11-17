@@ -21,7 +21,7 @@ class ConvertPaymentAction implements ActionInterface
         $payment = $request->getSource();
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
-        if ('SEK' == $payment->getCurrencyCode()) {
+        if ('SEK' === $payment->getCurrencyCode()) {
             $details['cart'] = [
                 'items' => [[
                     'reference' => $payment->getNumber(),
@@ -46,7 +46,7 @@ class ConvertPaymentAction implements ActionInterface
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            'array' == $request->getTo()
+            'array' === $request->getTo()
         ;
     }
 }

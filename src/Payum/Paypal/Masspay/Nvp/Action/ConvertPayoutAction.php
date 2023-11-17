@@ -51,7 +51,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
-            'array' == $request->getTo()
+            'array' === $request->getTo()
         ;
     }
 }

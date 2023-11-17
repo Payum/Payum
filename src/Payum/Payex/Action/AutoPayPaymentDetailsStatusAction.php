@@ -35,8 +35,8 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            AgreementApi::PURCHASEOPERATION_SALE == $model['purchaseOperation'] &&
-            OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']
+            AgreementApi::PURCHASEOPERATION_SALE === $model['purchaseOperation'] &&
+            OrderApi::TRANSACTIONSTATUS_SALE === $model['transactionStatus']
         ) {
             $request->markCaptured();
 
@@ -44,8 +44,8 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            AgreementApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation'] &&
-            OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']
+            AgreementApi::PURCHASEOPERATION_AUTHORIZATION === $model['purchaseOperation'] &&
+            OrderApi::TRANSACTIONSTATUS_AUTHORIZE === $model['transactionStatus']
         ) {
             $request->markCaptured();
 

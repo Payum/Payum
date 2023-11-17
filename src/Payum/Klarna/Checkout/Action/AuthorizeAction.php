@@ -88,7 +88,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
 
         $this->gateway->execute(new Sync($model));
 
-        if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
+        if (Constants::STATUS_CHECKOUT_INCOMPLETE === $model['status']) {
             $renderTemplate = new RenderTemplate($this->templateName, [
                 'snippet' => $model['gui']['snippet'] ?? null,
             ]);

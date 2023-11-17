@@ -3471,11 +3471,6 @@ parameters:
 			path: src/Payum/Sofort/Api.php
 
 		-
-			message: "#^Right side of && is always true\\.$#"
-			count: 1
-			path: src/Payum/Sofort/Api.php
-
-		-
 			message: "#^Class Payum\\\\Sofort\\\\Action\\\\Api\\\\CreateTransactionAction constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 2
 			path: src/Payum/Sofort/Tests/Action/Api/CreateTransactionActionTest.php

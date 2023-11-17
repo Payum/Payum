@@ -24,6 +24,6 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 
     public function supports($request)
     {
-        return 'a request' == $request;
+        return 'a request' === $request;
     }
 }

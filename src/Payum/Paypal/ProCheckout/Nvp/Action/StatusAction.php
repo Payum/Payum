@@ -41,13 +41,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT === $model['TRXTYPE'] && Api::RESULT_SUCCESS === $model['RESULT']) {
             $request->markRefunded();
 
             return;
         }
 
-        if (Api::TRXTYPE_SALE == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+        if (Api::TRXTYPE_SALE === $model['TRXTYPE'] && Api::RESULT_SUCCESS === $model['RESULT']) {
             $request->markCaptured();
 
             return;

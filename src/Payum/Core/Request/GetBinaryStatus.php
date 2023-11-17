@@ -143,6 +143,6 @@ class GetBinaryStatus extends BaseGetStatus
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {
-        return ($expectedStatus | $this->getValue()) == $expectedStatus;
+        return ($expectedStatus | $this->getValue()) === $expectedStatus;
     }
 }

@@ -13,7 +13,7 @@ class CreditCardExpirationDateType extends AbstractType
 {
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        if ('choice' == $options['widget']) {
+        if ('choice' === $options['widget']) {
             if (empty($view['day']->vars['value'])) {
                 $view['day']->vars['value'] = $view['day']->vars['choices'][0]->value;
             }
