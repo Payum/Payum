@@ -92,6 +92,8 @@ class Payum implements RegistryInterface
     }
 
     /**
+     * @param Request|array<string, mixed>|null $request
+     *
      * @throws Exception
      */
     public function capture(Request | array | null $request = null): Response
@@ -116,6 +118,8 @@ class Payum implements RegistryInterface
     }
 
     /**
+     * @param Request|array<string, mixed>|null $request
+     *
      * @throws Exception
      */
     public function done(Request | array | null $request = null): PaymentInterface
@@ -131,6 +135,8 @@ class Payum implements RegistryInterface
     }
 
     /**
+     * @param Request|array<string, mixed>|null $request
+     *
      * @throws Exception
      */
     public function notify(Request | array | null $request = null): Response
