@@ -21,13 +21,13 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var GetTransactionDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null == $model['txn_id']) {
+        if (null === $model['txn_id']) {
             throw new LogicException('TRANSACTIONID must be set.');
         }
 

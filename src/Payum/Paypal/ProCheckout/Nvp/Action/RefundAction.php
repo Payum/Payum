@@ -19,16 +19,16 @@ class RefundAction implements ActionInterface, ApiAwareInterface
      */
     protected $api;
 
-    public function setApi($api)
+    public function setApi($api): void
     {
-        if (false == $api instanceof Api) {
+        if (! $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 
         $this->api = $api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -40,7 +40,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         }
 
         $refundableTrxTypes = [Api::TRXTYPE_SALE, Api::TRXTYPE_DELAYED_CAPUTER, Api::TRXTYPE_VOICE_AUTHORIZATION];
-        if (false == in_array($details['TRXTYPE'], $refundableTrxTypes)) {
+        if (! in_array($details['TRXTYPE'], $refundableTrxTypes)) {
             throw new LogicException(sprintf(
                 'You cannot refund transaction with type %s. Only these types could be refunded: %s',
                 $details['TRXTYPE'],

@@ -26,17 +26,17 @@ class AuthorizeTokenAction implements ActionInterface, ApiAwareInterface
      * @throws LogicException if the token not set in the instruction.
      * @throws HttpRedirect if authorization required.
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var AuthorizeToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        if (false == $model['TOKEN']) {
+        if (! $model['TOKEN']) {
             throw new LogicException('The TOKEN must be set by SetExpressCheckout request but it was not executed or failed. Review payment details model for more information');
         }
 
-        if (false == $model['PAYERID'] || $request->isForced()) {
+        if (! $model['PAYERID'] || $request->isForced()) {
             throw new HttpRedirect(
                 $this->api->getAuthorizeTokenUrl($model['TOKEN'], [
                     'useraction' => $model['AUTHORIZE_TOKEN_USERACTION'],

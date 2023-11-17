@@ -16,14 +16,14 @@ use stdClass;
 
 class GenericTokenFactoryExtensionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(GenericTokenFactoryExtension::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface()
+    public function testShouldSetTokenFactoryToActionImplementsGenericTokenFactoryAwareInterface(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -39,7 +39,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $this->assertSame($tokenFactory, $action->tokenFactory);
     }
 
-    public function testShouldUnsetGenericTokenFactoryOnPostExecute()
+    public function testShouldUnsetGenericTokenFactoryOnPostExecute(): void
     {
         $tokenFactory = $this->createGenericTokenFactoryMock();
 
@@ -56,7 +56,7 @@ class GenericTokenFactoryExtensionTest extends TestCase
         $this->assertNull($action->tokenFactory);
     }
 
-    public function testShouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute()
+    public function testShouldDoNothingIfActionNotImplementsGenericTokenFactoryAwareInterfaceOnPostExecute(): void
     {
         $this->expectNotToPerformAssertions();
 
@@ -101,15 +101,16 @@ class ActionGenericTokenFactoryAware implements ActionInterface, GenericTokenFac
 {
     public $tokenFactory;
 
-    public function execute($request)
+    public function execute($request): void
     {
     }
 
-    public function supports($request)
+    public function supports($request): bool
     {
+        return true;
     }
 
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null): void
     {
         $this->tokenFactory = $genericTokenFactory;
     }

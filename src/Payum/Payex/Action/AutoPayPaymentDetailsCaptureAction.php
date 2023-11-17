@@ -15,7 +15,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -25,7 +25,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 
     public function supports($request)
     {
-        if (false == (
+        if (! (
             $request instanceof Capture &&
                 $request->getModel() instanceof ArrayAccess
         )) {
@@ -35,7 +35,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         //Make sure it is not recurring payment. There is an other capture action for recurring payments;
-        if (true == $model['recurring']) {
+        if ($model['recurring']) {
             return false;
         }
         return (bool) $model['autoPay'];

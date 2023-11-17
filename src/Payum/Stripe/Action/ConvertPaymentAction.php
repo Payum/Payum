@@ -14,7 +14,7 @@ class ConvertPaymentAction implements ActionInterface
     /**
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -46,7 +46,7 @@ class ConvertPaymentAction implements ActionInterface
     {
         return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            'array' == $request->getTo()
+            'array' === $request->getTo()
         ;
     }
 }

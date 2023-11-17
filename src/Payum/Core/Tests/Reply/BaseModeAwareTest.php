@@ -15,35 +15,35 @@ use stdClass;
 
 class BaseModeAwareTest extends TestCase
 {
-    public function testShouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
         $rc = new ReflectionClass(BaseModelAware::class);
 
         $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    public function testShouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface(): void
     {
         $rc = new ReflectionClass(BaseModelAware::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
-    public function testShouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface(): void
     {
         $rc = new ReflectionClass(BaseModelAware::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAggregateInterface::class));
     }
 
-    public function testShouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException(): void
     {
         $rc = new ReflectionClass(BaseModelAware::class);
 
         $this->assertTrue($rc->isSubclassOf(LogicException::class));
     }
 
-    public function testShouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
         $rc = new ReflectionClass(BaseModelAware::class);
 
@@ -63,7 +63,7 @@ class BaseModeAwareTest extends TestCase
     /**
      * @dataProvider provideDifferentPhpTypes
      */
-    public function testShouldAllowSetModelAndGetIt($phpType)
+    public function testShouldAllowSetModelAndGetIt($phpType): void
     {
         $request = new class(123321) extends BaseModelAware {
         };
@@ -76,7 +76,7 @@ class BaseModeAwareTest extends TestCase
     /**
      * @dataProvider provideDifferentPhpTypes
      */
-    public function testShouldAllowGetModelSetInConstructor($phpType)
+    public function testShouldAllowGetModelSetInConstructor($phpType): void
     {
         $request = new class($phpType) extends BaseModelAware {
         };
@@ -84,7 +84,7 @@ class BaseModeAwareTest extends TestCase
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    public function testShouldConvertArrayToArrayObjectInConstructor()
+    public function testShouldConvertArrayToArrayObjectInConstructor(): void
     {
         $model = [
             'foo' => 'bar',
@@ -96,7 +96,7 @@ class BaseModeAwareTest extends TestCase
         $this->assertSame($model, (array) $request->getModel());
     }
 
-    public function testShouldConvertArrayToArrayObjectSetWithSetter()
+    public function testShouldConvertArrayToArrayObjectSetWithSetter(): void
     {
         $request = $this->getMockForAbstractClass(BaseModelAware::class, [123321]);
 

@@ -17,14 +17,14 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['TOKEN']) {
+        if (! $model['TOKEN']) {
             return;
         }
 
@@ -46,15 +46,15 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 
     public function supports($request)
     {
-        if (false == $request instanceof Sync) {
+        if (! $request instanceof Sync) {
             return false;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return false;
         }
 
-        return false == isset($model['BILLINGPERIOD']);
+        return ! isset($model['BILLINGPERIOD']);
     }
 }

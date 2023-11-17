@@ -71,7 +71,7 @@ class Api
         $sofort->setSuccessUrl($fields['success_url'], $fields['success_link_redirect']);
         $sofort->setAbortUrl($fields['abort_url']);
 
-        if (false == $this->options['disable_notification']) {
+        if (! $this->options['disable_notification']) {
             $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
         }
 
@@ -131,7 +131,7 @@ class Api
             $varName = $method;
             $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
-            if (is_array($params) && 2 == count($params)) {
+            if (is_array($params) && 2 === count($params)) {
                 $fields[$varName] = $transactionData->{$method}($params[0], $params[1]);
             } elseif ('' !== $params) {
                 $fields[$varName] = $transactionData->{$method}($params);

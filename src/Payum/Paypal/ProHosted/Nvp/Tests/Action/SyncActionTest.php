@@ -17,21 +17,21 @@ use stdClass;
 
 class SyncActionTest extends TestCase
 {
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet(): void
     {
         $action = new SyncAction();
 
@@ -44,7 +44,7 @@ class SyncActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero(): void
     {
         $action = new SyncAction();
 
@@ -57,14 +57,14 @@ class SyncActionTest extends TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    public function testShouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
@@ -72,14 +72,14 @@ class SyncActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel()
+    public function testShouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetTransactionDetails::class))
-            ->willReturnCallback(function (GetTransactionDetails $request) {
+            ->willReturnCallback(function (GetTransactionDetails $request): void {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['AMT'] = 33;

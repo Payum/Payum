@@ -46,7 +46,7 @@ class Token implements TokenInterface
         return $this->details;
     }
 
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         $this->details = $details;
     }
@@ -56,7 +56,7 @@ class Token implements TokenInterface
         return $this->hash;
     }
 
-    public function setHash($hash)
+    public function setHash($hash): void
     {
         $this->hash = $hash;
     }
@@ -66,7 +66,7 @@ class Token implements TokenInterface
         return $this->targetUrl;
     }
 
-    public function setTargetUrl($targetUrl)
+    public function setTargetUrl($targetUrl): void
     {
         $this->targetUrl = $targetUrl;
     }
@@ -76,7 +76,7 @@ class Token implements TokenInterface
         return $this->afterUrl;
     }
 
-    public function setAfterUrl($afterUrl)
+    public function setAfterUrl($afterUrl): void
     {
         $this->afterUrl = $afterUrl;
     }
@@ -86,7 +86,7 @@ class Token implements TokenInterface
         return $this->gatewayName;
     }
 
-    public function setGatewayName($gatewayName)
+    public function setGatewayName($gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }

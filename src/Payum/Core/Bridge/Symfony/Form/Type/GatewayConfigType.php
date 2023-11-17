@@ -23,7 +23,7 @@ class GatewayConfigType extends AbstractType
         $this->registry = $registry;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('gatewayName')
@@ -34,7 +34,7 @@ class GatewayConfigType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'buildCredentials']);
     }
 
-    public function buildCredentials(FormEvent $event)
+    public function buildCredentials(FormEvent $event): void
     {
         /** @var array $data */
         $data = $event->getData();
@@ -56,7 +56,7 @@ class GatewayConfigType extends AbstractType
         $gatewayFactory = $this->registry->getGatewayFactory($factoryName);
         $config = $gatewayFactory->createConfig();
         $propertyPath = is_array($data) ? '[config]' : 'config';
-        $firstTime = false == PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
+        $firstTime = ! PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
         foreach ($config['payum.default_options'] as $name => $value) {
             $propertyPath = is_array($data) ? "[config][${name}]" : "config[${name}]";
             if ($firstTime) {
@@ -74,7 +74,7 @@ class GatewayConfigType extends AbstractType
         $event->setData($data);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => GatewayConfig::class,

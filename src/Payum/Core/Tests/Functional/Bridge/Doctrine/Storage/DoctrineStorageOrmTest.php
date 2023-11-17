@@ -9,7 +9,7 @@ use Payum\Core\Tests\Mocks\Entity\TestModel;
 
 class DoctrineStorageOrmTest extends OrmTest
 {
-    public function testShouldUpdateModelAndSetId()
+    public function testShouldUpdateModelAndSetId(): void
     {
         $storage = new DoctrineStorage(
             $this->em,
@@ -23,7 +23,7 @@ class DoctrineStorageOrmTest extends OrmTest
         $this->assertNotNull($model->getId());
     }
 
-    public function testShouldGetModelIdentifier()
+    public function testShouldGetModelIdentifier(): void
     {
         $storage = new DoctrineStorage(
             $this->em,
@@ -43,7 +43,7 @@ class DoctrineStorageOrmTest extends OrmTest
         $this->assertEquals($model->getId(), $identity->getId());
     }
 
-    public function testShouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $storage = new DoctrineStorage(
             $this->em,
@@ -64,7 +64,7 @@ class DoctrineStorageOrmTest extends OrmTest
         $this->assertEquals($requestId, $model->getId());
     }
 
-    public function testShouldFindModelByIdentity()
+    public function testShouldFindModelByIdentity(): void
     {
         $storage = new DoctrineStorage(
             $this->em,
@@ -87,7 +87,7 @@ class DoctrineStorageOrmTest extends OrmTest
         $this->assertEquals($requestId, $foundModel->getId());
     }
 
-    public function testShouldFindByCurrency()
+    public function testShouldFindByCurrency(): void
     {
         $storage = new DoctrineStorage(
             $this->em,
@@ -124,7 +124,7 @@ class DoctrineStorageOrmTest extends OrmTest
         $this->assertContainsOnly(TestModel::class, $result);
     }
 
-    public function testShouldFindByAllIfCriteriaIsEmpty()
+    public function testShouldFindByAllIfCriteriaIsEmpty(): void
     {
         $storage = new DoctrineStorage(
             $this->em,

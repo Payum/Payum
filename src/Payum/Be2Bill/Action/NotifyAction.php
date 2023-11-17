@@ -28,7 +28,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     /**
      * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -36,7 +36,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        if (false == $this->api->verifyHash($httpRequest->query)) {
+        if (! $this->api->verifyHash($httpRequest->query)) {
             throw new HttpResponse('The notification is invalid. Code 1', 400);
         }
 

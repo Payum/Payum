@@ -20,14 +20,14 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
+    public function testShouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute(): void
     {
         $testCase = $this;
 
@@ -42,7 +42,7 @@ class NotifyActionTest extends GenericActionTest
             )
             ->willReturnOnConsecutiveCalls(
                 null,
-                $this->returnCallback(function (UpdateOrder $request) use ($testCase) {
+                $this->returnCallback(function (UpdateOrder $request) use ($testCase): void {
                     $model = $request->getModel();
 
                     $testCase->assertSame(Constants::STATUS_CREATED, $model['status']);
@@ -65,7 +65,7 @@ class NotifyActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -83,7 +83,7 @@ class NotifyActionTest extends GenericActionTest
         ]));
     }
 
-    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

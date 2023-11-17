@@ -15,7 +15,7 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         if ($this->logger) {
             $this->logger->debug('I can log something here');
@@ -24,6 +24,6 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 
     public function supports($request)
     {
-        return 'a request' == $request;
+        return 'a request' === $request;
     }
 }

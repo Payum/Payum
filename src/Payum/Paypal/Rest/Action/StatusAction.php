@@ -23,7 +23,7 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     /**
      * @var GetStatusInterface
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -32,25 +32,25 @@ class StatusAction implements ActionInterface, ApiAwareInterface
 
         $state = $model instanceof ArrayAccess ? ($model['state'] ?? null) : $model->state;
 
-        if ('approved' == $state) {
+        if ('approved' === $state) {
             $request->markCaptured();
 
             return;
         }
 
-        if ('created' == $state) {
+        if ('created' === $state) {
             $request->markPending();
 
             return;
         }
 
-        if ('cancelled' == $state) {
+        if ('cancelled' === $state) {
             $request->markCanceled();
 
             return;
         }
 
-        if (null == $state) {
+        if (null === $state) {
             $request->markNew();
 
             return;

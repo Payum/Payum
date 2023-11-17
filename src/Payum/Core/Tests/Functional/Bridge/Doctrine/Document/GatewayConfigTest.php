@@ -7,7 +7,7 @@ use Payum\Core\Tests\Mocks\Document\GatewayConfig;
 
 class GatewayConfigTest extends MongoTest
 {
-    public function testShouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
@@ -23,7 +23,7 @@ class GatewayConfigTest extends MongoTest
         $this->assertSame([$gatewayConfig], $this->dm->getRepository(GatewayConfig::class)->findAll());
     }
 
-    public function testShouldAllowFindPersistedGatewayConfig()
+    public function testShouldAllowFindPersistedGatewayConfig(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
@@ -45,7 +45,7 @@ class GatewayConfigTest extends MongoTest
         $this->assertEquals($gatewayConfig->getId(), $foundGatewayConfig->getId());
     }
 
-    public function testShouldStoreConfigAsAssocArray()
+    public function testShouldStoreConfigAsAssocArray(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');

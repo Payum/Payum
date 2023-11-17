@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class GetStatusInterfaceTest extends TestCase
 {
-    public function testShouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface(): void
     {
         $rc = new ReflectionClass(GetStatusInterface::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
-    public function testShouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface(): void
     {
         $rc = new ReflectionClass(GetStatusInterface::class);
 

@@ -14,14 +14,14 @@ use stdClass;
 
 class FallbackRegistryTest extends TestCase
 {
-    public function testShouldImplementsRegistryInterface()
+    public function testShouldImplementsRegistryInterface(): void
     {
         $rc = new ReflectionClass(FallbackRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
-    public function testShouldReturnGatewayFromMainRegistry()
+    public function testShouldReturnGatewayFromMainRegistry(): void
     {
         $expectedGateway = $this->createMock(GatewayInterface::class);
 
@@ -44,7 +44,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGateway, $registry->getGateway('theGatewayName'));
     }
 
-    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGateway()
+    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGateway(): void
     {
         $expectedGateway = $this->createMock(GatewayInterface::class);
 
@@ -69,7 +69,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGateway, $registry->getGateway('theGatewayName'));
     }
 
-    public function testThrowIfBothRegistriesNotContainsGateway()
+    public function testThrowIfBothRegistriesNotContainsGateway(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
@@ -96,7 +96,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGateway, $registry->getGateway('theGatewayName'));
     }
 
-    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGateway()
+    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGateway(): void
     {
         $this->expectException(Exception::class);
         $expectedGateway = new stdClass();
@@ -120,7 +120,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGateway, $registry->getGateway('theGatewayName'));
     }
 
-    public function testShouldReturnStorageFromMainRegistry()
+    public function testShouldReturnStorageFromMainRegistry(): void
     {
         $expectedStorage = new stdClass();
 
@@ -143,7 +143,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
     }
 
-    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetStorage()
+    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetStorage(): void
     {
         $expectedStorage = new stdClass();
 
@@ -168,7 +168,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
     }
 
-    public function testThrowIfBothRegistriesNotContainsStorage()
+    public function testThrowIfBothRegistriesNotContainsStorage(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
@@ -195,7 +195,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
     }
 
-    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetStorage()
+    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetStorage(): void
     {
         $this->expectException(Exception::class);
         $expectedStorage = new stdClass();
@@ -219,7 +219,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedStorage, $registry->getStorage('theStorageName'));
     }
 
-    public function testShouldReturnGatewayFactoryFromMainRegistry()
+    public function testShouldReturnGatewayFactoryFromMainRegistry(): void
     {
         $expectedGatewayFactory = new stdClass();
 
@@ -242,7 +242,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGatewayFactory, $registry->getGatewayFactory('theGatewayFactoryName'));
     }
 
-    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGatewayFactory()
+    public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetGatewayFactory(): void
     {
         $expectedGatewayFactory = new stdClass();
 
@@ -267,7 +267,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGatewayFactory, $registry->getGatewayFactory('theGatewayFactoryName'));
     }
 
-    public function testThrowIfBothRegistriesNotContainsGatewayFactory()
+    public function testThrowIfBothRegistriesNotContainsGatewayFactory(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('second');
@@ -294,7 +294,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGatewayFactory, $registry->getGatewayFactory('theGatewayFactoryName'));
     }
 
-    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGatewayFactory()
+    public function testShouldNotCatchNoInvalidArgumentExceptionsFromMainRegistryOnGetGatewayFactory(): void
     {
         $this->expectException(Exception::class);
         $expectedGatewayFactory = new stdClass();
@@ -318,7 +318,7 @@ class FallbackRegistryTest extends TestCase
         $this->assertSame($expectedGatewayFactory, $registry->getGatewayFactory('theGatewayFactoryName'));
     }
 
-    public function testShouldMergeGatewaysFromMainAndFallbackRegistries()
+    public function testShouldMergeGatewaysFromMainAndFallbackRegistries(): void
     {
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -351,7 +351,7 @@ class FallbackRegistryTest extends TestCase
         ], $registry->getGateways());
     }
 
-    public function testShouldMergeStoragesFromMainAndFallbackRegistries()
+    public function testShouldMergeStoragesFromMainAndFallbackRegistries(): void
     {
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock
@@ -384,7 +384,7 @@ class FallbackRegistryTest extends TestCase
         ], $registry->getStorages());
     }
 
-    public function testShouldMergeGatewayFactoriesFromMainAndFallbackRegistries()
+    public function testShouldMergeGatewayFactoriesFromMainAndFallbackRegistries(): void
     {
         $mailRegistryMock = $this->createRegistryMock();
         $mailRegistryMock

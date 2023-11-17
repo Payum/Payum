@@ -19,7 +19,7 @@ class ActivateReservationAction extends BaseApiAwareAction implements GatewayAwa
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }
@@ -27,7 +27,7 @@ class ActivateReservationAction extends BaseApiAwareAction implements GatewayAwa
     /**
      * @param ActivateReservation $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

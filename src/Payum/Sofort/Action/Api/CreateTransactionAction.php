@@ -25,7 +25,7 @@ class CreateTransactionAction implements ActionInterface, ApiAwareInterface
     /**
      * @param CreateTransaction $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

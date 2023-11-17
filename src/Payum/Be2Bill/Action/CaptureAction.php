@@ -31,7 +31,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     /**
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -45,17 +45,17 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
             return;
         }
 
-        if (false == $model['CLIENTUSERAGENT']) {
+        if (! $model['CLIENTUSERAGENT']) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
             $model['CLIENTUSERAGENT'] = $httpRequest->userAgent;
         }
-        if (false == $model['CLIENTIP']) {
+        if (! $model['CLIENTIP']) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
             $model['CLIENTIP'] = $httpRequest->clientIp;
         }
 
         $cardFields = ['CARDCODE', 'CARDCVV', 'CARDVALIDITYDATE', 'CARDFULLNAME'];
-        if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
+        if (! $model->validateNotEmpty($cardFields, false) && ! $model['ALIAS']) {
             try {
                 $obtainCreditCard = new ObtainCreditCard($request->getToken());
                 $obtainCreditCard->setModel($request->getFirstModel());
@@ -77,7 +77,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         }
 
         //instruction must have an alias set (e.g oneclick payment) or credit card info.
-        if (false == ($model['ALIAS'] || $model->validateNotEmpty($cardFields, false))) {
+        if (! ($model['ALIAS'] || $model->validateNotEmpty($cardFields, false))) {
             throw new LogicException('Either credit card fields or its alias has to be set.');
         }
 

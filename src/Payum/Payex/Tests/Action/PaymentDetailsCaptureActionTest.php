@@ -18,21 +18,21 @@ use stdClass;
 
 class PaymentDetailsCaptureActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(PaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldSupportCaptureWithArrayAsModelIfAutoPayNotSet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertTrue($action->supports(new Capture([])));
     }
 
-    public function testShouldNotSupportCaptureayAsModelIfAutoPaySet()
+    public function testShouldNotSupportCaptureayAsModelIfAutoPaySet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -41,7 +41,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldSupportCaptureCaptureelIfAutoPaySetToFalse()
+    public function testShouldSupportCaptureCaptureelIfAutoPaySetToFalse(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -50,7 +50,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
+    public function testShouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -60,21 +60,21 @@ class PaymentDetailsCaptureActionTest extends TestCase
         ])));
     }
 
-    public function testShouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsCaptureAction();
@@ -82,7 +82,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
+    public function testShouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -101,7 +101,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
+    public function testShouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -121,7 +121,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
+    public function testShouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -145,7 +145,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldDoSubGetHttpRequestAndSetClientIpFromIt()
+    public function testShouldDoSubGetHttpRequestAndSetClientIpFromIt(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -156,7 +156,7 @@ class PaymentDetailsCaptureActionTest extends TestCase
                 [$this->isInstanceOf(InitializeOrder::class)]
             )
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (GetHttpRequest $request) {
+                $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->clientIp = 'expectedClientIp';
                 })
             )

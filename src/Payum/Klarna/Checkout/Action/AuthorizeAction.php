@@ -46,7 +46,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
     /**
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -54,15 +54,15 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
 
         $merchant = ArrayObject::ensureArrayObject($model['merchant'] ?: []);
 
-        if (false == $merchant['checkout_uri'] && $this->api->checkoutUri) {
+        if (! $merchant['checkout_uri'] && $this->api->checkoutUri) {
             $merchant['checkout_uri'] = $this->api->checkoutUri;
         }
 
-        if (false == $merchant['terms_uri'] && $this->api->termsUri) {
+        if (! $merchant['terms_uri'] && $this->api->termsUri) {
             $merchant['terms_uri'] = $this->api->termsUri;
         }
 
-        if (false == $merchant['confirmation_uri'] && $request->getToken()) {
+        if (! $merchant['confirmation_uri'] && $request->getToken()) {
             $merchant['confirmation_uri'] = $request->getToken()->getTargetUrl();
         }
 
@@ -78,7 +78,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
         $merchant->validateNotEmpty(['checkout_uri', 'terms_uri', 'confirmation_uri', 'push_uri']);
         $model['merchant'] = (array) $merchant;
 
-        if (false == $model['location']) {
+        if (! $model['location']) {
             $createOrderRequest = new CreateOrder($model);
             $this->gateway->execute($createOrderRequest);
 
@@ -88,7 +88,7 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface, Generic
 
         $this->gateway->execute(new Sync($model));
 
-        if (Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
+        if (Constants::STATUS_CHECKOUT_INCOMPLETE === $model['status']) {
             $renderTemplate = new RenderTemplate($this->templateName, [
                 'snippet' => $model['gui']['snippet'] ?? null,
             ]);

@@ -16,14 +16,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -34,7 +34,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -48,7 +48,7 @@ class ApiTest extends TestCase
         $api->setExpressCheckout([]);
     }
 
-    public function testShouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -66,7 +66,7 @@ class ApiTest extends TestCase
         $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
 
-    public function testShouldUseReturnUrlSetInOptions()
+    public function testShouldUseReturnUrlSetInOptions(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -82,7 +82,7 @@ class ApiTest extends TestCase
         $this->assertSame('optionReturnUrl', $result['RETURNURL']);
     }
 
-    public function testThrowIfCancelUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfCancelUrlNeitherSetToFormRequestNorToOptions(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -96,7 +96,7 @@ class ApiTest extends TestCase
         $api->setExpressCheckout([]);
     }
 
-    public function testShouldUseCancelUrlSetInFormRequest()
+    public function testShouldUseCancelUrlSetInFormRequest(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -114,7 +114,7 @@ class ApiTest extends TestCase
         $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
 
-    public function testShouldUseCancelUrlSetInOptions()
+    public function testShouldUseCancelUrlSetInOptions(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -130,7 +130,7 @@ class ApiTest extends TestCase
         $this->assertSame('optionCancelUrl', $result['CANCELURL']);
     }
 
-    public function testShouldAddMethodOnSetExpressCheckoutCall()
+    public function testShouldAddMethodOnSetExpressCheckoutCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -147,7 +147,7 @@ class ApiTest extends TestCase
         $this->assertSame('SetExpressCheckout', $result['METHOD']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
+    public function testShouldAddAuthorizeFieldsOnSetExpressCheckoutCall(): void
     {
         $api = new Api([
             'username' => 'the_username',
@@ -170,7 +170,7 @@ class ApiTest extends TestCase
         $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    public function testShouldAddVersionOnSetExpressCheckoutCall()
+    public function testShouldAddVersionOnSetExpressCheckoutCall(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -187,7 +187,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    public function testShouldGetSandboxAuthorizeUrlIfSandboxTrue()
+    public function testShouldGetSandboxAuthorizeUrlIfSandboxTrue(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -202,7 +202,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithCustomUserAction()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserAction(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -218,7 +218,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -236,7 +236,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithCustomCmd()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmd(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -252,7 +252,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -270,7 +270,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomQueryParameter(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -287,7 +287,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -304,7 +304,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldGetRealAuthorizeUrlIfSandboxFalse()
+    public function testShouldGetRealAuthorizeUrlIfSandboxFalse(): void
     {
         $api = new Api([
             'username' => 'a_username',
@@ -319,7 +319,7 @@ class ApiTest extends TestCase
         );
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -346,7 +346,7 @@ class ApiTest extends TestCase
         $api->setExpressCheckout([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 

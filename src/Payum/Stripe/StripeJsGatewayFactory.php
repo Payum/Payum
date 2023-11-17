@@ -6,7 +6,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 
 class StripeJsGatewayFactory extends StripeCheckoutGatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'stripe_js',

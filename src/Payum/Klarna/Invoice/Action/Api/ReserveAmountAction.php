@@ -19,7 +19,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
      */
     protected $gateway;
 
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }
@@ -27,7 +27,7 @@ class ReserveAmountAction extends BaseApiAwareAction implements GatewayAwareInte
     /**
      * @param ReserveAmount $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

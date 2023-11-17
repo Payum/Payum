@@ -49,7 +49,7 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     /**
      * @param mixed $model
      */
-    public function setModel($model)
+    public function setModel($model): void
     {
         if (is_array($model)) {
             $model = new ArrayObject($model);
@@ -76,7 +76,7 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     /**
      * @param mixed $model
      */
-    protected function setFirstModel($model)
+    protected function setFirstModel($model): void
     {
         if ($this->firstModel) {
             return;

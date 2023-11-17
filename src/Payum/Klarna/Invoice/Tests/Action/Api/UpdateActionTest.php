@@ -22,26 +22,26 @@ use stdClass;
 
 class UpdateActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(UpdateAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testShouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(UpdateAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldAllowSetGateway()
+    public function testShouldAllowSetGateway(): void
     {
         $this->assertInstanceOf(GatewayAwareInterface::class, new UpdateAction($this->createKlarnaMock()));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -50,28 +50,28 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportUpdateWithArrayAsModel()
+    public function testShouldSupportUpdateWithArrayAsModel(): void
     {
         $action = new UpdateAction();
 
         $this->assertTrue($action->supports(new Update([])));
     }
 
-    public function testShouldNotSupportAnythingNotUpdate()
+    public function testShouldNotSupportAnythingNotUpdate(): void
     {
         $action = new UpdateAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportUpdateWithNotArrayAccessModel()
+    public function testShouldNotSupportUpdateWithNotArrayAccessModel(): void
     {
         $action = new UpdateAction();
 
         $this->assertFalse($action->supports(new Update(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new UpdateAction();
@@ -79,7 +79,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldCallKlarnaUpdate()
+    public function testShouldCallKlarnaUpdate(): void
     {
         $details = [
             'rno' => 'theRno',
@@ -111,7 +111,7 @@ class UpdateActionTest extends GenericApiAwareActionTest
         $this->assertTrue($model['updated']);
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'rno' => 'theRno',

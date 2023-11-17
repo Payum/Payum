@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HttpResponseTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseReply()
+    public function testShouldBeSubClassOfBaseReply(): void
     {
         $rc = new ReflectionClass(HttpResponse::class);
 
         $this->assertTrue($rc->isSubclassOf(Base::class));
     }
 
-    public function testShouldAllowGetResponseSetInConstructor()
+    public function testShouldAllowGetResponseSetInConstructor(): void
     {
         $expectedResponse = new Response();
 

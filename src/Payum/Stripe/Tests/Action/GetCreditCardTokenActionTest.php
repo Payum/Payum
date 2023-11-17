@@ -14,14 +14,14 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
     protected $actionClass = GetCreditCardTokenAction::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(GetCreditCardTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldDoNothingIfPaymentHasNoCustomerSet()
+    public function testShouldDoNothingIfPaymentHasNoCustomerSet(): void
     {
         $model = [
         ];
@@ -33,7 +33,7 @@ class GetCreditCardTokenActionTest extends GenericActionTest
         $this->assertEmpty($getCreditCardToken->token);
     }
 
-    public function testShouldSetCustomerIdAsCardToken()
+    public function testShouldSetCustomerIdAsCardToken(): void
     {
         $model = [
             'customer' => 'theToken',

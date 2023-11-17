@@ -11,21 +11,21 @@ use ReflectionClass;
 
 class ArrayObjectTest extends TestCase
 {
-    public function testShouldImplementArrayAccessInterface()
+    public function testShouldImplementArrayAccessInterface(): void
     {
         $rc = new ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->implementsInterface(ArrayAccess::class));
     }
 
-    public function testShouldImplementIteratorAggregateInterface()
+    public function testShouldImplementIteratorAggregateInterface(): void
     {
         $rc = new ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->implementsInterface(IteratorAggregate::class));
     }
 
-    public function testShouldAllowAddElementToArray()
+    public function testShouldAllowAddElementToArray(): void
     {
         $model = new ArrayObject();
 
@@ -34,7 +34,7 @@ class ArrayObjectTest extends TestCase
         $this->assertSame('theFoo', $model['foo']);
     }
 
-    public function testShouldReturnTrueIfElementSetOnIsset()
+    public function testShouldReturnTrueIfElementSetOnIsset(): void
     {
         $model = new ArrayObject();
 
@@ -43,14 +43,14 @@ class ArrayObjectTest extends TestCase
         $this->assertArrayHasKey('foo', $model);
     }
 
-    public function testShouldReturnFalseIfElementNotSetOnIsset()
+    public function testShouldReturnFalseIfElementNotSetOnIsset(): void
     {
         $model = new ArrayObject();
 
         $this->assertArrayNotHasKey('foo', $model);
     }
 
-    public function testShouldAllowUnsetElement()
+    public function testShouldAllowUnsetElement(): void
     {
         $model = new ArrayObject();
 
@@ -64,7 +64,7 @@ class ArrayObjectTest extends TestCase
         $this->assertArrayNotHasKey('foo', $model);
     }
 
-    public function testShouldReturnArrayIteratorOnGetIterator()
+    public function testShouldReturnArrayIteratorOnGetIterator(): void
     {
         $model = new ArrayObject();
 

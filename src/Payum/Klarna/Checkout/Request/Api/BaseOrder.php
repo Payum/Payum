@@ -16,7 +16,7 @@ abstract class BaseOrder extends Generic
 
     public function __construct($model)
     {
-        if (false == (is_array($model) || $model instanceof ArrayAccess)) {
+        if (! (is_array($model) || $model instanceof ArrayAccess)) {
             throw new InvalidArgumentException('Given model is invalid. Should be an array or ArrayAccess instance.');
         }
 
@@ -31,7 +31,7 @@ abstract class BaseOrder extends Generic
         return $this->order;
     }
 
-    public function setOrder(Klarna_Checkout_Order $order)
+    public function setOrder(Klarna_Checkout_Order $order): void
     {
         $this->order = $order;
     }

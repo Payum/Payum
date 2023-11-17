@@ -19,14 +19,14 @@ use stdClass;
 
 class EmailInvoiceActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(EmailInvoiceAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -35,28 +35,28 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportEmailInvoiceWithArrayAsModel()
+    public function testShouldSupportEmailInvoiceWithArrayAsModel(): void
     {
         $action = new EmailInvoiceAction();
 
         $this->assertTrue($action->supports(new EmailInvoice([])));
     }
 
-    public function testShouldNotSupportAnythingNotEmailInvoice()
+    public function testShouldNotSupportAnythingNotEmailInvoice(): void
     {
         $action = new EmailInvoiceAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportEmailInvoiceWithNotArrayAccessModel()
+    public function testShouldNotSupportEmailInvoiceWithNotArrayAccessModel(): void
     {
         $action = new EmailInvoiceAction();
 
         $this->assertFalse($action->supports(new EmailInvoice(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new EmailInvoiceAction();
@@ -64,7 +64,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldCallKlarnaEmailInvoice()
+    public function testShouldCallKlarnaEmailInvoice(): void
     {
         $details = [
             'invoice_number' => 'invoice number',
@@ -85,7 +85,7 @@ class EmailInvoiceActionTest extends GenericApiAwareActionTest
         $action->execute(new EmailInvoice($details));
     }
 
-    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
         $details = [
             'invoice_number' => 'invoice number',

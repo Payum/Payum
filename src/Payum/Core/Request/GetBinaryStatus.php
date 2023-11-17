@@ -26,7 +26,7 @@ class GetBinaryStatus extends BaseGetStatus
 
     public const STATUS_NEW = 2; //2^1
 
-    public function markCaptured()
+    public function markCaptured(): void
     {
         $this->status = static::STATUS_CAPTURED;
     }
@@ -36,7 +36,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_CAPTURED);
     }
 
-    public function markAuthorized()
+    public function markAuthorized(): void
     {
         $this->status = static::STATUS_AUTHORIZED;
     }
@@ -46,7 +46,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_AUTHORIZED);
     }
 
-    public function markPayedout()
+    public function markPayedout(): void
     {
         $this->status = static::STATUS_PAYEDOUT;
     }
@@ -56,7 +56,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_PAYEDOUT);
     }
 
-    public function markRefunded()
+    public function markRefunded(): void
     {
         $this->status = static::STATUS_REFUNDED;
     }
@@ -66,7 +66,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_REFUNDED);
     }
 
-    public function markSuspended()
+    public function markSuspended(): void
     {
         $this->status = static::STATUS_SUSPENDED;
     }
@@ -76,7 +76,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_SUSPENDED);
     }
 
-    public function markExpired()
+    public function markExpired(): void
     {
         $this->status = static::STATUS_EXPIRED;
     }
@@ -86,7 +86,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_EXPIRED);
     }
 
-    public function markCanceled()
+    public function markCanceled(): void
     {
         $this->status = static::STATUS_CANCELED;
     }
@@ -96,7 +96,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_CANCELED);
     }
 
-    public function markPending()
+    public function markPending(): void
     {
         $this->status = static::STATUS_PENDING;
     }
@@ -106,7 +106,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_PENDING);
     }
 
-    public function markFailed()
+    public function markFailed(): void
     {
         $this->status = static::STATUS_FAILED;
     }
@@ -116,7 +116,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_FAILED);
     }
 
-    public function markNew()
+    public function markNew(): void
     {
         $this->status = static::STATUS_NEW;
     }
@@ -126,7 +126,7 @@ class GetBinaryStatus extends BaseGetStatus
         return $this->isCurrentStatusEqualTo(static::STATUS_NEW);
     }
 
-    public function markUnknown()
+    public function markUnknown(): void
     {
         $this->status = static::STATUS_UNKNOWN;
     }
@@ -143,6 +143,6 @@ class GetBinaryStatus extends BaseGetStatus
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {
-        return ($expectedStatus | $this->getValue()) == $expectedStatus;
+        return ($expectedStatus | $this->getValue()) === $expectedStatus;
     }
 }

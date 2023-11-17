@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class ReturnAmountTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
         $rc = new ReflectionClass(ReturnAmount::class);
 

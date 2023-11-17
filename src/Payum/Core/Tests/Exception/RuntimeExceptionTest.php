@@ -9,14 +9,14 @@ use RuntimeException;
 
 class RuntimeExceptionTest extends TestCase
 {
-    public function testShouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
         $rc = new ReflectionClass(\Payum\Core\Exception\RuntimeException::class);
 
         $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 
-    public function testShouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
         $rc = new ReflectionClass(\Payum\Core\Exception\RuntimeException::class);
 

@@ -14,14 +14,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -35,7 +35,7 @@ class ApiTest extends TestCase
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldAddTRXTYPEOnDoSaleCall()
+    public function testShouldAddTRXTYPEOnDoSaleCall(): void
     {
         $api = new Api([
             'username' => 'aUsername',
@@ -51,7 +51,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
-    public function testShouldAddTRXTYPEOnDoCreditCall()
+    public function testShouldAddTRXTYPEOnDoCreditCall(): void
     {
         $api = new Api([
             'username' => 'aUsername',
@@ -67,7 +67,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnDoSaleCall()
+    public function testShouldAddAuthorizeFieldsOnDoSaleCall(): void
     {
         $api = new Api([
             'username' => 'theUsername',
@@ -95,7 +95,7 @@ class ApiTest extends TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    public function testShouldAddAuthorizeFieldsOnDoCreditCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreditCall(): void
     {
         $api = new Api([
             'username' => 'theUsername',
@@ -123,7 +123,7 @@ class ApiTest extends TestCase
         $this->assertSame('theTender', $result['TENDER']);
     }
 
-    public function testShouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
@@ -150,7 +150,7 @@ class ApiTest extends TestCase
         $api->doCredit([]);
     }
 
-    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 

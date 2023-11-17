@@ -12,7 +12,7 @@ use Payum\Core\GatewayFactory;
 
 class AuthorizeNetAimGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (! class_exists(\AuthorizeNetAIM::class)) {
             throw new LogicException('You must install "authorizenet/authorizenet" library.');
@@ -26,7 +26,7 @@ class AuthorizeNetAimGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'login_id' => '',
                 'transaction_key' => '',

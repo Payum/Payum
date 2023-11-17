@@ -54,7 +54,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $recipientId
      */
-    public function setRecipientId($recipientId)
+    public function setRecipientId($recipientId): void
     {
         $this->recipientId = $recipientId;
     }
@@ -70,7 +70,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $recipientEmail
      */
-    public function setRecipientEmail($recipientEmail)
+    public function setRecipientEmail($recipientEmail): void
     {
         $this->recipientEmail = $recipientEmail;
     }
@@ -86,7 +86,7 @@ class Payout implements PayoutInterface
     /**
      * @param int $totalAmount
      */
-    public function setTotalAmount($totalAmount)
+    public function setTotalAmount($totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
@@ -102,7 +102,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode($currencyCode)
+    public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
@@ -118,7 +118,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
@@ -131,7 +131,7 @@ class Payout implements PayoutInterface
     /**
      * @param array|Traversable $details
      */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         if ($details instanceof Traversable) {
             $details = iterator_to_array($details);

@@ -37,7 +37,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -45,14 +45,14 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreateCharge $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == ($model['card'] || $model['customer'])) {
+        if (! ($model['card'] || $model['customer'])) {
             throw new LogicException('The either card token or customer id has to be set.');
         }
 

@@ -14,7 +14,7 @@ class StatusAction implements ActionInterface
     /**
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -38,13 +38,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
+        if (! $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE === $model['status']) {
             $request->markNew();
 
             return;
         }
 
-        if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
+        if (Constants::STATUS_CHECKOUT_COMPLETE === $model['status']) {
             $request->markPending();
 
             return;

@@ -25,7 +25,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -45,12 +45,12 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             return;
         }
 
-        if (false == $details['TOKEN']) {
-            if (false == $details['RETURNURL'] && $request->getToken()) {
+        if (! $details['TOKEN']) {
+            if (! $details['RETURNURL'] && $request->getToken()) {
                 $details['RETURNURL'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $details['CANCELURL'] && $request->getToken()) {
+            if (! $details['CANCELURL'] && $request->getToken()) {
                 $details['CANCELURL'] = $request->getToken()->getTargetUrl();
             }
 
@@ -81,7 +81,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
 
         if (
             $details['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $details['CHECKOUTSTATUS'] &&
             $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
             if (Api::USERACTION_COMMIT !== $details['AUTHORIZE_TOKEN_USERACTION']) {
@@ -94,7 +94,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
         }
 
-        if (false == $details['PAYERID']) {
+        if (! $details['PAYERID']) {
             $this->gateway->execute(new AuthorizeToken($details));
         }
 

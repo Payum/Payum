@@ -53,7 +53,7 @@ class Api
             'signature',
         ]);
 
-        if (false == is_bool($options['sandbox'])) {
+        if (! is_bool($options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
 
@@ -90,7 +90,7 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
@@ -114,14 +114,14 @@ class Api
         ;
     }
 
-    protected function addAuthorizeFields(array &$fields)
+    protected function addAuthorizeFields(array &$fields): void
     {
         $fields['PWD'] = $this->options['password'];
         $fields['USER'] = $this->options['username'];
         $fields['SIGNATURE'] = $this->options['signature'];
     }
 
-    protected function addVersionField(array &$fields)
+    protected function addVersionField(array &$fields): void
     {
         $fields['VERSION'] = self::VERSION;
     }

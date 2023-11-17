@@ -29,7 +29,7 @@ abstract class Humanify
             $details[] = sprintf('url: %s', $request->getUrl());
         }
 
-        if (false == empty($details)) {
+        if (! empty($details)) {
             $return .= sprintf('{%s}', implode(', ', $details));
         }
 

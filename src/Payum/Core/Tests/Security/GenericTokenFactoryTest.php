@@ -14,14 +14,14 @@ use stdClass;
 
 class GenericTokenFactoryTest extends TestCase
 {
-    public function testShouldImplementGenericTokenFactoryInterface()
+    public function testShouldImplementGenericTokenFactoryInterface(): void
     {
         $rc = new ReflectionClass(GenericTokenFactory::class);
 
         $this->assertTrue($rc->implementsInterface(GenericTokenFactoryInterface::class));
     }
 
-    public function testShouldAllowCreateCustomTokenWithAfterPath()
+    public function testShouldAllowCreateCustomTokenWithAfterPath(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -65,7 +65,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($token, $actualToken);
     }
 
-    public function testShouldAllowCreateCustomTokenWithoutAfterPath()
+    public function testShouldAllowCreateCustomTokenWithoutAfterPath(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -103,7 +103,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($token, $actualToken);
     }
 
-    public function testThrowIfCapturePathNotConfigured()
+    public function testThrowIfCapturePathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "capture" is not found. Possible paths are foo, bar');
@@ -133,7 +133,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateCaptureToken()
+    public function testShouldAllowCreateCaptureToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -191,7 +191,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($captureToken, $actualToken);
     }
 
-    public function testThrowIfAuthorizePathNotConfigured()
+    public function testThrowIfAuthorizePathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "authorize" is not found. Possible paths are foo, bar');
@@ -221,7 +221,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateAuthorizeToken()
+    public function testShouldAllowCreateAuthorizeToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -276,7 +276,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($authorizeToken, $actualToken);
     }
 
-    public function testThrowIfRefundPathNotConfigured()
+    public function testThrowIfRefundPathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "refund" is not found. Possible paths are foo, bar');
@@ -306,7 +306,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateRefundToken()
+    public function testShouldAllowCreateRefundToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -361,7 +361,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($refundToken, $actualToken);
     }
 
-    public function testShouldAllowCreateRefundTokenWithoutAfterPath()
+    public function testShouldAllowCreateRefundTokenWithoutAfterPath(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -393,7 +393,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($refundToken, $actualToken);
     }
 
-    public function testThrowIfCancelPathNotConfigured()
+    public function testThrowIfCancelPathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "cancel" is not found. Possible paths are foo, bar');
@@ -423,7 +423,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateCancelToken()
+    public function testShouldAllowCreateCancelToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -478,7 +478,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($cancelToken, $actualToken);
     }
 
-    public function testShouldAllowCreateCancelTokenWithoutAfterPath()
+    public function testShouldAllowCreateCancelTokenWithoutAfterPath(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -510,7 +510,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($cancelToken, $actualToken);
     }
 
-    public function testThrowIfNotifyPathNotConfigured()
+    public function testThrowIfNotifyPathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "notify" is not found. Possible paths are foo, bar');
@@ -538,7 +538,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreateNotifyToken()
+    public function testShouldAllowCreateNotifyToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();
@@ -570,7 +570,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($notifyToken, $actualToken);
     }
 
-    public function testShouldAllowCreateNotifyTokenWithoutModel()
+    public function testShouldAllowCreateNotifyTokenWithoutModel(): void
     {
         $gatewayName = 'theGatewayName';
         $notifyPath = 'theNotifyPath';
@@ -601,7 +601,7 @@ class GenericTokenFactoryTest extends TestCase
         $this->assertSame($notifyToken, $actualToken);
     }
 
-    public function testThrowIfPayoutPathNotConfigured()
+    public function testThrowIfPayoutPathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path "payout" is not found. Possible paths are foo, bar');
@@ -631,7 +631,7 @@ class GenericTokenFactoryTest extends TestCase
         );
     }
 
-    public function testShouldAllowCreatePayoutToken()
+    public function testShouldAllowCreatePayoutToken(): void
     {
         $gatewayName = 'theGatewayName';
         $model = new stdClass();

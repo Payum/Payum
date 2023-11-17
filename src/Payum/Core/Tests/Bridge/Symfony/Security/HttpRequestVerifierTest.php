@@ -16,14 +16,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HttpRequestVerifierTest extends TestCase
 {
-    public function testShouldImplementHttpRequestVerifierInterface()
+    public function testShouldImplementHttpRequestVerifierInterface(): void
     {
         $rc = new ReflectionClass(HttpRequestVerifier::class);
 
         $this->assertTrue($rc->implementsInterface(HttpRequestVerifierInterface::class));
     }
 
-    public function testThrowIfNotSymfonyRequestGivenOnVerify()
+    public function testThrowIfNotSymfonyRequestGivenOnVerify(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request given. Expected Symfony\Component\HttpFoundation\Request but it is stdClass');
@@ -32,7 +32,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify(new stdClass());
     }
 
-    public function testThrowIfRequestNotContainTokenParameterOnVerify()
+    public function testThrowIfRequestNotContainTokenParameterOnVerify(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Token parameter not set in request');
@@ -41,7 +41,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify(Request::create('/'));
     }
 
-    public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify()
+    public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('A token with hash `invalidHash` could not be found.');
@@ -63,7 +63,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify($request);
     }
 
-    public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify()
+    public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
@@ -87,7 +87,7 @@ class HttpRequestVerifierTest extends TestCase
         $verifier->verify($request);
     }
 
-    public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify()
+    public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify(): void
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
@@ -111,7 +111,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerifyAndHashSetToQuery()
+    public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerifyAndHashSetToQuery(): void
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
@@ -138,7 +138,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @group legacy
      */
-    public function testShouldReturnExpectedTokenIfTokenSetToRequestAttribute()
+    public function testShouldReturnExpectedTokenIfTokenSetToRequestAttribute(): void
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
@@ -163,7 +163,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @group legacy
      */
-    public function testShouldReturnExpectedTokenIfTokenSetToEncodedRequestAttribute()
+    public function testShouldReturnExpectedTokenIfTokenSetToEncodedRequestAttribute(): void
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
@@ -188,7 +188,7 @@ class HttpRequestVerifierTest extends TestCase
     /**
      * @group legacy
      */
-    public function testShouldNotMatchUriIfTokenSetToRequestAttribute()
+    public function testShouldNotMatchUriIfTokenSetToRequestAttribute(): void
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
@@ -210,7 +210,7 @@ class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
-    public function testShouldCallStorageDeleteModelMethodOnInvalidate()
+    public function testShouldCallStorageDeleteModelMethodOnInvalidate(): void
     {
         $token = new Token();
 

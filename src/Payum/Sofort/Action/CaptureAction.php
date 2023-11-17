@@ -22,22 +22,22 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
     /**
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['transaction_id']) {
-            if (false == $details['success_url'] && $request->getToken()) {
+        if (! $details['transaction_id']) {
+            if (! $details['success_url'] && $request->getToken()) {
                 $details['success_url'] = $request->getToken()->getTargetUrl();
             }
-            if (false == $details['abort_url'] && $request->getToken()) {
+            if (! $details['abort_url'] && $request->getToken()) {
                 $details['abort_url'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $details['notification_url'] && $request->getToken() && $this->tokenFactory) {
+            if (! $details['notification_url'] && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
                     $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()

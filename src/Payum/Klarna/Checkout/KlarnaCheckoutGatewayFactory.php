@@ -18,7 +18,7 @@ use Payum\Klarna\Checkout\Action\SyncAction;
 
 class KlarnaCheckoutGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         if (! class_exists(Klarna_Checkout_Order::class)) {
             throw new LogicException('You must install "klarna/checkout" library.');
@@ -48,7 +48,7 @@ class KlarnaCheckoutGatewayFactory extends GatewayFactory
             'payum.action.api.fetch_order' => new FetchOrderAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'merchant_id' => '',
                 'secret' => '',

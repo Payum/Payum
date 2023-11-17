@@ -21,7 +21,7 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreateAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);

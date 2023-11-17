@@ -14,21 +14,21 @@ use stdClass;
 
 class OrderApiTest extends TestCase
 {
-    public function testShouldBeSubClassOfBaseApi()
+    public function testShouldBeSubClassOfBaseApi(): void
     {
         $rc = new ReflectionClass(OrderApi::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApi::class));
     }
 
-    public function testThrowIfAccountNumberOptionNotSet()
+    public function testThrowIfAccountNumberOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The account_number option must be set.');
         new OrderApi(new SoapClientFactory(), []);
     }
 
-    public function testThrowIfEncryptionKeyOptionNotSet()
+    public function testThrowIfEncryptionKeyOptionNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The encryption_key option must be set.');
@@ -40,7 +40,7 @@ class OrderApiTest extends TestCase
         );
     }
 
-    public function testThrowIfNotBoolSandboxOptionGiven()
+    public function testThrowIfNotBoolSandboxOptionGiven(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -54,7 +54,7 @@ class OrderApiTest extends TestCase
         );
     }
 
-    public function testShouldUseSoapClientOnInitialize8AndConvertItsResponse()
+    public function testShouldUseSoapClientOnInitialize8AndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->Initialize8Result = '<foo>fooValue</foo>';
@@ -88,7 +88,7 @@ class OrderApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnCompleteAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCompleteAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->CompleteResult = '<foo>fooValue</foo>';
@@ -122,7 +122,7 @@ class OrderApiTest extends TestCase
         $this->assertSame(['fooValue'], $result);
     }
 
-    public function testShouldUseSoapClientOnCheckAndConvertItsResponse()
+    public function testShouldUseSoapClientOnCheckAndConvertItsResponse(): void
     {
         $response = new stdClass();
         $response->Check2Result = '<foo>fooValue</foo>';
@@ -171,15 +171,18 @@ class OrderSoapClient extends SoapClient
     {
     }
 
-    public function Initialize8()
+    public function Initialize8(): stdClass
     {
+        return new stdClass();
     }
 
-    public function Complete()
+    public function Complete(): stdClass
     {
+        return new stdClass();
     }
 
-    public function Check2()
+    public function Check2(): stdClass
     {
+        return new stdClass();
     }
 }

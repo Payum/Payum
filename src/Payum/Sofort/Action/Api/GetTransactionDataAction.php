@@ -24,13 +24,13 @@ class GetTransactionDataAction implements ActionInterface, ApiAwareInterface
     /**
      * @param GetTransactionData $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['transaction_id']) {
+        if (! $details['transaction_id']) {
             throw new LogicException('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');
         }
 

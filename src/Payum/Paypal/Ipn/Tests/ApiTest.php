@@ -15,14 +15,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends TestCase
 {
-    public function testThrowIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
+    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor(): void
     {
         $api = new Api([
             'sandbox' => true,
@@ -31,7 +31,7 @@ class ApiTest extends TestCase
         $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
+    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor(): void
     {
         $api = new Api([
             'sandbox' => false,
@@ -40,7 +40,7 @@ class ApiTest extends TestCase
         $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    public function testThrowIfResponseStatusNotOk()
+    public function testThrowIfResponseStatusNotOk(): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Client error response');
@@ -58,7 +58,7 @@ class ApiTest extends TestCase
         $api->notifyValidate([]);
     }
 
-    public function testShouldProxyWholeNotificationToClientSend()
+    public function testShouldProxyWholeNotificationToClientSend(): void
     {
         /** @var RequestInterface $actualRequest */
         $actualRequest = null;
@@ -96,7 +96,7 @@ class ApiTest extends TestCase
         $this->assertSame('POST', $actualRequest->getMethod());
     }
 
-    public function testShouldReturnVerifiedIfResponseContentVerified()
+    public function testShouldReturnVerifiedIfResponseContentVerified(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
@@ -112,7 +112,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate([]));
     }
 
-    public function testShouldReturnInvalidIfResponseContentInvalid()
+    public function testShouldReturnInvalidIfResponseContentInvalid(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
@@ -128,7 +128,7 @@ class ApiTest extends TestCase
         $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate([]));
     }
 
-    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
+    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified(): void
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock

@@ -37,7 +37,7 @@ class FilesystemStorage extends AbstractStorage
         $this->idProperty = $idProperty;
     }
 
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
@@ -53,11 +53,11 @@ class FilesystemStorage extends AbstractStorage
         }
     }
 
-    protected function doUpdateModel($model)
+    protected function doUpdateModel($model): void
     {
         $ro = new ReflectionObject($model);
 
-        if (false == $ro->hasProperty($this->idProperty)) {
+        if (! $ro->hasProperty($this->idProperty)) {
             $model->{$this->idProperty} = null;
         }
 
@@ -65,7 +65,7 @@ class FilesystemStorage extends AbstractStorage
         $rp->setAccessible(true);
 
         $id = $rp->getValue($model);
-        if (false == $id) {
+        if (! $id) {
             $rp->setValue($model, $id = uniqid());
         }
 
@@ -75,7 +75,7 @@ class FilesystemStorage extends AbstractStorage
         file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
     }
 
-    protected function doDeleteModel($model)
+    protected function doDeleteModel($model): void
     {
         $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
@@ -91,7 +91,7 @@ class FilesystemStorage extends AbstractStorage
         $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
-        if (false == $id = $rp->getValue($model)) {
+        if (! $id = $rp->getValue($model)) {
             throw new LogicException('The model must be persisted before usage of this method');
         }
 

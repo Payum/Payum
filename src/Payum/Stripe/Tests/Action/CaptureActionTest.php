@@ -20,14 +20,14 @@ class CaptureActionTest extends GenericActionTest
 
     protected $actionClass = CaptureAction::class;
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldDoNothingIfPaymentHasStatus()
+    public function testShouldDoNothingIfPaymentHasStatus(): void
     {
         $model = [
             'status' => Constants::STATUS_SUCCEEDED,
@@ -45,7 +45,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldSubExecuteObtainTokenRequestIfTokenNotSet()
+    public function testShouldSubExecuteObtainTokenRequestIfTokenNotSet(): void
     {
         $model = [];
 
@@ -62,7 +62,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldSubExecuteObtainTokenRequestWithCurrentModel()
+    public function testShouldSubExecuteObtainTokenRequestWithCurrentModel(): void
     {
         $model = new \ArrayObject([
             'foo' => 'fooVal',
@@ -74,7 +74,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(ObtainToken::class)], [$this->isInstanceOf(CreateCharge::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (ObtainToken $request) use ($model) {
+                $this->returnCallback(function (ObtainToken $request) use ($model): void {
                     $this->assertInstanceOf(ArrayObject::class, $request->getModel());
                     $this->assertSame([
                         'foo' => 'fooVal',
@@ -89,7 +89,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldSubExecuteCreateChargeIfTokenSetButNotUsed()
+    public function testShouldSubExecuteCreateChargeIfTokenSetButNotUsed(): void
     {
         $model = [
             'card' => 'notUsedToken',
@@ -108,7 +108,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldNotSubExecuteCreateChargeIfAlreadyCharged()
+    public function testShouldNotSubExecuteCreateChargeIfAlreadyCharged(): void
     {
         $model = [
             'card' => 'theToken',
@@ -127,7 +127,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldSubExecuteCreateChargeIfCustomerSet()
+    public function testShouldSubExecuteCreateChargeIfCustomerSet(): void
     {
         $model = [
             'customer' => 'theCustomerId',
@@ -146,7 +146,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldSubExecuteCreateChargeIfCreditCardSetExplisitly()
+    public function testShouldSubExecuteCreateChargeIfCreditCardSetExplisitly(): void
     {
         $model = [
             'card' => [
@@ -170,7 +170,7 @@ class CaptureActionTest extends GenericActionTest
         $action->execute(new Capture($model));
     }
 
-    public function testShouldNotSubExecuteCreateChargeIfCustomerSetButAlreadyCharged()
+    public function testShouldNotSubExecuteCreateChargeIfCustomerSetButAlreadyCharged(): void
     {
         $model = [
             'customer' => 'theCustomerId',

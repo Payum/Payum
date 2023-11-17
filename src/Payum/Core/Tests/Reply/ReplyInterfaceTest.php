@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class ReplyInterfaceTest extends TestCase
 {
-    public function testShouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
         $rc = new ReflectionClass(ReplyInterface::class);
 

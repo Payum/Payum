@@ -39,7 +39,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->apiClass = Config::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -50,7 +50,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     /**
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -69,7 +69,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         try {
             unset($model['recurring_token']);
 
-            $baseUri = Constants::BASE_URI_LIVE == $backupConfig->baseUri ?
+            $baseUri = Constants::BASE_URI_LIVE === $backupConfig->baseUri ?
                 Constants::BASE_URI_RECURRING_LIVE :
                 Constants::BASE_URI_RECURRING_SANDBOX
             ;
@@ -100,12 +100,12 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
 
     public function supports($request)
     {
-        if (false == ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
+        if (! ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        return false == $model['recurring'] && $model['recurring_token'];
+        return ! $model['recurring'] && $model['recurring_token'];
     }
 }

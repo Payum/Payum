@@ -22,7 +22,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         $newResponse = [];
         /** @var Capture $request */

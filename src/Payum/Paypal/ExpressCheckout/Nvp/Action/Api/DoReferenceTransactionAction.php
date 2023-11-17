@@ -21,7 +21,7 @@ class DoReferenceTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var DoReferenceTransaction $request */
         RequestNotSupportedException::assertSupports($this, $request);

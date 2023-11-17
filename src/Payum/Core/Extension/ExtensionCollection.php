@@ -12,7 +12,7 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * @param bool               $forcePrepend
      */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->extensions, $extension) :
@@ -20,21 +20,21 @@ class ExtensionCollection implements ExtensionInterface
         ;
     }
 
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPreExecute($context);
         }
     }
 
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onExecute($context);
         }
     }
 
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPostExecute($context);

@@ -16,7 +16,7 @@ class CreateTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
 {
     use GatewayAwareTrait;
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var CreateTokenForCreditCard $request */
         RequestNotSupportedException::assertSupports($this, $request);

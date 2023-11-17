@@ -17,7 +17,7 @@ class NotifyAction implements ActionInterface
     /**
      * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

@@ -20,14 +20,14 @@ use stdClass;
 
 class GetAddressesActionTest extends GenericApiAwareActionTest
 {
-    public function testShouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
         $rc = new ReflectionClass(GetAddressesAction::class);
 
         $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -36,21 +36,21 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldSupportGetAddressesRequest()
+    public function testShouldSupportGetAddressesRequest(): void
     {
         $action = new GetAddressesAction();
 
         $this->assertTrue($action->supports(new GetAddresses('pno')));
     }
 
-    public function testShouldNotSupportAnythingNotGetAddresses()
+    public function testShouldNotSupportAnythingNotGetAddresses(): void
     {
         $action = new GetAddressesAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new GetAddressesAction();
@@ -58,7 +58,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
         $action->execute(new stdClass());
     }
 
-    public function testShouldCallKlarnaGetAddresses()
+    public function testShouldCallKlarnaGetAddresses(): void
     {
         $first = new KlarnaAddr();
         $first->setCountry('SE');
@@ -83,7 +83,7 @@ class GetAddressesActionTest extends GenericApiAwareActionTest
         $this->assertSame($first, $getAddresses->getFirstAddress());
     }
 
-    public function testShouldNotCatchKlarnaException()
+    public function testShouldNotCatchKlarnaException(): void
     {
         $this->expectException(KlarnaException::class);
         $details = [

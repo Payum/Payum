@@ -10,7 +10,7 @@ use Payum\Core\GatewayFactory;
 
 class Be2BillDirectGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'be2bill_direct',
@@ -21,7 +21,7 @@ class Be2BillDirectGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'identifier' => '',
                 'password' => '',

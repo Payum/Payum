@@ -57,7 +57,7 @@ class RenderTemplate
     /**
      * @param string $result
      */
-    public function setResult($result)
+    public function setResult($result): void
     {
         $this->result = $result;
     }
@@ -66,7 +66,7 @@ class RenderTemplate
      * @param string $name
      * @param mixed  $value
      */
-    public function setParameter($name, $value)
+    public function setParameter($name, $value): void
     {
         $this->parameters[$name] = $value;
     }
@@ -75,7 +75,7 @@ class RenderTemplate
      * @param string $name
      * @param mixed  $value
      */
-    public function addParameter($name, $value)
+    public function addParameter($name, $value): void
     {
         if (array_key_exists($name, $this->parameters)) {
             throw new InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));

@@ -23,17 +23,17 @@ class GetHttpRequestAction implements ActionInterface
     /**
      * @deprecated
      */
-    public function setHttpRequest(Request $httpRequest = null)
+    public function setHttpRequest(Request $httpRequest = null): void
     {
         $this->httpRequest = $httpRequest;
     }
 
-    public function setHttpRequestStack(RequestStack $httpRequestStack = null)
+    public function setHttpRequestStack(RequestStack $httpRequestStack = null): void
     {
         $this->httpRequestStack = $httpRequestStack;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var GetHttpRequest $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -58,7 +58,7 @@ class GetHttpRequestAction implements ActionInterface
         return $request instanceof GetHttpRequest;
     }
 
-    protected function updateRequest(GetHttpRequest $request, Request $httpRequest)
+    protected function updateRequest(GetHttpRequest $request, Request $httpRequest): void
     {
         $request->query = $httpRequest->query->all();
         $request->request = $httpRequest->request->all();

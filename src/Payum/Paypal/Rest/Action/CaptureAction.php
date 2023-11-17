@@ -35,7 +35,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $this->apiClass = ApiContext::class;
     }
 
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -62,9 +62,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'paypal' == $payment->payer->payment_method
+            'paypal' === $payment->payer->payment_method
         ) {
             $payment->create($this->api);
 
@@ -73,16 +73,16 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
             }
 
             foreach ($payment->links as $link) {
-                if ('approval_url' == $link->rel) {
+                if ('approval_url' === $link->rel) {
                     throw new HttpRedirect($link->href);
                 }
             }
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'credit_card' == $payment->payer->payment_method
+            'credit_card' === $payment->payer->payment_method
         ) {
             $payment->create($this->api);
 
@@ -92,9 +92,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            true == isset($payment->state) &&
+            isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'paypal' == $payment->payer->payment_method
+            'paypal' === $payment->payer->payment_method
         ) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
 

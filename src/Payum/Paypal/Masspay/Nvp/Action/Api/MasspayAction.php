@@ -27,7 +27,7 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
     /**
      * @param Masspay $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 

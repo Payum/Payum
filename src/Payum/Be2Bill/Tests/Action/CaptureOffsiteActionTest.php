@@ -23,28 +23,28 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    public function testShouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
         $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    public function testThrowIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CaptureOffsiteAction();
@@ -52,7 +52,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->setApi(new stdClass());
     }
 
-    public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
+    public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery(): void
     {
         $this->expectException(HttpPostRedirect::class);
         $model = [
@@ -91,7 +91,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    public function testShouldUpdateModelWhenComeBackFromBe2billSite()
+    public function testShouldUpdateModelWhenComeBackFromBe2billSite(): void
     {
         $model = [
             'AMOUNT' => 1000,
@@ -111,7 +111,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
             })

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryBuilderTest extends TestCase
 {
-    public function testShouldBuildSymfonyHttpRequestVerifier()
+    public function testShouldBuildSymfonyHttpRequestVerifier(): void
     {
         /** @var StorageInterface $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);
@@ -29,7 +29,7 @@ class TokenFactoryBuilderTest extends TestCase
         $this->assertInstanceOf(TokenFactory::class, $tokenFactory);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         /** @var StorageInterface $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);

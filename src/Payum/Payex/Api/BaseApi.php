@@ -39,15 +39,15 @@ abstract class BaseApi
         $this->clientFactory = $clientFactory;
         $this->options = $options;
 
-        if (true == empty($this->options['account_number'])) {
+        if (empty($this->options['account_number'])) {
             throw new InvalidArgumentException('The account_number option must be set.');
         }
 
-        if (true == empty($this->options['encryption_key'])) {
+        if (empty($this->options['encryption_key'])) {
             throw new InvalidArgumentException('The encryption_key option must be set.');
         }
 
-        if (false == is_bool($this->options['sandbox'])) {
+        if (! is_bool($this->options['sandbox'])) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
     }
@@ -79,7 +79,7 @@ abstract class BaseApi
     {
         $orderedParameters = [];
         foreach ($parametersKeys as $parametersKey) {
-            if (false == isset($parameters[$parametersKey])) {
+            if (! isset($parameters[$parametersKey])) {
                 //TODO exception?
                 continue;
             }
@@ -120,7 +120,7 @@ abstract class BaseApi
             }
 
             foreach ($statuses as $name => $value) {
-                if ('description' == $name) {
+                if ('description' === $name) {
                     $name = 'errorDescription';
                 }
 

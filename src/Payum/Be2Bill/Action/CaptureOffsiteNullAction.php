@@ -21,7 +21,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -33,7 +33,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
         }
 
         $extraDataJson = $httpRequest->query['EXTRADATA'];
-        if (false == $extraData = json_decode($extraDataJson, true, 512, JSON_THROW_ON_ERROR)) {
+        if (! $extraData = json_decode($extraDataJson, true, 512, JSON_THROW_ON_ERROR)) {
             throw new HttpResponse('The capture is invalid. Code Be2Bell2', 400);
         }
 

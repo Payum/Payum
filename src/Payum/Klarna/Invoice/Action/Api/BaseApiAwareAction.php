@@ -39,7 +39,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
      *
      * @throws UnsupportedApiException if the given Api is not supported.
      */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -77,7 +77,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     /**
      * @param object           $request
      */
-    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, $request)
+    protected function populateDetailsWithError(ArrayAccess $details, KlarnaException $e, $request): void
     {
         $details['error_request'] = $request::class;
         $details['error_file'] = $e->getFile();

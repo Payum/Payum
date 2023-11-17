@@ -14,7 +14,7 @@ use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 
 class PaypalProHostedGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'paypal_pro_hosted',
@@ -28,7 +28,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
             'payum.action.api.create_button_payment' => new CreateButtonPaymentAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',

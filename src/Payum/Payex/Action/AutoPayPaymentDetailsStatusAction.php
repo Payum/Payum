@@ -15,7 +15,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
     /**
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -35,8 +35,8 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            AgreementApi::PURCHASEOPERATION_SALE == $model['purchaseOperation'] &&
-            OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']
+            AgreementApi::PURCHASEOPERATION_SALE === $model['purchaseOperation'] &&
+            OrderApi::TRANSACTIONSTATUS_SALE === $model['transactionStatus']
         ) {
             $request->markCaptured();
 
@@ -44,8 +44,8 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            AgreementApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation'] &&
-            OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']
+            AgreementApi::PURCHASEOPERATION_AUTHORIZATION === $model['purchaseOperation'] &&
+            OrderApi::TRANSACTIONSTATUS_AUTHORIZE === $model['transactionStatus']
         ) {
             $request->markCaptured();
 
@@ -57,7 +57,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
 
     public function supports($request)
     {
-        if (false == (
+        if (! (
             $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess
         )) {
@@ -67,7 +67,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         //Make sure it is not recurring payment. There is an status action for recurring payments;
-        if (true == $model['recurring']) {
+        if ($model['recurring']) {
             return false;
         }
         return (bool) $model['autoPay'];

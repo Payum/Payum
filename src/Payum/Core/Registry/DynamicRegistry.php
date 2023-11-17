@@ -120,7 +120,7 @@ class DynamicRegistry implements RegistryInterface
      *
      * @param boolean $backwardCompatibility
      */
-    public function setBackwardCompatibility($backwardCompatibility)
+    public function setBackwardCompatibility($backwardCompatibility): void
     {
         $this->backwardCompatibility = $backwardCompatibility;
     }

@@ -18,9 +18,9 @@ use Sofort\SofortLib\Sofortueberweisung;
 
 class SofortGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
-        if (false == class_exists(Sofortueberweisung::class)) {
+        if (! class_exists(Sofortueberweisung::class)) {
             throw new LogicException('You must install "sofort/sofortlib-php:^3.0" library.');
         }
 
@@ -39,7 +39,7 @@ class SofortGatewayFactory extends GatewayFactory
             'payum.action.api.refund_transaction' => new RefundTransactionAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'config_key' => '',
                 'abort_url' => '',
@@ -57,7 +57,7 @@ class SofortGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (false == preg_match('/.*\:.*\:.*/', $config['config_key'])) {
+                if (! preg_match('/.*\:.*\:.*/', $config['config_key'])) {
                     throw new \LogicException('The config_key is invalid. It must match the regexp "/.*\:.*\:.*/".');
                 }
 

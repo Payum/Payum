@@ -45,7 +45,7 @@ class Gateway implements GatewayInterface
      * @param mixed $api
      * @param bool  $forcePrepend
      */
-    public function addApi($api, $forcePrepend = false)
+    public function addApi($api, $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->apis, $api) :
@@ -56,7 +56,7 @@ class Gateway implements GatewayInterface
     /**
      * @param bool                   $forcePrepend
      */
-    public function addAction(ActionInterface $action, $forcePrepend = false)
+    public function addAction(ActionInterface $action, $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->actions, $action) :
@@ -67,7 +67,7 @@ class Gateway implements GatewayInterface
     /**
      * @param bool                                     $forcePrepend
      */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
     {
         $this->extensions->addExtension($extension, $forcePrepend);
     }
@@ -81,8 +81,8 @@ class Gateway implements GatewayInterface
         try {
             $this->extensions->onPreExecute($context);
 
-            if (false == $context->getAction()) {
-                if (false == $action = $this->findActionSupported($context->getRequest())) {
+            if (! $context->getAction()) {
+                if (! $action = $this->findActionSupported($context->getRequest())) {
                     throw RequestNotSupportedException::create($context->getRequest());
                 }
 
@@ -119,7 +119,7 @@ class Gateway implements GatewayInterface
         return;
     }
 
-    protected function onPostExecuteWithException(Context $context)
+    protected function onPostExecuteWithException(Context $context): void
     {
         array_pop($this->stack);
 
@@ -173,7 +173,7 @@ class Gateway implements GatewayInterface
                     }
                 }
 
-                if (false == $apiSet) {
+                if (! $apiSet) {
                     throw new LogicException(sprintf('Cannot find right api for the action %s', $action::class), 0, $unsupportedException);
                 }
             }

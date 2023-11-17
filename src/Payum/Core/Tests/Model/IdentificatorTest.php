@@ -10,28 +10,28 @@ use stdClass;
 
 class IdentificatorTest extends TestCase
 {
-    public function testShouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface(): void
     {
         $rc = new ReflectionClass(Identificator::class);
 
         $this->assertTrue($rc->implementsInterface(Serializable::class));
     }
 
-    public function testShouldAllowGetIdSetInConstructor()
+    public function testShouldAllowGetIdSetInConstructor(): void
     {
         $id = new Identificator('theId', new stdClass());
 
         $this->assertSame('theId', $id->getId());
     }
 
-    public function testShouldAllowGetClassSetInConstructor()
+    public function testShouldAllowGetClassSetInConstructor(): void
     {
         $id = new Identificator('theId', new stdClass());
 
         $this->assertSame(stdClass::class, $id->getClass());
     }
 
-    public function testShouldBeCorrectlySerializedAndUnserialized()
+    public function testShouldBeCorrectlySerializedAndUnserialized(): void
     {
         $id = new Identificator('theId', new stdClass());
 

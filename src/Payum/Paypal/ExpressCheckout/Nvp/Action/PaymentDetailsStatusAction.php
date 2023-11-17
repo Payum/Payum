@@ -14,14 +14,14 @@ class PaymentDetailsStatusAction implements ActionInterface
     /**
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         foreach (range(0, 9) as $index) {
-            if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED == $model['L_ERRORCODE' . $index]) {
+            if (Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED === $model['L_ERRORCODE' . $index]) {
                 $request->markCanceled();
 
                 return;
@@ -43,8 +43,8 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            false == $model['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
+            ! $model['PAYERID'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $model['CHECKOUTSTATUS']
         ) {
             $request->markPending();
 
@@ -54,9 +54,9 @@ class PaymentDetailsStatusAction implements ActionInterface
         //it is possible to set zero amount for create agreement request.
         if (
             $model['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $model['CHECKOUTSTATUS'] &&
             $model['L_BILLINGTYPE0'] &&
-            0 == $model['PAYMENTREQUEST_0_AMT']
+            0 === $model['PAYMENTREQUEST_0_AMT']
         ) {
             $request->markCaptured();
 
@@ -64,20 +64,20 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         if (
-            false == $model['CHECKOUTSTATUS'] ||
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $model['CHECKOUTSTATUS']
+            ! $model['CHECKOUTSTATUS'] ||
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $model['CHECKOUTSTATUS']
         ) {
             $request->markNew();
 
             return;
         }
 
-        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS == $model['CHECKOUTSTATUS']) {
+        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS === $model['CHECKOUTSTATUS']) {
             $request->markPending();
 
             return;
         }
-        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED == $model['CHECKOUTSTATUS']) {
+        if (Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED === $model['CHECKOUTSTATUS']) {
             $request->markFailed();
 
             return;
@@ -85,8 +85,8 @@ class PaymentDetailsStatusAction implements ActionInterface
 
         //todo check all payment statuses.
         if (
-            Api::CHECKOUTSTATUS_PAYMENT_COMPLETED == $model['CHECKOUTSTATUS'] ||
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED == $model['CHECKOUTSTATUS']
+            Api::CHECKOUTSTATUS_PAYMENT_COMPLETED === $model['CHECKOUTSTATUS'] ||
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED === $model['CHECKOUTSTATUS']
         ) {
             $completedCounter = 0;
             $authorizedCounter = 0;
@@ -114,7 +114,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_PENDING,
                 ];
                 if (in_array($paymentStatus, $pendingStatuses)) {
-                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
+                    if (Api::PENDINGREASON_AUTHORIZATION === $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $authorizedCounter++;
                     } else {
                         $request->markPending();
@@ -127,7 +127,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     Api::PAYMENTSTATUS_VOIDED,
                 ];
                 if (in_array($paymentStatus, $canceledStatuses)) {
-                    if (Api::PENDINGREASON_AUTHORIZATION == $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
+                    if (Api::PENDINGREASON_AUTHORIZATION === $model['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                         $voidedCounter++;
                     }
                 }
@@ -176,15 +176,15 @@ class PaymentDetailsStatusAction implements ActionInterface
 
     public function supports($request)
     {
-        if (false == $request instanceof GetStatusInterface) {
+        if (! $request instanceof GetStatusInterface) {
             return false;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return false;
         }
 
-        return false == isset($model['BILLINGPERIOD']);
+        return ! isset($model['BILLINGPERIOD']);
     }
 }

@@ -23,7 +23,7 @@
         "payum/core": "2.0.x-dev"
     },
     "require-dev": {
-        "php-http/guzzle6-adapter": "^1.0"
+        "php-http/guzzle7-adapter": "^1.0"
     },
     "config": {
         "bin-dir": "bin"

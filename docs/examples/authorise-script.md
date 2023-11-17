@@ -21,7 +21,7 @@ $gateway = $payum->getGateway($token->getGatewayName());
 try {
     $gateway->execute(new Authorize($token));
 
-    if (false == isset($_REQUEST['noinvalidate'])) {
+    if (! isset($_REQUEST['noinvalidate'])) {
         $payum->getHttpRequestVerifier()->invalidate($token);
     }
 

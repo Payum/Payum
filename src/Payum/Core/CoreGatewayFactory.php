@@ -85,7 +85,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.stream_factory' => function (ArrayObject $config) {
                 if (class_exists(StreamFactoryDiscovery::class)) {
@@ -104,7 +104,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttplugFactory();
                 }
 
-                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle6-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, zendframework/zend-diactoros. You can also overwrite the config option with your implementation.');
             },
             'httplug.client' => function (ArrayObject $config) {
                 if (class_exists(HttpClientDiscovery::class)) {
@@ -139,7 +139,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
                     return new HttpBuzzClient();
                 }
 
-                throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle6-adapter. You can also overwrite the config option with your implementation.');
+                throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
             'payum.http_client' => fn (ArrayObject $config) => new HttplugClient($config['httplug.client']),
             'payum.template.layout' => '@PayumCore/layout.html.twig',
@@ -147,7 +147,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
             'twig.env' => fn () => new Environment(new ChainLoader()),
             'twig.register_paths' => function (ArrayObject $config) {
                 $twig = $config['twig.env'];
-                if (false == $twig instanceof Environment) {
+                if (! $twig instanceof Environment) {
                     throw new LogicException(sprintf(
                         'The `twig.env config option must contains instance of Twig\Environment but got %s`',
                         get_debug_type($twig)
@@ -188,7 +188,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return (array) $config;
     }
 
-    protected function buildClosures(ArrayObject $config)
+    protected function buildClosures(ArrayObject $config): void
     {
         // with higher priority
         foreach (['httplug.message_factory', 'httplug.stream_factory', 'httplug.client', 'payum.http_client', 'payum.paths', 'twig.env', 'twig.register_paths'] as $name) {
@@ -205,7 +205,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildActions(Gateway $gateway, ArrayObject $config)
+    protected function buildActions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.action')) {
@@ -216,7 +216,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildApis(Gateway $gateway, ArrayObject $config)
+    protected function buildApis(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.api')) {
@@ -227,7 +227,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         }
     }
 
-    protected function buildExtensions(Gateway $gateway, ArrayObject $config)
+    protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.extension')) {

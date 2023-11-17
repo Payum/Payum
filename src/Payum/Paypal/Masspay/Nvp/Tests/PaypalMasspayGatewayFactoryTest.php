@@ -9,7 +9,7 @@ use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 
 class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
         $factory = new PaypalMasspayGatewayFactory([
             'foo' => 'fooVal',
@@ -27,7 +27,7 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('barVal', $config['bar']);
     }
 
-    public function testShouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalMasspayGatewayFactory();
 
@@ -47,7 +47,7 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         );
     }
 
-    public function testShouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalMasspayGatewayFactory();
 
@@ -62,7 +62,7 @@ class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->assertSame('PayPal Masspay', $config['payum.factory_title']);
     }
 
-    public function testShouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');

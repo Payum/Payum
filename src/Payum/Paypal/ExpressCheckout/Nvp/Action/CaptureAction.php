@@ -11,7 +11,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 
 class CaptureAction extends PurchaseAction
 {
-    public function execute($request)
+    public function execute($request): void
     {
         /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
@@ -21,7 +21,7 @@ class CaptureAction extends PurchaseAction
         $details['PAYMENTREQUEST_0_PAYMENTACTION'] = Api::PAYMENTACTION_SALE;
 
         foreach (range(0, 9) as $index) {
-            if (Api::PENDINGREASON_AUTHORIZATION == $details['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
+            if (Api::PENDINGREASON_AUTHORIZATION === $details['PAYMENTINFO_' . $index . '_PENDINGREASON']) {
                 $details->defaults([
                     'PAYMENTREQUEST_' . $index . '_COMPLETETYPE' => 'Complete',
                 ]);

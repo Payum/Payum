@@ -21,10 +21,10 @@ abstract class BaseOrmTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (false == class_exists(Version::class, $autoload = true)) {
+        if (! class_exists(Version::class, $autoload = true)) {
             throw new SkippedTestError('Doctrine ORM lib not installed. Have you run composer with --dev option?');
         }
-        if (false == extension_loaded('pdo_sqlite')) {
+        if (! extension_loaded('pdo_sqlite')) {
             throw new SkippedTestError('The pdo_sqlite extension is not loaded. It is required to run doctrine tests.');
         }
     }
@@ -35,7 +35,7 @@ abstract class BaseOrmTest extends TestCase
         $this->setUpDatabase();
     }
 
-    protected function setUpEntityManager()
+    protected function setUpEntityManager(): void
     {
         $config = new Configuration();
         $config->setAutoGenerateProxyClasses(true);
@@ -59,7 +59,7 @@ abstract class BaseOrmTest extends TestCase
         $this->em = EntityManager::create($connection, $config);
     }
 
-    protected function setUpDatabase()
+    protected function setUpDatabase(): void
     {
         $schemaTool = new SchemaTool($this->em);
         $schemaTool->dropDatabase();

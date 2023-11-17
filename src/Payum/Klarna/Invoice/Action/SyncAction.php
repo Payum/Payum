@@ -18,13 +18,13 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Sync $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['rno'] && false == $details['invoice_number']) {
+        if ($details['rno'] && ! $details['invoice_number']) {
             $this->gateway->execute(new CheckOrderStatus($request->getModel()));
         }
     }

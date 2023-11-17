@@ -18,13 +18,13 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Payout $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $model['ACK']) {
+        if (! $model['ACK']) {
             $this->gateway->execute(new Masspay($model));
         }
     }

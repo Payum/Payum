@@ -32,7 +32,7 @@ final class CryptoStorageDecorator implements StorageInterface
         return $this->decoratedStorage->support($model);
     }
 
-    public function update($model)
+    public function update($model): void
     {
         $this->assertCrypted($model);
 
@@ -41,7 +41,7 @@ final class CryptoStorageDecorator implements StorageInterface
         $this->decoratedStorage->update($model);
     }
 
-    public function delete($model)
+    public function delete($model): void
     {
         $this->decoratedStorage->delete($model);
     }
@@ -78,9 +78,9 @@ final class CryptoStorageDecorator implements StorageInterface
     /**
      * @param object $model
      */
-    private function assertCrypted($model)
+    private function assertCrypted($model): void
     {
-        if (false == $model instanceof CryptedInterface) {
+        if (! $model instanceof CryptedInterface) {
             throw new LogicException(sprintf(
                 'The model %s must implement %s interface. It is required for this decorator.',
                 $model::class,

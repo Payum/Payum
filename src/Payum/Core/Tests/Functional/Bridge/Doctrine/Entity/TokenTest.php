@@ -10,14 +10,14 @@ use stdClass;
 
 class TokenTest extends OrmTest
 {
-    public function testShouldAllSchemasBeValid()
+    public function testShouldAllSchemasBeValid(): void
     {
         $schemaValidator = new SchemaValidator($this->em);
 
         $this->assertEmpty($schemaValidator->validateMapping());
     }
 
-    public function testShouldAllowPersist()
+    public function testShouldAllowPersist(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -30,7 +30,7 @@ class TokenTest extends OrmTest
         $this->assertSame([$token], $repository->findAll());
     }
 
-    public function testShouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');

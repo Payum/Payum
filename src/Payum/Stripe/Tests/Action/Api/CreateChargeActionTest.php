@@ -15,21 +15,21 @@ use stdClass;
 
 class CreateChargeActionTest extends TestCase
 {
-    public function testShouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
         $rc = new ReflectionClass(CreateChargeAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    public function testShouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
         $rc = new ReflectionClass(CreateChargeAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi(): void
     {
         $this->expectException(UnsupportedApiException::class);
         $action = new CreateChargeAction();
@@ -37,28 +37,28 @@ class CreateChargeActionTest extends TestCase
         $action->setApi('not keys instance');
     }
 
-    public function testShouldSupportCreateChargeRequestWithArrayAccessModel()
+    public function testShouldSupportCreateChargeRequestWithArrayAccessModel(): void
     {
         $action = new CreateChargeAction();
 
         $this->assertTrue($action->supports(new CreateCharge([])));
     }
 
-    public function testShouldNotSupportCreateChargeRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreateChargeRequestWithNotArrayAccessModel(): void
     {
         $action = new CreateChargeAction();
 
         $this->assertFalse($action->supports(new CreateCharge(new stdClass())));
     }
 
-    public function testShouldNotSupportNotCreateChargeRequest()
+    public function testShouldNotSupportNotCreateChargeRequest(): void
     {
         $action = new CreateChargeAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testThrowRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreateChargeAction is not supported the request stdClass.');
@@ -67,7 +67,7 @@ class CreateChargeActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testThrowIfNotCardNorCustomerSet()
+    public function testThrowIfNotCardNorCustomerSet(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The either card token or customer id has to be set.');
@@ -76,7 +76,7 @@ class CreateChargeActionTest extends TestCase
         $action->execute(new CreateCharge([]));
     }
 
-    public function testThrowIfCardAlreadyUsed()
+    public function testThrowIfCardAlreadyUsed(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The token has already been used.');

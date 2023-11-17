@@ -63,7 +63,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $number
      */
-    public function setNumber($number)
+    public function setNumber($number): void
     {
         $this->number = $number;
     }
@@ -76,7 +76,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
@@ -89,7 +89,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $clientEmail
      */
-    public function setClientEmail($clientEmail)
+    public function setClientEmail($clientEmail): void
     {
         $this->clientEmail = $clientEmail;
     }
@@ -102,7 +102,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $clientId
      */
-    public function setClientId($clientId)
+    public function setClientId($clientId): void
     {
         $this->clientId = $clientId;
     }
@@ -115,7 +115,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param int $totalAmount
      */
-    public function setTotalAmount($totalAmount)
+    public function setTotalAmount($totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
@@ -128,7 +128,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode($currencyCode)
+    public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
@@ -141,7 +141,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param array|Traversable $details
      */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         if ($details instanceof Traversable) {
             $details = iterator_to_array($details);
@@ -158,7 +158,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->creditCard;
     }
 
-    public function setCreditCard(CreditCardInterface $creditCard = null)
+    public function setCreditCard(CreditCardInterface $creditCard = null): void
     {
         $this->creditCard = $creditCard;
     }
@@ -171,7 +171,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->bankAccount;
     }
 
-    public function setBankAccount(BankAccountInterface $bankAccount = null)
+    public function setBankAccount(BankAccountInterface $bankAccount = null): void
     {
         $this->bankAccount = $bankAccount;
     }

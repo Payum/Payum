@@ -18,13 +18,13 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['rno']) {
+        if (! $details['rno']) {
             $this->gateway->execute(new ReserveAmount($details));
         }
     }

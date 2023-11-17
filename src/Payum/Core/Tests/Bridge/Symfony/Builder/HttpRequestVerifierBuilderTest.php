@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class HttpRequestVerifierBuilderTest extends TestCase
 {
-    public function testShouldBuildSymfonyHttpRequestVerifier()
+    public function testShouldBuildSymfonyHttpRequestVerifier(): void
     {
         /** @var StorageInterface $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);
@@ -21,7 +21,7 @@ class HttpRequestVerifierBuilderTest extends TestCase
         $this->assertInstanceOf(HttpRequestVerifier::class, $verifier);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         /** @var StorageInterface $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);

@@ -11,7 +11,7 @@ use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 
 class PaypalMasspayGatewayFactory extends GatewayFactory
 {
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'paypal_masspay_nvp',
@@ -23,7 +23,7 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
             'payum.action.get_payout_status' => new GetPayoutStatusAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'username' => '',
                 'password' => '',

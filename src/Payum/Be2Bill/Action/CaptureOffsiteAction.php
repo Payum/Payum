@@ -34,7 +34,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
     /**
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -49,11 +49,11 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         } else {
             $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA'], true, 512, JSON_THROW_ON_ERROR) : [];
 
-            if (false == isset($extradata['capture_token']) && $request->getToken()) {
+            if (! isset($extradata['capture_token']) && $request->getToken()) {
                 $extradata['capture_token'] = $request->getToken()->getHash();
             }
 
-            if (false == isset($extradata['notify_token']) && $request->getToken() && $this->tokenFactory) {
+            if (! isset($extradata['notify_token']) && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
                     $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()

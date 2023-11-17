@@ -10,21 +10,21 @@ use ReflectionClass;
 
 class HttpRedirectTest extends TestCase
 {
-    public function testShouldReplyInterface()
+    public function testShouldReplyInterface(): void
     {
         $rc = new ReflectionClass(HttpRedirect::class);
 
         $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    public function testShouldBeSubClassOfHttpResponseClass()
+    public function testShouldBeSubClassOfHttpResponseClass(): void
     {
         $rc = new ReflectionClass(HttpRedirect::class);
 
         $this->assertTrue($rc->isSubclassOf(HttpResponse::class));
     }
 
-    public function testShouldAllowGetUrlSetInConstructor()
+    public function testShouldAllowGetUrlSetInConstructor(): void
     {
         $expectedUrl = 'theUrl';
 
@@ -33,7 +33,7 @@ class HttpRedirectTest extends TestCase
         $this->assertSame($expectedUrl, $request->getUrl());
     }
 
-    public function testShouldAllowGetContext()
+    public function testShouldAllowGetContext(): void
     {
         $expectedContent = <<<HTML
 <!DOCTYPE html>
@@ -55,21 +55,21 @@ HTML;
         $this->assertSame($expectedContent, $request->getContent());
     }
 
-    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl');
 
         $this->assertSame(302, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl', 301);
 
         $this->assertSame(301, $request->getStatusCode());
     }
 
-    public function testShouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl');
 
@@ -78,7 +78,7 @@ HTML;
         ], $request->getHeaders());
     }
 
-    public function testShouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor(): void
     {
         $customHeaders = [
             'foo' => 'fooVal',

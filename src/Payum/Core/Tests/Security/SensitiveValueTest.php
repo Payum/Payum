@@ -10,21 +10,21 @@ use Serializable;
 
 class SensitiveValueTest extends TestCase
 {
-    public function testShouldBeFinal()
+    public function testShouldBeFinal(): void
     {
         $rc = new ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->isFinal());
     }
 
-    public function testShouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface(): void
     {
         $rc = new ReflectionClass(SensitiveValue::class);
 
         $this->assertTrue($rc->implementsInterface(Serializable::class));
     }
 
-    public function testShouldAllowGetValueSetInConstructorAndErase()
+    public function testShouldAllowGetValueSetInConstructorAndErase(): void
     {
         $expectedValue = 'cardNumber';
 
@@ -34,7 +34,7 @@ class SensitiveValueTest extends TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-    public function testShouldAllowPeekValueSetInConstructorAndNotErase()
+    public function testShouldAllowPeekValueSetInConstructorAndNotErase(): void
     {
         $expectedValue = 'cardNumber';
 
@@ -44,7 +44,7 @@ class SensitiveValueTest extends TestCase
         $this->assertSame($expectedValue, $sensitiveValue->peek());
     }
 
-    public function testShouldAllowEraseValue()
+    public function testShouldAllowEraseValue(): void
     {
         $expectedValue = 'cardNumber';
 
@@ -57,7 +57,7 @@ class SensitiveValueTest extends TestCase
         $this->assertNull($sensitiveValue->get());
     }
 
-    public function testShouldNotSerializeValue()
+    public function testShouldNotSerializeValue(): void
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
@@ -73,21 +73,21 @@ class SensitiveValueTest extends TestCase
         }
     }
 
-    public function testShouldReturnEmptyStringOnToString()
+    public function testShouldReturnEmptyStringOnToString(): void
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertSame('', (string) $sensitiveValue);
     }
 
-    public function testShouldNotExposeValueWhileEncodingToJson()
+    public function testShouldNotExposeValueWhileEncodingToJson(): void
     {
         $sensitiveValue = new SensitiveValue('cardNumber');
 
         $this->assertSame('null', json_encode($sensitiveValue, JSON_THROW_ON_ERROR));
     }
 
-    public function testThrowIfTryToCloneValue()
+    public function testThrowIfTryToCloneValue(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('It is not permitted to close this object.');
@@ -96,12 +96,12 @@ class SensitiveValueTest extends TestCase
         clone $sensitiveValue;
     }
 
-    public function testShouldReturnNewInstanceOfSensitiveValueOnEnsureSensitive()
+    public function testShouldReturnNewInstanceOfSensitiveValueOnEnsureSensitive(): void
     {
         $this->assertInstanceOf(SensitiveValue::class, SensitiveValue::ensureSensitive('foo'));
     }
 
-    public function testShouldReturnSameInstanceOfSensitiveValueGivenAsArgumentOnEnsureSensitive()
+    public function testShouldReturnSameInstanceOfSensitiveValueGivenAsArgumentOnEnsureSensitive(): void
     {
         $foo = new SensitiveValue('foo');
 

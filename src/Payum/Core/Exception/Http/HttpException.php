@@ -18,7 +18,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
      */
     protected $response;
 
-    public function setRequest(RequestInterface $request)
+    public function setRequest(RequestInterface $request): void
     {
         $this->request = $request;
     }
@@ -28,7 +28,7 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
         return $this->request;
     }
 
-    public function setResponse(ResponseInterface $response)
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }

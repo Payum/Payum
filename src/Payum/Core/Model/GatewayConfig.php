@@ -38,7 +38,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->factoryName;
     }
 
-    public function setFactoryName($factoryName)
+    public function setFactoryName($factoryName): void
     {
         $this->factoryName = $factoryName;
     }
@@ -54,7 +54,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
     /**
      * @param string $gatewayName
      */
-    public function setGatewayName($gatewayName)
+    public function setGatewayName($gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }
@@ -68,20 +68,20 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         return $this->config;
     }
 
-    public function setConfig(array $config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
         $this->decryptedConfig = $config;
     }
 
-    public function decrypt(CypherInterface $cypher)
+    public function decrypt(CypherInterface $cypher): void
     {
         if (empty($this->config['encrypted'])) {
             return;
         }
 
         foreach ($this->config as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->decryptedConfig[$name] = $value;
 
                 continue;
@@ -91,12 +91,12 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         }
     }
 
-    public function encrypt(CypherInterface $cypher)
+    public function encrypt(CypherInterface $cypher): void
     {
         $this->decryptedConfig['encrypted'] = true;
 
         foreach ($this->decryptedConfig as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->config[$name] = $value;
 
                 continue;

@@ -20,7 +20,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
     /**
      * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,7 +28,7 @@ class NotifyAction implements ActionInterface, GatewayAwareInterface
 
         $this->gateway->execute(new Sync($details));
 
-        if (Constants::STATUS_CHECKOUT_COMPLETE == $details['status']) {
+        if (Constants::STATUS_CHECKOUT_COMPLETE === $details['status']) {
             $this->gateway->execute(new UpdateOrder([
                 'location' => $details['location'],
                 'status' => Constants::STATUS_CREATED,

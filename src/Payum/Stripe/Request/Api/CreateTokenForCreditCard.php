@@ -23,7 +23,7 @@ class CreateTokenForCreditCard extends Generic
     /**
      * @param array|ArrayAccess $token
      */
-    public function setToken($token)
+    public function setToken($token): void
     {
         $this->token = $token;
     }

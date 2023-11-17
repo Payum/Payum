@@ -48,7 +48,7 @@ class TwigFactory
      */
     public static function guessViewsPath($gatewayFactoryOrRootClass)
     {
-        if (false == class_exists($gatewayFactoryOrRootClass)) {
+        if (! class_exists($gatewayFactoryOrRootClass)) {
             return;
         }
 

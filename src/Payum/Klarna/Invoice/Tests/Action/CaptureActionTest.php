@@ -16,35 +16,35 @@ use stdClass;
 
 class CaptureActionTest extends TestCase
 {
-    public function testShouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
         $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    public function testShouldSupportCaptureWithArrayAsModel()
+    public function testShouldSupportCaptureWithArrayAsModel(): void
     {
         $action = new CaptureAction();
 
         $this->assertTrue($action->supports(new Capture([])));
     }
 
-    public function testShouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture(): void
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new stdClass()));
     }
 
-    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel(): void
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
-    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
         $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -52,7 +52,7 @@ class CaptureActionTest extends TestCase
         $action->execute(new stdClass());
     }
 
-    public function testShouldSubExecuteAuthorizeIfRnoNotSet()
+    public function testShouldSubExecuteAuthorizeIfRnoNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -69,7 +69,7 @@ class CaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldSubExecuteActivateIfRnoSet()
+    public function testShouldSubExecuteActivateIfRnoSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -88,7 +88,7 @@ class CaptureActionTest extends TestCase
         $action->execute($request);
     }
 
-    public function testShouldDoNothingIfAlreadyReservedAndActivated()
+    public function testShouldDoNothingIfAlreadyReservedAndActivated(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

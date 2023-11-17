@@ -11,14 +11,14 @@ use ReflectionClass;
 
 class ExtensionCollectionTest extends TestCase
 {
-    public function testShouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
         $rc = new ReflectionClass(ExtensionCollection::class);
 
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testShouldAllowAddExtensionAppendByDefault()
+    public function testShouldAllowAddExtensionAppendByDefault(): void
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -37,7 +37,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertSame($extensionSecond, $addedExtensions[1]);
     }
 
-    public function testShouldAllowAddExtensionWithForcedPrepend()
+    public function testShouldAllowAddExtensionWithForcedPrepend(): void
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -56,7 +56,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertSame($extensionFirst, $addedExtensions[1]);
     }
 
-    public function testShouldCallOnPreExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnPreExecuteForAllExtensionsInCollection(): void
     {
         $expectedContext = $this->createContextMock();
 
@@ -78,12 +78,10 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPreExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onPreExecute($expectedContext);
     }
 
-    public function testShouldCallOnExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnExecuteForAllExtensionsInCollection(): void
     {
         $expectedContext = $this->createContextMock();
 
@@ -105,12 +103,10 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onExecute($expectedContext);
     }
 
-    public function testShouldCallOnPostExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnPostExecuteForAllExtensionsInCollection(): void
     {
         $expectedContext = $this->createContextMock();
 
@@ -132,9 +128,7 @@ class ExtensionCollectionTest extends TestCase
         $collection->addExtension($extensionFirst);
         $collection->addExtension($extensionSecond);
 
-        $result = $collection->onPostExecute($expectedContext);
-
-        $this->assertNull($result);
+        $collection->onPostExecute($expectedContext);
     }
 
     /**

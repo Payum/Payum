@@ -14,7 +14,7 @@ class StatusAction implements ActionInterface
     /**
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -51,7 +51,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Api::PAYMENTSTATUS_COMPLETED == $paymentStatus) {
+        if (Api::PAYMENTSTATUS_COMPLETED === $paymentStatus) {
             $request->markCaptured();
 
             return;
@@ -63,14 +63,14 @@ class StatusAction implements ActionInterface
         ];
 
         if (in_array($paymentStatus, $pendingStatuses)) {
-            if (Api::PENDINGREASON_AUTHORIZATION == $model['PENDINGREASON']) {
+            if (Api::PENDINGREASON_AUTHORIZATION === $model['PENDINGREASON']) {
                 $request->markAuthorized();
 
                 return;
             }
         }
 
-        if (Api::PAYMENTSTATUS_PENDING == $paymentStatus) {
+        if (Api::PAYMENTSTATUS_PENDING === $paymentStatus) {
             $request->markPending();
 
             return;

@@ -50,14 +50,14 @@ class Context
     }
 
     /**
-     * @return ActionInterface
+     * @return ?ActionInterface
      */
     public function getAction()
     {
         return $this->action;
     }
 
-    public function setAction(ActionInterface $action)
+    public function setAction(ActionInterface $action): void
     {
         $this->action = $action;
     }
@@ -70,7 +70,7 @@ class Context
         return $this->reply;
     }
 
-    public function setReply(ReplyInterface $reply = null)
+    public function setReply(ReplyInterface $reply = null): void
     {
         $this->reply = $reply;
     }
@@ -83,7 +83,7 @@ class Context
         return $this->exception;
     }
 
-    public function setException(Exception $exception = null)
+    public function setException(Exception $exception = null): void
     {
         $this->exception = $exception;
     }
