@@ -40,7 +40,7 @@ class ConfirmOrderAction implements ActionInterface, GatewayAwareInterface, ApiA
         RequestNotSupportedException::assertSupports($this, $request);
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
-        if ('POST' == $httpRequest->method && ! empty($httpRequest->request['confirm'])) {
+        if ('POST' === $httpRequest->method && ! empty($httpRequest->request['confirm'])) {
             return;
         }
 

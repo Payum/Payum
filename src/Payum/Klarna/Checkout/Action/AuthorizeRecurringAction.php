@@ -69,7 +69,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         try {
             unset($model['recurring_token']);
 
-            $baseUri = Constants::BASE_URI_LIVE == $backupConfig->baseUri ?
+            $baseUri = Constants::BASE_URI_LIVE === $backupConfig->baseUri ?
                 Constants::BASE_URI_RECURRING_LIVE :
                 Constants::BASE_URI_RECURRING_SANDBOX
             ;

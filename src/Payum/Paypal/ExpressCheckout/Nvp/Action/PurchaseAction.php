@@ -81,7 +81,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
 
         if (
             $details['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $details['CHECKOUTSTATUS'] &&
             $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
             if (Api::USERACTION_COMMIT !== $details['AUTHORIZE_TOKEN_USERACTION']) {

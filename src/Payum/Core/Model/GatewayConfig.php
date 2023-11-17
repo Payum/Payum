@@ -81,7 +81,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         }
 
         foreach ($this->config as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->decryptedConfig[$name] = $value;
 
                 continue;
@@ -96,7 +96,7 @@ class GatewayConfig implements GatewayConfigInterface, CryptedInterface
         $this->decryptedConfig['encrypted'] = true;
 
         foreach ($this->decryptedConfig as $name => $value) {
-            if ('encrypted' == $name || is_bool($value)) {
+            if ('encrypted' === $name || is_bool($value)) {
                 $this->config[$name] = $value;
 
                 continue;

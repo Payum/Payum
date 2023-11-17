@@ -50,19 +50,19 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (KlarnaFlags::ACCEPTED == $details['status']) {
+        if (KlarnaFlags::ACCEPTED === $details['status']) {
             $request->markAuthorized();
 
             return;
         }
 
-        if (KlarnaFlags::PENDING == $details['status']) {
+        if (KlarnaFlags::PENDING === $details['status']) {
             $request->markPending();
 
             return;
         }
 
-        if (KlarnaFlags::DENIED == $details['status']) {
+        if (KlarnaFlags::DENIED === $details['status']) {
             $request->markFailed();
 
             return;

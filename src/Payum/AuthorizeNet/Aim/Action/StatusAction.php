@@ -26,25 +26,25 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::APPROVED === $model['response_code']) {
             $request->markCaptured();
 
             return;
         }
 
-        if (AuthorizeNetAIM_Response::DECLINED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::DECLINED === $model['response_code']) {
             $request->markCanceled();
 
             return;
         }
 
-        if (AuthorizeNetAIM_Response::ERROR == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::ERROR === $model['response_code']) {
             $request->markFailed();
 
             return;
         }
 
-        if (AuthorizeNetAIM_Response::HELD == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::HELD === $model['response_code']) {
             $request->markPending();
 
             return;

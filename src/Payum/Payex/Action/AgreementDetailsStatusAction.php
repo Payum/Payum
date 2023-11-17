@@ -30,7 +30,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_NOTVERIFIED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_NOTVERIFIED === $model['agreementStatus']
         ) {
             $request->markNew();
 
@@ -39,7 +39,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_VERIFIED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_VERIFIED === $model['agreementStatus']
         ) {
             $request->markCaptured();
 
@@ -48,7 +48,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_DELETED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_DELETED === $model['agreementStatus']
         ) {
             $request->markCanceled();
 

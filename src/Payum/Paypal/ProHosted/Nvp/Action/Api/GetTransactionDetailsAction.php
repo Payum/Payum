@@ -27,7 +27,7 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null == $model['txn_id']) {
+        if (null === $model['txn_id']) {
             throw new LogicException('TRANSACTIONID must be set.');
         }
 

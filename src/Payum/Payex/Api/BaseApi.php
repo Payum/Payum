@@ -120,7 +120,7 @@ abstract class BaseApi
             }
 
             foreach ($statuses as $name => $value) {
-                if ('description' == $name) {
+                if ('description' === $name) {
                     $name = 'errorDescription';
                 }
 

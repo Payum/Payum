@@ -34,43 +34,43 @@ class RecurringPaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        if (Api::RECURRINGPAYMENTSTATUS_ACTIVE == $model['STATUS']) {
+        if (Api::RECURRINGPAYMENTSTATUS_ACTIVE === $model['STATUS']) {
             $request->markCaptured();
 
             return;
         }
 
-        if (Api::RECURRINGPAYMENTSTATUS_CANCELLED == $model['STATUS']) {
+        if (Api::RECURRINGPAYMENTSTATUS_CANCELLED === $model['STATUS']) {
             $request->markCanceled();
 
             return;
         }
 
-        if (Api::RECURRINGPAYMENTSTATUS_PENDING == $model['STATUS']) {
+        if (Api::RECURRINGPAYMENTSTATUS_PENDING === $model['STATUS']) {
             $request->markPending();
 
             return;
         }
 
-        if (Api::RECURRINGPAYMENTSTATUS_EXPIRED == $model['STATUS']) {
+        if (Api::RECURRINGPAYMENTSTATUS_EXPIRED === $model['STATUS']) {
             $request->markExpired();
 
             return;
         }
 
-        if (Api::RECURRINGPAYMENTSTATUS_SUSPENDED == $model['STATUS']) {
+        if (Api::RECURRINGPAYMENTSTATUS_SUSPENDED === $model['STATUS']) {
             $request->markSuspended();
 
             return;
         }
 
-        if (Api::PROFILESTATUS_PENDINGPROFILE == $model['PROFILESTATUS']) {
+        if (Api::PROFILESTATUS_PENDINGPROFILE === $model['PROFILESTATUS']) {
             $request->markPending();
 
             return;
         }
 
-        if (Api::PROFILESTATUS_ACTIVEPROFILE == $model['PROFILESTATUS']) {
+        if (Api::PROFILESTATUS_ACTIVEPROFILE === $model['PROFILESTATUS']) {
             $request->markCaptured();
 
             return;

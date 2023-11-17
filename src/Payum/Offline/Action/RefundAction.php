@@ -18,7 +18,7 @@ class RefundAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (Constants::STATUS_CAPTURED == $model[Constants::FIELD_STATUS]) {
+        if (Constants::STATUS_CAPTURED === $model[Constants::FIELD_STATUS]) {
             $model[Constants::FIELD_STATUS] = Constants::STATUS_REFUNDED;
         }
     }
