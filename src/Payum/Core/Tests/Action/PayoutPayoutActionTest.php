@@ -15,7 +15,6 @@ use Payum\Core\Request\Payout;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
-use function iterator_to_array;
 
 class PayoutPayoutActionTest extends GenericActionTest
 {
@@ -174,7 +173,7 @@ class PayoutPayoutActionTest extends GenericActionTest
                     $details = $request->getModel();
 
                     $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                    $testCase->assertSame($expectedDetails, iterator_to_array($details));
+                    $testCase->assertSame($expectedDetails, (array) $details);
 
                     $details['bar'] = 'barVal';
                 })

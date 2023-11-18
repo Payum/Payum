@@ -38,7 +38,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $model = new ArrayObject($request->getModel());
 
         if (Api::EXECCODE_3DSECURE_IDENTIFICATION_REQUIRED === $model['EXECCODE']) {
-            throw new HttpResponse(base64_decode($model['3DSECUREHTML']), 302);
+            throw new HttpResponse(base64_decode((string) $model['3DSECUREHTML']), 302);
         }
 
         if (null !== $model['EXECCODE']) {

@@ -5,41 +5,42 @@ namespace Payum\Core\Model;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
-use ReturnTypeWillChange;
+use Traversable;
 
+/**
+ * @template TKey of array-key
+ * @template TValue
+ * @implements ArrayAccess<TKey, TValue>
+ * @implements IteratorAggregate<TKey, TValue>
+ */
 class ArrayObject implements ArrayAccess, IteratorAggregate
 {
     /**
-     * @var array
+     * @var array<TKey, TValue>
      */
-    protected $details = [];
+    protected array $details = [];
 
-    #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->details);
     }
 
-    #[ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->details[$offset];
     }
 
-    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->details[$offset] = $value;
     }
 
-    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         unset($this->details[$offset]);
     }
 
-    #[ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->details);
     }

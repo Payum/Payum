@@ -7,6 +7,7 @@ use Payum\Core\Model\ArrayObject as BaseArrayObject;
 
 /**
  * @ORM\Entity
+ * @extends BaseArrayObject<string, mixed>
  */
 class ArrayObject extends BaseArrayObject
 {

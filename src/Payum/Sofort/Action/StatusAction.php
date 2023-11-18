@@ -29,7 +29,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (! isset($details['transaction_id']) || ! strlen($details['transaction_id'])) {
+        if (! isset($details['transaction_id']) || ! strlen((string) $details['transaction_id'])) {
             $request->markNew();
 
             return;

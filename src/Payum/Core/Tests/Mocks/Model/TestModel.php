@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TestModel
 {
+    public mixed $payum_id = null;
+
     protected $id;
 
     protected $price;

@@ -211,116 +211,6 @@ parameters:
 			path: src/Payum/Core/Bridge/PlainPhp/Security/TokenFactory.php
 
 		-
-			message: "#^Class Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject extends generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
-			count: 2
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$flags with no type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$input with no type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:__construct\\(\\) has parameter \\$iterator_class with no type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:defaults\\(\\) has parameter \\$input with no value type specified in iterable type Traversable\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:defaults\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:defaults\\(\\) has parameter \\$input with no value type specified in iterable type array\\|Traversable\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:getArray\\(\\) should return static\\(Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\) but returns Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:offsetSet\\(\\) with return type void returns void but should not return anything\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:offsetUnset\\(\\) with return type void returns void but should not return anything\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:replace\\(\\) has parameter \\$input with no value type specified in iterable type Traversable\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:replace\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:replace\\(\\) has parameter \\$input with no value type specified in iterable type array\\|Traversable\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:toUnsafeArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:toUnsafeArrayWithoutLocal\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validateNotEmpty\\(\\) has parameter \\$required with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validatedKeysSet\\(\\) has parameter \\$required with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:\\$input has no type specified\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Result of method ArrayObject\\<\\(int\\|string\\),mixed\\>\\:\\:offsetSet\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Result of method ArrayObject\\<\\(int\\|string\\),mixed\\>\\:\\:offsetUnset\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
-			count: 1
-			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
-
-		-
 			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
@@ -589,21 +479,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\ISO4217\\\\Currency\\:\\:getCountry\\(\\) has invalid return type string\\.$#"
 			count: 1
 			path: src/Payum/Core/ISO4217/Currency.php
-
-		-
-			message: "#^Class Payum\\\\Core\\\\Model\\\\ArrayObject implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Payum/Core/Model/ArrayObject.php
-
-		-
-			message: "#^Class Payum\\\\Core\\\\Model\\\\ArrayObject implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Payum/Core/Model/ArrayObject.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Model\\\\ArrayObject\\:\\:\\$details type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/Model/ArrayObject.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Model\\\\BankAccountInterface\\:\\:setBankCode\\(\\) has no return type specified\\.$#"
@@ -1291,19 +1166,9 @@ parameters:
 			path: src/Payum/Core/Tests/AbstractGatewayFactoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$iterator of function iterator_to_array expects Traversable, ArrayAccess given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/AuthorizePaymentActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\AuthorizePaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Action/AuthorizePaymentActionTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$iterator of function iterator_to_array expects Traversable, ArrayAccess given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/CapturePaymentActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\CapturePaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -1313,11 +1178,6 @@ parameters:
 		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Action\\\\ModelAggregateAwareRequest\\:\\:__construct\\(\\) has parameter \\$model with no type specified\\.$#"
 			count: 1
-			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$iterator of function iterator_to_array expects Traversable, ArrayAccess given\\.$#"
-			count: 5
 			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
 
 		-
@@ -1349,11 +1209,6 @@ parameters:
 			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\GetTokenActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Action/GetTokenActionTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$iterator of function iterator_to_array expects Traversable, ArrayAccess given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/PayoutPayoutActionTest.php
 
 		-
 			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\PayoutPayoutActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
@@ -1432,21 +1287,6 @@ parameters:
 
 		-
 			message: "#^Class Payum\\\\Core\\\\Tests\\\\Bridge\\\\Spl\\\\CustomArrayObject implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:replace\\(\\) expects array\\|Traversable, string given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$required of method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validateNotEmpty\\(\\) expects array, string given\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$required of method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validatedKeysSet\\(\\) expects array, string given\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
 
@@ -2042,11 +1882,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$country of method KlarnaAddr\\:\\:setCountry\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Invoice/Action/Api/GetAddressesAction.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function utf8_encode expects string, int given\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Action/Api/GetAddressesAction.php
 
@@ -2726,19 +2561,9 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/DoCaptureAction.php
 
 		-
-			message: "#^Parameter \\#1 \\$required of method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validateNotEmpty\\(\\) expects array, string given\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetRecurringPaymentsProfileDetailsAction.php
-
-		-
 			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\GetTransactionDetailsAction\\:\\:getPaymentRequestNFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/GetTransactionDetailsAction.php
-
-		-
-			message: "#^Parameter \\#1 \\$required of method Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\:\\:validateNotEmpty\\(\\) expects array, string given\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/PurchaseAction.php
 
 		-
 			message: "#^Right side of && is always true\\.$#"

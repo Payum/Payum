@@ -57,7 +57,7 @@ class SofortGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (! preg_match('/.*\:.*\:.*/', $config['config_key'])) {
+                if (! preg_match('/.*\:.*\:.*/', (string) $config['config_key'])) {
                     throw new \LogicException('The config_key is invalid. It must match the regexp "/.*\:.*\:.*/".');
                 }
 
