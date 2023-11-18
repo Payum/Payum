@@ -46,8 +46,7 @@
         "league/uri": "^6.4",
         "league/uri-components": "^2.2",
         "twig/twig": "^2.4 || ^3.0",
-        "symfony/deprecation-contracts": "^2.5",
-        "doctrine/mongodb-odm": "^2.5"
+        "symfony/deprecation-contracts": "^2.5"
     },
     "require-dev": {
         "ext-curl": "*",
