@@ -17,7 +17,7 @@ use stdClass;
 abstract class GenericActionTest extends TestCase
 {
     /**
-     * @var Generic
+     * @var Generic|string
      */
     protected $requestClass;
 

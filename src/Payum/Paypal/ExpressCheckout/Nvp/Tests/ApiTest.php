@@ -2,17 +2,17 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class ApiTest extends TestCase
 {
@@ -20,7 +20,7 @@ class ApiTest extends TestCase
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
-        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testThrowIfSandboxOptionNotSetInConstructor(): void
@@ -31,7 +31,7 @@ class ApiTest extends TestCase
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions(): void
@@ -43,7 +43,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->setExpressCheckout([]);
     }
@@ -57,7 +57,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([
             'RETURNURL' => 'formRequestReturnUrl',
@@ -75,7 +75,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([]);
 
@@ -91,7 +91,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->setExpressCheckout([]);
     }
@@ -105,7 +105,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([
             'CANCELURL' => 'formRequestCancelUrl',
@@ -123,7 +123,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([]);
 
@@ -139,7 +139,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([]);
 
@@ -156,7 +156,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([]);
 
@@ -179,7 +179,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->setExpressCheckout([]);
 
@@ -194,7 +194,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -210,7 +210,7 @@ class ApiTest extends TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'aCustomUserAction',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
@@ -226,7 +226,7 @@ class ApiTest extends TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'notUsedUseraction',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
@@ -244,7 +244,7 @@ class ApiTest extends TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'theCmd',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -260,7 +260,7 @@ class ApiTest extends TestCase
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'thisCmdNotUsed',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
@@ -277,7 +277,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
@@ -294,7 +294,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -311,7 +311,7 @@ class ApiTest extends TestCase
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
@@ -321,16 +321,14 @@ class ApiTest extends TestCase
 
     public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
-        $testCase = $this;
-
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $this->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
             })
         ;
 
@@ -341,23 +339,21 @@ class ApiTest extends TestCase
             'sandbox' => false,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->setExpressCheckout([]);
     }
 
     public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
-        $testCase = $this;
-
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $this->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
             })
         ;
 
@@ -368,36 +364,32 @@ class ApiTest extends TestCase
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->setExpressCheckout([]);
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock(HttpClientInterface::class);
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createSuccessHttpClientStub()
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    protected function createSuccessHttpClientStub(): MockObject | ClientInterface
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], $request->getBody()))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody()))
         ;
 
         return $clientMock;

@@ -43,7 +43,7 @@ class PaypalMasspayGatewayFactory extends GatewayFactory
                     'sandbox' => $config['sandbox'],
                 ];
 
-                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory']);
+                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory'], $config['httplug.stream_factory']);
             };
         }
     }
