@@ -113,8 +113,8 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
         $klarna->expects($this->atMost(2))
             ->method('setAddress')
             ->withConsecutive(
-                [KlarnaFlags::IS_SHIPPING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')],
-                [KlarnaFlags::IS_BILLING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', utf8_decode('Stårgatan 1'), '12345', 'Ankeborg', 209, '', '')]
+                [KlarnaFlags::IS_SHIPPING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', mb_convert_encoding('Stårgatan 1', 'ISO-8859-1'), '12345', 'Ankeborg', 209, '', '')],
+                [KlarnaFlags::IS_BILLING, new KlarnaAddr('info@payum.com', '0700 00 00 00', '', 'Testperson-se', 'Approved', '', mb_convert_encoding('Stårgatan 1', 'ISO-8859-1'), '12345', 'Ankeborg', 209, '', '')]
             );
 
         $klarna->expects($this->once())

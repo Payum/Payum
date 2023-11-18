@@ -236,7 +236,7 @@ class Api
             $clearString .= $key . '=' . $value . $this->options['password'];
         }
 
-        return hash('sha256', $clearString);
+        return hash('sha256', (string) $clearString);
     }
 
     /**

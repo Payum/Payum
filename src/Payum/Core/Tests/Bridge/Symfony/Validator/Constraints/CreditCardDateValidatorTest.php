@@ -40,7 +40,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    protected function createValidator()
+    protected function createValidator(): CreditCardDateValidator
     {
         return new CreditCardDateValidator();
     }

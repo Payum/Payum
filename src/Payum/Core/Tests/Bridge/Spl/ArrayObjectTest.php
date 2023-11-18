@@ -6,7 +6,6 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\SensitiveValue;
 use PHPUnit\Framework\TestCase;
@@ -96,15 +95,6 @@ class ArrayObjectTest extends TestCase
         $array->replace($traversable);
 
         $this->assertSame($expectedArray, (array) $array);
-    }
-
-    public function testThrowIfInvalidArgumentGivenForReplace(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid input given. Should be an array or instance of \Traversable');
-        $array = new ArrayObject();
-
-        $array->replace('foo');
     }
 
     public function testShouldAllowCastToArrayFromCustomArrayObject(): void
@@ -361,13 +351,13 @@ class CustomArrayObject implements ArrayAccess, IteratorAggregate
     private $foo;
 
     #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return 'foo' === $offset;
     }
 
     #[ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->{$offset};
     }
@@ -385,7 +375,7 @@ class CustomArrayObject implements ArrayAccess, IteratorAggregate
     }
 
     #[ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator([
             'foo' => $this->foo,

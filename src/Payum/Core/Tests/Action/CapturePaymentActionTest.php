@@ -15,7 +15,6 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
-use function iterator_to_array;
 
 class CapturePaymentActionTest extends GenericActionTest
 {
@@ -171,7 +170,7 @@ class CapturePaymentActionTest extends GenericActionTest
                     $details = $request->getModel();
 
                     $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                    $testCase->assertSame($expectedDetails, iterator_to_array($details));
+                    $testCase->assertSame($expectedDetails, (array) $details);
 
                     $details['bar'] = 'barVal';
                 })

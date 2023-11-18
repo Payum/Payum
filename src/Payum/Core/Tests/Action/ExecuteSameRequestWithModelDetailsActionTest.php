@@ -20,7 +20,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
     protected $actionClass = ExecuteSameRequestWithModelDetailsAction::class;
 
-    protected $requestClass = \Payum\Core\Tests\Action\ModelAggregateAwareRequest::class;
+    protected $requestClass = ModelAggregateAwareRequest::class;
 
     public function provideSupportedRequests(): Iterator
     {
@@ -87,7 +87,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                $testCase->assertSame($expectedDetails, iterator_to_array($details));
+                $testCase->assertSame($expectedDetails, (array) $details);
 
                 $details['baz'] = 'bazVal';
             })
@@ -125,7 +125,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                $testCase->assertSame($expectedDetails, iterator_to_array($details));
+                $testCase->assertSame($expectedDetails, (array) $details);
 
                 $details['baz'] = 'bazVal';
             })
@@ -144,7 +144,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                 'bar' => 'barVal',
                 'baz' => 'bazVal',
             ],
-            iterator_to_array($details)
+            (array) $details
         );
     }
 
@@ -171,7 +171,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                 $details = $request->getModel();
 
                 $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                $testCase->assertSame($expectedDetails, iterator_to_array($details));
+                $testCase->assertSame($expectedDetails, (array) $details);
 
                 $details['baz'] = 'bazVal';
 
@@ -193,7 +193,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
                     'bar' => 'barVal',
                     'baz' => 'bazVal',
                 ],
-                iterator_to_array($details)
+                (array) $details
             );
 
             return;

@@ -54,8 +54,8 @@ class HttpPostRedirect extends HttpResponse
         foreach ($fields as $name => $value) {
             $formInputs .= sprintf(
                 '<input type="hidden" name="%1$s" value="%2$s" />',
-                htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-                htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
+                htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')
             ) . "\n";
         }
 
@@ -74,6 +74,6 @@ class HttpPostRedirect extends HttpResponse
 </html>
 HTML;
 
-        return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
+        return sprintf($content, htmlspecialchars((string) $url, ENT_QUOTES, 'UTF-8'), $formInputs);
     }
 }
