@@ -11,6 +11,12 @@
   * Any custom class implementing this interface should update their signature. The new signatures are:
     * `public function getGateway(string $name): GatewayInterface;`
     * `public function getGateways(): array;`
+* The HttpClient has been replaced with a PSR-18 HTTP Client
+  * The `Payum\Core\Bridge\Httplug\HttplugClient` and `Payum\Core\Bridge\Guzzle\HttpClientFactory` class and `Payum\Core\HttpClientInterface` interface have been removed
+  * The `httplug.message_factory` config option will now return an instance of `Psr\Http\Message\RequestFactoryInterface` instead of `Http\Message\MessageFactory`
+  * The `httplug.stream_factory` config option will now return an instance of `Psr\Http\Message\StreamFactoryInterface` instead of `Http\Message\StreamFactory`
+  * The `httplug.client` config option will now return an instance of `Psr\Http\Client\ClientInterface` instead of `Http\Client\HttpClient`
+  * The `payum.http_client` config option will now return an instance of `Payum\Core\HttpClientInterface` instead of `Payum\Core\Bridge\Httplug\HttplugClientg`
 
 ## 1.5.0
 
