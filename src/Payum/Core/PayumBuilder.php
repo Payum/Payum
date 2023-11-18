@@ -115,13 +115,6 @@ class PayumBuilder
     protected $mainRegistry;
 
     /**
-     * @deprecated will be removed in 2.0
-     *
-     * @var HttpClientInterface
-     */
-    protected $httpClient;
-
-    /**
      * @return static
      */
     public function addDefaultStorages()
@@ -344,18 +337,6 @@ class PayumBuilder
     public function setMainRegistry(RegistryInterface $mainRegistry = null)
     {
         $this->mainRegistry = $mainRegistry;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated this method will be removed in 2.0 Use self::addCoreGatewayFactoryConfig to overwrite http client.
-     *
-     * @return static
-     */
-    public function setHttpClient(HttpClientInterface $httpClient = null)
-    {
-        $this->httpClient = $httpClient;
 
         return $this;
     }
