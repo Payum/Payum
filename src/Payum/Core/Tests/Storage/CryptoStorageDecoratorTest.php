@@ -6,6 +6,7 @@ use LogicException;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 use Payum\Core\Storage\CryptoStorageDecorator;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -126,6 +127,7 @@ class CryptoStorageDecoratorTest extends TestCase
             ->expects($this->once())
             ->method('identify')
             ->with($this->identicalTo($model))
+            ->willReturn($this->createMock(IdentityInterface::class))
         ;
 
         $cypherMock = $this->createCypherMock();
@@ -268,9 +270,9 @@ class CryptoStorageDecoratorTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    private function createStorageMock()
+    private function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }

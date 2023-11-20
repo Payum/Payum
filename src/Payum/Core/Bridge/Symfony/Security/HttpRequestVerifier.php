@@ -14,10 +14,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
+    /**
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
@@ -33,7 +36,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             ));
         }
 
-        if (false === $hash = $httpRequest->attributes->get('payum_token', $httpRequest->get('payum_token', false))) {
+        if (! $hash = $httpRequest->attributes->get('payum_token', $httpRequest->get('payum_token', false))) {
             throw new NotFoundHttpException('Token parameter not set in request');
         }
 

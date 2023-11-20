@@ -5,6 +5,7 @@ namespace Payum\Core\Bridge\Symfony\Builder;
 use Payum\Core\Bridge\Symfony\Security\TokenFactory;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -17,15 +18,16 @@ class TokenFactoryBuilder
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function __invoke()
+    public function __invoke(): TokenFactoryInterface
     {
-        return call_user_func_array([$this, 'build'], func_get_args());
+        return $this->build(...func_get_args());
     }
 
     /**
-     * @return TokenFactoryInterface
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry
      */
-    public function build(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
+    public function build(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry): TokenFactoryInterface
     {
         return new TokenFactory($tokenStorage, $storageRegistry, $this->urlGenerator);
     }

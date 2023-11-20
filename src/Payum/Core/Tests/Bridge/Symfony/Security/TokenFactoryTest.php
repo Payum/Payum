@@ -277,7 +277,7 @@ class TokenFactoryTest extends TestCase
         $actualToken = $factory->createToken(
             $gatewayName,
             $model,
-            'http://google.com/?foo=fooVal',
+            'https://google.com/?foo=fooVal',
             [
                 'target' => 'val',
             ],
@@ -291,7 +291,7 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $token->getGatewayName());
         $this->assertSame($identity, $token->getDetails());
         $this->assertSame(
-            'http://google.com/?foo=fooVal&payum_token=' . $token->getHash() . '&target=val',
+            'https://google.com/?foo=fooVal&payum_token=' . $token->getHash() . '&target=val',
             $token->getTargetUrl()
         );
         $this->assertSame('theAfterPath?after=val', $token->getAfterUrl());
@@ -338,9 +338,9 @@ class TokenFactoryTest extends TestCase
         $actualToken = $factory->createToken(
             $gatewayName,
             $model,
-            'http://example.com/authorize.php',
+            'https://example.com/authorize.php',
             [],
-            'http://google.com/?payum_token=foo',
+            'https://google.com/?payum_token=foo',
             [
                 'afterKey' => 'afterVal',
             ]
@@ -350,11 +350,11 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
+            'https://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(
-            'http://google.com/?payum_token=foo&afterKey=afterVal',
+            'https://google.com/?payum_token=foo&afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
     }
@@ -400,9 +400,9 @@ class TokenFactoryTest extends TestCase
         $actualToken = $factory->createToken(
             $gatewayName,
             $model,
-            'http://example.com/authorize.php',
+            'https://example.com/authorize.php',
             [],
-            'http://google.com/?payum_token=foo',
+            'https://google.com/?afterKey=afterVal',
             [
                 'payum_token' => null,
                 'afterKey' => 'afterVal',
@@ -413,11 +413,11 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
+            'https://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(
-            'http://google.com/?afterKey=afterVal',
+            'https://google.com/?afterKey=afterVal',
             $authorizeToken->getAfterUrl()
         );
     }
@@ -463,9 +463,9 @@ class TokenFactoryTest extends TestCase
         $actualToken = $factory->createToken(
             $gatewayName,
             $model,
-            'http://example.com/authorize.php',
+            'https://example.com/authorize.php',
             [],
-            'http://google.com/foo/bar?foo=fooVal#fragment',
+            'https://google.com/foo/bar?foo=fooVal#fragment',
             [
                 'payum_token' => null,
             ]
@@ -475,35 +475,32 @@ class TokenFactoryTest extends TestCase
         $this->assertSame($gatewayName, $authorizeToken->getGatewayName());
         $this->assertSame($identity, $authorizeToken->getDetails());
         $this->assertSame(
-            'http://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
+            'https://example.com/authorize.php?payum_token=' . $authorizeToken->getHash(),
             $authorizeToken->getTargetUrl()
         );
         $this->assertSame(
-            'http://google.com/foo/bar?foo=fooVal#fragment',
+            'https://google.com/foo/bar?foo=fooVal#fragment',
             $authorizeToken->getAfterUrl()
         );
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface
+     * @return MockObject|StorageRegistryInterface<StorageInterface<object>>
      */
-    protected function createStorageRegistryMock()
+    protected function createStorageRegistryMock(): MockObject | StorageRegistryInterface
     {
         return $this->createMock(StorageRegistryInterface::class);
     }
 
-    /**
-     * @return MockObject|UrlGeneratorInterface
-     */
-    protected function createUrlGeneratorStub()
+    protected function createUrlGeneratorStub(): UrlGeneratorInterface | MockObject
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 

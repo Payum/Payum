@@ -3,21 +3,37 @@
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template T of object
+ * @implements RegistryInterface<T>
+ */
 class FallbackRegistry implements RegistryInterface
 {
+    /**
+     * @var RegistryInterface<T>
+     */
     private RegistryInterface $registry;
 
+    /**
+     * @var RegistryInterface<T>
+     */
     private RegistryInterface $fallbackRegistry;
 
+    /**
+     * @param RegistryInterface<T> $registry
+     * @param RegistryInterface<T> $fallbackRegistry
+     */
     public function __construct(RegistryInterface $registry, RegistryInterface $fallbackRegistry)
     {
         $this->registry = $registry;
         $this->fallbackRegistry = $fallbackRegistry;
     }
 
-    public function getGatewayFactory($name)
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         try {
             return $this->registry->getGatewayFactory($name);
@@ -26,7 +42,10 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    public function getGatewayFactories()
+    /**
+     * @return GatewayFactoryInterface[]
+     */
+    public function getGatewayFactories(): array
     {
         return array_replace($this->fallbackRegistry->getGatewayFactories(), $this->registry->getGatewayFactories());
     }
@@ -45,7 +64,11 @@ class FallbackRegistry implements RegistryInterface
         return array_replace($this->fallbackRegistry->getGateways(), $this->registry->getGateways());
     }
 
-    public function getStorage($class)
+    /**
+     * @param class-string|T $class
+     * @return StorageInterface<T>
+     */
+    public function getStorage(string | object $class): StorageInterface
     {
         try {
             return $this->registry->getStorage($class);
@@ -54,7 +77,10 @@ class FallbackRegistry implements RegistryInterface
         }
     }
 
-    public function getStorages()
+    /**
+     * @return array<class-string, T>>
+     */
+    public function getStorages(): array
     {
         return array_replace($this->fallbackRegistry->getStorages(), $this->registry->getStorages());
     }

@@ -338,25 +338,24 @@ class PayumBuilderTest extends TestCase
         $this->expectExceptionMessage('Gateway config must have factory set in it and it must not be empty.');
         (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGateway('a_gateway', [
-            ])
+            ->addGateway('a_gateway', [])
             ->getPayum()
         ;
     }
 
     public function testShouldAllowGetStorageAddedAsInstance(): void
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addStorage('a_storage', $expectedStorage)
+            ->addStorage($expectedStorage::class, $expectedStorage)
             ->getPayum()
         ;
 
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertSame($expectedStorage, $payum->getStorage('a_storage'));
+        $this->assertSame($expectedStorage, $payum->getStorage($expectedStorage::class));
     }
 
     public function testShouldAllowGetGatewayFactoryAddedAsInstance(): void
@@ -510,7 +509,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldAddStorageExtensionForTheAddedStorage(): void
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
@@ -796,25 +795,19 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface<object>
      */
-    protected function createRegistryMock()
+    protected function createRegistryMock(): MockObject | RegistryInterface
     {
         return $this->createMock(RegistryInterface::class);
     }
 
-    /**
-     * @return MockObject|HttpRequestVerifierInterface
-     */
-    protected function createHttpRequestVerifierMock()
+    protected function createHttpRequestVerifierMock(): MockObject | HttpRequestVerifierInterface
     {
         return $this->createMock(HttpRequestVerifierInterface::class);
     }
 
-    /**
-     * @return MockObject|GenericTokenFactoryInterface
-     */
-    protected function createGenericTokenFactoryMock()
+    protected function createGenericTokenFactoryMock(): MockObject | GenericTokenFactoryInterface
     {
         return $this->createMock(GenericTokenFactoryInterface::class);
     }

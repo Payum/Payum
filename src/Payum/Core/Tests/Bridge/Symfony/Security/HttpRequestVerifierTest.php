@@ -7,6 +7,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Token;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Storage\StorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -66,10 +67,10 @@ class HttpRequestVerifierTest extends TestCase
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('The current url http://target.com/bar not match target url http://target.com/foo set in the token.');
+        $this->expectExceptionMessage('The current url https://target.com/bar not match target url https://target.com/foo set in the token.');
         $token = new Token();
         $token->setHash('theHash');
-        $token->setTargetUrl('http://target.com/foo');
+        $token->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -79,7 +80,7 @@ class HttpRequestVerifierTest extends TestCase
             ->willReturn($token)
         ;
 
-        $request = Request::create('http://target.com/bar');
+        $request = Request::create('https://target.com/bar');
         $request->attributes->set('payum_token', 'theHash');
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -91,7 +92,7 @@ class HttpRequestVerifierTest extends TestCase
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/foo');
+        $expectedToken->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -101,7 +102,7 @@ class HttpRequestVerifierTest extends TestCase
             ->willReturn($expectedToken)
         ;
 
-        $request = Request::create('http://target.com/foo');
+        $request = Request::create('https://target.com/foo');
         $request->attributes->set('payum_token', 'theHash');
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -115,7 +116,7 @@ class HttpRequestVerifierTest extends TestCase
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/foo');
+        $expectedToken->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -125,7 +126,7 @@ class HttpRequestVerifierTest extends TestCase
             ->willReturn($expectedToken)
         ;
 
-        $request = Request::create('http://target.com/foo');
+        $request = Request::create('https://target.com/foo');
         $request->query->set('payum_token', 'theHash');
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -142,7 +143,7 @@ class HttpRequestVerifierTest extends TestCase
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/foo');
+        $expectedToken->setTargetUrl('https://target.com/foo');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -150,7 +151,7 @@ class HttpRequestVerifierTest extends TestCase
             ->method('find')
         ;
 
-        $request = Request::create('http://target.com/foo');
+        $request = Request::create('https://target.com/foo');
         $request->query->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -167,7 +168,7 @@ class HttpRequestVerifierTest extends TestCase
     {
         $expectedToken = new Token();
         $expectedToken->setHash('theHash');
-        $expectedToken->setTargetUrl('http://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
+        $expectedToken->setTargetUrl('https://target.com/_SsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6_w');
 
         $storageMock = $this->createStorageMock();
         $storageMock
@@ -175,7 +176,7 @@ class HttpRequestVerifierTest extends TestCase
             ->method('find')
         ;
 
-        $request = Request::create('http://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw');
+        $request = Request::create('https://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw');
         $request->query->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -200,7 +201,7 @@ class HttpRequestVerifierTest extends TestCase
             ->method('find')
         ;
 
-        $request = Request::create('http://target.com/foo');
+        $request = Request::create('https://target.com/foo');
         $request->query->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
@@ -227,9 +228,9 @@ class HttpRequestVerifierTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageInterface
+     * @return MockObject|StorageInterface<object>
      */
-    protected function createStorageMock()
+    protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
     }

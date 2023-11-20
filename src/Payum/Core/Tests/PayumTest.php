@@ -10,6 +10,7 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
@@ -26,15 +27,22 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use function spl_object_hash;
 
 final class PayumTest extends TestCase
 {
+    /**
+     * @var RegistryInterface<StorageRegistryInterface<StorageInterface<TokenInterface>>>|MockObject
+     */
     private RegistryInterface | MockObject $registryMock;
 
     private HttpRequestVerifierInterface | MockObject $httpRequestVerifierMock;
 
     private GenericTokenFactoryInterface | MockObject $tokenFactoryMock;
 
+    /**
+     * @var StorageInterface<TokenInterface>|MockObject
+     */
     private StorageInterface | MockObject $storageMock;
 
     protected function setUp(): void
@@ -90,14 +98,17 @@ final class PayumTest extends TestCase
 
     public function testShouldAllowGetGatewayFromRegistryInConstructor(): void
     {
+        $fooStorage = $this->createMock(StorageInterface::class);
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $registry = new SimpleRegistry(
             [
                 'foo' => $fooGateway = $this->createMock(GatewayInterface::class),
                 'bar' => $barGateway = $this->createMock(GatewayInterface::class),
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                $fooStorage::class => $fooStorage,
+                $barStorage::class => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -131,8 +142,8 @@ final class PayumTest extends TestCase
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => $fooStorage,
-                'bar' => $barStorage,
+                spl_object_hash($fooStorage) => $fooStorage,
+                spl_object_hash($barStorage) => $barStorage,
             ],
             [
                 'foo' => 'fooGatewayFactory',
@@ -147,16 +158,19 @@ final class PayumTest extends TestCase
             $this->storageMock,
         );
 
-        $this->assertSame($fooStorage, $payum->getStorage('foo'));
-        $this->assertSame($barStorage, $payum->getStorage('bar'));
+        $this->assertSame($fooStorage, $payum->getStorage(spl_object_hash($fooStorage)));
+        $this->assertSame($barStorage, $payum->getStorage(spl_object_hash($barStorage)));
         $this->assertSame([
-            'foo' => $fooStorage,
-            'bar' => $barStorage,
+            spl_object_hash($fooStorage) => $fooStorage,
+            spl_object_hash($barStorage) => $barStorage,
         ], $payum->getStorages());
     }
 
     public function testShouldAllowGetGatewayFactoriesFromRegistryInConstructor(): void
     {
+        $fooStorage = $this->createMock(StorageInterface::class);
+        $barStorage = $this->createMock(StorageInterface::class);
+
         $fooGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
         $barGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
@@ -166,8 +180,8 @@ final class PayumTest extends TestCase
                 'bar' => 'barGateway',
             ],
             [
-                'foo' => 'fooStorage',
-                'bar' => 'barStorage',
+                spl_object_hash($fooStorage) => $fooStorage,
+                spl_object_hash($barStorage) => $barStorage,
             ],
             [
                 'foo' => $fooGatewayFactory,

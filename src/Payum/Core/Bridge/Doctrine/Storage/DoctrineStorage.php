@@ -6,7 +6,12 @@ use Doctrine\Persistence\ObjectManager;
 use LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 
+/**
+ * @template T of object
+ * @extends AbstractStorage<T>
+ */
 class DoctrineStorage extends AbstractStorage
 {
     /**
@@ -24,29 +29,34 @@ class DoctrineStorage extends AbstractStorage
         $this->objectManager = $objectManager;
     }
 
-    public function findBy(array $criteria)
+    /**
+     * @return T[]
+     */
+    public function findBy(array $criteria): array
     {
         return $this->objectManager->getRepository($this->modelClass)->findBy($criteria);
     }
 
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         return $this->objectManager->find($this->modelClass, $id);
     }
 
-    protected function doUpdateModel($model): void
+    protected function doUpdateModel(object $model): object
     {
         $this->objectManager->persist($model);
         $this->objectManager->flush();
+
+        return $model;
     }
 
-    protected function doDeleteModel($model): void
+    protected function doDeleteModel(object $model): void
     {
         $this->objectManager->remove($model);
         $this->objectManager->flush();
     }
 
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): IdentityInterface
     {
         $modelMetadata = $this->objectManager->getClassMetadata($model::class);
         $id = $modelMetadata->getIdentifierValues($model);
