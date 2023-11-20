@@ -20,7 +20,7 @@ class Random
 {
     public static function generateToken()
     {
-        return rtrim(strtr(base64_encode(self::getRandomNumber()), '+/', '-_'), '=');
+        return rtrim(strtr(base64_encode((string) self::getRandomNumber()), '+/', '-_'), '=');
     }
 
     private static function getRandomNumber()

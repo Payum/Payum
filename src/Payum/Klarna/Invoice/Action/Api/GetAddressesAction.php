@@ -19,19 +19,19 @@ class GetAddressesAction extends BaseApiAwareAction
 
         foreach ($klarna->getAddresses($request->getPno()) as $address) {
             /** @var KlarnaAddr $address */
-            $address->setEmail(utf8_encode($address->getEmail()));
-            $address->setTelno(utf8_encode($address->getTelno()));
-            $address->setCellno(utf8_encode($address->getCellno()));
-            $address->setFirstName(utf8_encode($address->getFirstName()));
-            $address->setLastName(utf8_encode($address->getLastName()));
-            $address->setCompanyName(utf8_encode($address->getCompanyName()));
-            $address->setCareof(utf8_encode($address->getCareof()));
-            $address->setStreet(utf8_encode($address->getStreet()));
-            $address->setHouseNumber(utf8_encode($address->getHouseNumber()));
-            $address->setHouseExt(utf8_encode($address->getHouseExt()));
-            $address->setZipCode(utf8_encode($address->getZipCode()));
-            $address->setCity(utf8_encode($address->getCity()));
-            $address->setCountry(utf8_encode($address->getCountry()));
+            $address->setEmail(mb_convert_encoding((string) $address->getEmail(), 'UTF-8', 'ISO-8859-1'));
+            $address->setTelno(mb_convert_encoding((string) $address->getTelno(), 'UTF-8', 'ISO-8859-1'));
+            $address->setCellno(mb_convert_encoding((string) $address->getCellno(), 'UTF-8', 'ISO-8859-1'));
+            $address->setFirstName(mb_convert_encoding((string) $address->getFirstName(), 'UTF-8', 'ISO-8859-1'));
+            $address->setLastName(mb_convert_encoding((string) $address->getLastName(), 'UTF-8', 'ISO-8859-1'));
+            $address->setCompanyName(mb_convert_encoding((string) $address->getCompanyName(), 'UTF-8', 'ISO-8859-1'));
+            $address->setCareof(mb_convert_encoding((string) $address->getCareof(), 'UTF-8', 'ISO-8859-1'));
+            $address->setStreet(mb_convert_encoding((string) $address->getStreet(), 'UTF-8', 'ISO-8859-1'));
+            $address->setHouseNumber(mb_convert_encoding((string) $address->getHouseNumber(), 'UTF-8', 'ISO-8859-1'));
+            $address->setHouseExt(mb_convert_encoding((string) $address->getHouseExt(), 'UTF-8', 'ISO-8859-1'));
+            $address->setZipCode(mb_convert_encoding((string) $address->getZipCode(), 'UTF-8', 'ISO-8859-1'));
+            $address->setCity(mb_convert_encoding((string) $address->getCity(), 'UTF-8', 'ISO-8859-1'));
+            $address->setCountry(mb_convert_encoding((string) $address->getCountry(), 'UTF-8', 'ISO-8859-1'));
 
             $request->addAddress($address);
         }

@@ -53,6 +53,6 @@ class HttpRedirect extends HttpResponse
     <body>
         Redirecting to %1$s.
     </body>
-</html>', htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
+</html>', htmlspecialchars((string) $url, ENT_QUOTES, 'UTF-8'));
     }
 }

@@ -7,6 +7,7 @@ use Payum\Core\Model\ArrayObject as BaseArrayObject;
 
 /**
  * @Mongo\Document
+ * @extends BaseArrayObject<string, mixed>
  */
 class ArrayObject extends BaseArrayObject
 {

@@ -83,6 +83,6 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         $details['error_file'] = $e->getFile();
         $details['error_line'] = $e->getLine();
         $details['error_code'] = (int) $e->getCode();
-        $details['error_message'] = utf8_encode($e->getMessage());
+        $details['error_message'] = mb_convert_encoding((string) $e->getMessage(), 'UTF-8', 'ISO-8859-1');
     }
 }
