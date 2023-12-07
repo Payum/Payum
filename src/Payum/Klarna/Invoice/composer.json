@@ -24,7 +24,7 @@
     ],
     "require": {
         "payum/core": "^1.5",
-        "fp/klarna-invoice": "0.1.*"
+        "solidworx/klarna-invoice": "0.2.*"
     },
     "require-dev": {
         "payum/core": "^1.5",
