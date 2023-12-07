@@ -70,7 +70,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertSame('theNumber', $details['INVNUM']);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $details);
-        $this->assertSame(1.23, $details['PAYMENTREQUEST_0_AMT']);
+        $this->assertEqualsWithDelta(1.23, $details['PAYMENTREQUEST_0_AMT'], PHP_FLOAT_EPSILON);
 
         $this->assertArrayHasKey('PAYMENTREQUEST_0_CURRENCYCODE', $details);
         $this->assertSame('USD', $details['PAYMENTREQUEST_0_CURRENCYCODE']);
