@@ -32,7 +32,7 @@ $payum = (new PayumBuilder())
         'password' => 'REPLACE IT',
         'partner' => 'REPLACE IT',
         'vendor' => 'REPLACE IT',
-        'tender' => 'REPLACE IT'
+        'tender' => 'REPLACE IT',
         'sandbox' => true
     ])
 
