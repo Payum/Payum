@@ -13,9 +13,31 @@ use Payum\Stripe\Request\Api\CreatePlan;
 $plan = new \ArrayObject([
     "amount" => 2000,
     "interval" => "month",
-    "name" => "Amazing Gold Plan",
     "currency" => "usd",
-    "id" => "gold"
+    "id" => "gold",
+    "product" => [
+        "name" => "Amazing Gold Plan"
+    ]
+]);
+
+/** @var \Payum\Core\Payum $payum */
+$payum->getGateway('gatewayName')->execute(new CreatePlan($plan));
+```
+
+or with existing product, for example [Stripe API - Create a Plan](https://stripe.com/docs/api/plans/create)
+
+```php
+<?php
+// prepare.php
+
+use Payum\Stripe\Request\Api\CreatePlan;
+
+$plan = new \ArrayObject([
+    "amount" => 2000,
+    "interval" => "month",
+    "currency" => "usd",
+    "id" => "gold",
+    "product" => "prod_NjpI7DbZx6AlWQ" // Product ID
 ]);
 
 /** @var \Payum\Core\Payum $payum */
