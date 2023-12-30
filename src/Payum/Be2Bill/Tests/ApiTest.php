@@ -2,13 +2,14 @@
 
 namespace Payum\Be2Bill\Tests;
 
-use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Be2Bill\Api;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\HttpClientInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class ApiTest extends TestCase
 {
@@ -16,7 +17,7 @@ class ApiTest extends TestCase
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');
-        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
@@ -27,7 +28,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => 'notABool',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testShouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment(): void
@@ -36,7 +37,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $post = $api->prepareOffsitePayment([
             'AMOUNT' => 100,
@@ -53,7 +54,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $post = $api->prepareOffsitePayment([
             'AMOUNT' => 100,
@@ -71,7 +72,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $post = $api->prepareOffsitePayment([
             'AMOUNT' => 100,
@@ -90,7 +91,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $post = $api->prepareOffsitePayment([
             'AMOUNT' => 100,
@@ -112,7 +113,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertFalse($api->verifyHash([]));
     }
@@ -129,7 +130,7 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         //guard
         $this->assertNotSame($invalidHash, $api->calculateHash($params));
@@ -150,26 +151,25 @@ class ApiTest extends TestCase
             'identifier' => 'anId',
             'password' => 'aPass',
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $params['HASH'] = $api->calculateHash($params);
 
         $this->assertTrue($api->verifyHash($params));
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock(HttpClientInterface::class);
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
+    }
+
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
     }
 }

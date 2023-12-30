@@ -6,22 +6,7 @@ parameters:
 			path: src/Payum/AuthorizeNet/Aim/Bridge/AuthorizeNet/AuthorizeNetAIM.php
 
 		-
-			message: "#^Property Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/AuthorizeNet/Aim/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Property Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/AuthorizeNet/Aim/Tests/Action/ConvertPaymentActionTest.php
-
-		-
 			message: "#^Method Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:createGetStatusStub\\(\\) has parameter \\$model with no type specified\\.$#"
-			count: 1
-			path: src/Payum/AuthorizeNet/Aim/Tests/Action/StatusActionTest.php
-
-		-
-			message: "#^Property Payum\\\\AuthorizeNet\\\\Aim\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/AuthorizeNet/Aim/Tests/Action/StatusActionTest.php
 
@@ -34,96 +19,6 @@ parameters:
 			message: "#^Right side of && is always true\\.$#"
 			count: 1
 			path: src/Payum/Be2Bill/Action/CaptureOffsiteAction.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:addGlobalParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:calculateHash\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:payment\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:payment\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:prepareOffsitePayment\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:prepareOffsitePayment\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Api\\:\\:verifyHash\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Api.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\CaptureOffsiteActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/CaptureOffsiteActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/NotifyActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Be2Bill\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Action/StatusActionTest.php
-
-		-
-			message: "#^Method Payum\\\\Be2Bill\\\\Tests\\\\Be2BillDirectGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Be2Bill/Tests/Be2BillDirectGatewayFactoryTest.php
 
 		-
 			message: "#^Method Payum\\\\Be2Bill\\\\Tests\\\\Be2BillOffsiteGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -294,36 +189,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Bridge\\\\Twig\\\\TwigFactory\\:\\:guessViewsPath\\(\\) should return string\\|null but empty return statement found\\.$#"
 			count: 1
 			path: src/Payum/Core/Bridge/Twig/TwigFactory.php
-
-		-
-			message: "#^Instantiated class Nyholm\\\\Psr7\\\\Factory\\\\HttplugFactory not found\\.$#"
-			count: 2
-			path: src/Payum/Core/CoreGatewayFactory.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:__construct\\(\\) has parameter \\$defaultConfig with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/CoreGatewayFactory.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/CoreGatewayFactory.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:createConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/CoreGatewayFactory.php
-
-		-
-			message: "#^Method Payum\\\\Core\\\\CoreGatewayFactory\\:\\:createConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/CoreGatewayFactory.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\CoreGatewayFactory\\:\\:\\$defaultConfig type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Core/CoreGatewayFactory.php
 
 		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
@@ -1006,16 +871,6 @@ parameters:
 			path: src/Payum/Core/Tests/AbstractGatewayFactoryTest.php
 
 		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\AuthorizePaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/AuthorizePaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\CapturePaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/CapturePaymentActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Action\\\\ModelAggregateAwareRequest\\:\\:__construct\\(\\) has parameter \\$model with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
@@ -1031,29 +886,9 @@ parameters:
 			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\ExecuteSameRequestWithModelDetailsActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
-
-		-
 			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\ModelAggregateAwareRequest\\:\\:\\$model has no type specified\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Action/ExecuteSameRequestWithModelDetailsActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\GetCurrencyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/GetCurrencyActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\GetTokenActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/GetTokenActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Action\\\\PayoutPayoutActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Action/PayoutPayoutActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\ApiAwareClass\\:\\:setApi\\(\\) has parameter \\$api with no type specified\\.$#"
@@ -1089,11 +924,6 @@ parameters:
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Doctrine\\\\Storage\\\\DoctrineStorageTest\\:\\:createObjectRepositoryMock\\(\\) return type with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: T$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Doctrine/Storage/DoctrineStorageTest.php
-
-		-
-			message: "#^Property Payum\\\\Core\\\\Tests\\\\Bridge\\\\PlainPhp\\\\Action\\\\GetHttpRequestActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/PlainPhp/Action/GetHttpRequestActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\PlainPhp\\\\Security\\\\TokenFactoryTest\\:\\:testShouldCreateTokenForBaseUrlWithPathAndScriptFile\\(\\) has parameter \\$hostname with no type specified\\.$#"
@@ -1139,11 +969,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Core\\\\Bridge\\\\Symfony\\\\Action\\\\ObtainCreditCardAction\\:\\:execute\\(\\) expects Payum\\\\Core\\\\Request\\\\ObtainCreditCard, stdClass given\\.$#"
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Symfony/Action/ObtainCreditCardActionTest.php
-
-		-
-			message: "#^PHPDoc type string of property Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Action\\\\RenderTemplateActionTest\\:\\:\\$requestClass is not covariant with PHPDoc type Payum\\\\Core\\\\Request\\\\Generic of overridden property Payum\\\\Core\\\\Tests\\\\GenericActionTest\\:\\:\\$requestClass\\.$#"
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Symfony/Action/RenderTemplateActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Core\\\\Tests\\\\Bridge\\\\Symfony\\\\Extension\\\\EventDispatcherExtensionTest\\:\\:createContextMock\\(\\) has no return type specified\\.$#"
@@ -1576,23 +1401,8 @@ parameters:
 			path: src/Payum/Klarna/Checkout/KlarnaCheckoutGatewayFactory.php
 
 		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\CreateOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/CreateOrderActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\FetchOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/FetchOrderActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Klarna\\\\Checkout\\\\Action\\\\Api\\\\UpdateOrderAction\\:\\:execute\\(\\) expects Payum\\\\Klarna\\\\Checkout\\\\Request\\\\Api\\\\CreateOrder, Payum\\\\Klarna\\\\Checkout\\\\Request\\\\Api\\\\UpdateOrder given\\.$#"
 			count: 3
-			path: src/Payum/Klarna/Checkout/Tests/Action/Api/UpdateOrderActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\Api\\\\UpdateOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/Api/UpdateOrderActionTest.php
 
 		-
@@ -1621,27 +1431,7 @@ parameters:
 			path: src/Payum/Klarna/Checkout/Tests/Action/AuthorizeRecurringActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/NotifyActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/StatusActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Klarna\\\\Checkout\\\\Action\\\\SyncAction\\:\\:execute\\(\\) expects Payum\\\\Core\\\\Request\\\\Sync, stdClass given\\.$#"
-			count: 1
-			path: src/Payum/Klarna/Checkout/Tests/Action/SyncActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Klarna\\\\Checkout\\\\Tests\\\\Action\\\\SyncActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Checkout/Tests/Action/SyncActionTest.php
 
@@ -1899,16 +1689,6 @@ parameters:
 			message: "#^Method Payum\\\\Klarna\\\\Invoice\\\\Tests\\\\KlarnaInvoiceGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Klarna/Invoice/Tests/KlarnaInvoiceGatewayFactoryTest.php
-
-		-
-			message: "#^Property Payum\\\\Offline\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Offline/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Offline\\\\Tests\\\\Action\\\\ConvertPayoutActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Offline/Tests/Action/ConvertPayoutActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Offline\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:createGetStatusStub\\(\\) has parameter \\$model with no type specified\\.$#"
@@ -2351,11 +2131,6 @@ parameters:
 			path: src/Payum/Payex/Tests/Action/AutoPayPaymentDetailsStatusActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Payex\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Payex/Tests/Action/ConvertPaymentActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Payex\\\\Action\\\\PaymentDetailsCaptureAction\\:\\:execute\\(\\) expects Payum\\\\Core\\\\Request\\\\Capture, stdClass given\\.$#"
 			count: 1
 			path: src/Payum/Payex/Tests/Action/PaymentDetailsCaptureActionTest.php
@@ -2391,191 +2166,6 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/PurchaseAction.php
 
 		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createBillingAgreement\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createBillingAgreement\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createRecurringPaymentsProfile\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:createRecurringPaymentsProfile\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doCapture\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doCapture\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doExpressCheckoutPayment\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doExpressCheckoutPayment\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doReferenceTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doReferenceTransaction\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doVoid\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:doVoid\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getAuthorizeTokenUrl\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getExpressCheckoutDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getExpressCheckoutDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getRecurringPaymentsProfileDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getRecurringPaymentsProfileDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getTransactionDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:getTransactionDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:manageRecurringPaymentsProfileStatus\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:manageRecurringPaymentsProfileStatus\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:refundTransaction\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:refundTransaction\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:setExpressCheckout\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:setExpressCheckout\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:transactionSearch\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:transactionSearch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:updateRecurringPaymentsProfile\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:updateRecurringPaymentsProfile\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$client with type Payum\\\\Core\\\\HttpClientInterface\\|null is not subtype of native type Payum\\\\Core\\\\HttpClientInterface\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$messageFactory with type Http\\\\Message\\\\MessageFactory\\|null is not subtype of native type Http\\\\Message\\\\MessageFactory\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Api\\:\\:\\$options has no type specified\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Api.php
-
-		-
 			message: "#^ArrayObject\\<\\*NEVER\\*, \\*NEVER\\*\\> does not accept string\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
@@ -2601,11 +2191,6 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\Api\\\\ConfirmOrderActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\Api\\\\DoVoidAction\\:\\:execute\\(\\) expects Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Request\\\\Api\\\\DoVoid, stdClass given\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/DoVoidActionTest.php
@@ -2618,11 +2203,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$details of method Payum\\\\Core\\\\Model\\\\Token\\:\\:setDetails\\(\\) expects object, array given\\.$#"
 			count: 3
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/AutorizeActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\AutorizeActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/AutorizeActionTest.php
 
 		-
@@ -2651,21 +2231,6 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/CaptureActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/NotifyActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Paypal\\\\ExpressCheckout\\\\Nvp\\\\Action\\\\PaymentDetailsStatusAction\\:\\:execute\\(\\) expects Payum\\\\Core\\\\Request\\\\GetStatusInterface, stdClass given\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/PaymentDetailsStatusActionTest.php
@@ -2681,99 +2246,9 @@ parameters:
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/PaypalExpressCheckoutGatewayFactoryTest.php
 
 		-
-			message: "#^Method Payum\\\\Paypal\\\\Ipn\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Ipn/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Ipn\\\\Api\\:\\:notifyValidate\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Ipn/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Ipn\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Ipn/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:massPay\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:massPay\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$client with type Payum\\\\Core\\\\HttpClientInterface\\|null is not subtype of native type Payum\\\\Core\\\\HttpClientInterface\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$messageFactory with type Http\\\\Message\\\\MessageFactory\\|null is not subtype of native type Http\\\\Message\\\\MessageFactory\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Api.php
-
-		-
 			message: "#^Class Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Request\\\\Api\\\\Masspay constructor invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/Api/MasspayActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Tests\\\\Action\\\\Api\\\\MasspayActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/Api/MasspayActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Tests\\\\Action\\\\ConvertPayoutActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/ConvertPayoutActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Tests\\\\Action\\\\GetPayoutStatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/GetPayoutStatusActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Tests\\\\Action\\\\PayoutActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Masspay/Nvp/Tests/Action/PayoutActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Paypal\\\\Masspay\\\\Nvp\\\\Tests\\\\PaypalMasspayGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2781,149 +2256,9 @@ parameters:
 			path: src/Payum/Paypal/Masspay/Nvp/Tests/PaypalMasspayGatewayFactoryTest.php
 
 		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doCredit\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doCredit\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doSale\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:doSale\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\RefundActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/RefundActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/Action/StatusActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Paypal\\\\ProCheckout\\\\Nvp\\\\Tests\\\\PaypalProCheckoutGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Paypal/ProCheckout/Nvp/Tests/PaypalProCheckoutGatewayFactoryTest.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:addAuthorizeFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:addVersionField\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doCreateButton\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doCreateButton\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:getTransactionDetails\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:getTransactionDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:\\$options \\(array\\) does not accept Payum\\\\Core\\\\Bridge\\\\Spl\\\\ArrayObject\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Api.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/CaptureActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/ProHosted/Nvp/Tests/Action/NotifyActionTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$request of method Payum\\\\Paypal\\\\ProHosted\\\\Nvp\\\\Action\\\\StatusAction\\:\\:execute\\(\\) expects Payum\\\\Core\\\\Request\\\\GetStatusInterface, stdClass given\\.$#"
@@ -2991,44 +2326,9 @@ parameters:
 			path: src/Payum/Paypal/Rest/Model/PaymentDetails.php
 
 		-
-			message: "#^Property Payum\\\\Paypal\\\\Rest\\\\Tests\\\\Action\\\\ConvertActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Paypal/Rest/Tests/Action/ConvertActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Paypal\\\\Rest\\\\Tests\\\\PaypalRestGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Payum/Paypal/Rest/Tests/PaypalRestGatewayFactoryTest.php
-
-		-
-			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
-
-		-
-			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
-
-		-
-			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) has parameter \\$method with no type specified\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
-
-		-
-			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
-
-		-
-			message: "#^Method Payum\\\\Skeleton\\\\Api\\:\\:doRequest\\(\\) should return array but returns Psr\\\\Http\\\\Message\\\\ResponseInterface\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
-
-		-
-			message: "#^Property Payum\\\\Skeleton\\\\Api\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Skeleton/Api.php
 
 		-
 			message: "#^Right side of && is always true\\.$#"
@@ -3106,17 +2406,7 @@ parameters:
 			path: src/Payum/Sofort/Tests/Action/Api/RefundTransactionActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Sofort\\\\Tests\\\\Action\\\\NotifyActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Sofort/Tests/Action/NotifyActionTest.php
-
-		-
 			message: "#^Method Payum\\\\Sofort\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:executeRequestWithDetails\\(\\) has parameter \\$details with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Payum/Sofort/Tests/Action/StatusActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Sofort\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
 			count: 1
 			path: src/Payum/Sofort/Tests/Action/StatusActionTest.php
 
@@ -3226,29 +2516,9 @@ parameters:
 			path: src/Payum/Stripe/Tests/Action/CaptureActionTest.php
 
 		-
-			message: "#^Property Payum\\\\Stripe\\\\Tests\\\\Action\\\\CaptureActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Tests/Action/CaptureActionTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$securityCode of method Payum\\\\Core\\\\Model\\\\CreditCard\\:\\:setSecurityCode\\(\\) expects Payum\\\\Core\\\\Security\\\\SensitiveValue\\|string, int given\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Stripe\\\\Tests\\\\Action\\\\ConvertPaymentActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Tests/Action/ConvertPaymentActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Stripe\\\\Tests\\\\Action\\\\GetCreditCardTokenActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Tests/Action/GetCreditCardTokenActionTest.php
-
-		-
-			message: "#^Property Payum\\\\Stripe\\\\Tests\\\\Action\\\\StatusActionTest\\:\\:\\$requestClass \\(Payum\\\\Core\\\\Request\\\\Generic\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Payum/Stripe/Tests/Action/StatusActionTest.php
 
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Tests\\\\StripeCheckoutGatewayFactoryTest\\:\\:getRequiredOptions\\(\\) return type has no value type specified in iterable type array\\.$#"

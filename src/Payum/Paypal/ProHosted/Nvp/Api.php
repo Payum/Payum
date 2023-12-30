@@ -2,12 +2,15 @@
 
 namespace Payum\Paypal\ProHosted\Nvp;
 
-use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use function http_build_query;
 
 /**
  * @link https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution
@@ -101,20 +104,14 @@ class Api
 
     public const FORM_CMD = '_hosted-payment';
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+
+    protected RequestFactoryInterface $requestFactory;
 
     /**
-     * @var MessageFactory
+     * @var array<string, mixed>|ArrayObject
      */
-    protected $messageFactory;
-
-    /**
-     * @var array
-     */
-    protected $options = [
+    protected array|ArrayObject $options = [
         'username' => null,
         'password' => null,
         'signature' => null,
@@ -124,11 +121,18 @@ class Api
         'cmd' => self::FORM_CMD,
     ];
 
+    private StreamFactoryInterface $streamFactory;
+
     /**
+     * @param array<string, mixed> $options
      * @throws InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty([
@@ -143,17 +147,18 @@ class Api
 
         $this->options = $options;
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
      * Solution BMCreateButton
      *
-     * @throws RuntimeException
-     *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    public function doCreateButton(array $fields)
+    public function doCreateButton(array $fields): array
     {
         if (! isset($fields['return'])) {
             if (! $this->options['return']) {
@@ -186,11 +191,12 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @param array $fields
+     * @param array<string, mixed> $fields
      *
-     * @return array
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    public function getTransactionDetails($fields)
+    public function getTransactionDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
@@ -200,28 +206,27 @@ class Api
         return $this->doRequest($fields);
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnvironnementTest()
+    public function isEnvironmentTest(): bool
     {
         return $this->options['sandbox'];
     }
 
     /**
-     * @throws HttpException
+     * @param array<string, mixed> $fields
      *
-     * @return array
+     * @return array<string, string>
+     *
+     * @throws ClientExceptionInterface
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
-        $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
+        $request = $this->requestFactory
+            ->createRequest('POST', $this->getApiEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields)))
+        ;
 
-        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
+        $response = $this->client->sendRequest($request);
 
         if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
@@ -236,14 +241,14 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
-        return $this->options['sandbox'] ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
+        return $this->isEnvironmentTest() ? 'https://api-3t.sandbox.paypal.com/nvp' : 'https://api-3t.paypal.com/nvp';
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     */
     protected function addAuthorizeFields(array &$fields): void
     {
         $fields['USER'] = $this->options['username'];
@@ -256,6 +261,9 @@ class Api
         }
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     */
     protected function addVersionField(array &$fields): void
     {
         $fields['VERSION'] = self::VERSION;

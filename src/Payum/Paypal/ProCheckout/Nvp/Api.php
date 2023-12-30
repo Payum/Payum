@@ -2,11 +2,13 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp;
 
-use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -158,20 +160,16 @@ class Api
 
     public const TENDER_PAYPAL = 'P';
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+
+    protected RequestFactoryInterface $requestFactory;
+
+    protected StreamFactoryInterface $streamFactory;
 
     /**
-     * @var MessageFactory
+     * @var array<string, mixed>|ArrayObject
      */
-    protected $messageFactory;
-
-    /**
-     * @var array
-     */
-    protected $options = [
+    protected array | ArrayObject $options = [
         'username' => '',
         'password' => '',
         'partner' => '',
@@ -181,10 +179,15 @@ class Api
     ];
 
     /**
+     * @param array<string, mixed> $options
      * @throw InvalidArgumentException
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty([
@@ -201,13 +204,16 @@ class Api
 
         $this->options = $options;
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    public function doSale(array $fields)
+    public function doSale(array $fields): array
     {
         $fields['TRXTYPE'] = self::TRXTYPE_SALE;
         $this->addAuthorizeFields($fields);
@@ -219,9 +225,12 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     *
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    public function doCredit(array $fields)
+    public function doCredit(array $fields): array
     {
         $fields['TRXTYPE'] = self::TRXTYPE_CREDIT;
         $this->addAuthorizeFields($fields);
@@ -233,17 +242,18 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
-        $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
+        $request = $this->requestFactory
+            ->createRequest('POST', $this->getApiEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields)));
 
-        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
+        $response = $this->client->sendRequest($request);
 
         if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
@@ -258,10 +268,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://pilot-payflowpro.paypal.com/' :
@@ -269,6 +276,9 @@ class Api
         ;
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     */
     protected function addAuthorizeFields(array &$fields): void
     {
         $fields['USER'] = $this->options['username'];

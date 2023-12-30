@@ -2,16 +2,18 @@
 
 namespace Payum\Paypal\Ipn\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Nyholm\Psr7\Stream;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\HttpClientInterface;
 use Payum\Paypal\Ipn\Api;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use function http_build_query;
 
 class ApiTest extends TestCase
 {
@@ -19,14 +21,14 @@ class ApiTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor(): void
     {
         $api = new Api([
             'sandbox' => true,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -35,7 +37,7 @@ class ApiTest extends TestCase
     {
         $api = new Api([
             'sandbox' => false,
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
@@ -47,13 +49,13 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(404))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(404)->withBody($request->getBody()))
         ;
 
         $api = new Api([
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->notifyValidate([]);
     }
@@ -63,25 +65,27 @@ class ApiTest extends TestCase
         /** @var RequestInterface $actualRequest */
         $actualRequest = null;
 
+        $expectedNotification = [
+            'foo' => 'foo',
+            'bar' => 'baz',
+        ];
+
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest) {
-                $actualRequest = $request;
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest, $expectedNotification) {
+                $actualRequest = $request->withBody(Stream::create(http_build_query($expectedNotification + [
+                    'cmd' => Api::CMD_NOTIFY_VALIDATE,
+                ])));
 
-                return new Response(200);
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
             })
         ;
 
         $api = new Api([
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
-
-        $expectedNotification = [
-            'foo' => 'foo',
-            'bar' => 'baz',
-        ];
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->notifyValidate($expectedNotification);
 
@@ -101,13 +105,13 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_VERIFIED))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody(Stream::create(Api::NOTIFY_VERIFIED)))
         ;
 
         $api = new Api([
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate([]));
     }
@@ -117,13 +121,13 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], Api::NOTIFY_INVALID))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody(Stream::create(Api::NOTIFY_INVALID)))
         ;
 
         $api = new Api([
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate([]));
     }
@@ -133,42 +137,38 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], 'foobarbaz'))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody(Stream::create('foobarbaz')))
         ;
 
         $api = new Api([
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate([]));
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock(HttpClientInterface::class);
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createSuccessHttpClientStub()
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    protected function createSuccessHttpClientStub(): MockObject | ClientInterface
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody()))
         ;
 
         return $clientMock;

@@ -2,12 +2,14 @@
 
 namespace Payum\Be2Bill;
 
-use Http\Message\MessageFactory;
+use JsonException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class Api
 {
@@ -103,30 +105,31 @@ class Api
      */
     public const OPERATION_CREDIT = 'credit';
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+
+    protected RequestFactoryInterface $requestFactory;
+
+    protected StreamFactoryInterface $streamFactory;
 
     /**
-     * @var MessageFactory
+     * @var array<string, mixed>|ArrayObject
      */
-    protected $messageFactory;
-
-    /**
-     * @var array
-     */
-    protected $options = [
+    protected array | ArrayObject $options = [
         'identifier' => null,
         'password' => null,
         'sandbox' => null,
     ];
 
     /**
+     * @param array<string, mixed> $options
      * @throws InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty([
@@ -140,13 +143,16 @@ class Api
 
         $this->options = $options;
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     * @throws JsonException
      */
-    public function payment(array $params)
+    public function payment(array $params): array
     {
         $params['OPERATIONTYPE'] = static::OPERATION_PAYMENT;
 
@@ -161,9 +167,9 @@ class Api
     /**
      * Verify if the hash of the given parameter is correct
      *
-     * @return bool
+     * @param array<string, mixed> $params
      */
-    public function verifyHash(array $params)
+    public function verifyHash(array $params): bool
     {
         if (empty($params['HASH'])) {
             return false;
@@ -175,10 +181,7 @@ class Api
         return $hash === $this->calculateHash($params);
     }
 
-    /**
-     * @return string
-     */
-    public function getOffsiteUrl()
+    public function getOffsiteUrl(): string
     {
         return $this->options['sandbox'] ?
             'https://secure-test.be2bill.com/front/form/process.php' :
@@ -187,9 +190,10 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
      */
-    public function prepareOffsitePayment(array $params)
+    public function prepareOffsitePayment(array $params): array
     {
         $supportedParams = [
             'CLIENTIDENT' => null,
@@ -224,9 +228,9 @@ class Api
     }
 
     /**
-     * @return string
+     * @param array<string, mixed> $params
      */
-    public function calculateHash(array $params)
+    public function calculateHash(array $params): string
     {
         #Alpha sort
         ksort($params);
@@ -240,17 +244,19 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
+     * @throws JsonException
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
-        $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
+        $request = $this->requestFactory
+            ->createRequest('POST', $this->getApiEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields['params'])))
+        ;
 
-        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
+        $response = $this->client->sendRequest($request);
 
         if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
@@ -264,6 +270,9 @@ class Api
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     protected function addGlobalParams(array &$params): void
     {
         $params['VERSION'] = self::VERSION;
@@ -271,10 +280,7 @@ class Api
         $params['HASH'] = $this->calculateHash($params);
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://secure-test.be2bill.com/front/service/rest/process' :

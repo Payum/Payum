@@ -3,9 +3,6 @@
 namespace Payum\Core\Tests;
 
 use Closure;
-use Http\Client\HttpClient;
-use Http\Message\MessageFactory;
-use Http\Message\StreamFactory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
@@ -20,6 +17,9 @@ use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
 use stdClass;
 use Twig\Environment;
@@ -62,7 +62,7 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertArrayHasKey('httplug.message_factory', $config);
         $this->assertInstanceOf(Closure::class, $config['httplug.message_factory']);
         $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(MessageFactory::class, $config['httplug.message_factory']);
+        $this->assertInstanceOf(RequestFactoryInterface::class, $config['httplug.message_factory']);
     }
 
     public function testShouldCreateDefaultHttplugStreamFactory(): void
@@ -73,7 +73,7 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertArrayHasKey('httplug.stream_factory', $config);
         $this->assertInstanceOf(Closure::class, $config['httplug.stream_factory']);
         $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']);
+        $this->assertInstanceOf(StreamFactoryInterface::class, $config['httplug.stream_factory']);
     }
 
     public function testShouldCreateDefaultHttplugClient(): void
@@ -88,7 +88,7 @@ class CoreGatewayFactoryTest extends TestCase
         $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
         $config['httplug.client'] = call_user_func($config['httplug.client'], ArrayObject::ensureArrayObject($config));
 
-        $this->assertInstanceOf(HttpClient::class, $config['httplug.client']);
+        $this->assertInstanceOf(ClientInterface::class, $config['httplug.client']);
     }
 
     public function testShouldAllowCreateGatewayWithCustomApi(): void

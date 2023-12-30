@@ -2,8 +2,7 @@
 
 namespace Payum\Core\Tests\Exception\Http;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\Http\HttpExceptionInterface;
 use Payum\Core\Exception\RuntimeException;
@@ -66,9 +65,9 @@ class HttpExceptionTest extends TestCase
 
     public function testShouldAllowCreateHttpExceptionFromRequestAndResponse(): void
     {
-        $request = new Request('GET', 'http://example.com/foobar');
+        $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://example.com/foobar');
 
-        $response = new Response(404);
+        $response = Psr17FactoryDiscovery::findResponseFactory()->createResponse(404);
 
         $httpException = HttpException::factory($request, $response);
 
@@ -77,7 +76,7 @@ class HttpExceptionTest extends TestCase
         $this->assertSame($response, $httpException->getResponse());
 
         $this->assertSame(
-            "Client error response\n[status code] 404\n[reason phrase] Not Found\n[url] http://example.com/foobar",
+            "Client error response\n[status code] 404\n[reason phrase] Not Found\n[url] https://example.com/foobar",
             $httpException->getMessage()
         );
         $this->assertSame(404, $httpException->getCode());
