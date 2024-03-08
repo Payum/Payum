@@ -116,7 +116,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
 
         if (method_exists($this, 'expectExceptionMessageRegExp')) {
-            $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
+            $this->expectExceptionMessageRegExp('/Given \"config_path\" is invalid. \w+/');
         } else {
             $this->expectExceptionMessageMatches('/Given \"config_path\" is invalid. \w+/');
         }
