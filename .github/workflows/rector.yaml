@@ -14,7 +14,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.1
+                    php-version: 7.2
                     coverage: none
 
             -   uses: "ramsey/composer-install@v2"
@@ -23,7 +23,7 @@ jobs:
 
             -
                 # commit only to core contributors who have repository access
-                uses: stefanzweifel/git-auto-commit-action@v4
+                uses: stefanzweifel/git-auto-commit-action@v5
                 with:
                     commit_message: '[rector] Rector fixes'
                     commit_author: 'GitHub Action <actions@github.com>'
