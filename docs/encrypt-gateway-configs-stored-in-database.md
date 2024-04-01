@@ -32,7 +32,6 @@ $gatewayConfigStorage = new CryptoStorageDecorator($realStorage, $cypher);
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->setGatewayConfigStorage($gatewayConfigStorage)
 
     ->getPayum()

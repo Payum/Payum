@@ -23,7 +23,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('gatewayName', [
         'factory' => 'stripe_js',
         'publishable_key' => 'EDIT IT',

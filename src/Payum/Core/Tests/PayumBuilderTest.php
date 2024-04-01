@@ -63,10 +63,7 @@ class PayumBuilderTest extends TestCase
 
     public function testShouldBuildDefaultPayum(): void
     {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->getPayum()
-        ;
+        $payum = (new PayumBuilder())->getPayum();
 
         $this->assertInstanceOf(Payum::class, $payum);
         $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());

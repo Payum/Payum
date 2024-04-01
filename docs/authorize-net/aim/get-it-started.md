@@ -23,7 +23,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('authorize_net', [
         'factory' => 'authorize_net_aim',
         'login_id' => 'REPLACE IT',
