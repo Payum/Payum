@@ -21,10 +21,10 @@ jobs:
 
             -   run: bin/rector --ansi
 
-            #-
+            -
                 # commit only to core contributors who have repository access
-                #uses: stefanzweifel/git-auto-commit-action@v5
-                #with:
-                    #commit_message: '[rector] Rector fixes'
-                    #commit_author: 'GitHub Action <actions@github.com>'
-                    #commit_user_email: 'action@github.com'
+                uses: stefanzweifel/git-auto-commit-action@v5
+                with:
+                    commit_message: '[rector] Rector fixes'
+                    commit_author: 'GitHub Action <actions@github.com>'
+                    commit_user_email: 'action@github.com'
