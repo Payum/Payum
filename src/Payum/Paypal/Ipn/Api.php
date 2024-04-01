@@ -41,10 +41,10 @@ class Api
      * @param array<string, mixed> $options
      */
     public function __construct(
-        array                   $options,
-        ClientInterface         $client,
+        array $options,
+        ClientInterface $client,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         $this->client = $client;
         $this->requestFactory = $requestFactory;

@@ -47,10 +47,10 @@ class Payum implements RegistryInterface
      * @param StorageInterface<TokenInterface> $tokenStorage
      */
     public function __construct(
-        RegistryInterface            $registry,
+        RegistryInterface $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
         GenericTokenFactoryInterface $tokenFactory,
-        StorageInterface             $tokenStorage
+        StorageInterface $tokenStorage
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;

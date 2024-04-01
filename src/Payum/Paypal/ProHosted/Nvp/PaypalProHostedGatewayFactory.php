@@ -55,7 +55,7 @@ class PaypalProHostedGatewayFactory extends GatewayFactory
                     'sandbox' => $config['sandbox'],
                 ];
 
-                return new Api($paypalConfig, $config['payum.http_client'], $config['httplug.message_factory'], $config['httplug.stream_factory']);
+                return new Api($paypalConfig, $config['payum.http_client'], $config['payum.http_message_factory'], $config['payum.http_stream_factory']);
             };
         }
     }

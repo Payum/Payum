@@ -4,7 +4,6 @@ namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Core\Exception\LogicException;
-
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
 class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
