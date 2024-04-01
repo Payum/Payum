@@ -13,17 +13,12 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Set\ValueObject\LevelSetList;
 
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withPaths([
         __DIR__ . '/src',
-    ]);
-
-    //$rectorConfig->importNames();
-    //$rectorConfig->importShortClasses();
-    $rectorConfig->phpVersion(PhpVersion::PHP_72);
-
-    $rectorConfig->sets([
+    ])
+    ->withPhpVersion(PhpVersion::PHP_72)
+    ->withSets([
         LevelSetList::UP_TO_PHP_72,
 
         // PHPUnit
@@ -35,9 +30,8 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_90,
         PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-    ]);
-
-    $rectorConfig->skip([
+    ])
+    ->withSkip([
         LongArrayToShortArrayRector::class,
         StringClassNameToClassConstantRector::class,
         RemoveExtraParametersRector::class,
@@ -46,4 +40,3 @@ return static function (RectorConfig $rectorConfig): void {
         AddSeeTestAnnotationRector::class,
         RenameClassRector::class,
     ]);
-};
