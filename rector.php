@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\ValueObject\PhpVersion;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -39,4 +40,8 @@ return RectorConfig::configure()
 
         AddSeeTestAnnotationRector::class,
         RenameClassRector::class,
+
+        RenameMethodRector::class => [
+            __DIR__ . '/src/Payum/Paypal/Rest/Tests/PaypalRestGatewayFactoryTest.php',
+        ],
     ]);
