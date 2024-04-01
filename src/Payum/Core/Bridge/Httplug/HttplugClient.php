@@ -31,7 +31,7 @@ class HttplugClient implements HttpClientInterface, ClientInterface
      */
     public function send(RequestInterface $request): ResponseInterface
     {
-        trigger_error('The ' . __CLASS__ . '::send() is deprecated since 2.0.0 and will be removed in 3.0. Use sendRequest() instead.', E_USER_DEPRECATED);
+        trigger_error('The ' . self::class . '::send() is deprecated since 2.0.0 and will be removed in 3.0. Use sendRequest() instead.', E_USER_DEPRECATED);
         return $this->sendRequest($request);
     }
 
