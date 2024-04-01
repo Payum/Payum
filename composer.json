@@ -75,7 +75,7 @@
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "~1.0",
         "klarna/checkout": "^1.1 || ^2.0",
-        "fp/klarna-invoice": "0.1.*",
+        "solidworx/klarna-invoice": "0.2.*",
         "stripe/stripe-php": "^7.0",
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
