@@ -11,7 +11,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\ValueObject\PhpVersion;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
@@ -25,16 +25,13 @@ use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withPaths([
         __DIR__ . '/src',
-    ]);
-
-    $rectorConfig->importNames();
-    $rectorConfig->importShortClasses();
-    $rectorConfig->phpVersion(PhpVersion::PHP_82);
-
-    $rectorConfig->sets([
+    ])
+    ->withImportNames()
+    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withSets([
         LevelSetList::UP_TO_PHP_82,
 
         // PHP
@@ -54,9 +51,8 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_80,
         PHPUnitSetList::PHPUNIT_90,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-    ]);
-
-    $rectorConfig->rules([
+    ])
+    ->withRules([
         SimplifyUselessVariableRector::class,
         ShortenElseIfRector::class,
         SimplifyIfReturnBoolRector::class,
@@ -67,9 +63,8 @@ return static function (RectorConfig $rectorConfig): void {
         InlineConstructorDefaultToPropertyRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
         Utf8DecodeEncodeToMbConvertEncodingRector::class,
-    ]);
-
-    $rectorConfig->skip([
+    ])
+    ->withSkip([
         AddSeeTestAnnotationRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
         MixedTypeRector::class,
@@ -82,4 +77,3 @@ return static function (RectorConfig $rectorConfig): void {
             __DIR__ . '/src/Payum/Core/GatewayFactory.php',
         ],
     ]);
-};

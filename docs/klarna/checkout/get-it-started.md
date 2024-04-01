@@ -63,7 +63,7 @@ $storage->update($details);
 $authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('klarna', $details, 'done.php');
 
 /** @var \Payum\Core\Security\TokenInterface $notifyToken */
-$notifyToken = $payum->tokenFactory()->createNotifyToken('klarna', $details);
+$notifyToken = $payum->getTokenFactory()->createNotifyToken('klarna', $details);
 
 $details['merchant'] = array(
     'terms_uri' => 'http://example.com/terms',
