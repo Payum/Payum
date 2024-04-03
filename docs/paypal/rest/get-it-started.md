@@ -21,7 +21,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('paypalRest', [
         'factory' => 'paypal_rest',
         'client_id' => 'REPLACE IT', // Your PayPal REST API cliend ID.
@@ -44,7 +43,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('paypalRest', [
         'factory' => 'paypal_rest',
         'client_id' => 'REPLACE IT',

@@ -21,8 +21,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
     ->addGateway('sofort', [
         'factory' => 'sofort',
         'config_key' => 'EDIT ME',

@@ -52,21 +52,9 @@ class PayumBuilderTest extends TestCase
         ];
     }
 
-    public function testThrowsIfTokenStorageIsNotSet(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Token storage must be configured.');
-        $payum = (new PayumBuilder())->getPayum();
-
-        $this->assertInstanceOf(Payum::class, $payum);
-    }
-
     public function testShouldBuildDefaultPayum(): void
     {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->getPayum()
-        ;
+        $payum = (new PayumBuilder())->getPayum();
 
         $this->assertInstanceOf(Payum::class, $payum);
         $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());

@@ -23,7 +23,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('gatewayName', [
         'factory' => 'payex',
         'account_number' => 'REPLACE IT',

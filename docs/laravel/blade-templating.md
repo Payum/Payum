@@ -10,7 +10,6 @@ All you have to do is change the configuration of payum on the gateway you want 
 <?php
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('aGateway', [
         'factory' => 'klarna_checkout'
         'merchant_id' => '',
