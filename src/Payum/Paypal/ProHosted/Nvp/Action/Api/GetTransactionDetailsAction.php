@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -19,16 +21,13 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request GetTransactionDetails */
+        /** @var GetTransactionDetails $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null == $model['txn_id']) {
+        if (null === $model['txn_id']) {
             throw new LogicException('TRANSACTIONID must be set.');
         }
 
@@ -41,13 +40,9 @@ class GetTransactionDetailsAction implements ActionInterface, ApiAwareInterface
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetTransactionDetails &&
-            $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof GetTransactionDetails &&
+            $request->getModel() instanceof ArrayAccess;
     }
 }

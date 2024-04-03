@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Model\CreditCard;
@@ -9,39 +10,39 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardType extends AbstractType
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('holder', TextType::class, array('label' => 'form.credit_card.holder'))
-            ->add('number', TextType::class, array('label' => 'form.credit_card.number'))
-            ->add('securityCode', TextType::class, array('label' => 'form.credit_card.security_code'))
+            ->add('holder', TextType::class, [
+                'label' => 'form.credit_card.holder',
+            ])
+            ->add('number', TextType::class, [
+                'label' => 'form.credit_card.number',
+            ])
+            ->add('securityCode', TextType::class, [
+                'label' => 'form.credit_card.security_code',
+            ])
             ->add(
                 'expireAt',
                 CreditCardExpirationDateType::class,
-                array(
+                [
                     'input' => 'datetime',
-                    'widget' =>'choice',
+                    'widget' => 'choice',
                     'label' => 'form.credit_card.expire_at',
-                )
+                ]
             );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setDefaults(
-                array(
+                [
                     'data_class' => CreditCard::class,
-                    'validation_groups' => array('Payum'),
+                    'validation_groups' => ['Payum'],
                     'label' => false,
                     'translation_domain' => 'PayumBundle',
-                )
+                ]
             );
     }
 }

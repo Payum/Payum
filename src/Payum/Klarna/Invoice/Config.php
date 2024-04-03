@@ -1,5 +1,11 @@
 <?php
+
 namespace Payum\Klarna\Invoice;
+
+use Klarna;
+use KlarnaCountry;
+use KlarnaCurrency;
+use KlarnaLanguage;
 
 class Config
 {
@@ -16,22 +22,22 @@ class Config
     /**
      * @var int
      */
-    public $country = \KlarnaCountry::SE;
+    public $country = KlarnaCountry::SE;
 
     /**
      * @var int
      */
-    public $language = \KlarnaLanguage::SV;
+    public $language = KlarnaLanguage::SV;
 
     /**
      * @var int
      */
-    public $currency = \KlarnaCurrency::SEK;
+    public $currency = KlarnaCurrency::SEK;
 
     /**
      * @var int
      */
-    public $mode = \Klarna::BETA;
+    public $mode = Klarna::BETA;
 
     /**
      * @var string

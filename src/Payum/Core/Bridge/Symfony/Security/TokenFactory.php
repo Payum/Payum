@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -8,16 +9,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactory extends AbstractTokenFactory
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @param StorageInterface         $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
-     * @param UrlGeneratorInterface    $urlGenerator
-     */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry, UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
@@ -26,12 +19,9 @@ class TokenFactory extends AbstractTokenFactory
     }
 
     /**
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return string
+     * @param array<string, mixed> $parameters
      */
-    protected function generateUrl($path, array $parameters = array())
+    protected function generateUrl(string $path, array $parameters = []): string
     {
         return $this->urlGenerator->generate($path, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }

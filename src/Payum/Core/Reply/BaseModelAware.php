@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Core\Reply;
 
+use ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
@@ -31,10 +33,10 @@ abstract class BaseModelAware extends LogicException implements ReplyInterface, 
     /**
      * @param mixed $model
      */
-    public function setModel($model)
+    public function setModel($model): void
     {
         if (is_array($model)) {
-            $model = new \ArrayObject($model);
+            $model = new ArrayObject($model);
         }
 
         $this->model = $model;

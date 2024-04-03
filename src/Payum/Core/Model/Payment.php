@@ -1,5 +1,8 @@
 <?php
+
 namespace Payum\Core\Model;
+
+use Traversable;
 
 class Payment implements PaymentInterface, DirectDebitPaymentInterface
 {
@@ -36,7 +39,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @var array
      */
-    protected $details;
+    protected $details = [];
 
     /**
      * @var CreditCardInterface|null
@@ -50,12 +53,8 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
 
     public function __construct()
     {
-        $this->details = [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getNumber()
     {
         return $this->number;
@@ -64,14 +63,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $number
      */
-    public function setNumber($number)
+    public function setNumber($number): void
     {
         $this->number = $number;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDescription()
     {
         return $this->description;
@@ -80,14 +76,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getClientEmail()
     {
         return $this->clientEmail;
@@ -96,14 +89,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $clientEmail
      */
-    public function setClientEmail($clientEmail)
+    public function setClientEmail($clientEmail): void
     {
         $this->clientEmail = $clientEmail;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getClientId()
     {
         return $this->clientId;
@@ -112,14 +102,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $clientId
      */
-    public function setClientId($clientId)
+    public function setClientId($clientId): void
     {
         $this->clientId = $clientId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTotalAmount()
     {
         return $this->totalAmount;
@@ -128,14 +115,11 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param int $totalAmount
      */
-    public function setTotalAmount($totalAmount)
+    public function setTotalAmount($totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCurrencyCode()
     {
         return $this->currencyCode;
@@ -144,27 +128,22 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode($currencyCode)
+    public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDetails()
     {
         return $this->details;
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param array|\Traversable $details
+     * @param array|Traversable $details
      */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
-        if ($details instanceof \Traversable) {
+        if ($details instanceof Traversable) {
             $details = iterator_to_array($details);
         }
 
@@ -179,10 +158,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->creditCard;
     }
 
-    /**
-     * @param CreditCardInterface|null $creditCard
-     */
-    public function setCreditCard(CreditCardInterface $creditCard = null)
+    public function setCreditCard(CreditCardInterface $creditCard = null): void
     {
         $this->creditCard = $creditCard;
     }
@@ -195,10 +171,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->bankAccount;
     }
 
-    /**
-     * @param BankAccountInterface|null $bankAccount
-     */
-    public function setBankAccount(BankAccountInterface $bankAccount = null)
+    public function setBankAccount(BankAccountInterface $bankAccount = null): void
     {
         $this->bankAccount = $bankAccount;
     }

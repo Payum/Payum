@@ -1,6 +1,9 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -8,9 +11,10 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateToken;
-use Stripe\Error;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Token;
 
@@ -33,10 +37,7 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -44,12 +45,9 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateToken */
+        /** @var CreateToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -57,22 +55,26 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($token->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($token->toArray());
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateToken &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreateToken &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

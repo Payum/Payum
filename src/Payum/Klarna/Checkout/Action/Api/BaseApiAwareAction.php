@@ -1,6 +1,13 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action\Api;
 
+use ArrayAccess;
+use Closure;
+use Klarna_Checkout_ConnectionErrorException;
+use Klarna_Checkout_Connector;
+use Klarna_Checkout_ConnectorInterface;
+use Klarna_Checkout_Order;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -19,12 +26,9 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     protected $config;
 
-    /**
-     * @var \Klarna_Checkout_ConnectorInterface
-     */
-    private $connector;
+    private ?Klarna_Checkout_ConnectorInterface $connector = null;
 
-    public function __construct(\Klarna_Checkout_ConnectorInterface $connector = null)
+    public function __construct(Klarna_Checkout_ConnectorInterface $connector = null)
     {
         $this->connector = $connector;
 
@@ -32,10 +36,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Config::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -43,7 +44,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @return \Klarna_Checkout_ConnectorInterface
+     * @return Klarna_Checkout_ConnectorInterface
      */
     protected function getConnector()
     {
@@ -51,26 +52,23 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
             return $this->connector;
         }
 
-        \Klarna_Checkout_Order::$contentType = $this->config->contentType;
-        \Klarna_Checkout_Order::$baseUri = $this->config->baseUri;
-        if (property_exists('Klarna_Checkout_Order', 'accept')) {
-            \Klarna_Checkout_Order::$accept = $this->config->acceptHeader;
+        Klarna_Checkout_Order::$contentType = $this->config->contentType;
+        Klarna_Checkout_Order::$baseUri = $this->config->baseUri;
+        if (property_exists(Klarna_Checkout_Order::class, 'accept')) {
+            Klarna_Checkout_Order::$accept = $this->config->acceptHeader;
         }
 
-        return \Klarna_Checkout_Connector::create($this->config->secret);
+        return Klarna_Checkout_Connector::create($this->config->secret);
     }
 
-    /**
-     * @param \ArrayAccess $details
-     */
-    protected function addMerchantId(\ArrayAccess $details)
+    protected function addMerchantId(ArrayAccess $details): void
     {
-        if (false == isset($details['merchant'])) {
-            $details['merchant'] = array();
+        if (! isset($details['merchant'])) {
+            $details['merchant'] = [];
         }
 
         $merchant = $details['merchant'];
-        if (false == isset($merchant['id'])) {
+        if (! isset($merchant['id'])) {
             $merchant['id'] = (string) $this->config->merchantId;
         }
 
@@ -78,20 +76,19 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * @param \Closure $function
      * @param int $maxRetry
      *
-     * @throws \Klarna_Checkout_ConnectionErrorException
+     * @throws Klarna_Checkout_ConnectionErrorException
      *
      * @return mixed
      */
-    protected function callWithRetry(\Closure $function, $maxRetry = 3)
+    protected function callWithRetry(Closure $function, $maxRetry = 3)
     {
         $attempts = 1;
         while (true) {
             try {
                 return call_user_func($function);
-            } catch (\Klarna_Checkout_ConnectionErrorException $e) {
+            } catch (Klarna_Checkout_ConnectionErrorException $e) {
                 if ($attempts >= $maxRetry) {
                     throw $e;
                 }

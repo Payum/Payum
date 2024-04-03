@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Payex\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,11 +12,9 @@ use Payum\Payex\Api\OrderApi;
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -35,21 +34,17 @@ class ConvertPaymentAction implements ActionInterface
         $details['clientIdentifier'] = '';
         $details['additionalValues'] = '';
         $details['agreementRef'] = '';
-        $details['clientLanguage'] = isset($details['clientLanguage']) ? $details['clientLanguage'] : 'en-US';
+        $details['clientLanguage'] ??= 'en-US';
         $details['autoPay'] = false;
 
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' === $request->getTo()
         ;
     }
 }

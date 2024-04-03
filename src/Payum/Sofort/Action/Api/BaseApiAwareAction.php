@@ -2,10 +2,10 @@
 
 namespace Payum\Sofort\Action\Api;
 
-use Payum\Sofort\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Sofort\Api;
 
 /**
  * @deprecated since 1.4.1 will be removed in 2.x
@@ -13,16 +13,13 @@ use Payum\Core\Exception\UnsupportedApiException;
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Payum\Sofort\Api
+     * @var Api
      */
     protected $api;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
-        if (false == $api instanceof Api) {
+        if (! $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 

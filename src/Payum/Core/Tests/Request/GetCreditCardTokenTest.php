@@ -1,47 +1,36 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
+use ArrayObject;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCreditCardToken;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class GetCreditCardTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithCurrencyCode()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        new GetCreditCardToken([]);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
-    {
-        $rc = new \ReflectionClass(GetCreditCardToken::class);
+        $rc = new ReflectionClass(GetCreditCardToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor(): void
     {
-        $model = new \ArrayObject();
+        $model = new ArrayObject();
 
         $request = new GetCreditCardToken($model);
 
         $this->assertSame($model, $request->getModel());
     }
 
-    public function shouldAllowSetAndLaterGetToken()
+    public function shouldAllowSetAndLaterGetToken(): void
     {
         $request = new GetCreditCardToken([]);
         $request->token = 'aToken';
 
-        $this->assertEquals('aToken', $request->token);
+        $this->assertSame('aToken', $request->token);
     }
 }

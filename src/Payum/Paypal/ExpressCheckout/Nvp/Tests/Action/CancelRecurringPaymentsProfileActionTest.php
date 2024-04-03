@@ -1,7 +1,12 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
+use Iterator;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Cancel;
@@ -10,141 +15,127 @@ use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ManageRecurringPaymentsProfileStatus;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 {
     /**
      * @var Generic
      */
-    protected $requestClass = 'Payum\Core\Request\Cancel';
+    protected $requestClass = Cancel::class;
 
     /**
      * @var ActionInterface
      */
-    protected $actionClass = 'Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction';
+    protected $actionClass = CancelRecurringPaymentsProfileAction::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
-        yield array(new $this->requestClass(array('BILLINGPERIOD' => 'foo')));
-        yield array(new $this->requestClass(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))));
-    }
-    public function provideNotSupportedRequests(): \Iterator
-    {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array(new $this->requestClass('foo'));
-        yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield [
+            new $this->requestClass([
+                'BILLINGPERIOD' => 'foo',
+            ]), ];
+        yield [new $this->requestClass(new ArrayObject([
+            'BILLINGPERIOD' => 'foo',
+        ]))];
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function provideNotSupportedRequests(): Iterator
     {
-        $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
+        yield ['foo'];
+        yield [['foo']];
+        yield [new stdClass()];
+        yield [new $this->requestClass('foo')];
+        yield [new $this->requestClass(new stdClass())];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
+    }
+
+    public function testShouldImplementActionInterface(): void
+    {
+        $rc = new ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(CancelRecurringPaymentsProfileAction::class);
+        $rc = new ReflectionClass(CancelRecurringPaymentsProfileAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CancelRecurringPaymentsProfileAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel()
+    public function testShouldSupportManageRecurringPaymentsProfileStatusRequestAndArrayAccessAsModel(): void
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
         $this->assertTrue(
-            $action->supports(new Cancel(array('BILLINGPERIOD' => 'foo')))
+            $action->supports(new Cancel([
+                'BILLINGPERIOD' => 'foo',
+            ]))
         );
 
         $this->assertTrue(
-            $action->supports(new Cancel(new \ArrayObject(array('BILLINGPERIOD' => 'foo'))))
+            $action->supports(new Cancel(new ArrayObject([
+                'BILLINGPERIOD' => 'foo',
+            ])))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest()
+    public function testShouldNotSupportAnythingNotManageRecurringPaymentsProfileStatusRequest(): void
     {
         $action = new CancelRecurringPaymentsProfileAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request = null)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request = null): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CancelRecurringPaymentsProfileAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfProfileIdNotSetInModel()
+    public function testThrowIfProfileIdNotSetInModel(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PROFILEID fields are required.');
         $action = new CancelRecurringPaymentsProfileAction();
 
-        $request = new Cancel(array('BILLINGPERIOD' => 'foo'));
+        $request = new Cancel([
+            'BILLINGPERIOD' => 'foo',
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteManageAndSyncActions()
+    public function testShouldExecuteManageAndSyncActions(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->exactly(2))
             ->method('execute')
             ->withConsecutive(
-                array($this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)),
-                array($this->isInstanceOf(Sync::class))
+                [$this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)],
+                [$this->isInstanceOf(Sync::class)]
             )
         ;
 
         $action = new CancelRecurringPaymentsProfileAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Cancel(array(
+        $request = new Cancel([
             'BILLINGPERIOD' => 'Month',
             'PROFILEID' => 'profile-ID',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

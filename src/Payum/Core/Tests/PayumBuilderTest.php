@@ -1,12 +1,15 @@
 <?php
+
 namespace Payum\Core\Tests;
 
+use LogicException;
 use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
@@ -35,47 +38,23 @@ use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use stdClass;
 
 class PayumBuilderTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         $_SERVER = [
             'HTTP_HOST' => 'payum.dev',
         ];
     }
 
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testShouldBuildDefaultPayum(): void
     {
-        new PayumBuilder();
-    }
-
-    /**
-     * @test
-     */
-    public function throwsIfTokenStorageIsNotSet()
-    {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Token storage must be configured.');
         $payum = (new PayumBuilder())->getPayum();
-
-        $this->assertInstanceOf(Payum::class, $payum);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBuildDefaultPayum()
-    {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->getPayum()
-        ;
 
         $this->assertInstanceOf(Payum::class, $payum);
         $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());
@@ -89,7 +68,6 @@ class PayumBuilderTest extends TestCase
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
         $this->assertArrayHasKey(Payout::class, $payum->getStorages());
-
 
         $factories = $payum->getGatewayFactories();
         $this->assertIsArray($factories);
@@ -135,10 +113,7 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(StripeJsGatewayFactory::class, $factories['stripe_js']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCustomHttpRequestVerifier()
+    public function testShouldUseCustomHttpRequestVerifier(): void
     {
         /** @var HttpRequestVerifierInterface $expectedVerifier */
         $expectedVerifier = $this->createMock(HttpRequestVerifierInterface::class);
@@ -153,10 +128,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedVerifier, $payum->getHttpRequestVerifier());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseHttpRequestVerifierBuilder()
+    public function testShouldUseHttpRequestVerifierBuilder(): void
     {
         /** @var HttpRequestVerifierInterface $expectedVerifier */
         $expectedVerifier = $this->createMock(HttpRequestVerifierInterface::class);
@@ -175,26 +147,18 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedVerifier, $payum->getHttpRequestVerifier());
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfHttpRequestVerifierBuilderReturnsInvalidInstance()
+    public function testThrowsIfHttpRequestVerifierBuilderReturnsInvalidInstance(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setHttpRequestVerifier(function () {
-                return new \stdClass();
-            })
+            ->setHttpRequestVerifier(fn () => new stdClass())
             ->getPayum()
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCustomGenericTokenFactory()
+    public function testShouldUseCustomGenericTokenFactory(): void
     {
         /** @var GenericTokenFactoryInterface $expectedTokenFactory */
         $expectedTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
@@ -209,10 +173,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedTokenFactory, $payum->getTokenFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseGenericTokenFactoryBuilder()
+    public function testShouldUseGenericTokenFactoryBuilder(): void
     {
         /** @var GenericTokenFactoryInterface $expectedTokenFactory */
         $expectedTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
@@ -223,7 +184,7 @@ class PayumBuilderTest extends TestCase
                 $this->assertInstanceOf(TokenFactoryInterface::class, $tokenFactory);
 
                 $this->assertIsArray($paths);
-                $this->assertEquals([
+                $this->assertSame([
                     'capture' => 'capture.php',
                     'notify' => 'notify.php',
                     'authorize' => 'authorize.php',
@@ -240,10 +201,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedTokenFactory, $payum->getTokenFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCustomGenericTokenFactoryPaths()
+    public function testShouldUseCustomGenericTokenFactoryPaths(): void
     {
         $expectedPaths = [
             'capture' => 'capture_custom.php',
@@ -260,29 +218,26 @@ class PayumBuilderTest extends TestCase
         ;
 
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertAttributeSame($expectedPaths, 'paths', $payum->getTokenFactory());
+
+        $genericTokenFactory = $payum->getTokenFactory();
+        $ref = new ReflectionProperty($genericTokenFactory, 'paths');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedPaths, $ref->getValue($genericTokenFactory));
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfGenericTokenFactoryBuilderReturnInvalidInstance()
+    public function testThrowsIfGenericTokenFactoryBuilderReturnInvalidInstance(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
-        $payum = (new PayumBuilder())
+        (new PayumBuilder())
             ->addDefaultStorages()
-            ->setGenericTokenFactory(function () {
-                return new \stdClass();
-            })
+            ->setGenericTokenFactory(fn () => new stdClass())
             ->getPayum()
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCustomTokenFactory()
+    public function testShouldUseCustomTokenFactory(): void
     {
         /** @var TokenFactoryInterface $expectedTokenFactory */
         $expectedTokenFactory = $this->createMock(TokenFactoryInterface::class);
@@ -294,13 +249,15 @@ class PayumBuilderTest extends TestCase
         ;
 
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertAttributeSame($expectedTokenFactory, 'tokenFactory', $payum->getTokenFactory());
+
+        $genericTokenFactory = $payum->getTokenFactory();
+        $ref = new ReflectionProperty($genericTokenFactory, 'tokenFactory');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedTokenFactory, $ref->getValue($genericTokenFactory));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseTokenFactoryBuilder()
+    public function testShouldUseTokenFactoryBuilder(): void
     {
         /** @var TokenFactoryInterface $expectedTokenFactory */
         $expectedTokenFactory = $this->createMock(TokenFactoryInterface::class);
@@ -316,30 +273,26 @@ class PayumBuilderTest extends TestCase
             ->getPayum()
         ;
 
+        $genericTokenFactory = $payum->getTokenFactory();
+        $ref = new ReflectionProperty($genericTokenFactory, 'tokenFactory');
+        $ref->setAccessible(true);
+
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertAttributeSame($expectedTokenFactory, 'tokenFactory', $payum->getTokenFactory());
+        $this->assertSame($expectedTokenFactory, $ref->getValue($genericTokenFactory));
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfTokenFactoryBuilderReturnInvalidInstance()
+    public function testThrowsIfTokenFactoryBuilderReturnInvalidInstance(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
-        $payum = (new PayumBuilder())
+        (new PayumBuilder())
             ->addDefaultStorages()
-            ->setTokenFactory(function () {
-                return new \stdClass();
-            })
+            ->setTokenFactory(fn () => new stdClass())
             ->getPayum()
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayAddedAsInstance()
+    public function testShouldAllowGetGatewayAddedAsInstance(): void
     {
         $expectedGateway = new Gateway();
 
@@ -353,15 +306,12 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedGateway, $payum->getGateway('a_gateway'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayAddedAsConfig()
+    public function testShouldAllowGetGatewayAddedAsConfig(): void
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGateway('a_gateway', [
-                'factory' => 'offline'
+                'factory' => 'offline',
             ])
             ->getPayum()
         ;
@@ -370,43 +320,33 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Gateway::class, $payum->getGateway('a_gateway'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToAddGatewayConfigWithoutFactoryKeySet()
+    public function testThrowIfTryToAddGatewayConfigWithoutFactoryKeySet(): void
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway config must have factory set in it and it must not be empty.');
-        $payum = (new PayumBuilder())
+        (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGateway('a_gateway', [
-            ])
+            ->addGateway('a_gateway', [])
             ->getPayum()
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorageAddedAsInstance()
+    public function testShouldAllowGetStorageAddedAsInstance(): void
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addStorage('a_storage', $expectedStorage)
+            ->addStorage($expectedStorage::class, $expectedStorage)
             ->getPayum()
         ;
 
         $this->assertInstanceOf(Payum::class, $payum);
-        $this->assertSame($expectedStorage, $payum->getStorage('a_storage'));
+        $this->assertSame($expectedStorage, $payum->getStorage($expectedStorage::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayFactoryAddedAsInstance()
+    public function testShouldAllowGetGatewayFactoryAddedAsInstance(): void
     {
         /** @var GatewayFactoryInterface $expectedFactory */
         $expectedFactory = $this->createMock(GatewayFactoryInterface::class);
@@ -421,10 +361,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedFactory, $payum->getGatewayFactory('a_factory'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayFactoryAddedAsCallbackFactory()
+    public function testShouldAllowGetGatewayFactoryAddedAsCallbackFactory(): void
     {
         $expectedFactory = null;
 
@@ -442,16 +379,17 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($expectedFactory, $payum->getGatewayFactory('a_factory'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldPassAddedConfigToGatewayCallbackFactory()
+    public function testShouldPassAddedConfigToGatewayCallbackFactory(): void
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGatewayFactoryConfig('a_factory', ['foo' => 'fooVal'])
+            ->addGatewayFactoryConfig('a_factory', [
+                'foo' => 'fooVal',
+            ])
             ->addGatewayFactory('a_factory', function (array $config, GatewayFactoryInterface $coreGatewayFactory) use (&$expectedFactory) {
-                $this->assertEquals(['foo' => 'fooVal'], $config);
+                $this->assertSame([
+                    'foo' => 'fooVal',
+                ], $config);
 
                 return new GatewayFactory($config, $coreGatewayFactory);
             })
@@ -459,10 +397,7 @@ class PayumBuilderTest extends TestCase
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldReuseAddedFactoriesForGatewayCreatedFromConfig()
+    public function testShouldReuseAddedFactoriesForGatewayCreatedFromConfig(): void
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
@@ -477,10 +412,7 @@ class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Gateway::class, $payum->getGateway('a_gateway'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReuseGatewaysFromMainRegistryAndFallbackOne()
+    public function testShouldReuseGatewaysFromMainRegistryAndFallbackOne(): void
     {
         $fallbackGateway = new Gateway();
         $mainGateway = new Gateway();
@@ -489,7 +421,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addGateway('fallback_factory', $fallbackGateway)
             ->setMainRegistry(new SimpleRegistry([
-                'main_gateway' => $mainGateway
+                'main_gateway' => $mainGateway,
             ]))
             ->getPayum()
         ;
@@ -499,10 +431,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($fallbackGateway, $payum->getGateway('fallback_factory'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetReuseGatewaysFromMainRegistryAndFallbackOne()
+    public function testShouldAllowSetReuseGatewaysFromMainRegistryAndFallbackOne(): void
     {
         $fallbackGateway = new Gateway();
         $mainGateway = new Gateway();
@@ -511,7 +440,7 @@ class PayumBuilderTest extends TestCase
             ->addDefaultStorages()
             ->addGateway('fallback_factory', $fallbackGateway)
             ->setMainRegistry(new SimpleRegistry([
-                'main_gateway' => $mainGateway
+                'main_gateway' => $mainGateway,
             ]))
             ->getPayum()
         ;
@@ -521,10 +450,7 @@ class PayumBuilderTest extends TestCase
         $this->assertSame($fallbackGateway, $payum->getGateway('fallback_factory'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCustomCoreGatewayFactory()
+    public function testShouldUseCustomCoreGatewayFactory(): void
     {
         $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
@@ -538,13 +464,13 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $this->assertAttributeSame($expectedCoreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryBuilder()
+    public function testShouldUseCoreGatewayFactoryBuilder(): void
     {
         $expectedCoreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
 
@@ -563,15 +489,15 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $this->assertAttributeSame($expectedCoreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddStorageExtensionForTheAddedStorage()
+    public function testShouldAddStorageExtensionForTheAddedStorage(): void
     {
-        /** @var StorageInterface $expectedStorage */
+        /** @var StorageInterface<object> $expectedStorage */
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $payum = (new PayumBuilder())
@@ -581,7 +507,11 @@ class PayumBuilderTest extends TestCase
                 $this->assertIsArray($config);
                 $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
                 $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
-                $this->assertAttributeSame($expectedStorage, 'storage', $config['payum.extension.storage_payum_core_tests_testmodel']);
+
+                $ref = new ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
+                $ref->setAccessible(true);
+
+                $this->assertSame($expectedStorage, $ref->getValue($config['payum.extension.storage_payum_core_tests_testmodel']));
 
                 return new CoreGatewayFactory($config);
             })
@@ -596,17 +526,20 @@ class PayumBuilderTest extends TestCase
 
         $this->assertArrayHasKey('payum.extension.storage_payum_core_tests_testmodel', $config, var_export($config, true));
         $this->assertInstanceOf(StorageExtension::class, $config['payum.extension.storage_payum_core_tests_testmodel']);
-        $this->assertAttributeSame($expectedStorage, 'storage', $config['payum.extension.storage_payum_core_tests_testmodel']);
+
+        $ref = new ReflectionProperty($config['payum.extension.storage_payum_core_tests_testmodel'], 'storage');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedStorage, $ref->getValue($config['payum.extension.storage_payum_core_tests_testmodel']));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddGatewayFactorySpecificConfig()
+    public function testShouldAllowAddGatewayFactorySpecificConfig(): void
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->addGatewayFactoryConfig('offline', ['foo' => 'fooVal'])
+            ->addGatewayFactoryConfig('offline', [
+                'foo' => 'fooVal',
+            ])
 
             ->getPayum()
         ;
@@ -618,23 +551,18 @@ class PayumBuilderTest extends TestCase
         $config = $gatewayFactory->createConfig([]);
 
         $this->assertArrayHasKey('foo', $config, var_export($config, true));
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfCoreGatewayFactoryBuilderReturnInvalidInstance()
+    public function testThrowsIfCoreGatewayFactoryBuilderReturnInvalidInstance(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Builder returned invalid instance');
         $expectedCoreGateway = $this->createMock(GatewayFactoryInterface::class);
 
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
-            ->setCoreGatewayFactory(function () {
-                return new \stdClass();
-            })
+            ->setCoreGatewayFactory(fn () => new stdClass())
             ->getPayum()
         ;
 
@@ -642,15 +570,15 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OfflineGatewayFactory::class, $gatewayFactory);
 
-        $this->assertAttributeSame($expectedCoreGateway, 'coreGatewayFactory', $gatewayFactory);
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedCoreGateway, $ref->getValue($gatewayFactory));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRegisterOmnipayV3Factories()
+    public function testShouldRegisterOmnipayV3Factories(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -667,12 +595,9 @@ class PayumBuilderTest extends TestCase
         $this->assertArrayHasKey('omnipay', $gatewayFactories);
     }
 
-    /**
-     * @test
-     */
-    public function shouldInjectCoreGatewayFactoryToOmnipayV3Factory()
+    public function testShouldInjectCoreGatewayFactoryToOmnipayV3Factory(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -688,15 +613,15 @@ class PayumBuilderTest extends TestCase
 
         $this->assertInstanceOf(OmnipayGatewayFactory::class, $gatewayFactory);
 
-        $this->assertAttributeSame($expectedCoreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
+        $ref = new ReflectionProperty($gatewayFactory, 'coreGatewayFactory');
+        $ref->setAccessible(true);
+
+        $this->assertSame($expectedCoreGatewayFactory, $ref->getValue($gatewayFactory));
     }
 
-    /**
-     * @test
-     */
-    public function shouldInjectExpectedOmnipayV3GatewayInstanceAsApi()
+    public function testShouldInjectExpectedOmnipayV3GatewayInstanceAsApi(): void
     {
-        if (false == class_exists(OmnipayGateway::class)) {
+        if (! class_exists(OmnipayGateway::class)) {
             $this->markTestSkipped('Either omnipay or\and omnipay bridge are not installed. Skip');
         }
 
@@ -713,17 +638,16 @@ class PayumBuilderTest extends TestCase
             'type' => 'dummy',
         ]);
 
-        $apis = $this->readAttribute($gateway, 'apis');
+        $ref = new ReflectionProperty($gateway, 'apis');
+        $ref->setAccessible(true);
+        $apis = $ref->getValue($gateway);
 
         $this->assertCount(2, $apis);
         $this->assertInstanceOf(OmnipayGateway::class, $apis[1]);
-        $this->assertEquals('Dummy', $apis[1]->getName());
+        $this->assertSame('Dummy', $apis[1]->getName());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTokenStorageToCoreGatewayConfig()
+    public function testShouldAddTokenStorageToCoreGatewayConfig(): void
     {
         $tokenStorageMock = $this->createMock(StorageInterface::class);
 
@@ -741,61 +665,114 @@ class PayumBuilderTest extends TestCase
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddCoreGatewayConfig()
+    public function testShouldAllowAddCoreGatewayConfig(): void
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->setCoreGatewayFactoryConfig(['foo' => 'fooVal', 'bar' => 'barVal']);
-        $this->assertAttributeSame(['foo' => 'fooVal', 'bar' => 'barVal'], 'coreGatewayFactoryConfig', $payumBuilder);
+        $payumBuilder->setCoreGatewayFactoryConfig([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
+        $ref = new ReflectionProperty($payumBuilder, 'coreGatewayFactoryConfig');
+        $ref->setAccessible(true);
 
-        $payumBuilder->addCoreGatewayFactoryConfig(['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+        $this->assertSame([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ], $ref->getValue($payumBuilder));
 
-        $this->assertAttributeSame(['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal'], 'coreGatewayFactoryConfig', $payumBuilder);
+        $payumBuilder->addCoreGatewayFactoryConfig([
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
+
+        $this->assertSame([
+            'foo' => 'fooNewVal',
+            'bar' => 'barVal',
+            'baz' => 'bazVal',
+        ], $ref->getValue($payumBuilder));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddGatewayConfigSeveralTimes()
+    public function testShouldAllowAddGatewayConfigSeveralTimes(): void
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->addGateway('foo', ['factory' => 'aFactory', 'foo' => 'fooVal', 'bar' => 'barVal']);
-        $this->assertAttributeSame(['foo' => ['factory' => 'aFactory', 'foo' => 'fooVal', 'bar' => 'barVal']], 'gatewayConfigs', $payumBuilder);
+        $payumBuilder->addGateway('foo', [
+            'factory' => 'aFactory',
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
+        $ref = new ReflectionProperty($payumBuilder, 'gatewayConfigs');
+        $ref->setAccessible(true);
 
-        $payumBuilder->addGateway('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+        $this->assertSame([
+            'foo' => [
+                'factory' => 'aFactory',
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
 
-        $this->assertAttributeSame(['foo' => ['factory' => 'aFactory', 'foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], 'gatewayConfigs', $payumBuilder);
+            ],
+        ], $ref->getValue($payumBuilder));
+
+        $payumBuilder->addGateway('foo', [
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
+
+        $this->assertSame([
+            'foo' => [
+                'factory' => 'aFactory',
+                'foo' => 'fooNewVal',
+                'bar' => 'barVal',
+                'baz' => 'bazVal',
+
+            ],
+        ], $ref->getValue($payumBuilder));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddGatewayFactoryConfigSeveralTimes()
+    public function testShouldAllowAddGatewayFactoryConfigSeveralTimes(): void
     {
         $payumBuilder = new PayumBuilder();
 
-        $payumBuilder->addGatewayFactoryConfig('foo', ['foo' => 'fooVal', 'bar' => 'barVal']);
-        $this->assertAttributeSame(['foo' => ['foo' => 'fooVal', 'bar' => 'barVal']], 'gatewayFactoryConfigs', $payumBuilder);
+        $payumBuilder->addGatewayFactoryConfig('foo', [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
+        $ref = new ReflectionProperty($payumBuilder, 'gatewayFactoryConfigs');
+        $ref->setAccessible(true);
 
-        $payumBuilder->addGatewayFactoryConfig('foo', ['baz' => 'bazVal', 'foo' => 'fooNewVal']);
+        $this->assertSame([
+            'foo' => [
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
 
-        $this->assertAttributeSame(['foo' => ['foo' => 'fooNewVal', 'bar' => 'barVal', 'baz' => 'bazVal']], 'gatewayFactoryConfigs', $payumBuilder);
+            ],
+        ], $ref->getValue($payumBuilder));
+
+        $payumBuilder->addGatewayFactoryConfig('foo', [
+            'baz' => 'bazVal',
+            'foo' => 'fooNewVal',
+        ]);
+
+        $this->assertSame([
+            'foo' => [
+                'foo' => 'fooNewVal',
+                'bar' => 'barVal',
+                'baz' => 'bazVal',
+
+            ],
+        ], $ref->getValue($payumBuilder));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowBuildGatewayWithCoreGatewayFactory()
+    public function testShouldAllowBuildGatewayWithCoreGatewayFactory(): void
     {
         $payumBuilder = new PayumBuilder();
 
         $payum = $payumBuilder
             ->addDefaultStorages()
-            ->addGateway('foo', ['factory' => 'core'])
+            ->addGateway('foo', [
+                'factory' => 'core',
+            ])
 
             ->getPayum()
         ;
@@ -806,25 +783,19 @@ class PayumBuilderTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @return MockObject|RegistryInterface<object>
      */
-    protected function createRegistryMock()
+    protected function createRegistryMock(): MockObject | RegistryInterface
     {
         return $this->createMock(RegistryInterface::class);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequestVerifierInterface
-     */
-    protected function createHttpRequestVerifierMock()
+    protected function createHttpRequestVerifierMock(): MockObject | HttpRequestVerifierInterface
     {
         return $this->createMock(HttpRequestVerifierInterface::class);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GenericTokenFactoryInterface
-     */
-    protected function createGenericTokenFactoryMock()
+    protected function createGenericTokenFactoryMock(): MockObject | GenericTokenFactoryInterface
     {
         return $this->createMock(GenericTokenFactoryInterface::class);
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Builder;
 
 use Payum\Core\GatewayFactoryInterface;
@@ -18,10 +19,12 @@ class GatewayFactoryBuilder
         $this->gatewayFactoryClass = $gatewayFactoryClass;
     }
 
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
+
     /**
-     * @param array $defaultConfig
-     * @param GatewayFactoryInterface $coreGatewayFactory
-     *
      * @return GatewayFactoryInterface
      */
     public function build(array $defaultConfig, GatewayFactoryInterface $coreGatewayFactory)
@@ -29,10 +32,5 @@ class GatewayFactoryBuilder
         $gatewayFactoryClass = $this->gatewayFactoryClass;
 
         return new $gatewayFactoryClass($defaultConfig, $coreGatewayFactory);
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'build'], func_get_args());
     }
 }

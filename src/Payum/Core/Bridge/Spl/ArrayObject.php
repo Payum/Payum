@@ -1,64 +1,65 @@
 <?php
+
 namespace Payum\Core\Bridge\Spl;
 
+use ArrayAccess;
+use ArrayIterator;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\SensitiveValue;
+use Traversable;
 
+/**
+ * @extends \ArrayObject<string, mixed>
+ */
 class ArrayObject extends \ArrayObject
 {
-    protected $input;
+    /**
+     * @var ArrayObject<string, mixed>|ArrayAccess<string, mixed>|null
+     */
+    protected ArrayObject | ArrayAccess | null $input = null;
 
     /**
-     * {@inheritDoc}
+     * @param array<string, mixed>|ArrayObject<string, mixed>|ArrayAccess<string, mixed>|Traversable<string, mixed>|null $input
      */
-    public function __construct($input = array(), $flags = 0, $iterator_class = "ArrayIterator")
+    public function __construct($input = [], int $flags = 0, string $iterator_class = ArrayIterator::class)
     {
-        if ($input instanceof \ArrayAccess && false == $input instanceof \ArrayObject) {
+        if ($input instanceof ArrayAccess && ! $input instanceof \ArrayObject) {
             $this->input = $input;
 
-            if (false == $input instanceof \Traversable) {
+            if (! $input instanceof Traversable) {
                 throw new LogicException('Traversable interface must be implemented in case custom ArrayAccess instance given. It is because some php limitations.');
             }
 
             $input = iterator_to_array($input);
         }
 
-        parent::__construct($input, $flags, $iterator_class);
+        parent::__construct($input ?? [], $flags, $iterator_class);
     }
 
-    /**
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get($key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
-        return isset($this[$key]) ? $this[$key] : $default;
+        return $this[$key] ?? $default;
     }
 
     /**
-     * @param string $key
-     * @param mixed $default
+     * @param mixed|array $default
      *
-     * @return static
+     * @return ArrayObject<string, mixed>
      */
-    public function getArray($key, $default = [])
+    public function getArray(string $key, mixed $default = null): self
     {
         return static::ensureArrayObject($this->get($key, $default));
     }
 
     /**
-     * @param array|\Traversable $input
+     * @param iterable<string, mixed> $input
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
-     *
-     * @return void
+     * @throws InvalidArgumentException
      */
-    public function replace($input)
+    public function replace(iterable $input): void
     {
-        if (false == (is_array($input) || $input instanceof \Traversable)) {
+        if (! (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -68,15 +69,13 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array|\Traversable $input
+     * @param iterable<string, mixed> $input
      *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
-     *
-     * @return void
+     * @throws InvalidArgumentException
      */
-    public function defaults($input)
+    public function defaults(iterable $input): void
     {
-        if (false == (is_array($input) || $input instanceof \Traversable)) {
+        if (! (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -88,20 +87,13 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array   $required
-     * @param boolean $throwOnInvalid
-     *
      * @throws LogicException when one of the required fields is empty
-     *
-     * @return bool
      */
-    public function validateNotEmpty($required, $throwOnInvalid = true)
+    public function validateNotEmpty(mixed $required, bool $throwOnInvalid = true): bool
     {
-        $required = is_array($required) ? $required : array($required);
+        $empty = [];
 
-        $empty = array();
-
-        foreach ($required as $r) {
+        foreach ((array) $required as $r) {
             $value = $this[$r];
 
             if (empty($value)) {
@@ -112,30 +104,18 @@ class ArrayObject extends \ArrayObject
         if ($empty && $throwOnInvalid) {
             throw new LogicException(sprintf('The %s fields are required.', implode(', ', $empty)));
         }
-
-        if ($empty) {
-            return false;
-        }
-
-        return true;
+        return ! $empty;
     }
 
     /**
-     * @param array   $required
-     * @param boolean $throwOnInvalid
-     *
-     * @throws \Payum\Core\Exception\LogicException when one of the required fields present
-     *
-     * @return bool
+     * @throws LogicException when one of the required fields present
      */
-    public function validatedKeysSet($required, $throwOnInvalid = true)
+    public function validatedKeysSet(mixed $required, bool $throwOnInvalid = true): bool
     {
-        $required = is_array($required) ? $required : array($required);
-
-        foreach ($required as $required) {
-            if (false == $this->offsetExists($required)) {
+        foreach ((array) $required as $req) {
+            if (! $this->offsetExists($req)) {
                 if ($throwOnInvalid) {
-                    throw new LogicException(sprintf('The %s fields is not set.', $required));
+                    throw new LogicException(sprintf('The %s fields is not set.', $req));
                 }
 
                 return false;
@@ -145,28 +125,22 @@ class ArrayObject extends \ArrayObject
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetSet($index, $value)
+    public function offsetSet($key, $value): void
     {
         if ($this->input) {
-            $this->input[$index] = $value;
+            $this->input[$key] = $value;
         }
 
-        return parent::offsetSet($index, $value);
+        parent::offsetSet($key, $value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetUnset($index)
+    public function offsetUnset($key): void
     {
         if ($this->input) {
-            unset($this->input[$index]);
+            unset($this->input[$key]);
         }
 
-        return parent::offsetUnset($index);
+        parent::offsetUnset($key);
     }
 
     /**
@@ -175,21 +149,21 @@ class ArrayObject extends \ArrayObject
      *
      * {@inheritDoc}
      */
-    public function offsetGet($index)
+    public function offsetGet($key): mixed
     {
-        if ($this->offsetExists($index)) {
-            return parent::offsetGet($index);
+        if ($this->offsetExists($key)) {
+            return parent::offsetGet($key);
         }
 
-        return;
+        return null;
     }
 
     /**
      * @experimental
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toUnsafeArray()
+    public function toUnsafeArray(): array
     {
         $array = [];
         foreach ($this as $name => $value) {
@@ -208,23 +182,22 @@ class ArrayObject extends \ArrayObject
     /**
      * @experimental
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toUnsafeArrayWithoutLocal()
+    public function toUnsafeArrayWithoutLocal(): array
     {
         $array = $this->toUnsafeArray();
         unset($array['local']);
-        
+
         return $array;
     }
 
     /**
-     * @param mixed $input
-     *
-     * @return ArrayObject
+     * @param array<string, mixed>|ArrayObject<string, mixed>|\ArrayObject<string, mixed>|null $input
+     * @return ArrayObject<string, mixed>
      */
-    public static function ensureArrayObject($input)
+    public static function ensureArrayObject(array | self | \ArrayObject | null $input): self
     {
-        return $input instanceof static ? $input : new static($input);
+        return $input instanceof static ? $input : new self($input);
     }
 }

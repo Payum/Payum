@@ -2,117 +2,97 @@
 
 namespace Payum\Sofort\Tests\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
-use Payum\Sofort\Request\Api\CreateTransaction;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Sofort\Action\Api\CreateTransactionAction;
 use Payum\Sofort\Api;
+use Payum\Sofort\Request\Api\CreateTransaction;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CreateTransactionActionTest extends \PHPUnit\Framework\TestCase
+class CreateTransactionActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(CreateTransactionAction::class);
+        $rc = new ReflectionClass(CreateTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass(CreateTransactionAction::class);
+        $rc = new ReflectionClass(CreateTransactionAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new CreateTransactionAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateTransactionRequestWithArrayAccessAsModel()
+    public function testShouldSupportCreateTransactionRequestWithArrayAccessAsModel(): void
     {
         $action = new CreateTransactionAction();
 
-        $this->assertTrue($action->supports(new CreateTransaction($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateTransaction($this->createMock(ArrayAccess::class))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingCreateTransactionRequest()
+    public function testShouldNotSupportAnythingCreateTransactionRequest(): void
     {
         $action = new CreateTransactionAction($this->createApiMock());
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CreateTransactionAction($this->createApiMock());
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmountParameterIsNotSet()
+    public function testThrowIfAmountParameterIsNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The amount, currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array());
+        $request = new CreateTransaction([]);
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCurrencyCodeParameterIsNotSet()
+    public function testThrowIfCurrencyCodeParameterIsNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The currency_code, reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array('amount' => 55));
+        $request = new CreateTransaction([
+            'amount' => 55,
+        ]);
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReasonParameterIsNotSet()
+    public function testThrowIfReasonParameterIsNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The reason, success_url, notification_url fields are required.');
         $action = new CreateTransactionAction();
 
-        $request = new CreateTransaction(array('amount' => 55, 'currency_code' => 'CHF'));
+        $request = new CreateTransaction([
+            'amount' => 55,
+            'currency_code' => 'CHF',
+        ]);
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Sofort\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

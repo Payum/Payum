@@ -1,18 +1,17 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\RefundTransaction;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class RefundTransactionTest extends \PHPUnit\Framework\TestCase
+class RefundTransactionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        $rc = new \ReflectionClass(RefundTransaction::class);
+        $rc = new ReflectionClass(RefundTransaction::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }

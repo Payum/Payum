@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Reply;
 
 use Payum\Core\Reply\Base;
@@ -7,20 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 class HttpResponse extends Base
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Response
+     * @var Response
      */
     protected $response;
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     */
     public function __construct(Response $response)
     {
         $this->response = $response;
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function getResponse()
     {

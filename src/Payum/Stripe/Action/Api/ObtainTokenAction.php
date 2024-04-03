@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -16,7 +18,7 @@ use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\ObtainToken;
 
 /**
- * @param Keys $keys
+ * @param Keys $templateName
  * @param Keys $api
  */
 class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
@@ -48,10 +50,7 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -59,12 +58,9 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request ObtainToken */
+        /** @var ObtainToken $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -75,29 +71,25 @@ class ObtainTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
         $getHttpRequest = new GetHttpRequest();
         $this->gateway->execute($getHttpRequest);
-        if ($getHttpRequest->method == 'POST' && isset($getHttpRequest->request['stripeToken'])) {
+        if ('POST' === $getHttpRequest->method && isset($getHttpRequest->request['stripeToken'])) {
             $model['card'] = $getHttpRequest->request['stripeToken'];
 
             return;
         }
 
-        $this->gateway->execute($renderTemplate = new RenderTemplate($this->templateName, array(
+        $this->gateway->execute($renderTemplate = new RenderTemplate($this->templateName, [
             'model' => $model,
             'publishable_key' => $this->keys->getPublishableKey(),
             'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
-        )));
+        ]));
 
         throw new HttpResponse($renderTemplate->getResult());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof ObtainToken &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof ObtainToken &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

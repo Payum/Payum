@@ -2,43 +2,42 @@
 
 namespace Payum\Sofort\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Security\GenericTokenFactoryAwareTrait;
-use Payum\Sofort\Request\Api\CreateTransaction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
+use Payum\Sofort\Request\Api\CreateTransaction;
 
 class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     /**
-     * {@inheritdoc}
-     *
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
-        /* @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['transaction_id']) {
-            if (false == $details['success_url'] && $request->getToken()) {
+        if (! $details['transaction_id']) {
+            if (! $details['success_url'] && $request->getToken()) {
                 $details['success_url'] = $request->getToken()->getTargetUrl();
             }
-            if (false == $details['abort_url'] && $request->getToken()) {
+            if (! $details['abort_url'] && $request->getToken()) {
                 $details['abort_url'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $details['notification_url'] && $request->getToken() && $this->tokenFactory) {
+            if (! $details['notification_url'] && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
                     $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()
@@ -53,14 +52,10 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
         $this->gateway->execute(new Sync($details));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Capture &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

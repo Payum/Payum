@@ -1,5 +1,8 @@
 <?php
+
 namespace Payum\Core\Reply;
+
+use InvalidArgumentException;
 
 class HttpRedirect extends HttpResponse
 {
@@ -13,7 +16,7 @@ class HttpRedirect extends HttpResponse
      * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($url, $statusCode = 302, array $headers = array())
+    public function __construct($url, $statusCode = 302, array $headers = [])
     {
         $this->url = $url;
 
@@ -31,14 +34,12 @@ class HttpRedirect extends HttpResponse
     }
 
     /**
-     * @param $url
-     *
      * @return string
      */
     protected function prepareContent($url)
     {
         if (empty($url)) {
-            throw new \InvalidArgumentException('Cannot redirect to an empty URL.');
+            throw new InvalidArgumentException('Cannot redirect to an empty URL.');
         }
 
         return sprintf('<!DOCTYPE html>
@@ -52,6 +53,6 @@ class HttpRedirect extends HttpResponse
     <body>
         Redirecting to %1$s.
     </body>
-</html>', htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
+</html>', htmlspecialchars((string) $url, ENT_QUOTES, 'UTF-8'));
     }
 }

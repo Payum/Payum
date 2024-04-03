@@ -1,44 +1,42 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
 use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
-use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
+use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 
 abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+
+    public function execute($request): void
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $details->validateNotEmpty('PAYMENTREQUEST_0_PAYMENTACTION');
 
-        $details->defaults(array(
+        $details->defaults([
             'AUTHORIZE_TOKEN_USERACTION' => Api::USERACTION_COMMIT,
-        ));
+        ]);
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
         if (isset($httpRequest->query['cancelled'])) {
@@ -47,12 +45,12 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             return;
         }
 
-        if (false == $details['TOKEN']) {
-            if (false == $details['RETURNURL'] && $request->getToken()) {
+        if (! $details['TOKEN']) {
+            if (! $details['RETURNURL'] && $request->getToken()) {
                 $details['RETURNURL'] = $request->getToken()->getTargetUrl();
             }
 
-            if (false == $details['CANCELURL'] && $request->getToken()) {
+            if (! $details['CANCELURL'] && $request->getToken()) {
                 $details['CANCELURL'] = $request->getToken()->getTargetUrl();
             }
 
@@ -83,7 +81,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
 
         if (
             $details['PAYERID'] &&
-            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED == $details['CHECKOUTSTATUS'] &&
+            Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $details['CHECKOUTSTATUS'] &&
             $details['PAYMENTREQUEST_0_AMT'] > 0
         ) {
             if (Api::USERACTION_COMMIT !== $details['AUTHORIZE_TOKEN_USERACTION']) {
@@ -96,7 +94,7 @@ abstract class PurchaseAction implements ActionInterface, GatewayAwareInterface,
             $this->gateway->execute(new DoExpressCheckoutPayment($details));
         }
 
-        if (false == $details['PAYERID']) {
+        if (! $details['PAYERID']) {
             $this->gateway->execute(new AuthorizeToken($details));
         }
 

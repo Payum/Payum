@@ -1,55 +1,39 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HttpRedirectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldReplyInterface()
+    public function testShouldReplyInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
+        $rc = new ReflectionClass(HttpRedirect::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfHttpResponseClass()
+    public function testShouldBeSubClassOfHttpResponseClass(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpRedirect');
+        $rc = new ReflectionClass(HttpRedirect::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
+        $this->assertTrue($rc->isSubclassOf(HttpResponse::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithUrlAsArgument()
-    {
-        new HttpRedirect('an_url');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetUrlSetInConstructor()
+    public function testShouldAllowGetUrlSetInConstructor(): void
     {
         $expectedUrl = 'theUrl';
 
         $request = new HttpRedirect($expectedUrl);
 
-        $this->assertEquals($expectedUrl, $request->getUrl());
+        $this->assertSame($expectedUrl, $request->getUrl());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContext()
+    public function testShouldAllowGetContext(): void
     {
         $expectedContent = <<<HTML
 <!DOCTYPE html>
@@ -68,56 +52,44 @@ HTML;
 
         $request = new HttpRedirect('foo');
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl');
 
-        $this->assertEquals(302, $request->getStatusCode());
+        $this->assertSame(302, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl', 301);
 
-        $this->assertEquals(301, $request->getStatusCode());
+        $this->assertSame(301, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor(): void
     {
         $request = new HttpRedirect('anUrl');
 
-        $this->assertEquals(array(
+        $this->assertSame([
             'Location' => 'anUrl',
-        ), $request->getHeaders());
+        ], $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor(): void
     {
-        $customHeaders = array(
+        $customHeaders = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        );
+        ];
 
         $expectedHeaders = $customHeaders;
         $expectedHeaders['Location'] = 'anUrl';
 
         $request = new HttpRedirect('anUrl', 302, $customHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

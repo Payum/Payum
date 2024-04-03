@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -6,6 +7,7 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\GetPayoutStatusAction;
 use Payum\Paypal\Masspay\Nvp\Api;
+use ReflectionClass;
 
 class GetPayoutStatusActionTest extends GenericActionTest
 {
@@ -13,20 +15,14 @@ class GetPayoutStatusActionTest extends GenericActionTest
 
     protected $actionClass = GetPayoutStatusAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
-        $rc = new \ReflectionClass(GetPayoutStatusAction::class);
+        $rc = new ReflectionClass(GetPayoutStatusAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfAckNotSet()
+    public function testShouldMarkNewIfAckNotSet(): void
     {
         $action = new GetPayoutStatusAction();
 
@@ -39,15 +35,12 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPayedoutIfAckSuccess()
+    public function testShouldMarkPayedoutIfAckSuccess(): void
     {
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_SUCCESS
+            'ACK' => Api::ACK_SUCCESS,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -57,15 +50,12 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPayedout());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPayedoutIfAckSuccessWithWarning()
+    public function testShouldMarkPayedoutIfAckSuccessWithWarning(): void
     {
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_SUCCESS_WITH_WARNING
+            'ACK' => Api::ACK_SUCCESS_WITH_WARNING,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -75,15 +65,12 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isPayedout());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAckFailure()
+    public function testShouldMarkFailedIfAckFailure(): void
     {
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_FAILURE
+            'ACK' => Api::ACK_FAILURE,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -93,15 +80,12 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAckFailureWithWarning()
+    public function testShouldMarkFailedIfAckFailureWithWarning(): void
     {
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => Api::ACK_FAILURE_WITH_WARNING
+            'ACK' => Api::ACK_FAILURE_WITH_WARNING,
         ];
 
         $request = new GetHumanStatus($payout);
@@ -111,15 +95,12 @@ class GetPayoutStatusActionTest extends GenericActionTest
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfAckNotRecognized()
+    public function testShouldMarkUnknownIfAckNotRecognized(): void
     {
         $action = new GetPayoutStatusAction();
 
         $payout = [
-            'ACK' => 'foo'
+            'ACK' => 'foo',
         ];
 
         $request = new GetHumanStatus($payout);

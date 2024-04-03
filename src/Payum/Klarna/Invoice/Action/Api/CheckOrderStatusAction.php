@@ -1,6 +1,9 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action\Api;
 
+use ArrayAccess;
+use KlarnaException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
@@ -8,11 +11,9 @@ use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
 class CheckOrderStatusAction extends BaseApiAwareAction
 {
     /**
-     * {@inheritDoc}
-     *
      * @param CheckOrderStatus $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -22,25 +23,21 @@ class CheckOrderStatusAction extends BaseApiAwareAction
             return;
         }
 
-        $details->validateNotEmpty(array('rno'));
+        $details->validateNotEmpty(['rno']);
 
         $klarna = $this->getKlarna();
 
         try {
             $details['status'] = $klarna->checkOrderStatus($details['rno']);
-        } catch (\KlarnaException $e) {
+        } catch (KlarnaException $e) {
             $this->populateDetailsWithError($details, $e, $request);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CheckOrderStatus &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CheckOrderStatus &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

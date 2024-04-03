@@ -1,212 +1,185 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Payex\Action\PaymentDetailsCaptureAction;
+use Payum\Payex\Request\Api\CompleteOrder;
+use Payum\Payex\Request\Api\InitializeOrder;
+use Payum\Payex\Request\Api\StartRecurringPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsCaptureActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(PaymentDetailsCaptureAction::class);
+        $rc = new ReflectionClass(PaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsCaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldSupportCaptureWithArrayAsModelIfAutoPayNotSet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array())));
+        $this->assertTrue($action->supports(new Capture([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureayAsModelIfAutoPaySet()
+    public function testShouldNotSupportCaptureayAsModelIfAutoPaySet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(array(
+        $this->assertFalse($action->supports(new Capture([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureCaptureelIfAutoPaySetToFalse()
+    public function testShouldSupportCaptureCaptureelIfAutoPaySetToFalse(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array(
+        $this->assertTrue($action->supports(new Capture([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
+    public function testShouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertTrue($action->supports(new Capture(array(
+        $this->assertTrue($action->supports(new Capture([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel(): void
     {
         $action = new PaymentDetailsCaptureAction();
 
-        $this->assertFalse($action->supports(new Capture(new \stdClass())));
+        $this->assertFalse($action->supports(new Capture(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsCaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
+    public function testShouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\InitializeOrder'))
+            ->with($this->isInstanceOf(InitializeOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
+    public function testShouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CompleteOrder'))
+            ->with($this->isInstanceOf(CompleteOrder::class))
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'orderRef' => 'aRef',
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
+    public function testShouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(1))
+            ->expects($this->atLeastOnce())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\StartRecurringPayment'))
+            ->withConsecutive(
+                [$this->isInstanceOf(CompleteOrder::class)],
+                [$this->isInstanceOf(StartRecurringPayment::class)]
+            )
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array(
+        $request = new Capture([
             'orderRef' => 'aRef',
             'recurring' => true,
             'clientIPAddress' => 'anIp',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubGetHttpRequestAndSetClientIpFromIt()
+    public function testShouldDoSubGetHttpRequestAndSetClientIpFromIt(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeastOnce())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
-                $request->clientIp = 'expectedClientIp';
-            }))
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(InitializeOrder::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request): void {
+                    $request->clientIp = 'expectedClientIp';
+                })
+            )
         ;
 
         $action = new PaymentDetailsCaptureAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Capture(array());
+        $request = new Capture([]);
 
         $action->execute($request);
 
         $details = iterator_to_array($request->getModel());
 
         $this->assertArrayHasKey('clientIPAddress', $details);
-        $this->assertEquals('expectedClientIp', $details['clientIPAddress']);
+        $this->assertSame('expectedClientIp', $details['clientIPAddress']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

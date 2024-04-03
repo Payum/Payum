@@ -1,468 +1,395 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Payum\Core\HttpClientInterface;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RuntimeException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
-    {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
-        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {
-        $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        new Api(array(
+        new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions(): void
     {
-        $this->expectException(\Payum\Core\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->setExpressCheckout(array());
+        $api->setExpressCheckout([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest(): void
     {
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-            'return_url' => 'optionReturnUrl',
-            'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
-
-        $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
-
-        $this->assertEquals('formRequestReturnUrl', $result['RETURNURL']);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInOptions()
-    {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array());
+        $result = $api->setExpressCheckout([
+            'RETURNURL' => 'formRequestReturnUrl',
+        ]);
 
-        $this->assertEquals('optionReturnUrl', $result['RETURNURL']);
+        $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCancelUrlNeitherSetToFormRequestNorToOptions()
+    public function testShouldUseReturnUrlSetInOptions(): void
     {
-        $this->expectException(\Payum\Core\Exception\RuntimeException::class);
+        $api = new Api([
+            'username' => 'a_username',
+            'password' => 'a_password',
+            'signature' => 'a_signature',
+            'sandbox' => true,
+            'return_url' => 'optionReturnUrl',
+            'cancel_url' => 'optionCancelUrl',
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
+
+        $result = $api->setExpressCheckout([]);
+
+        $this->assertSame('optionReturnUrl', $result['RETURNURL']);
+    }
+
+    public function testThrowIfCancelUrlNeitherSetToFormRequestNorToOptions(): void
+    {
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->setExpressCheckout(array());
+        $api->setExpressCheckout([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInFormRequest()
+    public function testShouldUseCancelUrlSetInFormRequest(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
+        $result = $api->setExpressCheckout([
+            'CANCELURL' => 'formRequestCancelUrl',
+        ]);
 
-        $this->assertEquals('formRequestCancelUrl', $result['CANCELURL']);
+        $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInOptions()
+    public function testShouldUseCancelUrlSetInOptions(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array());
+        $result = $api->setExpressCheckout([]);
 
-        $this->assertEquals('optionCancelUrl', $result['CANCELURL']);
+        $this->assertSame('optionCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnSetExpressCheckoutCall()
+    public function testShouldAddMethodOnSetExpressCheckoutCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array());
+        $result = $api->setExpressCheckout([]);
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('SetExpressCheckout', $result['METHOD']);
+        $this->assertSame('SetExpressCheckout', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
+    public function testShouldAddAuthorizeFieldsOnSetExpressCheckoutCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'the_username',
             'password' => 'the_password',
             'signature' => 'the_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array());
+        $result = $api->setExpressCheckout([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnSetExpressCheckoutCall()
+    public function testShouldAddVersionOnSetExpressCheckoutCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->setExpressCheckout(array());
+        $result = $api->setExpressCheckout([]);
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetSandboxAuthorizeUrlIfSandboxTrue()
+    public function testShouldGetSandboxAuthorizeUrlIfSandboxTrue(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserAction()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserAction(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'aCustomUserAction',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'useraction' => 'notUsedUseraction',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', array('useraction' => 'theUseraction'))
+            $api->getAuthorizeTokenUrl('theToken', [
+                'useraction' => 'theUseraction',
+            ])
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmd()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmd(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'theCmd',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'cmd' => 'thisCmdNotUsed',
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', array('cmd' => 'theCmd'))
+            $api->getAuthorizeTokenUrl('theToken', [
+                'cmd' => 'theCmd',
+            ])
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomQueryParameter(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
-            $api->getAuthorizeTokenUrl('theToken', array('foo' => 'fooVal'))
+            $api->getAuthorizeTokenUrl('theToken', [
+                'foo' => 'fooVal',
+            ])
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
-            $api->getAuthorizeTokenUrl('theToken', array('foo' => ''))
+            $api->getAuthorizeTokenUrl('theToken', [
+                'foo' => '',
+            ])
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetRealAuthorizeUrlIfSandboxFalse()
+    public function testShouldGetRealAuthorizeUrlIfSandboxFalse(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
-        $testCase = $this;
-
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $this->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }))
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
+            })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => false,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->setExpressCheckout(array());
+        $api->setExpressCheckout([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
-        $testCase = $this;
-
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $this->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }))
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
+            })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'a_username',
             'password' => 'a_password',
             'signature' => 'a_signature',
             'sandbox' => true,
             'return_url' => 'optionReturnUrl',
             'cancel_url' => 'optionCancelUrl',
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->setExpressCheckout(array());
+        $api->setExpressCheckout([]);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock('Payum\Core\HttpClientInterface');
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return \Http\Message\MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
-     */
-    protected function createSuccessHttpClientStub()
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    protected function createSuccessHttpClientStub(): MockObject | ClientInterface
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            }))
+            ->method('sendRequest')
+            ->willReturnCallback(fn (RequestInterface $request) => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody()))
         ;
 
         return $clientMock;

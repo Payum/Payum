@@ -1,14 +1,15 @@
 <?php
+
 namespace Payum\Payex\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreement;
 
 class CreateAgreementAction implements ActionInterface, ApiAwareInterface
@@ -20,12 +21,9 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = AgreementApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateAgreement */
+        /** @var CreateAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -34,34 +32,30 @@ class CreateAgreementAction implements ActionInterface, ApiAwareInterface
             throw new LogicException('The agreement has already been created.');
         }
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'merchantRef',
             'description',
             'purchaseOperation',
             'maxAmount',
             'startDate',
             'stopDate',
-        ));
+        ]);
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'maxAmount',
             'merchantRef',
             'description',
-        ));
+        ]);
 
         $result = $this->api->create((array) $model);
 
         $model->replace($result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateAgreement &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreateAgreement &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

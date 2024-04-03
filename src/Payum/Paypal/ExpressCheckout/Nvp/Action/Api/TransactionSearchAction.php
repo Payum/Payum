@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -19,31 +20,24 @@ class TransactionSearchAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request TransactionSearch */
+        /** @var TransactionSearch $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('STARTDATE'));
+        $model->validateNotEmpty(['STARTDATE']);
 
         $model->replace(
             $this->api->transactionSearch((array) $model)
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof TransactionSearch &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof TransactionSearch &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Security\SensitiveValue;
@@ -7,19 +8,16 @@ use Payum\Core\Tests\Mocks\Document\Payment;
 
 class PaymentTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty(): void
     {
-        $this->dm->persist(new Payment());
+        $document = new Payment();
+        $this->dm->persist($document);
         $this->dm->flush();
+
+        $this->assertSame([$document], $this->dm->getRepository(Payment::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $order = new Payment();
         $order->setTotalAmount(100);
@@ -28,16 +26,18 @@ class PaymentTest extends MongoTest
         $order->setDetails('aDesc');
         $order->setClientEmail('anEmail');
         $order->setClientId('anId');
-        $order->setDetails(array('bar1', 'bar2' => 'theBar2'));
+        $order->setDetails([
+            'bar1',
+            'bar2' => 'theBar2',
+        ]);
 
         $this->dm->persist($order);
         $this->dm->flush();
+
+        $this->assertSame([$order], $this->dm->getRepository(Payment::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedOrder()
+    public function testShouldAllowFindPersistedOrder(): void
     {
         $order = new Payment();
 
@@ -48,7 +48,7 @@ class PaymentTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundOrder = $this->dm->find(get_class($order), $id);
+        $foundOrder = $this->dm->find($order::class, $id);
 
         //guard
         $this->assertNotSame($order, $foundOrder);
@@ -56,19 +56,29 @@ class PaymentTest extends MongoTest
         $this->assertEquals($order->getId(), $foundOrder->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue(): void
     {
         $order = new Payment();
-        $order->setDetails(array('cardNumber' => new SensitiveValue('theCardNumber')));
+        $order->setDetails([
+            'cardNumber' => new SensitiveValue('theCardNumber'),
+        ]);
 
         $this->dm->persist($order);
         $this->dm->flush();
 
         $this->dm->refresh($order);
 
-        $this->assertEquals(array('cardNumber' =>  null), $order->getDetails());
+        if (PHP_VERSION_ID >= 70400) {
+            $this->assertEquals([
+                'cardNumber' => new SensitiveValue(null),
+            ], $order->getDetails());
+            $this->assertNotEquals([
+                'cardNumber' => new SensitiveValue('theCardNumber'),
+            ], $order->getDetails());
+        } else {
+            $this->assertEquals([
+                'cardNumber' => null,
+            ], $order->getDetails());
+        }
     }
 }

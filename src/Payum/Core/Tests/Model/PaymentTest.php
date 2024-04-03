@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\BankAccountInterface;
@@ -8,51 +9,32 @@ use Payum\Core\Model\DirectDebitPaymentInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class PaymentTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsPaymentInterface()
+    public function testShouldImplementsPaymentInterface(): void
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(PaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsCreditCardPaymentInterface()
+    public function testShouldImplementsCreditCardPaymentInterface(): void
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardPaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsDirectDebitPaymentInterface()
+    public function testShouldImplementsDirectDebitPaymentInterface(): void
     {
-        $rc = new \ReflectionClass(Payment::class);
+        $rc = new ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(DirectDebitPaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Payment();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetCreditCardPreviouslySet()
+    public function testShouldAllowGetCreditCardPreviouslySet(): void
     {
         $order = new Payment();
 
@@ -63,10 +45,7 @@ class PaymentTest extends TestCase
         $this->assertSame($creditCardMock, $order->getCreditCard());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankAccountPreviouslySet()
+    public function testShouldAllowGetBankAccountPreviouslySet(): void
     {
         $order = new Payment();
 

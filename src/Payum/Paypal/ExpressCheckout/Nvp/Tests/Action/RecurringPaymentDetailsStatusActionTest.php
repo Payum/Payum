@@ -1,261 +1,211 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
-use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class RecurringPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class RecurringPaymentDetailsStatusActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction');
+        $rc = new ReflectionClass(RecurringPaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RecurringPaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasBillingPeriodSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $recurringPaymentDetails = array(
-           'BILLINGPERIOD' => 'foo',
-        );
+        $recurringPaymentDetails = [
+            'BILLINGPERIOD' => 'foo',
+        ];
 
         $request = new GetBinaryStatus($recurringPaymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(new \stdClass());
+        $request = new GetBinaryStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'L_ERRORCODE9' => 'foo',
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfProfileStatusAndStatusNotSet()
+    public function testShouldMarkNewIfProfileStatusAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfProfileStatusAndStatusNotRecognized()
+    public function testShouldMarkUnknownIfProfileStatusAndStatusNotRecognized(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => 'foo',
             'PROFILESTATUS' => 'bar',
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStatusHasGreaterPriorityOverProfileStatus()
+    public function testShouldStatusHasGreaterPriorityOverProfileStatus(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_EXPIRED,
             'PROFILESTATUS' => Api::PROFILESTATUS_PENDINGPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isExpired());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfProfileStatusPendingAndStatusNotSet()
+    public function testShouldMarkPendingIfProfileStatusPendingAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'PROFILESTATUS' => Api::PROFILESTATUS_PENDINGPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfProfileStatusActiveAndStatusNotSet()
+    public function testShouldMarkCapturedIfProfileStatusActiveAndStatusNotSet(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'PROFILESTATUS' => Api::PROFILESTATUS_ACTIVEPROFILE,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStatusActive()
+    public function testShouldMarkCapturedIfStatusActive(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_ACTIVE,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfStatusCanceled()
+    public function testShouldMarkCanceledIfStatusCanceled(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_CANCELLED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusPending()
+    public function testShouldMarkPendingIfStatusPending(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_PENDING,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkExpiredIfStatusExpired()
+    public function testShouldMarkExpiredIfStatusExpired(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_EXPIRED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isExpired());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkSuspendedIfStatusSuspended()
+    public function testShouldMarkSuspendedIfStatusSuspended(): void
     {
         $action = new RecurringPaymentDetailsStatusAction();
 
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             'BILLINGPERIOD' => 'foo',
             'STATUS' => Api::RECURRINGPAYMENTSTATUS_SUSPENDED,
-        ));
+        ]);
 
         $action->execute($request);
 

@@ -1,6 +1,9 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
+use ArrayAccess;
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -36,10 +39,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->apiClass = Config::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -48,11 +48,9 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -71,7 +69,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         try {
             unset($model['recurring_token']);
 
-            $baseUri = Constants::BASE_URI_LIVE == $backupConfig->baseUri ?
+            $baseUri = Constants::BASE_URI_LIVE === $backupConfig->baseUri ?
                 Constants::BASE_URI_RECURRING_LIVE :
                 Constants::BASE_URI_RECURRING_SANDBOX
             ;
@@ -83,7 +81,7 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
             $this->gateway->execute($createOrderRequest = new CreateOrder($model));
 
             $model->replace($createOrderRequest->getOrder()->marshal());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->api->contentType = $backupConfig->contentType;
             $this->api->acceptHeader = $backupConfig->acceptHeader;
             $this->api->baseUri = $backupConfig->baseUri;
@@ -100,17 +98,14 @@ class AuthorizeRecurringAction implements ActionInterface, ApiAwareInterface, Ga
         $this->api->baseUri = $backupConfig->baseUri;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        if (false == ($request instanceof Authorize && $request->getModel() instanceof \ArrayAccess)) {
+        if (! ($request instanceof Authorize && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        return false == $model['recurring'] && $model['recurring_token'];
+        return ! $model['recurring'] && $model['recurring_token'];
     }
 }

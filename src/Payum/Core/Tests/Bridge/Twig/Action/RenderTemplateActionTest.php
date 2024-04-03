@@ -1,73 +1,58 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Twig\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Twig\Environment;
 
 class RenderTemplateActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Twig\Action\RenderTemplateAction');
+        $rc = new ReflectionClass(RenderTemplateAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithTwigAndLayoutAsArguments()
-    {
-        new RenderTemplateAction($this->createTwigMock(), 'aLayout');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportRenderTemplate()
+    public function testShouldSupportRenderTemplate(): void
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
-        $this->assertTrue($action->supports(new RenderTemplate('aTemplate', array())));
+        $this->assertTrue($action->supports(new RenderTemplate('aTemplate', [])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotRenderTemplate()
+    public function testShouldNotSupportAnythingNotRenderTemplate(): void
     {
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $this->assertFalse($action->supports('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestPassedToExecute()
+    public function testThrowIfNotSupportedRequestPassedToExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action RenderTemplateAction is not supported the request string.');
         $action = new RenderTemplateAction($this->createTwigMock(), 'aLayout');
 
         $action->execute('foo');
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedTemplateAndContext()
+    public function testShouldRenderExpectedTemplateAndContext(): void
     {
         $expectedTemplate = 'theTemplate';
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = array('foo' => 'fooVal', 'bar' => 'barVal');
+        $context = $expectedContext = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ];
         $expectedContext['layout'] = 'theLayout';
 
         $twigMock = $this->createTwigMock();
@@ -75,7 +60,7 @@ class RenderTemplateActionTest extends TestCase
             ->expects($this->once())
             ->method('render')
             ->with($expectedTemplate, $expectedContext)
-            ->will($this->returnValue($expectedView))
+            ->willReturn($expectedView)
         ;
 
         $action = new RenderTemplateAction($twigMock, 'theLayout');
@@ -83,19 +68,20 @@ class RenderTemplateActionTest extends TestCase
         $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
-        $this->assertEquals($expectedView, $renderTemplate->getResult());
+        $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedTemplateAndContextWithCustomLayout()
+    public function testShouldRenderExpectedTemplateAndContextWithCustomLayout(): void
     {
         $expectedTemplate = 'theTemplate';
 
         $expectedView = 'theView';
 
-        $context = $expectedContext = array('foo' => 'fooVal', 'bar' => 'barVal', 'layout' => 'theCustomLayout');
+        $context = $expectedContext = [
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+            'layout' => 'theCustomLayout',
+        ];
         $expectedContext['layout'] = 'theCustomLayout';
 
         $twigMock = $this->createTwigMock();
@@ -103,7 +89,7 @@ class RenderTemplateActionTest extends TestCase
             ->expects($this->once())
             ->method('render')
             ->with($expectedTemplate, $expectedContext)
-            ->will($this->returnValue($expectedView))
+            ->willReturn($expectedView)
         ;
 
         $action = new RenderTemplateAction($twigMock, 'defaultLayout');
@@ -111,14 +97,14 @@ class RenderTemplateActionTest extends TestCase
         $renderTemplate = new RenderTemplate($expectedTemplate, $context);
         $action->execute($renderTemplate);
 
-        $this->assertEquals($expectedView, $renderTemplate->getResult());
+        $this->assertSame($expectedView, $renderTemplate->getResult());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Environment
+     * @return MockObject|Environment
      */
     protected function createTwigMock()
     {
-        return $this->createMock(Environment::class, array('render'), array(), '', false);
+        return $this->createMock(Environment::class);
     }
 }

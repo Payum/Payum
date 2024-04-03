@@ -1,27 +1,26 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Reply\Base;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BaseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\Base');
+        $rc = new ReflectionClass(Base::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\Base');
+        $rc = new ReflectionClass(Base::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\LogicException'));
+        $this->assertTrue($rc->isSubclassOf(LogicException::class));
     }
 }

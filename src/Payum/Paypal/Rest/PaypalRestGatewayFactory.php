@@ -1,25 +1,24 @@
 <?php
+
 namespace Payum\Paypal\Rest;
 
+use LogicException;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\Rest\Action\CaptureAction;
+use Payum\Paypal\Rest\Action\ConvertAction;
 use Payum\Paypal\Rest\Action\StatusAction;
 use Payum\Paypal\Rest\Action\SyncAction;
-use Payum\Paypal\Rest\Action\ConvertAction;
-use Payum\Core\Exception\InvalidArgumentException;
 
 class PaypalRestGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
-        if (false == class_exists(ApiContext::class)) {
-            throw new \LogicException('You must install "paypal/rest-api-sdk-php" library.');
+        if (! class_exists(ApiContext::class)) {
+            throw new LogicException('You must install "paypal/rest-api-sdk-php" library.');
         }
 
         $config->defaults([
@@ -32,7 +31,7 @@ class PaypalRestGatewayFactory extends GatewayFactory
             'payum.action.convert_payment' => new ConvertAction(),
         ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'client_id' => '',
                 'client_secret' => '',
@@ -45,8 +44,8 @@ class PaypalRestGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (isset($config['config_path']) && $config['config_path'] !== '') {
-                    if (false == defined('PP_CONFIG_PATH')) {
+                if (isset($config['config_path']) && '' !== $config['config_path']) {
+                    if (! defined('PP_CONFIG_PATH')) {
                         define('PP_CONFIG_PATH', $config['config_path']);
                     } elseif (PP_CONFIG_PATH !== $config['config_path']) {
                         throw new InvalidArgumentException(sprintf('Given "config_path" is invalid. Should be equal to the defined "PP_CONFIG_PATH": %s.', PP_CONFIG_PATH));

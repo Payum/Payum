@@ -1,6 +1,9 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Klarna_Checkout_Order;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
@@ -8,6 +11,9 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\SyncAction;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\FetchOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class SyncActionTest extends GenericActionTest
 {
@@ -15,108 +21,82 @@ class SyncActionTest extends GenericActionTest
 
     protected $requestClass = Sync::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAsModel()
+    public function testShouldSupportSyncWithArrayAsModel(): void
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new Sync(array())));
+        $this->assertTrue($action->supports(new Sync([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass())));
+        $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteFetchOrderRequestIfModelHasLocationSet()
+    public function testShouldSubExecuteFetchOrderRequestIfModelHasLocationSet(): void
     {
-        $orderMock = $this->createMock('Klarna_Checkout_Order', array('marshal'), array(), '', false);
+        $orderMock = $this->createMock(Klarna_Checkout_Order::class);
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->willReturn(array('foo' => 'fooVal', 'bar' => 'barVal'))
+            ->willReturn([
+                'foo' => 'fooVal',
+                'bar' => 'barVal',
+            ])
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\FetchOrder'))
-            ->will($this->returnCallback(function (FetchOrder $request) use ($orderMock) {
+            ->with($this->isInstanceOf(FetchOrder::class))
+            ->willReturnCallback(function (FetchOrder $request) use ($orderMock): void {
                 $request->setOrder($orderMock);
-            }))
+            })
         ;
 
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'theLocation',
-        ));
+        ]);
 
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theLocation', $model['location']);
-        $this->assertEquals(Constants::STATUS_CHECKOUT_INCOMPLETE, $model['status']);
-        $this->assertEquals('fooVal', $model['foo']);
-        $this->assertEquals('barVal', $model['bar']);
+        $this->assertSame('theLocation', $model['location']);
+        $this->assertSame(Constants::STATUS_CHECKOUT_INCOMPLETE, $model['status']);
+        $this->assertSame('fooVal', $model['foo']);
+        $this->assertSame('barVal', $model['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfModelHasNotLocationSet()
+    public function testShouldDoNothingIfModelHasNotLocationSet(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -127,24 +107,24 @@ class SyncActionTest extends GenericActionTest
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array());
+        $request = new Sync([]);
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_Order
+     * @return MockObject|Klarna_Checkout_Order
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

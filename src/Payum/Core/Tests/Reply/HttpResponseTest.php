@@ -1,83 +1,60 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HttpResponseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\HttpResponse');
+        $rc = new ReflectionClass(HttpResponse::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithContentAsArgument()
-    {
-        new HttpResponse('html page');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentSetInConstructor()
+    public function testShouldAllowGetContentSetInConstructor(): void
     {
         $expectedContent = 'html page';
 
         $request = new HttpResponse($expectedContent);
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor(): void
     {
         $request = new HttpResponse('html page');
 
-        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertSame(200, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor(): void
     {
         $request = new HttpResponse('html page', 301);
 
-        $this->assertEquals(301, $request->getStatusCode());
+        $this->assertSame(301, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor(): void
     {
         $request = new HttpResponse('html page');
 
-        $this->assertEquals(array(), $request->getHeaders());
+        $this->assertSame([], $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor(): void
     {
-        $expectedHeaders = array(
+        $expectedHeaders = [
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        );
+        ];
 
         $request = new HttpResponse('html page', 200, $expectedHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

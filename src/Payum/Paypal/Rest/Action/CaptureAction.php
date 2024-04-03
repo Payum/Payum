@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Rest\Action;
 
+use ArrayAccess;
 use League\Uri\Http as HttpUri;
 use League\Uri\UriModifier;
 use PayPal\Api\Amount;
@@ -14,15 +15,14 @@ use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 
 class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface, GenericTokenFactoryAwareInterface
 {
@@ -35,15 +35,12 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         $this->apiClass = ApiContext::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var \ArrayAccess|PaypalPayment $model */
+        /** @var ArrayAccess|PaypalPayment $model */
         $model = $request->getModel();
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
@@ -65,39 +62,39 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'paypal' == $payment->payer->payment_method
+            'paypal' === $payment->payer->payment_method
         ) {
             $payment->create($this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
 
             foreach ($payment->links as $link) {
-                if ($link->rel == 'approval_url') {
+                if ('approval_url' === $link->rel) {
                     throw new HttpRedirect($link->href);
                 }
             }
         }
 
         if (
-            false == isset($payment->state) &&
+            ! isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'credit_card' == $payment->payer->payment_method
+            'credit_card' === $payment->payer->payment_method
         ) {
             $payment->create($this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
         }
 
         if (
-            true == isset($payment->state) &&
+            isset($payment->state) &&
             isset($payment->payer->payment_method) &&
-            'paypal' == $payment->payer->payment_method
+            'paypal' === $payment->payer->payment_method
         ) {
             $this->gateway->execute($httpRequest = new GetHttpRequest());
 
@@ -106,24 +103,20 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 
             $payment->execute($execution, $this->api);
 
-            if ($model instanceof \ArrayAccess) {
+            if ($model instanceof ArrayAccess) {
                 $model->replace($payment->toArray());
             }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            ($request->getModel() instanceof PaypalPayment || $request->getModel() instanceof \ArrayAccess)
+        return $request instanceof Capture &&
+            ($request->getModel() instanceof PaypalPayment || $request->getModel() instanceof ArrayAccess)
         ;
     }
 
-    private function captureArrayAccess(\ArrayAccess $model, Capture $request): PaypalPayment
+    private function captureArrayAccess(ArrayAccess $model, Capture $request): PaypalPayment
     {
         if (isset($model['id'])) {
             return PaypalPayment::get($model['id'], $this->api);
@@ -148,7 +141,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
 
         $cancelUri = HttpUri::createFromString($returnUrl);
         $redirectUrls->setReturnUrl($returnUrl)
-        ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
+            ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
 
         $payment = new PaypalPayment();
         $payment->setIntent('sale')

@@ -1,63 +1,57 @@
 <?php
+
 namespace Payum\Core\Tests;
 
+use Iterator;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
+use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 abstract class BaseConvertPaymentActionTest extends TestCase
 {
     /**
      * @var Generic
      */
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = Convert::class;
 
     /**
      * @var ActionInterface
      */
     protected $actionClass;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
-        yield array(new $this->requestClass(new Payment()));
-        yield array(new $this->requestClass($this->createMock(PaymentInterface::class)));
-        yield array(new $this->requestClass(new Payment(), $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield [new $this->requestClass(new Payment())];
+        yield [new $this->requestClass($this->createMock(PaymentInterface::class))];
+        yield [new $this->requestClass(new Payment(), $this->createMock(TokenInterface::class))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new $this->actionClass();
-    }
-
-    /**
-     * @test
-     *
      * @dataProvider provideSupportedRequests
      */
-    public function shouldSupportRequest($request)
+    public function testShouldSupportRequest($request): void
     {
         $action = new $this->actionClass();
 
@@ -65,11 +59,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function shouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request): void
     {
         $action = new $this->actionClass();
 
@@ -77,13 +69,11 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new $this->actionClass();
 
         $action->execute($request);

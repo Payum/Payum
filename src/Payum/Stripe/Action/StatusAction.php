@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Stripe\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,11 +12,9 @@ use Payum\Stripe\Constants;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -26,19 +26,19 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == $model['status'] && false == $model['card']) {
+        if (! $model['status'] && ! $model['card']) {
             $request->markNew();
 
             return;
         }
 
-        if (false == $model['status'] && $model['card']) {
+        if (! $model['status'] && $model['card']) {
             $request->markPending();
 
             return;
         }
 
-        if (Constants::STATUS_FAILED == $model['status']) {
+        if (Constants::STATUS_FAILED === $model['status']) {
             $request->markFailed();
 
             return;
@@ -50,25 +50,24 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (Constants::STATUS_SUCCEEDED == $model['status'] && $model['captured'] && $model['paid']) {
+        if (Constants::STATUS_SUCCEEDED === $model['status'] && $model['captured'] && $model['paid']) {
             $request->markCaptured();
 
             return;
         }
 
-        if (Constants::STATUS_PAID == $model['status'] && $model['captured'] && $model['paid']) {
+        if (Constants::STATUS_PAID === $model['status'] && $model['captured'] && $model['paid']) {
             $request->markCaptured();
 
             return;
         }
 
-
-        if (Constants::STATUS_SUCCEEDED == $model['status'] && false == $model['captured']) {
+        if (Constants::STATUS_SUCCEEDED === $model['status'] && ! $model['captured']) {
             $request->markAuthorized();
 
             return;
         }
-        if (Constants::STATUS_PAID == $model['status'] && false == $model['captured']) {
+        if (Constants::STATUS_PAID === $model['status'] && ! $model['captured']) {
             $request->markAuthorized();
 
             return;
@@ -77,14 +76,10 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

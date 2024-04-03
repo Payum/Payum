@@ -1,27 +1,18 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\Notify;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class NotifyTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        $rc = new \ReflectionClass(Notify::class);
+        $rc = new ReflectionClass(Notify::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Notify(new \stdClass());
     }
 }

@@ -1,15 +1,18 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
-class CheckOrderTest extends \PHPUnit\Framework\TestCase
-{
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
-    {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\CheckOrder');
+use Payum\Core\Request\Generic;
+use Payum\Payex\Request\Api\CheckOrder;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+class CheckOrderTest extends TestCase
+{
+    public function testShouldBeSubClassOfGeneric(): void
+    {
+        $rc = new ReflectionClass(CheckOrder::class);
+
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

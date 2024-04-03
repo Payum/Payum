@@ -1,21 +1,21 @@
 <?php
+
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
-use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Api\OrderApi;
+use Payum\Payex\Api\RecurringApi;
 
 class PaymentDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,12 +28,12 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        $recurringCanceledStatuses = array(
+        $recurringCanceledStatuses = [
             RecurringApi::RECURRINGSTATUS_STOPPEDBYADMIN,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYCLIENT,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYMERCHANT,
             RecurringApi::RECURRINGSTATUS_STOPPEDBYSYSTEM,
-        );
+        ];
         if (
             is_numeric($model['recurringStatus']) &&
             in_array($model['recurringStatus'], $recurringCanceledStatuses)
@@ -45,14 +45,14 @@ class PaymentDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['recurringStatus']) &&
-            RecurringApi::RECURRINGSTATUS_FAILED == $model['recurringStatus']
+            RecurringApi::RECURRINGSTATUS_FAILED === $model['recurringStatus']
         ) {
             $request->markFailed();
 
             return;
         }
 
-        if (count(iterator_to_array($model)) == 0) {
+        if (0 === count(iterator_to_array($model))) {
             $request->markNew();
 
             return;
@@ -65,18 +65,18 @@ class PaymentDetailsStatusAction implements ActionInterface
         }
 
         //A purchase has been done, but check the transactionStatus to see the result
-        if (OrderApi::ORDERSTATUS_COMPLETED == $model['orderStatus']) {
-            if (OrderApi::TRANSACTIONSTATUS_CANCEL == $model['transactionStatus']) {
+        if (OrderApi::ORDERSTATUS_COMPLETED === $model['orderStatus']) {
+            if (OrderApi::TRANSACTIONSTATUS_CANCEL === $model['transactionStatus']) {
                 $request->markCanceled();
 
                 return;
             }
 
-            if (OrderApi::TRANSACTIONSTATUS_FAILURE == $model['transactionStatus']) {
+            if (OrderApi::TRANSACTIONSTATUS_FAILURE === $model['transactionStatus']) {
                 $errorDetails = $model['errorDetails'];
                 if (
                     isset($errorDetails['transactionErrorCode']) &&
-                    $errorDetails['transactionErrorCode'] == OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER
+                    OrderApi::TRANSACTIONERRORCODE_OPERATIONCANCELLEDBYCUSTOMER === $errorDetails['transactionErrorCode']
                 ) {
                     $request->markCanceled();
 
@@ -89,8 +89,8 @@ class PaymentDetailsStatusAction implements ActionInterface
             }
 
             //If you are running 2-phase transactions, you should check that the node transactionStatus contains 3 (authorize)
-            if (OrderApi::PURCHASEOPERATION_AUTHORIZATION == $model['purchaseOperation']) {
-                if (OrderApi::TRANSACTIONSTATUS_AUTHORIZE == $model['transactionStatus']) {
+            if (OrderApi::PURCHASEOPERATION_AUTHORIZATION === $model['purchaseOperation']) {
+                if (OrderApi::TRANSACTIONSTATUS_AUTHORIZE === $model['transactionStatus']) {
                     $request->markCaptured();
 
                     return;
@@ -103,8 +103,8 @@ class PaymentDetailsStatusAction implements ActionInterface
             }
 
             //If you are running 1-phase transactions, you should check that the node transactionStatus contains 0 (sale)
-            if (OrderApi::PURCHASEOPERATION_SALE == $model['purchaseOperation']) {
-                if (is_numeric($model['transactionStatus']) && OrderApi::TRANSACTIONSTATUS_SALE == $model['transactionStatus']) {
+            if (OrderApi::PURCHASEOPERATION_SALE === $model['purchaseOperation']) {
+                if (is_numeric($model['transactionStatus']) && OrderApi::TRANSACTIONSTATUS_SALE === $model['transactionStatus']) {
                     $request->markCaptured();
 
                     return;
@@ -121,14 +121,14 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        if (OrderApi::ORDERSTATUS_PROCESSING == $model['orderStatus']) {
+        if (OrderApi::ORDERSTATUS_PROCESSING === $model['orderStatus']) {
             $request->markPending();
 
             return;
         }
 
         //PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
-        if (OrderApi::ORDERSTATUS_NOT_FOUND == $model['orderStatus']) {
+        if (OrderApi::ORDERSTATUS_NOT_FOUND === $model['orderStatus']) {
             $request->markExpired();
 
             return;
@@ -137,33 +137,25 @@ class PaymentDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        if (false == (
+        if (! (
             $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof ArrayAccess
         )) {
             return false;
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (count(iterator_to_array($model)) == 0) {
+        if (0 === count(iterator_to_array($model))) {
             return true;
         }
 
         if ($model['recurring']) {
             return true;
         }
-
         //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
-        if (isset($model['autoPay']) && false == $model['autoPay']) {
-            return true;
-        }
-
-        return false;
+        return isset($model['autoPay']) && ! $model['autoPay'];
     }
 }

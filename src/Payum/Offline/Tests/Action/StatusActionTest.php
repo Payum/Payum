@@ -1,84 +1,66 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
-use Payum\Offline\Constants;
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Offline\Action\StatusAction;
+use Payum\Offline\Constants;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class StatusActionTest extends \PHPUnit\Framework\TestCase
+class StatusActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\StatusAction');
+        $rc = new ReflectionClass(StatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new StatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModel()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModel(): void
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub($this->createMock('ArrayAccess'));
+        $request = $this->createGetStatusStub($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotStatusRequest()
+    public function testShouldNotSupportNotStatusRequest(): void
     {
         $action = new StatusAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessAsModel(): void
     {
         $action = new StatusAction();
 
-        $request = $this->createGetStatusStub(new \stdClass());
+        $request = $this->createGetStatusStub(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
-        $request = new GetBinaryStatus(array());
+        $request = new GetBinaryStatus([]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -88,12 +70,9 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfStatusNotSet()
+    public function testShouldMarkNewIfStatusNotSet(): void
     {
-        $request = new GetBinaryStatus(array());
+        $request = new GetBinaryStatus([]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -103,14 +82,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusSetToPending()
+    public function testShouldMarkPendingIfStatusSetToPending(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PENDING,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -120,14 +96,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfStatusSetToCaptured()
+    public function testShouldMarkCapturedIfStatusSetToCaptured(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CAPTURED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -137,14 +110,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPayedoutIfStatusSetToPayedout()
+    public function testShouldMarkPayedoutIfStatusSetToPayedout(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_PAYEDOUT,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -154,14 +124,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isPayedout());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfStatusSetToRefunded()
+    public function testShouldMarkRefundedIfStatusSetToRefunded(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_REFUNDED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -171,14 +138,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfStatusSetToCanceled()
+    public function testShouldMarkCanceledIfStatusSetToCanceled(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => Constants::STATUS_CANCELED,
-        ));
+        ]);
         $request->markUnknown();
 
         $action = new StatusAction();
@@ -187,15 +151,12 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($request->isCanceled());
     }
-    
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfStatusNotRecognized()
+
+    public function testShouldMarkUnknownIfStatusNotRecognized(): void
     {
-        $request = new GetBinaryStatus(array(
+        $request = new GetBinaryStatus([
             Constants::FIELD_STATUS => 'some-foo-bar-status',
-        ));
+        ]);
         $request->markCaptured();
 
         $action = new StatusAction();
@@ -206,11 +167,11 @@ class StatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GetStatusInterface
+     * @return MockObject|GetStatusInterface
      */
     protected function createGetStatusStub($model)
     {
-        $status = $this->createMock('Payum\Core\Request\GetStatusInterface');
+        $status = $this->createMock(GetStatusInterface::class);
 
         $status
             ->method('getModel')

@@ -1,403 +1,329 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsStatusActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsStatusAction');
+        $rc = new ReflectionClass(PaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSet(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $payment = array(
-           'PAYMENTREQUEST_0_AMT' => 1,
-        );
+        $payment = [
+            'PAYMENTREQUEST_0_AMT' => 1,
+        ];
 
         $request = new GetHumanStatus($payment);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportEmptyModel()
+    public function testShouldSupportEmptyModel(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportStatusRequestWithArrayAsModelWhichHasPaymentRequestAmountSetToZero(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $payment = array(
+        $payment = [
             'PAYMENTREQUEST_0_AMT' => 0,
-        );
+        ];
 
         $request = new GetHumanStatus($payment);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportStatusRequestWithNoArrayAccessAsModel(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(new \stdClass());
+        $request = new GetHumanStatus(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfPaymentNotAuthorized()
+    public function testShouldMarkCanceledIfPaymentNotAuthorized(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'L_ERRORCODE0' => Api::L_ERRORCODE_PAYMENT_NOT_AUTHORIZED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfDetailsContainCanceledKey()
+    public function testShouldMarkCanceledIfDetailsContainCanceledKey(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'CANCELLED' => true,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSetToModel()
+    public function testShouldMarkFailedIfErrorCodeSetToModel(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 21,
-            'L_ERRORCODE9' => 'foo'
-        ));
+            'L_ERRORCODE9' => 'foo',
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount()
+    public function testShouldMarkCapturedIfCreateBillingAgreementRequestAndZeroAmount(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'L_BILLINGTYPE0' => Api::BILLINGTYPE_RECURRING_PAYMENTS,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array());
+        $request = new GetHumanStatus([]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated()
+    public function testShouldMarkNewIfPayerIdSetAndCheckoutStatusNotInitiated(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 0,
             'PAYERID' => 'thePayerId',
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfCheckoutStatusInProgress()
+    public function testShouldMarkPendingIfCheckoutStatusInProgress(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_IN_PROGRESS,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfPayerIdNotSetAndCheckoutStatusNotInitiated()
+    public function testShouldMarkPendingIfPayerIdNotSetAndCheckoutStatusNotInitiated(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'PAYERID' => null,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfCheckoutStatusFailed()
+    public function testShouldMarkFailedIfCheckoutStatusFailed(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_FAILED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfAtLeastOnePaymentStatusInProgress()
+    public function testShouldMarkPendingIfAtLeastOnePaymentStatusInProgress(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_IN_PROGRESS,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAtLeastOnePaymentStatusFailed()
+    public function testShouldMarkFailedIfAtLeastOnePaymentStatusFailed(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_FAILED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAtLeastOnePaymentStatusReversed()
+    public function testShouldMarkFailedIfAtLeastOnePaymentStatusReversed(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REVERSED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfAtLeastOnePaymentStatusRefund()
+    public function testShouldMarkRefundedIfAtLeastOnePaymentStatusRefund(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfAtLeastOnePaymentStatusPartiallyRefund()
+    public function testShouldMarkRefundedIfAtLeastOnePaymentStatusPartiallyRefund(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PARTIALLY_REFUNDED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed()
+    public function testShouldMarkCapturedIfAllPaymentStatusCompletedOrProcessed(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PROCESSED,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfAllPaymentStatusVoidedAndReasonAuthorization()
+    public function testShouldMarkCanceledIfAllPaymentStatusVoidedAndReasonAuthorization(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_0_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_VOIDED,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization()
+    public function testShouldMarkAuthorizedIfAllPaymentStatusPendingAndReasonAuthorization(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_0_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
@@ -405,60 +331,50 @@ class PaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
             'PAYMENTINFO_9_PAYMENTSTATUS' => Api::PAYMENTSTATUS_PENDING,
             'PAYMENTINFO_9_PENDINGREASON' => Api::PENDINGREASON_AUTHORIZATION,
 
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isAuthorized());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfCheckoutStatusUnknown()
+    public function testShouldMarkUnknownIfCheckoutStatusUnknown(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => 'unknownCheckoutStatus',
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentStatusUnknown()
+    public function testShouldMarkUnknownIfPaymentStatusUnknown(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'PAYMENTREQUEST_0_AMT' => 12,
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_COMPLETED,
             'PAYMENTINFO_9_PAYMENTSTATUS' => 'unknownPaymentStatus',
-        ));
+        ]);
 
         $action->execute($request);
 
         $this->assertTrue($request->isUnknown());
     }
 
-
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfPaymentIsCancelledByUser()
+    public function testShouldMarkCanceledIfPaymentIsCancelledByUser(): void
     {
         $action = new PaymentDetailsStatusAction();
 
-        $request = new GetHumanStatus(array(
+        $request = new GetHumanStatus([
             'CHECKOUTSTATUS' => Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED,
             'CANCELLED' => true,
-        ));
+        ]);
 
         $action->execute($request);
 

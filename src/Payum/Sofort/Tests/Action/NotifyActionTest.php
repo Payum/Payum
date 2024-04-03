@@ -3,12 +3,14 @@
 namespace Payum\Sofort\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 use Payum\Core\Request\Sync;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\GatewayInterface;
 use Payum\Sofort\Action\NotifyAction;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -16,22 +18,18 @@ class NotifyActionTest extends GenericActionTest
 
     protected $actionClass = NotifyAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteSyncWithSameModelAndThrowHttpResponse()
+    public function testShouldSubExecuteSyncWithSameModelAndThrowHttpResponse(): void
     {
-        $expectedModel = array('foo' => 'fooVal');
+        $expectedModel = [
+            'foo' => 'fooVal',
+        ];
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -46,12 +44,12 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($expectedModel));
         } catch (HttpResponse $response) {
-            $this->assertEquals(200, $response->getStatusCode());
+            $this->assertSame(200, $response->getStatusCode());
         }
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

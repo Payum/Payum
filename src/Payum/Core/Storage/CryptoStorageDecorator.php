@@ -2,24 +2,25 @@
 
 namespace Payum\Core\Storage;
 
+use LogicException;
 use Payum\Core\Security\CryptedInterface;
 use Payum\Core\Security\CypherInterface;
 
+/**
+ * @template T of object
+ * @implements StorageInterface<T>
+ */
 final class CryptoStorageDecorator implements StorageInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<T>
      */
-    private $decoratedStorage;
+    private StorageInterface $decoratedStorage;
+
+    private CypherInterface $crypto;
 
     /**
-     * @var CypherInterface
-     */
-    private $crypto;
-
-    /**
-     * @param StorageInterface $decoratedStorage
-     * @param CypherInterface $crypto
+     * @param StorageInterface<T> $decoratedStorage
      */
     public function __construct(StorageInterface $decoratedStorage, CypherInterface $crypto)
     {
@@ -27,10 +28,7 @@ final class CryptoStorageDecorator implements StorageInterface
         $this->crypto = $crypto;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function create()
+    public function create(): object
     {
         $model = $this->decoratedStorage->create();
 
@@ -39,40 +37,34 @@ final class CryptoStorageDecorator implements StorageInterface
         return $model;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function support($model)
+    public function support(object $model): bool
     {
         return $this->decoratedStorage->support($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function update($model)
+    public function update(object $model): object
     {
         $this->assertCrypted($model);
 
         $model->encrypt($this->crypto);
 
         $this->decoratedStorage->update($model);
+
+        return $model;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($model)
+    public function delete(object $model): void
     {
         $this->decoratedStorage->delete($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function find($id)
+    public function find($id): ?object
     {
         $model = $this->decoratedStorage->find($id);
+
+        if (! $model) {
+            return null;
+        }
 
         $this->assertCrypted($model);
 
@@ -82,9 +74,9 @@ final class CryptoStorageDecorator implements StorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return T[]
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         $models = $this->decoratedStorage->findBy($criteria);
 
@@ -97,10 +89,7 @@ final class CryptoStorageDecorator implements StorageInterface
         return $models;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function identify($model)
+    public function identify($model): IdentityInterface
     {
         return $this->decoratedStorage->identify($model);
     }
@@ -108,12 +97,12 @@ final class CryptoStorageDecorator implements StorageInterface
     /**
      * @param object $model
      */
-    private function assertCrypted($model)
+    private function assertCrypted($model): void
     {
-        if (false == $model instanceof  CryptedInterface) {
-            throw new \LogicException(sprintf(
+        if (! $model instanceof CryptedInterface) {
+            throw new LogicException(sprintf(
                 'The model %s must implement %s interface. It is required for this decorator.',
-                get_class($model),
+                $model::class,
                 CryptedInterface::class
             ));
         }

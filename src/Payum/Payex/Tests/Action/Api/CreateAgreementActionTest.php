@@ -1,33 +1,44 @@
 <?php
+
 namespace Payum\Payex\Tests\Action\Api;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\CreateAgreementAction;
 use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Request\Api\CreateAgreement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
+class CreateAgreementActionTest extends TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'purchaseOperation' => AgreementApi::PURCHASEOPERATION_SALE,
         'maxAmount' => 100000,
         'startDate' => '',
         'stopDate' => '',
-    );
+    ];
 
-    protected $requiredNotEmptyFields = array(
+    protected $requiredNotEmptyFields = [
         'merchantRef' => 'aMerchRef',
         'description' => 'aDesc',
         'maxAmount' => 100000,
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
@@ -35,118 +46,73 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
 
     public function provideRequiredNotEmptyFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredNotEmptyFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CreateAgreementAction');
+        $rc = new ReflectionClass(CreateAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\CreateAgreementAction');
+        $rc = new ReflectionClass(CreateAgreementAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowOnTryingSetNotAgreementApiAsApi(): void
     {
-        new CreateAgreementAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetAgreementApiAsApi()
-    {
-        $agreementApi = $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
-
-        $action = new CreateAgreementAction();
-
-        $action->setApi($agreementApi);
-
-        $this->assertAttributeSame($agreementApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwOnTryingSetNotAgreementApiAsApi()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\AgreementApi');
         $action = new CreateAgreementAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreateAgreementRequestWithArrayAccessAsModel()
+    public function testShouldSupportCreateAgreementRequestWithArrayAccessAsModel(): void
     {
         $action = new CreateAgreementAction();
 
-        $this->assertTrue($action->supports(new CreateAgreement($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new CreateAgreement($this->createMock(ArrayAccess::class))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateAgreementRequest()
+    public function testShouldNotSupportAnythingNotCreateAgreementRequest(): void
     {
         $action = new CreateAgreementAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreateAgreementRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreateAgreementRequestWithNotArrayAccessModel(): void
     {
         $action = new CreateAgreementAction();
 
-        $this->assertFalse($action->supports(new CreateAgreement(new \stdClass())));
+        $this->assertFalse($action->supports(new CreateAgreement(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CreateAgreementAction($this->createApiMock());
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideRequiredFields
      */
-    public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
 
         $action = new CreateAgreementAction();
@@ -155,13 +121,11 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideRequiredNotEmptyFields
      */
-    public function throwIfTryInitializeWithRequiredFieldEmpty($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldEmpty($requiredField): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $fields = $this->requiredNotEmptyFields;
 
         $fields[$requiredField] = '';
@@ -171,19 +135,16 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CreateAgreement($fields));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateAgreementPayment()
+    public function testShouldCreateAgreementPayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('create')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn([
                 'agreementRef' => 'theRef',
-            )));
+            ]);
 
         $action = new CreateAgreementAction();
         $action->setApi($apiMock);
@@ -193,30 +154,27 @@ class CreateAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theRef', $model['agreementRef']);
+        $this->assertSame('theRef', $model['agreementRef']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryCreateAlreadyCreatedAgreement()
+    public function testThrowIfTryCreateAlreadyCreatedAgreement(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The agreement has already been created.');
         $action = new CreateAgreementAction();
 
-        $request = new CreateAgreement(array(
+        $request = new CreateAgreement([
             'agreementRef' => 'aRef',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Payex\Api\AgreementApi
+     * @return MockObject|AgreementApi
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\AgreementApi', array(), array(), '', false);
+        return $this->createMock(AgreementApi::class);
     }
 }

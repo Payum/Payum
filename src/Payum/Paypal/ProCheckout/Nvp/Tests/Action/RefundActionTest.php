@@ -1,55 +1,41 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
+use ArrayObject;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Refund;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Paypal\ProCheckout\Nvp\Action\RefundAction;
+use Payum\Paypal\ProCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class RefundActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\RefundAction';
+    protected $actionClass = RefundAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Refund';
+    protected $requestClass = Refund::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\RefundAction');
+        $rc = new ReflectionClass(RefundAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
-        $expectedApi = $this->createApiMock();
-
-        $action = new RefundAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new RefundAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfPaymentNew()
+    public function testShouldDoNothingIfPaymentNew(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -60,15 +46,12 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array()));
+        $action->execute(new Refund([]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionTypeIsNotRefundable()
+    public function testThrowIfTransactionTypeIsNotRefundable(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
         $apiMock = $this->createApiMock();
         $apiMock
@@ -79,18 +62,15 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array(
+        $action->execute(new Refund([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => 'notSupported',
-        )));
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdNotSet()
+    public function testThrowIfTransactionIdNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The PNREF fields are required.');
         $apiMock = $this->createApiMock();
         $apiMock
@@ -101,39 +81,36 @@ class RefundActionTest extends GenericActionTest
         $action = new RefundAction();
         $action->setApi($apiMock);
 
-        $action->execute(new Refund(array(
+        $action->execute(new Refund([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => Api::TRXTYPE_SALE,
-        )));
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetPnrefAsOriginIdAndPerformCreditApiCall()
+    public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall(): void
     {
-        $details = new \ArrayObject(array(
+        $details = new ArrayObject([
             'RESULT' => Api::RESULT_SUCCESS,
             'TRXTYPE' => Api::TRXTYPE_SALE,
             'PNREF' => 'aRef',
-        ));
+        ]);
 
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doCredit')
-            ->with(array(
+            ->with([
                 'RESULT' => null,
                 'TRXTYPE' => null,
                 'PNREF' => 'aRef',
                 'PURCHASE_TRXTYPE' => 'S',
                 'PURCHASE_RESULT' => 0,
                 'ORIGID' => 'aRef',
-            ))
-            ->will($this->returnValue(array(
+            ])
+            ->willReturn([
                 'RESULT' => 'aResult',
                 'FOO' => 'aVal',
-            )))
+            ])
         ;
 
         $action = new RefundAction();
@@ -142,20 +119,20 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund($details));
 
         $this->assertArrayHasKey('FOO', $details);
-        $this->assertEquals('aVal', $details['FOO']);
+        $this->assertSame('aVal', $details['FOO']);
 
         $this->assertArrayHasKey('RESULT', $details);
-        $this->assertEquals('aResult', $details['RESULT']);
+        $this->assertSame('aResult', $details['RESULT']);
 
         $this->assertArrayHasKey('ORIGID', $details);
-        $this->assertEquals('aRef', $details['ORIGID']);
+        $this->assertSame('aRef', $details['ORIGID']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

@@ -1,13 +1,4 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Custom action usage
+# Custom Action
 
 Gateway comes with built in actions but sometime you have to add your own. First you have to define a service:
 
@@ -22,7 +13,7 @@ services:
 
 There are several ways to add it to a gateway:
 
-* Set it explicitly in config.yml. 
+*   Set it explicitly in config.yml.
 
     ```yaml
     # app/config/config.yml
@@ -33,14 +24,10 @@ There are several ways to add it to a gateway:
                 factory: a_factory:
                 payum.action.foo: @payumActionServiceId
     ```
+*   Tag it
 
-* Tag it
+    More powerful method is to add a tag `payum.action` to action server. Payum will do the reset. You can define a `factory` attribute inside that tag. In this case the action will be added to all gateways created by requested factory.
 
-    
-    More powerful method is to add a tag `payum.action` to action server. Payum will do the reset.
-    You can define a `factory` attribute inside that tag. 
-    In this case the action will be added to all gateways created by requested factory.
- 
     ```yaml
     # app/config/config.yml
 
@@ -62,8 +49,7 @@ There are several ways to add it to a gateway:
 
     ```
 
-    If `prepend` set to true the action is added before the rest. 
-    If you want to add the action to all configured gateways set `all` to true.
+    If `prepend` set to true the action is added before the rest. If you want to add the action to all configured gateways set `all` to true.
 
     ```yaml
     # src/Acme/PaymentBundle/Resources/config/services.yml
@@ -76,4 +62,10 @@ There are several ways to add it to a gateway:
                 - {name: payum.action, prepend: true, all: true }
     ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,11 +12,9 @@ use Payum\Core\Security\SensitiveValue;
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -23,15 +22,15 @@ class ConvertPaymentAction implements ActionInterface
         $payment = $request->getSource();
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details["amount"] = $payment->getTotalAmount();
-        $details["currency"] = $payment->getCurrencyCode();
-        $details["description"] = $payment->getDescription();
+        $details['amount'] = $payment->getTotalAmount();
+        $details['currency'] = $payment->getCurrencyCode();
+        $details['description'] = $payment->getDescription();
 
         if ($card = $payment->getCreditCard()) {
             if ($card->getToken()) {
-                $details["customer"] = $card->getToken();
+                $details['customer'] = $card->getToken();
             } else {
-                $details["card"] = SensitiveValue::ensureSensitive([
+                $details['card'] = SensitiveValue::ensureSensitive([
                     'number' => $card->getNumber(),
                     'exp_month' => $card->getExpireAt()->format('m'),
                     'exp_year' => $card->getExpireAt()->format('Y'),
@@ -43,15 +42,11 @@ class ConvertPaymentAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' === $request->getTo()
         ;
     }
 }

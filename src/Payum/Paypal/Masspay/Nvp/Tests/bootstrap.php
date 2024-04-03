@@ -1,7 +1,8 @@
 <?php
+
 use Payum\Core\GatewayInterface;
 
-if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
+if (! $loader = @include __DIR__ . '/../vendor/autoload.php') {
     echo <<<EOM
 You must set up the project dependencies by running the following commands:
 
@@ -13,8 +14,8 @@ EOM;
     exit(1);
 }
 
-$rc = new \ReflectionClass(GatewayInterface::class);
-$coreDir = dirname($rc->getFileName()).'/Tests';
+$rc = new ReflectionClass(GatewayInterface::class);
+$coreDir = dirname($rc->getFileName()) . '/Tests';
 
 $loader->add('Payum\Core\Tests', $coreDir);
 $loader->add('Payum\Paypal\Masspay\Nvp\Tests', $coreDir);

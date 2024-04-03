@@ -1,14 +1,18 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateSubscription;
-use Stripe\Error;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -34,10 +38,7 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -45,12 +46,9 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateSubscription */
+        /** @var CreateSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -58,22 +56,26 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         try {
             Stripe::setApiKey($this->api->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($subscription->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($subscription->toArray());
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateSubscription &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreateSubscription &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

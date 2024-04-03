@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Event;
 
 use Payum\Core\Extension\Context;
@@ -11,9 +12,6 @@ class ExecuteEvent extends Event
      */
     protected $context;
 
-    /**
-     * @param Context $context
-     */
     public function __construct(Context $context)
     {
         $this->context = $context;

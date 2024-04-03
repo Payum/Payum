@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Sofort;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -17,16 +18,13 @@ use Sofort\SofortLib\Sofortueberweisung;
 
 class SofortGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
-        if (false == class_exists(Sofortueberweisung::class)) {
+        if (! class_exists(Sofortueberweisung::class)) {
             throw new LogicException('You must install "sofort/sofortlib-php:^3.0" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'sofort',
             'payum.factory_title' => 'Sofort',
             'payum.action.capture' => new CaptureAction(),
@@ -39,9 +37,9 @@ class SofortGatewayFactory extends GatewayFactory
             'payum.action.api.create_transaction' => new CreateTransactionAction(),
             'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
             'payum.action.api.refund_transaction' => new RefundTransactionAction(),
-        ));
+        ]);
 
-        if (false == $config['payum.api']) {
+        if (! $config['payum.api']) {
             $config['payum.default_options'] = [
                 'config_key' => '',
                 'abort_url' => '',
@@ -52,7 +50,6 @@ class SofortGatewayFactory extends GatewayFactory
                  * @link https://github.com/Payum/Payum/issues/628
                  */
                 'disable_notification' => false,
-
             ];
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = ['config_key'];
@@ -60,7 +57,7 @@ class SofortGatewayFactory extends GatewayFactory
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                if (false == preg_match('/.*\:.*\:.*/', $config['config_key'])) {
+                if (! preg_match('/.*\:.*\:.*/', (string) $config['config_key'])) {
                     throw new \LogicException('The config_key is invalid. It must match the regexp "/.*\:.*\:.*/".');
                 }
 

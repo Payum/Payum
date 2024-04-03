@@ -1,132 +1,91 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Klarna;
+use KlarnaException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Tests\GenericApiAwareActionTest;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Invoice\Action\Api\CancelReservationAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CancelReservation;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use PhpXmlRpc\Client;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
-class CancelReservationActionTest extends TestCase
+class CancelReservationActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CancelReservationAction');
+        $rc = new ReflectionClass(CancelReservationAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
-        new CancelReservationAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CancelReservationAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CancelReservationAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new CancelReservationAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCancelReservationWithArrayAsModel()
+    public function testShouldSupportCancelReservationWithArrayAsModel(): void
     {
         $action = new CancelReservationAction();
 
-        $this->assertTrue($action->supports(new CancelReservation(array())));
+        $this->assertTrue($action->supports(new CancelReservation([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCancelReservation()
+    public function testShouldNotSupportAnythingNotCancelReservation(): void
     {
         $action = new CancelReservationAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCancelReservationWithNotArrayAccessModel()
+    public function testShouldNotSupportCancelReservationWithNotArrayAccessModel(): void
     {
         $action = new CancelReservationAction();
 
-        $this->assertFalse($action->supports(new CancelReservation(new \stdClass())));
+        $this->assertFalse($action->supports(new CancelReservation(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CancelReservationAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new CancelReservationAction();
 
-        $action->execute(new CancelReservation(array()));
+        $action->execute(new CancelReservation([]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCancelReservationMethod()
+    public function testShouldCallKlarnaCancelReservationMethod(): void
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
             ->method('cancelReservation')
             ->with($details['rno'])
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $action = new CancelReservationAction($klarnaMock);
@@ -139,21 +98,18 @@ class CancelReservationActionTest extends TestCase
         $this->assertTrue($canceledDetails['canceled']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
             ->method('cancelReservation')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new KlarnaException('theMessage', 123))
         ;
 
         $action = new CancelReservationAction($klarnaMock);
@@ -162,18 +118,28 @@ class CancelReservationActionTest extends TestCase
         $action->execute($cancel = new CancelReservation($details));
 
         $activatedDetails = $cancel->getModel();
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
+    }
+
+    protected function getActionClass(): string
+    {
+        return CancelReservationAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna
+     * @return MockObject|Klarna
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+        $klarnaMock = $this->createMock(Klarna::class);
 
-        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
         $rp->setAccessible(false);

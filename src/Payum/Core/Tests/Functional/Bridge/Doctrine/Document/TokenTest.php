@@ -1,16 +1,15 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\Token;
+use stdClass;
 
 class TokenTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersist()
+    public function testShouldAllowPersist(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -18,18 +17,17 @@ class TokenTest extends MongoTest
 
         $this->dm->persist($token);
         $this->dm->flush();
+
+        $this->assertSame([$token], $this->dm->getRepository(Token::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken(): void
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
         $token->setGatewayName('aName');
         $token->setAfterUrl('anAfterUrl');
-        $token->setDetails(new Identity('anId', 'stdClass'));
+        $token->setDetails(new Identity('anId', stdClass::class));
 
         $this->dm->persist($token);
         $this->dm->flush();
@@ -38,13 +36,13 @@ class TokenTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundToken = $this->dm->find(get_class($token), $hash);
+        $foundToken = $this->dm->find($token::class, $hash);
 
         $this->assertNotSame($token, $foundToken);
 
-        $this->assertEquals($token->getHash(), $foundToken->getHash());
-        $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
-        $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());
+        $this->assertSame($token->getHash(), $foundToken->getHash());
+        $this->assertSame($token->getTargetUrl(), $foundToken->getTargetUrl());
+        $this->assertSame($token->getAfterUrl(), $foundToken->getAfterUrl());
 
         $this->assertNotSame($token->getDetails(), $foundToken->getDetails());
         $this->assertEquals($token->getDetails(), $foundToken->getDetails());

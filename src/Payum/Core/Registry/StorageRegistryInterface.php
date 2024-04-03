@@ -1,24 +1,27 @@
 <?php
+
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template T of object
+ */
 interface StorageRegistryInterface
 {
     /**
-     * @param object|string $class
+     * @param class-string|T $class
      *
+     * @return StorageInterface<T>
      * @throws InvalidArgumentException if storage with such name not exists
-     *
-     * @return StorageInterface
      */
-    public function getStorage($class);
+    public function getStorage(string | object $class): StorageInterface;
 
     /**
      * The key must be a model class
      *
-     * @return StorageInterface[]
+     * @return array<class-string, StorageInterface<T>>
      */
-    public function getStorages();
+    public function getStorages(): array;
 }

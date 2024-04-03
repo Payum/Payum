@@ -1,104 +1,84 @@
 <?php
+
 namespace Payum\Core\Tests\Exception\Http;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Exception\Http\HttpException;
+use Payum\Core\Exception\Http\HttpExceptionInterface;
+use Payum\Core\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
 
 class HttpExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
+        $rc = new ReflectionClass(HttpException::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\RuntimeException'));
+        $this->assertTrue($rc->isSubclassOf(RuntimeException::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementHttpExceptionInterface()
+    public function testShouldImplementHttpExceptionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\Http\HttpException');
+        $rc = new ReflectionClass(HttpException::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\Http\HttpExceptionInterface'));
+        $this->assertTrue($rc->isSubclassOf(HttpExceptionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedSameAsStandardException()
-    {
-        new HttpException('aMessage', 404);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetRequest()
+    public function testShouldAllowSetRequest(): void
     {
         $exception = new HttpException();
 
-        $exception->setRequest($this->createMock('Psr\Http\Message\RequestInterface'));
+        $request = $this->createMock(RequestInterface::class);
+        $exception->setRequest($request);
+        $this->assertSame($request, $exception->getRequest());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetRequest()
+    public function testShouldAllowGetPreviouslySetRequest(): void
     {
         $exception = new HttpException();
 
-        $exception->setRequest($expectedRequest = $this->createMock('Psr\Http\Message\RequestInterface'));
+        $exception->setRequest($expectedRequest = $this->createMock(RequestInterface::class));
 
         $this->assertSame($expectedRequest, $exception->getRequest());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetResponse()
+    public function testShouldAllowSetResponse(): void
     {
         $exception = new HttpException();
 
-        $exception->setResponse($this->createMock('Psr\Http\Message\ResponseInterface'));
+        $response = $this->createMock(ResponseInterface::class);
+        $exception->setResponse($response);
+        $this->assertSame($response, $exception->getResponse());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetResponse()
+    public function testShouldAllowGetPreviouslySetResponse(): void
     {
         $exception = new HttpException();
 
-        $exception->setResponse($expectedResponse = $this->createMock('Psr\Http\Message\ResponseInterface'));
+        $exception->setResponse($expectedResponse = $this->createMock(ResponseInterface::class));
 
         $this->assertSame($expectedResponse, $exception->getResponse());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateHttpExceptionFromRequestAndResponse()
+    public function testShouldAllowCreateHttpExceptionFromRequestAndResponse(): void
     {
-        $request = new Request('GET', 'http://example.com/foobar');
+        $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://example.com/foobar');
 
-        $response = new Response(404);
+        $response = Psr17FactoryDiscovery::findResponseFactory()->createResponse(404);
 
         $httpException = HttpException::factory($request, $response);
 
-        $this->assertInstanceOf('Payum\Core\Exception\Http\HttpException', $httpException);
+        $this->assertInstanceOf(HttpException::class, $httpException);
         $this->assertSame($request, $httpException->getRequest());
         $this->assertSame($response, $httpException->getResponse());
 
-        $this->assertEquals(
-            "Client error response\n[status code] 404\n[reason phrase] Not Found\n[url] http://example.com/foobar",
+        $this->assertSame(
+            "Client error response\n[status code] 404\n[reason phrase] Not Found\n[url] https://example.com/foobar",
             $httpException->getMessage()
         );
-        $this->assertEquals(404, $httpException->getCode());
+        $this->assertSame(404, $httpException->getCode());
     }
 }

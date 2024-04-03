@@ -1,17 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# ISO4217 or Currency Details
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# ISO4217 or Currency Details. 
-
-Payum provides ability to get currency details listed in [ISO4217](http://en.wikipedia.org/wiki/ISO_4217) specification.
-To get this information you have to execute a GetCurrency request with a currency code.
-
+Payum provides ability to get currency details listed in [ISO4217](http://en.wikipedia.org/wiki/ISO\_4217) specification. To get this information you have to execute a GetCurrency request with a currency code.
 
 ```php
 <?php
@@ -23,10 +12,10 @@ $gateway = $factory->create();
 
 $gateway->execute($currency = new GetCurrency('USD'));
 
-echo $currency->alpha3;  // USD
-echo $currency->name;    // US Dollar
-echo $currency->exp;     // 2
-echo $currency->country; // US
+echo $currency->getAlpha3();  // USD
+echo $currency->getName();    // US Dollar
+echo $currency->getExp();     // 2
+echo $currency->getCountry(); // US
 
 // and so on...
 ```
@@ -49,10 +38,10 @@ class FooAction implements ActionInterface, GatewayAwareInterface
     {
         $this->gateway->execute($currency = new GetCurrency('USD'));
         
-        echo $currency->alpha3;  // USD
-        echo $currency->name;    // US Dollar
-        echo $currency->exp;     // 2
-        echo $currency->country; // US
+        echo $currency->getAlpha3();  // USD
+        echo $currency->getName();    // US Dollar
+        echo $currency->getExp();     // 2
+        echo $currency->getCountry(); // US
     }
 }
 ```
@@ -62,11 +51,9 @@ Or directly ISO4217 service:
 ```php
 <?php
 
-use Payum\ISO4217\ISO4217;
+use Payum\Core\ISO4217\Currency;
 
-$iso4217 = new ISO4217();
-
-$currency = $iso4217->findByAlpha3('USD');
+$currency = Currency::createFromIso4217Alpha3('USD');
 
 echo $currency->getAlpha3();  // USD
 echo $currency->getName();    // US Dollar
@@ -74,10 +61,16 @@ echo $currency->getExp();     // 2
 echo $currency->getCountry(); // US
 ```
 
-## Next 
+### Next
 
 * [The architecture](the-architecture.md).
 * [Supported gateways](supported-gateways.md).
 * [Storages](storages.md).
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

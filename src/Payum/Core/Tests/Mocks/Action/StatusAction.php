@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -7,18 +8,13 @@ use Payum\Core\Request\GetStatusInterface;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         $request->markCaptured();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetStatusInterface;

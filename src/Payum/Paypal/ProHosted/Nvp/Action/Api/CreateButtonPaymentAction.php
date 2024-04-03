@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -22,12 +24,9 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateButtonPayment */
+        /** @var CreateButtonPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
@@ -39,18 +38,14 @@ class CreateButtonPaymentAction implements ActionInterface, ApiAwareInterface
         $result = $this->api->doCreateButton((array) $model);
         $model->replace((array) $result);
 
-        if ($model['EMAILLINK'] != null) {
+        if (null != $model['EMAILLINK']) {
             throw new HttpRedirect($model['EMAILLINK']);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateButtonPayment &&
-            $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof CreateButtonPayment &&
+            $request->getModel() instanceof ArrayAccess;
     }
 }

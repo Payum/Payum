@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 use Payum\Core\Model\ModelAggregateInterface;
@@ -8,38 +9,35 @@ use Payum\Core\Storage\StorageInterface;
 class StorageExtension implements ExtensionInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
+     * @var StorageInterface<object>
      */
-    protected $storage;
+    protected StorageInterface $storage;
 
     /**
      * @var object[]
      */
-    protected $scheduledForUpdateModels = array();
+    protected array $scheduledForUpdateModels = [];
 
     /**
-     * @param \Payum\Core\Storage\StorageInterface $storage
+     * @param StorageInterface<object> $storage
      */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         $request = $context->getRequest();
 
-        if (false == $request instanceof ModelAggregateInterface) {
+        if (! $request instanceof ModelAggregateInterface) {
             return;
         }
 
         if ($request->getModel() instanceof IdentityInterface) {
             /** @var IdentityInterface $identity */
             $identity = $request->getModel();
-            if (false == $model = $this->storage->find($identity)) {
+            if (! $model = $this->storage->find($identity)) {
                 return;
             }
 
@@ -49,17 +47,11 @@ class StorageExtension implements ExtensionInterface
         $this->scheduleForUpdateIfSupported($request->getModel());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $request = $context->getRequest();
 
@@ -67,7 +59,7 @@ class StorageExtension implements ExtensionInterface
             $this->scheduleForUpdateIfSupported($request->getModel());
         }
 
-        if (false == $context->getPrevious()) {
+        if (! $context->getPrevious()) {
             foreach ($this->scheduledForUpdateModels as $modelHash => $model) {
                 $this->storage->update($model);
                 unset($this->scheduledForUpdateModels[$modelHash]);
@@ -78,7 +70,7 @@ class StorageExtension implements ExtensionInterface
     /**
      * @param mixed $model
      */
-    protected function scheduleForUpdateIfSupported($model)
+    protected function scheduleForUpdateIfSupported($model): void
     {
         if ($this->storage->support($model)) {
             $modelHash = spl_object_hash($model);

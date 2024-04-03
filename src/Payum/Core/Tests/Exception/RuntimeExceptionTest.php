@@ -1,36 +1,25 @@
 <?php
+
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\RuntimeException;
+use Payum\Core\Exception\ExceptionInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use RuntimeException;
 
 class RuntimeExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\RuntimeException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\RuntimeException::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\RuntimeException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\RuntimeException::class);
 
-        $this->assertTrue($rc->isSubclassOf('RuntimeException'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RuntimeException();
+        $this->assertTrue($rc->isSubclassOf(RuntimeException::class));
     }
 }

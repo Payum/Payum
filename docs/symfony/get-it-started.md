@@ -1,30 +1,26 @@
-<h2 align="center">Supporting Payum</h2>
+# Get started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+## Payum Bundle
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Install
 
----
-
-# Payum Bundle. Get it started
-
-## Install
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run `composer require` to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run `composer require` to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle6-adapter"
+php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle7-adapter"
 ```
 
-_**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](../supported-gateways.md) to find out what you can use._
+{% hint style="info" %}
+_**Note**: Where **payum/offline** is a payum gateway, you can for example change it to **payum/paypal-express-checkout-nvp** or **payum/stripe**. Look at_ [_supported gateways_](../supported-gateways.md) _to find out what you can use._
+{% endhint %}
 
-_**Note**: Use payum/payum if you want to install all gateways at once._
+{% hint style="info" %}
+_**Note**: Use **payum/payum** if you want to install all gateways at once._
+{% endhint %}
 
 Enable the bundle in the kernel (only necessary for Symfony <=3):
 
-``` php
+```php
 <?php
 // app/AppKernel.php
 
@@ -40,15 +36,15 @@ public function registerBundles()
 Now let's import Payum's routes:
 
 ```yaml
-# config/routes/payum.yaml (Symfony >=4) or app/config/routing.yml (Symfony <=3)
+# app/config/routing.yml (In Symfony 4 & 5 config/routes.yaml )
 
 payum_all:
     resource: "@PayumBundle/Resources/config/routing/all.xml"
 ```
 
-## Configure
+### Configure
 
-First we need two entities: `PaymentToken` and `Payment`.  
+First we need two entities: `Token` and `Payment`.\
 The token entity is used to protect your payments, while the payment entity stores all your payment information.
 
 _**Note**: In this chapter we show how to use [Doctrine ORM](https://www.doctrine-project.org/projects/orm.html) entities. There are other supported [storages](storages.md)._
@@ -175,11 +171,28 @@ class PaymentController extends AbstractController
         
         return $this->redirect($captureToken->getTargetUrl());    
     }
-    
+}
+```
+
+### Payment is done
+
+After setting up the payment, the user will be redirected to `doneAction()`. You can read more about it in its dedicated [chapter](purchase-done-action.md). `doneAction()` is always called, no matter if the payment was successful or not. Here we may check the payment status, update the model, dispatch events and so on.
+
+```php
+<?php
+// src/Acme/PaymentBundle/Controller/PaymentController.php
+namespace Acme\PaymentBundle\Controller;
+
+use Payum\Core\Request\GetHumanStatus;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class PaymentController extends Controller 
+{
     /**
      * @Route("/payment-done", name="payum_payment_done")
      */
-    public function done(Request $request, Payum $payum)
+    public function doneAction(Request $request)
     {
         $token = $payum->getHttpRequestVerifier()->verify($request);
         
@@ -211,9 +224,10 @@ class PaymentController extends AbstractController
 
 ```
 
-After setting up the payment, the user will be redirected to `done()`.
-This function is always called, no matter if the payment was successful or not.
-Here we may check the payment status, update the model, dispatch events and so on.
-You can read more about it in its dedicated [chapter](purchase-done-action.md).
+***
 
-* [Back to index](../index.md).
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

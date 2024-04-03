@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
+use ArrayAccess;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -9,9 +11,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 
@@ -23,18 +25,16 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
     use ApiAwareTrait;
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
-    
+
     public function __construct()
     {
         $this->apiClass = Api::class;
     }
-    
+
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -47,13 +47,13 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);
         } else {
-            $extradata = $model['EXTRADATA'] ? json_decode($model['EXTRADATA'], true) : [];
+            $extradata = $model['EXTRADATA'] ? json_decode((string) $model['EXTRADATA'], true, 512, JSON_THROW_ON_ERROR) : [];
 
-            if (false == isset($extradata['capture_token']) && $request->getToken()) {
+            if (! isset($extradata['capture_token']) && $request->getToken()) {
                 $extradata['capture_token'] = $request->getToken()->getHash();
             }
 
-            if (false == isset($extradata['notify_token']) && $request->getToken() && $this->tokenFactory) {
+            if (! isset($extradata['notify_token']) && $request->getToken() && $this->tokenFactory) {
                 $notifyToken = $this->tokenFactory->createNotifyToken(
                     $request->getToken()->getGatewayName(),
                     $request->getToken()->getDetails()
@@ -62,7 +62,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
                 $extradata['notify_token'] = $notifyToken->getHash();
             }
 
-            $model['EXTRADATA'] = json_encode($extradata);
+            $model['EXTRADATA'] = json_encode($extradata, JSON_THROW_ON_ERROR);
 
             throw new HttpPostRedirect(
                 $this->api->getOffsiteUrl(),
@@ -71,14 +71,10 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Capture &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

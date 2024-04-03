@@ -2,6 +2,7 @@
 
 namespace Payum\Paypal\Rest\Action;
 
+use ArrayAccess;
 use PayPal\Api\Payment;
 use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
@@ -20,38 +21,36 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @var GetStatusInterface $request
+     * @var GetStatusInterface
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var \ArrayAccess|Payment $model */
+        /** @var ArrayAccess|Payment $model */
         $model = $request->getModel();
 
-        $state = $model instanceof \ArrayAccess ? ($model['state'] ?? null) : $model->state;
+        $state = $model instanceof ArrayAccess ? ($model['state'] ?? null) : $model->state;
 
-        if ('approved' == $state) {
+        if ('approved' === $state) {
             $request->markCaptured();
 
             return;
         }
 
-        if ('created' == $state) {
+        if ('created' === $state) {
             $request->markPending();
 
             return;
         }
 
-        if ('cancelled' == $state) {
+        if ('cancelled' === $state) {
             $request->markCanceled();
 
             return;
         }
 
-        if (null == $state) {
+        if (null === $state) {
             $request->markNew();
 
             return;
@@ -60,14 +59,10 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            ($request->getModel() instanceof Payment || $request->getModel() instanceof \ArrayAccess)
+        return $request instanceof GetStatusInterface &&
+            ($request->getModel() instanceof Payment || $request->getModel() instanceof ArrayAccess)
         ;
     }
 }

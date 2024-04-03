@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -7,18 +8,14 @@ use Payum\Core\GatewayInterface;
 interface GatewayRegistryInterface
 {
     /**
-     * @param string $name
-     *
      * @throws InvalidArgumentException if gateway with such name not exist
-     *
-     * @return GatewayInterface
      */
-    public function getGateway($name);
+    public function getGateway(string $name): GatewayInterface;
 
     /**
      * The key must be a gateway name
      *
-     * @return GatewayInterface[]
+     * @return array<string, GatewayInterface>
      */
-    public function getGateways();
+    public function getGateways(): array;
 }

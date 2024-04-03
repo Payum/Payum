@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Offline;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -13,10 +14,7 @@ use Payum\Offline\Action\StatusAction;
 
 class OfflineGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => 'offline',

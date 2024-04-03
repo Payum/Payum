@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
@@ -6,32 +7,28 @@ use Payum\Core\Tests\Mocks\Document\GatewayConfig;
 
 class GatewayConfigTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
+
+        $this->assertSame([$gatewayConfig], $this->dm->getRepository(GatewayConfig::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedGatewayConfig()
+    public function testShouldAllowFindPersistedGatewayConfig(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array());
+        $gatewayConfig->setConfig([]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
@@ -40,7 +37,7 @@ class GatewayConfigTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundGatewayConfig = $this->dm->find(get_class($gatewayConfig), $id);
+        $foundGatewayConfig = $this->dm->find($gatewayConfig::class, $id);
 
         //guard
         $this->assertNotSame($gatewayConfig, $foundGatewayConfig);
@@ -48,26 +45,23 @@ class GatewayConfigTest extends MongoTest
         $this->assertEquals($gatewayConfig->getId(), $foundGatewayConfig->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreConfigAsAssocArray()
+    public function testShouldStoreConfigAsAssocArray(): void
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setGatewayName('fooGateway');
         $gatewayConfig->setFactoryName('fooGatewayFactory');
-        $gatewayConfig->setConfig(array(
+        $gatewayConfig->setConfig([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $this->dm->persist($gatewayConfig);
         $this->dm->flush();
         $this->dm->refresh($gatewayConfig);
 
-        $this->assertEquals(array(
+        $this->assertSame([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ), $gatewayConfig->getConfig());
+        ], $gatewayConfig->getConfig());
     }
 }

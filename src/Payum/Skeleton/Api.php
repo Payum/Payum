@@ -1,66 +1,68 @@
 <?php
+
 namespace Payum\Skeleton;
 
-use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;
-use Payum\Core\HttpClientInterface;
+use Payum\Core\Exception\InvalidArgumentException;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use function http_build_query;
 
 class Api
 {
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+
+    protected RequestFactoryInterface $requestFactory;
+
+    protected StreamFactoryInterface $streamFactory;
 
     /**
-     * @var MessageFactory
+     * @var array<string, mixed>
      */
-    protected $messageFactory;
+    protected array $options = [];
 
     /**
-     * @var array
+     * @param array<string, mixed> $options
+     * @throws InvalidArgumentException if an option is invalid
      */
-    protected $options = [];
-
-    /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
-     */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $this->options = $options;
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
-     * @param array $fields
-     *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @throws ClientExceptionInterface
      */
-    protected function doRequest($method, array $fields)
+    protected function doRequest(string $method, array $fields): ResponseInterface
     {
-        $headers = [];
+        $request = $this->requestFactory
+            ->createRequest($method, $this->getApiEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields)))
+        ;
 
-        $request = $this->messageFactory->createRequest($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
+        $response = $this->client->sendRequest($request);
 
-        $response = $this->client->send($request);
-
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
         return $response;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
-        return $this->options['sandbox'] ? 'http://sandbox.example.com' : 'http://example.com';
+        return $this->options['sandbox'] ? 'https://sandbox.example.com' : 'https://example.com';
     }
 }

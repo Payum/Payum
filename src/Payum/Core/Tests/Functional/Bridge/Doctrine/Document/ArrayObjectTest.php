@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Security\SensitiveValue;
@@ -7,36 +8,38 @@ use Payum\Core\Tests\Mocks\Document\ArrayObject;
 
 class ArrayObjectTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty(): void
     {
-        $this->dm->persist(new ArrayObject());
+        $document = new ArrayObject();
+        $this->dm->persist($document);
         $this->dm->flush();
+
+        $this->assertSame([$document], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = [
+            'bar1',
+            'bar2' => 'theBar2',
+        ];
 
         $this->dm->persist($model);
         $this->dm->flush();
+
+        $this->assertSame([$model], $this->dm->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedArrayobject()
+    public function testShouldAllowFindPersistedArrayobject(): void
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = [
+            'bar1',
+            'bar2' => 'theBar2',
+        ];
 
         $this->dm->persist($model);
         $this->dm->flush();
@@ -45,7 +48,7 @@ class ArrayObjectTest extends MongoTest
 
         $this->dm->clear();
 
-        $foundModel = $this->dm->find(get_class($model), $id);
+        $foundModel = $this->dm->find($model::class, $id);
 
         //guard
         $this->assertNotSame($model, $foundModel);
@@ -53,10 +56,7 @@ class ArrayObjectTest extends MongoTest
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue(): void
     {
         $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');
@@ -66,6 +66,11 @@ class ArrayObjectTest extends MongoTest
 
         $this->dm->refresh($model);
 
-        $this->assertEquals(null, $model['cardNumber']);
+        if (PHP_VERSION_ID >= 70400) {
+            $this->assertEquals(new SensitiveValue(null), $model['cardNumber']);
+            $this->assertNotEquals(new SensitiveValue('theCardNumber'), $model['cardNumber']);
+        } else {
+            $this->assertEquals(null, $model['cardNumber']);
+        }
     }
 }

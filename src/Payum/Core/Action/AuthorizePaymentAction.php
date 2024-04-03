@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -15,15 +16,13 @@ class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        /** @var $payment PaymentInterface */
+        /** @var PaymentInterface $payment */
         $payment = $request->getModel();
 
         $this->gateway->execute($status = new GetHumanStatus($payment));
@@ -43,13 +42,9 @@ class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
+        return $request instanceof Authorize &&
             $request->getModel() instanceof PaymentInterface
         ;
     }

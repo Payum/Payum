@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ class TestModel extends BaseTestModel
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer $id
+     * @var integer
      */
     protected $id;
 

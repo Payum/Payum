@@ -1,21 +1,23 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Defuse\Security;
 
 use Defuse\Crypto\Key;
 use Payum\Core\Bridge\Defuse\Security\DefuseCypher;
 use Payum\Core\Security\CypherInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class DefuseCypherTest extends TestCase
 {
-    public function testShouldImplementCypherInterface()
+    public function testShouldImplementCypherInterface(): void
     {
-        $rc = new \ReflectionClass(DefuseCypher::class);
+        $rc = new ReflectionClass(DefuseCypher::class);
 
         $this->assertTrue($rc->implementsInterface(CypherInterface::class));
     }
 
-    public function testShouldEncryptAndDecryptValue()
+    public function testShouldEncryptAndDecryptValue(): void
     {
         $secret = Key::createNewRandomKey()->saveToAsciiSafeString();
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Request;
 
 use Payum\Core\Security\TokenInterface;
@@ -20,15 +21,11 @@ class Convert
      */
     protected $to;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token = null;
 
     /**
      * @param mixed $source
      * @param string $to
-     * @param TokenInterface $token
      */
     public function __construct($source, $to, TokenInterface $token = null)
     {
@@ -72,7 +69,7 @@ class Convert
     /**
      * @param mixed $result
      */
-    public function setResult($result)
+    public function setResult($result): void
     {
         $this->result = $result;
     }

@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -18,17 +20,14 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateRecurringPaymentProfile */
+        /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array(
+        $model->validateNotEmpty([
             'TOKEN',
             'PROFILESTARTDATE',
             'DESC',
@@ -36,21 +35,17 @@ class CreateRecurringPaymentProfileAction implements ActionInterface, ApiAwareIn
             'BILLINGFREQUENCY',
             'AMT',
             'CURRENCYCODE',
-        ));
+        ]);
 
         $model->replace(
             $this->api->createRecurringPaymentsProfile((array) $model)
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateRecurringPaymentProfile &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreateRecurringPaymentProfile &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

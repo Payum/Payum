@@ -1,71 +1,62 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
-use Payum\Klarna\Checkout\Config;
+use Klarna_Checkout_ConnectorInterface;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class BaseApiAwareActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $rc = new ReflectionClass(BaseApiAwareAction::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
-        $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $this->expectException(UnsupportedApiException::class);
+        $action = $this->getMockForAbstractClass(BaseApiAwareAction::class);
 
-        $config = new Config();
+        $action->setApi(new stdClass());
+    }
 
-        $action->setApi($config);
+    protected function getActionClass(): string
+    {
+        return self::class;
+    }
 
-        $this->assertAttributeSame($config, 'config', $action);
+    protected function getApiClass(): void
+    {
     }
 
     /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
-        $action = $this->getMockForAbstractClass('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
-
-        $action->setApi(new \stdClass());
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_ConnectorInterface
+     * @return MockObject|Klarna_Checkout_ConnectorInterface
      */
     protected function createConnectorMock()
     {
-        return $this->createMock('Klarna_Checkout_ConnectorInterface');
+        return $this->createMock(Klarna_Checkout_ConnectorInterface::class);
     }
 }

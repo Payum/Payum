@@ -1,23 +1,31 @@
 <?php
+
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayInterface;
+use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template T of object
+ * @implements RegistryInterface<T>
+ */
 class FallbackRegistry implements RegistryInterface
 {
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<T>
      */
-    private $registry;
+    private RegistryInterface $registry;
 
     /**
-     * @var RegistryInterface
+     * @var RegistryInterface<T>
      */
-    private $fallbackRegistry;
+    private RegistryInterface $fallbackRegistry;
 
     /**
-     * @param RegistryInterface $registry
-     * @param RegistryInterface $fallbackRegistry
+     * @param RegistryInterface<T> $registry
+     * @param RegistryInterface<T> $fallbackRegistry
      */
     public function __construct(RegistryInterface $registry, RegistryInterface $fallbackRegistry)
     {
@@ -25,62 +33,54 @@ class FallbackRegistry implements RegistryInterface
         $this->fallbackRegistry = $fallbackRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGatewayFactory($name)
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         try {
             return $this->registry->getGatewayFactory($name);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getGatewayFactory($name);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * @return GatewayFactoryInterface[]
      */
-    public function getGatewayFactories()
+    public function getGatewayFactories(): array
     {
         return array_replace($this->fallbackRegistry->getGatewayFactories(), $this->registry->getGatewayFactories());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         try {
             return $this->registry->getGateway($name);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getGateway($name);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGateways()
+    public function getGateways(): array
     {
         return array_replace($this->fallbackRegistry->getGateways(), $this->registry->getGateways());
     }
 
     /**
-     * {@inheritDoc}
+     * @param class-string|T $class
+     * @return StorageInterface<T>
      */
-    public function getStorage($class)
+    public function getStorage(string | object $class): StorageInterface
     {
         try {
             return $this->registry->getStorage($class);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             return $this->fallbackRegistry->getStorage($class);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * @return array<class-string, T>>
      */
-    public function getStorages()
+    public function getStorages(): array
     {
         return array_replace($this->fallbackRegistry->getStorages(), $this->registry->getStorages());
     }

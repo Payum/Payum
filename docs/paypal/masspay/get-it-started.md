@@ -1,30 +1,16 @@
-<h2 align="center">Supporting Payum</h2>
+# Get Started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+Mass Payments lets you send multiple payments in one batch. It's a fast and convenient way to send commissions, rebates, rewards, and general payments. You must have explicit permission from PayPal to use Mass Payments. You submit the payment information to PayPal in the form of a payment file. PayPal processes each payment and notifies you when it is complete.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Installation
 
----
-
-# Paypal Masspay. Get it started.
-
-Mass Payments lets you send multiple payments in one batch.
-It's a fast and convenient way to send commissions, rebates, rewards, and general payments.
-You must have explicit permission from PayPal to use Mass Payments.
-You submit the payment information to PayPal in the form of a payment file.
-PayPal processes each payment and notifies you when it is complete.
-
-## Installation
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/paypal-masspay-nvp php-http/guzzle6-adapter
+php composer.phar require payum/paypal-masspay-nvp php-http/guzzle7-adapter
 ```
 
-## config.php
+### config.php
 
 ```php
 <?php
@@ -35,8 +21,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
     ->addGateway('aGateway', [
         'factory' => 'paypal_masspay',
         'username'  => 'change it',
@@ -49,7 +33,7 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-## prepare.php
+### prepare.php
 
 Here we send 1$ to recipient@example.com user:
 
@@ -77,9 +61,15 @@ $payoutToken = $payum->getTokenFactory()->createPayoutToken($gatewayName, $payou
 header("Location: ".$payoutToken->getTargetUrl());
 ```
 
-## Links
+### Links
 
-* https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayOverview/
-* https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayUsingAPI/
+* [https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayOverview/](https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayOverview/)
+* [https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayUsingAPI/](https://developer.paypal.com/docs/classic/mass-pay/integration-guide/MassPayUsingAPI/)
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

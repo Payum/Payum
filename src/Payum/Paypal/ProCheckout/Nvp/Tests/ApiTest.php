@@ -1,249 +1,210 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Payum\Core\HttpClientInterface;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Strategy\MockClientStrategy;
+use Payum\Core\Exception\LogicException;
 use Payum\Paypal\ProCheckout\Nvp\Api;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
-class ApiTest extends \PHPUnit\Framework\TestCase
+class ApiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
+    protected function setUp(): void
     {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'tender' => 'aTender'
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
+        Psr17FactoryDiscovery::prependStrategy(MockClientStrategy::class);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
-        new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
-        new Api(array(
+        new Api([
             'username' => 'aUsername',
             'password' => 'aPassword',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender',
-            'sandbox' => 'notABool'
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
+            'sandbox' => 'notABool',
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoSaleCall()
+    public function testShouldAddTRXTYPEOnDoSaleCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'aUsername',
             'password' => 'aPassword',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
-            'tender' => 'aTender'
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'tender' => 'aTender',
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->doSale(array());
+        $result = $api->doSale([]);
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_SALE, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoCreditCall()
+    public function testShouldAddTRXTYPEOnDoCreditCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'aUsername',
             'password' => 'aPassword',
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
-            'tender' => 'aTender'
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'tender' => 'aTender',
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->doCredit(array());
+        $result = $api->doCredit([]);
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoSaleCall()
+    public function testShouldAddAuthorizeFieldsOnDoSaleCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'theUsername',
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
-            'tender' => 'theTender'
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'tender' => 'theTender',
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->doSale(array());
+        $result = $api->doSale([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoCreditCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreditCall(): void
     {
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'theUsername',
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
-            'tender' => 'theTender'
-        ), $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+            'tender' => 'theTender',
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $result = $api->doCredit(array());
+        $result = $api->doCredit([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse(): void
     {
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://payflowpro.paypal.com/', $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://payflowpro.paypal.com/', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }))
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
+            })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'theUsername',
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => false,
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->doCredit(array());
+        $api->doCredit([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue(): void
     {
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://pilot-payflowpro.paypal.com/', $request->getUri());
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://pilot-payflowpro.paypal.com/', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
-            }))
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
+            })
         ;
 
-        $api = new Api(array(
+        $api = new Api([
             'username' => 'theUsername',
             'password' => 'thePassword',
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => true,
-        ), $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        $api->doCredit(array());
+        $api->doCredit([]);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock('Payum\Core\HttpClientInterface');
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return \Http\Message\MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
-     */
-    protected function createSuccessHttpClientStub()
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    protected function createSuccessHttpClientStub(): MockObject | ClientInterface
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
-                return new Response(200, [], $request->getBody());
-            }))
-        ;
+            ->method('sendRequest')
+            ->willReturnCallback(static fn (RequestInterface $request): ResponseInterface => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody()));
 
         return $clientMock;
     }

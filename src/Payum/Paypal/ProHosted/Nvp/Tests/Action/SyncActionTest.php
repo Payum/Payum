@@ -1,134 +1,113 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Paypal\ProHosted\Nvp\Action\SyncAction;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class SyncActionTest extends \PHPUnit\Framework\TestCase
+class SyncActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSet(): void
     {
         $action = new SyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'AMT' => 12,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasPaymentRequestAmountSetToZero(): void
     {
         $action = new SyncAction();
 
-        $paymentDetails = array(
+        $paymentDetails = [
             'AMT' => 0,
-        );
+        ];
 
         $request = new Sync($paymentDetails);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel()
+    public function testShouldRequestGetTransactionDetailsAndUpdateModelIfTransactionIdSetInModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails'))
-            ->will($this->returnCallback(function (GetTransactionDetails $request) {
+            ->with($this->isInstanceOf(GetTransactionDetails::class))
+            ->willReturnCallback(function (GetTransactionDetails $request): void {
                 $model = $request->getModel();
                 $model['foo'] = 'fooVal';
                 $model['AMT'] = 33;
-            }))
+            })
         ;
 
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $details = new \ArrayObject(array(
+        $details = new ArrayObject([
             'AMT' => 11,
             'txn_id' => 'aTxn_id',
-        ));
+        ]);
 
         $action->execute($sync = new Sync($details));
 
         $this->assertArrayHasKey('foo', (array) $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
 
         $this->assertArrayHasKey('AMT', (array) $details);
-        $this->assertEquals(33, $details['AMT']);
+        $this->assertSame(33, $details['AMT']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

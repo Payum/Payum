@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Psr\Log;
 
 use Payum\Core\Debug\Humanify;
@@ -15,33 +16,21 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
      */
     protected $logger;
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         $this->logger->debug(sprintf(
             '[Payum] %d# %s::execute(%s)',
@@ -51,20 +40,19 @@ class LogExecutedActionsExtension implements ExtensionInterface, LoggerAwareInte
         ));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         if ($context->getReply()) {
-            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws reply %s',
+            $this->logger->debug(sprintf(
+                '[Payum] %d# %s::execute(%s) throws reply %s',
                 count($context->getPrevious()) + 1,
                 Humanify::value($context->getAction()),
                 Humanify::request($context->getRequest()),
                 Humanify::request($context->getReply())
             ));
         } elseif ($context->getException()) {
-            $this->logger->debug(sprintf('[Payum] %d# %s::execute(%s) throws exception %s',
+            $this->logger->debug(sprintf(
+                '[Payum] %d# %s::execute(%s) throws exception %s',
                 count($context->getPrevious()) + 1,
                 $context->getAction() ? Humanify::value($context->getAction()) : 'Gateway',
                 Humanify::request($context->getRequest()),

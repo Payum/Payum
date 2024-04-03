@@ -1,14 +1,19 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\ConfirmOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class ConfirmOrderActionTest extends GenericActionTest
 {
@@ -21,52 +26,46 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->action = new ConfirmOrderAction('theConfirmOrderTemplate');
     }
 
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testShouldBeSubClassOfGatewayAwareAction(): void
     {
-        //overwrite
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGatewayAwareAction()
-    {
-        $rc = new \ReflectionClass(ConfirmOrderAction::class);
+        $rc = new ReflectionClass(ConfirmOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
+    public function testShouldRenderConfirmOrderTemplateIfHttpRequestNotPost(): void
     {
-        $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
-
+        $firstModel = new stdClass();
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->method = 'GET';
-            })
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
-                $this->assertSame($firstModel, $request->getParameters()['firstModel']);
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request): void {
+                    $request->method = 'GET';
+                }),
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model): void {
+                    $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
+                    $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
-                $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
+                    $this->assertSame([
+                        'foo' => 'fooVal',
+                        'bar' => 'barVal',
+                    ], (array) $request->getParameters()['model']);
 
-                $request->setResult('thePage');
-            })
+                    $request->setResult('thePage');
+                })
+            )
         ;
 
         $request = new ConfirmOrder($firstModel);
@@ -77,8 +76,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }
@@ -86,37 +85,39 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
+    public function testShouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm(): void
     {
-        $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
-
+        $firstModel = new stdClass();
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
-                $request->method = 'POST';
-            })
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
-                $this->assertSame($firstModel, $request->getParameters()['firstModel']);
+            ->withConsecutive(
+                [$this->isInstanceOf(GetHttpRequest::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (GetHttpRequest $request): void {
+                    $request->method = 'POST';
+                }),
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model): void {
+                    $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
+                    $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
-                $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
-                $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getParameters()['model']);
+                    $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
+                    $this->assertSame([
+                        'foo' => 'fooVal',
+                        'bar' => 'barVal',
+                    ], (array) $request->getParameters()['model']);
 
-                $request->setResult('thePage');
-            })
+                    $request->setResult('thePage');
+                })
+            )
         ;
 
         $request = new ConfirmOrder($firstModel);
@@ -127,8 +128,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }
@@ -136,23 +137,24 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldGiveControllBackIfHttpRequestPostWithConfirm()
+    public function testShouldGiveControllBackIfHttpRequestPostWithConfirm(): void
     {
-        $firstModel = new \stdClass();
-        $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
-
+        $firstModel = new stdClass();
+        $model = new \ArrayObject([
+            'foo' => 'fooVal',
+            'bar' => 'barVal',
+        ]);
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->willReturnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->method = 'POST';
-                $request->request = ['confirm' => 1];
+                $request->request = [
+                    'confirm' => 1,
+                ];
             })
         ;
 
@@ -165,10 +167,10 @@ class ConfirmOrderActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

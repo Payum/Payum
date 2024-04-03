@@ -1,25 +1,18 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Invoice\Request\Api\Update;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\Update');
+        $rc = new ReflectionClass(Update::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new Update(array());
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

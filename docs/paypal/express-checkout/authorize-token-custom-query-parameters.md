@@ -1,21 +1,8 @@
-<h2 align="center">Supporting Payum</h2>
+# Authorize token custom query parameters
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+It often required to customize authorize token ulr parameters. For example you may want a mobile version of paypal pages. In this case you would like to change `cmd` from `_express-checkout` to `_express-checkout-mobile`. Or to change "Continue" button to "Pay" on the last paypal's page. To do so you have to send an extra query parameter `useraction=commit`. So here we would describe ways you can use this.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Paypal Express Checkout. Authorize token custom query parameters.
-
-It often required to customize authorize token ulr parameters.
-For example you may want a mobile version of paypal pages.
-In this case you would like to change `cmd` from `_express-checkout` to `_express-checkout-mobile`.
-Or to change "Continue" button to "Pay" on the last paypal's page. To do so you have to send an extra query parameter `useraction=commit`.
-So here we would describe ways you can use this.
-
-## Static usage.
+### Static usage.
 
 You can pass these query parameters as api options:
 
@@ -23,35 +10,43 @@ You can pass these query parameters as api options:
 <?php
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamInterfacel
 
-/** @var \Payum\Core\HttpClientInterface $client */ 
-/** @var \Http\Message\MessageFactory $messageFactory */
+/** @var ClientInterface $client */ 
+/** @var RequestInterface $requestInterface */
+/** @var StreamInterface $streamInterface */
 
 $api = new Api([
     // ...
     'useraction' => Api::USERACTION_COMMIT,
     'cmd' => Api::CMD_EXPRESS_CHECKOUT_MOBILE,
-], $client, $messageFactory);
+], $client, $requestInterface, $streamInterface);
 
 echo $api->getAuthorizeTokenUrl('aToken');
 // https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout-mobile&useraction=commit&token=aToken
 ```
 
-## Runtime usage.
+### Runtime usage.
 
-You could also pass these parameters as a second argument of `getAuthorizeTokenUrl` method.
-These parameters will overwrite values passed as options.
-You could also use second variant to pass any other parameters.
+You could also pass these parameters as a second argument of `getAuthorizeTokenUrl` method. These parameters will overwrite values passed as options. You could also use second variant to pass any other parameters.
 
 ```php
 <?php
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamInterfacel
 
-/** @var \Payum\Core\HttpClientInterface $client */ 
-/** @var \Http\Message\MessageFactory $messageFactory */
+/** @var ClientInterface $client */ 
+/** @var RequestInterface $requestInterface */
+/** @var StreamInterface $streamInterface */
 
-$api = new Api($options = [], $client, $messageFactory);
+$api = new Api($options = [], $client, $requestInterface, $streamInterface);
 
 echo $api->getAuthorizeTokenUrl('aToken', array(
     'useraction' => Api::USERACTION_COMMIT,
@@ -77,4 +72,10 @@ $model['AUTHORIZE_TOKEN_USERACTION'] = Api::USERACTION_COMMIT;
 $gateway->execute(new Capture($model));
 ```
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

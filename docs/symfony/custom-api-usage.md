@@ -1,22 +1,10 @@
-<h2 align="center">Supporting Payum</h2>
+# Custom API usage
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+Sometime you asked to store payment gateway credentials to database. If this is your case read [Configure payment in backend](configure-payment-in-backend.md) chapter. Here we would describe how you can add an api defined as service.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Api factory
 
----
-
-# Payum Bundle. Custom api usage
-
-Sometime you asked to store payment gateway credentials to database. 
-If this is your case read [Configure payment in backend](configure-payment-in-backend.md) chapter.
-Here we would describe how you can add an api defined as service.
-
-## Api factory
-
-First, we have to create an api factory.
-The factory would create the desired api using database or what ever else you want.
+First, we have to create an api factory. The factory would create the desired api using database or what ever else you want.
 
 ```php
 <?php
@@ -56,9 +44,7 @@ class Factory
 }
 ```
 
-As you could see we use container to build paypal api.
-Feel free to change it to suit your needs.
-Now we have to create an api service which is created by the factory one:
+As you could see we use container to build paypal api. Feel free to change it to suit your needs. Now we have to create an api service which is created by the factory one:
 
 ```yaml
 # src/Acme/PaymentBundle/Resources/config/services.yml
@@ -98,4 +84,10 @@ payum:
 
 That's it!
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

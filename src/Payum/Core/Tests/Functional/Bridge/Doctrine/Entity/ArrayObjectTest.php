@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Security\SensitiveValue;
@@ -7,36 +8,38 @@ use Payum\Core\Tests\Mocks\Entity\ArrayObject;
 
 class ArrayObjectTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersistEmpty()
+    public function testShouldAllowPersistEmpty(): void
     {
-        $this->em->persist(new ArrayObject());
+        $entity = new ArrayObject();
+        $this->em->persist($entity);
         $this->em->flush();
+
+        $this->assertSame([$entity], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersistWithSomeFieldsSet()
+    public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = [
+            'bar1',
+            'bar2' => 'theBar2',
+        ];
 
         $this->em->persist($model);
         $this->em->flush();
+
+        $this->assertSame([$model], $this->em->getRepository(ArrayObject::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedArrayobject()
+    public function testShouldAllowFindPersistedArrayobject(): void
     {
         $model = new ArrayObject();
         $model['foo'] = 'theFoo';
-        $model['bar'] = array('bar1', 'bar2' => 'theBar2');
+        $model['bar'] = [
+            'bar1',
+            'bar2' => 'theBar2',
+        ];
 
         $this->em->persist($model);
         $this->em->flush();
@@ -45,7 +48,7 @@ class ArrayObjectTest extends OrmTest
 
         $this->em->clear();
 
-        $foundModel = $this->em->find(get_class($model), $id);
+        $foundModel = $this->em->find($model::class, $id);
 
         //guard
         $this->assertNotSame($model, $foundModel);
@@ -53,10 +56,7 @@ class ArrayObjectTest extends OrmTest
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotStoreSensitiveValue()
+    public function testShouldNotStoreSensitiveValue(): void
     {
         $model = new ArrayObject();
         $model['cardNumber'] = new SensitiveValue('theCardNumber');

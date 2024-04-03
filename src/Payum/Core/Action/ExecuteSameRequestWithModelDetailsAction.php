@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -15,11 +16,9 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param ModelAggregateInterface|ModelAwareInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -41,13 +40,9 @@ class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, Gatew
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof ModelAggregateInterface &&
+        return $request instanceof ModelAggregateInterface &&
             $request instanceof ModelAwareInterface &&
             $request->getModel() instanceof DetailsAggregateInterface
         ;

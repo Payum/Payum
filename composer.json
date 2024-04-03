@@ -1,7 +1,7 @@
 {
     "name": "payum/payum",
     "type": "library",
-    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Zend, Yii, Silex). Check more visiting site.",
+    "description": "One million downloads of Payum already! Payum offers everything you need to work with payments. Friendly for all PHP frameworks (Symfony, Laravel, Laminas, Yii, Silex). Check more visiting site.",
     "keywords": [
         "payment",
         "recurring payment",
@@ -39,14 +39,14 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
-        "alcohol/iso4217": "^3.1 || ^4.0",
-        "payum/iso4217": "~1.0",
+        "php": "^8.0",
+        "alcohol/iso4217": "^4.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
         "league/uri": "^6.4",
         "league/uri-components": "^2.2",
-        "twig/twig": "^1.34 || ^2.4 || ^3.0"
+        "twig/twig": "^2.4 || ^3.0",
+        "php-http/discovery": "^1.19"
     },
     "require-dev": {
         "ext-curl": "*",
@@ -54,29 +54,36 @@
         "payum/omnipay-v3-bridge": "^1.0",
         "omnipay/dummy": "^3.0",
         "omnipay/common": "^3.0",
+        "doctrine/dbal": "^2.7 || ^3.0",
         "doctrine/orm": "^2.5",
+        "doctrine/annotations": "^1.14.3 || ^2.0.1",
         "doctrine/persistence": "^1.3.3 || ^2.0",
-        "phpunit/phpunit": "^7.5 || ^8.5",
-        "propel/propel1": "~1.7",
+        "phpunit/phpunit": "^9.6.11",
         "psr/log": "~1.0",
-        "zendframework/zend-db": "~2",
-        "symfony/routing": "^4.4 || ^5.0",
-        "symfony/http-kernel": "^4.4 || ^5.0",
+        "laminas/laminas-db": "^2.0",
+        "symfony/cache": "^4.4 || ^5.0 || ^6.0",
+        "symfony/routing": "^4.4 || ^5.0 || ^6.0",
+        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
         "symfony/http-foundation": "^4.4 || ^5.0",
-        "symfony/form": "^4.4 || ^5.0",
-        "symfony/templating": "^4.4 || ^5.0",
-        "symfony/validator": "^4.4 || ^5.0",
-        "symfony/phpunit-bridge": "^4.4 || ^5.0",
-        "symfony/dependency-injection": "^4.4 || ^5.0",
+        "symfony/form": "^4.4 || ^5.0 || ^6.0",
+        "symfony/templating": "^4.4 || ^5.0 || ^6.0",
+        "symfony/validator": "^4.4 || ^5.0 || ^6.0",
+        "symfony/phpunit-bridge": "^5.4 || ^6.0",
+        "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
         "authorizenet/authorizenet": "^1.8.1",
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "~1.0",
         "klarna/checkout": "^1.1 || ^2.0",
-        "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~2.0 || ~3.0",
-        "php-http/guzzle6-adapter": "^1.1.1",
+        "solidworx/klarna-invoice": "0.2.*",
+        "stripe/stripe-php": "^7.0",
+        "php-http/mock-client": "^1.0",
         "defuse/php-encryption": "^2",
-        "ext-soap": "*"
+        "ext-soap": "*",
+        "rector/rector": "^1.0.2",
+        "symplify/easy-coding-standard": "^12.0",
+        "phpstan/phpstan": "^1.10",
+        "symfony/http-client": "^5.4 || ^6.2",
+        "nyholm/psr7": "^1.8"
     },
     "replace": {
         "payum/core": "^1",
@@ -94,17 +101,21 @@
         "payum/sofort": "self.version"
     },
     "conflict": {
-        "league/uri-components": "<1.7.1"
+        "league/uri-components": "<1.7.1",
+        "jms/serializer": "<3.15.0"
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "autoload": {
         "psr-4": { "Payum\\": "src/Payum/" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }

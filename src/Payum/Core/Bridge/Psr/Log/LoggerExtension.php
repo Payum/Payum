@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Psr\Log;
 
 use Payum\Core\Extension\Context;
@@ -19,34 +20,22 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
      */
     protected $nullLogger;
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->nullLogger = new NullLogger();
         $this->logger = $logger ?: $this->nullLogger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         $action = $context->getAction();
         if ($action instanceof LoggerAwareInterface) {
@@ -54,10 +43,7 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $action = $context->getAction();
         if ($action instanceof LoggerAwareInterface) {

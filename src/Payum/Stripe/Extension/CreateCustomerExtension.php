@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Stripe\Extension;
 
+use ArrayAccess;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
@@ -13,18 +15,18 @@ use Payum\Stripe\Request\Api\ObtainToken;
 class CreateCustomerExtension implements ExtensionInterface
 {
     /**
-     * @var Context $context
+     * @var Context
      */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         /** @var Capture $request */
         $request = $context->getRequest();
-        if (false == $request instanceof Capture) {
+        if (! $request instanceof Capture) {
             return;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return;
         }
 
@@ -32,46 +34,43 @@ class CreateCustomerExtension implements ExtensionInterface
     }
 
     /**
-     * @var Context $context
+     * @var Context
      */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
     /**
-     * @var Context $context
+     * @var Context
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
+        $model = null;
         /** @var Capture $request */
         $request = $context->getRequest();
-        if (false == $request instanceof ObtainToken) {
+        if (! $request instanceof ObtainToken) {
             return;
         }
 
         $model = $request->getModel();
-        if (false == $model instanceof \ArrayAccess) {
+        if (! $model instanceof ArrayAccess) {
             return;
         }
 
         $this->createCustomer($context->getGateway(), ArrayObject::ensureArrayObject($model));
     }
 
-    /**
-     * @param GatewayInterface $gateway
-     * @param ArrayObject $model
-     */
-    protected function createCustomer(GatewayInterface $gateway, ArrayObject $model)
+    protected function createCustomer(GatewayInterface $gateway, ArrayObject $model): void
     {
         if ($model['customer']) {
             return;
         }
-        if (false == ($model['card'] && is_string($model['card']))) {
+        if (! ($model['card'] && is_string($model['card']))) {
             return;
         }
 
         $local = $model->getArray('local');
-        if (false == $local['save_card']) {
+        if (! $local['save_card']) {
             return;
         }
 

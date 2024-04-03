@@ -1,119 +1,91 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AutoPayPaymentDetailsStatusAction;
 use Payum\Payex\Api\OrderApi;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class AutoPayPaymentDetailsStatusActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\AutoPayPaymentDetailsStatusAction');
+        $rc = new ReflectionClass(AutoPayPaymentDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AutoPayPaymentDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue()
+    public function testShouldSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertTrue($action->supports(new GetBinaryStatus(array(
+        $this->assertTrue($action->supports(new GetBinaryStatus([
             'autoPay' => true,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPayNotSet(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array())));
+        $this->assertFalse($action->supports(new GetBinaryStatus([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToTrueAndRecurringSetToTrue(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus([
             'autoPay' => true,
             'recurring' => true,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithArrayAsModelIfAutoPaySetToFalse(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(array(
+        $this->assertFalse($action->supports(new GetBinaryStatus([
             'autoPay' => false,
-        ))));
+        ])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotBinaryMaskStatusRequest()
+    public function testShouldNotSupportAnythingNotBinaryMaskStatusRequest(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportBinaryMaskStatusRequestWithNotArrayAccessModel(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfTransactionStatusNotSet()
+    public function testShouldMarkNewIfTransactionStatusNotSet(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -123,18 +95,15 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree()
+    public function testShouldMarkCapturedIfPurchaseOperationAuthorizeAndTransactionStatusThree(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_AUTHORIZE,
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -144,18 +113,15 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero()
+    public function testShouldMarkCapturedIfPurchaseOperationSaleAndTransactionStatusZero(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_SALE,
             'transactionStatus' => OrderApi::TRANSACTIONSTATUS_SALE,
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -165,18 +131,15 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfTransactionStatusNeitherZeroOrThree()
+    public function testShouldMarkFailedIfTransactionStatusNeitherZeroOrThree(): void
     {
         $action = new AutoPayPaymentDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'purchaseOperation' => OrderApi::PURCHASEOPERATION_AUTHORIZATION,
             'transactionStatus' => 'foobarbaz',
             'autoPay' => true,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -187,10 +150,10 @@ class AutoPayPaymentDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Security\Util;
 
 class Mask
@@ -15,12 +16,12 @@ class Mask
         $maskSymbol = $maskSymbol ?: 'X';
         $showLast = max(0, $showLast);
 
-        if (mb_strlen($value) <= ($showLast + 1) * 2 || false == $showLast) {
-            $showRegExpPart = "";
+        if (mb_strlen($value) <= ($showLast + 1) * 2 || ! $showLast) {
+            $showRegExpPart = '';
         } else {
-            $showRegExpPart = "(?!(.){0,$showLast}$)";
+            $showRegExpPart = "(?!(.){0,{$showLast}}$)";
         }
 
-        return preg_replace("/(?!^.?)[^-_\s]$showRegExpPart/u", $maskSymbol, $value);
+        return preg_replace("/(?!^.?)[^-_\s]{$showRegExpPart}/u", $maskSymbol, $value);
     }
 }

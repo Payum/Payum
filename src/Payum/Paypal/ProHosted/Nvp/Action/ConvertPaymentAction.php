@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -15,11 +16,9 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,22 +27,18 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
 
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
 
-        $details                 = ArrayObject::ensureArrayObject($payment->getDetails());
-        $details['INVNUM']       = $payment->getNumber();
-        $details['AMT']          = (float) $payment->getTotalAmount();
+        $details = ArrayObject::ensureArrayObject($payment->getDetails());
+        $details['INVNUM'] = $payment->getNumber();
+        $details['AMT'] = (float) $payment->getTotalAmount();
         $details['CURRENCYCODE'] = $payment->getCurrencyCode();
 
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array';
+            'array' === $request->getTo();
     }
 }

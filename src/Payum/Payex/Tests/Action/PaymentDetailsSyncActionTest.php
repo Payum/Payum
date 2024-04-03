@@ -1,41 +1,35 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\PaymentDetailsSyncAction;
+use Payum\Payex\Request\Api\CheckOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsSyncActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(PaymentDetailsSyncAction::class);
+        $rc = new ReflectionClass(PaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsSyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfTransactionNumberSet(): void
     {
         $action = new PaymentDetailsSyncAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(ArrayAccess::class);
         $array
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('offsetExists')
             ->with('transactionNumber')
             ->willReturn(true)
@@ -44,62 +38,50 @@ class PaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new PaymentDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new PaymentDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass())));
+        $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new PaymentDetailsSyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCheckOrderApiRequest()
+    public function testShouldDoSubExecuteCheckOrderApiRequest(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckOrder'))
+            ->with($this->isInstanceOf(CheckOrder::class))
         ;
 
         $action = new PaymentDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Sync(array(
+        $action->execute(new Sync([
             'transactionNumber' => 'aNum',
-        )));
+        ]));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

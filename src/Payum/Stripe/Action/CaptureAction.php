@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Stripe\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -15,11 +17,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Capture $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -30,26 +30,19 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
         }
 
         if ($model['customer']) {
-        } else {
-            if (false == $model['card']) {
-                $obtainToken = new ObtainToken($request->getToken());
-                $obtainToken->setModel($model);
-
-                $this->gateway->execute($obtainToken);
-            }
+        } elseif (! $model['card']) {
+            $obtainToken = new ObtainToken($request->getToken());
+            $obtainToken->setModel($model);
+            $this->gateway->execute($obtainToken);
         }
 
         $this->gateway->execute(new CreateCharge($model));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Capture &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

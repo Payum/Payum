@@ -1,120 +1,87 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
-use Payum\Payex\Api\AgreementApi;
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Payex\Action\AgreementDetailsStatusAction;
+use Payum\Payex\Api\AgreementApi;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
+class AgreementDetailsStatusActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\AgreementDetailsStatusAction');
+        $rc = new ReflectionClass(AgreementDetailsStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AgreementDetailsStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportStatusRequestWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(ArrayAccess::class);
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->willReturn(false)
+            ->withConsecutive(['agreementRef'], ['orderId'])
+            ->willReturnOnConsecutiveCalls(true, false)
         ;
 
         $this->assertTrue($action->supports(new GetBinaryStatus($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportStatusRequestWithArrayAccessAsModelIfOrderIdAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(ArrayAccess::class);
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
+            ->withConsecutive(['agreementRef'], ['orderId'])
             ->willReturn(true)
         ;
 
         $this->assertFalse($action->supports(new GetBinaryStatus($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStatusRequest()
+    public function testShouldNotSupportAnythingNotStatusRequest(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStatusRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportStatusRequestWithNotArrayAccessModel(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $this->assertFalse($action->supports(new GetBinaryStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new GetBinaryStatus(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AgreementDetailsStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfTransactionStatusNotSet()
+    public function testShouldMarkUnknownIfTransactionStatusNotSet(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
-        ));
+        ]);
 
         //guard
         $status->markCaptured();
@@ -124,17 +91,14 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfAgreementStatusNotVerified()
+    public function testShouldMarkNewIfAgreementStatusNotVerified(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_NOTVERIFIED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -144,17 +108,14 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfAgreementStatusVerified()
+    public function testShouldMarkCapturedIfAgreementStatusVerified(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -164,17 +125,14 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfAgreementStatusDeleted()
+    public function testShouldMarkCanceledIfAgreementStatusDeleted(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_DELETED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -184,17 +142,14 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($status->isCanceled());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeNotOk()
+    public function testShouldMarkFailedIfErrorCodeNotOk(): void
     {
         $action = new AgreementDetailsStatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'agreementRef' => 'aRef',
             'errorCode' => 'not-ok',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -205,10 +160,10 @@ class AgreementDetailsStatusActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

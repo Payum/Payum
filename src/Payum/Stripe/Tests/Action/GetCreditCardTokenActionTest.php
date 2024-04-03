@@ -1,10 +1,12 @@
 <?php
+
 namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetCreditCardToken;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\GetCreditCardTokenAction;
+use ReflectionClass;
 
 class GetCreditCardTokenActionTest extends GenericActionTest
 {
@@ -12,20 +14,14 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
     protected $actionClass = GetCreditCardTokenAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(GetCreditCardTokenAction::class);
+        $rc = new ReflectionClass(GetCreditCardTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfPaymentHasNoCustomerSet()
+    public function testShouldDoNothingIfPaymentHasNoCustomerSet(): void
     {
         $model = [
         ];
@@ -34,13 +30,10 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
         $action->execute($getCreditCardToken = new GetCreditCardToken($model));
 
-        self::assertEmpty($getCreditCardToken->token);
+        $this->assertEmpty($getCreditCardToken->token);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetCustomerIdAsCardToken()
+    public function testShouldSetCustomerIdAsCardToken(): void
     {
         $model = [
             'customer' => 'theToken',
@@ -50,6 +43,6 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
         $action->execute($getCreditCardToken = new GetCreditCardToken($model));
 
-        self::assertEquals('theToken', $getCreditCardToken->token);
+        $this->assertSame('theToken', $getCreditCardToken->token);
     }
 }

@@ -1,88 +1,72 @@
 <?php
+
 namespace Payum\Core\Tests\Reply;
 
+use ArrayObject;
+use Iterator;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
+use Payum\Core\Reply\BaseModelAware;
+use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class BaseModeAwareTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+        $rc = new ReflectionClass(BaseModelAware::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
+        $this->assertTrue($rc->implementsInterface(ReplyInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+        $rc = new ReflectionClass(BaseModelAware::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+        $rc = new ReflectionClass(BaseModelAware::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(ModelAggregateInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfLogicException()
+    public function testShouldBeSubClassOfLogicException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+        $rc = new ReflectionClass(BaseModelAware::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Exception\LogicException'));
+        $this->assertTrue($rc->isSubclassOf(LogicException::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Reply\BaseModelAware');
+        $rc = new ReflectionClass(BaseModelAware::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    public static function provideDifferentPhpTypes(): \Iterator
+    public static function provideDifferentPhpTypes(): Iterator
     {
-        yield 'object' => array(new \stdClass());
-        yield 'int' => array(5);
-        yield 'float' => array(5.5);
-        yield 'string' => array('foo');
-        yield 'boolean' => array(false);
-        yield 'resource' => array(tmpfile());
+        yield 'object' => [new stdClass()];
+        yield 'int' => [5];
+        yield 'float' => [5.5];
+        yield 'string' => ['foo'];
+        yield 'boolean' => [false];
+        yield 'resource' => [tmpfile()];
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function couldBeConstructedWithModelOfAnyType($phpType)
+    public function testShouldAllowSetModelAndGetIt($phpType): void
     {
-        $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
-    }
-
-    /**
-     * @test
-     *
-     * @dataProvider provideDifferentPhpTypes
-     */
-    public function shouldAllowSetModelAndGetIt($phpType)
-    {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
+        $request = new class(123321) extends BaseModelAware {
+        };
 
         $request->setModel($phpType);
 
@@ -90,42 +74,39 @@ class BaseModeAwareTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function shouldAllowGetModelSetInConstructor($phpType)
+    public function testShouldAllowGetModelSetInConstructor($phpType): void
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($phpType));
+        $request = new class($phpType) extends BaseModelAware {
+        };
 
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectInConstructor()
+    public function testShouldConvertArrayToArrayObjectInConstructor(): void
     {
-        $model = array('foo' => 'bar');
+        $model = [
+            'foo' => 'bar',
+        ];
 
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array($model));
+        $request = $this->getMockForAbstractClass(BaseModelAware::class, [$model]);
 
-        $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectSetWithSetter()
+    public function testShouldConvertArrayToArrayObjectSetWithSetter(): void
     {
-        $request = $this->getMockForAbstractClass('Payum\Core\Reply\BaseModelAware', array(123321));
+        $request = $this->getMockForAbstractClass(BaseModelAware::class, [123321]);
 
-        $model = array('foo' => 'bar');
+        $model = [
+            'foo' => 'bar',
+        ];
 
         $request->setModel($model);
 
-        $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 }

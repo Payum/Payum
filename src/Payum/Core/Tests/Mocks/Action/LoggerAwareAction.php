@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -9,29 +10,20 @@ class LoggerAwareAction implements ActionInterface, LoggerAwareInterface
 {
     protected $logger;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
         if ($this->logger) {
             $this->logger->debug('I can log something here');
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return $request == 'a request';
+        return 'a request' === $request;
     }
 }

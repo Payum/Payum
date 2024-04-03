@@ -1,5 +1,27 @@
 # Upgrades
 
+## 2.0.0
+
+* Dropped support for PHP 7.x
+* Twig 1.x is no longer supported
+* `Payum\Core\Action\GetCurrencyAction` does not accept any constructor arguments anymore and uses alcohol/iso4217 by default
+* Support for Propel storage has been removed
+* The `Payum\Core\Bridge\Guzzle\HttpClient` and `Payum\Core\Bridge\Guzzle\HttpClientFactory` classes have been removed
+* The signatures in `src/Payum/Core/Registry/GatewayRegistryInterface.php` has been changed to add strict types.
+  * Any custom class implementing this interface should update their signature. The new signatures are:
+    * `public function getGateway(string $name): GatewayInterface;`
+    * `public function getGateways(): array;`
+* The `Payum\Core\ApiAwareInterface` and `Payum\Core\ApiAwareTrait` has been deprecated. Inject the required API in the action's constructor instead.
+* The `payum.api` config has been deprecated.
+* The HttpClient has been replaced with a PSR-18 HTTP Client
+  * The `httplug.message_factory` config option is deprecated. Use `payum.http_message_factory` instead
+  * The `httplug.stream_factory` config option is deprecated. Use `payum.http_stream_factory` instead
+  * The `httplug.client` is deprecated. Use `payum.http_client` instead
+  * The `Payum\Core\Bridge\Httplug\HttplugClient::send` method is deprecated and will be removed in 3.0. Use `Payum\Core\Bridge\Httplug\HttplugClient::sendRequest` instead
+  * The `Payum\Core\Bridge\Httplug\HttplugClient` is deprecated and will be removed in 3.0. Use PSR-18 HTTP Client instead
+  * The `payum.http_client` config option will return an instance of `Psr\Http\Client\ClientInterface` in a future version.
+    * Change all type-hints from `Payum\Core\HttpClientInterface` or `Payum\Core\Bridge\Httplug\HttplugClient` to `Psr\Http\Client\ClientInterface`
+
 ## 1.5.0
 
 * Dropped PHP 5.x support

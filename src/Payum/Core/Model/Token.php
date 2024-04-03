@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Model;
 
 use Payum\Core\Security\TokenInterface;
@@ -38,8 +39,6 @@ class Token implements TokenInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Identity
      */
     public function getDetails()
@@ -47,74 +46,47 @@ class Token implements TokenInterface
         return $this->details;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         $this->details = $details;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getHash()
     {
         return $this->hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setHash($hash)
+    public function setHash($hash): void
     {
         $this->hash = $hash;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTargetUrl()
     {
         return $this->targetUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setTargetUrl($targetUrl)
+    public function setTargetUrl($targetUrl): void
     {
         $this->targetUrl = $targetUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAfterUrl()
     {
         return $this->afterUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setAfterUrl($afterUrl)
+    public function setAfterUrl($afterUrl): void
     {
         $this->afterUrl = $afterUrl;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGatewayName()
     {
         return $this->gatewayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setGatewayName($gatewayName)
+    public function setGatewayName($gatewayName): void
     {
         $this->gatewayName = $gatewayName;
     }

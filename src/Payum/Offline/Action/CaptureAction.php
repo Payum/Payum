@@ -1,20 +1,19 @@
 <?php
+
 namespace Payum\Offline\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Offline\Constants;
 use Payum\Core\Request\Capture;
+use Payum\Offline\Constants;
 
 class CaptureAction implements ActionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request Capture */
+        /** @var Capture $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -26,14 +25,10 @@ class CaptureAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Capture &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

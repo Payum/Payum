@@ -2,27 +2,19 @@
 
 namespace Payum\Paypal\Rest\Tests\Action;
 
+use ArrayObject;
 use PayPal\Api\Payment as PaypalPayment;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Rest\ApiContext;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Request\Capture;
 use Payum\Paypal\Rest\Action\CaptureAction;
 use Payum\Paypal\Rest\Model\PaymentDetails;
-use Payum\Core\Request\Capture;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
-class CaptureActionTest extends \PHPUnit\Framework\TestCase
+class CaptureActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithPaymentSdkModel()
+    public function testShouldSupportCaptureWithPaymentSdkModel(): void
     {
         $action = new CaptureAction();
 
@@ -33,89 +25,56 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayObjectModel()
+    public function testShouldSupportCaptureWithArrayObjectModel(): void
     {
         $action = new CaptureAction();
 
-        $model = new \ArrayObject();
+        $model = new ArrayObject();
 
         $request = new Capture($model);
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCapturePaymentSdkModel()
+    public function testShouldNotSupportCapturePaymentSdkModel(): void
     {
         $action = new CaptureAction();
 
-        $request = new Capture(new \stdClass());
+        $request = new Capture(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture(): void
     {
         $action = new CaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCapture()
+    public function testShouldSupportCapture(): void
     {
         $action = new CaptureAction();
 
         $request = new Capture($this->createMock(PaypalPayment::class));
 
         $this->assertTrue($action->supports($request));
-        $this->assertTrue($action->supports(new Capture(new \ArrayObject)));
+        $this->assertTrue($action->supports(new Capture(new ArrayObject())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportApiContext()
+    public function testThrowIfNotSupportedApiContext(): void
     {
+        $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();
 
-        /** @var OAuthTokenCredential $tokenMock */
-        $tokenMock = $this->createMock(OAuthTokenCredential::class, [], [], '', false);
-
-        $apiContext = new ApiContext($tokenMock);
-
-        $action->setApi($apiContext);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedApiContext()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
-        $action = new CaptureAction();
-
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 }

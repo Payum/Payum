@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -15,16 +17,13 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request Cancel */
+        /** @var Cancel $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        $model->validateNotEmpty(array('PROFILEID', 'BILLINGPERIOD'));
+        $model->validateNotEmpty(['PROFILEID', 'BILLINGPERIOD']);
 
         $cancelDetails = new ArrayObject([
             'PROFILEID' => $model['PROFILEID'],
@@ -35,12 +34,9 @@ class CancelRecurringPaymentsProfileAction implements ActionInterface, GatewayAw
         $this->gateway->execute(new Sync($request->getModel()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        if (false == ($request instanceof Cancel && $request->getModel() instanceof \ArrayAccess)) {
+        if (! ($request instanceof Cancel && $request->getModel() instanceof ArrayAccess)) {
             return false;
         }
 

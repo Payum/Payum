@@ -1,26 +1,18 @@
 <?php
+
 namespace Payum\Stripe\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
 use Payum\Stripe\Request\Api\CreateCustomer;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class CreateCustomerTest extends \PHPUnit\Framework\TestCase
+class CreateCustomerTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        $rc = new \ReflectionClass(CreateCustomer::class);
+        $rc = new ReflectionClass(CreateCustomer::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsFirstArgument()
-    {
-        new CreateCustomer($model = []);
     }
 }

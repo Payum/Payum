@@ -2,8 +2,10 @@
 /**
  * @author Marc Pantel <pantel.m@gmail.com>
  */
+
 namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 
+use DateTime;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -14,28 +16,25 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class CreditCardDateValidator extends ConstraintValidator
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (null === $value) {
             return;
         }
 
-        if (!($value instanceof \DateTime)) {
+        if (! ($value instanceof DateTime)) {
             if (method_exists($this->context, 'buildViolation')) {
-                $this->context->buildViolation($constraint->invalidMessage, array(
-                             '{{ value }}' => $value,
-                         ))
-                     ->addViolation();
+                $this->context->buildViolation($constraint->invalidMessage, [
+                    '{{ value }}' => $value,
+                ])
+                    ->addViolation();
 
                 return;
             }
 
-            $this->context->addViolationAt('expireAt', $constraint->invalidMessage, array(
+            $this->context->addViolationAt('expireAt', $constraint->invalidMessage, [
                 '{{ value }}' => $value,
-            ));
+            ]);
         }
 
         /**

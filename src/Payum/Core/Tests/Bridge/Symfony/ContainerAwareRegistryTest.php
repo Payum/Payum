@@ -1,99 +1,79 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\ContainerAwareRegistry;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Registry\AbstractRegistry;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class ContainerAwareRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractRegistry()
+    public function testShouldBeSubClassOfAbstractRegistry(): void
     {
-        $rc = new \ReflectionClass(ContainerAwareRegistry::class);
+        $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface(): void
     {
-        $rc = new \ReflectionClass(ContainerAwareRegistry::class);
+        $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithGatewaysStoragesAndTheirDefaultNames()
+    public function testShouldReturnGatewaySetToContainer(): void
     {
-        $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
-        $storages = array('barName' => array('stdClass' => 'barStorage'));
+        $gateways = [
+            'fooGateway' => 'fooGatewayServiceId',
+        ];
+        $storages = [];
 
-        new ContainerAwareRegistry($gateways, $storages);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldReturnGatewaySetToContainer()
-    {
-        $gateways = array('fooGateway' => 'fooGatewayServiceId');
-        $storages = array();
-
-        $container = new Container;
+        $container = new Container();
         $container->set('fooGatewayServiceId', $this->createMock(GatewayInterface::class));
 
         $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
-        
+
         $this->assertSame(
             $container->get('fooGatewayServiceId'),
             $registry->getGateway('fooGateway')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnStorageSetToContainer()
+    public function testShouldReturnStorageSetToContainer(): void
     {
-        $gateways = array();
-        $storages = array(
-            'stdClass' =>  'fooStorageServiceId'
-        );
+        $gateways = [];
+        $storages = [
+            stdClass::class => 'fooStorageServiceId',
+        ];
 
-        $container = new Container;
+        $container = new Container();
         $container->set('fooStorageServiceId', $this->createMock(StorageInterface::class));
 
         $registry = new ContainerAwareRegistry($gateways, $storages);
         $registry->setContainer($container);
 
-        $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage('stdClass'));
+        $this->assertSame($container->get('fooStorageServiceId'), $registry->getStorage(stdClass::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnGatewayFactorySetToContainer()
+    public function testShouldReturnGatewayFactorySetToContainer(): void
     {
-        $container = new Container;
-        $container->set('fooFactoryServiceId', $this->createMock(StorageInterface::class));
+        $container = new Container();
+        $container->set(GatewayFactoryInterface::class, $this->createMock(GatewayFactoryInterface::class));
 
-        $registry = new ContainerAwareRegistry(array(), array(), array(
-            'fooName' => 'fooFactoryServiceId',
-        ));
+        $registry = new ContainerAwareRegistry([], [], [
+            'fooName' => GatewayFactoryInterface::class,
+        ]);
         $registry->setContainer($container);
 
-        $this->assertSame($container->get('fooFactoryServiceId'), $registry->getGatewayFactory('fooName'));
+        $this->assertSame($container->get(GatewayFactoryInterface::class), $registry->getGatewayFactory('fooName'));
     }
 }

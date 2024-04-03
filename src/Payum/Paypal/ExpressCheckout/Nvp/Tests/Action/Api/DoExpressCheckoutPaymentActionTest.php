@@ -1,139 +1,110 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoExpressCheckoutPaymentAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
+class DoExpressCheckoutPaymentActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(DoExpressCheckoutPaymentAction::class);
+        $rc = new ReflectionClass(DoExpressCheckoutPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
-        $rc = new \ReflectionClass(DoExpressCheckoutPaymentAction::class);
+        $rc = new ReflectionClass(DoExpressCheckoutPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoExpressCheckoutPaymentAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoExpressCheckoutPaymentRequestAndArrayAccessAsModel(): void
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new DoExpressCheckoutPayment($this->createMock(ArrayAccess::class))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest()
+    public function testShouldNotSupportAnythingNotDoExpressCheckoutPaymentRequest(): void
     {
         $action = new DoExpressCheckoutPaymentAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new DoExpressCheckoutPaymentAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $action->execute(new DoExpressCheckoutPayment(array()));
+        $action->execute(new DoExpressCheckoutPayment([]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfPayerIdNotSetInModel()
+    public function testThrowIfPayerIdNotSetInModel(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYERID must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfZeroPaymentRequestActionNotSet()
+    public function testThrowIfZeroPaymentRequestActionNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_0_PAYMENTACTION must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfZeroPaymentRequestAmtNotSet()
+    public function testThrowIfZeroPaymentRequestAmtNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('PAYMENTREQUEST_0_AMT must be set.');
         $action = new DoExpressCheckoutPaymentAction();
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoExpressCheckoutMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -141,79 +112,74 @@ class DoExpressCheckoutPaymentActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
-                $testCase->assertEquals('theToken', $fields['TOKEN']);
+                $testCase->assertSame('theToken', $fields['TOKEN']);
 
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
+                $testCase->assertSame('theAmt', $fields['PAYMENTREQUEST_0_AMT']);
 
                 $testCase->assertArrayHasKey('PAYMENTREQUEST_0_PAYMENTACTION', $fields);
-                $testCase->assertEquals('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
+                $testCase->assertSame('theAction', $fields['PAYMENTREQUEST_0_PAYMENTACTION']);
 
                 $testCase->assertArrayHasKey('PAYERID', $fields);
-                $testCase->assertEquals('thePayerId', $fields['PAYERID']);
+                $testCase->assertSame('thePayerId', $fields['PAYERID']);
 
-                return array();
-            }))
+                return [];
+            })
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'theToken',
             'PAYERID' => 'thePayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'theAction',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoExpressCheckoutMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoExpressCheckoutMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doExpressCheckoutPayment')
-            ->will($this->returnCallback(function () {
-                return array(
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                );
-            }))
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $action = new DoExpressCheckoutPaymentAction();
         $action->setApi($apiMock);
 
-        $request = new DoExpressCheckoutPayment(array(
+        $request = new DoExpressCheckoutPayment([
             'TOKEN' => 'aToken',
             'PAYERID' => 'aPayerId',
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'anAction',
             'PAYMENTREQUEST_0_AMT' => 'anAmt',
-        ));
+        ]);
 
         $action->execute($request);
 
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

@@ -1,19 +1,20 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Action;
 
+use ArrayAccess;
+use AuthorizeNetAIM_Response;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetStatusInterface;
 
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -25,25 +26,25 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::APPROVED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::APPROVED === $model['response_code']) {
             $request->markCaptured();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::DECLINED == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::DECLINED === $model['response_code']) {
             $request->markCanceled();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::ERROR == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::ERROR === $model['response_code']) {
             $request->markFailed();
 
             return;
         }
 
-        if (\AuthorizeNetAIM_Response::HELD == $model['response_code']) {
+        if (AuthorizeNetAIM_Response::HELD === $model['response_code']) {
             $request->markPending();
 
             return;
@@ -52,14 +53,10 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

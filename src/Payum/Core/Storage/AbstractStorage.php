@@ -1,125 +1,87 @@
 <?php
+
 namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\InvalidArgumentException;
 
+/**
+ * @template T of object
+ * @implements StorageInterface<T>
+ */
 abstract class AbstractStorage implements StorageInterface
 {
     /**
-     * @var string
+     * @var class-string<T>
      */
-    protected $modelClass;
+    protected string $modelClass;
 
-    /**
-     * @param $modelClass
-     */
-    public function __construct($modelClass)
+    public function __construct(string $modelClass)
     {
         $this->modelClass = $modelClass;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function create()
+    public function create(): object
     {
         return new $this->modelClass();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function support($model)
+    public function support(object $model): bool
     {
         return $model instanceof $this->modelClass;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function update($model)
+    public function update(object $model): object
     {
         $this->assertModelSupported($model);
 
-        $this->doUpdateModel($model);
+        return $this->doUpdateModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function find($id)
+    public function find($id): ?object
     {
         if ($id instanceof IdentityInterface) {
             if (ltrim($id->getClass(), '\\') === ltrim($this->modelClass, '\\')) {
                 return $this->doFind($id->getId());
             }
 
-            return;
+            return null;
         }
 
         return $this->doFind($id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function delete($model)
+    public function delete(object $model): void
     {
         $this->assertModelSupported($model);
 
         $this->doDeleteModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function identify($model)
+    public function identify($model): IdentityInterface
     {
         $this->assertModelSupported($model);
 
         return $this->doGetIdentity($model);
     }
 
-    /**
-     * @param object $model
-     *
-     * @return void
-     */
-    abstract protected function doUpdateModel($model);
+    abstract protected function doUpdateModel(object $model): object;
+
+    abstract protected function doDeleteModel(object $model);
+
+    abstract protected function doGetIdentity(object $model): IdentityInterface;
+
+    abstract protected function doFind(mixed $id): ?object;
 
     /**
-     * @param object $model
-     *
-     * @return void
+     * @throws InvalidArgumentException
      */
-    abstract protected function doDeleteModel($model);
-
-    /**
-     * @param object $model
-     *
-     * @return IdentityInterface
-     */
-    abstract protected function doGetIdentity($model);
-
-    /**
-     * @param mixed $id
-     *
-     * @return object|null
-     */
-    abstract protected function doFind($id);
-
-    /**
-     * @param object $model
-     *
-     * @throws \Payum\Core\Exception\InvalidArgumentException
-     */
-    protected function assertModelSupported($model)
+    protected function assertModelSupported(object $model): void
     {
-        if (false == $this->support($model)) {
+        if (! $this->support($model)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid model given. Should be instance of %s but it is %s',
                 $this->modelClass,
-                is_object($model) ? get_class($model) : gettype($model)
+                get_debug_type($model)
             ));
         }
     }

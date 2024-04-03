@@ -1,82 +1,63 @@
 <?php
+
 namespace Payum\Offline\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\Capture;
 use Payum\Offline\Action\CaptureAction;
 use Payum\Offline\Constants;
-use Payum\Core\Request\Capture;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CaptureActionTest extends \PHPUnit\Framework\TestCase
+class CaptureActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Offline\Action\CaptureAction');
+        $rc = new ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAccessAsModel()
+    public function testShouldSupportCaptureWithArrayAccessAsModel(): void
     {
         $action = new CaptureAction();
 
-        $request = new Capture($this->createMock('ArrayAccess'));
+        $request = new Capture($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture(): void
     {
         $action = new CaptureAction();
 
-        $request = new \stdClass();
+        $request = new stdClass();
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureAndNotArrayAccessAsModel()
+    public function testShouldNotSupportCaptureAndNotArrayAccessAsModel(): void
     {
         $action = new CaptureAction();
 
-        $request = new Capture(new \stdClass());
+        $request = new Capture(new stdClass());
 
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPaidNotSet()
+    public function testShouldSetStatusPendingIfPaidNotSet(): void
     {
         $action = new CaptureAction();
 
@@ -90,13 +71,10 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusPendingIfPaidSetToFalse()
+    public function testShouldSetStatusPendingIfPaidSetToFalse(): void
     {
         $action = new CaptureAction();
 
@@ -111,13 +89,10 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusCapturedIfPaidSetToTrue()
+    public function testShouldSetStatusCapturedIfPaidSetToTrue(): void
     {
         $action = new CaptureAction();
 
@@ -132,6 +107,6 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_CAPTURED, $details[Constants::FIELD_STATUS]);
     }
 }

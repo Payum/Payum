@@ -1,19 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
 # Storages
 
-Storage allow you save,fetch payment related information. 
-They could be used explicitly, it means you have to call save or fetch methods when it is required. 
-Or you can integrate a storage to a gateway using `StorageExtension`. 
-In this case every time gateway finish to execute a request it stores the information. 
-`StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
+Storage allow you save,fetch payment related information. They could be used explicitly, it means you have to call save or fetch methods when it is required. Or you can integrate a storage to a gateway using `StorageExtension`. In this case every time gateway finish to execute a request it stores the information. `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
 
 Explicitly used example:
 
@@ -32,7 +19,7 @@ $storage->update($order);
 $foundOrder = $storage->find($order->getNumber());
 ```
 
-Implicitly used example: 
+Implicitly used example:
 
 ```php
 <?php
@@ -69,7 +56,7 @@ echo get_class($capture->getModel());
 // -> Payum\Core\Model\Payment
 ```
 
-## Doctrine ORM
+### Doctrine ORM
 
 ```
 php composer.phar install "doctrine/orm"
@@ -163,7 +150,7 @@ $tokenStorage = new DoctrineStorage(
 );
 ```
 
-### Doctrine MongoODM.
+#### Doctrine MongoODM.
 
 ```
 php composer.phar require "doctrine/mongodb-odm:^2.1"
@@ -256,9 +243,9 @@ $documentManager = DocumentManager::create(null, $config);
 
 $orderStorage = new DoctrineStorage($documentManager, 'Acme\Document\Payment');
 $tokenStorage = new DoctrineStorage($documentManager, 'Acme\Document\SecurityToken');
-```        
+```
 
-## Filesystem.
+### Filesystem.
 
 ```php
 <?php
@@ -271,57 +258,7 @@ $storage = new FilesystemStorage(
 );
 ```
 
-## Propel 2
-
-First, you have to generate the model base classes.
-
-To do that, you have to create a configuration file. 
-Please take a look at [propel's documentation](http://propelorm.org/documentation/02-buildtime.html#building-the-model) to write that file.
-
-Then run:
-```sh
-$ bin/propel --config-dir=path/where/you/created/propel.ext --schema-dir=src/Payum/Core/Bridge/Propel2/Resources/config --output-dir=src/ build
-```
-
-Then you can insert ```src/Payum/Core/Bridge/Propel2/Resources/install/order.sql``` and ```src/Payum/Core/Bridge/Propel2/Resources/install/token.sql```
-in your database(s).
-
-You can copy the ```schema.xml``` file into your project resources and customize it.
-If you customize your ```schema.xml``` you'll have to generate the table creation sql file.
-You only have to run:
-```sh
-$ bin/propel --config-dir=your/path/to/propel.xml/directory --schema-dir=your/path/to/schema.xml/directory --output-dir=your-application/resources/ sql:build
-```
-
-If you want to add your own logic to the model classes, you can extend the following classes:
-- ```Payum\Core\Bridge\Propel2\Model\Payment```
-- ```Payum\Core\Bridge\Propel2\Model\OrderQuery```
-- ```Payum\Core\Bridge\Propel2\Model\Token```
-- ```Payum\Core\Bridge\Propel2\Model\TokenQuery```
-
-If you don't want to, you only have to use them.
-
-Then, you have to configure a connection.
-
-Here's a snippet adapted from propel [documentation](http://propelorm.org/documentation/02-buildtime.html#runtime-connection-settings):
-
-```php
-<?php
-
-use Propel\Runtime\Propel;
-use Propel\Runtime\Connection\ConnectionManagerSingle;
-$serviceContainer = Propel::getServiceContainer();
-$serviceContainer->setAdapterClass('default', 'mysql');
-$manager = new ConnectionManagerSingle();
-$manager->setConfiguration(array (
-  'dsn'      => 'mysql:host=localhost;dbname=my_db_name',
-  'user'     => 'my_db_user',
-  'password' => 's3cr3t',
-));
-$serviceContainer->setConnectionManager('default', $manager);
-```
-
-## Custom.
+### Custom.
 
 You can create your own custom storage. To do so just implement `StorageInterface`.
 
@@ -335,9 +272,15 @@ class CustomStorage implements StorageInterface
 }
 ```
 
-## TODO
+### TODO
 
 * [Pdo](http://php.net/manual/en/book.pdo.php) Storage - https://github.com/Payum/Payum/issues/205
 * [Yii ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar) Storage - https://github.com/Payum/PayumYiiExtension/pull/4
 
-* [Back to index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

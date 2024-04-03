@@ -1,81 +1,71 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
+use ArrayObject;
+use AuthorizeNetAIM_Response;
+use DateTime;
+use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Model\CreditCard;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\Capture;
-use Payum\AuthorizeNet\Aim\Action\CaptureAction;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Tests\GenericActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class CaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\CaptureAction';
+    protected $actionClass = CaptureAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Capture';
+    protected $requestClass = Capture::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(CaptureAction::class);
+        $rc = new ReflectionClass(CaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\AuthorizeNet\Aim\Action\CaptureAction');
+        $rc = new ReflectionClass(CaptureAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
+    }
+
+    public function testShouldAllowSetApi(): void
+    {
+        $this->assertInstanceOf(ApiAwareInterface::class, new CaptureAction());
     }
 
     /**
-     * @test
+     * @group legacy
      */
-    public function shouldAllowSetApi()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
-        $expectedApi = $this->createAuthorizeNetAIMMock();
-
-        $action = new CaptureAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new CaptureAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfResponseCodeSet()
+    public function testShouldDoNothingIfResponseCodeSet(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
@@ -93,21 +83,18 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'response_code' => 'foo',
-        )));
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCaptureWithCreditCardSetExplicitly()
+    public function testShouldCaptureWithCreditCardSetExplicitly(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
             ->expects($this->once())
             ->method('authorizeAndCapture')
-            ->will($this->returnValue($this->createAuthorizeNetAIMResponseMock()))
+            ->willReturn($this->createAuthorizeNetAIMResponseMock())
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -120,75 +107,69 @@ class CaptureActionTest extends GenericActionTest
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
             'card_num' => '1234567812345678',
             'exp_date' => '10/16',
-        )));
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture()
+    public function testThrowIfCreditCardNotSetExplicitlyAndObtainRequestNotSupportedOnCapture(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
         $api = $this->createAuthorizeNetAIMMock();
         $api
             ->expects($this->never())
             ->method('authorizeAndCapture')
-            ->will($this->returnValue($this->createAuthorizeNetAIMResponseMock()))
+            ->willReturn($this->createAuthorizeNetAIMResponseMock())
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->throwException(new RequestNotSupportedException()))
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
+            ->willThrowException(new RequestNotSupportedException())
         ;
 
         $action = new CaptureAction();
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
-        )));
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest()
+    public function testShouldPassFirstAndCurrentModelsWithObtainCreditCardSubRequest(): void
     {
-        $firstModel = new \stdClass();
-        $currentModel = new \ArrayObject(array(
+        $firstModel = new stdClass();
+        $currentModel = new ArrayObject([
             'amount' => 10,
-        ));
+        ]);
 
         $api = $this->createAuthorizeNetAIMMock();
         $api
             ->expects($this->once())
             ->method('authorizeAndCapture')
-            ->will($this->returnValue($this->createAuthorizeNetAIMResponseMock()))
+            ->willReturn($this->createAuthorizeNetAIMResponseMock())
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->returnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel) {
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
+            ->willReturnCallback(function (ObtainCreditCard $request) use ($firstModel, $currentModel): void {
                 $this->assertSame($firstModel, $request->getFirstModel());
                 $this->assertSame($currentModel, $request->getModel());
 
                 $card = new CreditCard();
-                $card->setExpireAt(new \DateTime('2014-10-01'));
+                $card->setExpireAt(new DateTime('2014-10-01'));
 
                 $request->set($card);
-            }))
+            })
         ;
 
         $action = new CaptureAction();
@@ -201,62 +182,59 @@ class CaptureActionTest extends GenericActionTest
         $action->execute($capture);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCaptureWithObtainedCreditCard()
+    public function testShouldCaptureWithObtainedCreditCard(): void
     {
         $api = $this->createAuthorizeNetAIMMock();
         $api
             ->expects($this->once())
             ->method('authorizeAndCapture')
-            ->will($this->returnValue($this->createAuthorizeNetAIMResponseMock()))
+            ->willReturn($this->createAuthorizeNetAIMResponseMock())
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\ObtainCreditCard'))
-            ->will($this->returnCallback(function (ObtainCreditCard $request) {
+            ->with($this->isInstanceOf(ObtainCreditCard::class))
+            ->willReturnCallback(function (ObtainCreditCard $request): void {
                 $card = new CreditCard();
                 $card->setNumber('1234567812345678');
-                $card->setExpireAt(new \DateTime('2014-10-01'));
+                $card->setExpireAt(new DateTime('2014-10-01'));
 
                 $request->set($card);
-            }))
+            })
         ;
 
         $action = new CaptureAction();
         $action->setApi($api);
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Capture(array(
+        $action->execute(new Capture([
             'amount' => 10,
-        )));
+        ]));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|AuthorizeNetAIM
+     * @return MockObject|AuthorizeNetAIM
      */
     protected function createAuthorizeNetAIMMock()
     {
-        return $this->createMock('Payum\AuthorizeNet\Aim\Bridge\AuthorizeNet\AuthorizeNetAIM', array(), array(), '', false);
+        return $this->createMock(AuthorizeNetAIM::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\AuthorizeNetAIM_Response
+     * @return MockObject|AuthorizeNetAIM_Response
      */
     protected function createAuthorizeNetAIMResponseMock()
     {
-        return $this->createMock('AuthorizeNetAIM_Response', array(), array(), '', false);
+        return $this->createMock(AuthorizeNetAIM_Response::class);
     }
 }

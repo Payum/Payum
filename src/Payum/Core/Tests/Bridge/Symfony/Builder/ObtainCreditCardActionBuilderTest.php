@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -10,15 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ObtainCreditCardActionBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithFormFactoryAndRequestStackServices()
-    {
-        new ObtainCreditCardActionBuilder(
-            $this->createMock(FormFactoryInterface::class),
-            $this->createMock(RequestStack::class)
-        );
-    }
-
-    public function testShouldBuildObtainCreditCardWithGivenTemplate()
+    public function testShouldBuildObtainCreditCardWithGivenTemplate(): void
     {
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $requestStack = $this->createMock(RequestStack::class);
@@ -30,13 +23,9 @@ class ObtainCreditCardActionBuilderTest extends TestCase
         ]));
 
         $this->assertInstanceOf(ObtainCreditCardAction::class, $action);
-
-        $this->assertAttributeSame($formFactory, 'formFactory', $action);
-        $this->assertAttributeSame($requestStack, 'httpRequestStack', $action);
-        $this->assertAttributeSame('obtain_credit_card_template', 'templateName', $action);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $requestStack = $this->createMock(RequestStack::class);

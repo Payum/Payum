@@ -1,28 +1,16 @@
-<h2 align="center">Supporting Payum</h2>
+# Get Started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we are going to talk about the most common task: purchasing a product. We assume you already read basic [get it started](../../get-it-started.md).
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Installation
 
----
-
-# Paypal Rest. Get it started.
-
-In this chapter we are going to talk about the most common task: purchasing a product.
-We assume you already read basic [get it started](../../get-it-started.md).
-
-
-## Installation
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/paypal-rest php-http/guzzle6-adapter
+php composer.phar require payum/paypal-rest php-http/guzzle7-adapter
 ```
 
-## Configuration
+### Configuration
 
 ```php
 <?php
@@ -33,7 +21,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('paypalRest', [
         'factory' => 'paypal_rest',
         'client_id' => 'REPLACE IT', // Your PayPal REST API cliend ID.
@@ -44,7 +31,9 @@ $payum = (new PayumBuilder())
     ->getPayum()
 ;
 ```
+
 alternatively, set configuration via the `config` option. See PayPal's `sdk_config.ini` for available options.
+
 ```php
 <?php
 //config.php
@@ -54,7 +43,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('paypalRest', [
         'factory' => 'paypal_rest',
         'client_id' => 'REPLACE IT',
@@ -69,7 +57,7 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-## Prepare payment
+### Prepare payment
 
 ```php
 <?php
@@ -153,7 +141,12 @@ $storage->update($payment);
 header("Location: ".$captureToken->getTargetUrl());
 ```
 
-That's it. As you see we configured Paypal Rest `config.php` and set details `prepare.php`.
-[capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
+That's it. As you see we configured Paypal Rest `config.php` and set details `prepare.php`. [capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

@@ -1,135 +1,102 @@
 <?php
+
 namespace Payum\Payex\Tests\Action;
 
+use ArrayAccess;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Payex\Action\AgreementDetailsSyncAction;
+use Payum\Payex\Request\Api\CheckAgreement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AgreementDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
+class AgreementDetailsSyncActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(AgreementDetailsSyncAction::class);
+        $rc = new ReflectionClass(AgreementDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AgreementDetailsSyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet()
+    public function testShouldSupportSyncWithArrayAccessAsModelIfOrderIdNotSetAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(ArrayAccess::class);
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
-            ->willReturn(false)
+            ->withConsecutive(['agreementRef'], ['orderId'])
+            ->willReturnOnConsecutiveCalls(true, false)
         ;
 
         $this->assertTrue($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet()
+    public function testShouldNotSupportSyncWithArrayAccessAsModelIfOrderIdAndAgreementRefSet(): void
     {
         $action = new AgreementDetailsSyncAction();
 
-        $array = $this->createMock('ArrayAccess');
+        $array = $this->createMock(ArrayAccess::class);
         $array
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('offsetExists')
-            ->with('agreementRef')
-            ->willReturn(true)
-        ;
-        $array
-            ->expects($this->at(1))
-            ->method('offsetExists')
-            ->with('orderId')
+            ->withConsecutive(['agreementRef'], ['orderId'])
             ->willReturn(true)
         ;
 
         $this->assertFalse($action->supports(new Sync($array)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new AgreementDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new AgreementDetailsSyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass())));
+        $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AgreementDetailsSyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCheckAgreementApiRequest()
+    public function testShouldDoSubExecuteCheckAgreementApiRequest(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Payex\Request\Api\CheckAgreement'))
+            ->with($this->isInstanceOf(CheckAgreement::class))
         ;
 
         $action = new AgreementDetailsSyncAction();
         $action->setGateway($gatewayMock);
 
-        $action->execute(new Sync(array(
+        $action->execute(new Sync([
             'agreementRef' => 'aRef',
-        )));
+        ]));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Core\GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

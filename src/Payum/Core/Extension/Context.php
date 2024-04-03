@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Core\Extension;
 
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\ReplyInterface;
@@ -28,7 +30,7 @@ class Context
     protected $reply;
 
     /**
-     * @var \Exception|null
+     * @var Exception|null
      */
     protected $exception;
 
@@ -38,8 +40,6 @@ class Context
     protected $previous;
 
     /**
-     * @param GatewayInterface $gateway
-     * @param $request
      * @param Context[] $previous
      */
     public function __construct(GatewayInterface $gateway, $request, array $previous)
@@ -50,17 +50,14 @@ class Context
     }
 
     /**
-     * @return ActionInterface
+     * @return ?ActionInterface
      */
     public function getAction()
     {
         return $this->action;
     }
 
-    /**
-     * @param ActionInterface $action
-     */
-    public function setAction(ActionInterface $action)
+    public function setAction(ActionInterface $action): void
     {
         $this->action = $action;
     }
@@ -73,26 +70,20 @@ class Context
         return $this->reply;
     }
 
-    /**
-     * @param null|ReplyInterface $reply
-     */
-    public function setReply(ReplyInterface $reply = null)
+    public function setReply(ReplyInterface $reply = null): void
     {
         $this->reply = $reply;
     }
 
     /**
-     * @return \Exception|null
+     * @return Exception|null
      */
     public function getException()
     {
         return $this->exception;
     }
 
-    /**
-     * @param \Exception|null $exception
-     */
-    public function setException(\Exception $exception = null)
+    public function setException(Exception $exception = null): void
     {
         $this->exception = $exception;
     }

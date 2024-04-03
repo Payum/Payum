@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -20,18 +21,15 @@ class GatewayFactoriesChoiceType extends AbstractType
         $this->defaultChoices = $defaultChoices;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'choices' => $this->defaultChoices,
-        ));
+        ]);
     }
 
     /**
-     * {@inheritDoc}
+     * @return ?string
      */
     public function getParent()
     {

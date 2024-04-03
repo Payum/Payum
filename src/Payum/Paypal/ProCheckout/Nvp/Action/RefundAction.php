@@ -1,14 +1,16 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
-use Payum\Paypal\ProCheckout\Nvp\Api;
 use Payum\Core\Request\Refund;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class RefundAction implements ActionInterface, ApiAwareInterface
 {
@@ -17,24 +19,18 @@ class RefundAction implements ActionInterface, ApiAwareInterface
      */
     protected $api;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
-        if (false == $api instanceof Api) {
+        if (! $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 
         $this->api = $api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request Refund */
+        /** @var Refund $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -43,8 +39,8 @@ class RefundAction implements ActionInterface, ApiAwareInterface
             return;
         }
 
-        $refundableTrxTypes = array(Api::TRXTYPE_SALE, Api::TRXTYPE_DELAYED_CAPUTER, Api::TRXTYPE_VOICE_AUTHORIZATION);
-        if (false == in_array($details['TRXTYPE'], $refundableTrxTypes)) {
+        $refundableTrxTypes = [Api::TRXTYPE_SALE, Api::TRXTYPE_DELAYED_CAPUTER, Api::TRXTYPE_VOICE_AUTHORIZATION];
+        if (! in_array($details['TRXTYPE'], $refundableTrxTypes)) {
             throw new LogicException(sprintf(
                 'You cannot refund transaction with type %s. Only these types could be refunded: %s',
                 $details['TRXTYPE'],
@@ -52,7 +48,7 @@ class RefundAction implements ActionInterface, ApiAwareInterface
             ));
         }
 
-        $details->validateNotEmpty(array('PNREF'), true);
+        $details->validateNotEmpty(['PNREF'], true);
 
         $details['PURCHASE_TRXTYPE'] = $details['TRXTYPE'];
         $details['TRXTYPE'] = null;
@@ -65,14 +61,10 @@ class RefundAction implements ActionInterface, ApiAwareInterface
         $details->replace($this->api->doCredit($details->toUnsafeArray()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Refund &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

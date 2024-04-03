@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -20,50 +21,44 @@ class GetHttpRequestAction implements ActionInterface
     protected $httpRequestStack;
 
     /**
-     * @param Request|null $httpRequest
      * @deprecated
      */
-    public function setHttpRequest(Request $httpRequest = null)
+    public function setHttpRequest(Request $httpRequest = null): void
     {
         $this->httpRequest = $httpRequest;
     }
 
-    /**
-     * @param RequestStack|null $httpRequestStack
-     */
-    public function setHttpRequestStack(RequestStack $httpRequestStack = null)
+    public function setHttpRequestStack(RequestStack $httpRequestStack = null): void
     {
         $this->httpRequestStack = $httpRequestStack;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request GetHttpRequest */
+        /** @var GetHttpRequest $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         if ($this->httpRequest instanceof Request) {
             $this->updateRequest($request, $this->httpRequest);
-        } elseif ($this->httpRequestStack instanceof RequestStack && null !== $this->httpRequestStack->getMasterRequest()) {
-            $this->updateRequest($request, $this->httpRequestStack->getMasterRequest());
+        } elseif ($this->httpRequestStack instanceof RequestStack) {
+            # BC Layer for Symfony 4 (Simplify after support for Symfony < 5 is dropped)
+            if (method_exists($this->httpRequestStack, 'getMainRequest')) {
+                $mainRequest = $this->httpRequestStack->getMainRequest();
+            } else {
+                $mainRequest = $this->httpRequestStack->getMasterRequest();
+            }
+            if (null !== $mainRequest) {
+                $this->updateRequest($request, $mainRequest);
+            }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof GetHttpRequest;
     }
 
-    /**
-     * @param GetHttpRequest $request
-     * @param Request $httpRequest
-     */
-    protected function updateRequest(GetHttpRequest $request, Request $httpRequest)
+    protected function updateRequest(GetHttpRequest $request, Request $httpRequest): void
     {
         $request->query = $httpRequest->query->all();
         $request->request = $httpRequest->request->all();

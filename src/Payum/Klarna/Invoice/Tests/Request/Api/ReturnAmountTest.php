@@ -1,25 +1,18 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class ReturnAmountTest extends \PHPUnit\Framework\TestCase
+class ReturnAmountTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\ReturnAmount');
+        $rc = new ReflectionClass(ReturnAmount::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new ReturnAmount(array());
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

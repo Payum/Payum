@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Exception;
 
 use Payum\Core\Action\ActionInterface;
@@ -35,14 +36,13 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param \Payum\Core\Action\ActionInterface $action
      * @param mixed                              $request
      *
      * @throws RequestNotSupportedException
      */
-    public static function assertSupports(ActionInterface $action, $request)
+    public static function assertSupports(ActionInterface $action, $request): void
     {
-        if (false == $action->supports($request)) {
+        if (! $action->supports($request)) {
             throw static::createActionNotSupported($action, $request);
         }
     }
@@ -57,7 +57,7 @@ class RequestNotSupportedException extends InvalidArgumentException
         $exception = new self(sprintf(
             'Request %s is not supported. %s',
             Humanify::request($request),
-            implode(" ", static::suggestions($request))
+            implode(' ', static::suggestions($request))
         ));
 
         $exception->request = $request;
@@ -66,17 +66,17 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param \Payum\Core\Action\ActionInterface $action
      * @param mixed                              $request
      *
      * @return RequestNotSupportedException
      */
     public static function createActionNotSupported(ActionInterface $action, $request)
     {
-        $exception = new self(sprintf("Action %s is not supported the request %s. %s",
+        $exception = new self(sprintf(
+            'Action %s is not supported the request %s. %s',
             Humanify::value($action),
             Humanify::request($request),
-            implode(" ", static::suggestions($request))
+            implode(' ', static::suggestions($request))
         ));
 
         $exception->request = $request;
@@ -86,8 +86,6 @@ class RequestNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @param $request
-     *
      * @return string[]
      */
     protected static function suggestions($request)

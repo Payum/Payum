@@ -1,47 +1,35 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use KlarnaAddr;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
+use PHPUnit\Framework\TestCase;
 
-class GetAddressesTest extends \PHPUnit\Framework\TestCase
+class GetAddressesTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithPnoAsArgument()
-    {
-        new GetAddresses('pno');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPnoSetInConstructor()
+    public function testShouldAllowGetPnoSetInConstructor(): void
     {
         $request = new GetAddresses($pno = 'thePno');
 
         $this->assertSame($pno, $request->getPno());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddKLarnaAddress()
+    public function testShouldAllowAddKLarnaAddress(): void
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress(new \KlarnaAddr());
+        $address = new KlarnaAddr();
+        $request->addAddress($address);
+        $this->assertSame([$address], $request->getAddresses());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslyAddedKLarnaAddresses()
+    public function testShouldAllowGetPreviouslyAddedKLarnaAddresses(): void
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr());
-        $request->addAddress($second = new \KlarnaAddr());
+        $request->addAddress($first = new KlarnaAddr());
+        $request->addAddress($second = new KlarnaAddr());
 
         $addresses = $request->getAddresses();
 
@@ -50,25 +38,19 @@ class GetAddressesTest extends \PHPUnit\Framework\TestCase
         $this->assertContains($second, $addresses);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnNullIfAnyAddressAddedOnGetFirstAddress()
+    public function testShouldReturnNullIfAnyAddressAddedOnGetFirstAddress(): void
     {
         $request = new GetAddresses('aPno');
 
         $this->assertNull($request->getFirstAddress());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetFirstAddress()
+    public function testShouldAllowGetFirstAddress(): void
     {
         $request = new GetAddresses('aPno');
 
-        $request->addAddress($first = new \KlarnaAddr());
-        $request->addAddress($second = new \KlarnaAddr());
+        $request->addAddress($first = new KlarnaAddr());
+        $request->addAddress($second = new KlarnaAddr());
 
         $this->assertSame($first, $request->getFirstAddress());
     }

@@ -1,183 +1,148 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoCaptureAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoCapture;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
+class DoCaptureActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface(): void
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(DoCaptureAction::class);
+        $rc = new ReflectionClass(DoCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoCaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportDoCaptureRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoCaptureRequestAndArrayAccessAsModel(): void
     {
         $action = new DoCaptureAction();
 
-        $this->assertTrue($action->supports(new DoCapture(new \ArrayObject(), 0)));
+        $this->assertTrue($action->supports(new DoCapture(new ArrayObject(), 0)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoCaptureRequest()
+    public function testShouldNotSupportAnythingNotDoCaptureRequest(): void
     {
         $action = new DoCaptureAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new DoCaptureAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdNorAuthorizationIdNotSetInModel()
+    public function testThrowIfTransactionIdNorAuthorizationIdNotSetInModel(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT, COMPLETETYPE, AUTHORIZATIONID fields are required.');
         $action = new DoCaptureAction();
 
         $action->execute(new DoCapture([], 0));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCompleteTypeNotSet()
+    public function testThrowIfCompleteTypeNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The COMPLETETYPE fields are required.');
         $action = new DoCaptureAction();
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aTransactionId',
             'PAYMENTREQUEST_0_AMT' => 100,
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmtNotSet()
+    public function testThrowIfAmtNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The AMT fields are required.');
         $action = new DoCaptureAction();
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'aReferenceId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoCaptureMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoCaptureMethodWithExpectedRequiredArguments(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->will($this->returnCallback(function (array $fields) {
+            ->willReturnCallback(function (array $fields) {
                 $this->assertArrayHasKey('TRANSACTIONID', $fields);
-                $this->assertEquals('theTransactionId', $fields['TRANSACTIONID']);
+                $this->assertSame('theTransactionId', $fields['TRANSACTIONID']);
 
                 $this->assertArrayHasKey('AMT', $fields);
-                $this->assertEquals('theAmt', $fields['AMT']);
+                $this->assertSame('theAmt', $fields['AMT']);
 
                 $this->assertArrayHasKey('COMPLETETYPE', $fields);
-                $this->assertEquals('Complete', $fields['COMPLETETYPE']);
+                $this->assertSame('Complete', $fields['COMPLETETYPE']);
 
-                return array();
-            }))
+                return [];
+            })
         ;
 
         $action = new DoCaptureAction();
         $action->setApi($apiMock);
         $action->setGateway($this->createGatewayMock());
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoCaptureMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('DoCapture')
-            ->will($this->returnCallback(function () {
-                return array(
-                    'FIRSTNAME' => 'theFirstname',
-                    'EMAIL' => 'the@example.com',
-                );
-            }))
+            ->willReturnCallback(fn () => [
+                'FIRSTNAME' => 'theFirstname',
+                'EMAIL' => 'the@example.com',
+            ])
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -185,52 +150,51 @@ class DoCaptureActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetTransactionDetails::class))
-            ->will($this->returnCallback(function (GetTransactionDetails $request) {
+            ->willReturnCallback(function (GetTransactionDetails $request): void {
                 $this->assertSame(0, $request->getPaymentRequestN());
-                $this->assertSame(array(
+                $this->assertSame([
                     'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
                     'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
                     'PAYMENTREQUEST_0_AMT' => 'theAmt',
-                ), (array) $request->getModel());
-
+                ], (array) $request->getModel());
 
                 $model = $request->getModel();
                 $model['FIRSTNAME'] = 'theFirstname';
                 $model['EMAIL'] = 'the@example.com';
-            }))
+            })
         ;
 
         $action = new DoCaptureAction();
         $action->setApi($apiMock);
         $action->setGateway($gatewayMock);
 
-        $request = new DoCapture(array(
+        $request = new DoCapture([
             'PAYMENTREQUEST_0_TRANSACTIONID' => 'theTransactionId',
             'PAYMENTREQUEST_0_COMPLETETYPE' => 'Complete',
             'PAYMENTREQUEST_0_AMT' => 'theAmt',
-        ), 0);
+        ], 0);
 
         $action->execute($request);
 
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, [], [], '', false);
+        return $this->createMock(Api::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

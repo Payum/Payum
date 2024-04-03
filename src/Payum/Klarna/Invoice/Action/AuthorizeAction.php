@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -14,29 +16,23 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Authorize $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (false == $details['rno']) {
+        if (! $details['rno']) {
             $this->gateway->execute(new ReserveAmount($details));
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Authorize &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Authorize &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

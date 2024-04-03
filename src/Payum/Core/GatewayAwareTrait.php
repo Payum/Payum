@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core;
 
 trait GatewayAwareTrait
@@ -8,10 +9,7 @@ trait GatewayAwareTrait
      */
     protected $gateway;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setGateway(GatewayInterface $gateway)
+    public function setGateway(GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

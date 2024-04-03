@@ -1,102 +1,68 @@
 <?php
+
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Stripe\Action\Api\CreatePlanAction;
-use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CreatePlanActionTest extends \PHPUnit\Framework\TestCase
+class CreatePlanActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsActionInterface()
+    public function testShouldImplementsActionInterface(): void
     {
-        $rc = new \ReflectionClass(CreatePlanAction::class);
+        $rc = new ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass(CreatePlanAction::class);
+        $rc = new ReflectionClass(CreatePlanAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi(): void
     {
-        new CreatePlanAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetKeysAsApi()
-    {
-        $action = new CreatePlanAction();
-
-        $action->setApi(new Keys('publishableKey', 'secretKey'));
-    }
-
-    /**
-     * @test
-     */
-    public function throwNotSupportedApiIfNotKeysGivenAsApi()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new CreatePlanAction();
 
         $action->setApi('not keys instance');
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreatePlanRequestWithArrayAccessModel()
+    public function testShouldSupportCreatePlanRequestWithArrayAccessModel(): void
     {
         $action = new CreatePlanAction();
 
         $this->assertTrue($action->supports(new CreatePlan([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreatePlanRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportCreatePlanRequestWithNotArrayAccessModel(): void
     {
         $action = new CreatePlanAction();
 
-        $this->assertFalse($action->supports(new CreatePlan(new \stdClass())));
+        $this->assertFalse($action->supports(new CreatePlan(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCreatePlanRequest()
+    public function testShouldNotSupportNotCreatePlanRequest(): void
     {
         $action = new CreatePlanAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action CreatePlanAction is not supported the request stdClass.');
         $action = new CreatePlanAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 }

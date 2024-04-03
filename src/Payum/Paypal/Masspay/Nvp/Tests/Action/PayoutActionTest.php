@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
+use ArrayObject;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
@@ -8,6 +10,8 @@ use Payum\Core\Request\Payout;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\PayoutAction;
 use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 class PayoutActionTest extends GenericActionTest
 {
@@ -15,32 +19,23 @@ class PayoutActionTest extends GenericActionTest
 
     protected $actionClass = PayoutAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(PayoutAction::class);
+        $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(PayoutAction::class);
+        $rc = new ReflectionClass(PayoutAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoMasspayRequestIfModelNotAcknowledge()
+    public function testShouldDoMasspayRequestIfModelNotAcknowledge(): void
     {
-        $payoutModel = new \ArrayObject([
+        $payoutModel = new ArrayObject([
             'bar' => 'barVal',
         ]);
 
@@ -49,11 +44,11 @@ class PayoutActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(Masspay::class))
-            ->will($this->returnCallback(function (Masspay $request) {
+            ->willReturnCallback(function (Masspay $request): void {
                 $model = $request->getModel();
 
                 $model['foo'] = 'fooVal';
-            }))
+            })
         ;
 
         $action = new PayoutAction();
@@ -61,11 +56,14 @@ class PayoutActionTest extends GenericActionTest
 
         $action->execute(new Payout($payoutModel));
 
-        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $payoutModel);
+        $this->assertSame([
+            'bar' => 'barVal',
+            'foo' => 'fooVal',
+        ], (array) $payoutModel);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

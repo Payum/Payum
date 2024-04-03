@@ -1,74 +1,31 @@
 <?php
+
 namespace Payum\Core\Tests;
 
+use Payum\Core\Gateway;
 use Payum\Core\GatewayFactory;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\GatewayFactoryInterface;
+use ReflectionClass;
 
 class GatewayFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\GatewayFactory');
+        $rc = new ReflectionClass(GatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GatewayFactory();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
+    public function testShouldAllowCreateGateway(): void
     {
         $factory = new GatewayFactory();
 
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
+        $gateway = $factory->create([]);
+
+        $this->assertInstanceOf(Gateway::class, $gateway);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock('Payum\Core\CoreGatewayFactory');
-
-        $factory = new GatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new GatewayFactory();
-
-        $gateway = $factory->create(array());
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
+    public function testShouldAllowCreateGatewayConfig(): void
     {
         $factory = new GatewayFactory();
 

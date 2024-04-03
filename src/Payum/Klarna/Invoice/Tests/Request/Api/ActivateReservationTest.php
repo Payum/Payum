@@ -1,26 +1,18 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Invoice\Request\Api\ActivateReservation;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class ActivateReservationTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\ActivateReservation');
+        $rc = new ReflectionClass(ActivateReservation::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new ActivateReservation(array());
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

@@ -1,15 +1,18 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
-class DeleteAgreementTest extends \PHPUnit\Framework\TestCase
-{
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
-    {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\DeleteAgreement');
+use Payum\Core\Request\Generic;
+use Payum\Payex\Request\Api\DeleteAgreement;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+class DeleteAgreementTest extends TestCase
+{
+    public function testShouldBeSubClassOfGeneric(): void
+    {
+        $rc = new ReflectionClass(DeleteAgreement::class);
+
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

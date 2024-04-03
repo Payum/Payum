@@ -1,21 +1,19 @@
 <?php
+
 namespace Payum\Stripe;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 
 class StripeJsGatewayFactory extends StripeCheckoutGatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'stripe_js',
             'payum.factory_title' => 'Stripe.Js',
 
             'payum.template.obtain_token' => '@PayumStripe/Action/obtain_js_token.html.twig',
-        ));
+        ]);
 
         parent::populateConfig($config);
     }

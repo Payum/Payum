@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Exception\Http;
 
 use Payum\Core\Exception\RuntimeException;
@@ -17,42 +18,27 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
      */
     protected $response;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setRequest(RequestInterface $request)
+    public function setRequest(RequestInterface $request): void
     {
         $this->request = $request;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRequest()
     {
         return $this->request;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setResponse(ResponseInterface $response)
+    public function setResponse(ResponseInterface $response): void
     {
         $this->response = $response;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getResponse()
     {
         return $this->response;
     }
 
     /**
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     *
      * @return HttpException
      */
     public static function factory(RequestInterface $request, ResponseInterface $response)
@@ -65,12 +51,12 @@ class HttpException extends RuntimeException implements HttpExceptionInterface
             $label = 'Unsuccessful response';
         }
 
-        $message = implode(PHP_EOL, array(
+        $message = implode(PHP_EOL, [
             $label,
-            '[status code] '.$response->getStatusCode(),
-            '[reason phrase] '.$response->getReasonPhrase(),
-            '[url] '.$request->getUri(),
-        ));
+            '[status code] ' . $response->getStatusCode(),
+            '[reason phrase] ' . $response->getReasonPhrase(),
+            '[url] ' . $request->getUri(),
+        ]);
 
         $e = new static($message, $response->getStatusCode());
         $e->setResponse($response);

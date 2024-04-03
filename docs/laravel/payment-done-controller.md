@@ -1,17 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Payment done controller
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Laravel Package. Payment done controller
-
-First we have to validate the request. 
-If it is valid the verifier returns a token. 
-We can use it later to get payment status, details and any other information. 
+First we have to validate the request. If it is valid the verifier returns a token. We can use it later to get payment status, details and any other information.
 
 ```php
 <?php
@@ -41,4 +30,10 @@ class PaymentController extends PayumController
 }
 ```
 
-Back to [index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

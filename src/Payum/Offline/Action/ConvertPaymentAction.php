@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Offline\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,11 +12,9 @@ use Payum\Offline\Constants;
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -29,23 +28,19 @@ class ConvertPaymentAction implements ActionInterface
         $details['description'] = $payment->getDescription();
         $details['client_email'] = $payment->getClientEmail();
         $details['client_id'] = $payment->getClientId();
-        
-        $details->defaults(array(
+
+        $details->defaults([
             Constants::FIELD_PAID => true,
-        ));
+        ]);
 
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' === $request->getTo()
         ;
     }
 }

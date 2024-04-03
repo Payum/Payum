@@ -1,6 +1,9 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
+use ArrayAccess;
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -8,9 +11,10 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePlan;
-use Stripe\Error;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Plan;
 use Stripe\Stripe;
 
@@ -37,10 +41,7 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->apiClass = Keys::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
 
@@ -48,12 +49,9 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         $this->keys = $this->api;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreatePlan */
+        /** @var CreatePlan $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -61,22 +59,26 @@ class CreatePlanAction implements ActionInterface, GatewayAwareInterface, ApiAwa
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $plan = Plan::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($plan->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($plan->toArray());
+        } catch (ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreatePlan &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreatePlan &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

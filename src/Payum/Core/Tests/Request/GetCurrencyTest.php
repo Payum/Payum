@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetCurrency;
@@ -6,25 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetCurrencyTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithCurrencyCode()
-    {
-        new GetCurrency('aCode');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetCodeSetInConstructor()
+    public function testShouldAllowGetCodeSetInConstructor(): void
     {
         $request = new GetCurrency('theCode');
 
-        $this->assertEquals('theCode', $request->code);
+        $this->assertSame('theCode', $request->code);
     }
 
-    public function shouldAllowGetPreviouslySetCurrency()
+    public function shouldAllowGetPreviouslySetCurrency(): void
     {
         $request = new GetCurrency('aCode');
         $request->numeric = 'aNumeric';
@@ -33,10 +23,10 @@ class GetCurrencyTest extends TestCase
         $request->country = 'aCountry';
         $request->code = 'aCode';
 
-        $this->assertEquals('aNumeric', $request->numeric);
-        $this->assertEquals('aName', $request->name);
-        $this->assertEquals('anExp', $request->exp);
-        $this->assertEquals('aCountry', $request->country);
-        $this->assertEquals('aCode', $request->code);
+        $this->assertSame('aNumeric', $request->numeric);
+        $this->assertSame('aName', $request->name);
+        $this->assertSame('anExp', $request->exp);
+        $this->assertSame('aCountry', $request->country);
+        $this->assertSame('aCode', $request->code);
     }
 }

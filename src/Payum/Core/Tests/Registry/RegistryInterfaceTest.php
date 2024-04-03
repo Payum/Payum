@@ -1,37 +1,34 @@
 <?php
+
 namespace Payum\Core\Tests\Registry;
 
+use Payum\Core\Registry\GatewayFactoryRegistryInterface;
+use Payum\Core\Registry\GatewayRegistryInterface;
+use Payum\Core\Registry\RegistryInterface;
+use Payum\Core\Registry\StorageRegistryInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class RegistryInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayRegistryInterface()
+    public function testShouldImplementGatewayRegistryInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
+        $rc = new ReflectionClass(RegistryInterface::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\GatewayRegistryInterface'));
+        $this->assertTrue($rc->isSubclassOf(GatewayRegistryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementStorageRegistryInterface()
+    public function testShouldImplementStorageRegistryInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
+        $rc = new ReflectionClass(RegistryInterface::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\StorageRegistryInterface'));
+        $this->assertTrue($rc->isSubclassOf(StorageRegistryInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
+        $rc = new ReflectionClass(RegistryInterface::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
+        $this->assertTrue($rc->isSubclassOf(GatewayFactoryRegistryInterface::class));
     }
 }

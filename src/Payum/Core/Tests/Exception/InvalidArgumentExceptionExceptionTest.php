@@ -1,36 +1,25 @@
 <?php
+
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\InvalidArgumentException;
+use InvalidArgumentException;
+use Payum\Core\Exception\ExceptionInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class InvalidArgumentExceptionExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\InvalidArgumentException::class);
 
-        $this->assertTrue($rc->isSubclassOf('InvalidArgumentException'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new InvalidArgumentException();
+        $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 }

@@ -9,170 +9,134 @@ use Payum\Sofort\Api;
 
 class StatusActionTest extends GenericActionTest
 {
-    const TRANSACTION_ID = '1597-FS16-234D-A324';
+    public const TRANSACTION_ID = '1597-FS16-234D-A324';
 
     protected $requestClass = GetHumanStatus::class;
 
     protected $actionClass = StatusAction::class;
 
-    /**
-     * @test
-     */
-    public function shouldMarkExpiredIfPaymentExpirationTimePassed()
+    public function testShouldMarkExpiredIfPaymentExpirationTimePassed(): void
     {
         $expires = time();
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'expires' => --$expires
-        ));
+            'expires' => --$expires,
+        ]);
 
         $this->assertTrue($request->isExpired());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfPaymentWithoutTransactionId()
+    public function testShouldMarkNewIfPaymentWithoutTransactionId(): void
     {
-        $request = $this->executeRequestWithDetails(array());
+        $request = $this->executeRequestWithDetails([]);
 
         $this->assertTrue($request->isNew());
 
-        $request = $this->executeRequestWithDetails(array('transaction_id'));
+        $request = $this->executeRequestWithDetails(['transaction_id']);
 
         $this->assertTrue($request->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfPaymentWithoutStatus()
+    public function testShouldMarkNewIfPaymentWithoutStatus(): void
     {
-        $request = $this->executeRequestWithDetails(array(
-            'transaction_id' => self::TRANSACTION_ID
-        ));
-
-        $this->assertTrue($request->isNew());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfPaymentLoss()
-    {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_LOSS
-        ));
+        ]);
+
+        $this->assertTrue($request->isNew());
+    }
+
+    public function testShouldMarkFailedIfPaymentLoss(): void
+    {
+        $request = $this->executeRequestWithDetails([
+            'transaction_id' => self::TRANSACTION_ID,
+            'status' => Api::STATUS_LOSS,
+        ]);
 
         $this->assertTrue($request->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfPaymentPending()
+    public function testShouldMarkPendingIfPaymentPending(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_PENDING
-        ));
+            'status' => Api::STATUS_PENDING,
+        ]);
 
         $this->assertTrue($request->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentReceivedAndPartiallyCredited()
+    public function testShouldMarkUnknownIfPaymentReceivedAndPartiallyCredited(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_PARTIALLY
-        ));
+            'statusReason' => Api::SUB_PARTIALLY,
+        ]);
 
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPaymentReceivedAndCredited()
+    public function testShouldMarkCapturedIfPaymentReceivedAndCredited(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_CREDITED
-        ));
+            'statusReason' => Api::SUB_CREDITED,
+        ]);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPaymentReceivedWithOverpayment()
+    public function testShouldMarkCapturedIfPaymentReceivedWithOverpayment(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_RECEIVED,
-            'statusReason' => Api::SUB_OVERPAYMENT
-        ));
+            'statusReason' => Api::SUB_OVERPAYMENT,
+        ]);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentRefundedPartially()
+    public function testShouldMarkUnknownIfPaymentRefundedPartially(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_REFUNDED,
-            'statusReason' => Api::SUB_COMPENSATION
-        ));
+            'statusReason' => Api::SUB_COMPENSATION,
+        ]);
 
         $this->assertTrue($request->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfPaymentRefunded()
+    public function testShouldMarkRefundedIfPaymentRefunded(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
             'status' => Api::STATUS_REFUNDED,
-            'statusReason' => Api::SUB_REFUNDED
-        ));
+            'statusReason' => Api::SUB_REFUNDED,
+        ]);
 
         $this->assertTrue($request->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfPaymentUntraceable()
+    public function testShouldMarkCapturedIfPaymentUntraceable(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => Api::STATUS_UNTRACEABLE
-        ));
+            'status' => Api::STATUS_UNTRACEABLE,
+        ]);
 
         $this->assertTrue($request->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfPaymentWithUnsupportedStatus()
+    public function testShouldMarkUnknownIfPaymentWithUnsupportedStatus(): void
     {
-        $request = $this->executeRequestWithDetails(array(
+        $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'status' => 'unsupported'
-        ));
+            'status' => 'unsupported',
+        ]);
 
         $this->assertTrue($request->isUnknown());
     }

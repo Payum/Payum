@@ -1,19 +1,25 @@
 <?php
+
 namespace Payum\Core\Bridge\Doctrine\Storage;
 
 use Doctrine\Persistence\ObjectManager;
+use LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
 
+/**
+ * @template T of object
+ * @extends AbstractStorage<T>
+ */
 class DoctrineStorage extends AbstractStorage
 {
     /**
-     * @var \Doctrine\Persistence\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @param \Doctrine\Persistence\ObjectManager $objectManager
      * @param string                              $modelClass
      */
     public function __construct(ObjectManager $objectManager, $modelClass)
@@ -24,48 +30,38 @@ class DoctrineStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritDoc}
+     * @return T[]
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         return $this->objectManager->getRepository($this->modelClass)->findBy($criteria);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         return $this->objectManager->find($this->modelClass, $id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doUpdateModel($model)
+    protected function doUpdateModel(object $model): object
     {
         $this->objectManager->persist($model);
         $this->objectManager->flush();
+
+        return $model;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doDeleteModel($model)
+    protected function doDeleteModel(object $model): void
     {
         $this->objectManager->remove($model);
         $this->objectManager->flush();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): IdentityInterface
     {
-        $modelMetadata = $this->objectManager->getClassMetadata(get_class($model));
+        $modelMetadata = $this->objectManager->getClassMetadata($model::class);
         $id = $modelMetadata->getIdentifierValues($model);
         if (count($id) > 1) {
-            throw new \LogicException('Storage not support composite primary ids');
+            throw new LogicException('Storage not support composite primary ids');
         }
 
         return new Identity(array_shift($id), $model);

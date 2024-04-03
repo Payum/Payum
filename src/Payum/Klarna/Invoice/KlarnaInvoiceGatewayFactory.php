@@ -1,6 +1,11 @@
 <?php
+
 namespace Payum\Klarna\Invoice;
 
+use Klarna;
+use KlarnaCountry;
+use KlarnaCurrency;
+use KlarnaLanguage;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
@@ -25,16 +30,13 @@ use Payum\Klarna\Invoice\Action\SyncAction;
 
 class KlarnaInvoiceGatewayFactory extends GatewayFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
-        if (!class_exists('KlarnaCurrency')) {
-            throw new \LogicException('You must install "fp/klarna-invoice" library.');
+        if (! class_exists(KlarnaCurrency::class)) {
+            throw new \LogicException('You must install "solidworx/klarna-invoice" library.');
         }
 
-        $config->defaults(array(
+        $config->defaults([
             'payum.factory_name' => 'klarna_invoice',
             'payum.factory_title' => 'Klarna Invoice',
             'sandbox' => true,
@@ -62,35 +64,35 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
             'payum.action.api.email_invoice' => new EmailInvoiceAction(),
             'payum.action.api.send_invoice' => new SendInvoiceAction(),
             'payum.action.api.update' => new UpdateAction(),
-        ));
+        ]);
 
-        if (false == $config['payum.api']) {
-            $config['payum.default_options'] = array(
+        if (! $config['payum.api']) {
+            $config['payum.default_options'] = [
                 'eid' => '',
                 'secret' => '',
                 'country' => '',
                 'language' => '',
                 'currency' => '',
                 'sandbox' => true,
-            );
+            ];
             $config->defaults($config['payum.default_options']);
-            $config['payum.required_options'] = array('eid', 'secret', 'country', 'language', 'currency');
-            $config->defaults(array(
+            $config['payum.required_options'] = ['eid', 'secret', 'country', 'language', 'currency'];
+            $config->defaults([
                 'sandbox' => true,
-            ));
+            ]);
 
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
 
-                $config['mode'] = $config['sandbox'] ? \Klarna::BETA : \Klarna::LIVE;
+                $config['mode'] = $config['sandbox'] ? Klarna::BETA : Klarna::LIVE;
 
-                if (null === $country = \KlarnaCountry::fromCode($config['country'])) {
+                if (null === $country = KlarnaCountry::fromCode($config['country'])) {
                     throw new LogicException(sprintf('Given %s country code is not valid. Klarna cannot recognize it.', $config['country']));
                 }
-                if (null === $language = \KlarnaLanguage::fromCode($config['language'])) {
+                if (null === $language = KlarnaLanguage::fromCode($config['language'])) {
                     throw new LogicException(sprintf('Given %s language code is not valid. Klarna cannot recognize it.', $config['language']));
                 }
-                if (null === $currency = \KlarnaCurrency::fromCode($config['currency'])) {
+                if (null === $currency = KlarnaCurrency::fromCode($config['currency'])) {
                     throw new LogicException(sprintf('Given %s currency code is not valid. Klarna cannot recognize it.', $config['currency']));
                 }
 

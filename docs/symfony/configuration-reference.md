@@ -1,15 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Configuration Reference
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Payum Bundle. Configuration Reference
-
-## Payum extension:
+### Payum extension:
 
 ```yaml
 payum:
@@ -52,7 +43,7 @@ payum:
             payum.extension.foo: "@aServiceId"
 ```
 
-## Doctrine storage:
+### Doctrine storage:
 
 ```yaml
 payum:
@@ -60,7 +51,7 @@ payum:
         A\Model\Class: { doctrine: orm } # orm or mongodb for now
 ```
 
-## Filesystem storage:
+### Filesystem storage:
 
 ```yaml
 payum:
@@ -71,7 +62,7 @@ payum:
                 id_property: 'required'
 ```
 
-## Paypal express checkout gateway
+### Paypal express checkout gateway
 
 ```yaml
 payum:
@@ -84,7 +75,7 @@ payum:
             sandbox: true
 ```
 
-## Paypal pro checkout gateway
+### Paypal pro checkout gateway
 
 ```yaml
 payum:
@@ -100,7 +91,7 @@ payum:
             sandbox: true
 ```
 
-## Stripe.Js
+### Stripe.Js
 
 ```yaml
 payum:
@@ -111,7 +102,7 @@ payum:
             secret_key: 'required'
 ```
 
-## Stripe Checkout
+### Stripe Checkout
 
 ```yaml
 payum:
@@ -122,7 +113,7 @@ payum:
             secret_key: 'required'
 ```
 
-## Authorize.Net AIM gateway
+### Authorize.Net AIM gateway
 
 ```yaml
 payum:
@@ -134,7 +125,7 @@ payum:
             sandbox: true
 ```
 
-## Be2Bill gateway
+### Be2Bill gateway
 
 ```yml
 payum:
@@ -146,7 +137,7 @@ payum:
             sandbox: true
 ```
 
-## Be2Bill onsite gateway
+### Be2Bill onsite gateway
 
 ```yml
 payum:
@@ -158,7 +149,7 @@ payum:
             sandbox: true
 ```
 
-## Payex gateway
+### Payex gateway
 
 ```yml
 payum:
@@ -170,7 +161,7 @@ payum:
             sandbox: true
 ```
 
-## Klarna checkout gateway
+### Klarna checkout gateway
 
 ```yml
 payum:
@@ -182,7 +173,7 @@ payum:
             sandbox: true
 ```
 
-## Klarna invoice gateway
+### Klarna invoice gateway
 
 ```yml
 payum:
@@ -197,7 +188,7 @@ payum:
             sandbox: true
 ```
 
-## Omnipay gateway
+### Omnipay gateway
 
 ```yml
 payum:
@@ -210,7 +201,7 @@ payum:
                 bar: barOpt
 ```
 
-## Custom gateway
+### Custom gateway
 
 ```yaml
 payum:
@@ -221,4 +212,10 @@ payum:
             service: ~
 ```
 
-* [Back to index](../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

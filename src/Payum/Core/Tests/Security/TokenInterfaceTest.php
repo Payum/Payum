@@ -1,27 +1,26 @@
 <?php
+
 namespace Payum\Core\Tests\Security;
 
+use Payum\Core\Model\DetailsAggregateInterface;
+use Payum\Core\Model\DetailsAwareInterface;
+use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class TokenInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAwareInterface()
+    public function testShouldExtendDetailsAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
+        $rc = new ReflectionClass(TokenInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\DetailsAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(DetailsAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendDetailsAggregateInterface()
+    public function testShouldExtendDetailsAggregateInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Security\TokenInterface');
+        $rc = new ReflectionClass(TokenInterface::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\DetailsAggregateInterface'));
+        $this->assertTrue($rc->implementsInterface(DetailsAggregateInterface::class));
     }
 }

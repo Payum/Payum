@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -16,11 +17,9 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,7 +27,7 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
         $payout = $request->getSource();
 
         $this->gateway->execute($currency = new GetCurrency($payout->getCurrencyCode()));
-        $divisor = pow(10, $currency->exp);
+        $divisor = 10 ** $currency->exp;
 
         $details = ArrayObject::ensureArrayObject($payout->getDetails());
         $details['CURRENCYCODE'] = $payout->getCurrencyCode();
@@ -44,19 +43,15 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
         } else {
             throw new LogicException('Either recipient id or email must be set.');
         }
-        
+
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PayoutInterface &&
-            'array' == $request->getTo()
+            'array' === $request->getTo()
         ;
     }
 }

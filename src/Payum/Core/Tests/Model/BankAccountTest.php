@@ -1,93 +1,66 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\BankAccount;
 use Payum\Core\Model\BankAccountInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BankAccountTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendBankAccountInterface()
+    public function testShouldExtendBankAccountInterface(): void
     {
-        $rc = new \ReflectionClass(BankAccount::class);
+        $rc = new ReflectionClass(BankAccount::class);
 
         $this->assertTrue($rc->implementsInterface(BankAccountInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new BankAccount();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetHolderPreviouslySet()
+    public function testShouldAllowGetHolderPreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setHolder('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getHolder());
+        $this->assertSame('theVal', $bankAccount->getHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetNumberPreviouslySet()
+    public function testShouldAllowGetNumberPreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setNumber('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getNumber());
+        $this->assertSame('theVal', $bankAccount->getNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCodePreviouslySet()
+    public function testShouldAllowGetBankCodePreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCode());
+        $this->assertSame('theVal', $bankAccount->getBankCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCountryCodePreviouslySet()
+    public function testShouldAllowGetBankCountryCodePreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCountryCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCountryCode());
+        $this->assertSame('theVal', $bankAccount->getBankCountryCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIbanPreviouslySet()
+    public function testShouldAllowGetIbanPreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setIban('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getIban());
+        $this->assertSame('theVal', $bankAccount->getIban());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBicPreviouslySet()
+    public function testShouldAllowGetBicPreviouslySet(): void
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBic('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBic());
+        $this->assertSame('theVal', $bankAccount->getBic());
     }
 }

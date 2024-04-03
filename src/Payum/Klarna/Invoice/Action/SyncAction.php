@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -14,29 +16,23 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Sync $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['rno'] && false == $details['invoice_number']) {
+        if ($details['rno'] && ! $details['invoice_number']) {
             $this->gateway->execute(new CheckOrderStatus($request->getModel()));
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Sync &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

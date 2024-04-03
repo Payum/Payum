@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Model;
 
 interface GatewayConfigInterface
@@ -27,9 +28,6 @@ interface GatewayConfigInterface
      */
     public function setFactoryName($name);
 
-    /**
-     * @param array $config
-     */
     public function setConfig(array $config);
 
     /**

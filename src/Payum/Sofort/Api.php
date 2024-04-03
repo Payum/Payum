@@ -8,27 +8,36 @@ use Sofort\SofortLib\TransactionData;
 
 class Api
 {
-    const STATUS_LOSS = 'loss';
-    const SUB_LOSS = 'not_credited';
-    const STATUS_PENDING = 'pending';
-    const SUB_PENDING = 'not_credited_yet';
-    const STATUS_RECEIVED = 'received';
-    const SUB_CREDITED = 'credited';
-    const SUB_PARTIALLY = 'partially_credited';
-    const SUB_OVERPAYMENT = 'overpayment';
-    const STATUS_REFUNDED = 'refunded';
-    const SUB_COMPENSATION = 'compensation';
-    const SUB_REFUNDED = 'refunded';
-    const STATUS_UNTRACEABLE = 'untraceable';
-    const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
+    public const STATUS_LOSS = 'loss';
+
+    public const SUB_LOSS = 'not_credited';
+
+    public const STATUS_PENDING = 'pending';
+
+    public const SUB_PENDING = 'not_credited_yet';
+
+    public const STATUS_RECEIVED = 'received';
+
+    public const SUB_CREDITED = 'credited';
+
+    public const SUB_PARTIALLY = 'partially_credited';
+
+    public const SUB_OVERPAYMENT = 'overpayment';
+
+    public const STATUS_REFUNDED = 'refunded';
+
+    public const SUB_COMPENSATION = 'compensation';
+
+    public const SUB_REFUNDED = 'refunded';
+
+    public const STATUS_UNTRACEABLE = 'untraceable';
+
+    public const SUB_SOFORT_NEEDED = 'sofort_bank_account_needed';
 
     protected $options = [
         'config_key' => null,
     ];
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options)
     {
         $this->options = array_replace([
@@ -39,8 +48,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function createTransaction(array $fields)
@@ -64,7 +71,7 @@ class Api
         $sofort->setSuccessUrl($fields['success_url'], $fields['success_link_redirect']);
         $sofort->setAbortUrl($fields['abort_url']);
 
-        if (false == $this->options['disable_notification']) {
+        if (! $this->options['disable_notification']) {
             $sofort->setNotificationUrl($fields['notification_url'], $fields['notify_on']);
         }
 
@@ -78,8 +85,6 @@ class Api
     }
 
     /**
-     * @param $transactionId
-     *
      * @return array
      */
     public function getTransactionData($transactionId)
@@ -89,8 +94,8 @@ class Api
         $transactionData->setApiVersion('2.0');
         $transactionData->sendRequest();
 
-        $fields = array();
-        $methods = array(
+        $fields = [];
+        $methods = [
             'getAmount' => '',
             'getAmountRefunded' => '',
             'getCount' => '',
@@ -102,7 +107,7 @@ class Api
             'getLanguageCode' => '',
             'getCurrency' => '',
             'getTransaction' => '',
-            'getReason' => array(0,0),
+            'getReason' => [0, 0],
             'getUserVariable' => 0,
             'getTime' => '',
             'getProjectId' => '',
@@ -120,18 +125,18 @@ class Api
             'getSenderBankName' => '',
             'getSenderBic' => '',
             'getSenderIban' => '',
-        );
+        ];
 
         foreach ($methods as $method => $params) {
             $varName = $method;
-            $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
+            $varName = strtolower((string) preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
-            if (is_array($params) && count($params) == 2) {
-                $fields[$varName] = $transactionData->$method($params[0], $params[1]);
-            } elseif ($params !== '') {
-                $fields[$varName] = $transactionData->$method($params);
+            if (is_array($params) && 2 === count($params)) {
+                $fields[$varName] = $transactionData->{$method}($params[0], $params[1]);
+            } elseif ('' !== $params) {
+                $fields[$varName] = $transactionData->{$method}($params);
             } else {
-                $fields[$varName] = $transactionData->$method();
+                $fields[$varName] = $transactionData->{$method}();
             }
         }
 
@@ -143,8 +148,6 @@ class Api
     }
 
     /**
-     * @param array $fields
-     *
      * @return array
      */
     public function refundTransaction(array $fields)

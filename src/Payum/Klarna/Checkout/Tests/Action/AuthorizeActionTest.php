@@ -1,8 +1,13 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
+use Klarna_Checkout_Order;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Identity;
@@ -17,123 +22,89 @@ use Payum\Klarna\Checkout\Action\AuthorizeAction;
 use Payum\Klarna\Checkout\Config;
 use Payum\Klarna\Checkout\Constants;
 use Payum\Klarna\Checkout\Request\Api\CreateOrder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class AuthorizeActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGenericTokenFactoryAwareInterface()
+    public function testShouldImplementsGenericTokenFactoryAwareInterface(): void
     {
-        $rc = new \ReflectionClass(AuthorizeAction::class);
-        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(GenericTokenFactoryAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass(AuthorizeAction::class);
+        $rc = new ReflectionClass(AuthorizeAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new AuthorizeAction('aTemplate');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportAuthorizeWithArrayAsModel()
+    public function testShouldSupportAuthorizeWithArrayAsModel(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $this->assertTrue($action->supports(new Authorize(array())));
+        $this->assertTrue($action->supports(new Authorize([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotAuthorize()
+    public function testShouldNotSupportAnythingNotAuthorize(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAuthorizeWithNotArrayAccessModel()
+    public function testShouldNotSupportAuthorizeWithNotArrayAccessModel(): void
     {
         $action = new AuthorizeAction('aTemplate');
 
-        $this->assertFalse($action->supports(new Authorize(new \stdClass())));
+        $this->assertFalse($action->supports(new Authorize(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new AuthorizeAction('aTemplate');
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteSyncIfModelHasLocationSet()
+    public function testShouldSubExecuteSyncIfModelHasLocationSet(): void
     {
-        $this->expectException(\Payum\Core\Reply\HttpResponse::class);
+        $this->expectException(HttpResponse::class);
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
         ;
 
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($gatewayMock);
         $action->setApi(new Config());
 
-        $action->execute(new Authorize(array(
+        $action->execute(new Authorize([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
             'location' => 'aLocation',
             'merchant' => [
@@ -141,43 +112,40 @@ class AuthorizeActionTest extends TestCase
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
-        )));
+            ],
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteCreateOrderRequestIfStatusAndLocationNotSet()
+    public function testShouldSubExecuteCreateOrderRequestIfStatusAndLocationNotSet(): void
     {
         $orderMock = $this->createOrderMock();
         $orderMock
             ->expects($this->once())
             ->method('marshal')
-            ->will($this->returnValue(array(
+            ->willReturn([
                 'foo' => 'fooVal',
                 'bar' => 'barVal',
-            )))
+            ])
         ;
         $orderMock
             ->expects($this->once())
             ->method('getLocation')
-            ->will($this->returnValue('theLocation'))
+            ->willReturn('theLocation')
         ;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(0))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(CreateOrder::class))
-            ->will($this->returnCallback(function (CreateOrder $request) use ($orderMock) {
-                $request->setOrder($orderMock);
-            }))
-        ;
-        $gatewayMock
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->isInstanceOf(Sync::class))
+            ->withConsecutive(
+                [$this->isInstanceOf(CreateOrder::class)],
+                [$this->isInstanceOf(Sync::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->returnCallback(function (CreateOrder $request) use ($orderMock): void {
+                    $request->setOrder($orderMock);
+                })
+            )
         ;
 
         $action = new AuthorizeAction('aTemplate');
@@ -190,58 +158,65 @@ class AuthorizeActionTest extends TestCase
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]);
 
         $action->execute(new Authorize($model));
 
-        $this->assertEquals('fooVal', $model['foo']);
-        $this->assertEquals('barVal', $model['bar']);
-        $this->assertEquals('theLocation', $model['location']);
+        $this->assertSame('fooVal', $model['foo']);
+        $this->assertSame('barVal', $model['bar']);
+        $this->assertSame('theLocation', $model['location']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowReplyWhenStatusCheckoutIncomplete()
+    public function testShouldThrowReplyWhenStatusCheckoutIncomplete(): void
     {
         $snippet = 'theSnippet';
         $expectedContent = 'theTemplateContent';
         $expectedTemplateName = 'theTemplateName';
-        $expectedContext = array('snippet' => $snippet);
+        $expectedContext = [
+            'snippet' => $snippet,
+        ];
 
         $testCase = $this;
 
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
-            ->expects($this->at(1))
+            ->expects($this->atLeast(2))
             ->method('execute')
-            ->with($this->isInstanceOf(RenderTemplate::class))
-            ->will($this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent) {
-                $testCase->assertEquals($expectedTemplateName, $request->getTemplateName());
-                $testCase->assertEquals($expectedContext, $request->getParameters());
+            ->withConsecutive(
+                [$this->isInstanceOf(Sync::class)],
+                [$this->isInstanceOf(RenderTemplate::class)]
+            )
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->returnCallback(function (RenderTemplate $request) use ($testCase, $expectedTemplateName, $expectedContext, $expectedContent): void {
+                    $testCase->assertSame($expectedTemplateName, $request->getTemplateName());
+                    $testCase->assertSame($expectedContext, $request->getParameters());
 
-                $request->setResult($expectedContent);
-            }))
+                    $request->setResult($expectedContent);
+                })
+            )
         ;
 
         $action = new AuthorizeAction($expectedTemplateName);
         $action->setGateway($gatewayMock);
 
         try {
-            $action->execute(new Authorize(array(
+            $action->execute(new Authorize([
                 'location' => 'aLocation',
                 'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-                'gui' => array('snippet' => $snippet),
+                'gui' => [
+                    'snippet' => $snippet,
+                ],
                 'merchant' => [
                     'confirmation_uri' => 'theConfirmationUri',
                     'push_uri' => 'thePushUri',
                     'checkout_uri' => 'theCheckoutUri',
                     'terms_uri' => 'theTermsUri',
-                ]
-            )));
+                ],
+            ]));
         } catch (HttpResponse $reply) {
-            $this->assertEquals($expectedContent, $reply->getContent());
+            $this->assertSame($expectedContent, $reply->getContent());
 
             return;
         }
@@ -249,53 +224,88 @@ class AuthorizeActionTest extends TestCase
         $this->fail('Exception expected to be throw');
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowReplyWhenStatusNotSet()
+    public function testShouldNotThrowReplyWhenStatusNotSet(): void
     {
         $action = new AuthorizeAction('aTemplate');
-        $action->setGateway($this->createGatewayMock());
+        $gateway = $this->createGatewayMock();
+        $action->setGateway($gateway);
 
-        $action->execute(new Authorize(array(
+        $gateway->expects($this->once())
+            ->method('execute')
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
+                    'location' => 'aLocation',
+                    'gui' => [
+                        'snippet' => 'theSnippet',
+                    ],
+                    'merchant' => [
+                        'confirmation_uri' => 'theConfirmationUri',
+                        'push_uri' => 'thePushUri',
+                        'checkout_uri' => 'theCheckoutUri',
+                        'terms_uri' => 'theTermsUri',
+                    ],
+                ]))
+            );
+
+        $action->execute(new Authorize([
             'location' => 'aLocation',
-            'gui' => array('snippet' => 'theSnippet'),
+            'gui' => [
+                'snippet' => 'theSnippet',
+            ],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
-        )));
+            ],
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowReplyWhenStatusCreated()
+    public function testShouldNotThrowReplyWhenStatusCreated(): void
     {
         $action = new AuthorizeAction('aTemplate');
-        $action->setGateway($this->createGatewayMock());
+        $gateway = $this->createGatewayMock();
+        $action->setGateway($gateway);
 
-        $action->execute(new Authorize(array(
+        $gateway->expects($this->once())
+            ->method('execute')
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject(
+                    [
+                        'location' => 'aLocation',
+                        'status' => Constants::STATUS_CREATED,
+                        'gui' => [
+                            'snippet' => 'theSnippet',
+                        ],
+                        'merchant' => [
+                            'confirmation_uri' => 'theConfirmationUri',
+                            'push_uri' => 'thePushUri',
+                            'checkout_uri' => 'theCheckoutUri',
+                            'terms_uri' => 'theTermsUri',
+
+                        ],
+                    ]
+                ))
+            );
+
+        $action->execute(new Authorize([
             'location' => 'aLocation',
             'status' => Constants::STATUS_CREATED,
-            'gui' => array('snippet' => 'theSnippet'),
+            'gui' => [
+                'snippet' => 'theSnippet',
+            ],
             'merchant' => [
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
-        )));
+            ],
+        ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfPushUriNotSet()
+    public function testShouldThrowIfPushUriNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The push_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
@@ -305,16 +315,13 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfConfirmUriNotSet()
+    public function testShouldThrowIfConfirmUriNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The confirmation_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
@@ -324,16 +331,13 @@ class AuthorizeActionTest extends TestCase
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment()
+    public function testShouldThrowIfCheckoutUriNotSetNeitherInConfigNorPayment(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The checkout_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
@@ -344,20 +348,31 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCheckoutUriFromConfig()
+    public function testShouldUseCheckoutUriFromConfig(): void
     {
         $config = new Config();
         $config->checkoutUri = 'theCheckoutUrl';
 
         $action = new AuthorizeAction('aTemplate');
-        $action->setGateway($this->createGatewayMock());
+        $gateway = $this->createGatewayMock();
+        $gateway->expects($this->once())
+            ->method('execute')
+            ->with(new Sync(ArrayObject::ensureArrayObject([
+                'location' => 'aLocation',
+                'merchant' => [
+                    'checkout_uri' => 'theCheckoutUrl',
+                    'confirmation_uri' => 'theConfirmationUri',
+                    'terms_uri' => 'theTermsUri',
+                    'push_uri' => 'thePushUri',
+
+                ],
+            ])));
+
+        $action->setGateway($gateway);
         $action->setApi($config);
 
         $action->execute(new Authorize([
@@ -366,16 +381,13 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'terms_uri' => 'theTermsUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfTermsUriNotSetNeitherInConfigNorPayment()
+    public function testShouldThrowIfTermsUriNotSetNeitherInConfigNorPayment(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The terms_uri fields are required.');
         $action = new AuthorizeAction('aTemplate');
         $action->setGateway($this->createGatewayMock());
@@ -386,21 +398,33 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'push_uri' => 'thePushUri',
                 'checkout_uri' => 'theCheckoutUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseTermsUriFromConfig()
+    public function testShouldUseTermsUriFromConfig(): void
     {
         $config = new Config();
         $config->termsUri = 'theTermsUrl';
 
         $action = new AuthorizeAction('aTemplate');
-        $action->setGateway($this->createGatewayMock());
+        $gateway = $this->createGatewayMock();
+        $action->setGateway($gateway);
         $action->setApi($config);
+
+        $gateway->expects($this->once())
+            ->method('execute')
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
+                    'location' => 'aLocation',
+                    'merchant' => [
+                        'confirmation_uri' => 'theConfirmationUri',
+                        'checkout_uri' => 'theCheckoutUri',
+                        'push_uri' => 'thePushUri',
+                        'terms_uri' => 'theTermsUrl',
+                    ],
+                ]))
+            );
 
         $action->execute(new Authorize([
             'location' => 'aLocation',
@@ -408,23 +432,35 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseTargetUrlFromRequestTokenAsConfirmationIfNotSet()
+    public function testShouldUseTargetUrlFromRequestTokenAsConfirmationIfNotSet(): void
     {
         $config = new Config();
 
         $action = new AuthorizeAction('aTemplate');
-        $action->setGateway($this->createGatewayMock());
+        $gateway = $this->createGatewayMock();
+        $action->setGateway($gateway);
         $action->setApi($config);
 
         $token = new Token();
         $token->setTargetUrl('theTargetUrl');
+
+        $gateway->expects($this->once())
+            ->method('execute')
+            ->with(
+                new Sync(ArrayObject::ensureArrayObject([
+                    'location' => 'aLocation',
+                    'merchant' => [
+                        'confirmation_uri' => 'theTargetUrl',
+                        'checkout_uri' => 'theCheckoutUri',
+                        'push_uri' => 'thePushUri',
+                        'terms_uri' => 'theTermsUri',
+                    ],
+                ]))
+            );
 
         $authorize = new Authorize($token);
         $authorize->setModel([
@@ -433,16 +469,13 @@ class AuthorizeActionTest extends TestCase
                 'terms_uri' => 'theTermsUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'push_uri' => 'thePushUri',
-            ]
+            ],
         ]);
 
         $action->execute($authorize);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGeneratePushUriIfNotSet()
+    public function testShouldGeneratePushUriIfNotSet(): void
     {
         $config = new Config();
         $config->termsUri = 'theTermsUri';
@@ -468,8 +501,6 @@ class AuthorizeActionTest extends TestCase
         $action->setApi($config);
         $action->setGenericTokenFactory($tokenFactory);
 
-
-
         $authorize = new Authorize($token);
         $authorize->setModel([
             'location' => 'aLocation',
@@ -477,25 +508,25 @@ class AuthorizeActionTest extends TestCase
                 'confirmation_uri' => 'theConfirmationUri',
                 'checkout_uri' => 'theCheckoutUri',
                 'terms_uri' => 'theTermsUri',
-            ]
+            ],
         ]);
 
         $action->execute($authorize);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna_Checkout_Order
+     * @return MockObject|Klarna_Checkout_Order
      */
     protected function createOrderMock()
     {
-        return $this->createMock('Klarna_Checkout_Order', array(), array(), '', false);
+        return $this->createMock(Klarna_Checkout_Order::class);
     }
 }

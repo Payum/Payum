@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,17 +12,15 @@ use Payum\Paypal\Masspay\Nvp\Api;
 class GetPayoutStatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        if (false == $model['ACK']) {
+
+        if (! $model['ACK']) {
             $request->markNew();
 
             return;
@@ -41,14 +41,10 @@ class GetPayoutStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

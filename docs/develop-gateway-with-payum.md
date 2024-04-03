@@ -1,16 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Develop a custom Payum gateway
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Develop a custom Payum gateway.
-
-This chapter could be useful for a developer who wants to create a gateway on top of payum.
-The Payum provides a skeleton project which helps us a lots.
+This chapter could be useful for a developer who wants to create a gateway on top of payum. The Payum provides a skeleton project which helps us a lots.
 
 1. Create new project
 
@@ -40,7 +30,9 @@ $payum = (new PayumBuilder)
     ->getPayum()
 ;
 ```
+
 Or, if your are working on the bases of Symfony, you can define it in a service that way :
+
 ```yml
     acme.paypal_gateway_factory:
         class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
@@ -66,4 +58,10 @@ $model = new \ArrayObject([
 $paypal->execute(new Capture($model));
 ```
 
-Back to [index](index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

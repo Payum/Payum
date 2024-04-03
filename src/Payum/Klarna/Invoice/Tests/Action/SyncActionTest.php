@@ -1,99 +1,76 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Action;
 
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Sync;
 use Payum\Klarna\Invoice\Action\SyncAction;
+use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class SyncActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(SyncAction::class);
+        $rc = new ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAsModel()
+    public function testShouldSupportSyncWithArrayAsModel(): void
     {
         $action = new SyncAction();
 
-        $this->assertTrue($action->supports(new Sync(array())));
+        $this->assertTrue($action->supports(new Sync([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync(): void
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel(): void
     {
         $action = new SyncAction();
 
-        $this->assertFalse($action->supports(new Sync(new \stdClass())));
+        $this->assertFalse($action->supports(new Sync(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new SyncAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteCheckOrderStatusIfReservedButNotActivated()
+    public function testShouldSubExecuteCheckOrderStatusIfReservedButNotActivated(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Klarna\Invoice\Request\Api\CheckOrderStatus'))
+            ->with($this->isInstanceOf(CheckOrderStatus::class))
         ;
 
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'rno' => 'aRno',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSubExecuteCheckOrderStatusIfNotReserved()
+    public function testShouldNotSubExecuteCheckOrderStatusIfNotReserved(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -104,15 +81,12 @@ class SyncActionTest extends TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array());
+        $request = new Sync([]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSubExecuteCheckOrderStatusIfReservedAndActivated()
+    public function testShouldNotSubExecuteCheckOrderStatusIfReservedAndActivated(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -123,19 +97,19 @@ class SyncActionTest extends TestCase
         $action = new SyncAction();
         $action->setGateway($gatewayMock);
 
-        $request = new Sync(array(
+        $request = new Sync([
             'rno' => 'aRno',
             'invoice_number' => 'aInvNumber',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

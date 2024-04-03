@@ -1,48 +1,37 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use ArrayObject;
+use Klarna;
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
+class PopulateKlarnaFromDetailsTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails');
+        $rc = new ReflectionClass(PopulateKlarnaFromDetails::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAndKlarnaAsArguments()
+    public function testShouldAllowGetModelSetInConstructor(): void
     {
-        new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
-    {
-        $details = new \ArrayObject();
-        $klarna = new \Klarna();
+        $details = new ArrayObject();
+        $klarna = new Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 
         $this->assertSame($details, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetKlarnaSetInConstructor()
+    public function testShouldAllowGetKlarnaSetInConstructor(): void
     {
-        $details = new \ArrayObject();
-        $klarna = new \Klarna();
+        $details = new ArrayObject();
+        $klarna = new Klarna();
 
         $request = new PopulateKlarnaFromDetails($details, $klarna);
 

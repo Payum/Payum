@@ -1,20 +1,19 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Request\Api;
 
+use ArrayAccess;
+use Klarna;
 use Payum\Core\Request\Generic;
 
 class PopulateKlarnaFromDetails extends Generic
 {
     /**
-     * @var \Klarna
+     * @var Klarna
      */
     protected $klarna;
 
-    /**
-     * @param \ArrayAccess $details
-     * @param \Klarna      $klarna
-     */
-    public function __construct(\ArrayAccess $details, \Klarna $klarna)
+    public function __construct(ArrayAccess $details, Klarna $klarna)
     {
         parent::__construct($details);
 
@@ -22,7 +21,7 @@ class PopulateKlarnaFromDetails extends Generic
     }
 
     /**
-     * @return \Klarna
+     * @return Klarna
      */
     public function getKlarna()
     {

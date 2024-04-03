@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
@@ -10,9 +11,12 @@ class CoreGatewayFactoryBuilder implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
+    public function __invoke()
+    {
+        return call_user_func_array([$this, 'build'], func_get_args());
+    }
+
     /**
-     * @param array $defaultConfig
-     *
      * @return GatewayFactoryInterface
      */
     public function build(array $defaultConfig)
@@ -21,10 +25,5 @@ class CoreGatewayFactoryBuilder implements ContainerAwareInterface
         $coreGatewayFactory->setContainer($this->container);
 
         return $coreGatewayFactory;
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'build'], func_get_args());
     }
 }

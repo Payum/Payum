@@ -1,64 +1,39 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identity;
 use Payum\Core\Storage\IdentityInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class IdentityTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementIdentityInterface()
+    public function testShouldImplementIdentityInterface(): void
     {
-        $rc = new \ReflectionClass(Identity::class);
+        $rc = new ReflectionClass(Identity::class);
 
         $this->assertTrue($rc->implementsInterface(IdentityInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
+    public function testShouldAllowGetIdSetInConstructor(): void
     {
-        new Identity('anId', 'aClass');
+        $id = new Identity('theId', new stdClass());
+
+        $this->assertSame('theId', $id->getId());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
+    public function testShouldAllowGetClassSetInConstructor(): void
     {
-        new Identity('anId', new \stdClass());
+        $id = new Identity('theId', new stdClass());
+
+        $this->assertSame(stdClass::class, $id->getClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdSetInConstructor()
+    public function testShouldBeCorrectlySerializedAndUnserialized(): void
     {
-        $id = new Identity('theId', new \stdClass());
-
-        $this->assertEquals('theId', $id->getId());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetClassSetInConstructor()
-    {
-        $id = new Identity('theId', new \stdClass());
-
-        $this->assertEquals('stdClass', $id->getClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeCorrectlySerializedAndUnserialized()
-    {
-        $id = new Identity('theId', new \stdClass());
+        $id = new Identity('theId', new stdClass());
 
         $serializedId = serialize($id);
 

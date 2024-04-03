@@ -1,94 +1,69 @@
 <?php
+
 namespace Payum\Core\Tests\Extension;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\GatewayInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
+        $rc = new ReflectionClass(EndlessCycleDetectorExtension::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest(): void
     {
-        new EndlessCycleDetectorExtension();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetDefaultLimitInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension();
-
-        $this->assertAttributeEquals(100, 'limit', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetLimitInInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension($expectedLimit = 55);
-
-        $this->assertAttributeEquals($expectedLimit, 'limit', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
-    {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), array(
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-        ));
+        $context = new Context($gatewayMock, new stdClass(), [
+            new Context($gatewayMock, new stdClass(), []),
+            new Context($gatewayMock, new stdClass(), []),
+            new Context($gatewayMock, new stdClass(), []),
+        ]);
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 2);
 
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
+    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $gatewayMock = $this->createGatewayMock();
 
-        $context = new Context($gatewayMock, new \stdClass(), array(
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-            new Context($gatewayMock, new \stdClass(), array()),
-        ));
+        $context = new Context($gatewayMock, new stdClass(), [
+            new Context($gatewayMock, new stdClass(), []),
+            new Context($gatewayMock, new stdClass(), []),
+            new Context($gatewayMock, new stdClass(), []),
+        ]);
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 5);
 
-        $extension->onPreExecute($context);
+        try {
+            $extension->onPreExecute($context);
+        } catch (LogicException) {
+            $this->fail('Exception should not be thrown');
+        }
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->createMock('Payum\Core\GatewayInterface');
+        return $this->createMock(GatewayInterface::class);
     }
 }

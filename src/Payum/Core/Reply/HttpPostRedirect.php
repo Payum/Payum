@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Reply;
 
 class HttpPostRedirect extends HttpResponse
@@ -15,11 +16,10 @@ class HttpPostRedirect extends HttpResponse
 
     /**
      * @param string   $url
-     * @param array    $fields
      * @param int      $statusCode
      * @param string[] $headers
      */
-    public function __construct($url, array $fields = array(), $statusCode = 200, array $headers = array())
+    public function __construct($url, array $fields = [], $statusCode = 200, array $headers = [])
     {
         $this->url = $url;
         $this->fields = $fields;
@@ -45,7 +45,6 @@ class HttpPostRedirect extends HttpResponse
 
     /**
      * @param string $url
-     * @param array  $fields
      *
      * @return string
      */
@@ -55,9 +54,9 @@ class HttpPostRedirect extends HttpResponse
         foreach ($fields as $name => $value) {
             $formInputs .= sprintf(
                 '<input type="hidden" name="%1$s" value="%2$s" />',
-                htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-                htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
-            )."\n";
+                htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')
+            ) . "\n";
         }
 
         $content = <<<'HTML'
@@ -75,6 +74,6 @@ class HttpPostRedirect extends HttpResponse
 </html>
 HTML;
 
-        return sprintf($content, htmlspecialchars($url, ENT_QUOTES, 'UTF-8'), $formInputs);
+        return sprintf($content, htmlspecialchars((string) $url, ENT_QUOTES, 'UTF-8'), $formInputs);
     }
 }

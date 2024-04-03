@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Stripe\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -15,12 +16,9 @@ class CreateTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateTokenForCreditCard */
+        /** @var CreateTokenForCreditCard $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var CreditCardInterface $card */
@@ -37,17 +35,13 @@ class CreateTokenForCreditCardAction implements ActionInterface, GatewayAwareInt
         }
 
         $this->gateway->execute(new CreateToken($token));
-        
+
         $request->setToken($token->toUnsafeArray());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateTokenForCreditCard &&
+        return $request instanceof CreateTokenForCreditCard &&
             $request->getModel() instanceof CreditCardInterface
         ;
     }

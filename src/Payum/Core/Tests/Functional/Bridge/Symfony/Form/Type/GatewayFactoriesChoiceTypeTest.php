@@ -1,11 +1,13 @@
 <?php
+
 namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormView;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {
@@ -17,29 +19,23 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
     protected function setUp(): void
     {
         $this->formFactory = Forms::createFormFactoryBuilder()
-            ->addType(new GatewayFactoriesChoiceType(array(
+            ->addType(new GatewayFactoriesChoiceType([
                 'Foo Factory' => 'foo',
-                'Bar Factory' => 'bar'
-            )))
+                'Bar Factory' => 'bar',
+            ]))
             ->getFormFactory()
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
-        $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
-        $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
+        $this->assertInstanceOf(Form::class, $form);
+        $this->assertInstanceOf(FormView::class, $form->createView());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyBindValidValue()
+    public function testShouldCorrectlyBindValidValue(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 
@@ -47,13 +43,10 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
 
         $this->assertTrue($form->isValid());
 
-        $this->assertEquals('foo', $form->getData());
+        $this->assertSame('foo', $form->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotBindInvalidValue()
+    public function testShouldNotBindInvalidValue(): void
     {
         $form = $this->formFactory->create(GatewayFactoriesChoiceType::class);
 

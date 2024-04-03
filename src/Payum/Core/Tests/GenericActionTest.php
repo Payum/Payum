@@ -1,16 +1,23 @@
 <?php
+
 namespace Payum\Core\Tests;
 
+use ArrayObject;
+use Iterator;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Security\TokenInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 abstract class GenericActionTest extends TestCase
 {
     /**
-     * @var Generic
+     * @var Generic|string
      */
     protected $requestClass;
 
@@ -29,73 +36,56 @@ abstract class GenericActionTest extends TestCase
         $this->action = new $this->actionClass();
     }
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
-        yield array(new $this->requestClass(array()));
-        yield array(new $this->requestClass(new \ArrayObject()));
+        yield [new $this->requestClass([])];
+        yield [new $this->requestClass(new ArrayObject())];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array(new $this->requestClass('foo'));
-        yield array(new $this->requestClass(new \stdClass()));
-        yield array($this->getMockForAbstractClass(Generic::class, array(array())));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new stdClass()];
+        yield [new $this->requestClass('foo')];
+        yield [new $this->requestClass(new stdClass())];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass($this->actionClass);
+        $rc = new ReflectionClass($this->actionClass);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
     /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new $this->actionClass();
-    }
-
-    /**
-     * @test
-     *
      * @dataProvider provideSupportedRequests
      */
-    public function shouldSupportRequest($request)
+    public function testShouldSupportRequest($request): void
     {
         $this->assertTrue($this->action->supports($request));
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function shouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request): void
     {
         $this->assertFalse($this->action->supports($request));
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $this->action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
@@ -103,7 +93,7 @@ abstract class GenericActionTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|TokenInterface
+     * @return MockObject|TokenInterface
      */
     protected function createTokenMock()
     {

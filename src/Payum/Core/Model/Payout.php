@@ -1,5 +1,8 @@
 <?php
+
 namespace Payum\Core\Model;
+
+use Traversable;
 
 /**
  * Experimental. Anything could be changed in this model at any moment
@@ -34,11 +37,10 @@ class Payout implements PayoutInterface
     /**
      * @var array
      */
-    protected $details;
+    protected $details = [];
 
     public function __construct()
     {
-        $this->details = [];
     }
 
     /**
@@ -52,7 +54,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $recipientId
      */
-    public function setRecipientId($recipientId)
+    public function setRecipientId($recipientId): void
     {
         $this->recipientId = $recipientId;
     }
@@ -68,7 +70,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $recipientEmail
      */
-    public function setRecipientEmail($recipientEmail)
+    public function setRecipientEmail($recipientEmail): void
     {
         $this->recipientEmail = $recipientEmail;
     }
@@ -84,7 +86,7 @@ class Payout implements PayoutInterface
     /**
      * @param int $totalAmount
      */
-    public function setTotalAmount($totalAmount)
+    public function setTotalAmount($totalAmount): void
     {
         $this->totalAmount = $totalAmount;
     }
@@ -100,7 +102,7 @@ class Payout implements PayoutInterface
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode($currencyCode)
+    public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
@@ -116,27 +118,22 @@ class Payout implements PayoutInterface
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDetails()
     {
         return $this->details;
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param array|\Traversable $details
+     * @param array|Traversable $details
      */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
-        if ($details instanceof \Traversable) {
+        if ($details instanceof Traversable) {
             $details = iterator_to_array($details);
         }
 

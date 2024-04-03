@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Request;
 
 use Payum\Core\Security\TokenInterface;
@@ -10,10 +11,7 @@ class GetToken
      */
     private $hash;
 
-    /**
-     * @var TokenInterface
-     */
-    private $token;
+    private ?TokenInterface $token = null;
 
     /**
      * @param string $hash
@@ -39,10 +37,7 @@ class GetToken
         return $this->token;
     }
 
-    /**
-     * @param TokenInterface $token
-     */
-    public function setToken(TokenInterface $token)
+    public function setToken(TokenInterface $token): void
     {
         $this->token = $token;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\ApiAwareInterface;

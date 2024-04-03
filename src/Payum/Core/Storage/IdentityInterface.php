@@ -1,7 +1,10 @@
 <?php
+
 namespace Payum\Core\Storage;
 
-interface IdentityInterface extends \Serializable
+use Serializable;
+
+interface IdentityInterface extends Serializable
 {
     /**
      * @return string

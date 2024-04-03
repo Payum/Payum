@@ -1,102 +1,81 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\RefundTransaction;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
+class RefundTransactionActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new ReflectionClass(RefundTransactionAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new ReflectionClass(RefundTransactionAction::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseApiAwareTrait()
+    public function testShouldUseApiAwareTrait(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\RefundTransactionAction');
+        $rc = new ReflectionClass(RefundTransactionAction::class);
 
-        $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
+        $this->assertContains(ApiAwareTrait::class, $rc->getTraitNames());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RefundTransactionAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportRefundTransactionRequestAndArrayAccessAsModel()
+    public function testShouldSupportRefundTransactionRequestAndArrayAccessAsModel(): void
     {
         $action = new RefundTransactionAction();
 
         $this->assertTrue(
-            $action->supports(new RefundTransaction($this->createMock('ArrayAccess')))
+            $action->supports(new RefundTransaction($this->createMock(ArrayAccess::class)))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotRefundTransactionRequest()
+    public function testShouldNotSupportAnythingNotRefundTransactionRequest(): void
     {
         $action = new RefundTransactionAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\RequestNotSupportedException
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
+        $this->expectException(RequestNotSupportedException::class);
         $action = new RefundTransactionAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     *
-     * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage The TRANSACTIONID fields are required.
-     */
-    public function throwIfAuthorizationIdNotSetInModel()
+    public function testThrowIfAuthorizationIdNotSetInModel(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The TRANSACTIONID fields are required.');
+
         $action = new RefundTransactionAction();
 
-        $request = new RefundTransaction(array());
+        $request = new RefundTransaction([]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiRefundTransactionMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiRefundTransactionMethodWithExpectedRequiredArguments(): void
     {
         $testCase = $this;
 
@@ -104,64 +83,59 @@ class RefundTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('RefundTransaction')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TRANSACTIONID', $fields);
-                $testCase->assertEquals('theOriginalTransactionId', $fields['TRANSACTIONID']);
+                $testCase->assertSame('theOriginalTransactionId', $fields['TRANSACTIONID']);
 
-                return array();
-            }))
+                return [];
+            })
         ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'TRANSACTIONID' => 'theOriginalTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiRefundTransactionMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiRefundTransactionMethodAndUpdateModelFromResponseOnSuccess(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('RefundTransaction')
-            ->will($this->returnCallback(function () {
-                return array(
-                    'TRANSACTIONID' => 'theTransactionId',
-                    'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
-                );
-            }))
+            ->willReturnCallback(fn () => [
+                'TRANSACTIONID' => 'theTransactionId',
+                'REFUNDTRANSACTIONID' => 'theRefundTransactionId',
+            ])
         ;
 
         $action = new RefundTransactionAction();
         $action->setApi($apiMock);
 
-        $request = new RefundTransaction(array(
+        $request = new RefundTransaction([
             'TRANSACTIONID' => 'theTransactionId',
-        ));
+        ]);
 
         $action->execute($request);
 
         $model = $request->getModel();
 
         $this->assertArrayHasKey('TRANSACTIONID', $model);
-        $this->assertEquals('theTransactionId', $model['TRANSACTIONID']);
+        $this->assertSame('theTransactionId', $model['TRANSACTIONID']);
 
         $this->assertArrayHasKey('REFUNDTRANSACTIONID', $model);
-        $this->assertEquals('theRefundTransactionId', $model['REFUNDTRANSACTIONID']);
+        $this->assertSame('theRefundTransactionId', $model['REFUNDTRANSACTIONID']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ExpressCheckout\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

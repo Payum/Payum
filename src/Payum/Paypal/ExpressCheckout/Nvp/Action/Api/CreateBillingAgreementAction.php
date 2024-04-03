@@ -1,12 +1,14 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement;
 
@@ -19,12 +21,9 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateBillingAgreement */
+        /** @var CreateBillingAgreement $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -38,14 +37,10 @@ class CreateBillingAgreementAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof CreateBillingAgreement &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof CreateBillingAgreement &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

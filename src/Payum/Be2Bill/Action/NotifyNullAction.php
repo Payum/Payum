@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -15,11 +16,9 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
-     * @param $request Notify
+     * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -31,7 +30,7 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
         }
 
         $extraDataJson = $httpRequest->query['EXTRADATA'];
-        if (false == $extraData = json_decode($extraDataJson, true)) {
+        if (! $extraData = json_decode((string) $extraDataJson, true, 512, JSON_THROW_ON_ERROR)) {
             throw new HttpResponse('The notification is invalid. Code Be2Bell2', 400);
         }
 
@@ -43,13 +42,9 @@ class NotifyNullAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute(new Notify($getToken->getToken()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
+        return $request instanceof Notify &&
             null === $request->getModel()
         ;
     }

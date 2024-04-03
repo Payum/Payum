@@ -1,45 +1,35 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Twig;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
+use Payum\Core\Gateway;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
 class TwigFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowCreateATwigEnvironment()
+    public function testShouldAllowCreateATwigEnvironment(): void
     {
         $twig = TwigFactory::createGeneric();
 
         $this->assertInstanceOf(Environment::class, $twig);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGuessCorrectCorePathByGatewayClass()
+    public function testShouldGuessCorrectCorePathByGatewayClass(): void
     {
-        $path = TwigFactory::guessViewsPath('Payum\Core\Gateway');
+        $path = TwigFactory::guessViewsPath(Gateway::class);
 
         $this->assertFileExists($path);
         $this->assertStringEndsWith('Payum/Core/Resources/views', $path);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotGuessPathIfFileNotExist()
+    public function testShouldNotGuessPathIfFileNotExist(): void
     {
         $this->assertNull(TwigFactory::guessViewsPath('Foo\Bar\Baz'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGenericPaths()
+    public function testShouldAllowCreateGenericPaths(): void
     {
         $paths = TwigFactory::createGenericPaths();
 

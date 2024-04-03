@@ -1,11 +1,17 @@
 <?php
+
 namespace Payum\Core\Debug;
 
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Reply\HttpRedirect;
+use ReflectionObject;
 
 abstract class Humanify
 {
+    final private function __construct()
+    {
+    }
+
     /**
      * @param  mixed  $request
      * @return string
@@ -14,7 +20,7 @@ abstract class Humanify
     {
         $return = self::value($request);
 
-        $details = array();
+        $details = [];
 
         if ($request instanceof ModelAggregateInterface) {
             $details[] = sprintf('model: %s', self::value($request->getModel()));
@@ -23,7 +29,7 @@ abstract class Humanify
             $details[] = sprintf('url: %s', $request->getUrl());
         }
 
-        if (false == empty($details)) {
+        if (! empty($details)) {
             $return .= sprintf('{%s}', implode(', ', $details));
         }
 
@@ -40,18 +46,14 @@ abstract class Humanify
     {
         if (is_object($value)) {
             if ($shortClass) {
-                $ro = new \ReflectionObject($value);
+                $ro = new ReflectionObject($value);
 
                 return $ro->getShortName();
             }
 
-            return get_class($value);
+            return $value::class;
         }
 
         return gettype($value);
-    }
-
-    final private function __construct()
-    {
     }
 }

@@ -2,26 +2,25 @@
 
 namespace Payum\Sofort\Action;
 
-use Payum\Sofort\Api;
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Sofort\Api;
 
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritdoc}
-     *
-     * @param $request GetStatusInterface
+     * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (!isset($details['status'])
+        if (! isset($details['status'])
            && isset($details['transaction_id'])
            && isset($details['expires'])
            && $details['expires'] < time()) {
@@ -30,19 +29,19 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (!isset($details['transaction_id']) || !strlen($details['transaction_id'])) {
+        if (! isset($details['transaction_id']) || ! strlen((string) $details['transaction_id'])) {
             $request->markNew();
 
             return;
         }
 
-        if (!isset($details['status'])) {
+        if (! isset($details['status'])) {
             $request->markNew();
 
             return;
         }
 
-        $subcode = isset($details['statusReason']) ? $details['statusReason'] : null;
+        $subcode = $details['statusReason'] ?? null;
         switch ($details['status']) {
             case Api::STATUS_LOSS:
                 $request->markFailed();
@@ -81,14 +80,10 @@ class StatusAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

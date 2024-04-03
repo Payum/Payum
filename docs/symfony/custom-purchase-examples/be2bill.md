@@ -1,23 +1,14 @@
-<h2 align="center">Supporting Payum</h2>
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Be2bill credit card
+# Be2Bill Credit Card
 
 Steps:
 
-* [Download libraries](#download-libraries)
-* [Configure payment](#configure-context)
-* [Prepare payment](#prepare-payment)
+* [Download libraries](be2bill.md#download-libraries)
+* [Configure payment](be2bill.md#configure-context)
+* [Prepare payment](be2bill.md#prepare-payment)
 
-_**Note**: We assume you followed all steps in [get it started](../get-it-started.md) and your basic configuration same as described there._
+_**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._
 
-## Download libraries
+### Download libraries
 
 Run the following command:
 
@@ -25,7 +16,7 @@ Run the following command:
 $ php composer.phar require "payum/be2bill"
 ```
 
-## Configure gateway
+### Configure gateway
 
 ```yaml
 #app/config/config.yml
@@ -41,10 +32,9 @@ payum:
 
 _**Attention**: You have to changed `your_gateway_name` to something more descriptive and domain related, for example `post_a_job_with_be2bill`._
 
-## Prepare payment
+### Prepare payment
 
-Now we are ready to prepare the payment. Here we set price, currency, cart items details and so.
-Please note that you have to set details in the payment gateway specific format.
+Now we are ready to prepare the payment. Here we set price, currency, cart items details and so. Please note that you have to set details in the payment gateway specific format.
 
 ```php
 <?php
@@ -85,11 +75,10 @@ class PaymentController extends Controller
 }
 ```
 
-That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action.
-Check [this chapter](../purchase-done-action.md) to find out how this done action could look like.
+That's it. It will ask user for credit card and convert it to payment specific format. After the payment done you will be redirect to `acme_payment_done` action. Check [this chapter](../purchase-done-action.md) to find out how this done action could look like.
 
-If you still able to pass credit card details explicitly: 
-  
+If you still able to pass credit card details explicitly:
+
 ```php
 <?php
 use Payum\Core\Security\SensitiveValue;
@@ -100,7 +89,14 @@ $details['CARDFULLNAME'] = new SensitiveValue('John Doe');
 $details['CARDVALIDITYDATE'] = new SensitiveValue('15-11');
 ```
 
-## Next Step
+### Next Step
 
 * [Examples list](../custom-purchase-examples.md).
-* [Back to index](../../index.md).
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

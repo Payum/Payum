@@ -1,36 +1,25 @@
 <?php
+
 namespace Payum\Core\Tests\Exception;
 
-use Payum\Core\Exception\LogicException;
+use LogicException;
+use Payum\Core\Exception\ExceptionInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class LogicExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\LogicException::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
+        $this->assertTrue($rc->implementsInterface(ExceptionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Exception\LogicException');
+        $rc = new ReflectionClass(\Payum\Core\Exception\LogicException::class);
 
-        $this->assertTrue($rc->isSubclassOf('LogicException'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new LogicException();
+        $this->assertTrue($rc->isSubclassOf(LogicException::class));
     }
 }

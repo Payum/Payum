@@ -1,13 +1,14 @@
 <?php
+
 namespace Payum\Payex\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Payex\Api\OrderApi;
 use Payum\Payex\Request\Api\InitializeOrder;
@@ -21,12 +22,9 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = OrderApi::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request InitializeOrder */
+        /** @var InitializeOrder $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -35,7 +33,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
             throw new LogicException('The order has already been initialized.');
         }
 
-        $model->validatedKeysSet(array(
+        $model->validatedKeysSet([
             'price',
             'priceArgList',
             'vat',
@@ -52,7 +50,7 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
             'clientIdentifier',
             'agreementRef',
             'clientLanguage',
-        ));
+        ]);
 
         $result = $this->api->initialize((array) $model);
 
@@ -63,14 +61,10 @@ class InitializeOrderAction implements ActionInterface, ApiAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof InitializeOrder &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof InitializeOrder &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

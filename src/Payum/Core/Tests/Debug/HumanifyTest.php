@@ -1,98 +1,70 @@
 <?php
+
 namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
-use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Request\Capture;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class HumanifyTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeAbstract()
+    public function testShouldBeAbstract(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
+        $rc = new ReflectionClass(Humanify::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function couldNotBeInstantiable()
+    public function testCouldNotBeInstantiable(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Debug\Humanify');
+        $rc = new ReflectionClass(Humanify::class);
 
         $this->assertFalse($rc->isInstantiable());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnObjectClassOnValueIfObjectPassed()
+    public function testShouldReturnObjectClassOnValueIfObjectPassed(): void
     {
-        $this->assertEquals('HumanifyTest', Humanify::value($this));
+        $this->assertSame('HumanifyTest', Humanify::value($this));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue()
+    public function testShouldReturnObjectShortClassOnValueIfObjectPassedAndShortClassFlagSetTrue(): void
     {
-        $this->assertEquals('HumanifyTest', Humanify::value($this, true));
+        $this->assertSame('HumanifyTest', Humanify::value($this, true));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse()
+    public function testShouldReturnObjectClassOnValueIfObjectPassedAndShortClassFlagSetFalse(): void
     {
-        $this->assertEquals(__CLASS__, Humanify::value($this, false));
+        $this->assertSame(self::class, Humanify::value($this, false));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnValueTypeIfNotObjectValueGivenOnValue()
+    public function testShouldReturnValueTypeIfNotObjectValueGivenOnValue(): void
     {
-        $this->assertEquals('string', Humanify::value('foo'));
+        $this->assertSame('string', Humanify::value('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnRequestTypeIfRequestNotObjectOnRequest()
+    public function testShouldReturnRequestTypeIfRequestNotObjectOnRequest(): void
     {
-        $this->assertEquals('string', Humanify::request('foo'));
+        $this->assertSame('string', Humanify::request('foo'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnRequestShortClassIfRequestObjectOnRequest()
+    public function testShouldReturnRequestShortClassIfRequestObjectOnRequest(): void
     {
-        $this->assertEquals('HumanifyTest', Humanify::request($this));
+        $this->assertSame('HumanifyTest', Humanify::request($this));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest()
+    public function testShouldReturnRequestShortClassAndModelIfRequestImplementsModelRequestInterfaceOnRequest(): void
     {
         $request = new Capture($this);
 
-        $this->assertEquals('Capture{model: HumanifyTest}', Humanify::request($request));
+        $this->assertSame('Capture{model: HumanifyTest}', Humanify::request($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest()
+    public function testShouldReturnReplyShortClassAndUrlIfHttpRedirectReplyOnRequest(): void
     {
         $request = new HttpRedirect('http://example.com/foo');
 
-        $this->assertEquals('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
+        $this->assertSame('HttpRedirect{url: http://example.com/foo}', Humanify::request($request));
     }
 }

@@ -1,35 +1,40 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\GatewayInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
-    public function testShouldExtendCoreGatewayFactory()
+    public function testShouldExtendCoreGatewayFactory(): void
     {
-        $rc = new \ReflectionClass(ContainerAwareCoreGatewayFactory::class);
+        $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(CoreGatewayFactory::class));
     }
 
-    public function testShouldImplementContainerAwareInterface()
+    public function testShouldImplementContainerAwareInterface(): void
     {
-        $rc = new \ReflectionClass(ContainerAwareCoreGatewayFactory::class);
+        $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new ContainerAwareCoreGatewayFactory();
-    }
-
-    public function testShouldResolveContainerParameter()
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
+    public function testShouldResolveContainerParameter(): void
     {
         $container = new Container();
         $container->setParameter('foo', 'fooVal');
@@ -43,18 +48,24 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $factory->create([
             'foo' => '%foo%',
             'bar' => '%bar.baz_ololo%',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
-                $this->assertEquals('fooVal', $config['foo']);
-                $this->assertEquals('barBazOloloVal', $config['bar']);
+                $this->assertSame('fooVal', $config['foo']);
+                $this->assertSame('barBazOloloVal', $config['bar']);
             },
         ]);
 
         $this->assertTrue($called);
     }
 
-    public function testShouldResolveTemplateFromContainerParameter()
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
+    public function testShouldResolveTemplateFromContainerParameter(): void
     {
         $container = new Container();
         $container->setParameter('a_template_parameter', '@aTemplate');
@@ -66,17 +77,17 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'payum.template.foo' => '%a_template_parameter%',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
-                $this->assertEquals('@aTemplate', $config['payum.template.foo']);
+                $this->assertSame('@aTemplate', $config['payum.template.foo']);
             },
         ]);
 
         $this->assertTrue($called);
     }
 
-    public function testShouldSkipContainerServiceIfSuchNotExist()
+    public function testShouldSkipContainerServiceIfSuchNotExist(): void
     {
         $container = new Container();
 
@@ -87,19 +98,19 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'foo' => '@anActionService',
-            'test' => function (ArrayObject $config) use (&$called) {
+            'test' => function (ArrayObject $config) use (&$called): void {
                 $called = true;
 
-                $this->assertEquals('@anActionService', $config['foo']);
+                $this->assertSame('@anActionService', $config['foo']);
             },
         ]);
 
         $this->assertTrue($called);
     }
 
-    public function testShouldResolveContainerServiceIfSuchExist()
+    public function testShouldResolveContainerServiceIfSuchExist(): void
     {
-        $service = new \stdClass();
+        $service = new stdClass();
 
         $container = new Container();
         $container->set('anActionService', $service);
@@ -111,7 +122,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
 
         $factory->create([
             'foo' => '@anActionService',
-            'test' => function (ArrayObject $config) use (&$called, $service) {
+            'test' => function (ArrayObject $config) use (&$called, $service): void {
                 $called = true;
 
                 $this->assertSame($service, $config['foo']);
@@ -121,13 +132,13 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
-    public function testShouldSkipEmptyStringValue()
+    public function testShouldSkipEmptyStringValue(): void
     {
         $factory = new ContainerAwareCoreGatewayFactory();
         $factory->setContainer(new Container());
 
-        $factory->create([
+        $this->assertInstanceOf(GatewayInterface::class, $factory->create([
             'foo' => '',
-        ]);
+        ]));
     }
 }

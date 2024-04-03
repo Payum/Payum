@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -6,16 +7,13 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
-use Payum\Core\Storage\IdentityInterface;
 
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -32,15 +30,11 @@ class ConvertPaymentAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' === $request->getTo()
         ;
     }
 }

@@ -1,29 +1,23 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\TokenFactoryBuilder;
 use Payum\Core\Bridge\Symfony\Security\TokenFactory;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TokenFactoryBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithUrlGeneratorAsFirstArgument()
+    public function testShouldBuildSymfonyHttpRequestVerifier(): void
     {
-        /** @var UrlGeneratorInterface $urlGenerator */
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-
-        new TokenFactoryBuilder($urlGenerator);
-    }
-
-    public function testShouldBuildSymfonyHttpRequestVerifier()
-    {
-        /** @var StorageInterface $tokenStorage */
+        /** @var StorageInterface<TokenInterface> $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);
 
-        /** @var StorageRegistryInterface $storageRegistry */
+        /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */
         $storageRegistry = $this->createMock(StorageRegistryInterface::class);
 
         /** @var UrlGeneratorInterface $urlGenerator */
@@ -34,17 +28,14 @@ class TokenFactoryBuilderTest extends TestCase
         $tokenFactory = $builder->build($tokenStorage, $storageRegistry);
 
         $this->assertInstanceOf(TokenFactory::class, $tokenFactory);
-        $this->assertAttributeSame($tokenStorage, 'tokenStorage', $tokenFactory);
-        $this->assertAttributeSame($storageRegistry, 'storageRegistry', $tokenFactory);
-        $this->assertAttributeSame($urlGenerator, 'urlGenerator', $tokenFactory);
     }
 
-    public function testAllowUseBuilderAsAsFunction()
+    public function testAllowUseBuilderAsAsFunction(): void
     {
-        /** @var StorageInterface $tokenStorage */
+        /** @var StorageInterface<object> $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);
 
-        /** @var StorageRegistryInterface $storageRegistry */
+        /** @var StorageRegistryInterface<StorageInterface<object>> $storageRegistry */
         $storageRegistry = $this->createMock(StorageRegistryInterface::class);
 
         /** @var UrlGeneratorInterface $urlGenerator */

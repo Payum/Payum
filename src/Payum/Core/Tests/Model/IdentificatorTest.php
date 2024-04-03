@@ -1,63 +1,39 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identificator;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Serializable;
+use stdClass;
 
 class IdentificatorTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface(): void
     {
-        $rc = new \ReflectionClass(Identificator::class);
+        $rc = new ReflectionClass(Identificator::class);
 
-        $this->assertTrue($rc->implementsInterface(\Serializable::class));
+        $this->assertTrue($rc->implementsInterface(Serializable::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
+    public function testShouldAllowGetIdSetInConstructor(): void
     {
-        new Identificator('anId', 'aClass');
+        $id = new Identificator('theId', new stdClass());
+
+        $this->assertSame('theId', $id->getId());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
+    public function testShouldAllowGetClassSetInConstructor(): void
     {
-        new Identificator('anId', new \stdClass());
+        $id = new Identificator('theId', new stdClass());
+
+        $this->assertSame(stdClass::class, $id->getClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdSetInConstructor()
+    public function testShouldBeCorrectlySerializedAndUnserialized(): void
     {
-        $id = new Identificator('theId', new \stdClass());
-
-        $this->assertEquals('theId', $id->getId());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetClassSetInConstructor()
-    {
-        $id = new Identificator('theId', new \stdClass());
-
-        $this->assertEquals('stdClass', $id->getClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeCorrectlySerializedAndUnserialized()
-    {
-        $id = new Identificator('theId', new \stdClass());
+        $id = new Identificator('theId', new stdClass());
 
         $serializedId = serialize($id);
 

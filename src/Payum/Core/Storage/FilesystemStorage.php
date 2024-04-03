@@ -1,32 +1,25 @@
 <?php
+
 namespace Payum\Core\Storage;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
+use ReflectionObject;
+use ReflectionProperty;
 
+/**
+ * @template T of object
+ * @extends AbstractStorage<T>
+ */
 class FilesystemStorage extends AbstractStorage
 {
-    /**
-     * @var string
-     */
-    protected $storageDir;
+    protected string $storageDir;
 
-    /**
-     * @var string
-     */
-    protected $idProperty;
+    protected string $idProperty;
 
-    /**
-     * @var array
-     */
-    protected $identityMap;
+    protected array $identityMap;
 
-    /**
-     * @param string $storageDir
-     * @param string $modelClass
-     * @param string $idProperty
-     */
-    public function __construct($storageDir, $modelClass, $idProperty = 'payum_id')
+    public function __construct(string $storageDir, string $modelClass, string $idProperty = 'payum_id')
     {
         parent::__construct($modelClass);
 
@@ -34,76 +27,65 @@ class FilesystemStorage extends AbstractStorage
         $this->idProperty = $idProperty;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         throw new LogicException('Method is not supported by the storage.');
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doFind($id)
+    protected function doFind(mixed $id): ?object
     {
         if (isset($this->identityMap[$id])) {
             return $this->identityMap[$id];
         }
 
-        if (file_exists($this->storageDir.'/payum-model-'.$id)) {
-            return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir.'/payum-model-'.$id));
+        if (file_exists($this->storageDir . '/payum-model-' . $id)) {
+            return $this->identityMap[$id] = unserialize(file_get_contents($this->storageDir . '/payum-model-' . $id));
         }
+
+        return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doUpdateModel($model)
+    protected function doUpdateModel(object $model): object
     {
-        $ro = new \ReflectionObject($model);
+        $ro = new ReflectionObject($model);
 
-        if (false == $ro->hasProperty($this->idProperty)) {
+        if (! $ro->hasProperty($this->idProperty)) {
             $model->{$this->idProperty} = null;
         }
 
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
         $id = $rp->getValue($model);
-        if (false == $id) {
-            $rp->setValue($model, $id = uniqid());
+        if (! $id) {
+            $rp->setValue($model, $id = uniqid('', true));
         }
 
         $rp->setAccessible(false);
 
         $this->identityMap[$id] = $model;
-        file_put_contents($this->storageDir.'/payum-model-'.$id, serialize($model));
+        file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
+
+        return $model;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doDeleteModel($model)
+    protected function doDeleteModel(object $model): void
     {
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
         if ($id = $rp->getValue($model)) {
-            unlink($this->storageDir.'/payum-model-'.$id);
+            unlink($this->storageDir . '/payum-model-' . $id);
             unset($this->identityMap[$id]);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function doGetIdentity($model)
+    protected function doGetIdentity(object $model): Identity
     {
-        $rp = new \ReflectionProperty($model, $this->idProperty);
+        $rp = new ReflectionProperty($model, $this->idProperty);
         $rp->setAccessible(true);
 
-        if (false == $id = $rp->getValue($model)) {
+        if (! $id = $rp->getValue($model)) {
             throw new LogicException('The model must be persisted before usage of this method');
         }
 

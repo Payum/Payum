@@ -1,11 +1,13 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Paypal\ProCheckout\Nvp\Api;
-use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetStatusInterface;
+use Payum\Paypal\ProCheckout\Nvp\Api;
 
 /**
  * @author Ton Sharp <Forma-PRO@66ton99.org.ua>
@@ -13,11 +15,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -29,7 +29,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == is_numeric($model['RESULT'])) {
+        if (! is_numeric($model['RESULT'])) {
             $request->markUnknown();
 
             return;
@@ -41,13 +41,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+        if ($model['ORIGID'] && Api::TRXTYPE_CREDIT === $model['TRXTYPE'] && Api::RESULT_SUCCESS === $model['RESULT']) {
             $request->markRefunded();
 
             return;
         }
 
-        if (Api::TRXTYPE_SALE == $model['TRXTYPE'] && Api::RESULT_SUCCESS == $model['RESULT']) {
+        if (Api::TRXTYPE_SALE === $model['TRXTYPE'] && Api::RESULT_SUCCESS === $model['RESULT']) {
             $request->markCaptured();
 
             return;
@@ -56,14 +56,10 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

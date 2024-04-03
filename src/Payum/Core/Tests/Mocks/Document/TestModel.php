@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
@@ -12,7 +13,7 @@ class TestModel extends BaseTestModel
     /**
      * @Mongo\Id
      *
-     * @var integer $id
+     * @var integer
      */
     protected $id;
 

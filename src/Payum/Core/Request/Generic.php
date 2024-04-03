@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Core\Request;
 
+use ArrayObject;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Security\TokenAggregateInterface;
@@ -47,10 +49,10 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     /**
      * @param mixed $model
      */
-    public function setModel($model)
+    public function setModel($model): void
     {
         if (is_array($model)) {
-            $model = new \ArrayObject($model);
+            $model = new ArrayObject($model);
         }
 
         $this->model = $model;
@@ -58,9 +60,6 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
         $this->setFirstModel($model);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getToken()
     {
         return $this->token;
@@ -77,7 +76,7 @@ abstract class Generic implements ModelAwareInterface, ModelAggregateInterface, 
     /**
      * @param mixed $model
      */
-    protected function setFirstModel($model)
+    protected function setFirstModel($model): void
     {
         if ($this->firstModel) {
             return;

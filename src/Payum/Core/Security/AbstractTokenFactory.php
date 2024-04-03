@@ -1,9 +1,9 @@
 <?php
+
 namespace Payum\Core\Security;
 
-use League\Uri\Http as HttpUri;
 use League\Uri\Components\Query;
-use League\Uri\QueryString;
+use League\Uri\Http as HttpUri;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
@@ -12,18 +12,18 @@ use Payum\Core\Storage\StorageInterface;
 abstract class AbstractTokenFactory implements TokenFactoryInterface
 {
     /**
-     * @var StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
     /**
-     * @var StorageRegistryInterface
+     * @var StorageRegistryInterface<StorageInterface<TokenInterface>>
      */
-    protected $storageRegistry;
+    protected StorageRegistryInterface $storageRegistry;
 
     /**
-     * @param StorageInterface         $tokenStorage
-     * @param StorageRegistryInterface $storageRegistry
+     * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {
@@ -31,16 +31,15 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         $this->storageRegistry = $storageRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
+    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = []): TokenInterface
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
         $token->setHash($token->getHash() ?: Random::generateToken());
 
-        $targetParameters = array_replace(['payum_token' => $token->getHash()], $targetParameters);
+        $targetParameters = array_replace([
+            'payum_token' => $token->getHash(),
+        ], $targetParameters);
 
         $token->setGatewayName($gatewayName);
 
@@ -50,7 +49,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setDetails($this->storageRegistry->getStorage($model)->identify($model));
         }
 
-        if (0 === strpos($targetPath, 'http')) {
+        if (str_starts_with($targetPath, 'http')) {
             $targetUri = HttpUri::createFromString($targetPath);
             $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
 
@@ -59,7 +58,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
-        if ($afterPath && 0 === strpos($afterPath, 'http')) {
+        if ($afterPath && str_starts_with($afterPath, 'http')) {
             $afterUri = HttpUri::createFromString($afterPath);
             $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
@@ -73,13 +72,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         return $token;
     }
 
-    /**
-     * @param HttpUri $uri
-     * @param array $query
-     *
-     * @return HttpUri
-     */
-    protected function addQueryToUri(HttpUri $uri, array $query)
+    protected function addQueryToUri(HttpUri $uri, array $query): HttpUri
     {
         $uriQuery = Query::createFromUri($uri)->withoutEmptyPairs();
 
@@ -88,11 +81,5 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         return $uri->withQuery((string) Query::createFromParams($query));
     }
 
-    /**
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return string
-     */
-    abstract protected function generateUrl($path, array $parameters = array());
+    abstract protected function generateUrl(string $path, array $parameters = []): string;
 }

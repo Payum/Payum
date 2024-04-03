@@ -1,24 +1,23 @@
 <?php
+
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Payex\Request\Api\CheckOrder;
 use Payum\Core\Request\Sync;
-use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Payex\Request\Api\CheckOrder;
 
 class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request Sync */
+        /** @var Sync $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -28,14 +27,10 @@ class PaymentDetailsSyncAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
-            $request->getModel() instanceof \ArrayAccess &&
+        return $request instanceof Sync &&
+            $request->getModel() instanceof ArrayAccess &&
             $request->getModel()->offsetExists('transactionNumber')
         ;
     }

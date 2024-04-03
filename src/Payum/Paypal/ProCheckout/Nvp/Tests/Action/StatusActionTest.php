@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
@@ -8,18 +9,15 @@ use Payum\Paypal\ProCheckout\Nvp\Api;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Paypal\ProCheckout\Nvp\Action\StatusAction';
+    protected $actionClass = StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = GetHumanStatus::class;
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array());
+        $status = new GetHumanStatus([]);
 
         //guard
         $status->markUnknown();
@@ -29,16 +27,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfResultNotSupported()
+    public function testShouldMarkFailedIfResultNotSupported(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 123,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -48,17 +43,14 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfResultSuccess()
+    public function testShouldMarkCapturedIfResultSuccess(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_SALE,
             'RESULT' => Api::RESULT_SUCCESS,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -68,18 +60,15 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess()
+    public function testShouldMarkRefundedIfOrigIdSetAndTrxTypeCreditAndResultSuccess(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_CREDIT,
             'RESULT' => Api::RESULT_SUCCESS,
             'ORIGID' => 'anId',
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -89,16 +78,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isRefunded());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfResultGreaterThenZero()
+    public function testShouldMarkFailedIfResultGreaterThenZero(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 1,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -107,9 +93,9 @@ class StatusActionTest extends GenericActionTest
 
         $this->assertTrue($status->isFailed());
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'RESULT' => 100000,
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -119,17 +105,14 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne()
+    public function testShouldMarkUnknownIfResultSuccessButTrxTypeNotPurchaseOne(): void
     {
         $action = new StatusAction();
 
-        $status = new GetHumanStatus(array(
+        $status = new GetHumanStatus([
             'TRXTYPE' => Api::TRXTYPE_CREDIT,
             'RESULT' => Api::RESULT_SUCCESS,
-        ));
+        ]);
 
         //guard
         $status->markNew();

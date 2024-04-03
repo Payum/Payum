@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 use Payum\Core\Exception\LogicException;
@@ -18,10 +19,7 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
         $this->limit = $limit;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         if (count($context->getPrevious()) >= $this->limit) {
             throw new LogicException(sprintf(
@@ -31,17 +29,11 @@ class EndlessCycleDetectorExtension implements ExtensionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
     }
 }

@@ -1,18 +1,17 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Convert;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class ConvertTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithSourceModelAndTo()
+    public function testCouldBeConstructedWithSourceModelAndTo(): void
     {
-        $request = new Convert($source = new \stdClass(), $to = 'array');
+        $request = new Convert($source = new stdClass(), $to = 'array');
 
         $this->assertSame($source, $request->getSource());
         $this->assertSame($to, $request->getTo());
@@ -20,12 +19,9 @@ class ConvertTest extends TestCase
         $this->assertNull($request->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithSourceModelAndToAndOptionnalToken()
+    public function testCouldBeConstructedWithSourceModelAndToAndOptionnalToken(): void
     {
-        $request = new Convert($source = new \stdClass(), $to = 'array', $token = $this->createMock(TokenInterface::class));
+        $request = new Convert($source = new stdClass(), $to = 'array', $token = $this->createMock(TokenInterface::class));
 
         $this->assertSame($source, $request->getSource());
         $this->assertSame($to, $request->getTo());
@@ -33,14 +29,11 @@ class ConvertTest extends TestCase
         $this->assertNull($request->getResult());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetResult()
+    public function testShouldAllowGetPreviouslySetResult(): void
     {
-        $request = new Convert(new \stdClass(), 'array');
+        $request = new Convert(new stdClass(), 'array');
 
-        $request->setResult($result = new \stdClass());
+        $request->setResult($result = new stdClass());
 
         $this->assertSame($result, $request->getResult());
     }

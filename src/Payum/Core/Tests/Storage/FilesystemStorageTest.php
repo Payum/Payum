@@ -1,49 +1,28 @@
 <?php
+
 namespace Payum\Core\Tests\Storage;
 
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Model\Identity;
+use Payum\Core\Storage\AbstractStorage;
 use Payum\Core\Storage\FilesystemStorage;
+use Payum\Core\Tests\Mocks\Model\TestModel;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class FilesystemStorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Storage\FilesystemStorage');
+        $rc = new ReflectionClass(FilesystemStorage::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
+        $this->assertTrue($rc->isSubclassOf(AbstractStorage::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithStorageDirModelClassAndDefaultIdPropertyArguments()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor(): void
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
-
-        $this->assertAttributeEquals('payum_id', 'idProperty', $storage);
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithStorageDirModelClassAndIdPropertyArguments()
-    {
-        new FilesystemStorage(
-            sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
-            'id'
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
-    {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $expectedModelClass = TestModel::class;
 
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -57,12 +36,9 @@ class FilesystemStorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelAndSetIdToModel()
+    public function testShouldUpdateModelAndSetIdToModel(): void
     {
-        $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
+        $expectedModelClass = TestModel::class;
 
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
@@ -78,14 +54,11 @@ class FilesystemStorageTest extends TestCase
         $this->assertNotEmpty($model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelAndSetIdToModelEvenIfModelNotHaveIdDefined()
+    public function testShouldUpdateModelAndSetIdToModelEvenIfModelNotHaveIdDefined(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'stdClass',
+            stdClass::class,
             'notExistProperty'
         );
 
@@ -93,18 +66,15 @@ class FilesystemStorageTest extends TestCase
 
         $storage->update($model);
 
-        $this->assertInstanceOf('stdClass', $model);
-        $this->assertObjectHasAttribute('notExistProperty', $model);
+        $this->assertInstanceOf(stdClass::class, $model);
+        $this->assertObjectHasProperty('notExistProperty', $model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldKeepIdTheSameOnSeveralUpdates()
+    public function testShouldKeepIdTheSameOnSeveralUpdates(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -119,31 +89,25 @@ class FilesystemStorageTest extends TestCase
         $this->assertSame($firstId, $secondId);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateFileWithModelInfoInStorageDirOnUpdateModel()
+    public function testShouldCreateFileWithModelInfoInStorageDirOnUpdateModel(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
         $model = $storage->create();
         $storage->update($model);
 
-        $this->assertFileExists(sys_get_temp_dir().'/payum-model-'.$model->getId());
+        $this->assertFileExists(sys_get_temp_dir() . '/payum-model-' . $model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldGenerateDifferentIdsForDifferentModels()
+    public function testShouldGenerateDifferentIdsForDifferentModels(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -156,16 +120,13 @@ class FilesystemStorageTest extends TestCase
         $this->assertNotSame($modelOne->getId(), $modelTwo->getId());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryGetIdentifierOfNotPersistedModel()
+    public function testThrowIfTryGetIdentifierOfNotPersistedModel(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The model must be persisted before usage of this method');
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -177,14 +138,11 @@ class FilesystemStorageTest extends TestCase
         $storage->identify($model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelIdentity()
+    public function testShouldAllowGetModelIdentity(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -199,12 +157,9 @@ class FilesystemStorageTest extends TestCase
         $this->assertSame($firstId, $secondId);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelIdentityWhenDynamicIdUsed()
+    public function testShouldAllowGetModelIdentityWhenDynamicIdUsed(): void
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'stdClass');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), stdClass::class);
 
         $model = $storage->create();
 
@@ -212,35 +167,29 @@ class FilesystemStorageTest extends TestCase
 
         $identity = $storage->identify($model);
 
-        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
-        $this->assertEquals('stdClass', $identity->getClass());
+        $this->assertInstanceOf(Identity::class, $identity);
+        $this->assertSame(stdClass::class, $identity->getClass());
         $this->assertEquals($model->payum_id, $identity->getId());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToUseNotSupportedFindByMethod()
+    public function testThrowIfTryToUseNotSupportedFindByMethod(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Method is not supported by the storage.');
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
-        $storage->findBy(array());
+        $storage->findBy([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelById()
+    public function testShouldFindModelById(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -252,18 +201,15 @@ class FilesystemStorageTest extends TestCase
 
         $foundModel = $storage->find($model->getId());
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
+        $this->assertInstanceOf(TestModel::class, $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelByIdentity()
+    public function testShouldFindModelByIdentity(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -276,22 +222,19 @@ class FilesystemStorageTest extends TestCase
         $identity = $storage->identify($model);
 
         //guard
-        $this->assertInstanceOf('Payum\Core\Model\Identity', $identity);
+        $this->assertInstanceOf(Identity::class, $identity);
 
         $foundModel = $storage->find($identity);
 
-        $this->assertInstanceOf('Payum\Core\Tests\Mocks\Model\TestModel', $foundModel);
+        $this->assertInstanceOf(TestModel::class, $foundModel);
         $this->assertEquals($model->getId(), $foundModel->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreInfoBetweenUpdateAndFind()
+    public function testShouldStoreInfoBetweenUpdateAndFind(): void
     {
         $storage = new FilesystemStorage(
             sys_get_temp_dir(),
-            'Payum\Core\Tests\Mocks\Model\TestModel',
+            TestModel::class,
             'id'
         );
 
@@ -304,16 +247,13 @@ class FilesystemStorageTest extends TestCase
         $foundModel = $storage->find($model->getId());
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
     }
 
-    /**
-     * @test
-     */
-    public function shouldStoreInfoBetweenUpdateAndFindWithDefaultId()
+    public function testShouldStoreInfoBetweenUpdateAndFindWithDefaultId(): void
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), TestModel::class);
 
         $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
@@ -322,25 +262,22 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertObjectHasProperty('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
         $foundModel = $storage->find($model->payum_id);
 
         $this->assertSame($model, $foundModel);
-        $this->assertEquals($expectedPrice, $foundModel->getPrice());
-        $this->assertEquals($expectedCurrency, $foundModel->getCurrency());
+        $this->assertSame($expectedPrice, $foundModel->getPrice());
+        $this->assertSame($expectedCurrency, $foundModel->getCurrency());
 
-        $this->assertObjectHasAttribute('payum_id', $foundModel);
+        $this->assertObjectHasProperty('payum_id', $foundModel);
         $this->assertNotEmpty($foundModel->payum_id);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowDeleteModel()
+    public function testShouldAllowDeleteModel(): void
     {
-        $storage = new FilesystemStorage(sys_get_temp_dir(), 'Payum\Core\Tests\Mocks\Model\TestModel');
+        $storage = new FilesystemStorage(sys_get_temp_dir(), TestModel::class);
 
         $model = $storage->create();
         $model->setPrice($expectedPrice = 123);
@@ -349,7 +286,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasAttribute('payum_id', $model);
+        $this->assertObjectHasProperty('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
         $storage->delete($model);

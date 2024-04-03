@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -21,13 +23,11 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
     {
         $this->apiClass = Api::class;
     }
-    
+
     /**
-     * {@inheritdoc}
-     *
      * @param Masspay $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -42,14 +42,10 @@ class MasspayAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Masspay &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Masspay &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

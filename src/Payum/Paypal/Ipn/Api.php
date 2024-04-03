@@ -1,10 +1,13 @@
 <?php
+
 namespace Payum\Paypal\Ipn;
 
-use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
@@ -14,65 +17,62 @@ class Api
     /**
      * It sends back if the message originated with PayPal.
      */
-    const NOTIFY_VERIFIED = 'VERIFIED';
+    public const NOTIFY_VERIFIED = 'VERIFIED';
 
     /**
      * if there is any discrepancy with what was originally sent
      */
-    const NOTIFY_INVALID = 'INVALID';
+    public const NOTIFY_INVALID = 'INVALID';
 
-    const CMD_NOTIFY_VALIDATE = '_notify-validate';
+    public const CMD_NOTIFY_VALIDATE = '_notify-validate';
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
 
-    /**
-     * @var MessageFactory
-     */
-    protected $messageFactory;
+    protected RequestFactoryInterface $requestFactory;
+
+    protected StreamFactoryInterface $streamFactory;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $options;
+    protected array $options;
 
     /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
+     * @param array<string, mixed> $options
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
 
         $this->options = $options;
 
-        if (false == (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
+        if (! (isset($this->options['sandbox']) && is_bool($this->options['sandbox']))) {
             throw new InvalidArgumentException('The boolean sandbox option must be set.');
         }
+        $this->streamFactory = $streamFactory;
     }
 
     /**
-     * @param array $fields
-     *
-     * @return string
+     * @param array<string, mixed> $fields
+     * @throws ClientExceptionInterface
      */
-    public function notifyValidate(array $fields)
+    public function notifyValidate(array $fields): string
     {
         $fields['cmd'] = self::CMD_NOTIFY_VALIDATE;
 
-        $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        );
+        $request = $this->requestFactory
+            ->createRequest('POST', $this->getIpnEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields)));
 
-        $request = $this->messageFactory->createRequest('POST', $this->getIpnEndpoint(), $headers, http_build_query($fields));
+        $response = $this->client->sendRequest($request);
 
-        $response = $this->client->send($request);
-
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
         }
 
@@ -81,14 +81,10 @@ class Api
         return self::NOTIFY_VERIFIED === $result ? self::NOTIFY_VERIFIED : self::NOTIFY_INVALID;
     }
 
-    /**
-     * @return string
-     */
-    public function getIpnEndpoint()
+    public function getIpnEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://www.sandbox.paypal.com/cgi-bin/webscr' :
-            'https://www.paypal.com/cgi-bin/webscr'
-        ;
+            'https://www.paypal.com/cgi-bin/webscr';
     }
 }

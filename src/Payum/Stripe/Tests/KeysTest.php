@@ -1,35 +1,23 @@
 <?php
+
 namespace Payum\Stripe\Tests;
 
 use Payum\Stripe\Keys;
+use PHPUnit\Framework\TestCase;
 
-class KeysTest extends \PHPUnit\Framework\TestCase
+class KeysTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithPublishableKeyAndSecretOne()
-    {
-        new Keys('aPublishableKey', 'aSecretKey');
-    }
-
-    /**
-     * @test
-     */
-    public function souldAllowGetPublishableKeySetInConstructor()
+    public function testSouldAllowGetPublishableKeySetInConstructor(): void
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');
 
-        $this->assertEquals('thePublishableKey', $keys->getPublishableKey());
+        $this->assertSame('thePublishableKey', $keys->getPublishableKey());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetSecretKeySetInConstructor()
+    public function testShouldAllowGetSecretKeySetInConstructor(): void
     {
         $keys = new Keys('aPublishableKey', 'theSecretKey');
 
-        $this->assertEquals('theSecretKey', $keys->getSecretKey());
+        $this->assertSame('theSecretKey', $keys->getSecretKey());
     }
 }

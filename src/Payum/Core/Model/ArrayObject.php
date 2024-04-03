@@ -1,50 +1,47 @@
 <?php
+
 namespace Payum\Core\Model;
 
-class ArrayObject implements \ArrayAccess, \IteratorAggregate
+use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+/**
+ * @template TKey of array-key
+ * @template TValue
+ * @implements ArrayAccess<TKey, TValue>
+ * @implements IteratorAggregate<TKey, TValue>
+ */
+class ArrayObject implements ArrayAccess, IteratorAggregate
 {
     /**
-     * @var array
+     * @var array<TKey, TValue>
      */
-    protected $details = array();
+    protected array $details = [];
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->details[$offset];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->details[$offset] = $value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->details[$offset]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->details);
+        return new ArrayIterator($this->details);
     }
 }

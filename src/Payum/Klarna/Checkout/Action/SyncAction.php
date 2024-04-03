@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -14,11 +16,9 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Sync $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -31,14 +31,10 @@ class SyncAction implements ActionInterface, GatewayAwareInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Sync &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Sync &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

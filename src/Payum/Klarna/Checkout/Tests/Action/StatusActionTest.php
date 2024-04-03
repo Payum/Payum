@@ -1,27 +1,26 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\Klarna\Checkout\Action\StatusAction;
 use Payum\Klarna\Checkout\Constants;
 
 class StatusActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\Klarna\Checkout\Action\StatusAction';
+    protected $actionClass = StatusAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = GetHumanStatus::class;
 
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfStatusNotSupported()
+    public function testShouldMarkUnknownIfStatusNotSupported(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => 'not-supported-status',
-        ));
+        ]);
 
         //guard
         $status->markNew();
@@ -31,14 +30,11 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isUnknown());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array());
+        $status = new GetBinaryStatus([]);
 
         //guard
         $status->markUnknown();
@@ -48,14 +44,11 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfOrderStatusNotSet()
+    public function testShouldMarkNewIfOrderStatusNotSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array());
+        $status = new GetBinaryStatus([]);
 
         //guard
         $status->markUnknown();
@@ -65,16 +58,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfStatusCheckoutIncomplete()
+    public function testShouldMarkNewIfStatusCheckoutIncomplete(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -84,16 +74,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isNew());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkPendingIfStatusCheckoutComplete()
+    public function testShouldMarkPendingIfStatusCheckoutComplete(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -103,16 +90,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isPending());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfReservationSet()
+    public function testShouldMarkAuthorizedIfReservationSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'reservation' => 'aNumber',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -122,16 +106,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isAuthorized());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkCapturedIfInvoiceNumberSet()
+    public function testShouldMarkCapturedIfInvoiceNumberSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'invoice_number' => 'aNum',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -141,16 +122,13 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isCaptured());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfErrorCodeSet()
+    public function testShouldMarkFailedIfErrorCodeSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -160,17 +138,14 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedEvenIfInvoceNumberAndErrorCodeSet()
+    public function testShouldMarkFailedEvenIfInvoceNumberAndErrorCodeSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
             'invoice_number' => 'aNum',
-        ));
+        ]);
 
         //guard
         $status->markUnknown();
@@ -180,17 +155,14 @@ class StatusActionTest extends GenericActionTest
         $this->assertTrue($status->isFailed());
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFailedEvenIfStatusCreatedAndErrorCodeSet()
+    public function testShouldMarkFailedEvenIfStatusCreatedAndErrorCodeSet(): void
     {
         $action = new StatusAction();
 
-        $status = new GetBinaryStatus(array(
+        $status = new GetBinaryStatus([
             'error_code' => 'aCode',
             'status' => Constants::STATUS_CREATED,
-        ));
+        ]);
 
         //guard
         $status->markUnknown();

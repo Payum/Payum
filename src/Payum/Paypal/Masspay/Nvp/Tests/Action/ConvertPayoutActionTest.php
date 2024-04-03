@@ -1,15 +1,18 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
+use Iterator;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\Payout;
+use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\Core\Request\Convert;
 use Payum\Paypal\Masspay\Nvp\Action\ConvertPayoutAction;
+use stdClass;
 
 class ConvertPayoutActionTest extends GenericActionTest
 {
@@ -17,35 +20,32 @@ class ConvertPayoutActionTest extends GenericActionTest
 
     protected $requestClass = Convert::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
-        yield array(new $this->requestClass(new Payout(), 'array'));
-        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'array'));
-        yield array(new $this->requestClass(new Payout(), 'array', $this->createMock(TokenInterface::class)));
+        yield [new $this->requestClass(new Payout(), 'array')];
+        yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'array')];
+        yield [new $this->requestClass(new Payout(), 'array', $this->createMock(TokenInterface::class))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass(Generic::class, [[]]));
-        yield array(new $this->requestClass(new \stdClass(), 'array'));
-        yield array(new $this->requestClass(new Payout(), 'foobar'));
-        yield array(new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar'));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
+        yield [new $this->requestClass(new stdClass(), 'array')];
+        yield [new $this->requestClass(new Payout(), 'foobar')];
+        yield [new $this->requestClass($this->createMock(PayoutInterface::class), 'foobar')];
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertPayoutToDetails()
+    public function testShouldCorrectlyConvertPayoutToDetails(): void
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -69,7 +69,7 @@ class ConvertPayoutActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
-        $this->assertEquals([
+        $this->assertSame([
             'CURRENCYCODE' => 'USD',
             'L_AMT0' => 1.23,
             'L_NOTE0' => 'the description',
@@ -78,17 +78,14 @@ class ConvertPayoutActionTest extends GenericActionTest
         ], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails(): void
     {
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetCurrency::class))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -115,13 +112,13 @@ class ConvertPayoutActionTest extends GenericActionTest
 
         $this->assertNotEmpty($details);
 
-        $this->assertEquals([
+        $this->assertSame([
+            'foo' => 'fooVal',
             'CURRENCYCODE' => 'USD',
             'L_AMT0' => 1.23,
             'L_NOTE0' => 'the description',
             'RECEIVERTYPE' => 'EmailAddress',
             'L_EMAIL0' => 'theRecipientEmail',
-            'foo' => 'fooVal',
         ], $details);
     }
 }

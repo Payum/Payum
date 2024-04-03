@@ -1,24 +1,14 @@
-<h2 align="center">Supporting Payum</h2>
+# Configure gateways in backend
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In [get it started](get-it-started.md) we showed you how to configure gateways in the code. Sometimes you may asked to store gateways (mostly gateway credentials) to a database for example. So the admin can edit them in the backend. Here's the basic example how to do it in plain php.
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Configure
 
----
+First we have to create an entity where we store information about a gateway. The model must implement `Payum\Core\Model\GatewayConfigInterface`.
 
-# Configure gateway in backend
-
-In [get it started](get-it-started.md) we showed you how to configure gateways in the code. 
-Sometimes you may asked to store gateways (mostly gateway credentials) to a database for example. 
-So the admin can edit them in the backend. Here's the basic example how to do it in plain php. 
-   
-## Configure
-
-First we have to create an entity where we store information about a gateway. 
-The model must implement `Payum\Core\Model\GatewayConfigInterface`.
-
+{% hint style="info" %}
 _**Note**: In this chapter we use DoctrineStorage._
+{% endhint %}
 
 ```php
 <?php
@@ -68,7 +58,7 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-## Store gateway config
+### Store gateway config
 
 ```php
 <?php
@@ -91,7 +81,7 @@ $gatewayConfig->setConfig(array(
 $gatewayConfigStorage->update($gatewayConfig);
 ```
 
-## Use gateway
+### Use gateway
 
 ```php
 <?php
@@ -103,8 +93,10 @@ include __DIR__.'/config.php';
 $gateway = $payum->getGateway('paypal');
 ```
 
-Back to [index](index.md).
+***
 
- 
- 
+### Supporting Payum
 
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

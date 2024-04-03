@@ -1,26 +1,18 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
+use Payum\Klarna\Checkout\Request\Api\BaseOrder;
 use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class UpdateOrderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\UpdateOrder');
+        $rc = new ReflectionClass(UpdateOrder::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Request\Api\BaseOrder'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new UpdateOrder(array());
+        $this->assertTrue($rc->isSubclassOf(BaseOrder::class));
     }
 }

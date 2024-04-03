@@ -1,21 +1,21 @@
 <?php
+
 namespace Payum\Payex\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Payex\Api\AgreementApi;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Payex\Api\AgreementApi;
 use Payum\Payex\Api\OrderApi;
 
 class AgreementDetailsStatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -30,7 +30,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_NOTVERIFIED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_NOTVERIFIED === $model['agreementStatus']
         ) {
             $request->markNew();
 
@@ -39,7 +39,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_VERIFIED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_VERIFIED === $model['agreementStatus']
         ) {
             $request->markCaptured();
 
@@ -48,7 +48,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         if (
             is_numeric($model['agreementStatus']) &&
-            AgreementApi::AGREEMENTSTATUS_DELETED == $model['agreementStatus']
+            AgreementApi::AGREEMENTSTATUS_DELETED === $model['agreementStatus']
         ) {
             $request->markCanceled();
 
@@ -58,17 +58,13 @@ class AgreementDetailsStatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess &&
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess &&
             //Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&
-            false == $request->getModel()->offsetExists('orderId')
+            ! $request->getModel()->offsetExists('orderId')
         ;
     }
 }

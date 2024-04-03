@@ -1,48 +1,51 @@
 <?php
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
+use Iterator;
 use Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
+use stdClass;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\AuthorizeNet\Aim\Action\ConvertPaymentAction';
+    protected $actionClass = ConvertPaymentAction::class;
 
-    protected $requestClass = 'Payum\Core\Request\Convert';
+    protected $requestClass = Convert::class;
 
-    public function provideSupportedRequests(): \Iterator
+    public function provideSupportedRequests(): Iterator
     {
-        yield array(new $this->requestClass(new Payment(), 'array'));
-        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'array'));
-        yield array(new $this->requestClass(new Payment(), 'array', $this->createMock('Payum\Core\Security\TokenInterface')));
+        yield [new $this->requestClass(new Payment(), 'array')];
+        yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'array')];
+        yield [new $this->requestClass(new Payment(), 'array', $this->createMock(TokenInterface::class))];
     }
 
-    public function provideNotSupportedRequests(): \Iterator
+    public function provideNotSupportedRequests(): Iterator
     {
-        yield array('foo');
-        yield array(array('foo'));
-        yield array(new \stdClass());
-        yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
-        yield array(new $this->requestClass(new \stdClass(), 'array'));
-        yield array(new $this->requestClass(new Payment(), 'foobar'));
-        yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
+        yield ['foo'];
+        yield [['foo']];
+        yield [new stdClass()];
+        yield [$this->getMockForAbstractClass(Generic::class, [[]])];
+        yield [new $this->requestClass(new stdClass(), 'array')];
+        yield [new $this->requestClass(new Payment(), 'foobar')];
+        yield [new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar')];
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertPaymentToArray()
+    public function testShouldCorrectlyConvertPaymentToArray(): void
     {
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->with($this->isInstanceOf(GetCurrency::class))
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -70,32 +73,29 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('amount', $result);
-        $this->assertEquals(1.23, $result['amount']);
+        $this->assertEqualsWithDelta(1.23, $result['amount'], PHP_FLOAT_EPSILON);
 
         $this->assertArrayHasKey('invoice_num', $result);
-        $this->assertEquals('theNumber', $result['invoice_num']);
+        $this->assertSame('theNumber', $result['invoice_num']);
 
         $this->assertArrayHasKey('description', $result);
-        $this->assertEquals('the description', $result['description']);
+        $this->assertSame('the description', $result['description']);
 
         $this->assertArrayHasKey('cust_id', $result);
-        $this->assertEquals('theClientId', $result['cust_id']);
+        $this->assertSame('theClientId', $result['cust_id']);
 
         $this->assertArrayHasKey('email', $result);
-        $this->assertEquals('theClientEmail', $result['email']);
+        $this->assertSame('theClientEmail', $result['email']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails(): void
     {
-        $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
+        $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
-            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
-            ->willReturnCallback(function (GetCurrency $request) {
+            ->with($this->isInstanceOf(GetCurrency::class))
+            ->willReturnCallback(function (GetCurrency $request): void {
                 $request->name = 'US Dollar';
                 $request->alpha3 = 'USD';
                 $request->numeric = 123;
@@ -108,9 +108,9 @@ class ConvertPaymentActionTest extends GenericActionTest
         $payment->setCurrencyCode('USD');
         $payment->setTotalAmount(123);
         $payment->setDescription('the description');
-        $payment->setDetails(array(
+        $payment->setDetails([
             'foo' => 'fooVal',
-        ));
+        ]);
 
         $action = new ConvertPaymentAction();
         $action->setGateway($gatewayMock);
@@ -122,6 +122,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('fooVal', $result['foo']);
+        $this->assertSame('fooVal', $result['foo']);
     }
 }

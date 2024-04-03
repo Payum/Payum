@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Be2Bill\Action;
 
+use ArrayAccess;
 use Payum\Be2Bill\Api;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -24,11 +26,9 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param $request Notify
+     * @param Notify $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -36,7 +36,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        if (false == $this->api->verifyHash($httpRequest->query)) {
+        if (! $this->api->verifyHash($httpRequest->query)) {
             throw new HttpResponse('The notification is invalid. Code 1', 400);
         }
 
@@ -49,14 +49,10 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         throw new HttpResponse('OK', 200);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Notify &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

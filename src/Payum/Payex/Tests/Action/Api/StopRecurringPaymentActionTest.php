@@ -1,129 +1,96 @@
 <?php
+
 namespace Payum\Payex\Tests\Action\Api;
 
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Payex\Action\Api\StopRecurringPaymentAction;
+use Payum\Payex\Api\RecurringApi;
 use Payum\Payex\Request\Api\StopRecurringPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
+class StopRecurringPaymentActionTest extends TestCase
 {
-    protected $requiredFields = array(
+    protected $requiredFields = [
         'agreementRef' => 'aRef',
-    );
+    ];
 
     public function provideRequiredFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->requiredFields as $name => $value) {
-            $fields[] = array($name);
+            $fields[] = [$name];
         }
 
         return $fields;
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\StopRecurringPaymentAction');
+        $rc = new ReflectionClass(StopRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Action\ActionInterface'));
+        $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass('Payum\Payex\Action\Api\StopRecurringPaymentAction');
+        $rc = new ReflectionClass(StopRecurringPaymentAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowOnTryingSetNotRecurringApiAsApi(): void
     {
-        new StopRecurringPaymentAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetRecurringApiAsApi()
-    {
-        $recurringApi = $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
-
-        $action = new StopRecurringPaymentAction();
-
-        $action->setApi($recurringApi);
-
-        $this->assertAttributeSame($recurringApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwOnTryingSetNotRecurringApiAsApi()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Payex\Api\RecurringApi');
         $action = new StopRecurringPaymentAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportStopRecurringPaymentRequestWithArrayAccessAsModel()
+    public function testShouldSupportStopRecurringPaymentRequestWithArrayAccessAsModel(): void
     {
         $action = new StopRecurringPaymentAction();
 
-        $this->assertTrue($action->supports(new StopRecurringPayment($this->createMock('ArrayAccess'))));
+        $this->assertTrue($action->supports(new StopRecurringPayment($this->createMock(ArrayAccess::class))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotStopRecurringPaymentRequest()
+    public function testShouldNotSupportAnythingNotStopRecurringPaymentRequest(): void
     {
         $action = new StopRecurringPaymentAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportStopRecurringPaymentRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportStopRecurringPaymentRequestWithNotArrayAccessModel(): void
     {
         $action = new StopRecurringPaymentAction();
 
-        $this->assertFalse($action->supports(new StopRecurringPayment(new \stdClass())));
+        $this->assertFalse($action->supports(new StopRecurringPayment(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new StopRecurringPaymentAction($this->createApiMock());
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideRequiredFields
      */
-    public function throwIfTryInitializeWithRequiredFieldNotPresent($requiredField)
+    public function testThrowIfTryInitializeWithRequiredFieldNotPresent($requiredField): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         unset($this->requiredFields[$requiredField]);
 
         $action = new StopRecurringPaymentAction();
@@ -131,19 +98,16 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new StopRecurringPayment($this->requiredFields));
     }
 
-    /**
-     * @test
-     */
-    public function shouldStopRecurringPayment()
+    public function testShouldStopRecurringPayment(): void
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('stop')
             ->with($this->requiredFields)
-            ->will($this->returnValue(array(
+            ->willReturn([
                 'errorCode' => 'theCode',
-            )));
+            ]);
 
         $action = new StopRecurringPaymentAction();
         $action->setApi($apiMock);
@@ -153,14 +117,14 @@ class StopRecurringPaymentActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $model = $request->getModel();
-        $this->assertEquals('theCode', $model['errorCode']);
+        $this->assertSame('theCode', $model['errorCode']);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Payex\Api\RecurringApi
+     * @return MockObject|RecurringApi
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Payex\Api\RecurringApi', array(), array(), '', false);
+        return $this->createMock(RecurringApi::class);
     }
 }

@@ -1,15 +1,21 @@
 <?php
+
 namespace Payum\Be2Bill\Tests\Action;
 
+use ArrayObject;
 use Payum\Be2Bill\Action\NotifyAction;
 use Payum\Be2Bill\Api;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use stdClass;
 
 class NotifyActionTest extends GenericActionTest
 {
@@ -17,63 +23,38 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface(): void
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface(): void
     {
-        $rc = new \ReflectionClass(NotifyAction::class);
+        $rc = new ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
+    public function testThrowIfUnsupportedApiGiven(): void
     {
-        $expectedApi = $this->createApiMock();
-
-        $action = new NotifyAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $action = new NotifyAction();
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryHashDoesNotMatchExpected()
+    public function testThrowIfQueryHashDoesNotMatchExpected(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request): void {
                 $request->query = ['expected be2bill query'];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -99,19 +80,18 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryAmountDoesNotMatchOneFromModel()
+    public function testThrowIfQueryAmountDoesNotMatchOneFromModel(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
-                $request->query = ['AMOUNT' => 2.0];
-            }))
+            ->willReturnCallback(function (GetHttpRequest $request): void {
+                $request->query = [
+                    'AMOUNT' => 2.0,
+                ];
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -127,7 +107,7 @@ class NotifyActionTest extends GenericActionTest
 
         try {
             $action->execute(new Notify([
-                'AMOUNT' => 1.0
+                'AMOUNT' => 1.0,
             ]));
         } catch (HttpResponse $reply) {
             $this->assertSame(400, $reply->getStatusCode());
@@ -139,19 +119,20 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelIfNotificationValid()
+    public function testShouldUpdateModelIfNotificationValid(): void
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
-                $request->query = ['AMOUNT' => 1.0, 'FOO' => 'FOO', 'BAR' => 'BAR'];
-            }))
+            ->willReturnCallback(function (GetHttpRequest $request): void {
+                $request->query = [
+                    'AMOUNT' => 1.0,
+                    'FOO' => 'FOO',
+                    'BAR' => 'BAR',
+                ];
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -165,7 +146,7 @@ class NotifyActionTest extends GenericActionTest
         $action->setGateway($gatewayMock);
         $action->setApi($apiMock);
 
-        $model = new \ArrayObject([
+        $model = new ArrayObject([
             'AMOUNT' => 1.0,
             'FOO' => 'FOOOLD',
         ]);
@@ -173,7 +154,7 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals([
+            $this->assertSame([
                 'AMOUNT' => 1.0,
                 'FOO' => 'FOO',
                 'BAR' => 'BAR',
@@ -189,15 +170,15 @@ class NotifyActionTest extends GenericActionTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock(Api::class, ['verifyHash'], [], '', false);
+        return $this->createMock(Api::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {

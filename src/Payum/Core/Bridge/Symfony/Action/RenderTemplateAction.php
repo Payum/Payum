@@ -10,14 +10,11 @@ use Symfony\Component\Templating\EngineInterface;
 class RenderTemplateAction implements ActionInterface
 {
     /**
-     * @var EngineInterface
-     */
-    private $templating;
-
-    /**
      * @var string
      */
     protected $layout;
+
+    private EngineInterface $templating;
 
     public function __construct(EngineInterface $templating, $layout = null)
     {
@@ -28,17 +25,20 @@ class RenderTemplateAction implements ActionInterface
     /**
      * @param mixed $request
      *
-     * @throws \Payum\Core\Exception\RequestNotSupportedException if the action dose not support the request.
+     * @throws RequestNotSupportedException if the action dose not support the request.
      */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request RenderTemplate */
+        /** @var RenderTemplate $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $request->setResult(
             $this->templating->render(
-                $request->getTemplateName(), array_replace(
-                    ['layout' => $this->layout],
+                $request->getTemplateName(),
+                array_replace(
+                    [
+                        'layout' => $this->layout,
+                    ],
                     $request->getParameters()
                 )
             )

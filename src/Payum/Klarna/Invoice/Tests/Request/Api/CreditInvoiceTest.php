@@ -1,25 +1,18 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
+use Payum\Core\Request\Generic;
 use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class CreditInvoiceTest extends \PHPUnit\Framework\TestCase
+class CreditInvoiceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\CreditInvoice');
+        $rc = new ReflectionClass(CreditInvoice::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new CreditInvoice(array());
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

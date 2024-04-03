@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Extension;
 
 class ExtensionCollection implements ExtensionInterface
@@ -6,15 +7,12 @@ class ExtensionCollection implements ExtensionInterface
     /**
      * @var ExtensionInterface[]
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
-     * @param ExtensionInterface $extension
      * @param bool               $forcePrepend
-     *
-     * @return void
      */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->extensions, $extension) :
@@ -22,30 +20,21 @@ class ExtensionCollection implements ExtensionInterface
         ;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPreExecute(Context $context)
+    public function onPreExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPreExecute($context);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onExecute(Context $context)
+    public function onExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onExecute($context);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         foreach ($this->extensions as $extension) {
             $extension->onPostExecute($context);

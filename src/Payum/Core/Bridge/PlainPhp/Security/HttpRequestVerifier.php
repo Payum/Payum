@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\PlainPhp\Security;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -6,39 +7,38 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\RequestTokenVerifier;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Request;
+use function array_merge;
 
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
+
+    protected string $tokenParameter;
 
     /**
-     * @var string
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
-    protected $tokenParameter;
-
-    /**
-     * @param StorageInterface $tokenStorage
-     * @param string           $tokenParameter
-     */
-    public function __construct(StorageInterface $tokenStorage, $tokenParameter = 'payum_token')
+    public function __construct(StorageInterface $tokenStorage, string $tokenParameter = 'payum_token')
     {
         $this->tokenStorage = $tokenStorage;
-        $this->tokenParameter = (string) $tokenParameter;
+        $this->tokenParameter = $tokenParameter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function verify($httpRequest)
+    public function verify($httpRequest): TokenInterface
     {
-        if (false == is_array($httpRequest)) {
+        if ($httpRequest instanceof Request) {
+            $httpRequest = array_merge($httpRequest->request->all(), $httpRequest->query->all());
+        }
+
+        if (! is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
         }
 
-        if (false == isset($httpRequest[$this->tokenParameter])) {
+        if (! isset($httpRequest[$this->tokenParameter])) {
             throw new InvalidArgumentException(sprintf('Token parameter `%s` was not found in in the http request.', $this->tokenParameter));
         }
 
@@ -46,22 +46,19 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             return $httpRequest[$this->tokenParameter];
         }
 
-        if (false == $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
+        if (! $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
             throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$this->tokenParameter]));
         }
 
-        /** @var $token TokenInterface */
-        if (!RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
+        /** @var TokenInterface $token */
+        if (! RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
             throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
         }
 
         return $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function invalidate(TokenInterface $token)
+    public function invalidate(TokenInterface $token): void
     {
         $this->tokenStorage->delete($token);
     }

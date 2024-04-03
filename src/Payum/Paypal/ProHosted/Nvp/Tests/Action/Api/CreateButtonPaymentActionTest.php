@@ -1,81 +1,68 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
 
+use ArrayAccess;
+use ArrayObject;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ProHosted\Nvp\Action\Api\CreateButtonPaymentAction;
+use Payum\Paypal\ProHosted\Nvp\Api;
 use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class CreateButtonPaymentActionTest extends \PHPUnit\Framework\TestCase
+class CreateButtonPaymentActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction(): void
     {
-        $rc = new \ReflectionClass(CreateButtonPaymentAction::class);
+        $rc = new ReflectionClass(CreateButtonPaymentAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateButtonPaymentAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateButtonPaymentRequestAndArrayAccessAsModel()
+    public function testShouldSupportCreateButtonPaymentRequestAndArrayAccessAsModel(): void
     {
         $action = new CreateButtonPaymentAction();
 
-        $request = new CreateButtonPayment($this->createMock('ArrayAccess'));
+        $request = new CreateButtonPayment($this->createMock(ArrayAccess::class));
 
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateButtonPaymentRequest()
+    public function testShouldNotSupportAnythingNotCreateButtonPaymentRequest(): void
     {
         $action = new CreateButtonPaymentAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CreateButtonPaymentAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfModelNotHavePaymentAmountOrCurrencySet()
+    public function testThrowIfModelNotHavePaymentAmountOrCurrencySet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $action = new CreateButtonPaymentAction();
 
-        $request = new CreateButtonPayment(new \ArrayObject());
+        $request = new CreateButtonPayment(new ArrayObject());
 
         $action->execute($request);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Payum\Paypal\ProHosted\Nvp\Api
+     * @return MockObject|Api
      */
     protected function createApiMock()
     {
-        return $this->createMock('Payum\Paypal\ProHosted\Nvp\Api', array(), array(), '', false);
+        return $this->createMock(Api::class);
     }
 }

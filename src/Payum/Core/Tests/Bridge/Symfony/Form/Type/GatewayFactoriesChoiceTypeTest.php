@@ -1,50 +1,36 @@
 <?php
+
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType(): void
     {
-        $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType');
+        $rc = new ReflectionClass(GatewayFactoriesChoiceType::class);
 
-        $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
+        $this->assertTrue($rc->isSubclassOf(AbstractType::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithDefaultFactoriesAsFirstArgument()
+    public function testShouldExtendChoice(): void
     {
-        new GatewayFactoriesChoiceType(array('foo' => 'Foo Factory'));
+        $type = new GatewayFactoriesChoiceType([]);
+
+        $this->assertSame(ChoiceType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldExtendChoice()
+    public function testShouldAllowResolveOptions(): void
     {
-        $type = new GatewayFactoriesChoiceType(array());
-
-        $this->assertEquals(ChoiceType::class, $type->getParent());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
-    {
-        $expectedChoices = array(
+        $expectedChoices = [
             'foo' => 'Foo Factory',
             'bar' => 'Bar Factory',
-        );
+        ];
 
         $type = new GatewayFactoriesChoiceType($expectedChoices);
 
@@ -55,6 +41,6 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('choices', $options);
-        $this->assertEquals($expectedChoices, $options['choices']);
+        $this->assertSame($expectedChoices, $options['choices']);
     }
 }

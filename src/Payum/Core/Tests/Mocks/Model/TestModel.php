@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Tests\Mocks\Model;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -8,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TestModel
 {
+    public mixed $payum_id = null;
+
     protected $id;
 
     protected $price;
@@ -19,7 +22,7 @@ class TestModel
         return $this->id;
     }
 
-    public function setPrice($price)
+    public function setPrice($price): void
     {
         $this->price = $price;
     }
@@ -29,7 +32,7 @@ class TestModel
         return $this->price;
     }
 
-    public function setCurrency($currency)
+    public function setCurrency($currency): void
     {
         $this->currency = $currency;
     }

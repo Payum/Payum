@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -18,12 +20,9 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request RefundTransaction */
+        /** @var RefundTransaction $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -34,14 +33,10 @@ class RefundTransactionAction implements ActionInterface, ApiAwareInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof RefundTransaction &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof RefundTransaction &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

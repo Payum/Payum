@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -19,12 +21,9 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request CreateRecurringPaymentProfile */
+        /** @var CreateRecurringPaymentProfile $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -32,18 +31,16 @@ class GetRecurringPaymentsProfileDetailsAction implements ActionInterface, ApiAw
         $model->validateNotEmpty('PROFILEID');
 
         $model->replace(
-            $this->api->getRecurringPaymentsProfileDetails(array('PROFILEID' => $model['PROFILEID']))
+            $this->api->getRecurringPaymentsProfileDetails([
+                'PROFILEID' => $model['PROFILEID'],
+            ])
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetRecurringPaymentsProfileDetails &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetRecurringPaymentsProfileDetails &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Stripe\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -9,11 +11,9 @@ use Payum\Core\Request\GetCreditCardToken;
 class GetCreditCardTokenAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetCreditCardToken $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -21,14 +21,11 @@ class GetCreditCardTokenAction implements ActionInterface
 
         $request->token = $model['customer'];
     }
-    /**
-     * {@inheritDoc}
-     */
+
     public function supports($request)
     {
-        return
-            $request instanceof GetCreditCardToken &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetCreditCardToken &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

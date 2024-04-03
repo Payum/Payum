@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,18 +12,16 @@ use Payum\Paypal\ProHosted\Nvp\Api;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         foreach (range(0, 9) as $index) {
-            if ($model['L_ERRORCODE'.$index]) {
+            if ($model['L_ERRORCODE' . $index]) {
                 $request->markFailed();
 
                 return;
@@ -51,7 +51,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if ($paymentStatus == Api::PAYMENTSTATUS_COMPLETED) {
+        if (Api::PAYMENTSTATUS_COMPLETED === $paymentStatus) {
             $request->markCaptured();
 
             return;
@@ -63,25 +63,25 @@ class StatusAction implements ActionInterface
         ];
 
         if (in_array($paymentStatus, $pendingStatuses)) {
-            if (Api::PENDINGREASON_AUTHORIZATION == $model['PENDINGREASON']) {
+            if (Api::PENDINGREASON_AUTHORIZATION === $model['PENDINGREASON']) {
                 $request->markAuthorized();
 
                 return;
             }
         }
 
-        if ($paymentStatus == Api::PAYMENTSTATUS_PENDING) {
+        if (Api::PAYMENTSTATUS_PENDING === $paymentStatus) {
             $request->markPending();
 
             return;
         }
 
-        $failedStatuses = array(
+        $failedStatuses = [
             Api::PAYMENTSTATUS_FAILED,
             Api::PAYMENTSTATUS_EXPIRED,
             Api::PAYMENTSTATUS_DENIED,
             Api::PAYMENTSTATUS_CANCELED_REVERSAL,
-        );
+        ];
 
         if (in_array($paymentStatus, $failedStatuses)) {
             $request->markFailed();
@@ -90,14 +90,10 @@ class StatusAction implements ActionInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

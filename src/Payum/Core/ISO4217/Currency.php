@@ -6,26 +6,15 @@ namespace Payum\Core\ISO4217;
 
 use Alcohol\ISO4217;
 
-final class Currency {
-    /**
-     * @var string
-     */
-    private $name;
+final class Currency
+{
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $alpha3;
+    private string $alpha3;
 
-    /**
-     * @var string
-     */
-    private $numeric;
+    private string $numeric;
 
-    /**
-     * @var int
-     */
-    private $exp;
+    private int $exp;
 
     /**
      * @var string|string[]
@@ -33,10 +22,6 @@ final class Currency {
     private $country;
 
     /**
-     * @param string $name
-     * @param string $alpha3
-     * @param string $numeric
-     * @param int $exp
      * @param string|string[] $country
      */
     public function __construct(string $name, string $alpha3, string $numeric, int $exp, $country)

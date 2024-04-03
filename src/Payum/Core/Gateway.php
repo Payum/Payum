@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Core;
 
+use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -9,48 +11,51 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Reply\ReplyInterface;
+use ReflectionProperty;
+use Throwable;
 
 class Gateway implements GatewayInterface
 {
     /**
      * @var Action\ActionInterface[]
      */
-    protected $actions;
+    protected $actions = [];
 
     /**
      * @var mixed[]
+     * @deprecated since 2.0. BC will be removed in 3.x. Use dependency-injection to inject the api into the action instead.
      */
-    protected $apis;
+    protected $apis = [];
 
     /**
-     * @var \Payum\Core\Extension\ExtensionCollection
+     * @var ExtensionCollection
      */
     protected $extensions;
 
     /**
      * @var Context[]
      */
-    protected $stack;
+    protected $stack = [];
 
-    /**
-     */
     public function __construct()
     {
-        $this->stack = [];
-        $this->actions = [];
-        $this->apis = [];
-
         $this->extensions = new ExtensionCollection();
     }
 
     /**
      * @param mixed $api
      * @param bool  $forcePrepend
-     *
-     * @return void
      */
-    public function addApi($api, $forcePrepend = false)
+    public function addApi($api, $forcePrepend = false): void
     {
+        @trigger_error(
+            sprintf(
+                'The %s method is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.',
+                __METHOD__
+            ),
+            E_USER_DEPRECATED
+        );
+
         $forcePrepend ?
             array_unshift($this->apis, $api) :
             array_push($this->apis, $api)
@@ -58,12 +63,9 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param Action\ActionInterface $action
      * @param bool                   $forcePrepend
-     *
-     * @return void
      */
-    public function addAction(ActionInterface $action, $forcePrepend = false)
+    public function addAction(ActionInterface $action, $forcePrepend = false): void
     {
         $forcePrepend ?
             array_unshift($this->actions, $action) :
@@ -72,30 +74,24 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param \Payum\Core\Extension\ExtensionInterface $extension
      * @param bool                                     $forcePrepend
-     *
-     * @return void
      */
-    public function addExtension(ExtensionInterface $extension, $forcePrepend = false)
+    public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
     {
         $this->extensions->addExtension($extension, $forcePrepend);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function execute($request, $catchReply = false)
     {
         $context = new Context($this, $request, $this->stack);
 
-        array_push($this->stack, $context);
+        $this->stack[] = $context;
 
         try {
             $this->extensions->onPreExecute($context);
 
-            if (false == $context->getAction()) {
-                if (false == $action = $this->findActionSupported($context->getRequest())) {
+            if (! $context->getAction()) {
+                if (! $action = $this->findActionSupported($context->getRequest())) {
                     throw RequestNotSupportedException::create($context->getRequest());
                 }
 
@@ -123,7 +119,7 @@ class Gateway implements GatewayInterface
             if ($context->getReply()) {
                 throw $context->getReply();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $context->setException($e);
 
             $this->onPostExecuteWithException($context);
@@ -132,7 +128,7 @@ class Gateway implements GatewayInterface
         return;
     }
 
-    protected function onPostExecuteWithException(Context $context)
+    protected function onPostExecuteWithException(Context $context): void
     {
         array_pop($this->stack);
 
@@ -140,16 +136,16 @@ class Gateway implements GatewayInterface
 
         try {
             $this->extensions->onPostExecute($context);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // logic is similar to one in Symfony's ExceptionListener::onKernelException
             $wrapper = $e;
-            while ($prev = $wrapper->getPrevious()) {
+            while (($prev = $wrapper->getPrevious()) instanceof Throwable) {
                 if ($exception === $wrapper = $prev) {
                     throw $e;
                 }
             }
 
-            $prev = new \ReflectionProperty('Exception', 'previous');
+            $prev = new ReflectionProperty('Exception', 'previous');
             $prev->setAccessible(true);
             $prev->setValue($wrapper, $exception);
 
@@ -174,6 +170,15 @@ class Gateway implements GatewayInterface
             }
 
             if ($action instanceof ApiAwareInterface) {
+                @trigger_error(
+                    sprintf(
+                        'Implementing the %s interface in %s is deprecated and will be removed in 2.0. Use dependency-injection to inject the api into the action instead.',
+                        ApiAwareInterface::class,
+                        $action::class,
+                    ),
+                    E_USER_DEPRECATED
+                );
+
                 $apiSet = false;
                 $unsupportedException = null;
                 foreach ($this->apis as $api) {
@@ -186,8 +191,8 @@ class Gateway implements GatewayInterface
                     }
                 }
 
-                if (false == $apiSet) {
-                    throw new LogicException(sprintf('Cannot find right api for the action %s', get_class($action)), null, $unsupportedException);
+                if (! $apiSet) {
+                    throw new LogicException(sprintf('Cannot find right api for the action %s', $action::class), 0, $unsupportedException);
                 }
             }
 

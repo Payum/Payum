@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Model\GatewayConfig;
@@ -15,37 +16,25 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class GatewayConfigType extends AbstractType
 {
-    /**
-     * @var GatewayFactoryRegistryInterface
-     */
-    private $registry;
+    private GatewayFactoryRegistryInterface $registry;
 
-    /**
-     * @param GatewayFactoryRegistryInterface $registry
-     */
     public function __construct(GatewayFactoryRegistryInterface $registry)
     {
         $this->registry = $registry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('gatewayName')
             ->add('factoryName', GatewayFactoriesChoiceType::class)
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'buildCredentials'));
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'buildCredentials'));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'buildCredentials']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'buildCredentials']);
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    public function buildCredentials(FormEvent $event)
+    public function buildCredentials(FormEvent $event): void
     {
         /** @var array $data */
         $data = $event->getData();
@@ -67,16 +56,16 @@ class GatewayConfigType extends AbstractType
         $gatewayFactory = $this->registry->getGatewayFactory($factoryName);
         $config = $gatewayFactory->createConfig();
         $propertyPath = is_array($data) ? '[config]' : 'config';
-        $firstTime = false == PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
+        $firstTime = ! PropertyAccess::createPropertyAccessor()->getValue($data, $propertyPath);
         foreach ($config['payum.default_options'] as $name => $value) {
-            $propertyPath = is_array($data) ? "[config][$name]" : "config[$name]";
+            $propertyPath = is_array($data) ? "[config][{$name}]" : "config[{$name}]";
             if ($firstTime) {
                 PropertyAccess::createPropertyAccessor()->setValue($data, $propertyPath, $value);
             }
 
             $type = is_bool($value) ? CheckboxType::class : TextType::class;
 
-            $options = array();
+            $options = [];
             $options['required'] = in_array($name, $config['payum.required_options']);
 
             $configForm->add($name, $type, $options);
@@ -85,13 +74,10 @@ class GatewayConfigType extends AbstractType
         $event->setData($data);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => GatewayConfig::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => GatewayConfig::class,
+        ]);
     }
 }

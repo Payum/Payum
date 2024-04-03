@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -27,7 +28,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     protected $formFactory;
 
     /**
-     * @var Request
+     * @var ?Request
      */
     protected $httpRequest;
 
@@ -42,7 +43,6 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     protected $templateName;
 
     /**
-     * @param FormFactoryInterface $formFactory
      * @param string               $templateName
      */
     public function __construct(FormFactoryInterface $formFactory, $templateName)
@@ -52,28 +52,22 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     }
 
     /**
-     * @param Request $request
      * @deprecated
      */
-    public function setRequest(Request $request = null)
+    public function setRequest(Request $request = null): void
     {
         $this->httpRequest = $request;
     }
 
-    /**
-     * @param RequestStack|null $requestStack
-     */
-    public function setRequestStack(RequestStack $requestStack = null)
+    public function setRequestStack(RequestStack $requestStack = null): void
     {
         $this->httpRequestStack = $requestStack;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param ObtainCreditCard $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -81,10 +75,15 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
         if ($this->httpRequest instanceof Request) {
             $httpRequest = $this->httpRequest;
         } elseif ($this->httpRequestStack instanceof RequestStack) {
-            $httpRequest = $this->httpRequestStack->getMasterRequest();
+            # BC Layer for Symfony 4 (Simplify after support for Symfony < 5 is dropped)
+            if (method_exists($this->httpRequestStack, 'getMainRequest')) {
+                $httpRequest = $this->httpRequestStack->getMainRequest();
+            } else {
+                $httpRequest = $this->httpRequestStack->getMasterRequest();
+            }
         }
 
-        if (false == $httpRequest) {
+        if (! $httpRequest) {
             throw new LogicException('The action can be run only when http request is set.');
         }
 
@@ -103,24 +102,21 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
             }
         }
 
-        $renderTemplate = new RenderTemplate($this->templateName, array(
+        $renderTemplate = new RenderTemplate($this->templateName, [
             'model' => $request->getModel(),
             'firstModel' => $request->getFirstModel(),
             'form' => $form->createView(),
             'actionUrl' => $request->getToken() ? $request->getToken()->getTargetUrl() : null,
-        ));
+        ]);
         $this->gateway->execute($renderTemplate);
 
-        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, array(
+        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, [
             'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
             'X-Status-Code' => 200,
             'Pragma' => 'no-cache',
-        )));
+        ]));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
         return $request instanceof ObtainCreditCard;

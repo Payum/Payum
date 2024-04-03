@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -14,11 +16,9 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
      * @param Refund $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -28,19 +28,15 @@ class RefundAction implements ActionInterface, GatewayAwareInterface
             return;
         }
 
-        $details->validateNotEmpty(array('invoice_number'));
+        $details->validateNotEmpty(['invoice_number']);
 
         $this->gateway->execute(new CreditPart($details));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Refund &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Refund &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

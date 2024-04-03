@@ -1,38 +1,41 @@
 <?php
+
 namespace Payum\Core\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @template StorageType of object
+ * @implements RegistryInterface<StorageType>
+ */
 class DynamicRegistry implements RegistryInterface
 {
     /**
      * @var GatewayInterface[]
      */
-    private $gateways = [];
+    private array $gateways = [];
 
     /**
-     * @var StorageInterface
+     * @var StorageInterface<GatewayConfigInterface>
      */
-    private $gatewayConfigStore;
+    private StorageInterface $gatewayConfigStore;
 
     /**
-     * @var GatewayFactoryRegistryInterface|null
+     * @var GatewayFactoryRegistryInterface|RegistryInterface<StorageType>
      */
-    private $gatewayFactoryRegistry;
+    private GatewayFactoryRegistryInterface | RegistryInterface $gatewayFactoryRegistry;
 
     /**
      * @deprecated since 1.3.3 will be removed in 2.0
-     *
-     * @var bool
      */
-    private $backwardCompatibility = true;
+    private bool $backwardCompatibility = true;
 
     /**
-     * @param StorageInterface $gatewayConfigStore
-     * @param GatewayFactoryRegistryInterface $gatewayFactoryRegistry
+     * @param StorageInterface<GatewayConfigInterface> $gatewayConfigStore
      */
     public function __construct(StorageInterface $gatewayConfigStore, GatewayFactoryRegistryInterface $gatewayFactoryRegistry)
     {
@@ -40,42 +43,35 @@ class DynamicRegistry implements RegistryInterface
         $this->gatewayFactoryRegistry = $gatewayFactoryRegistry;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGatewayFactory($name)
+    public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
         // @deprecated It will throw invalid argument exception in 2.x
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactory($name);
         }
 
         throw new InvalidArgumentException(sprintf('Gateway factory "%s" does not exist.', $name));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGatewayFactories()
+    public function getGatewayFactories(): array
     {
         // @deprecated It will return empty array here
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactories();
         }
 
         return [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGateway($name)
+    public function getGateway(string $name): GatewayInterface
     {
         if (array_key_exists($name, $this->gateways)) {
             return $this->gateways[$name];
         }
 
-        if ($gatewayConfigs = $this->gatewayConfigStore->findBy(array('gatewayName' => $name))) {
+        if ($gatewayConfigs = $this->gatewayConfigStore->findBy([
+            'gatewayName' => $name,
+        ])) {
             $gateway = $this->createGateway(array_shift($gatewayConfigs));
             $this->gateways[$name] = $gateway;
 
@@ -91,12 +87,12 @@ class DynamicRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return GatewayInterface[]
      */
-    public function getGateways()
+    public function getGateways(): array
     {
         // @deprecated It will return empty array here
-        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof  RegistryInterface) {
+        if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGateways();
         }
 
@@ -111,9 +107,11 @@ class DynamicRegistry implements RegistryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param class-string|object $class
+     *
+     * @return StorageInterface<object>
      */
-    public function getStorage($class)
+    public function getStorage($class): StorageInterface
     {
         // @deprecated It will throw invalid argument exception in 2.x
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
@@ -122,14 +120,14 @@ class DynamicRegistry implements RegistryInterface
 
         throw new InvalidArgumentException(sprintf(
             'Storage for given class "%s" does not exist.',
-            is_object($class) ? get_class($class) : $class
+            is_object($class) ? $class::class : $class
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * @return StorageInterface<object>[]
      */
-    public function getStorages()
+    public function getStorages(): array
     {
         // @deprecated It will return empty array here
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
@@ -144,14 +142,12 @@ class DynamicRegistry implements RegistryInterface
      *
      * @param boolean $backwardCompatibility
      */
-    public function setBackwardCompatibility($backwardCompatibility)
+    public function setBackwardCompatibility($backwardCompatibility): void
     {
         $this->backwardCompatibility = $backwardCompatibility;
     }
 
     /**
-     * @param GatewayConfigInterface $gatewayConfig
-     *
      * @return GatewayInterface
      */
     protected function createGateway(GatewayConfigInterface $gatewayConfig)

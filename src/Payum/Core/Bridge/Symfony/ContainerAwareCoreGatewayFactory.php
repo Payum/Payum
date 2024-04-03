@@ -1,24 +1,20 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\CoreGatewayFactory;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContainerAwareCoreGatewayFactory extends CoreGatewayFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @param ArrayObject $config
-     */
-    protected function buildClosures(ArrayObject $config)
+    protected function buildClosures(ArrayObject $config): void
     {
         foreach ($config as $name => $value) {
-            if (false == $value || false == is_string($value)) {
+            if (! $value || ! is_string($value)) {
                 continue;
             }
 

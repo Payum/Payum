@@ -1,15 +1,18 @@
 <?php
+
 namespace Payum\Payex\Tests\Request\Api;
 
-class StopRecurringPaymentTest extends \PHPUnit\Framework\TestCase
-{
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
-    {
-        $rc = new \ReflectionClass('Payum\Payex\Request\Api\StopRecurringPayment');
+use Payum\Core\Request\Generic;
+use Payum\Payex\Request\Api\StopRecurringPayment;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
+class StopRecurringPaymentTest extends TestCase
+{
+    public function testShouldBeSubClassOfGeneric(): void
+    {
+        $rc = new ReflectionClass(StopRecurringPayment::class);
+
+        $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 }

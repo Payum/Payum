@@ -1,27 +1,28 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use function trigger_error;
 
 /**
- * @deprecated since 1.4.1 will be removed in 2.x
+ * @deprecated since 1.4.1 will be removed in 3.x
  */
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     /**
-     * @var \Payum\Paypal\ExpressCheckout\Nvp\Api
+     * @var Api
      */
     protected $api;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function setApi($api): void
     {
-        if (false == $api instanceof Api) {
+        @trigger_error('The ' . self::class . '::setApi is deprecated since 1.4.1 and will be removed in 3.x.', E_USER_DEPRECATED);
+
+        if (! $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 

@@ -1,130 +1,32 @@
 <?php
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory;
 
-class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
+class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\PaypalProCheckoutGatewayFactory');
-
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayFactory'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaypalProCheckoutGatewayFactory();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
-    {
-        $factory = new PaypalProCheckoutGatewayFactory();
-
-        $this->assertAttributeInstanceOf('Payum\Core\CoreGatewayFactory', 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock('Payum\Core\GatewayFactoryInterface');
-
-        $factory = new PaypalProCheckoutGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new PaypalProCheckoutGatewayFactory();
-
-        $gateway = $factory->create(array(
-            'username' => 'aName',
-            'password' => 'aPass',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'tender' => 'aTender',
-        ));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new PaypalProCheckoutGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new PaypalProCheckoutGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
-    {
-        $factory = new PaypalProCheckoutGatewayFactory(array(
+        $factory = new PaypalProCheckoutGatewayFactory([
             'foo' => 'fooVal',
             'bar' => 'barVal',
-        ));
+        ]);
 
         $config = $factory->createConfig();
 
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions(): void
     {
         $factory = new PaypalProCheckoutGatewayFactory();
 
@@ -133,13 +35,17 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
-        $this->assertEquals(array('username' => '', 'password' => '', 'partner' => '', 'vendor' => '', 'tender' => '', 'sandbox' => true), $config['payum.default_options']);
+        $this->assertEquals([
+            'username' => '',
+            'password' => '',
+            'partner' => '',
+            'vendor' => '',
+            'tender' => '',
+            'sandbox' => true,
+        ], $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle(): void
     {
         $factory = new PaypalProCheckoutGatewayFactory();
 
@@ -148,21 +54,34 @@ class PaypalProCheckoutGatewayFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('paypal_pro_checkout_nvp', $config['payum.factory_name']);
+        $this->assertSame('paypal_pro_checkout_nvp', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('PayPal ProCheckout', $config['payum.factory_title']);
+        $this->assertSame('PayPal ProCheckout', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor, tender fields are required.');
         $factory = new PaypalProCheckoutGatewayFactory();
 
         $factory->create();
+    }
+
+    protected function getGatewayFactoryClass(): string
+    {
+        return PaypalProCheckoutGatewayFactory::class;
+    }
+
+    protected function getRequiredOptions(): array
+    {
+        return [
+            'username' => 'aName',
+            'password' => 'aPass',
+            'partner' => 'aPartner',
+            'vendor' => 'aVendor',
+            'tender' => 'aTender',
+        ];
     }
 }

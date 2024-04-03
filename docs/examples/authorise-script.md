@@ -1,18 +1,6 @@
-<h2 align="center">Supporting Payum</h2>
+# Authorise script
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
-
----
-
-# Authorise script.
-
-This is the script which does all the job related to payments authorization. 
-It may show a credit card form, an iframe or redirect a user to gateway side. 
-The action provides some basic security features. It is completely unique for each payment, and once we done the url invalidated.
-When the authorization is done a user is redirected to after url, in our case it is [done script](done-script.md).
+This is the script which does all the job related to payments authorization. It may show a credit card form, an iframe or redirect a user to gateway side. The action provides some basic security features. It is completely unique for each payment, and once we done the url invalidated. When the authorization is done a user is redirected to after url, in our case it is [done script](done-script.md).
 
 ```php
 <?php
@@ -33,7 +21,7 @@ $gateway = $payum->getGateway($token->getGatewayName());
 try {
     $gateway->execute(new Authorize($token));
 
-    if (false == isset($_REQUEST['noinvalidate'])) {
+    if (! isset($_REQUEST['noinvalidate'])) {
         $payum->getHttpRequestVerifier()->invalidate($token);
     }
 
@@ -56,5 +44,12 @@ _**Note**: If you've got the "Unsupported reply" you have to add an if condition
 
 This is how you can create a authorize url.
 
-Back to [examples](index.md).
-Back to [index](../index.md).
+Back to [examples](index.md)
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

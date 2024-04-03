@@ -1,10 +1,15 @@
 <?php
+
 namespace Payum\Core\Security;
 
+use JsonSerializable;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Security\Util\Mask;
+use ReturnTypeWillChange;
+use Serializable;
+use Stringable;
 
-final class SensitiveValue implements \Serializable, \JsonSerializable
+final class SensitiveValue implements Serializable, JsonSerializable, Stringable
 {
     private $value;
 
@@ -14,6 +19,32 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
     final public function __construct($value)
     {
         $this->value = $value;
+    }
+
+    public function __serialize(): array
+    {
+        return [];
+    }
+
+    public function __unserialize(array $data): void
+    {
+    }
+
+    public function __toString(): string
+    {
+        return '';
+    }
+
+    public function __clone()
+    {
+        throw new LogicException('It is not permitted to close this object.');
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]',
+        ];
     }
 
     /**
@@ -36,55 +67,23 @@ final class SensitiveValue implements \Serializable, \JsonSerializable
         return $value;
     }
 
-    public function erase()
+    public function erase(): void
     {
         $this->value = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function serialize()
+    public function serialize(): ?string
     {
-        return;
+        return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function jsonSerialize()
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): void
     {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __toString()
-    {
-        return '';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __clone()
-    {
-        throw new LogicException('It is not permitted to close this object.');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __debugInfo()
-    {
-        return ['value' => is_scalar($this->value) ? Mask::mask($this->value) : '[FILTERED OUT]'];
     }
 
     /**

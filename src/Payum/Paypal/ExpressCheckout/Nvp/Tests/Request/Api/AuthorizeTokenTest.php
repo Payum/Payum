@@ -1,37 +1,32 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
-class AuthorizeTokenTest extends \PHPUnit\Framework\TestCase
+class AuthorizeTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Request\Api\AuthorizeToken');
+        $rc = new ReflectionClass(AuthorizeToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultForceSetToFalseByDefault()
+    public function testShouldAllowGetDefaultForceSetToFalseByDefault(): void
     {
-        $request = new AuthorizeToken(new \stdClass());
+        $request = new AuthorizeToken(new stdClass());
 
         $this->assertFalse($request->isForced());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetForceSetInConstructor()
+    public function testShouldAllowGetForceSetInConstructor(): void
     {
-        $request = new AuthorizeToken(new \stdClass(), $force = true);
+        $request = new AuthorizeToken(new stdClass(), $force = true);
 
         $this->assertTrue($request->isForced());
     }

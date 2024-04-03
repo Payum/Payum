@@ -20,13 +20,12 @@
         }
     ],
     "require": {
-        "payum/core": "^1.5",
-        "stripe/stripe-php": "^3|^4"
+        "payum/core": "2.0.x-dev",
+        "stripe/stripe-php": "^7.0"
     },
     "require-dev": {
-        "payum/core": "^1.5",
-        "phpunit/phpunit": "^5.7",
-        "symfony/phpunit-bridge": "^3.1|^4"
+        "symfony/phpunit-bridge": "^6.0",
+        "php-http/guzzle7-adapter": "^1.0"
     },
     "config": {
         "bin-dir": "bin"
@@ -37,7 +36,7 @@
     "target-dir": "Payum/Stripe",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

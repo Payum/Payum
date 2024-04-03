@@ -1,94 +1,71 @@
 <?php
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class PayoutTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendPayoutInterface()
+    public function testShouldExtendPayoutInterface(): void
     {
-        $rc = new \ReflectionClass(Payout::class);
+        $rc = new ReflectionClass(Payout::class);
 
         $this->assertTrue($rc->implementsInterface(PayoutInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Payout();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetRecipientIdPreviouslySet()
+    public function testShouldAllowGetRecipientIdPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setRecipientId('theVal');
 
-        $this->assertEquals('theVal', $payout->getRecipientId());
+        $this->assertSame('theVal', $payout->getRecipientId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetRecipientEmailPreviouslySet()
+    public function testShouldAllowGetRecipientEmailPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setRecipientEmail('theVal');
 
-        $this->assertEquals('theVal', $payout->getRecipientEmail());
+        $this->assertSame('theVal', $payout->getRecipientEmail());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetTotalAmountPreviouslySet()
+    public function testShouldAllowGetTotalAmountPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setTotalAmount('theVal');
 
-        $this->assertEquals('theVal', $payout->getTotalAmount());
+        $this->assertSame('theVal', $payout->getTotalAmount());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCurrencyCodePreviouslySet()
+    public function testShouldAllowGetCurrencyCodePreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setCurrencyCode('theVal');
 
-        $this->assertEquals('theVal', $payout->getCurrencyCode());
+        $this->assertSame('theVal', $payout->getCurrencyCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDescriptionPreviouslySet()
+    public function testShouldAllowGetDescriptionPreviouslySet(): void
     {
         $payout = new Payout();
         $payout->setDescription('theVal');
 
-        $this->assertEquals('theVal', $payout->getDescription());
+        $this->assertSame('theVal', $payout->getDescription());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDetailsPreviouslySet()
+    public function testShouldAllowGetDetailsPreviouslySet(): void
     {
         $payout = new Payout();
 
-        $payout->setDetails(['foo' => 'fooVal']);
+        $payout->setDetails([
+            'foo' => 'fooVal',
+        ]);
 
-        $this->assertEquals(['foo' => 'fooVal'], $payout->getDetails());
+        $this->assertSame([
+            'foo' => 'fooVal',
+        ], $payout->getDetails());
     }
 }

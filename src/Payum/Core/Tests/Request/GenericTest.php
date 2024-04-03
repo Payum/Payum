@@ -1,80 +1,78 @@
 <?php
+
 namespace Payum\Core\Tests\Request;
 
+use ArrayObject;
+use Iterator;
+use Payum\Core\Model\Identity;
+use Payum\Core\Model\ModelAggregateInterface;
+use Payum\Core\Model\ModelAwareInterface;
 use Payum\Core\Request\Generic;
+use Payum\Core\Security\TokenAggregateInterface;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\IdentityInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
 
 class GenericTest extends TestCase
 {
-    public static function provideDifferentPhpTypes(): \Iterator
+    public static function provideDifferentPhpTypes(): Iterator
     {
-        yield 'object' => array(new \stdClass());
-        yield 'int' => array(5);
-        yield 'float' => array(5.5);
-        yield 'string' => array('foo');
-        yield 'boolean' => array(false);
-        yield 'resource' => array(tmpfile());
+        yield 'object' => [new stdClass()];
+        yield 'int' => [5];
+        yield 'float' => [5.5];
+        yield 'string' => ['foo'];
+        yield 'boolean' => [false];
+        yield 'resource' => [tmpfile()];
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass(): void
     {
-        $rc = new \ReflectionClass(Generic::class);
+        $rc = new ReflectionClass(Generic::class);
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface(): void
     {
-        $rc = new \ReflectionClass(Generic::class);
+        $rc = new ReflectionClass(Generic::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAwareInterface'));
+        $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
+    }
+
+    public function testShouldImplementModelAggregateInterface(): void
+    {
+        $rc = new ReflectionClass(Generic::class);
+
+        $this->assertTrue($rc->implementsInterface(ModelAggregateInterface::class));
+    }
+
+    public function testShouldImplementTokenAggregateInterface(): void
+    {
+        $rc = new ReflectionClass(Generic::class);
+
+        $this->assertTrue($rc->implementsInterface(TokenAggregateInterface::class));
     }
 
     /**
-     * @test
-     */
-    public function shouldImplementModelAggregateInterface()
-    {
-        $rc = new \ReflectionClass(Generic::class);
-
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Model\ModelAggregateInterface'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldImplementTokenAggregateInterface()
-    {
-        $rc = new \ReflectionClass(Generic::class);
-
-        $this->assertTrue($rc->implementsInterface('Payum\Core\Security\TokenAggregateInterface'));
-    }
-
-    /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function couldBeConstructedWithModelOfAnyType($phpType)
+    public function testCouldBeConstructedWithModelOfAnyType($phpType): void
     {
-        $this->getMockForAbstractClass(Generic::class, array($phpType));
+        $request = new class($phpType) extends Generic {
+        };
+
+        $this->assertEquals($phpType, $request->getModel());
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function shouldAllowSetModelAndGetIt($phpType)
+    public function testShouldAllowSetModelAndGetIt($phpType): void
     {
-        /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(123321));
+        $request = new class(123321) extends Generic {
+        };
 
         $request->setModel($phpType);
 
@@ -82,153 +80,178 @@ class GenericTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideDifferentPhpTypes
      */
-    public function shouldAllowGetModelSetInConstructor($phpType)
+    public function testShouldAllowGetModelSetInConstructor($phpType): void
     {
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array($phpType));
+        $request = $this->getMockForAbstractClass(Generic::class, [$phpType]);
 
         $this->assertEquals($phpType, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetTokenSetInConstructor()
+    public function testShouldAllowGetTokenSetInConstructor(): void
     {
-        $tokenMock = $this->createMock('Payum\Core\Security\TokenInterface');
+        $tokenMock = $this->createMock(TokenInterface::class);
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array($tokenMock));
+        $request = $this->getMockForAbstractClass(Generic::class, [$tokenMock]);
 
         $this->assertSame($tokenMock, $request->getModel());
         $this->assertSame($tokenMock, $request->getToken());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectInConstructor()
+    public function testShouldConvertArrayToArrayObjectInConstructor(): void
     {
-        $model = array('foo' => 'bar');
+        $model = [
+            'foo' => 'bar',
+        ];
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array($model));
+        $request = $this->getMockForAbstractClass(Generic::class, [$model]);
 
-        $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldConvertArrayToArrayObjectSetWithSetter()
+    public function testShouldConvertArrayToArrayObjectSetWithSetter(): void
     {
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(123321));
+        $request = $this->getMockForAbstractClass(Generic::class, [123321]);
 
-        $model = array('foo' => 'bar');
+        $model = [
+            'foo' => 'bar',
+        ];
 
         $request->setModel($model);
 
-        $this->assertInstanceOf('ArrayObject', $request->getModel());
-        $this->assertEquals($model, (array) $request->getModel());
+        $this->assertInstanceOf(ArrayObject::class, $request->getModel());
+        $this->assertSame($model, (array) $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSetTokenAsFirstModelOnConstruct()
+    public function testShouldNotSetTokenAsFirstModelOnConstruct(): void
     {
         /** @var Generic $request */
-        $token = $this->createMock('Payum\Core\Security\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
 
-        $request = $this->getMockForAbstractClass(Generic::class, array($token));
+        $request = $this->getMockForAbstractClass(Generic::class, [$token]);
 
         $this->assertNull($request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSetIdentityAsFirstModelOnConstruct()
+    public function testShouldNotSetIdentityAsFirstModelOnConstruct(): void
     {
-        /** @var Generic $request */
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = new class() implements IdentityInterface {
+            public function serialize(): string
+            {
+                return '';
+            }
 
-        $request = $this->getMockForAbstractClass(Generic::class, array($identity));
+            public function unserialize($data): array
+            {
+                return [];
+            }
+
+            public function getClass(): string
+            {
+                return self::class;
+            }
+
+            public function getId(): IdentityInterface
+            {
+                return new Identity();
+            }
+
+            public function __serialize(): array
+            {
+                return [];
+            }
+
+            public function __unserialize(array $data): void
+            {
+            }
+        };
+
+        $request = $this->getMockForAbstractClass(Generic::class, [$identity]);
 
         $this->assertNull($request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetAnyObjectAsFirstModelOnConstruct()
+    public function testShouldSetAnyObjectAsFirstModelOnConstruct(): void
     {
-        $model = new \stdClass();
+        $model = new stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array($model));
+        $request = $this->getMockForAbstractClass(Generic::class, [$model]);
 
         $this->assertSame($model, $request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSetTokenAsFirstModelOnSetModel()
+    public function testShouldNotSetTokenAsFirstModelOnSetModel(): void
     {
-        $token = $this->createMock('Payum\Core\Security\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, [null]);
         $request->setModel($token);
 
         $this->assertNull($request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSetIdentityAsFirstModelOnSetModel()
+    public function testShouldNotSetIdentityAsFirstModelOnSetModel(): void
     {
-        $identity = $this->createMock('Payum\Core\Storage\IdentityInterface', array(), array(), '', false);
+        $identity = new class() implements IdentityInterface {
+            public function serialize(): void
+            {
+            }
+
+            public function unserialize($data): void
+            {
+            }
+
+            public function getClass(): void
+            {
+            }
+
+            public function getId(): void
+            {
+            }
+
+            public function __serialize(): array
+            {
+                return [];
+            }
+
+            public function __unserialize(array $data): void
+            {
+            }
+        };
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, [null]);
         $request->setModel($identity);
 
         $this->assertNull($request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetAnyObjectAsFirstModelOnSetModel()
+    public function testShouldSetAnyObjectAsFirstModelOnSetModel(): void
     {
-        $model = new \stdClass();
+        $model = new stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array(null));
+        $request = $this->getMockForAbstractClass(Generic::class, [null]);
         $request->setModel($model);
 
         $this->assertSame($model, $request->getFirstModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotChangeFirstModelOnSecondSetModelCall()
+    public function testShouldNotChangeFirstModelOnSecondSetModelCall(): void
     {
-        $firstModel = new \stdClass();
-        $secondModel = new \stdClass();
+        $firstModel = new stdClass();
+        $secondModel = new stdClass();
 
         /** @var Generic $request */
-        $request = $this->getMockForAbstractClass(Generic::class, array($firstModel));
+        $request = $this->getMockForAbstractClass(Generic::class, [$firstModel]);
         $request->setModel($secondModel);
 
         $this->assertSame($firstModel, $request->getFirstModel());

@@ -1,5 +1,8 @@
 <?php
+
 namespace Payum\Core\Request;
+
+use InvalidArgumentException;
 
 class RenderTemplate
 {
@@ -16,17 +19,15 @@ class RenderTemplate
     /**
      * @var string
      */
-    protected $result;
+    protected $result = '';
 
     /**
      * @param string $templateName
-     * @param array  $parameters
      */
-    public function __construct($templateName, array $parameters = array())
+    public function __construct($templateName, array $parameters = [])
     {
         $this->templateName = $templateName;
         $this->parameters = $parameters;
-        $this->result = '';
     }
 
     /**
@@ -56,7 +57,7 @@ class RenderTemplate
     /**
      * @param string $result
      */
-    public function setResult($result)
+    public function setResult($result): void
     {
         $this->result = $result;
     }
@@ -65,7 +66,7 @@ class RenderTemplate
      * @param string $name
      * @param mixed  $value
      */
-    public function setParameter($name, $value)
+    public function setParameter($name, $value): void
     {
         $this->parameters[$name] = $value;
     }
@@ -74,10 +75,10 @@ class RenderTemplate
      * @param string $name
      * @param mixed  $value
      */
-    public function addParameter($name, $value)
+    public function addParameter($name, $value): void
     {
         if (array_key_exists($name, $this->parameters)) {
-            throw new \InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));
+            throw new InvalidArgumentException(sprintf('Parameter with given name "%s" already exists', $name));
         }
 
         $this->parameters[$name] = $value;

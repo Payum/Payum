@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\Masspay\Nvp\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -14,29 +16,23 @@ class PayoutAction implements ActionInterface, GatewayAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param Payout $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
-        if (false == $model['ACK']) {
+
+        if (! $model['ACK']) {
             $this->gateway->execute(new Masspay($model));
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Payout &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof Payout &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

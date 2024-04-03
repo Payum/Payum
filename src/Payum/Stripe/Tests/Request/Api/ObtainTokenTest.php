@@ -1,26 +1,18 @@
 <?php
+
 namespace Payum\Stripe\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
 use Payum\Stripe\Request\Api\ObtainToken;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class ObtainTokenTest extends \PHPUnit\Framework\TestCase
+class ObtainTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric(): void
     {
-        $rc = new \ReflectionClass(ObtainToken::class);
+        $rc = new ReflectionClass(ObtainToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsFirstArgument()
-    {
-        new ObtainToken($model = []);
     }
 }

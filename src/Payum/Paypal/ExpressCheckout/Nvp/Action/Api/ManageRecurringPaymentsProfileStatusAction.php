@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -21,14 +23,14 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
     /**
      * [@inheritdoc}
      */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request ManageRecurringPaymentsProfileStatus */
+        /** @var ManageRecurringPaymentsProfileStatus $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $model->validateNotEmpty(array('PROFILEID', 'ACTION'));
+        $model->validateNotEmpty(['PROFILEID', 'ACTION']);
 
         $model->replace(
             $this->api->manageRecurringPaymentsProfileStatus((array) $model)
@@ -40,9 +42,8 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
      */
     public function supports($request)
     {
-        return
-            $request instanceof ManageRecurringPaymentsProfileStatus &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof ManageRecurringPaymentsProfileStatus &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

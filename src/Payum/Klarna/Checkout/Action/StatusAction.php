@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -10,11 +12,9 @@ use Payum\Klarna\Checkout\Constants;
 class StatusAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param GetStatusInterface $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -38,13 +38,13 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        if (false == $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE == $model['status']) {
+        if (! $model['status'] || Constants::STATUS_CHECKOUT_INCOMPLETE === $model['status']) {
             $request->markNew();
 
             return;
         }
 
-        if (Constants::STATUS_CHECKOUT_COMPLETE == $model['status']) {
+        if (Constants::STATUS_CHECKOUT_COMPLETE === $model['status']) {
             $request->markPending();
 
             return;
@@ -53,14 +53,10 @@ class StatusAction implements ActionInterface
         $request->markUnknown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof GetStatusInterface &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

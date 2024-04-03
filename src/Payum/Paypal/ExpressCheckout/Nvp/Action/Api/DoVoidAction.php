@@ -1,6 +1,8 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -23,11 +25,9 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param $request DoVoid
+     * @param DoVoid $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -42,14 +42,10 @@ class DoVoidAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof DoVoid &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof DoVoid &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

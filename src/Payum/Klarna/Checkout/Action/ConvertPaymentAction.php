@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Klarna\Checkout\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -10,11 +11,9 @@ use Payum\Core\Request\Convert;
 class ConvertPaymentAction implements ActionInterface
 {
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
-    public function execute($request)
+    public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
@@ -22,16 +21,18 @@ class ConvertPaymentAction implements ActionInterface
         $payment = $request->getSource();
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
-        if ('SEK' == $payment->getCurrencyCode()) {
-            $details['cart'] = ['items' => [[
-                'reference' => $payment->getNumber(),
-                'name' => $payment->getNumber(),
-                'quantity' => 1,
-                // klarna calculate the tax later.
-                'unit_price' => round($payment->getTotalAmount() / 0.75),
-                'discount_rate' => 0,
-                'tax_rate' => 2500
-            ]]];
+        if ('SEK' === $payment->getCurrencyCode()) {
+            $details['cart'] = [
+                'items' => [[
+                    'reference' => $payment->getNumber(),
+                    'name' => $payment->getNumber(),
+                    'quantity' => 1,
+                    // klarna calculate the tax later.
+                    'unit_price' => round($payment->getTotalAmount() / 0.75),
+                    'discount_rate' => 0,
+                    'tax_rate' => 2500,
+                ]],
+            ];
 
             $details['purchase_country'] = 'SE';
             $details['purchase_currency'] = 'SEK';
@@ -41,15 +42,11 @@ class ConvertPaymentAction implements ActionInterface
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof Convert &&
+        return $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            'array' === $request->getTo()
         ;
     }
 }

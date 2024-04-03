@@ -1,132 +1,91 @@
 <?php
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Klarna;
+use KlarnaException;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Tests\GenericApiAwareActionTest;
+use Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction;
 use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use PhpXmlRpc\Client;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
-class CheckOrderStatusActionTest extends TestCase
+class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
-        $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
+        $rc = new ReflectionClass(CheckOrderStatusAction::class);
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
+        $this->assertTrue($rc->isSubclassOf(BaseApiAwareAction::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi(): void
     {
-        new CheckOrderStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CheckOrderStatusAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CheckOrderStatusAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
-    {
-        $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
+        $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
         $action = new CheckOrderStatusAction($this->createKlarnaMock());
 
-        $action->setApi(new \stdClass());
+        $action->setApi(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCheckOrderStatusWithArrayAsModel()
+    public function testShouldSupportCheckOrderStatusWithArrayAsModel(): void
     {
         $action = new CheckOrderStatusAction();
 
-        $this->assertTrue($action->supports(new CheckOrderStatus(array())));
+        $this->assertTrue($action->supports(new CheckOrderStatus([])));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCheckOrderStatus()
+    public function testShouldNotSupportAnythingNotCheckOrderStatus(): void
     {
         $action = new CheckOrderStatusAction();
 
-        $this->assertFalse($action->supports(new \stdClass()));
+        $this->assertFalse($action->supports(new stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderStatusWithNotArrayAccessModel(): void
     {
         $action = new CheckOrderStatusAction();
 
-        $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass())));
+        $this->assertFalse($action->supports(new CheckOrderStatus(new stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute(): void
     {
-        $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
+        $this->expectException(RequestNotSupportedException::class);
         $action = new CheckOrderStatusAction();
 
-        $action->execute(new \stdClass());
+        $action->execute(new stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet(): void
     {
-        $this->expectException(\Payum\Core\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
         $action = new CheckOrderStatusAction();
 
-        $action->execute(new CheckOrderStatus(array()));
+        $action->execute(new CheckOrderStatus([]));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCheckOrderStatusMethod()
+    public function testShouldCallKlarnaCheckOrderStatusMethod(): void
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->returnValue('theStatus'))
+            ->willReturn('theStatus')
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -136,24 +95,21 @@ class CheckOrderStatusActionTest extends TestCase
 
         $activatedDetails = $check->getModel();
 
-        $this->assertEquals('theStatus', $activatedDetails['status']);
+        $this->assertSame('theStatus', $activatedDetails['status']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails(): void
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new KlarnaException('theMessage', 123))
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -162,19 +118,16 @@ class CheckOrderStatusActionTest extends TestCase
         $action->execute($activate = new CheckOrderStatus($details));
 
         $activatedDetails = $activate->getModel();
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfAlreadyActivated()
+    public function testShouldDoNothingIfAlreadyActivated(): void
     {
-        $details = array(
+        $details = [
             'rno' => 'theRno',
             'invoice_number' => 'anInvNumber',
-        );
+        ];
 
         $klarnaMock = $this->createKlarnaMock();
         $klarnaMock
@@ -187,14 +140,24 @@ class CheckOrderStatusActionTest extends TestCase
         $action->execute($activate = new CheckOrderStatus($details));
     }
 
+    protected function getActionClass(): string
+    {
+        return CheckOrderStatusAction::class;
+    }
+
+    protected function getApiClass(): Config
+    {
+        return new Config();
+    }
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Klarna
+     * @return MockObject|Klarna
      */
     protected function createKlarnaMock()
     {
-        $klarnaMock =  $this->createMock('Klarna', array('config', 'activate', 'cancelReservation', 'checkOrderStatus'));
+        $klarnaMock = $this->createMock(Klarna::class);
 
-        $rp = new \ReflectionProperty($klarnaMock, 'xmlrpc');
+        $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
         $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
         $rp->setAccessible(false);

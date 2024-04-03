@@ -1,28 +1,16 @@
-<h2 align="center">Supporting Payum</h2>
+# Klarna Checkout: Get Started
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+In this chapter we are going to talk about the most common task: purchase of a product using [Klarna Checkout](https://developers.klarna.com/en/klarna-checkout). Unfortunately, You cannot use Payum's order to purchase stuff. Only klarna specific format is supported. We assume you already read basic [get it started](../../get-it-started.md).
 
-- [Become a sponsor](https://www.patreon.com/makasim)
-- [Become our client](http://forma-pro.com/)
+### Installation
 
----
-
-# Klarna Checkout. Get it started.
-
-In this chapter we are going to talk about the most common task: purchase of a product using [Klarna Checkout](https://developers.klarna.com/en/klarna-checkout).
-Unfortunately, You cannot use Payum's order to purchase stuff. Only klarna specific format is supported.
-We assume you already read basic [get it started](../../get-it-started.md).
-
-## Installation
-
-The preferred way to install the library is using [composer](http://getcomposer.org/).
-Run composer require to add dependencies to _composer.json_:
+The preferred way to install the library is using [composer](http://getcomposer.org/). Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/klarna-checkout php-http/guzzle6-adapter
+php composer.phar require payum/klarna-checkout php-http/guzzle7-adapter
 ```
 
-## config.php
+### config.php
 
 We have to only add the gateway factory. All the rest remain the same:
 
@@ -35,7 +23,6 @@ use Payum\Core\Payum;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
     ->addGateway('klarna', [
         'factory' => 'klarna_checkout',
         'merchant_id' => 'EDIT IT',
@@ -46,15 +33,13 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-An initial configuration for Payum basically wants to ensure we have things ready to be stored such as
-a token, or a payment details. We also would like to have a registry of various gateways supported and the place where they can store their information (e.g. payment details).
+An initial configuration for Payum basically wants to ensure we have things ready to be stored such as a token, or a payment details. We also would like to have a registry of various gateways supported and the place where they can store their information (e.g. payment details).
 
 _**Note**: Consider using something other than `FilesystemStorage` in production. `DoctrineStorage` may be a good alternative._
 
-First we have modify `config.php` a bit.
-We need to add gateway factory and payment details storage.
+First we have modify `config.php` a bit. We need to add gateway factory and payment details storage.
 
-## prepare.php
+### prepare.php
 
 ```php
 <?php
@@ -77,7 +62,7 @@ $storage->update($details);
 $authorizeToken = $payum->getTokenFactory()->createAuthorizeToken('klarna', $details, 'done.php');
 
 /** @var \Payum\Core\Security\TokenInterface $notifyToken */
-$notifyToken = $payum->tokenFactory()->createNotifyToken('klarna', $details);
+$notifyToken = $payum->getTokenFactory()->createNotifyToken('klarna', $details);
 
 $details['merchant'] = array(
     'terms_uri' => 'http://example.com/terms',
@@ -110,7 +95,12 @@ $storage->update($details);
 header("Location: ".$authorizeToken->getTargetUrl());
 ```
 
-That's it. As you see we configured Klarna Checkout `config.php` and set details `prepare.php`.
-[capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
+That's it. As you see we configured Klarna Checkout `config.php` and set details `prepare.php`. [capture.php](../../examples/capture-script.md) and [done.php](../../examples/done-script.md) scripts remain same.
 
-Back to [index](../../index.md).
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

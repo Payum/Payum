@@ -1,12 +1,14 @@
 <?php
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Action\Api;
 
+use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoExpressCheckoutPayment;
 
@@ -19,12 +21,9 @@ class DoExpressCheckoutPaymentAction implements ActionInterface, ApiAwareInterfa
         $this->apiClass = Api::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute($request)
+    public function execute($request): void
     {
-        /** @var $request DoExpressCheckoutPayment */
+        /** @var DoExpressCheckoutPayment $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -47,14 +46,10 @@ class DoExpressCheckoutPaymentAction implements ActionInterface, ApiAwareInterfa
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supports($request)
     {
-        return
-            $request instanceof DoExpressCheckoutPayment &&
-            $request->getModel() instanceof \ArrayAccess
+        return $request instanceof DoExpressCheckoutPayment &&
+            $request->getModel() instanceof ArrayAccess
         ;
     }
 }

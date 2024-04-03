@@ -1,4 +1,5 @@
 <?php
+
 namespace Payum\Core\Bridge\Symfony\Security;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -6,50 +7,47 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\Util\RequestTokenVerifier;
 use Payum\Core\Storage\StorageInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
 
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
-     * @var \Payum\Core\Storage\StorageInterface
+     * @var StorageInterface<TokenInterface>
      */
-    protected $tokenStorage;
+    protected StorageInterface $tokenStorage;
 
     /**
-     * @param StorageInterface $tokenStorage
+     * @param StorageInterface<TokenInterface> $tokenStorage
      */
     public function __construct(StorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function verify($httpRequest)
     {
-        if (false == $httpRequest instanceof Request) {
+        if (! $httpRequest instanceof Request) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid request given. Expected %s but it is %s',
-                'Symfony\Component\HttpFoundation\Request',
-                is_object($httpRequest) ? get_class($httpRequest) : gettype($httpRequest)
+                Request::class,
+                get_debug_type($httpRequest)
             ));
         }
 
-        if (false === $hash = $httpRequest->attributes->get('payum_token', $httpRequest->get('payum_token', false))) {
+        if (! $hash = $httpRequest->attributes->get('payum_token', $httpRequest->get('payum_token', false))) {
             throw new NotFoundHttpException('Token parameter not set in request');
         }
 
         if ($hash instanceof TokenInterface) {
             $token = $hash;
         } else {
-            if (false == $token = $this->tokenStorage->find($hash)) {
+            if (! $token = $this->tokenStorage->find($hash)) {
                 throw new NotFoundHttpException(sprintf('A token with hash `%s` could not be found.', $hash));
             }
 
-            if (!RequestTokenVerifier::isValid($httpRequest->getUri(), $token->getTargetUrl())) {
+            if (! RequestTokenVerifier::isValid($httpRequest->getUri(), $token->getTargetUrl())) {
                 throw new HttpException(400, sprintf('The current url %s not match target url %s set in the token.', $httpRequest->getUri(), $token->getTargetUrl()));
             }
         }
@@ -57,10 +55,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
         return $token;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function invalidate(TokenInterface $token)
+    public function invalidate(TokenInterface $token): void
     {
         $this->tokenStorage->delete($token);
     }
