@@ -23,6 +23,7 @@ class Gateway implements GatewayInterface
 
     /**
      * @var mixed[]
+     * @deprecated since 2.0. BC will be removed in 3.x. Use dependency-injection to inject the api into the action instead.
      */
     protected $apis = [];
 
@@ -47,6 +48,14 @@ class Gateway implements GatewayInterface
      */
     public function addApi($api, $forcePrepend = false): void
     {
+        @trigger_error(
+            sprintf(
+                'The %s method is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.',
+                __METHOD__
+            ),
+            E_USER_DEPRECATED
+        );
+
         $forcePrepend ?
             array_unshift($this->apis, $api) :
             array_push($this->apis, $api)
@@ -161,6 +170,15 @@ class Gateway implements GatewayInterface
             }
 
             if ($action instanceof ApiAwareInterface) {
+                @trigger_error(
+                    sprintf(
+                        'Implementing the %s interface in %s is deprecated and will be removed in 2.0. Use dependency-injection to inject the api into the action instead.',
+                        ApiAwareInterface::class,
+                        $action::class,
+                    ),
+                    E_USER_DEPRECATED
+                );
+
                 $apiSet = false;
                 $unsupportedException = null;
                 foreach ($this->apis as $api) {
