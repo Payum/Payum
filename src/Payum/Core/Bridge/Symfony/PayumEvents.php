@@ -2,7 +2,7 @@
 
 namespace Payum\Core\Bridge\Symfony;
 
-@trigger_error('The '.__NAMESPACE__.'\PayumEvents class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\PayumEvents class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
 
 /**
  * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
