@@ -215,7 +215,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.api')) {
-                $prepend = in_array($name, $config['payum.prepend_apis']);
+                @trigger_error('The payum.api.* config is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.', E_USER_DEPRECATED);
+                $prepend = in_array($name, $config['payum.prepend_apis'], true);
 
                 $gateway->addApi($value, $prepend);
             }
