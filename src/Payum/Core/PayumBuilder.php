@@ -280,7 +280,7 @@ class PayumBuilder
     public function getPayum(): Payum
     {
         if (! $this->tokenStorage) {
-            throw new LogicException('Token storage must be configured.');
+            $this->addDefaultStorages();
         }
 
         /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */

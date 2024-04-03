@@ -11,6 +11,8 @@
   * Any custom class implementing this interface should update their signature. The new signatures are:
     * `public function getGateway(string $name): GatewayInterface;`
     * `public function getGateways(): array;`
+* The `Payum\Core\ApiAwareInterface` and `Payum\Core\ApiAwareTrait` has been deprecated. Inject the required API in the action's constructor instead.
+* The `payum.api` config has been deprecated.
 * The HttpClient has been replaced with a PSR-18 HTTP Client
   * The `httplug.message_factory` config option is deprecated. Use `payum.http_message_factory` instead
   * The `httplug.stream_factory` config option is deprecated. Use `payum.http_stream_factory` instead
