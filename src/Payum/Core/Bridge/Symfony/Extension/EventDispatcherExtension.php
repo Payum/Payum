@@ -8,6 +8,11 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+@trigger_error('The '.__NAMESPACE__.'\EventDispatcherExtension class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+
+/**
+ * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ */
 class EventDispatcherExtension implements ExtensionInterface
 {
     private EventDispatcherInterface $dispatcher;

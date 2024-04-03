@@ -6,6 +6,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+@trigger_error('The '.__NAMESPACE__.'\GatewayChoiceType class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+
+/**
+ * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ */
 class GatewayChoiceType extends AbstractType
 {
     /**
