@@ -7,6 +7,11 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Templating\EngineInterface;
 
+@trigger_error('The '.__NAMESPACE__.'\RenderTemplateAction class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+
+/**
+ * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ */
 class RenderTemplateAction implements ActionInterface
 {
     /**

@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+@trigger_error('The '.__NAMESPACE__.'\HttpRequestVerifier class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+
+/**
+ * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ */
 class HttpRequestVerifier implements HttpRequestVerifierInterface
 {
     /**
