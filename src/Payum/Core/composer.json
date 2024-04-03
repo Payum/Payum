@@ -35,6 +35,7 @@
         "alcohol/iso4217": "^4.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
+        "php-http/discovery": "^1.19",
         "psr/log": "^1 || ^2 || ^3",
         "league/uri": "^6.4",
         "league/uri-components": "^2.2",

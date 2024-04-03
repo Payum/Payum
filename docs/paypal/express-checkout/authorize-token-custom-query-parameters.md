@@ -10,15 +10,20 @@ You can pass these query parameters as api options:
 <?php
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamInterfacel
 
-/** @var \Payum\Core\HttpClientInterface $client */ 
-/** @var \Http\Message\MessageFactory $messageFactory */
+/** @var ClientInterface $client */ 
+/** @var RequestInterface $requestInterface */
+/** @var StreamInterface $streamInterface */
 
 $api = new Api([
     // ...
     'useraction' => Api::USERACTION_COMMIT,
     'cmd' => Api::CMD_EXPRESS_CHECKOUT_MOBILE,
-], $client, $messageFactory);
+], $client, $requestInterface, $streamInterface);
 
 echo $api->getAuthorizeTokenUrl('aToken');
 // https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout-mobile&useraction=commit&token=aToken
@@ -32,11 +37,16 @@ You could also pass these parameters as a second argument of `getAuthorizeTokenU
 <?php
 
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamInterfacel
 
-/** @var \Payum\Core\HttpClientInterface $client */ 
-/** @var \Http\Message\MessageFactory $messageFactory */
+/** @var ClientInterface $client */ 
+/** @var RequestInterface $requestInterface */
+/** @var StreamInterface $streamInterface */
 
-$api = new Api($options = [], $client, $messageFactory);
+$api = new Api($options = [], $client, $requestInterface, $streamInterface);
 
 echo $api->getAuthorizeTokenUrl('aToken', array(
     'useraction' => Api::USERACTION_COMMIT,

@@ -3,8 +3,7 @@
 namespace Payum\Core\Tests;
 
 use Closure;
-use Http\Client\HttpClient;
-use Http\Message\MessageFactory;
+use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CapturePaymentAction;
@@ -20,6 +19,9 @@ use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
 use stdClass;
 use Twig\Environment;
@@ -54,6 +56,9 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertSame($config['payum.http_client'], $config['payum.api.http_client'](new ArrayObject($config)));
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldCreateDefaultHttplugMessageFactory(): void
     {
         $factory = new CoreGatewayFactory();
@@ -62,9 +67,12 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertArrayHasKey('httplug.message_factory', $config);
         $this->assertInstanceOf(Closure::class, $config['httplug.message_factory']);
         $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(MessageFactory::class, $config['httplug.message_factory']);
+        $this->assertInstanceOf(RequestFactory::class, $config['httplug.message_factory']);
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldCreateDefaultHttplugStreamFactory(): void
     {
         $factory = new CoreGatewayFactory();
@@ -74,6 +82,28 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertInstanceOf(Closure::class, $config['httplug.stream_factory']);
         $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
         $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']);
+    }
+
+    public function testShouldCreateDefaultHttMessageFactory(): void
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([]);
+        $this->assertArrayHasKey('payum.http_message_factory', $config);
+        $this->assertInstanceOf(Closure::class, $config['payum.http_message_factory']);
+        $config['payum.http_message_factory'] = call_user_func($config['payum.http_message_factory'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(RequestFactoryInterface::class, $config['payum.http_message_factory']);
+    }
+
+    public function testShouldCreateDefaultHttStreamFactory(): void
+    {
+        $factory = new CoreGatewayFactory();
+
+        $config = $factory->createConfig([]);
+        $this->assertArrayHasKey('payum.http_stream_factory', $config);
+        $this->assertInstanceOf(Closure::class, $config['payum.http_stream_factory']);
+        $config['payum.http_stream_factory'] = call_user_func($config['payum.http_stream_factory'], ArrayObject::ensureArrayObject($config));
+        $this->assertInstanceOf(StreamFactoryInterface::class, $config['payum.http_stream_factory']);
     }
 
     public function testShouldCreateDefaultHttplugClient(): void
@@ -88,7 +118,7 @@ class CoreGatewayFactoryTest extends TestCase
         $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
         $config['httplug.client'] = call_user_func($config['httplug.client'], ArrayObject::ensureArrayObject($config));
 
-        $this->assertInstanceOf(HttpClient::class, $config['httplug.client']);
+        $this->assertInstanceOf(ClientInterface::class, $config['httplug.client']);
     }
 
     public function testShouldAllowCreateGatewayWithCustomApi(): void
@@ -246,6 +276,12 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertSame('barVal', $config['bar']);
     }
 
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
     public function testShouldAllowPrependAction(): void
     {
         $firstAction = $this->createMock(ActionInterface::class);
@@ -275,6 +311,12 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertSame($firstAction, $actions[1]);
     }
 
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
     public function testShouldAllowPrependApi(): void
     {
         $firstApi = new stdClass();
@@ -304,6 +346,12 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertSame($firstApi, $apis[1]);
     }
 
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
     public function testShouldAllowPrependExtensions(): void
     {
         $firstExtension = $this->createMock(ExtensionInterface::class);

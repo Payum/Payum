@@ -11,7 +11,10 @@ use Http\Client\Curl\Client as HttpCurlClient;
 use Http\Client\Socket\Client as HttpSocketClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
+use Http\Message\MessageFactory;
 use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
@@ -29,23 +32,33 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
+use function trigger_error;
+use const E_USER_DEPRECATED;
 
 class CoreGatewayFactory implements GatewayFactoryInterface
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $defaultConfig;
+    protected array $defaultConfig = [];
 
+    /**
+     * @param array<string, mixed> $defaultConfig
+     */
     public function __construct(array $defaultConfig = [])
     {
         $this->defaultConfig = $defaultConfig;
     }
 
-    public function create(array $config = [])
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function create(array $config = []): Gateway
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->createConfig());
@@ -61,13 +74,20 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         return $gateway;
     }
 
-    public function createConfig(array $config = [])
+    /**
+     * @param array<string, mixed> $config
+     *
+     * @return array<string, mixed>
+     */
+    public function createConfig(array $config = []): array
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
 
         $config->defaults([
-            'httplug.message_factory' => function (ArrayObject $config) {
+            'httplug.message_factory' => static function (ArrayObject $config): MessageFactory {
+                @trigger_error('Using "httplug.message_factory" is deprecated, use "payum.http_message_factory" instead, which will return a PSR-17 RequestFactoryInterface since payum/core 2.0.0', E_USER_DEPRECATED);
+
                 if (class_exists(MessageFactoryDiscovery::class)) {
                     return MessageFactoryDiscovery::find();
                 }
@@ -86,7 +106,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
-            'httplug.stream_factory' => function (ArrayObject $config) {
+            'httplug.stream_factory' => static function (ArrayObject $config) {
+                @trigger_error('Using "httplug.stream_factory" is deprecated, use "payum.http_stream_factory" instead which will return a PSR-17 StreamFactoryInterface since payum/core 2.0.0', E_USER_DEPRECATED);
                 if (class_exists(StreamFactoryDiscovery::class)) {
                     return StreamFactoryDiscovery::find();
                 }
@@ -101,7 +122,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
-            'httplug.client' => function (ArrayObject $config) {
+            'httplug.client' => static function (ArrayObject $config) {
+                @trigger_error('Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0', E_USER_DEPRECATED);
+
                 if (class_exists(HttpClientDiscovery::class)) {
                     return HttpClientDiscovery::find();
                 }
@@ -136,7 +159,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface
 
                 throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
             },
-            'payum.http_client' => fn (ArrayObject $config) => new HttplugClient($config['httplug.client']),
+
+            'payum.http_client' => static fn (ArrayObject $config): HttplugClient => new HttplugClient(Psr18ClientDiscovery::find()),
+            'payum.http_stream_factory' => static fn (ArrayObject $config): StreamFactoryInterface => Psr17FactoryDiscovery::findStreamFactory(),
+            'payum.http_message_factory' => static fn (ArrayObject $config): RequestFactoryInterface => Psr17FactoryDiscovery::findRequestFactory(),
+
             'payum.template.layout' => '@PayumCore/layout.html.twig',
 
             'twig.env' => fn () => new Environment(new ChainLoader()),
@@ -173,7 +200,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
         ]);
 
         if ($config['payum.security.token_storage']) {
-            $config['payum.action.get_token'] = fn (ArrayObject $config) => new GetTokenAction($config['payum.security.token_storage']);
+            $config['payum.action.get_token'] = static fn (ArrayObject $config) => new GetTokenAction($config['payum.security.token_storage']);
         }
 
         $config['payum.paths'] = array_replace([
@@ -186,16 +213,28 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     protected function buildClosures(ArrayObject $config): void
     {
         // with higher priority
-        foreach (['httplug.message_factory', 'httplug.stream_factory', 'httplug.client', 'payum.http_client', 'payum.paths', 'twig.env', 'twig.register_paths'] as $name) {
+        foreach ([
+            'payum.http_client',
+            'payum.http_stream_factory',
+            'payum.http_message_factory',
+
+            'httplug.message_factory',
+            'httplug.stream_factory',
+            'httplug.client',
+
+            'payum.paths',
+            'twig.env',
+            'twig.register_paths',
+        ] as $name) {
             $value = $config[$name];
             if (is_callable($value)) {
-                $config[$name] = call_user_func($value, $config);
+                $config[$name] = $value($config);
             }
         }
 
         foreach ($config as $name => $value) {
             if (is_callable($value) && ! (is_string($value) && function_exists('\\' . $value))) {
-                $config[$name] = call_user_func($value, $config);
+                $config[$name] = $value($config);
             }
         }
     }
@@ -204,7 +243,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.action')) {
-                $prepend = in_array($name, $config['payum.prepend_actions']);
+                $prepend = in_array($name, $config['payum.prepend_actions'], true);
 
                 $gateway->addAction($value, $prepend);
             }
@@ -227,7 +266,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface
     {
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.extension')) {
-                $prepend = in_array($name, $config['payum.prepend_extensions']);
+                $prepend = in_array($name, $config['payum.prepend_extensions'], true);
 
                 $gateway->addExtension($value, $prepend);
             }

@@ -28,6 +28,12 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
     public function testShouldResolveContainerParameter(): void
     {
         $container = new Container();
@@ -53,6 +59,12 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($called);
     }
 
+    /**
+     * NOTE: The "@group legacy" annotation is only added since we have some deprecated config options.
+     * The annotation can be removed once the deprecated configs has been removed in 3.0
+     *
+     * @group legacy
+     */
     public function testShouldResolveTemplateFromContainerParameter(): void
     {
         $container = new Container();

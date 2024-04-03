@@ -2,23 +2,30 @@
 
 namespace Payum\Paypal\ProCheckout\Nvp\Tests;
 
-use GuzzleHttp\Psr7\Response;
-use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Strategy\MockClientStrategy;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\HttpClientInterface;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class ApiTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        Psr17FactoryDiscovery::prependStrategy(MockClientStrategy::class);
+    }
+
     public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
-        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testThrowIfSandboxOptionsNotBooleanInConstructor(): void
@@ -32,7 +39,7 @@ class ApiTest extends TestCase
             'vendor' => 'aVendor',
             'tender' => 'aTender',
             'sandbox' => 'notABool',
-        ], $this->createHttpClientMock(), $this->createHttpMessageFactory());
+        ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
     }
 
     public function testShouldAddTRXTYPEOnDoSaleCall(): void
@@ -43,7 +50,7 @@ class ApiTest extends TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->doSale([]);
 
@@ -59,7 +66,7 @@ class ApiTest extends TestCase
             'partner' => 'aPartner',
             'vendor' => 'aVendor',
             'tender' => 'aTender',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->doCredit([]);
 
@@ -75,7 +82,7 @@ class ApiTest extends TestCase
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->doSale([]);
 
@@ -103,7 +110,7 @@ class ApiTest extends TestCase
             'partner' => 'thePartner',
             'vendor' => 'theVendor',
             'tender' => 'theTender',
-        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory());
+        ], $this->createSuccessHttpClientStub(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $result = $api->doCredit([]);
 
@@ -130,11 +137,11 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
+            ->method('sendRequest')
             ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
                 $testCase->assertSame('https://payflowpro.paypal.com/', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
             })
         ;
 
@@ -145,7 +152,7 @@ class ApiTest extends TestCase
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => false,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->doCredit([]);
     }
@@ -157,11 +164,11 @@ class ApiTest extends TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
-            ->method('send')
+            ->method('sendRequest')
             ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
                 $testCase->assertSame('https://pilot-payflowpro.paypal.com/', (string) $request->getUri());
 
-                return new Response(200, [], $request->getBody());
+                return Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody());
             })
         ;
 
@@ -172,37 +179,32 @@ class ApiTest extends TestCase
             'vendor' => 'theVendor',
             'tender' => 'theTender',
             'sandbox' => true,
-        ], $clientMock, $this->createHttpMessageFactory());
+        ], $clientMock, $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
         $api->doCredit([]);
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createHttpClientMock()
+    protected function createHttpClientMock(): MockObject | ClientInterface
     {
-        return $this->createMock(HttpClientInterface::class);
+        return $this->createMock(ClientInterface::class);
     }
 
-    /**
-     * @return MessageFactory
-     */
-    protected function createHttpMessageFactory()
+    protected function createHttpMessageFactory(): RequestFactoryInterface
     {
-        return new GuzzleMessageFactory();
+        return Psr17FactoryDiscovery::findRequestFactory();
     }
 
-    /**
-     * @return MockObject|HttpClientInterface
-     */
-    protected function createSuccessHttpClientStub()
+    protected function createHttpStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    protected function createSuccessHttpClientStub(): MockObject | ClientInterface
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
-            ->method('send')
-            ->willReturnCallback(fn (RequestInterface $request) => new Response(200, [], $request->getBody()))
-        ;
+            ->method('sendRequest')
+            ->willReturnCallback(static fn (RequestInterface $request): ResponseInterface => Psr17FactoryDiscovery::findResponseFactory()->createResponse(200)->withBody($request->getBody()));
 
         return $clientMock;
     }

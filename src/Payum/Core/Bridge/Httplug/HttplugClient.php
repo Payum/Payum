@@ -4,7 +4,12 @@ namespace Payum\Core\Bridge\Httplug;
 
 use Http\Client\HttpClient;
 use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use function trigger_error;
+
+trigger_error('The ' . __NAMESPACE__ . '\HttplugClient is deprecated since 2.0.0 and will be removed in 3.0. Use Psr18ClientDiscovery::find() instead.', E_USER_DEPRECATED);
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking
@@ -12,16 +17,25 @@ use Psr\Http\Message\RequestInterface;
  *
  * @deprecated This will be removed in 2.0. Consider using Http\Client\HttpClient.
  */
-class HttplugClient implements HttpClientInterface
+class HttplugClient implements HttpClientInterface, ClientInterface
 {
-    private HttpClient $client;
+    private ClientInterface $client;
 
-    public function __construct(HttpClient $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
 
-    public function send(RequestInterface $request)
+    /**
+     * @deprecated since 2.0.0, will be removed in 3.0. Use sendRequest() instead.
+     */
+    public function send(RequestInterface $request): ResponseInterface
+    {
+        trigger_error('The ' . self::class . '::send() is deprecated since 2.0.0 and will be removed in 3.0. Use sendRequest() instead.', E_USER_DEPRECATED);
+        return $this->sendRequest($request);
+    }
+
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         return $this->client->sendRequest($request);
     }

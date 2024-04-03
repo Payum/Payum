@@ -76,18 +76,16 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 
         $request = new ModelAggregateAwareRequest($model);
 
-        $testCase = $this;
-
         $gatewayMock = $this->createMock(GatewayInterface::class);
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->identicalTo($request))
-            ->willReturnCallback(function ($request) use ($expectedDetails, $testCase): void {
+            ->willReturnCallback(function ($request) use ($expectedDetails): void {
                 $details = $request->getModel();
 
-                $testCase->assertInstanceOf(ArrayAccess::class, $details);
-                $testCase->assertSame($expectedDetails, (array) $details);
+                $this->assertInstanceOf(ArrayAccess::class, $details);
+                $this->assertSame($expectedDetails, (array) $details);
 
                 $details['baz'] = 'bazVal';
             })
@@ -99,7 +97,7 @@ class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
         $action->execute($request);
 
         $details = $model->getDetails();
-        $this->assertEquals($details, $model->getDetails());
+        $this->assertSame($details, $model->getDetails());
     }
 
     public function testShouldWrapArrayDetailsToArrayObjectAndSetDetailsBackAfterExecution(): void

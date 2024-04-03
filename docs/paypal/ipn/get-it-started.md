@@ -3,11 +3,16 @@
 ```php
 <?php
 use Payum\Paypal\Ipn\Api;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamInterfacel
 
-/** @var \Payum\Core\HttpClientInterface $client */ 
-/** @var \Http\Message\MessageFactory $messageFactory */
+/** @var ClientInterface $client */ 
+/** @var RequestInterface $requestInterface */
+/** @var StreamInterface $streamInterface */
 
-$api = new Api(['sandbox' => true], $client, $messageFactory);
+$api = new Api(['sandbox' => true], $client, $requestInterface, $streamInterface);
 
 if (Api::NOTIFY_VERIFIED === $api->notifyValidate($_POST)) {
     echo 'It is valid paypal notification. Let\'s do some additional checks';

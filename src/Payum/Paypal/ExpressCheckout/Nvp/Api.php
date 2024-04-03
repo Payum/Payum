@@ -2,12 +2,14 @@
 
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
-use Http\Message\MessageFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\RuntimeException;
-use Payum\Core\HttpClientInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @link https://www.x.com/developers/paypal/documentation-tools/api/getexpresscheckoutdetails-api-operation-nvp
@@ -289,17 +291,16 @@ class Api
 
     public const VERSION = '65.1';
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+
+    protected RequestFactoryInterface $requestFactory;
+
+    protected StreamFactoryInterface $streamFactory;
 
     /**
-     * @var MessageFactory
+     * @var array<string, mixed>|ArrayObject
      */
-    protected $messageFactory;
-
-    protected $options = [
+    protected array | ArrayObject $options = [
         'username' => null,
         'password' => null,
         'signature' => null,
@@ -312,11 +313,14 @@ class Api
     ];
 
     /**
-     * @param HttpClientInterface|null $client
-     * @param MessageFactory|null      $messageFactory
+     * @param array<string, mixed> $options
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
-    {
+    public function __construct(
+        array $options,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+    ) {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
         $options->validateNotEmpty([
@@ -331,15 +335,17 @@ class Api
 
         $this->options = $options;
         $this->client = $client;
-        $this->messageFactory = $messageFactory;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
      * Require: PAYMENTREQUEST_0_AMT
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function setExpressCheckout(array $fields)
+    public function setExpressCheckout(array $fields): array
     {
         if (! isset($fields['RETURNURL'])) {
             if (! $this->options['return_url']) {
@@ -368,9 +374,10 @@ class Api
     /**
      * Require: TOKEN
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function getExpressCheckoutDetails(array $fields)
+    public function getExpressCheckoutDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetExpressCheckoutDetails';
 
@@ -383,9 +390,10 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function getTransactionDetails(array $fields)
+    public function getTransactionDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetTransactionDetails';
 
@@ -398,9 +406,10 @@ class Api
     /**
      * Require: STARTDATE
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function transactionSearch(array $fields)
+    public function transactionSearch(array $fields): array
     {
         $fields['METHOD'] = 'TransactionSearch';
 
@@ -413,9 +422,10 @@ class Api
     /**
      * Require: PAYMENTREQUEST_0_AMT, PAYMENTREQUEST_0_PAYMENTACTION, PAYERID, TOKEN
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function doExpressCheckoutPayment(array $fields)
+    public function doExpressCheckoutPayment(array $fields): array
     {
         $fields['METHOD'] = 'DoExpressCheckoutPayment';
 
@@ -426,9 +436,10 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function createRecurringPaymentsProfile(array $fields)
+    public function createRecurringPaymentsProfile(array $fields): array
     {
         $fields['METHOD'] = 'CreateRecurringPaymentsProfile';
 
@@ -439,9 +450,10 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function updateRecurringPaymentsProfile(array $fields)
+    public function updateRecurringPaymentsProfile(array $fields): array
     {
         $fields['METHOD'] = 'UpdateRecurringPaymentsProfile';
 
@@ -452,9 +464,10 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function getRecurringPaymentsProfileDetails(array $fields)
+    public function getRecurringPaymentsProfileDetails(array $fields): array
     {
         $fields['METHOD'] = 'GetRecurringPaymentsProfileDetails';
 
@@ -465,9 +478,10 @@ class Api
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function manageRecurringPaymentsProfileStatus(array $fields)
+    public function manageRecurringPaymentsProfileStatus(array $fields): array
     {
         $fields['METHOD'] = 'ManageRecurringPaymentsProfileStatus';
 
@@ -480,9 +494,10 @@ class Api
     /**
      * Require: PAYERID, TOKEN
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function createBillingAgreement(array $fields)
+    public function createBillingAgreement(array $fields): array
     {
         $fields['METHOD'] = 'CreateBillingAgreement';
 
@@ -495,9 +510,10 @@ class Api
     /**
      * Require: AMT, PAYMENTACTION, REFERENCEID
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function doReferenceTransaction(array $fields)
+    public function doReferenceTransaction(array $fields): array
     {
         $fields['METHOD'] = 'DoReferenceTransaction';
 
@@ -510,9 +526,10 @@ class Api
     /**
      * Require: AUTHORIZATIONID, AMT, COMPLETETYPE
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function doCapture(array $fields)
+    public function doCapture(array $fields): array
     {
         $fields['METHOD'] = 'DoCapture';
 
@@ -525,9 +542,10 @@ class Api
     /**
      * Require: TRANSACTIONID
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function refundTransaction(array $fields)
+    public function refundTransaction(array $fields): array
     {
         $fields['METHOD'] = 'RefundTransaction';
 
@@ -540,9 +558,10 @@ class Api
     /**
      * Require: AUTHORIZATIONID
      *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function doVoid(array $fields)
+    public function doVoid(array $fields): array
     {
         $fields['METHOD'] = 'DoVoid';
 
@@ -553,11 +572,9 @@ class Api
     }
 
     /**
-     * @param string $token
-     *
-     * @return string
+     * @param array<string, mixed> $query
      */
-    public function getAuthorizeTokenUrl($token, array $query = [])
+    public function getAuthorizeTokenUrl(string $token, array $query = []): string
     {
         $defaultQuery = array_filter([
             'useraction' => $this->options['useraction'],
@@ -575,19 +592,19 @@ class Api
     }
 
     /**
-     * @throws HttpException
-     *
-     * @return array
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
+     * @throws ClientExceptionInterface
      */
-    protected function doRequest(array $fields)
+    protected function doRequest(array $fields): array
     {
-        $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
+        $request = $this->requestFactory
+            ->createRequest('POST', $this->getApiEndpoint())
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ->withBody($this->streamFactory->createStream(http_build_query($fields)))
+        ;
 
-        $request = $this->messageFactory->createRequest('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
+        $response = $this->client->sendRequest($request);
 
         if (! ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
@@ -602,10 +619,7 @@ class Api
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    protected function getApiEndpoint()
+    protected function getApiEndpoint(): string
     {
         return $this->options['sandbox'] ?
             'https://api-3t.sandbox.paypal.com/nvp' :
@@ -613,6 +627,9 @@ class Api
         ;
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     */
     protected function addAuthorizeFields(array &$fields): void
     {
         $fields['PWD'] = $this->options['password'];
@@ -624,6 +641,9 @@ class Api
         }
     }
 
+    /**
+     * @param array<string, mixed> $fields
+     */
     protected function addVersionField(array &$fields): void
     {
         $fields['VERSION'] = self::VERSION;
