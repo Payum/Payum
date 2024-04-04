@@ -7,21 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class CaptureTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(Capture::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Capture(new \stdClass());
     }
 }

@@ -6,21 +6,10 @@ use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
 
 class MasspayTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(Masspay::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsArgument()
-    {
-        new Masspay(new \stdClass());
     }
 }

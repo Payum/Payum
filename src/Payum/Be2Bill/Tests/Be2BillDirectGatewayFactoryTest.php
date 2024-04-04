@@ -2,106 +2,25 @@
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
-use Payum\Core\CoreGatewayFactory;
-use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
-use PHPUnit\Framework\TestCase;
 
-class Be2BillDirectGatewayFactoryTest extends TestCase
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
+
+class Be2BillDirectGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass(Be2BillDirectGatewayFactory::class);
-
-        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
+        return Be2BillDirectGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    protected function getRequiredOptions(): array
     {
-        new Be2BillDirectGatewayFactory();
+        return [
+            'identifier' => 'anId',
+            'password' => 'aPass',
+        ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-
-        $factory = new Be2BillDirectGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $gateway = $factory->create(array('identifier' => 'anId', 'password' => 'aPass'));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new Be2BillDirectGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new Be2BillDirectGatewayFactory(array(
             'foo' => 'fooVal',
@@ -113,16 +32,13 @@ class Be2BillDirectGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new Be2BillDirectGatewayFactory();
 
@@ -134,10 +50,7 @@ class Be2BillDirectGatewayFactoryTest extends TestCase
         $this->assertEquals(array('identifier' => '', 'password' => '', 'sandbox' => true), $config['payum.default_options']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new Be2BillDirectGatewayFactory();
 
@@ -146,16 +59,13 @@ class Be2BillDirectGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('be2bill_direct', $config['payum.factory_name']);
+        $this->assertSame('be2bill_direct', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('Be2Bill Direct', $config['payum.factory_title']);
+        $this->assertSame('Be2Bill Direct', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');

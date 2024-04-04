@@ -7,28 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetCreditCardTokenTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithCurrencyCode()
-    {
-        new GetCreditCardToken([]);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetCreditCardToken::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor()
     {
         $model = new \ArrayObject();
 
@@ -42,6 +28,6 @@ class GetCreditCardTokenTest extends TestCase
         $request = new GetCreditCardToken([]);
         $request->token = 'aToken';
 
-        $this->assertEquals('aToken', $request->token);
+        $this->assertSame('aToken', $request->token);
     }
 }

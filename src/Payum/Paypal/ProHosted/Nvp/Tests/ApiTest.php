@@ -9,31 +9,7 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client  = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username'  => 'a_username',
-            'password'  => 'a_password',
-            'signature' => 'a_signature',
-            'business'  => 'a_business',
-            'sandbox'   => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -45,10 +21,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -64,10 +37,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('return=formRequestReturnUrl', $result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoCreateButtonCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'the_username',
@@ -82,25 +52,22 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
 
         $this->assertArrayHasKey('BUSINESS', $result);
-        $this->assertEquals('the_business', $result['BUSINESS']);
+        $this->assertSame('the_business', $result['BUSINESS']);
 
         $this->assertArrayHasKey('SUBJECT', $result);
-        $this->assertEquals('the_business', $result['SUBJECT']);
+        $this->assertSame('the_business', $result['SUBJECT']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnDoCreateButtonCall()
+    public function testShouldAddVersionOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -114,24 +81,21 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
+        $clientMock->expects($this->once())->method('send')->willReturnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
-            $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         $api = new Api(array(
             'username'  => 'a_username',
@@ -145,21 +109,18 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 
         $clientMock = $this->createHttpClientMock();
-        $clientMock->expects($this->once())->method('send')->will($this->returnCallback(function (RequestInterface $request) use (
+        $clientMock->expects($this->once())->method('send')->willReturnCallback(function (RequestInterface $request) use (
             $testCase
         ) {
-            $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         $api = new Api(array(
             'username'  => 'a_username',
@@ -173,10 +134,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnDoCreateButtonCall()
+    public function testShouldAddMethodOnDoCreateButtonCall()
     {
         $api = new Api(array(
             'username'  => 'a_username',
@@ -190,13 +148,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCreateButton([]);
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('BMCreateButton', $result['METHOD']);
+        $this->assertSame('BMCreateButton', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return must be set either to FormRequest or to options.');
@@ -211,10 +166,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCreateButton([]);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
@@ -243,9 +195,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
     protected function createSuccessHttpClientStub()
     {
         $clientMock = $this->createHttpClientMock();
-        $clientMock->method('send')->will($this->returnCallback(function (RequestInterface $request) {
+        $clientMock->method('send')->willReturnCallback(function (RequestInterface $request) {
             return new Response(200, [], $request->getBody());
-        }));
+        });
 
         return $clientMock;
     }

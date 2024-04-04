@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class MaskTest extends TestCase
 {
-    public function provideValues(): \Iterator
+    public static function provideValues(): \Iterator
     {
         yield 'just 16 numbers' => array("4567890123456789", "4XXXXXXXXXXX6789");
         yield 'just 9 numbers' => array("498291842", "4XXXX1842");
@@ -21,35 +21,24 @@ class MaskTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideValues
      */
-    public function shouldAllowGenerateToken($value, $expected)
+    public function testShouldAllowGenerateToken($value, $expected)
     {
         $this->assertSame($expected, Mask::mask($value));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowChangeMaskedSymbol()
+    public function testShouldAllowChangeMaskedSymbol()
     {
         $this->assertSame('1***-****-****-5678', Mask::mask('1234-5678-1234-5678', '*'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowChangeNumberOfLastShownSymbols()
+    public function testShouldAllowChangeNumberOfLastShownSymbols()
     {
         $this->assertSame('1XXX-XXXX-1234-5678', Mask::mask('1234-5678-1234-5678', null, 8));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotShowAnythingIfNegativeShowLastGiven()
+    public function testShouldNotShowAnythingIfNegativeShowLastGiven()
     {
         $this->assertSame('BXXXXXXXX', Mask::mask('Beatrices', null, -1));
     }

@@ -9,40 +9,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'aUsername',
-            'password' => 'aPassword',
-            'partner' => 'aPartner',
-            'vendor' => 'aVendor',
-            'tender' => 'aTender'
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, partner, vendor fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -56,10 +30,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoSaleCall()
+    public function testShouldAddTRXTYPEOnDoSaleCall()
     {
         $api = new Api(array(
             'username' => 'aUsername',
@@ -72,13 +43,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doSale(array());
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_SALE, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_SALE, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddTRXTYPEOnDoCreditCall()
+    public function testShouldAddTRXTYPEOnDoCreditCall()
     {
         $api = new Api(array(
             'username' => 'aUsername',
@@ -91,13 +59,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCredit(array());
 
         $this->assertArrayHasKey('TRXTYPE', $result);
-        $this->assertEquals(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
+        $this->assertSame(Api::TRXTYPE_CREDIT, $result['TRXTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoSaleCall()
+    public function testShouldAddAuthorizeFieldsOnDoSaleCall()
     {
         $api = new Api(array(
             'username' => 'theUsername',
@@ -110,25 +75,22 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doSale(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnDoCreditCall()
+    public function testShouldAddAuthorizeFieldsOnDoCreditCall()
     {
         $api = new Api(array(
             'username' => 'theUsername',
@@ -141,25 +103,22 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->doCredit(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('theUsername', $result['USER']);
+        $this->assertSame('theUsername', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('thePassword', $result['PWD']);
+        $this->assertSame('thePassword', $result['PWD']);
 
         $this->assertArrayHasKey('PARTNER', $result);
-        $this->assertEquals('thePartner', $result['PARTNER']);
+        $this->assertSame('thePartner', $result['PARTNER']);
 
         $this->assertArrayHasKey('VENDOR', $result);
-        $this->assertEquals('theVendor', $result['VENDOR']);
+        $this->assertSame('theVendor', $result['VENDOR']);
 
         $this->assertArrayHasKey('TENDER', $result);
-        $this->assertEquals('theTender', $result['TENDER']);
+        $this->assertSame('theTender', $result['TENDER']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -167,11 +126,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://payflowpro.paypal.com/', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -186,10 +145,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->doCredit(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 
@@ -197,11 +153,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://pilot-payflowpro.paypal.com/', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://pilot-payflowpro.paypal.com/', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -240,9 +196,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

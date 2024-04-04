@@ -6,50 +6,30 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayObjectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementArrayAccessInterface()
+    public function testShouldImplementArrayAccessInterface()
     {
         $rc = new \ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->implementsInterface(\ArrayAccess::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementIteratorAggregateInterface()
+    public function testShouldImplementIteratorAggregateInterface()
     {
         $rc = new \ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($rc->implementsInterface(\IteratorAggregate::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ArrayObject();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowAddElementToArray()
+    public function testShouldAllowAddElementToArray()
     {
         $model = new ArrayObject();
 
         $model['foo'] = 'theFoo';
 
-        $this->assertEquals('theFoo', $model['foo']);
+        $this->assertSame('theFoo', $model['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfElementSetOnIsset()
+    public function testShouldReturnTrueIfElementSetOnIsset()
     {
         $model = new ArrayObject();
 
@@ -58,20 +38,14 @@ class ArrayObjectTest extends TestCase
         $this->assertArrayHasKey('foo', $model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfElementNotSetOnIsset()
+    public function testShouldReturnFalseIfElementNotSetOnIsset()
     {
         $model = new ArrayObject();
 
         $this->assertArrayNotHasKey('foo', $model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowUnsetElement()
+    public function testShouldAllowUnsetElement()
     {
         $model = new ArrayObject();
 
@@ -85,10 +59,7 @@ class ArrayObjectTest extends TestCase
         $this->assertArrayNotHasKey('foo', $model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnArrayIteratorOnGetIterator()
+    public function testShouldReturnArrayIteratorOnGetIterator()
     {
         $model = new ArrayObject();
 
@@ -98,7 +69,7 @@ class ArrayObjectTest extends TestCase
         $iterator = $model->getIterator();
 
         $this->assertInstanceOf('ArrayIterator', $iterator);
-        $this->assertEquals(
+        $this->assertSame(
             array(
                 'foo' => 'theFoo',
                 'bar' => 'theBar',

@@ -22,7 +22,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run composer require to add dependencies to _composer.json_:
 
 ```bash
-php composer.phar require payum/offline php-http/guzzle6-adapter
+php composer.phar require payum/offline php-http/guzzle7-adapter
 ```
 
 _**Note**: Where payum/offline is a php payum extension, you can for example change it to payum/paypal-express-checkout-nvp or payum/stripe. Look at [supported gateways](supported-gateways.md) to find out what you can use._
@@ -122,6 +122,7 @@ It has to work for all gateways without any modification from your side.
 
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpPostRedirect;
 
 include __DIR__.'/config.php';
 
@@ -133,6 +134,9 @@ $gateway = $payum->getGateway($token->getGatewayName());
 if ($reply = $gateway->execute(new Capture($token), true)) {
     if ($reply instanceof HttpRedirect) {
         header("Location: ".$reply->getUrl());
+        die();
+    } elseif ($reply instanceof HttpPostRedirect) {
+        echo $reply->getContent();
         die();
     }
 

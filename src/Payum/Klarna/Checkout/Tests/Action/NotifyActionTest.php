@@ -15,20 +15,14 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
+    public function testShouldUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutCompleteOnExecute()
     {
         $testCase = $this;
 
@@ -42,13 +36,13 @@ class NotifyActionTest extends GenericActionTest
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Klarna\Checkout\Request\Api\UpdateOrder'))
-            ->will($this->returnCallback(function (UpdateOrder $request) use ($testCase) {
+            ->willReturnCallback(function (UpdateOrder $request) use ($testCase) {
                 $model = $request->getModel();
 
-                $testCase->assertEquals(Constants::STATUS_CREATED, $model['status']);
-                $testCase->assertEquals('theLocation', $model['location']);
-                $testCase->assertEquals('theOrderId', $model['merchant_reference']['orderid1']);
-            }))
+                $testCase->assertSame(Constants::STATUS_CREATED, $model['status']);
+                $testCase->assertSame('theLocation', $model['location']);
+                $testCase->assertSame('theOrderId', $model['merchant_reference']['orderid1']);
+            })
         ;
         $gatewayMock
             ->expects($this->at(2))
@@ -68,10 +62,7 @@ class NotifyActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCheckoutInCompleteOnExecute()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -89,10 +80,7 @@ class NotifyActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
+    public function testShouldNotUpdateOrderWithStatusCreatedIfCurrentStatusCreatedOnExecute()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

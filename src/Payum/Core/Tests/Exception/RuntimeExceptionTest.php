@@ -6,31 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class RuntimeExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\RuntimeException');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\RuntimeException');
 
         $this->assertTrue($rc->isSubclassOf('RuntimeException'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RuntimeException();
     }
 }

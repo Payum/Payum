@@ -6,68 +6,42 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
 class DoVoidActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseApiAwareTrait()
+    public function testShouldUseApiAwareTrait()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
         $this->assertContains('Payum\Core\ApiAwareTrait', $rc->getTraitNames());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseGatewayAwareTrait()
+    public function testShouldUseGatewayAwareTrait()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ExpressCheckout\Nvp\Action\Api\DoVoidAction');
 
         $this->assertContains('Payum\Core\GatewayAwareTrait', $rc->getTraitNames());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoVoidAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportDoVoidRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoVoidRequestAndArrayAccessAsModel()
     {
         $action = new DoVoidAction();
 
@@ -76,20 +50,14 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoVoidRequest()
+    public function testShouldNotSupportAnythingNotDoVoidRequest()
     {
         $action = new DoVoidAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DoVoidAction();
@@ -97,10 +65,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAuthorizationIdNotSetInModel()
+    public function testThrowIfAuthorizationIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('AUTHORIZATIONID must be set. Has user not authorized this transaction?');
@@ -111,10 +76,7 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoVoidMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoVoidMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -122,12 +84,12 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('AUTHORIZATIONID', $fields);
-                $testCase->assertEquals('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
+                $testCase->assertSame('theOriginalTransactionId', $fields['AUTHORIZATIONID']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoVoidAction();
@@ -140,21 +102,18 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoVoidMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoVoidMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('DoVoid')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'AUTHORIZATIONID' => 'theTransactionId',
                     'MSGSUBID' => 'aMessageId',
                 );
-            }))
+            })
         ;
 
         $action = new DoVoidAction();
@@ -169,10 +128,10 @@ class DoVoidActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('AUTHORIZATIONID', $model);
-        $this->assertEquals('theTransactionId', $model['AUTHORIZATIONID']);
+        $this->assertSame('theTransactionId', $model['AUTHORIZATIONID']);
 
         $this->assertArrayHasKey('MSGSUBID', $model);
-        $this->assertEquals('aMessageId', $model['MSGSUBID']);
+        $this->assertSame('aMessageId', $model['MSGSUBID']);
     }
 
     /**

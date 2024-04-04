@@ -12,38 +12,21 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
 class CancelActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CancelAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CancelAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportEmptyModel()
+    public function testShouldSupportEmptyModel()
     {
         $action = new CancelAction();
 
@@ -52,10 +35,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsAuthorized()
+    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsAuthorized()
     {
         $action = new CancelAction();
 
@@ -68,10 +48,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsOtherThanAuthorized()
+    public function testShouldSupportCancelRequestWithArrayAsModelWhichHasPendingReasonAsOtherThanAuthorized()
     {
         $action = new CancelAction();
 
@@ -84,10 +61,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportModelWithBillingPeriod()
+    public function testShouldNotSupportModelWithBillingPeriod()
     {
         $action = new CancelAction();
 
@@ -100,10 +74,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCancelRequestWithNoArrayAccessAsModel()
+    public function testShouldNotSupportCancelRequestWithNoArrayAccessAsModel()
     {
         $action = new CancelAction();
 
@@ -112,20 +83,14 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCancelRequest()
+    public function testShouldNotSupportAnythingNotCancelRequest()
     {
         $action = new CancelAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CancelAction();
@@ -133,10 +98,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotExecuteDoVoidIfTransactionIdNotSet()
+    public function testShouldNotExecuteDoVoidIfTransactionIdNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -152,10 +114,7 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldExecuteDoVoidIfTransactionIdSet()
+    public function testShouldExecuteDoVoidIfTransactionIdSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

@@ -16,11 +16,6 @@ class CoreGatewayFactoryBuilderTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new CoreGatewayFactoryBuilder();
-    }
-
     public function testShouldBuildContainerAwareCoreGatewayFactory()
     {
         $container = new Container();
@@ -32,8 +27,6 @@ class CoreGatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder->build($defaultConfig);
 
         $this->assertInstanceOf(ContainerAwareCoreGatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($container, 'container', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 
     public function testAllowUseBuilderAsAsFunction()

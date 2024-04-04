@@ -8,38 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\CreditCardType');
 
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditCardType();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldExtendFormType()
+    public function testShouldExtendFormType()
     {
         $type = new CreditCardType();
 
-        $this->assertEquals(FormType::class, $type->getParent());
+        $this->assertSame(FormType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions()
     {
         $type = new CreditCardType();
 
@@ -50,10 +33,10 @@ class CreditCardTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('data_class', $options);
-        $this->assertEquals('Payum\Core\Model\CreditCard', $options['data_class']);
+        $this->assertSame('Payum\Core\Model\CreditCard', $options['data_class']);
 
         $this->assertArrayHasKey('validation_groups', $options);
-        $this->assertEquals(array('Payum'), $options['validation_groups']);
+        $this->assertSame(array('Payum'), $options['validation_groups']);
 
         $this->assertArrayHasKey('label', $options);
         $this->assertFalse($options['label']);

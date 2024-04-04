@@ -19,7 +19,7 @@ class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 
         $value = new \Datetime();
 
-        $this->validator->validate($value, $constraint);
+        $this->assertNull($this->validator->validate($value, $constraint));
     }
 
     public function testValidateWrongDate()

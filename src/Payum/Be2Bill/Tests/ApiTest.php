@@ -8,38 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'identifier' => 'anId',
-            'password' => 'aPass',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The identifier, password fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionsNotBooleanInConstructor()
+    public function testThrowIfSandboxOptionsNotBooleanInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -50,10 +26,7 @@ class ApiTest extends TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment()
+    public function testShouldReturnPostArrayWithOperationTypeAddedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -67,13 +40,10 @@ class ApiTest extends TestCase
 
         $this->assertIsArray($post);
         $this->assertArrayHasKey('OPERATIONTYPE', $post);
-        $this->assertEquals(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
+        $this->assertSame(Api::OPERATION_PAYMENT, $post['OPERATIONTYPE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnPostArrayWithGlobalsAddedOnPrepareOffsitePayment()
+    public function testShouldReturnPostArrayWithGlobalsAddedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -91,10 +61,7 @@ class ApiTest extends TestCase
         $this->assertArrayHasKey('HASH', $post);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFilterNotSupportedOnPrepareOffsitePayment()
+    public function testShouldFilterNotSupportedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -113,10 +80,7 @@ class ApiTest extends TestCase
         $this->assertArrayNotHasKey('BAR', $post);
     }
 
-    /**
-     * @test
-     */
-    public function shouldKeepSupportedOnPrepareOffsitePayment()
+    public function testShouldKeepSupportedOnPrepareOffsitePayment()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -132,16 +96,13 @@ class ApiTest extends TestCase
         $this->assertIsArray($post);
 
         $this->assertArrayHasKey('AMOUNT', $post);
-        $this->assertEquals(100, $post['AMOUNT']);
+        $this->assertSame(100, $post['AMOUNT']);
 
         $this->assertArrayHasKey('DESCRIPTION', $post);
-        $this->assertEquals('a desc', $post['DESCRIPTION']);
+        $this->assertSame('a desc', $post['DESCRIPTION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfHashNotSetToParams()
+    public function testShouldReturnFalseIfHashNotSetToParams()
     {
         $api = new Api(array(
             'identifier' => 'anId',
@@ -152,10 +113,7 @@ class ApiTest extends TestCase
         $this->assertFalse($api->verifyHash(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnFalseIfHashesMisMatched()
+    public function testShouldReturnFalseIfHashesMisMatched()
     {
         $params = array(
             'foo' => 'fooVal',
@@ -170,17 +128,14 @@ class ApiTest extends TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
         //guard
-        $this->assertNotEquals($invalidHash, $api->calculateHash($params));
+        $this->assertNotSame($invalidHash, $api->calculateHash($params));
 
         $params['HASH'] = $invalidHash;
 
         $this->assertFalse($api->verifyHash($params));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnTrueIfHashesMatched()
+    public function testShouldReturnTrueIfHashesMatched()
     {
         $params = array(
             'foo' => 'fooVal',

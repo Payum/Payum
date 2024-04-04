@@ -1,56 +1,33 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ReturnAmountAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\ReturnAmount;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class ReturnAmountActionTest extends TestCase
+class ReturnAmountActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return ReturnAmountAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ReturnAmountAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ReturnAmountAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new ReturnAmountAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new ReturnAmountAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -59,40 +36,28 @@ class ReturnAmountActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportReserveAmountWithArrayAsModel()
+    public function testShouldSupportReserveAmountWithArrayAsModel()
     {
         $action = new ReturnAmountAction();
 
         $this->assertTrue($action->supports(new ReturnAmount(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotReserveAmount()
+    public function testShouldNotSupportAnythingNotReserveAmount()
     {
         $action = new ReturnAmountAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportReturnAmountWithNotArrayAccessModel()
+    public function testShouldNotSupportReturnAmountWithNotArrayAccessModel()
     {
         $action = new ReturnAmountAction();
 
         $this->assertFalse($action->supports(new ReturnAmount(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ReturnAmountAction();
@@ -100,10 +65,7 @@ class ReturnAmountActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaReturnAmount()
+    public function testShouldCallKlarnaReturnAmount()
     {
         $details = array(
             'invoice_number' => 'invoice number',
@@ -132,10 +94,7 @@ class ReturnAmountActionTest extends TestCase
         $action->execute(new ReturnAmount($details));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'invoice_number' => 'invoice number',
@@ -156,7 +115,7 @@ class ReturnAmountActionTest extends TestCase
                 $details['flags'],
                 $details['description']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new ReturnAmountAction($klarnaMock);
@@ -165,8 +124,8 @@ class ReturnAmountActionTest extends TestCase
         $action->execute($reserve = new ReturnAmount($details));
 
         $postDetails = $reserve->getModel();
-        $this->assertEquals(123, $postDetails['error_code']);
-        $this->assertEquals('theMessage', $postDetails['error_message']);
+        $this->assertSame(123, $postDetails['error_code']);
+        $this->assertSame('theMessage', $postDetails['error_message']);
     }
 
     /**

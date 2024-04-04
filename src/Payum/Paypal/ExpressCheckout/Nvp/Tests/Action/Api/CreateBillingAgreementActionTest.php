@@ -8,58 +8,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateBillingAgreement;
 
 class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(CreateBillingAgreementAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreateBillingAgreementAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
+    public function testShouldSupportCreateBillingAgreementRequestAndArrayAccessAsModel()
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertTrue($action->supports(new CreateBillingAgreement($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreateBillingAgreementRequest()
+    public function testShouldNotSupportAnythingNotCreateBillingAgreementRequest()
     {
         $action = new CreateBillingAgreementAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreateBillingAgreementAction();
@@ -67,10 +44,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTokenNotSetInModel()
+    public function testThrowIfTokenNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('TOKEN must be set. Have you run SetExpressCheckoutAction?');
@@ -79,10 +53,7 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new CreateBillingAgreement(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiCreateBillingAgreementMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -90,12 +61,12 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('TOKEN', $fields);
-                $testCase->assertEquals('theToken', $fields['TOKEN']);
+                $testCase->assertSame('theToken', $fields['TOKEN']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new CreateBillingAgreementAction();
@@ -108,21 +79,18 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiCreateBillingMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('createBillingAgreement')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $action = new CreateBillingAgreementAction();
@@ -137,10 +105,10 @@ class CreateBillingAgreementActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

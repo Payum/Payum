@@ -8,58 +8,35 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoReferenceTransaction;
 
 class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApoAwareInterface()
+    public function testShouldImplementApoAwareInterface()
     {
         $rc = new \ReflectionClass(DoReferenceTransactionAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new DoReferenceTransactionAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
+    public function testShouldSupportDoReferenceTransactionRequestAndArrayAccessAsModel()
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertTrue($action->supports(new DoReferenceTransaction($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotDoReferenceTransactionRequest()
+    public function testShouldNotSupportAnythingNotDoReferenceTransactionRequest()
     {
         $action = new DoReferenceTransactionAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new DoReferenceTransactionAction();
@@ -67,10 +44,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReferenceIdNotSetInModel()
+    public function testThrowIfReferenceIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('REFERENCEID must be set.');
@@ -79,10 +53,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new DoReferenceTransaction(array()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfPaymentActionNotSet()
+    public function testThrowIfPaymentActionNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('PAYMENTACTION must be set.');
@@ -95,10 +66,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfAmtNotSet()
+    public function testThrowIfAmtNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('AMT must be set.');
@@ -112,10 +80,7 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiDoReferenceTransactionMethodWithExpectedRequiredArguments()
     {
         $testCase = $this;
 
@@ -123,18 +88,18 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function (array $fields) use ($testCase) {
+            ->willReturnCallback(function (array $fields) use ($testCase) {
                 $testCase->assertArrayHasKey('REFERENCEID', $fields);
-                $testCase->assertEquals('theReferenceId', $fields['REFERENCEID']);
+                $testCase->assertSame('theReferenceId', $fields['REFERENCEID']);
 
                 $testCase->assertArrayHasKey('AMT', $fields);
-                $testCase->assertEquals('theAmt', $fields['AMT']);
+                $testCase->assertSame('theAmt', $fields['AMT']);
 
                 $testCase->assertArrayHasKey('PAYMENTACTION', $fields);
-                $testCase->assertEquals('theAction', $fields['PAYMENTACTION']);
+                $testCase->assertSame('theAction', $fields['PAYMENTACTION']);
 
                 return array();
-            }))
+            })
         ;
 
         $action = new DoReferenceTransactionAction();
@@ -149,21 +114,18 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiDoReferenceTransactionMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('doReferenceTransaction')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'FIRSTNAME' => 'theFirstname',
                     'EMAIL' => 'the@example.com',
                 );
-            }))
+            })
         ;
 
         $action = new DoReferenceTransactionAction();
@@ -180,10 +142,10 @@ class DoReferenceTransactionActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('FIRSTNAME', $model);
-        $this->assertEquals('theFirstname', $model['FIRSTNAME']);
+        $this->assertSame('theFirstname', $model['FIRSTNAME']);
 
         $this->assertArrayHasKey('EMAIL', $model);
-        $this->assertEquals('the@example.com', $model['EMAIL']);
+        $this->assertSame('the@example.com', $model['EMAIL']);
     }
 
     /**

@@ -9,31 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class DoctrineStorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithObjectManagerAndModelClassAsArguments()
-    {
-        new DoctrineStorage(
-            $this->createObjectManagerMock(),
-            'Payum\Core\Tests\Mocks\Model\TestModel'
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
 
@@ -48,10 +31,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertNull($model->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallObjectManagerPersistAndFlushOnUpdateModel()
+    public function testShouldCallObjectManagerPersistAndFlushOnUpdateModel()
     {
         $objectManagerMock = $this->createObjectManagerMock();
         $objectManagerMock
@@ -74,10 +54,7 @@ class DoctrineStorageTest extends TestCase
         $storage->update($model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
+    public function testShouldProxyCriteriaToRepositoryFindByMethodOnFindByCall()
     {
         $modelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $model = new TestModel();
@@ -108,10 +85,7 @@ class DoctrineStorageTest extends TestCase
         $this->assertSame($model, $storage->findBy($criteria));
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelById()
+    public function testShouldFindModelById()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\TestModel';
         $expectedModelId = 123;
@@ -122,7 +96,7 @@ class DoctrineStorageTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($expectedModelClass, $expectedModelId)
-            ->will($this->returnValue($expectedFoundModel))
+            ->willReturn($expectedFoundModel)
         ;
 
         $storage = new DoctrineStorage(

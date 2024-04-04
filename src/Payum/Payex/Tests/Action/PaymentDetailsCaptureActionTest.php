@@ -9,38 +9,21 @@ use Payum\Payex\Action\PaymentDetailsCaptureAction;
 
 class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(PaymentDetailsCaptureAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new PaymentDetailsCaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
+    public function testShouldSupportCaptureWithArrayAsModelIfAutoPayNotSet()
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertTrue($action->supports(new Capture(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureayAsModelIfAutoPaySet()
+    public function testShouldNotSupportCaptureayAsModelIfAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -49,10 +32,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureCaptureelIfAutoPaySetToFalse()
+    public function testShouldSupportCaptureCaptureelIfAutoPaySetToFalse()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -61,10 +41,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
+    public function testShouldSupportCaptureWithArrCaptureurringSetToTrueAndAutoPaySet()
     {
         $action = new PaymentDetailsCaptureAction();
 
@@ -74,30 +51,21 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         ))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCapture()
+    public function testShouldNotSupportAnythingNotCapture()
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCaptureWithNotArrayAccessModel()
+    public function testShouldNotSupportCaptureWithNotArrayAccessModel()
     {
         $action = new PaymentDetailsCaptureAction();
 
         $this->assertFalse($action->supports(new Capture(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new PaymentDetailsCaptureAction();
@@ -105,10 +73,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
+    public function testShouldDoSubExecuteInitializeOrderApiRequestIfOrderRefNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -127,10 +92,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
+    public function testShouldDoSubExecuteCompleteOrderApiRequestIfOrderRefSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -150,10 +112,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
+    public function testShouldDoSubExecuteStartRecurringPaymentApiRequestIfRecurringSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -174,19 +133,16 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoSubGetHttpRequestAndSetClientIpFromIt()
+    public function testShouldDoSubGetHttpRequestAndSetClientIpFromIt()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->clientIp = 'expectedClientIp';
-            }))
+            })
         ;
 
         $action = new PaymentDetailsCaptureAction();
@@ -199,7 +155,7 @@ class PaymentDetailsCaptureActionTest extends \PHPUnit\Framework\TestCase
         $details = iterator_to_array($request->getModel());
 
         $this->assertArrayHasKey('clientIPAddress', $details);
-        $this->assertEquals('expectedClientIp', $details['clientIPAddress']);
+        $this->assertSame('expectedClientIp', $details['clientIPAddress']);
     }
 
     /**

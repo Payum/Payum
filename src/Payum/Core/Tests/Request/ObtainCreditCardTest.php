@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class ObtainCreditCardTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGenericRequest()
+    public function testShouldBeSubClassOfGenericRequest()
     {
         $rc = new \ReflectionClass(ObtainCreditCard::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testItCouldBeConstructedWithoutAnyArguments()
     {
         $request = new ObtainCreditCard();
 
@@ -29,10 +23,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertNull($request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithFirstModelAsFirstArgument()
+    public function testCouldBeConstructedWithFirstModelAsFirstArgument()
     {
         $request = new ObtainCreditCard($firstModel = new \stdClass());
 
@@ -40,10 +31,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertNull($request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithFirstModelAndCurrentModelAsArguments()
+    public function testCouldBeConstructedWithFirstModelAndCurrentModelAsArguments()
     {
         $request = new ObtainCreditCard($firstModel = new \stdClass(), $currentModel = new \stdClass());
 
@@ -51,20 +39,16 @@ class ObtainCreditCardTest extends TestCase
         $this->assertSame($currentModel, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetCreditCard()
+    public function testShouldAllowSetCreditCard()
     {
         $request = new ObtainCreditCard();
 
-        $request->set($this->createMock(CreditCardInterface::class));
+        $creditCard = $this->createMock(CreditCardInterface::class);
+        $request->set($creditCard);
+        $this->assertSame($creditCard, $request->obtain());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowObtainPreviouslySetCreditCard()
+    public function testShouldAllowObtainPreviouslySetCreditCard()
     {
         $request = new ObtainCreditCard();
 
@@ -75,10 +59,7 @@ class ObtainCreditCardTest extends TestCase
         $this->assertSame($card, $request->obtain());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfObtainCalledBeforeCreditCardSet()
+    public function testThrowIfObtainCalledBeforeCreditCardSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Credit card could not be obtained. It has to be set before obtain.');

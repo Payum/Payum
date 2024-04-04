@@ -34,10 +34,7 @@ abstract class BaseConvertPaymentActionTest extends TestCase
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass($this->actionClass);
 
@@ -45,19 +42,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     }
 
     /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new $this->actionClass();
-    }
-
-    /**
-     * @test
-     *
      * @dataProvider provideSupportedRequests
      */
-    public function shouldSupportRequest($request)
+    public function testShouldSupportRequest($request)
     {
         $action = new $this->actionClass();
 
@@ -65,11 +52,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function shouldNotSupportRequest($request)
+    public function testShouldNotSupportRequest($request)
     {
         $action = new $this->actionClass();
 
@@ -77,11 +62,9 @@ abstract class BaseConvertPaymentActionTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @dataProvider provideNotSupportedRequests
      */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute($request)
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute($request)
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new $this->actionClass();

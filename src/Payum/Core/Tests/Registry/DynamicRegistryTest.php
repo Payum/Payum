@@ -13,10 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class DynamicRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsRegistryInterface()
+    public function testShouldImplementsRegistryInterface()
     {
         $rc = new \ReflectionClass(DynamicRegistry::class);
 
@@ -25,28 +22,8 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function couldBeConstructedWithGatewayConfigAndRegistryAsArguments()
-    {
-        new DynamicRegistry($this->createStorageMock(), $this->createRegistryMock());
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithGatewayConfigAndGatewayFactoryRegistryAsArguments()
-    {
-        new DynamicRegistry($this->createStorageMock(), $this->createGatewayFactoryRegistryMock());
-    }
-
-    /**
-     * @deprecated
-     *
-     * @test
-     */
-    public function shouldCallStaticRegistryOnGetGateways()
+    public function testShouldCallStaticRegistryOnGetGateways()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -59,14 +36,11 @@ class DynamicRegistryTest extends TestCase
             $this->createStorageMock(),
             $staticRegistryMock
         );
-        
-        $this->assertEquals(['theGateways'], $registry->getGateways());
+
+        $this->assertSame(['theGateways'], $registry->getGateways());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnEmptyArrayOnGetGatewaysIfNothingFound()
+    public function testShouldReturnEmptyArrayOnGetGatewaysIfNothingFound()
     {
         $gatewayFactoryRegistry = $this->createGatewayFactoryRegistryMock();
         $gatewayFactoryRegistry
@@ -87,10 +61,7 @@ class DynamicRegistryTest extends TestCase
         $this->assertSame([], $registry->getGateways());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateGatewaysUsingConfigOnGetGateways()
+    public function testShouldCreateGatewaysUsingConfigOnGetGateways()
     {
         $factoryName = 'theFactoryName';
 
@@ -143,10 +114,8 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCreateGatewayUsingConfigAndGetFactoryNameOnGetGateway()
+    public function testShouldCreateGatewayUsingConfigAndGetFactoryNameOnGetGateway()
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
@@ -184,10 +153,7 @@ class DynamicRegistryTest extends TestCase
         $this->assertSame($gateway, $registry->getGateway($gatewayName));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateGatewayUsingConfigOnGetGateway()
+    public function testShouldCreateGatewayUsingConfigOnGetGateway()
     {
         $factoryName = 'theFactoryName';
 
@@ -232,10 +198,7 @@ class DynamicRegistryTest extends TestCase
         $this->assertSame($gateway, $registry->getGateway($gatewayName));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateGatewayOnlyOnceWhenCalledMultipleTimes()
+    public function testShouldCreateGatewayOnlyOnceWhenCalledMultipleTimes()
     {
         $gatewayConfig = new GatewayConfig();
         $gatewayConfig->setConfig($config = array('foo' => 'fooVal', 'bar' => 'barVal'));
@@ -276,10 +239,8 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway()
+    public function testShouldCallStaticRegistryIfGatewayConfigNotFoundOnGetGateway()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -306,10 +267,7 @@ class DynamicRegistryTest extends TestCase
         $this->assertSame('theGateway', $registry->getGateway('theGatewayName'));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfGatewayConfigNotFoundOnGetGateway()
+    public function testThrowIfGatewayConfigNotFoundOnGetGateway()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway "theGatewayName" does not exist.');
@@ -335,10 +293,8 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCallStaticRegistryOnGetGatewayFactories()
+    public function testShouldCallStaticRegistryOnGetGatewayFactories()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -352,13 +308,10 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theGatewaysFactories', $registry->getGatewayFactories());
+        $this->assertSame('theGatewaysFactories', $registry->getGatewayFactories());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnEmptyArrayOnGetGatewayFactories()
+    public function testShouldReturnEmptyArrayOnGetGatewayFactories()
     {
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
@@ -366,15 +319,13 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $this->assertEquals([], $registry->getGatewayFactories());
+        $this->assertSame([], $registry->getGatewayFactories());
     }
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCallStaticRegistryOnGetGatewayFactory()
+    public function testShouldCallStaticRegistryOnGetGatewayFactory()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -389,13 +340,10 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theGatewayFactory', $registry->getGatewayFactory('theName'));
+        $this->assertSame('theGatewayFactory', $registry->getGatewayFactory('theName'));
     }
 
-    /**
-     * @test
-     */
-    public function alwaysThrowOnGetGatewayFactory()
+    public function testAlwaysThrowOnGetGatewayFactory()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway factory "theName" does not exist.');
@@ -410,10 +358,8 @@ class DynamicRegistryTest extends TestCase
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCallStaticRegistryOnGetStorages()
+    public function testShouldCallStaticRegistryOnGetStorages()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -427,13 +373,10 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theStorages', $registry->getStorages());
+        $this->assertSame('theStorages', $registry->getStorages());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnEmptyArrayOnGetStorages()
+    public function testShouldReturnEmptyArrayOnGetStorages()
     {
         $registry = new DynamicRegistry(
             $this->createStorageMock(),
@@ -441,15 +384,13 @@ class DynamicRegistryTest extends TestCase
         );
         $registry->setBackwardCompatibility(false);
 
-        $this->assertEquals([], $registry->getStorages());
+        $this->assertSame([], $registry->getStorages());
     }
 
     /**
      * @deprecated
-     *
-     * @test
      */
-    public function shouldCallStaticRegistryOnGetStorage()
+    public function testShouldCallStaticRegistryOnGetStorage()
     {
         $staticRegistryMock = $this->createRegistryMock();
         $staticRegistryMock
@@ -464,13 +405,10 @@ class DynamicRegistryTest extends TestCase
             $staticRegistryMock
         );
 
-        $this->assertEquals('theStorage', $registry->getStorage('theName'));
+        $this->assertSame('theStorage', $registry->getStorage('theName'));
     }
 
-    /**
-     * @test
-     */
-    public function alwaysThrowOnGetStorageForClass()
+    public function testAlwaysThrowOnGetStorageForClass()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Storage for given class "theClass" does not exist.');
@@ -483,10 +421,7 @@ class DynamicRegistryTest extends TestCase
         $registry->getStorage('theClass');
     }
 
-    /**
-     * @test
-     */
-    public function alwaysThrowOnGetStorageForObject()
+    public function testAlwaysThrowOnGetStorageForObject()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Storage for given class "stdClass" does not exist.');

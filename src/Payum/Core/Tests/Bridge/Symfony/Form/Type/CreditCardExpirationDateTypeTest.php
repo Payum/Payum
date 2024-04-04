@@ -8,38 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreditCardExpirationDateTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType');
 
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CreditCardExpirationDateType();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldExtendDateType()
+    public function testShouldExtendDateType()
     {
         $type = new CreditCardExpirationDateType();
 
-        $this->assertEquals(DateType::class, $type->getParent());
+        $this->assertSame(DateType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions()
     {
         $type = new CreditCardExpirationDateType();
 
@@ -59,10 +42,7 @@ class CreditCardExpirationDateTypeTest extends TestCase
         $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
+    public function testShouldTakeMinAndMaxExpirationYearsWhileCalcYearsRange()
     {
         $type = new CreditCardExpirationDateType();
 
@@ -79,9 +59,9 @@ class CreditCardExpirationDateTypeTest extends TestCase
         $this->assertCount(3, $options['years']);
 
         $this->assertArrayHasKey('min_expiration_year', $options);
-        $this->assertEquals(2000, $options['min_expiration_year']);
+        $this->assertSame(2000, $options['min_expiration_year']);
 
         $this->assertArrayHasKey('max_expiration_year', $options);
-        $this->assertEquals(2002, $options['max_expiration_year']);
+        $this->assertSame(2002, $options['max_expiration_year']);
     }
 }

@@ -6,46 +6,21 @@ use PHPUnit\Framework\TestCase;
 
 class HttpPostRedirectTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementReplyInterface()
+    public function testShouldImplementReplyInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Reply\ReplyInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfHttpPostRedirectReply()
+    public function testShouldBeSubClassOfHttpPostRedirectReply()
     {
         $rc = new \ReflectionClass('Payum\Core\Reply\HttpPostRedirect');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Reply\HttpResponse'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithUrlAsArgument()
-    {
-        new HttpPostRedirect('an_url');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithUrlAsArgumentAndPostValuesArray()
-    {
-        new HttpPostRedirect('an_url', array('foo' => 'bar'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentWhenPostNotSet()
+    public function testShouldAllowGetContentWhenPostNotSet()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -64,13 +39,10 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl');
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetContentWhenPostSet()
+    public function testShouldAllowGetContentWhenPostSet()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -91,13 +63,10 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl', array('foo' => 'fooVal', 'bar' => 'barVal'));
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldEscapeHtmlSpecialChars()
+    public function testShouldEscapeHtmlSpecialChars()
     {
         $expectedContent = <<<'HTML'
 <!DOCTYPE html>
@@ -117,43 +86,31 @@ HTML;
 
         $request = new HttpPostRedirect('theUrl', array('foo' => '<>&"'));
 
-        $this->assertEquals($expectedContent, $request->getContent());
+        $this->assertSame($expectedContent, $request->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultStatusCodeSetInConstructor()
+    public function testShouldAllowGetDefaultStatusCodeSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl');
 
-        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertSame(200, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomStatusCodeSetInConstructor()
+    public function testShouldAllowGetCustomStatusCodeSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl', array(), 201);
 
-        $this->assertEquals(201, $request->getStatusCode());
+        $this->assertSame(201, $request->getStatusCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetDefaultHeadersSetInConstructor()
+    public function testShouldAllowGetDefaultHeadersSetInConstructor()
     {
         $request = new HttpPostRedirect('anUrl');
 
-        $this->assertEquals(array(), $request->getHeaders());
+        $this->assertSame(array(), $request->getHeaders());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetCustomHeadersSetInConstructor()
+    public function testShouldAllowGetCustomHeadersSetInConstructor()
     {
         $expectedHeaders = array(
             'foo' => 'fooVal',
@@ -162,6 +119,6 @@ HTML;
 
         $request = new HttpPostRedirect('anUrl', array(), 200, $expectedHeaders);
 
-        $this->assertEquals($expectedHeaders, $request->getHeaders());
+        $this->assertSame($expectedHeaders, $request->getHeaders());
     }
 }

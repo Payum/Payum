@@ -21,25 +21,14 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->action = new ConfirmOrderAction('theConfirmOrderTemplate');
     }
 
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        //overwrite
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGatewayAwareAction()
+    public function testShouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass(ConfirmOrderAction::class);
 
         $this->assertTrue($rc->isSubclassOf(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
+    public function testShouldRenderConfirmOrderTemplateIfHttpRequestNotPost()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
@@ -59,7 +48,7 @@ class ConfirmOrderActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                 $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                 $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
@@ -77,8 +66,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }
@@ -86,10 +75,7 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
+    public function testShouldStillRenderConfirmOrderTemplateIfHttpRequestPostButWithoutConfirm()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);
@@ -109,7 +95,7 @@ class ConfirmOrderActionTest extends GenericActionTest
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
             ->willReturnCallback(function (RenderTemplate $request) use ($firstModel, $model) {
-                $this->assertEquals('theConfirmOrderTemplate', $request->getTemplateName());
+                $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                 $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
                 $this->assertInstanceOf(ArrayObject::class, $request->getParameters()['model']);
@@ -127,8 +113,8 @@ class ConfirmOrderActionTest extends GenericActionTest
         try {
             $this->action->execute($request);
         } catch (HttpResponse $reply) {
-            $this->assertEquals(200, $reply->getStatusCode());
-            $this->assertEquals('thePage', $reply->getContent());
+            $this->assertSame(200, $reply->getStatusCode());
+            $this->assertSame('thePage', $reply->getContent());
 
             return;
         }
@@ -136,10 +122,7 @@ class ConfirmOrderActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldGiveControllBackIfHttpRequestPostWithConfirm()
+    public function testShouldGiveControllBackIfHttpRequestPostWithConfirm()
     {
         $firstModel = new \stdClass();
         $model = new \ArrayObject(['foo' => 'fooVal', 'bar' => 'barVal']);

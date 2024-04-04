@@ -12,6 +12,8 @@
             data-description="{{ model.description|default("") }}"
             data-amount="{{ model.amount }}"
             data-currency="{{ model.currency|default("USD") }}"
+            data-allowRememberMe="{{ model.local.allowRememberMe|default("false") }}"
+            data-email="{{ model.local.email|default("") }}"
             data-locale="auto">
         </script>
     </form>

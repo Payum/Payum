@@ -31,7 +31,7 @@ class KlarnaInvoiceGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         if (!class_exists('KlarnaCurrency')) {
-            throw new \LogicException('You must install "fp/klarna-invoice" library.');
+            throw new \LogicException('You must install "solidworx/klarna-invoice" library.');
         }
 
         $config->defaults(array(

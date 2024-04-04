@@ -35,7 +35,7 @@ class ArrayObject extends \ArrayObject
      */
     public function get($key, $default = null)
     {
-        return isset($this[$key]) ? $this[$key] : $default;
+        return $this[$key] ?? $default;
     }
 
     /**
@@ -58,7 +58,7 @@ class ArrayObject extends \ArrayObject
      */
     public function replace($input)
     {
-        if (false == (is_array($input) || $input instanceof \Traversable)) {
+        if (false == (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -76,7 +76,7 @@ class ArrayObject extends \ArrayObject
      */
     public function defaults($input)
     {
-        if (false == (is_array($input) || $input instanceof \Traversable)) {
+        if (false == (is_iterable($input))) {
             throw new InvalidArgumentException('Invalid input given. Should be an array or instance of \Traversable');
         }
 
@@ -148,6 +148,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($index, $value)
     {
         if ($this->input) {
@@ -160,6 +161,7 @@ class ArrayObject extends \ArrayObject
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($index)
     {
         if ($this->input) {
@@ -175,6 +177,7 @@ class ArrayObject extends \ArrayObject
      *
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($index)
     {
         if ($this->offsetExists($index)) {
@@ -214,7 +217,7 @@ class ArrayObject extends \ArrayObject
     {
         $array = $this->toUnsafeArray();
         unset($array['local']);
-        
+
         return $array;
     }
 

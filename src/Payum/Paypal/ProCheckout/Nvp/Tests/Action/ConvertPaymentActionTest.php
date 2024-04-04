@@ -32,10 +32,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
@@ -69,16 +66,13 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('AMT', $details);
-        $this->assertEquals(1.23, $details['AMT']);
+        $this->assertEqualsWithDelta(1.23, $details['AMT'], PHP_FLOAT_EPSILON);
 
         $this->assertArrayHasKey('CURRENCY', $details);
-        $this->assertEquals('USD', $details['CURRENCY']);
+        $this->assertSame('USD', $details['CURRENCY']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $gatewayMock = $this->createMock('Payum\Core\GatewayInterface');
         $gatewayMock
@@ -112,6 +106,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

@@ -6,28 +6,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetTransactionDetails::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new GetTransactionDetails(new \stdClass(), $paymentRequestN = 5);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPaymentRequestNSetInConstructor()
+    public function testShouldAllowGetPaymentRequestNSetInConstructor()
     {
         $expectedPaymentRequestN = 7;
 

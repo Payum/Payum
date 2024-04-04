@@ -1,56 +1,33 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\SendInvoiceAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\SendInvoice;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class SendInvoiceActionTest extends TestCase
+class SendInvoiceActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return SendInvoiceAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\SendInvoiceAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SendInvoiceAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new SendInvoiceAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new SendInvoiceAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -59,40 +36,28 @@ class SendInvoiceActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportSendInvoiceWithArrayAsModel()
+    public function testShouldSupportSendInvoiceWithArrayAsModel()
     {
         $action = new SendInvoiceAction();
 
         $this->assertTrue($action->supports(new SendInvoice(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSendInvoice()
+    public function testShouldNotSupportAnythingNotSendInvoice()
     {
         $action = new SendInvoiceAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSendInvoiceWithNotArrayAccessModel()
+    public function testShouldNotSupportSendInvoiceWithNotArrayAccessModel()
     {
         $action = new SendInvoiceAction();
 
         $this->assertFalse($action->supports(new SendInvoice(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SendInvoiceAction();
@@ -100,10 +65,7 @@ class SendInvoiceActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaSendInvoice()
+    public function testShouldCallKlarnaSendInvoice()
     {
         $details = array(
             'invoice_number' => 'invoice number',
@@ -124,10 +86,7 @@ class SendInvoiceActionTest extends TestCase
         $action->execute(new SendInvoice($details));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'invoice_number' => 'invoice number',
@@ -140,7 +99,7 @@ class SendInvoiceActionTest extends TestCase
             ->with(
                 $details['invoice_number']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new SendInvoiceAction($klarnaMock);
@@ -149,8 +108,8 @@ class SendInvoiceActionTest extends TestCase
         $action->execute($reserve = new SendInvoice($details));
 
         $postDetails = $reserve->getModel();
-        $this->assertEquals(123, $postDetails['error_code']);
-        $this->assertEquals('theMessage', $postDetails['error_message']);
+        $this->assertSame(123, $postDetails['error_code']);
+        $this->assertSame('theMessage', $postDetails['error_message']);
     }
 
     /**

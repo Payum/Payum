@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class GetStatusInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementModelAwareInterface()
+    public function testShouldImplementModelAwareInterface()
     {
         $rc = new \ReflectionClass(GetStatusInterface::class);
 
         $this->assertTrue($rc->implementsInterface(ModelAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementModelAggregateInterface()
+    public function testShouldImplementModelAggregateInterface()
     {
         $rc = new \ReflectionClass(GetStatusInterface::class);
 

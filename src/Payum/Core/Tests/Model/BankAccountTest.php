@@ -7,87 +7,58 @@ use PHPUnit\Framework\TestCase;
 
 class BankAccountTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldExtendBankAccountInterface()
+    public function testShouldExtendBankAccountInterface()
     {
         $rc = new \ReflectionClass(BankAccount::class);
 
         $this->assertTrue($rc->implementsInterface(BankAccountInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new BankAccount();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetHolderPreviouslySet()
+    public function testShouldAllowGetHolderPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setHolder('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getHolder());
+        $this->assertSame('theVal', $bankAccount->getHolder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetNumberPreviouslySet()
+    public function testShouldAllowGetNumberPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setNumber('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getNumber());
+        $this->assertSame('theVal', $bankAccount->getNumber());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCodePreviouslySet()
+    public function testShouldAllowGetBankCodePreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCode());
+        $this->assertSame('theVal', $bankAccount->getBankCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankCountryCodePreviouslySet()
+    public function testShouldAllowGetBankCountryCodePreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBankCountryCode('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBankCountryCode());
+        $this->assertSame('theVal', $bankAccount->getBankCountryCode());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetIbanPreviouslySet()
+    public function testShouldAllowGetIbanPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setIban('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getIban());
+        $this->assertSame('theVal', $bankAccount->getIban());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBicPreviouslySet()
+    public function testShouldAllowGetBicPreviouslySet()
     {
         $bankAccount = new BankAccount();
         $bankAccount->setBic('theVal');
 
-        $this->assertEquals('theVal', $bankAccount->getBic());
+        $this->assertSame('theVal', $bankAccount->getBic());
     }
 }

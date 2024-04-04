@@ -33,10 +33,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -55,25 +52,22 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('AMOUNT', $details);
-        $this->assertEquals(123, $details['AMOUNT']);
+        $this->assertSame(123, $details['AMOUNT']);
 
         $this->assertArrayHasKey('ORDERID', $details);
-        $this->assertEquals('theNumber', $details['ORDERID']);
+        $this->assertSame('theNumber', $details['ORDERID']);
 
         $this->assertArrayHasKey('DESCRIPTION', $details);
-        $this->assertEquals('the description', $details['DESCRIPTION']);
+        $this->assertSame('the description', $details['DESCRIPTION']);
 
         $this->assertArrayHasKey('CLIENTIDENT', $details);
-        $this->assertEquals('theClientId', $details['CLIENTIDENT']);
+        $this->assertSame('theClientId', $details['CLIENTIDENT']);
 
         $this->assertArrayHasKey('CLIENTEMAIL', $details);
-        $this->assertEquals('theClientEmail', $details['CLIENTEMAIL']);
+        $this->assertSame('theClientEmail', $details['CLIENTEMAIL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $payment = new Payment();
         $payment->setCurrencyCode('USD');
@@ -92,6 +86,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

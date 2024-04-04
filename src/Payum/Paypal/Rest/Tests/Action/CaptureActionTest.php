@@ -11,18 +11,7 @@ use Payum\Core\Request\Capture;
 
 class CaptureActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CaptureAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithPaymentSdkModel()
+    public function testShouldSupportCaptureWithPaymentSdkModel()
     {
         $action = new CaptureAction();
 
@@ -33,10 +22,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCaptureWithArrayObjectModel()
+    public function testShouldSupportCaptureWithArrayObjectModel()
     {
         $action = new CaptureAction();
 
@@ -47,10 +33,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCapturePaymentSdkModel()
+    public function testShouldNotSupportCapturePaymentSdkModel()
     {
         $action = new CaptureAction();
 
@@ -59,10 +42,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CaptureAction();
@@ -70,20 +50,14 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotCapture()
+    public function testShouldNotSupportNotCapture()
     {
         $action = new CaptureAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCapture()
+    public function testShouldSupportCapture()
     {
         $action = new CaptureAction();
 
@@ -93,25 +67,7 @@ class CaptureActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports(new Capture(new \ArrayObject)));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportApiContext()
-    {
-        $action = new CaptureAction();
-
-        /** @var OAuthTokenCredential $tokenMock */
-        $tokenMock = $this->createMock(OAuthTokenCredential::class, [], [], '', false);
-
-        $apiContext = new ApiContext($tokenMock);
-
-        $action->setApi($apiContext);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedApiContext()
+    public function testThrowIfNotSupportedApiContext()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureAction();

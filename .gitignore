@@ -1,3 +1,4 @@
+.idea
 composer.phar
 composer.lock
 phpunit.xml
@@ -6,3 +7,4 @@ vendor
 bin
 src/Payum/Core/Bridge/Propel2/Model/Base
 src/Payum/Core/Bridge/Propel2/Model/Map
+.phpunit.result.cache

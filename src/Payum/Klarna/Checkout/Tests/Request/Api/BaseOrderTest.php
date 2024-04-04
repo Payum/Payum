@@ -6,64 +6,28 @@ use PHPUnit\Framework\TestCase;
 
 class BaseOrderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Request\Api\BaseOrder');
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        $this->createBaseOrderMock(array());
-        $this->createBaseOrderMock(new \ArrayObject());
-        $this->createBaseOrderMock($this->createMock('ArrayAccess'));
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfTryConstructWithNotArrayModel()
+    public function testThrowIfTryConstructWithNotArrayModel()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Given model is invalid. Should be an array or ArrayAccess instance.');
         $this->createBaseOrderMock('not array');
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetOrder()
-    {
-        $request = $this->createBaseOrderMock(array());
-
-        $expectedOrder = $this->createOrderMock();
-
-        $request->setOrder($expectedOrder);
-
-        $this->assertAttributeSame($expectedOrder, 'order', $request);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetPreviouslySetOrder()
+    public function testShouldAllowGetPreviouslySetOrder()
     {
         $request = $this->createBaseOrderMock(array());
 

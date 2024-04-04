@@ -6,56 +6,28 @@ use PHPUnit\Framework\TestCase;
 
 class IdentificatorTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementSerializableInterface()
+    public function testShouldImplementSerializableInterface()
     {
         $rc = new \ReflectionClass(Identificator::class);
 
         $this->assertTrue($rc->implementsInterface(\Serializable::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
-    {
-        new Identificator('anId', 'aClass');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
-    {
-        new Identificator('anId', new \stdClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdSetInConstructor()
+    public function testShouldAllowGetIdSetInConstructor()
     {
         $id = new Identificator('theId', new \stdClass());
 
-        $this->assertEquals('theId', $id->getId());
+        $this->assertSame('theId', $id->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetClassSetInConstructor()
+    public function testShouldAllowGetClassSetInConstructor()
     {
         $id = new Identificator('theId', new \stdClass());
 
-        $this->assertEquals('stdClass', $id->getClass());
+        $this->assertSame('stdClass', $id->getClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeCorrectlySerializedAndUnserialized()
+    public function testShouldBeCorrectlySerializedAndUnserialized()
     {
         $id = new Identificator('theId', new \stdClass());
 

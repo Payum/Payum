@@ -54,30 +54,34 @@
         "payum/omnipay-v3-bridge": "^1.0",
         "omnipay/dummy": "^3.0",
         "omnipay/common": "^3.0",
+        "doctrine/dbal": "^2.7 || ^3.0",
         "doctrine/orm": "^2.5",
+        "doctrine/annotations": "^1.14.3 || ^2.0.1",
         "doctrine/persistence": "^1.3.3 || ^2.0",
-        "phpunit/phpunit": "^7.5 || ^8.5",
+        "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
         "propel/propel1": "~1.7",
         "psr/log": "~1.0",
-        "zendframework/zend-db": "~2",
-        "symfony/routing": "^4.4 || ^5.0",
-        "symfony/http-kernel": "^4.4 || ^5.0",
+        "laminas/laminas-db": "^2.0",
+        "symfony/cache": "^4.4 || ^5.0 || ^6.0",
+        "symfony/routing": "^4.4 || ^5.0 || ^6.0",
+        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
         "symfony/http-foundation": "^4.4 || ^5.0",
-        "symfony/form": "^4.4 || ^5.0",
-        "symfony/templating": "^4.4 || ^5.0",
-        "symfony/validator": "^4.4 || ^5.0",
+        "symfony/form": "^4.4 || ^5.0 || ^6.0",
+        "symfony/templating": "^4.4 || ^5.0 || ^6.0",
+        "symfony/validator": "^4.4 || ^5.0 || ^6.0",
         "symfony/phpunit-bridge": "^4.4 || ^5.0",
-        "symfony/dependency-injection": "^4.4 || ^5.0",
+        "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
         "authorizenet/authorizenet": "^1.8.1",
         "sofort/sofortlib-php": "^3.0",
         "paypal/rest-api-sdk-php" : "~1.0",
         "klarna/checkout": "^1.1 || ^2.0",
-        "fp/klarna-invoice": "0.1.*",
-        "stripe/stripe-php": "~2.0 || ~3.0",
+        "solidworx/klarna-invoice": "0.2.*",
+        "stripe/stripe-php": "^7.0",
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "rector/rector": "^1.0.2"
     },
     "replace": {
         "payum/core": "^1",
@@ -98,14 +102,17 @@
         "league/uri-components": "<1.7.1"
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "autoload": {
         "psr-4": { "Payum\\": "src/Payum/" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "1.7-dev"
         }
     }
 }

@@ -35,10 +35,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $order = new Payment();
         $order->setCurrencyCode('USD');
@@ -56,19 +53,16 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertArrayNotHasKey('card', $details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertSame(123, $details['amount']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $order = new Payment();
         $order->setCurrencyCode('USD');
@@ -87,13 +81,10 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertCreditCard()
+    public function testShouldCorrectlyConvertCreditCard()
     {
         $creditCard = new CreditCard();
         $creditCard->setNumber('4111111111111111');
@@ -119,22 +110,19 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertIsArray($card);
 
         $this->assertArrayHasKey('number', $card);
-        $this->assertEquals('4111111111111111', $card['number']);
+        $this->assertSame('4111111111111111', $card['number']);
 
         $this->assertArrayHasKey('exp_month', $card);
-        $this->assertEquals('05', $card['exp_month']);
+        $this->assertSame('05', $card['exp_month']);
 
         $this->assertArrayHasKey('exp_year', $card);
-        $this->assertEquals('2018', $card['exp_year']);
+        $this->assertSame('2018', $card['exp_year']);
 
         $this->assertArrayHasKey('cvc', $card);
-        $this->assertEquals('123', $card['cvc']);
+        $this->assertSame(123, $card['cvc']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertCreditCardToken()
+    public function testShouldCorrectlyConvertCreditCardToken()
     {
         $creditCard = new CreditCard();
         $creditCard->setToken('theCustomerId');
@@ -151,6 +139,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('customer', $details);
-        $this->assertEquals('theCustomerId', $details['customer']);
+        $this->assertSame('theCustomerId', $details['customer']);
     }
 }

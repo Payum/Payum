@@ -6,14 +6,11 @@ use PHPUnit\Framework\TestCase;
 
 class RandomTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldAllowGenerateToken()
+    public function testShouldAllowGenerateToken()
     {
         $token = Random::generateToken();
 
         $this->assertIsString($token);
-        $this->assertEquals(43, strlen($token));
+        $this->assertSame(43, strlen($token));
     }
 }

@@ -11,48 +11,28 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsPaymentInterface()
+    public function testShouldImplementsPaymentInterface()
     {
         $rc = new \ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(PaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsCreditCardPaymentInterface()
+    public function testShouldImplementsCreditCardPaymentInterface()
     {
         $rc = new \ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(CreditCardPaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsDirectDebitPaymentInterface()
+    public function testShouldImplementsDirectDebitPaymentInterface()
     {
         $rc = new \ReflectionClass(Payment::class);
 
         $this->assertTrue($rc->implementsInterface(DirectDebitPaymentInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new Payment();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetCreditCardPreviouslySet()
+    public function testShouldAllowGetCreditCardPreviouslySet()
     {
         $order = new Payment();
 
@@ -63,10 +43,7 @@ class PaymentTest extends TestCase
         $this->assertSame($creditCardMock, $order->getCreditCard());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetBankAccountPreviouslySet()
+    public function testShouldAllowGetBankAccountPreviouslySet()
     {
         $order = new Payment();
 

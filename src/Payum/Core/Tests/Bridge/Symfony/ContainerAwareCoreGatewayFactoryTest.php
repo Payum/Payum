@@ -4,6 +4,7 @@ namespace Payum\Core\Tests\Bridge\Symfony;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\GatewayInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -24,11 +25,6 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new ContainerAwareCoreGatewayFactory();
-    }
-
     public function testShouldResolveContainerParameter()
     {
         $container = new Container();
@@ -46,8 +42,8 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('fooVal', $config['foo']);
-                $this->assertEquals('barBazOloloVal', $config['bar']);
+                $this->assertSame('fooVal', $config['foo']);
+                $this->assertSame('barBazOloloVal', $config['bar']);
             },
         ]);
 
@@ -69,7 +65,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('@aTemplate', $config['payum.template.foo']);
+                $this->assertSame('@aTemplate', $config['payum.template.foo']);
             },
         ]);
 
@@ -90,7 +86,7 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
             'test' => function (ArrayObject $config) use (&$called) {
                 $called = true;
 
-                $this->assertEquals('@anActionService', $config['foo']);
+                $this->assertSame('@anActionService', $config['foo']);
             },
         ]);
 
@@ -126,8 +122,8 @@ class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $factory = new ContainerAwareCoreGatewayFactory();
         $factory->setContainer(new Container());
 
-        $factory->create([
+        $this->assertInstanceOf(GatewayInterface::class, $factory->create([
             'foo' => '',
-        ]);
+        ]));
     }
 }

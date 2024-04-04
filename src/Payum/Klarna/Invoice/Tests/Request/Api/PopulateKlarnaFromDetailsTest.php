@@ -5,28 +5,14 @@ use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 
 class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAndKlarnaAsArguments()
-    {
-        new PopulateKlarnaFromDetails(new \ArrayObject(), new \Klarna());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetModelSetInConstructor()
+    public function testShouldAllowGetModelSetInConstructor()
     {
         $details = new \ArrayObject();
         $klarna = new \Klarna();
@@ -36,10 +22,7 @@ class PopulateKlarnaFromDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($details, $request->getModel());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetKlarnaSetInConstructor()
+    public function testShouldAllowGetKlarnaSetInConstructor()
     {
         $details = new \ArrayObject();
         $klarna = new \Klarna();

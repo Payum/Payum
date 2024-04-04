@@ -13,48 +13,21 @@ use Payum\Stripe\Request\Api\ObtainToken;
 
 class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareInterface()
+    public function testShouldImplementsApiAwareInterface()
     {
         $rc = new \ReflectionClass(ObtainTokenAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithTemplateAsFirstArgument()
-    {
-        new ObtainTokenAction('aTemplateName');
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetKeysAsApi()
-    {
-        $action = new ObtainTokenAction('aTemplateName');
-
-        $action->setApi(new Keys('publishableKey', 'secretKey'));
-    }
-
-    /**
-     * @test
-     */
-    public function throwNotSupportedApiIfNotKeysGivenAsApi()
+    public function testThrowNotSupportedApiIfNotKeysGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new ObtainTokenAction('aTemplateName');
@@ -62,40 +35,28 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->setApi('not keys instance');
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportObtainTokenRequestWithArrayAccessModel()
+    public function testShouldSupportObtainTokenRequestWithArrayAccessModel()
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertTrue($action->supports(new ObtainToken(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportObtainTokenRequestWithNotArrayAccessModel()
+    public function testShouldNotSupportObtainTokenRequestWithNotArrayAccessModel()
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertFalse($action->supports(new ObtainToken(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotObtainTokenRequest()
+    public function testShouldNotSupportNotObtainTokenRequest()
     {
         $action = new ObtainTokenAction('aTemplateName');
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwRequestNotSupportedIfNotSupportedGiven()
+    public function testThrowRequestNotSupportedIfNotSupportedGiven()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $this->expectExceptionMessage('Action ObtainTokenAction is not supported the request stdClass.');
@@ -104,10 +65,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfModelAlreadyHaveTokenSet()
+    public function testThrowIfModelAlreadyHaveTokenSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The token has already been set.');
@@ -118,10 +76,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedTemplateIfHttpRequestNotPOST()
+    public function testShouldRenderExpectedTemplateIfHttpRequestNotPOST()
     {
         $model = new \ArrayObject();
         $templateName = 'theTemplateName';
@@ -132,24 +87,24 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'GET';
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
             ->method('execute')
             ->with($this->isInstanceOf(RenderTemplate::class))
-            ->will($this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
-                $this->assertEquals($templateName, $request->getTemplateName());
+            ->willReturnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model) {
+                $this->assertSame($templateName, $request->getTemplateName());
 
                 $context = $request->getParameters();
                 $this->assertArrayHasKey('model', $context);
                 $this->assertArrayHasKey('publishable_key', $context);
-                $this->assertEquals($publishableKey, $context['publishable_key']);
+                $this->assertSame($publishableKey, $context['publishable_key']);
 
                 $request->setResult('theContent');
-            }))
+            })
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -159,7 +114,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         try {
             $action->execute(new ObtainToken($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals('theContent', $reply->getContent());
+            $this->assertSame('theContent', $reply->getContent());
 
             return;
         }
@@ -167,10 +122,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldRenderTemplateIfHttpRequestPOSTButNotContainStripeToken()
+    public function testShouldRenderTemplateIfHttpRequestPOSTButNotContainStripeToken()
     {
         $model = array();
         $templateName = 'aTemplateName';
@@ -181,9 +133,9 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
-            }))
+            })
         ;
         $gatewayMock
             ->expects($this->at(1))
@@ -204,10 +156,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $this->fail('HttpResponse reply was expected to be thrown.');
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetTokenFromHttpRequestToObtainTokenRequestOnPOST()
+    public function testShouldSetTokenFromHttpRequestToObtainTokenRequestOnPOST()
     {
         $model = array();
         $templateName = 'aTemplateName';
@@ -218,10 +167,10 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->method = 'POST';
                 $request->request = array('stripeToken' => 'theToken');
-            }))
+            })
         ;
 
         $action = new ObtainTokenAction($templateName);
@@ -231,7 +180,7 @@ class ObtainTokenActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($obtainToken = new ObtainToken($model));
 
         $model = $obtainToken->getModel();
-        $this->assertEquals('theToken', $model['card']);
+        $this->assertSame('theToken', $model['card']);
     }
 
     /**

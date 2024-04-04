@@ -7,56 +7,28 @@ use PHPUnit\Framework\TestCase;
 
 class IdentityTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementIdentityInterface()
+    public function testShouldImplementIdentityInterface()
     {
         $rc = new \ReflectionClass(Identity::class);
 
         $this->assertTrue($rc->implementsInterface(IdentityInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelClassAsArguments()
-    {
-        new Identity('anId', 'aClass');
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithIdAndModelAsArguments()
-    {
-        new Identity('anId', new \stdClass());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetIdSetInConstructor()
+    public function testShouldAllowGetIdSetInConstructor()
     {
         $id = new Identity('theId', new \stdClass());
 
-        $this->assertEquals('theId', $id->getId());
+        $this->assertSame('theId', $id->getId());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetClassSetInConstructor()
+    public function testShouldAllowGetClassSetInConstructor()
     {
         $id = new Identity('theId', new \stdClass());
 
-        $this->assertEquals('stdClass', $id->getClass());
+        $this->assertSame('stdClass', $id->getClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeCorrectlySerializedAndUnserialized()
+    public function testShouldBeCorrectlySerializedAndUnserialized()
     {
         $id = new Identity('theId', new \stdClass());
 

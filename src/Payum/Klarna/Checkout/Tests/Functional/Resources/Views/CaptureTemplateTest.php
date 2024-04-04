@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class CaptureTemplateTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldRenderExpectedResult()
+    public function testShouldRenderExpectedResult()
     {
         $twig = TwigFactory::createGeneric();
 
@@ -29,6 +26,6 @@ class CaptureTemplateTest extends TestCase
 
 HTML;
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

@@ -6,104 +6,35 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayRegistryInterface()
+    public function testShouldImplementGatewayRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayRegistryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementStorageRegistryInterface()
+    public function testShouldImplementStorageRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\StorageRegistryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Registry\GatewayFactoryRegistryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeAbstractClass()
+    public function testShouldBeAbstractClass()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\AbstractRegistry');
 
         $this->assertTrue($rc->isAbstract());
     }
 
-    /**
-     * @test
-     */
-    public function couldConstructedWithoutAnyArguments()
-    {
-        $registry = $this->createAbstractRegistryMock(array());
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithGatewaysOnly()
-    {
-        $gateways = array('fooName' => 'fooGateway');
-
-        $registry = $this->createAbstractRegistryMock(array($gateways));
-
-        $this->assertAttributeEquals($gateways, 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithStoragesOnly()
-    {
-        $storages = array('stdClass' => 'barStorage');
-
-        $registry = $this->createAbstractRegistryMock(array(array(), $storages));
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals($storages, 'storages', $registry);
-        $this->assertAttributeEquals(array(), 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function couldConstructedWithGatewayFactoriesOnly()
-    {
-        $factories = array('bar' => 'barFactory');
-
-        $registry = $this->createAbstractRegistryMock(array(array(), array(), $factories));
-
-        $this->assertAttributeEquals(array(), 'gateways', $registry);
-        $this->assertAttributeEquals(array(), 'storages', $registry);
-        $this->assertAttributeEquals($factories, 'gatewayFactories', $registry);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayWithNamePassedExplicitly()
+    public function testShouldAllowGetGatewayWithNamePassedExplicitly()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
 
@@ -111,13 +42,10 @@ class AbstractRegistryTest extends TestCase
             $gateways,
         ));
 
-        $this->assertEquals('barGateway', $registry->getGateway('barName'));
+        $this->assertSame('barGateway', $registry->getGateway('barName'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAllGateways()
+    public function testShouldAllowGetAllGateways()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
 
@@ -131,16 +59,13 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('fooName', $gateways);
-        $this->assertEquals('fooGateway', $gateways['fooName']);
+        $this->assertSame('fooGateway', $gateways['fooName']);
 
         $this->assertArrayHasKey('barName', $gateways);
-        $this->assertEquals('barGateway', $gateways['barName']);
+        $this->assertSame('barGateway', $gateways['barName']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToGetGatewayWithNotExistName()
+    public function testThrowIfTryToGetGatewayWithNotExistName()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway "notExistName" does not exist.');
@@ -153,10 +78,7 @@ class AbstractRegistryTest extends TestCase
         $registry->getGateway('notExistName');
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetGatewayFactoryByName()
+    public function testShouldAllowGetGatewayFactoryByName()
     {
         $gatewayFactories = array('foo' => 'fooGatewayFactory', 'bar' => 'barGatewayFactory');
 
@@ -166,13 +88,10 @@ class AbstractRegistryTest extends TestCase
             $gatewayFactories,
         ));
 
-        $this->assertEquals('barGatewayFactory', $registry->getGatewayFactory('bar'));
+        $this->assertSame('barGatewayFactory', $registry->getGatewayFactory('bar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAllGatewayFactories()
+    public function testShouldAllowGetAllGatewayFactories()
     {
         $gatewayFactories = array('foo' => 'fooGatewayFactory', 'bar' => 'barGatewayFactory');
 
@@ -188,16 +107,13 @@ class AbstractRegistryTest extends TestCase
         $this->assertCount(2, $gateways);
 
         $this->assertArrayHasKey('foo', $gateways);
-        $this->assertEquals('fooGatewayFactory', $gateways['foo']);
+        $this->assertSame('fooGatewayFactory', $gateways['foo']);
 
         $this->assertArrayHasKey('bar', $gateways);
-        $this->assertEquals('barGatewayFactory', $gateways['bar']);
+        $this->assertSame('barGatewayFactory', $gateways['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToGetGatewayFactoryWithNotExistName()
+    public function testThrowIfTryToGetGatewayFactoryWithNotExistName()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Gateway factory "notExistName" does not exist.');
@@ -212,10 +128,7 @@ class AbstractRegistryTest extends TestCase
         $registry->getGatewayFactory('notExistName');
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorageForGivenModelClass()
+    public function testShouldAllowGetStorageForGivenModelClass()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('stdClass' => 'barStorage');
@@ -225,13 +138,10 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('stdClass'));
+        $this->assertSame('barStorage', $registry->getStorage('stdClass'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorageIfDoctrineProxyClassGiven()
+    public function testShouldAllowGetStorageIfDoctrineProxyClassGiven()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
@@ -241,13 +151,10 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
+        $this->assertSame('barStorage', $registry->getStorage('Payum\Core\Tests\Registry\DoctrineProxy'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorageIfDoctrineProxyObjectGiven()
+    public function testShouldAllowGetStorageIfDoctrineProxyObjectGiven()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('Payum\Core\Tests\Registry\DoctrineModel' => 'barStorage');
@@ -257,13 +164,10 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage(new DoctrineProxy()));
+        $this->assertSame('barStorage', $registry->getStorage(new DoctrineProxy()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTryToGetStorageWithNotRegisteredModelClass()
+    public function testThrowIfTryToGetStorageWithNotRegisteredModelClass()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('A storage for model notRegisteredModelClass was not registered. There are storages for next models: stdClass.');
@@ -275,13 +179,10 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage('notRegisteredModelClass'));
+        $this->assertSame('barStorage', $registry->getStorage('notRegisteredModelClass'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorageWithObjectModel()
+    public function testShouldAllowGetStorageWithObjectModel()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array('stdClass' => 'barStorage');
@@ -291,13 +192,10 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals('barStorage', $registry->getStorage(new \stdClass()));
+        $this->assertSame('barStorage', $registry->getStorage(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetStorages()
+    public function testShouldAllowGetStorages()
     {
         $gateways = array('fooName' => 'fooGateway', 'barName' => 'barGateway');
         $storages = array(
@@ -309,7 +207,7 @@ class AbstractRegistryTest extends TestCase
             $storages,
         ));
 
-        $this->assertEquals($storages, $registry->getStorages());
+        $this->assertSame($storages, $registry->getStorages());
     }
 
     /**

@@ -7,21 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class GetTransactionDetailsTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(GetTransactionDetails::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAndPaymentRequestNAsArguments()
-    {
-        new GetTransactionDetails(new \stdClass());
     }
 }

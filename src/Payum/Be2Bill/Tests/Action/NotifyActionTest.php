@@ -17,43 +17,21 @@ class NotifyActionTest extends GenericActionTest
 
     protected $requestClass = Notify::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(NotifyAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = new NotifyAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new NotifyAction();
@@ -61,19 +39,16 @@ class NotifyActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryHashDoesNotMatchExpected()
+    public function testThrowIfQueryHashDoesNotMatchExpected()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['expected be2bill query'];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -99,19 +74,16 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function throwIfQueryAmountDoesNotMatchOneFromModel()
+    public function testThrowIfQueryAmountDoesNotMatchOneFromModel()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 2.0];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -139,19 +111,16 @@ class NotifyActionTest extends GenericActionTest
         $this->fail('The exception is expected');
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelIfNotificationValid()
+    public function testShouldUpdateModelIfNotificationValid()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf(GetHttpRequest::class))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query = ['AMOUNT' => 1.0, 'FOO' => 'FOO', 'BAR' => 'BAR'];
-            }))
+            })
         ;
 
         $apiMock = $this->createApiMock();
@@ -173,7 +142,7 @@ class NotifyActionTest extends GenericActionTest
         try {
             $action->execute(new Notify($model));
         } catch (HttpResponse $reply) {
-            $this->assertEquals([
+            $this->assertSame([
                 'AMOUNT' => 1.0,
                 'FOO' => 'FOO',
                 'BAR' => 'BAR',

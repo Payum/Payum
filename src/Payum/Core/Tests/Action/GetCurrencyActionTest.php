@@ -27,34 +27,25 @@ class GetCurrencyActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetCurrencyByAlpha3()
+    public function testShouldSetCurrencyByAlpha3()
     {
         $action = new GetCurrencyAction();
 
         $action->execute($getCurrency = new GetCurrency('USD'));
 
-        $this->assertEquals('USD', $getCurrency->alpha3);
+        $this->assertSame('USD', $getCurrency->alpha3);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetCurrencyByNumeric()
+    public function testShouldSetCurrencyByNumeric()
     {
         $action = new GetCurrencyAction();
 
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
-    /**
-     * @test
-     */
-    public function throwsIfCurrencyNotSupported()
+    public function testThrowsIfCurrencyNotSupported()
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('ISO 4217 does not contain: 000');
@@ -79,7 +70,7 @@ class GetCurrencyActionTest extends GenericActionTest
     }
 
     /**
-     * @legacy
+     * @group legacy
      */
     public function testItUsesPayumIso4217WhenItIsPassedThrough()
     {
@@ -92,7 +83,7 @@ class GetCurrencyActionTest extends GenericActionTest
         $action = new GetCurrencyAction($mock);
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 
     public function testItDoesNotUsePayumIso4217ByDefault()
@@ -110,6 +101,6 @@ class GetCurrencyActionTest extends GenericActionTest
 
         $action->execute($getCurrency = new GetCurrency($euro = 978));
 
-        $this->assertEquals('EUR', $getCurrency->alpha3);
+        $this->assertSame('EUR', $getCurrency->alpha3);
     }
 }

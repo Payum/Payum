@@ -5,31 +5,17 @@ use Payum\Stripe\Keys;
 
 class KeysTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithPublishableKeyAndSecretOne()
-    {
-        new Keys('aPublishableKey', 'aSecretKey');
-    }
-
-    /**
-     * @test
-     */
-    public function souldAllowGetPublishableKeySetInConstructor()
+    public function testSouldAllowGetPublishableKeySetInConstructor()
     {
         $keys = new Keys('thePublishableKey', 'aSecretKey');
 
-        $this->assertEquals('thePublishableKey', $keys->getPublishableKey());
+        $this->assertSame('thePublishableKey', $keys->getPublishableKey());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetSecretKeySetInConstructor()
+    public function testShouldAllowGetSecretKeySetInConstructor()
     {
         $keys = new Keys('aPublishableKey', 'theSecretKey');
 
-        $this->assertEquals('theSecretKey', $keys->getSecretKey());
+        $this->assertSame('theSecretKey', $keys->getSecretKey());
     }
 }

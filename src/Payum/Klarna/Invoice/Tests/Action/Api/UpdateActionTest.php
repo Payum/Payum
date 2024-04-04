@@ -1,79 +1,47 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\UpdateAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Update;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class UpdateActionTest extends TestCase
+class UpdateActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return UpdateAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\UpdateAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\UpdateAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testShouldAllowSetGateway()
     {
-        new UpdateAction();
+        $this->assertInstanceOf(GatewayAwareInterface::class, new UpdateAction($this->createKlarnaMock()));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new UpdateAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetGateway()
-    {
-        $action = new UpdateAction($this->createKlarnaMock());
-
-        $action->setGateway($gateway = $this->createMock('Payum\Core\GatewayInterface'));
-
-        $this->assertAttributeSame($gateway, 'gateway', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new UpdateAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -82,40 +50,28 @@ class UpdateActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportUpdateWithArrayAsModel()
+    public function testShouldSupportUpdateWithArrayAsModel()
     {
         $action = new UpdateAction();
 
         $this->assertTrue($action->supports(new Update(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotUpdate()
+    public function testShouldNotSupportAnythingNotUpdate()
     {
         $action = new UpdateAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportUpdateWithNotArrayAccessModel()
+    public function testShouldNotSupportUpdateWithNotArrayAccessModel()
     {
         $action = new UpdateAction();
 
         $this->assertFalse($action->supports(new Update(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new UpdateAction();
@@ -123,10 +79,7 @@ class UpdateActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaUpdate()
+    public function testShouldCallKlarnaUpdate()
     {
         $details = array(
             'rno' => 'theRno',
@@ -144,7 +97,7 @@ class UpdateActionTest extends TestCase
             ->expects($this->once())
             ->method('update')
             ->with($details['rno'])
-            ->will($this->returnValue(true))
+            ->willReturn(true)
         ;
 
         $action = new UpdateAction($klarnaMock);
@@ -154,14 +107,11 @@ class UpdateActionTest extends TestCase
         $action->execute($request = new Update($details));
 
         $model = $request->getModel();
-        $this->assertEquals('theRno', $model['rno']);
+        $this->assertSame('theRno', $model['rno']);
         $this->assertTrue($model['updated']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',
@@ -179,7 +129,7 @@ class UpdateActionTest extends TestCase
             ->expects($this->once())
             ->method('update')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new UpdateAction($klarnaMock);
@@ -189,8 +139,8 @@ class UpdateActionTest extends TestCase
         $action->execute($request = new Update($details));
 
         $model = $request->getModel();
-        $this->assertEquals(123, $model['error_code']);
-        $this->assertEquals('theMessage', $model['error_message']);
+        $this->assertSame(123, $model['error_code']);
+        $this->assertSame('theMessage', $model['error_message']);
     }
 
     /**

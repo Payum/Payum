@@ -21,11 +21,6 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($rc->implementsInterface(ExtensionInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new CreateCustomerExtension();
-    }
-
     public function testShouldCreateCustomerAndReplaceCardTokenOnPreCapture()
     {
         $model = new \ArrayObject([
@@ -33,7 +28,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
             'local' => ['save_card' => true],
         ]);
         $request = new Capture($model);
-        
+
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
             ->expects($this->once())
@@ -44,7 +39,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame(['card' => 'theCardToken'], (array) $model);
 
                 $model['id'] = 'theCustomerId';
             });
@@ -88,10 +83,10 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals([
-                    'card' => 'theCardToken',
+                $this->assertSame([
                     'foo' => 'fooVal',
-                    'bar' => 'barVal'
+                    'bar' => 'barVal',
+                    'card' => 'theCardToken',
                 ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
@@ -137,7 +132,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame(['card' => 'theCardToken'], (array) $model);
 
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
@@ -204,7 +199,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $extension = new CreateCustomerExtension();
         $extension->onPreExecute($context);
 
-        $this->assertEquals([
+        $this->assertSame([
             'card' => 'theCardToken',
         ], (array) $request->getModel());
     }
@@ -316,7 +311,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame(['card' => 'theCardToken'], (array) $model);
 
                 $model['id'] = 'theCustomerId';
             });
@@ -360,10 +355,10 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals([
-                    'card' => 'theCardToken',
+                $this->assertSame([
                     'foo' => 'fooVal',
-                    'bar' => 'barVal'
+                    'bar' => 'barVal',
+                    'card' => 'theCardToken',
                 ], (array) $model);
 
                 $model['id'] = 'theCustomerId';
@@ -409,7 +404,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
 
                 $this->assertInstanceOf(\ArrayObject::class, $model);
 
-                $this->assertEquals(['card' => 'theCardToken'], (array) $model);
+                $this->assertSame(['card' => 'theCardToken'], (array) $model);
 
                 // we assume the customer creation has failed when the customer does not have an id set.
                 $model['id'] = null;
@@ -476,7 +471,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $extension = new CreateCustomerExtension();
         $extension->onPostExecute($context);
 
-        $this->assertEquals([
+        $this->assertSame([
             'card' => 'theCardToken',
         ], (array) $request->getModel());
     }

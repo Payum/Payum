@@ -31,10 +31,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $order = new Payment();
         $order->setNumber('theNumber');
@@ -53,29 +50,26 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('price', $details);
-        $this->assertEquals(123, $details['price']);
+        $this->assertSame(123, $details['price']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('orderId', $details);
-        $this->assertEquals('theNumber', $details['orderId']);
+        $this->assertSame('theNumber', $details['orderId']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
 
         // should not work if we pass anything. Not sure what it should be
         $this->assertArrayHasKey('clientIdentifier', $details);
-        $this->assertEquals('', $details['clientIdentifier']);
+        $this->assertSame('', $details['clientIdentifier']);
 
         $this->assertArrayHasKey('autoPay', $details);
         $this->assertEquals(false, $details['autoPay']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $order = new Payment();
         $order->setCurrencyCode('USD');
@@ -94,6 +88,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

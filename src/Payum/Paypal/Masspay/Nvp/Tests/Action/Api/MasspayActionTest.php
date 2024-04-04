@@ -12,20 +12,14 @@ class MasspayActionTest extends GenericActionTest
     protected $requestClass = Masspay::class;
 
     protected $actionClass = MasspayAction::class;
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction()
     {
         $rc = new \ReflectionClass(MasspayAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
     
-    /**
-     * @test
-     */
-    public function throwIfPayoutAlreadyAcknowledged()
+    public function testThrowIfPayoutAlreadyAcknowledged()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Payout has already been acknowledged');
@@ -34,20 +28,17 @@ class MasspayActionTest extends GenericActionTest
         $action->execute(new Masspay(['ACK' => 'foo'], 0));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiMasspayMethodWithExpectedRequiredArguments()
+    public function testShouldCallApiMasspayMethodWithExpectedRequiredArguments()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->will($this->returnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+            ->willReturnCallback(function (array $fields) {
+                $this->assertSame(['foo' => 'fooVal'], $fields);
 
                 return [];
-            }))
+            })
         ;
 
         $action = new MasspayAction();
@@ -58,22 +49,19 @@ class MasspayActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiMasspayMethodAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('massPay')
-            ->will($this->returnCallback(function (array $fields) {
-                $this->assertEquals(['foo' => 'fooVal'], $fields);
+            ->willReturnCallback(function (array $fields) {
+                $this->assertSame(['foo' => 'fooVal'], $fields);
 
                 $fields['bar'] = 'barVal';
 
                 return $fields;
-            }))
+            })
         ;
 
         $action = new MasspayAction();
@@ -83,7 +71,7 @@ class MasspayActionTest extends GenericActionTest
 
         $action->execute($request);
 
-        $this->assertEquals(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getModel());
+        $this->assertSame(['foo' => 'fooVal', 'bar' => 'barVal'], (array) $request->getModel());
     }
 
     /**

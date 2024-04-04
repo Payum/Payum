@@ -6,10 +6,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\DoVoid;
 
 class DoVoidTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(DoVoid::class);
 

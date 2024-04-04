@@ -10,58 +10,35 @@ use Payum\Sofort\Api;
 
 class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(GetTransactionDataAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(GetTransactionDataAction::class);
 
         $this->assertTrue($rc->isSubclassOf(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArgument()
-    {
-        new GetTransactionDataAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportGetTransactionDataRequestWithArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDataRequestWithArrayAccessAsModel()
     {
         $action = new GetTransactionDataAction();
 
         $this->assertTrue($action->supports(new GetTransactionData($this->createMock('ArrayAccess'))));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingGetTransactionDataRequest()
+    public function testShouldNotSupportAnythingGetTransactionDataRequest()
     {
         $action = new GetTransactionDataAction($this->createApiMock());
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetTransactionDataAction($this->createApiMock());
@@ -69,10 +46,7 @@ class GetTransactionDataActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdParameterIsNotSet()
+    public function testThrowIfTransactionIdParameterIsNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The parameter "transaction_id" must be set. Have you run CreateTransactionAction?');

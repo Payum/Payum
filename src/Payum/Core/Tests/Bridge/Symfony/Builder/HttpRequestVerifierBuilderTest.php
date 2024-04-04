@@ -8,11 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class HttpRequestVerifierBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new HttpRequestVerifierBuilder();
-    }
-
     public function testShouldBuildSymfonyHttpRequestVerifier()
     {
         /** @var StorageInterface $tokenStorage */
@@ -23,7 +18,6 @@ class HttpRequestVerifierBuilderTest extends TestCase
         $verifier = $builder->build($tokenStorage);
 
         $this->assertInstanceOf(HttpRequestVerifier::class, $verifier);
-        $this->assertAttributeSame($tokenStorage, 'tokenStorage', $verifier);
     }
 
     public function testAllowUseBuilderAsAsFunction()

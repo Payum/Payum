@@ -8,32 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class Propel1StorageTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractStorage()
+    public function testShouldBeSubClassOfAbstractStorage()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Propel\Storage\Propel1Storage');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Storage\AbstractStorage'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelClassesAsArguments()
-    {
-        new PropelStorage(
-            'Payum\Core\Tests\Mocks\Model\PropelModel',
-            'Payum\Core\Tests\Mocks\Model\PropelModelPeer',
-            'Payum\Core\Tests\Mocks\Model\PropelModelQuery'
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateInstanceOfModelClassGivenInConstructor()
+    public function testShouldCreateInstanceOfModelClassGivenInConstructor()
     {
         $expectedModelClass = 'Payum\Core\Tests\Mocks\Model\PropelModel';
 
@@ -56,10 +38,7 @@ class Propel1StorageTest extends TestCase
         $storage->update($model);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelById()
+    public function testShouldFindModelById()
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();
@@ -72,10 +51,7 @@ class Propel1StorageTest extends TestCase
         $this->assertEquals($expectedFoundModel, $actualModel);
     }
 
-    /**
-     * @test
-     */
-    public function shouldFindModelByCriteria()
+    public function testShouldFindModelByCriteria()
     {
         $expectedModelId = 123;
         $expectedFoundModel = new PropelModel();

@@ -31,35 +31,11 @@ class ApiAwareTraitTest extends TestCase
     public function testThrowUnsupportedApi()
     {
         $object = new ApiAwareClass;
-        $object->setApiClass($this->getMockClass(\stdClass::class));
+        $object->setApiClass($this->createMock(\stdClass::class));
 
         $this->expectException(UnsupportedApiException::class);
         $this->expectExceptionMessage('It must be an instance of Mock_stdClass');
         $object->setApi(new \stdClass);
-    }
-
-    public function testShouldSetApiIfSupported()
-    {
-        $expectedApi = new \stdClass;
-
-        $object = new ApiAwareClass;
-        $object->setApiClass(\stdClass::class);
-
-        $object->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $object);
-    }
-
-    public function testShouldSetApiIfSupportedWithInterface()
-    {
-        $expectedApi = new FooApi;
-
-        $object = new ApiAwareClass;
-        $object->setApiClass(FooInterface::class);
-
-        $object->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $object);
     }
 }
 

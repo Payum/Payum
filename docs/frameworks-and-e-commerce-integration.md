@@ -22,7 +22,7 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 * Doctrine ORM\MongoODM
 * Propel1
 * Propel2
-* Zend Db Gateway
+* Laminas Db Gateway
 * Elouqent
 * Filesystem
 

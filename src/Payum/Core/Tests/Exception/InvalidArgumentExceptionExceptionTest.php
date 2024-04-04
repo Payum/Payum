@@ -6,31 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class InvalidArgumentExceptionExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExceptionInterface()
+    public function testShouldImplementExceptionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Exception\ExceptionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfRuntimeException()
+    public function testShouldBeSubClassOfRuntimeException()
     {
         $rc = new \ReflectionClass('Payum\Core\Exception\InvalidArgumentException');
 
         $this->assertTrue($rc->isSubclassOf('InvalidArgumentException'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new InvalidArgumentException();
     }
 }

@@ -20,20 +20,14 @@ class CreateOrderActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\CreateOrderAction');
 
-        $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateOrderOnExecute()
+    public function testShouldCreateOrderOnExecute()
     {
         $request = new CreateOrder(array());
 
@@ -52,10 +46,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseModelAsDataToCreateOrderOnExecute()
+    public function testShouldUseModelAsDataToCreateOrderOnExecute()
     {
         $model = array(
             'foo' => 'fooVal',
@@ -72,11 +63,11 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($model, $options['data']);
-            }))
+                $testCase->assertSame($model, $options['data']);
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -87,10 +78,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
+    public function testShouldAddMerchantIdFromConfigIfNotSetInModelOnExecute()
     {
         $config = new Config();
         $config->merchantId = 'theMerchantId';
@@ -112,11 +100,11 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $expectedModel) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals($expectedModel, $options['data']);
-            }))
+                $testCase->assertSame($expectedModel, $options['data']);
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -127,10 +115,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
+    public function testShouldReturnSameOrderUsedWhileCreateAndFetchCallsOnExecute()
     {
         $request = new CreateOrder(array());
 
@@ -142,9 +127,9 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, &$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);
@@ -155,10 +140,7 @@ class CreateOrderActionTest extends GenericActionTest
         $this->assertSame($expectedOrder, $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
@@ -178,7 +160,7 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new CreateOrderAction($connector);
@@ -187,10 +169,7 @@ class CreateOrderActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout()
     {
         $model = array(
             'location' => 'theLocation',
@@ -211,15 +190,15 @@ class CreateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
         $connector
             ->expects($this->at(1))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use (&$expectedOrder) {
+            ->willReturnCallback(function ($method, $order, $options) use (&$expectedOrder) {
                 $expectedOrder = $order;
-            }))
+            })
         ;
 
         $action = new CreateOrderAction($connector);

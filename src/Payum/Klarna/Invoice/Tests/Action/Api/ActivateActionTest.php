@@ -1,56 +1,33 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\ActivateAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\Activate;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class ActivateActionTest extends TestCase
+class ActivateActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return ActivateAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\ActivateAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ActivateAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new ActivateAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new ActivateAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -59,40 +36,28 @@ class ActivateActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportActivateWithArrayAsModel()
+    public function testShouldSupportActivateWithArrayAsModel()
     {
         $action = new ActivateAction();
 
         $this->assertTrue($action->supports(new Activate(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotActivate()
+    public function testShouldNotSupportAnythingNotActivate()
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportActivateWithNotArrayAccessModel()
+    public function testShouldNotSupportActivateWithNotArrayAccessModel()
     {
         $action = new ActivateAction();
 
         $this->assertFalse($action->supports(new Activate(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new ActivateAction();
@@ -100,10 +65,7 @@ class ActivateActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -112,10 +74,7 @@ class ActivateActionTest extends TestCase
         $action->execute(new Activate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaActivate()
+    public function testShouldCallKlarnaActivate()
     {
         $details = array(
             'rno' => 'theRno',
@@ -132,7 +91,7 @@ class ActivateActionTest extends TestCase
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->will($this->returnValue(array('theRisk', 'theInvNumber')))
+            ->willReturn(array('theRisk', 'theInvNumber'))
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -141,14 +100,11 @@ class ActivateActionTest extends TestCase
         $action->execute($activate = new Activate($details));
 
         $activatedDetails = $activate->getModel();
-        $this->assertEquals('theRisk', $activatedDetails['risk_status']);
-        $this->assertEquals('theInvNumber', $activatedDetails['invoice_number']);
+        $this->assertSame('theRisk', $activatedDetails['risk_status']);
+        $this->assertSame('theInvNumber', $activatedDetails['invoice_number']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',
@@ -165,7 +121,7 @@ class ActivateActionTest extends TestCase
                 $details['osr'],
                 $details['activation_flags']
             )
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new ActivateAction($klarnaMock);
@@ -175,8 +131,8 @@ class ActivateActionTest extends TestCase
 
         $activatedDetails = $activate->getModel();
 
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
     /**

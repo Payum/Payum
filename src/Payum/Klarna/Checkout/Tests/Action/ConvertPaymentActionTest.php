@@ -33,10 +33,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -52,7 +49,7 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([
+        $this->assertSame([
             'cart' => [
                 'items' => [
                     [
@@ -72,10 +69,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         ], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfCurrencyNotSEK()
+    public function testShouldDoNothingIfCurrencyNotSEK()
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -91,13 +85,10 @@ class ConvertPaymentActionTest extends GenericActionTest
 
         $details = $convert->getResult();
 
-        $this->assertEquals([], $details);
+        $this->assertSame([], $details);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $payment = new Payment();
         $payment->setCurrencyCode('USD');
@@ -116,6 +107,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

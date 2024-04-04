@@ -7,28 +7,14 @@ use Payum\Paypal\ProHosted\Nvp\Request\Api\GetTransactionDetails;
 
 class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementsApiAwareAction()
+    public function testShouldImplementsApiAwareAction()
     {
         $rc = new \ReflectionClass(GetTransactionDetailsAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new GetTransactionDetailsAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
+    public function testShouldSupportGetTransactionDetailsRequestAndArrayAccessAsModel()
     {
         $action = new GetTransactionDetailsAction();
 
@@ -37,20 +23,14 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotGetTransactionDetailsRequest()
+    public function testShouldNotSupportAnythingNotGetTransactionDetailsRequest()
     {
         $action = new GetTransactionDetailsAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new GetTransactionDetailsAction();
@@ -58,10 +38,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfZeroPaymentRequestTransactionIdNotSetInModel()
+    public function testThrowIfZeroPaymentRequestTransactionIdNotSetInModel()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('TRANSACTIONID must be set.');
@@ -72,20 +49,17 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
+    public function testShouldCallApiGetTransactionDetailsAndUpdateModelFromResponseOnSuccess()
     {
         $apiMock = $this->createApiMock();
         $apiMock
             ->expects($this->once())
             ->method('getTransactionDetails')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 return array(
                     'PAYMENTSTATUS' => 'theStatus',
                 );
-            }));
+            });
 
         $action = new GetTransactionDetailsAction();
         $action->setApi($apiMock);
@@ -99,7 +73,7 @@ class GetTransactionDetailsActionTest extends \PHPUnit\Framework\TestCase
         $model = $request->getModel();
 
         $this->assertArrayHasKey('PAYMENTSTATUS', $model);
-        $this->assertEquals('theStatus', $model['PAYMENTSTATUS']);
+        $this->assertSame('theStatus', $model['PAYMENTSTATUS']);
     }
 
     /**

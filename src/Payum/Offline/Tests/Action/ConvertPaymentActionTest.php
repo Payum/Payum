@@ -32,10 +32,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         yield array(new $this->requestClass($this->createMock(PaymentInterface::class), 'foobar'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function testShouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
         $order = new Payment();
         $order->setNumber('theNumber');
@@ -54,31 +51,28 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('amount', $details);
-        $this->assertEquals(123, $details['amount']);
+        $this->assertSame(123, $details['amount']);
 
         $this->assertArrayHasKey('currency', $details);
-        $this->assertEquals('USD', $details['currency']);
+        $this->assertSame('USD', $details['currency']);
 
         $this->assertArrayHasKey('number', $details);
-        $this->assertEquals('theNumber', $details['number']);
+        $this->assertSame('theNumber', $details['number']);
 
         $this->assertArrayHasKey('description', $details);
-        $this->assertEquals('the description', $details['description']);
+        $this->assertSame('the description', $details['description']);
 
         $this->assertArrayHasKey('client_id', $details);
-        $this->assertEquals('theClientId', $details['client_id']);
+        $this->assertSame('theClientId', $details['client_id']);
 
         $this->assertArrayHasKey('client_email', $details);
-        $this->assertEquals('theClientEmail', $details['client_email']);
+        $this->assertSame('theClientEmail', $details['client_email']);
 
         $this->assertArrayHasKey(Constants::FIELD_PAID, $details);
         $this->assertEquals(true, $details[Constants::FIELD_PAID]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldForcePaidFalseIfAlreadySet()
+    public function testShouldForcePaidFalseIfAlreadySet()
     {
         $order = new Payment();
         $order->setDetails(array(
@@ -97,10 +91,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertEquals(false, $details[Constants::FIELD_PAID]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function testShouldNotOverwriteAlreadySetExtraDetails()
     {
         $order = new Payment();
         $order->setCurrencyCode('USD');
@@ -119,6 +110,6 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('foo', $details);
-        $this->assertEquals('fooVal', $details['foo']);
+        $this->assertSame('fooVal', $details['foo']);
     }
 }

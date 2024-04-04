@@ -1,14 +1,16 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateSubscription;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -58,10 +60,18 @@ class CreateSubscriptionAction implements ActionInterface, ApiAwareInterface
         try {
             Stripe::setApiKey($this->api->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $subscription = Subscription::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($subscription->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($subscription->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

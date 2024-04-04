@@ -4,32 +4,18 @@ namespace Payum\Core\Tests\Extension;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
 
 class ExtensionCollectionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\ExtensionCollection');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new ExtensionCollection();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowAddExtensionAppendByDefault()
+    public function testShouldAllowAddExtensionAppendByDefault()
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -48,10 +34,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertSame($extensionSecond, $addedExtensions[1]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowAddExtensionWithForcedPrepend()
+    public function testShouldAllowAddExtensionWithForcedPrepend()
     {
         $extensionFirst = $this->createExtensionMock();
         $extensionSecond = $this->createExtensionMock();
@@ -70,10 +53,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertSame($extensionFirst, $addedExtensions[1]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallOnPreExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnPreExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 
@@ -100,10 +80,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallOnExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 
@@ -130,10 +107,7 @@ class ExtensionCollectionTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallOnPostExecuteForAllExtensionsInCollection()
+    public function testShouldCallOnPostExecuteForAllExtensionsInCollection()
     {
         $expectedContext = $this->createContextMock();
 

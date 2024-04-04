@@ -42,7 +42,7 @@ class StatusAction implements ActionInterface
             return;
         }
 
-        $subcode = isset($details['statusReason']) ? $details['statusReason'] : null;
+        $subcode = $details['statusReason'] ?? null;
         switch ($details['status']) {
             case Api::STATUS_LOSS:
                 $request->markFailed();

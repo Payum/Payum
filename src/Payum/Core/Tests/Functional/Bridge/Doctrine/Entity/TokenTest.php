@@ -8,20 +8,14 @@ use Payum\Core\Tests\Mocks\Entity\Token;
 
 class TokenTest extends OrmTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllSchemasBeValid()
+    public function testShouldAllSchemasBeValid()
     {
         $schemaValidator = new SchemaValidator($this->em);
 
         $this->assertEmpty($schemaValidator->validateMapping());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowPersist()
+    public function testShouldAllowPersist()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -29,12 +23,12 @@ class TokenTest extends OrmTest
 
         $this->em->persist($token);
         $this->em->flush();
+
+        $repository = $this->em->getRepository(Token::class);
+        $this->assertSame([$token], $repository->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -53,9 +47,9 @@ class TokenTest extends OrmTest
 
         $this->assertNotSame($token, $foundToken);
 
-        $this->assertEquals($token->getHash(), $foundToken->getHash());
-        $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
-        $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());
+        $this->assertSame($token->getHash(), $foundToken->getHash());
+        $this->assertSame($token->getTargetUrl(), $foundToken->getTargetUrl());
+        $this->assertSame($token->getAfterUrl(), $foundToken->getAfterUrl());
 
         $this->assertNotSame($token->getDetails(), $foundToken->getDetails());
         $this->assertEquals($token->getDetails(), $foundToken->getDetails());

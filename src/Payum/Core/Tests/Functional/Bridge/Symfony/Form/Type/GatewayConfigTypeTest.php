@@ -41,10 +41,7 @@ class GatewayConfigTypeTest extends TestCase
         ;
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeConstructedByFormFactory()
+    public function testShouldBeConstructedByFormFactory()
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -52,10 +49,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormView', $form->createView());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddDefaultFieldsIfFactoryNameChosen()
+    public function testShouldAddDefaultFieldsIfFactoryNameChosen()
     {
         $form = $this->formFactory->create(GatewayConfigType::class);
 
@@ -64,10 +58,7 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertFalse($form->has('config'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkFormInvalidAndAddConfigFields()
+    public function testShouldMarkFormInvalidAndAddConfigFields()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -93,19 +84,16 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('defaultName', $form->get('config')->get('username')->getData());
+        $this->assertSame('defaultName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('defaultPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('defaultPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(true, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubmitWholeGatewayConfig()
+    public function testShouldSubmitWholeGatewayConfig()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -137,19 +125,16 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('submitName', $form->get('config')->get('username')->getData());
+        $this->assertSame('submitName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('submitPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('submitPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetSandboxToFalseIfCheckboxUnset()
+    public function testShouldSetSandboxToFalseIfCheckboxUnset()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -180,19 +165,16 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('submitName', $form->get('config')->get('username')->getData());
+        $this->assertSame('submitName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('submitPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('submitPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddConfigFieldsIfGatewayConfigHasFactorySet()
+    public function testShouldAddConfigFieldsIfGatewayConfigHasFactorySet()
     {
         $this->fooGatewayFactoryMock
             ->expects($this->once())
@@ -223,10 +205,10 @@ class GatewayConfigTypeTest extends TestCase
         $this->assertTrue($form->has('config'));
 
         $this->assertTrue($form->get('config')->has('username'));
-        $this->assertEquals('modelName', $form->get('config')->get('username')->getData());
+        $this->assertSame('modelName', $form->get('config')->get('username')->getData());
 
         $this->assertTrue($form->get('config')->has('password'));
-        $this->assertEquals('modelPass', $form->get('config')->get('password')->getData());
+        $this->assertSame('modelPass', $form->get('config')->get('password')->getData());
 
         $this->assertTrue($form->get('config')->has('sandbox'));
         $this->assertEquals(false, $form->get('config')->get('sandbox')->getData());

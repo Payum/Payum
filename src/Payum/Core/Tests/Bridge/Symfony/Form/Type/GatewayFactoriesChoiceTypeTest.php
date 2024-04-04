@@ -8,38 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GatewayFactoriesChoiceTypeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfAbstractType()
+    public function testShouldBeSubClassOfAbstractType()
     {
         $rc = new \ReflectionClass('Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType');
 
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\Form\AbstractType'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithDefaultFactoriesAsFirstArgument()
-    {
-        new GatewayFactoriesChoiceType(array('foo' => 'Foo Factory'));
-    }
-
-    /**
-     * @test
-     */
-    public function shouldExtendChoice()
+    public function testShouldExtendChoice()
     {
         $type = new GatewayFactoriesChoiceType(array());
 
-        $this->assertEquals(ChoiceType::class, $type->getParent());
+        $this->assertSame(ChoiceType::class, $type->getParent());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowResolveOptions()
+    public function testShouldAllowResolveOptions()
     {
         $expectedChoices = array(
             'foo' => 'Foo Factory',
@@ -55,6 +38,6 @@ class GatewayFactoriesChoiceTypeTest extends TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('choices', $options);
-        $this->assertEquals($expectedChoices, $options['choices']);
+        $this->assertSame($expectedChoices, $options['choices']);
     }
 }

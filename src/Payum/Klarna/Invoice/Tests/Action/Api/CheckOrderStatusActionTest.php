@@ -1,56 +1,32 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CheckOrderStatus;
-use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class CheckOrderStatusActionTest extends TestCase
+class CheckOrderStatusActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return CheckOrderStatusAction::class;
+    }
+
+    protected function getApiClass(): Config
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CheckOrderStatusAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new CheckOrderStatusAction();
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CheckOrderStatusAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CheckOrderStatusAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -59,40 +35,28 @@ class CheckOrderStatusActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCheckOrderStatusWithArrayAsModel()
+    public function testShouldSupportCheckOrderStatusWithArrayAsModel()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertTrue($action->supports(new CheckOrderStatus(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCheckOrderStatus()
+    public function testShouldNotSupportAnythingNotCheckOrderStatus()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
+    public function testShouldNotSupportCheckOrderStatusWithNotArrayAccessModel()
     {
         $action = new CheckOrderStatusAction();
 
         $this->assertFalse($action->supports(new CheckOrderStatus(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CheckOrderStatusAction();
@@ -100,10 +64,7 @@ class CheckOrderStatusActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfRnoNotSet()
+    public function testThrowIfRnoNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The rno fields are required.');
@@ -112,10 +73,7 @@ class CheckOrderStatusActionTest extends TestCase
         $action->execute(new CheckOrderStatus(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCheckOrderStatusMethod()
+    public function testShouldCallKlarnaCheckOrderStatusMethod()
     {
         $details = array(
             'rno' => 'theRno',
@@ -126,7 +84,7 @@ class CheckOrderStatusActionTest extends TestCase
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->returnValue('theStatus'))
+            ->willReturn('theStatus')
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -136,13 +94,10 @@ class CheckOrderStatusActionTest extends TestCase
 
         $activatedDetails = $check->getModel();
 
-        $this->assertEquals('theStatus', $activatedDetails['status']);
+        $this->assertSame('theStatus', $activatedDetails['status']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'rno' => 'theRno',
@@ -153,7 +108,7 @@ class CheckOrderStatusActionTest extends TestCase
             ->expects($this->once())
             ->method('checkOrderStatus')
             ->with($details['rno'])
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new CheckOrderStatusAction($klarnaMock);
@@ -162,14 +117,11 @@ class CheckOrderStatusActionTest extends TestCase
         $action->execute($activate = new CheckOrderStatus($details));
 
         $activatedDetails = $activate->getModel();
-        $this->assertEquals(123, $activatedDetails['error_code']);
-        $this->assertEquals('theMessage', $activatedDetails['error_message']);
+        $this->assertSame(123, $activatedDetails['error_code']);
+        $this->assertSame('theMessage', $activatedDetails['error_message']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfAlreadyActivated()
+    public function testShouldDoNothingIfAlreadyActivated()
     {
         $details = array(
             'rno' => 'theRno',

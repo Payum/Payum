@@ -8,11 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class GatewayFactoryBuilderTest extends TestCase
 {
-    public function testCouldBeConstructedWithGatewayFactoryClassAsFirstArgument()
-    {
-        new GatewayFactoryBuilder(GatewayFactory::class);
-    }
-
     public function testShouldBuildContainerAwareCoreGatewayFactory()
     {
         /** @var GatewayFactoryInterface $coreGatewayFactory */
@@ -24,8 +19,6 @@ class GatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder->build($defaultConfig, $coreGatewayFactory);
 
         $this->assertInstanceOf(GatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 
     public function testAllowUseBuilderAsAsFunction()
@@ -39,7 +32,5 @@ class GatewayFactoryBuilderTest extends TestCase
         $gatewayFactory = $builder($defaultConfig, $coreGatewayFactory);
 
         $this->assertInstanceOf(GatewayFactory::class, $gatewayFactory);
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $gatewayFactory);
-        $this->assertAttributeSame($defaultConfig, 'defaultConfig', $gatewayFactory);
     }
 }

@@ -7,28 +7,14 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
 class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(RecurringPaymentDetailsSyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RecurringPaymentDetailsSyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncAndArrayAsModelWhichHasBillingPeriodSet()
+    public function testShouldSupportSyncAndArrayAsModelWhichHasBillingPeriodSet()
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
@@ -41,20 +27,14 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSyncRequest()
+    public function testShouldNotSupportAnythingNotSyncRequest()
     {
         $action = new RecurringPaymentDetailsSyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RecurringPaymentDetailsSyncAction();
@@ -62,10 +42,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfProfileIdNotSet()
+    public function testShouldDoNothingIfProfileIdNotSet()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -83,10 +60,7 @@ class RecurringPaymentDetailsSyncActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel()
+    public function testShouldRequestGetRecurringPaymentsProfileDetailsActionIfProfileIdSetInModel()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

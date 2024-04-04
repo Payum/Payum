@@ -9,54 +9,32 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithHttpClientAndOptions()
-    {
-        new Api(array(
-            'sandbox' => true,
-        ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
+    public function testShouldReturnSandboxIpnEndpointIfSandboxSetTrueInConstructor()
     {
         $api = new Api(array(
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
+        $this->assertSame('https://www.sandbox.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
+    public function testShouldReturnLiveIpnEndpointIfSandboxSetFalseInConstructor()
     {
         $api = new Api(array(
             'sandbox' => false,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
+        $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $api->getIpnEndpoint());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfResponseStatusNotOk()
+    public function testThrowIfResponseStatusNotOk()
     {
         $this->expectException(\Payum\Core\Exception\Http\HttpException::class);
         $this->expectExceptionMessage('Client error response');
@@ -64,9 +42,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(404);
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -76,10 +54,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->notifyValidate(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldProxyWholeNotificationToClientSend()
+    public function testShouldProxyWholeNotificationToClientSend()
     {
         /** @var RequestInterface $actualRequest */
         $actualRequest = null;
@@ -88,11 +63,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use (&$actualRequest) {
+            ->willReturnCallback(function (RequestInterface $request) use (&$actualRequest) {
                 $actualRequest = $request;
 
                 return new Response(200);
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -110,72 +85,63 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         parse_str($actualRequest->getBody()->getContents(), $content);
 
         $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $actualRequest);
-        $this->assertEquals(array('cmd' => Api::CMD_NOTIFY_VALIDATE) + $expectedNotification, $content);
-        $this->assertEquals($api->getIpnEndpoint(), $actualRequest->getUri());
-        $this->assertEquals('POST', $actualRequest->getMethod());
+        $this->assertSame($expectedNotification + array('cmd' => Api::CMD_NOTIFY_VALIDATE), $content);
+        $this->assertSame($api->getIpnEndpoint(), (string) $actualRequest->getUri());
+        $this->assertSame('POST', $actualRequest->getMethod());
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnVerifiedIfResponseContentVerified()
+    public function testShouldReturnVerifiedIfResponseContentVerified()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), Api::NOTIFY_VERIFIED);
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_VERIFIED, $api->notifyValidate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnInvalidIfResponseContentInvalid()
+    public function testShouldReturnInvalidIfResponseContentInvalid()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), Api::NOTIFY_INVALID);
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
+    public function testShouldReturnInvalidIfResponseContentContainsSomethingNotEqualToVerified()
     {
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, array(), 'foobarbaz');
-            }))
+            })
         ;
 
         $api = new Api(array(
             'sandbox' => false,
         ), $clientMock, $this->createHttpMessageFactory());
 
-        $this->assertEquals(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
+        $this->assertSame(Api::NOTIFY_INVALID, $api->notifyValidate(array()));
     }
 
     /**
@@ -202,9 +168,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200);
-            }))
+            })
         ;
 
         return $clientMock;

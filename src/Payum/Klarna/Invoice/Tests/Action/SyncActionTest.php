@@ -9,58 +9,35 @@ use PHPUnit\Framework\TestCase;
 
 class SyncActionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(SyncAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new SyncAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportSyncWithArrayAsModel()
+    public function testShouldSupportSyncWithArrayAsModel()
     {
         $action = new SyncAction();
 
         $this->assertTrue($action->supports(new Sync(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotSync()
+    public function testShouldNotSupportAnythingNotSync()
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportSyncWithNotArrayAccessModel()
+    public function testShouldNotSupportSyncWithNotArrayAccessModel()
     {
         $action = new SyncAction();
 
         $this->assertFalse($action->supports(new Sync(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new SyncAction();
@@ -68,10 +45,7 @@ class SyncActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSubExecuteCheckOrderStatusIfReservedButNotActivated()
+    public function testShouldSubExecuteCheckOrderStatusIfReservedButNotActivated()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -90,10 +64,7 @@ class SyncActionTest extends TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSubExecuteCheckOrderStatusIfNotReserved()
+    public function testShouldNotSubExecuteCheckOrderStatusIfNotReserved()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock
@@ -109,10 +80,7 @@ class SyncActionTest extends TestCase
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSubExecuteCheckOrderStatusIfReservedAndActivated()
+    public function testShouldNotSubExecuteCheckOrderStatusIfReservedAndActivated()
     {
         $gatewayMock = $this->createGatewayMock();
         $gatewayMock

@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -8,10 +9,11 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateCharge;
 use Stripe\Charge;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 
 class CreateChargeAction implements ActionInterface, ApiAwareInterface
@@ -65,12 +67,18 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $charge = Charge::create($model->toUnsafeArrayWithoutLocal());
 
-            $arrayMethod = method_exists($charge, 'toArray') ? 'toArray' : '__toArray';
-
-            $model->replace($charge->$arrayMethod(true));
-        } catch (Error\Base $e) {
+            $model->replace($charge->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

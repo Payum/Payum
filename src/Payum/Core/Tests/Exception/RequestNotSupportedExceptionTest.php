@@ -10,28 +10,14 @@ use PHPUnit\Framework\TestCase;
 
 class RequestNotSupportedExceptionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfInvalidArgumentException()
+    public function testShouldBeSubClassOfInvalidArgumentException()
     {
         $rc = new \ReflectionClass(RequestNotSupportedException::class);
 
         $this->assertTrue($rc->isSubclassOf(InvalidArgumentException::class));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RequestNotSupportedException();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldCreateWithNoneObjectRequest()
+    public function testShouldCreateWithNoneObjectRequest()
     {
         $exception = RequestNotSupportedException::create('anRequest');
 
@@ -42,10 +28,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithObjectRequest()
+    public function testShouldCreateWithObjectRequest()
     {
         $request = new \stdClass();
 
@@ -58,10 +41,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertNull($exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithActionAndStringRequest()
+    public function testShouldCreateWithActionAndStringRequest()
     {
         $action = $this->createMock(ActionInterface::class);
         $actionClass = get_class($action);
@@ -79,10 +59,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithActionAndObjectRequest()
+    public function testShouldCreateWithActionAndObjectRequest()
     {
         $request = new \stdClass();
 
@@ -101,33 +78,27 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertSame($action, $exception->getAction());
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithSuggestions()
+    public function testShouldCreateWithSuggestions()
     {
         $request = new \stdClass();
 
         $exception = RequestNotSupportedException::create($request);
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
-        $this->assertEquals(
+        $this->assertSame(
             'Request stdClass is not supported. Make sure the gateway supports the requests and there is an action which supports this request (The method returns true). There may be a bug, so look for a related issue on the issue tracker.',
             $exception->getMessage()
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateWithSuggestionsOnIdentityAsModel()
+    public function testShouldCreateWithSuggestionsOnIdentityAsModel()
     {
         $request = new Capture(new Identity('theId', \stdClass::class));
 
         $exception = RequestNotSupportedException::create($request);
 
         $this->assertInstanceOf(RequestNotSupportedException::class, $exception);
-        $this->assertEquals(
+        $this->assertSame(
             'Request Capture{model: Identity} is not supported. Make sure the storage extension for "stdClass" is registered to the gateway. Make sure the storage find method returns an instance by id "theId". Make sure the gateway supports the requests and there is an action which supports this request (The method returns true). There may be a bug, so look for a related issue on the issue tracker.',
             $exception->getMessage()
         );

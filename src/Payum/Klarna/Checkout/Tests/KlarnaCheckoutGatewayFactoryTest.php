@@ -1,108 +1,25 @@
 <?php
 namespace Payum\Klarna\Checkout\Tests;
 
-use Payum\Core\CoreGatewayFactory;
-use Payum\Core\Gateway;
-use Payum\Core\GatewayFactory;
-use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
-use PHPUnit\Framework\TestCase;
 
-class KlarnaCheckoutGatewayFactoryTest extends TestCase
+class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
-    /**
-     * @test
-     */
-    public function shouldSubClassGatewayFactory()
+    protected function getGatewayFactoryClass(): string
     {
-        $rc = new \ReflectionClass(KlarnaCheckoutGatewayFactory::class);
-
-        $this->assertTrue($rc->isSubclassOf(GatewayFactory::class));
+        return KlarnaCheckoutGatewayFactory::class;
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    protected function getRequiredOptions(): array
     {
-        new KlarnaCheckoutGatewayFactory();
+        return [
+            'merchant_id' => 'aMerchId',
+            'secret' => 'aSecret',
+        ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldCreateCoreGatewayFactoryIfNotPassed()
-    {
-        $factory = new KlarnaCheckoutGatewayFactory();
-
-        $this->assertAttributeInstanceOf(CoreGatewayFactory::class, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldUseCoreGatewayFactoryPassedAsSecondArgument()
-    {
-        $coreGatewayFactory = $this->createMock(GatewayFactoryInterface::class);
-
-        $factory = new KlarnaCheckoutGatewayFactory(array(), $coreGatewayFactory);
-
-        $this->assertAttributeSame($coreGatewayFactory, 'coreGatewayFactory', $factory);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGateway()
-    {
-        $factory = new KlarnaCheckoutGatewayFactory();
-
-        $gateway = $factory->create(array('merchant_id' => 'aMerchId', 'secret' => 'aSecret'));
-
-        $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayWithCustomApi()
-    {
-        $factory = new KlarnaCheckoutGatewayFactory();
-
-        $gateway = $factory->create(array('payum.api' => new \stdClass()));
-
-        $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowCreateGatewayConfig()
-    {
-        $factory = new KlarnaCheckoutGatewayFactory();
-
-        $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
-        $this->assertNotEmpty($config);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
+    public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig()
     {
         $factory = new KlarnaCheckoutGatewayFactory(array(
             'foo' => 'fooVal',
@@ -114,16 +31,13 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
-        $this->assertEquals('fooVal', $config['foo']);
+        $this->assertSame('fooVal', $config['foo']);
 
         $this->assertArrayHasKey('bar', $config);
-        $this->assertEquals('barVal', $config['bar']);
+        $this->assertSame('barVal', $config['bar']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainDefaultOptions()
+    public function testShouldConfigContainDefaultOptions()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 
@@ -144,10 +58,7 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigContainFactoryNameAndTitle()
+    public function testShouldConfigContainFactoryNameAndTitle()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 
@@ -156,16 +67,13 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
-        $this->assertEquals('klarna_checkout', $config['payum.factory_name']);
+        $this->assertSame('klarna_checkout', $config['payum.factory_name']);
 
         $this->assertArrayHasKey('payum.factory_title', $config);
-        $this->assertEquals('Klarna Checkout', $config['payum.factory_title']);
+        $this->assertSame('Klarna Checkout', $config['payum.factory_title']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowIfRequiredOptionsNotPassed()
+    public function testShouldThrowIfRequiredOptionsNotPassed()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The merchant_id, secret fields are required.');
@@ -174,10 +82,7 @@ class KlarnaCheckoutGatewayFactoryTest extends TestCase
         $factory->create();
     }
 
-    /**
-     * @test
-     */
-    public function shouldConfigurePaths()
+    public function testShouldConfigurePaths()
     {
         $factory = new KlarnaCheckoutGatewayFactory();
 

@@ -6,21 +6,10 @@ use Payum\Stripe\Request\Api\CreatePlan;
 
 class CreatePlanTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(CreatePlan::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModelAsFirstArgument()
-    {
-        new CreatePlan($model = []);
     }
 }

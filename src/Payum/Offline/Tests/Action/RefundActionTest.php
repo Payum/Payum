@@ -8,28 +8,14 @@ use Payum\Offline\Constants;
 
 class RefundActionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass('Payum\Offline\Action\RefundAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Action\ActionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new RefundAction();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSupportRefundWithArrayAccessAsModel()
+    public function testShouldSupportRefundWithArrayAccessAsModel()
     {
         $action = new RefundAction();
 
@@ -38,10 +24,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportNotRefund()
+    public function testShouldNotSupportNotRefund()
     {
         $action = new RefundAction();
 
@@ -50,10 +33,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportRefundAndNotArrayAccessAsModel()
+    public function testShouldNotSupportRefundAndNotArrayAccessAsModel()
     {
         $action = new RefundAction();
 
@@ -62,10 +42,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($action->supports($request));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentForExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentForExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new RefundAction();
@@ -73,10 +50,7 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetStatusRefundedIfStatusSetToCaptured()
+    public function testShouldSetStatusRefundedIfStatusSetToCaptured()
     {
         $action = new RefundAction();
 
@@ -91,13 +65,10 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_REFUNDED, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_REFUNDED, $details[Constants::FIELD_STATUS]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSetStatusRefundedIfStatusNotSetToCaptured()
+    public function testShouldNotSetStatusRefundedIfStatusNotSetToCaptured()
     {
         $action = new RefundAction();
 
@@ -112,6 +83,6 @@ class RefundActionTest extends \PHPUnit\Framework\TestCase
         $action->execute($request);
 
         $this->assertArrayHasKey(Constants::FIELD_STATUS, $details);
-        $this->assertEquals(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
+        $this->assertSame(Constants::STATUS_PENDING, $details[Constants::FIELD_STATUS]);
     }
 }

@@ -12,33 +12,14 @@ class RefundActionTest extends GenericActionTest
 
     protected $requestClass = 'Payum\Core\Request\Refund';
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Paypal\ProCheckout\Nvp\Action\RefundAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\ApiAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = new RefundAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new RefundAction();
@@ -46,10 +27,7 @@ class RefundActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldDoNothingIfPaymentNew()
+    public function testShouldDoNothingIfPaymentNew()
     {
         $apiMock = $this->createApiMock();
         $apiMock
@@ -63,10 +41,7 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund(array()));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionTypeIsNotRefundable()
+    public function testThrowIfTransactionTypeIsNotRefundable()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('You cannot refund transaction with type notSupported. Only these types could be refunded: S, D, F');
@@ -85,10 +60,7 @@ class RefundActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfTransactionIdNotSet()
+    public function testThrowIfTransactionIdNotSet()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The PNREF fields are required.');
@@ -107,10 +79,7 @@ class RefundActionTest extends GenericActionTest
         )));
     }
 
-    /**
-     * @test
-     */
-    public function shouldSetPnrefAsOriginIdAndPerformCreditApiCall()
+    public function testShouldSetPnrefAsOriginIdAndPerformCreditApiCall()
     {
         $details = new \ArrayObject(array(
             'RESULT' => Api::RESULT_SUCCESS,
@@ -130,10 +99,10 @@ class RefundActionTest extends GenericActionTest
                 'PURCHASE_RESULT' => 0,
                 'ORIGID' => 'aRef',
             ))
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'RESULT' => 'aResult',
                 'FOO' => 'aVal',
-            )))
+            ))
         ;
 
         $action = new RefundAction();
@@ -142,13 +111,13 @@ class RefundActionTest extends GenericActionTest
         $action->execute(new Refund($details));
 
         $this->assertArrayHasKey('FOO', $details);
-        $this->assertEquals('aVal', $details['FOO']);
+        $this->assertSame('aVal', $details['FOO']);
 
         $this->assertArrayHasKey('RESULT', $details);
-        $this->assertEquals('aResult', $details['RESULT']);
+        $this->assertSame('aResult', $details['RESULT']);
 
         $this->assertArrayHasKey('ORIGID', $details);
-        $this->assertEquals('aRef', $details['ORIGID']);
+        $this->assertSame('aRef', $details['ORIGID']);
     }
 
     /**

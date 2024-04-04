@@ -9,39 +9,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api([], $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -52,10 +27,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnMasspayCall()
+    public function testShouldAddMethodOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -69,13 +41,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('MassPay', $result['METHOD']);
+        $this->assertSame('MassPay', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnMasspayCall()
+    public function testShouldAddAuthorizeFieldsOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'the_username',
@@ -87,19 +56,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnMasspayCall()
+    public function testShouldAddVersionOnMasspayCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -111,13 +77,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->massPay([]);
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -125,11 +88,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -142,10 +105,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->massPay([]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 
@@ -153,11 +113,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -194,9 +154,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

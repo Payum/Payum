@@ -5,21 +5,10 @@ use Payum\Klarna\Invoice\Request\Api\CreditPart;
 
 class CreditPartTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseOrder()
+    public function testShouldBeSubClassOfBaseOrder()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Request\Api\CreditPart');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Request\Generic'));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithArrayModelAsArgument()
-    {
-        new CreditPart(array());
     }
 }

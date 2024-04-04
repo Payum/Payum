@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Stripe\Action\Api;
 
+use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
@@ -8,9 +9,10 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateToken;
-use Stripe\Error;
+use Stripe\Exception;
 use Stripe\Stripe;
 use Stripe\Token;
 
@@ -57,10 +59,18 @@ class CreateTokenAction implements ActionInterface, GatewayAwareInterface, ApiAw
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
 
+            if (class_exists(InstalledVersions::class)) {
+                Stripe::setAppInfo(
+                    Constants::PAYUM_STRIPE_APP_NAME,
+                    InstalledVersions::getVersion('stripe/stripe-php'),
+                    Constants::PAYUM_URL
+                );
+            }
+
             $token = Token::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($token->__toArray(true));
-        } catch (Error\Base $e) {
+            $model->replace($token->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }
     }

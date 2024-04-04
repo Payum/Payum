@@ -20,20 +20,14 @@ class UpdateOrderActionTest extends GenericActionTest
         yield array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Checkout\Action\Api\UpdateOrderAction');
 
-        $rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction');
+        $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Checkout\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateOrderIfModelHasCartItemsSetOnExecute()
+    public function testShouldUpdateOrderIfModelHasCartItemsSetOnExecute()
     {
         $model = array(
             'location' => 'theLocation',
@@ -54,11 +48,11 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($testCase, $model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($testCase, $model) {
                 $testCase->assertIsArray($options);
                 $testCase->assertArrayHasKey('data', $options);
-                $testCase->assertEquals(array('cart' => $model['cart']), $options['data']);
-            }))
+                $testCase->assertSame(array('cart' => $model['cart']), $options['data']);
+            })
         ;
 
         $action = new UpdateOrderAction($connector);
@@ -69,10 +63,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $this->assertInstanceOf('Klarna_Checkout_Order', $request->getOrder());
     }
 
-    /**
-     * @test
-     */
-    public function shouldFailedAfterThreeRetriesOnTimeout()
+    public function testShouldFailedAfterThreeRetriesOnTimeout()
     {
         $this->expectException(\Klarna_Checkout_ConnectionErrorException::class);
         $model = array(
@@ -90,7 +81,7 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->exactly(3))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
 
         $action = new UpdateOrderAction($connector);
@@ -99,10 +90,7 @@ class UpdateOrderActionTest extends GenericActionTest
         $action->execute(new UpdateOrder($model));
     }
 
-    /**
-     * @test
-     */
-    public function shouldRecoverAfterTimeout()
+    public function testShouldRecoverAfterTimeout()
     {
         $model = array(
             'location' => 'theLocation',
@@ -119,17 +107,17 @@ class UpdateOrderActionTest extends GenericActionTest
             ->expects($this->at(0))
             ->method('apply')
             ->with('POST')
-            ->will($this->throwException(new \Klarna_Checkout_ConnectionErrorException()))
+            ->willThrowException(new \Klarna_Checkout_ConnectionErrorException())
         ;
         $connector
             ->expects($this->at(1))
             ->method('apply')
             ->with('POST')
-            ->will($this->returnCallback(function ($method, $order, $options) use ($model) {
+            ->willReturnCallback(function ($method, $order, $options) use ($model) {
                 $this->assertIsArray($options);
                 $this->assertArrayHasKey('data', $options);
-                $this->assertEquals(array('cart' => $model['cart']), $options['data']);
-            }))
+                $this->assertSame(array('cart' => $model['cart']), $options['data']);
+            })
         ;
 
         $action = new UpdateOrderAction($connector);

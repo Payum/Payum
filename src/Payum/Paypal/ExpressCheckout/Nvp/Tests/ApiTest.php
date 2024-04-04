@@ -9,39 +9,14 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithOptionsAndHttpClient()
-    {
-        $client = $this->createHttpClientMock();
-        $factory = $this->createHttpMessageFactory();
-
-        $api = new Api(array(
-            'username' => 'a_username',
-            'password' => 'a_password',
-            'signature' => 'a_signature',
-            'sandbox' => true,
-        ), $client, $factory);
-
-        $this->assertAttributeSame($client, 'client', $api);
-        $this->assertAttributeSame($factory, 'messageFactory', $api);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfRequiredOptionsNotSetInConstructor()
+    public function testThrowIfRequiredOptionsNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The username, password, signature fields are required.');
         new Api(array(), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfSandboxOptionNotSetInConstructor()
+    public function testThrowIfSandboxOptionNotSetInConstructor()
     {
         $this->expectException(\Payum\Core\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The boolean sandbox option must be set.');
@@ -52,10 +27,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfReturnUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfReturnUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -69,10 +41,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInFormRequest()
+    public function testShouldUseReturnUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -85,13 +54,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array('RETURNURL' => 'formRequestReturnUrl'));
 
-        $this->assertEquals('formRequestReturnUrl', $result['RETURNURL']);
+        $this->assertSame('formRequestReturnUrl', $result['RETURNURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseReturnUrlSetInOptions()
+    public function testShouldUseReturnUrlSetInOptions()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -104,13 +70,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array());
 
-        $this->assertEquals('optionReturnUrl', $result['RETURNURL']);
+        $this->assertSame('optionReturnUrl', $result['RETURNURL']);
     }
 
-    /**
-     * @test
-     */
-    public function throwIfCancelUrlNeitherSetToFormRequestNorToOptions()
+    public function testThrowIfCancelUrlNeitherSetToFormRequestNorToOptions()
     {
         $this->expectException(\Payum\Core\Exception\RuntimeException::class);
         $this->expectExceptionMessage('The return_url must be set either to FormRequest or to options.');
@@ -124,10 +87,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInFormRequest()
+    public function testShouldUseCancelUrlSetInFormRequest()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -140,13 +100,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array('CANCELURL' => 'formRequestCancelUrl'));
 
-        $this->assertEquals('formRequestCancelUrl', $result['CANCELURL']);
+        $this->assertSame('formRequestCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseCancelUrlSetInOptions()
+    public function testShouldUseCancelUrlSetInOptions()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -159,13 +116,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
 
         $result = $api->setExpressCheckout(array());
 
-        $this->assertEquals('optionCancelUrl', $result['CANCELURL']);
+        $this->assertSame('optionCancelUrl', $result['CANCELURL']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddMethodOnSetExpressCheckoutCall()
+    public function testShouldAddMethodOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -179,13 +133,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('METHOD', $result);
-        $this->assertEquals('SetExpressCheckout', $result['METHOD']);
+        $this->assertSame('SetExpressCheckout', $result['METHOD']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
+    public function testShouldAddAuthorizeFieldsOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'the_username',
@@ -199,19 +150,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('USER', $result);
-        $this->assertEquals('the_username', $result['USER']);
+        $this->assertSame('the_username', $result['USER']);
 
         $this->assertArrayHasKey('PWD', $result);
-        $this->assertEquals('the_password', $result['PWD']);
+        $this->assertSame('the_password', $result['PWD']);
 
         $this->assertArrayHasKey('SIGNATURE', $result);
-        $this->assertEquals('the_signature', $result['SIGNATURE']);
+        $this->assertSame('the_signature', $result['SIGNATURE']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldAddVersionOnSetExpressCheckoutCall()
+    public function testShouldAddVersionOnSetExpressCheckoutCall()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -225,13 +173,10 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $result = $api->setExpressCheckout(array());
 
         $this->assertArrayHasKey('VERSION', $result);
-        $this->assertEquals(Api::VERSION, $result['VERSION']);
+        $this->assertSame(Api::VERSION, $result['VERSION']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetSandboxAuthorizeUrlIfSandboxTrue()
+    public function testShouldGetSandboxAuthorizeUrlIfSandboxTrue()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -240,16 +185,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserAction()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserAction()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -259,16 +201,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'useraction' => 'aCustomUserAction',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=aCustomUserAction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomUserActionPassedAsQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -278,16 +217,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'useraction' => 'notUsedUseraction',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?useraction=theUseraction&cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('useraction' => 'theUseraction'))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmd()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmd()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -297,16 +233,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cmd' => 'theCmd',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomCmdPassedAsQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -316,16 +249,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'cmd' => 'thisCmdNotUsed',
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=theCmd&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('cmd' => 'theCmd'))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithCustomQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -334,16 +264,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken&foo=fooVal',
             $api->getAuthorizeTokenUrl('theToken', array('foo' => 'fooVal'))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
+    public function testShouldAllowGetAuthorizeUrlWithIgnoredEmptyCustomQueryParameter()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -352,16 +279,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => true,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken', array('foo' => ''))
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetRealAuthorizeUrlIfSandboxFalse()
+    public function testShouldGetRealAuthorizeUrlIfSandboxFalse()
     {
         $api = new Api(array(
             'username' => 'a_username',
@@ -370,16 +294,13 @@ class ApiTest extends \PHPUnit\Framework\TestCase
             'sandbox' => false,
         ), $this->createHttpClientMock(), $this->createHttpMessageFactory());
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=theToken',
             $api->getAuthorizeTokenUrl('theToken')
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseRealApiEndpointIfSandboxFalse()
+    public function testShouldUseRealApiEndpointIfSandboxFalse()
     {
         $testCase = $this;
 
@@ -387,11 +308,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -406,10 +327,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $api->setExpressCheckout(array());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUseSandboxApiEndpointIfSandboxTrue()
+    public function testShouldUseSandboxApiEndpointIfSandboxTrue()
     {
         $testCase = $this;
 
@@ -417,11 +335,11 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock
             ->expects($this->once())
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) use ($testCase) {
-                $testCase->assertEquals('https://api-3t.sandbox.paypal.com/nvp', $request->getUri());
+            ->willReturnCallback(function (RequestInterface $request) use ($testCase) {
+                $testCase->assertSame('https://api-3t.sandbox.paypal.com/nvp', (string) $request->getUri());
 
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         $api = new Api(array(
@@ -460,9 +378,9 @@ class ApiTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createHttpClientMock();
         $clientMock
             ->method('send')
-            ->will($this->returnCallback(function (RequestInterface $request) {
+            ->willReturnCallback(function (RequestInterface $request) {
                 return new Response(200, [], $request->getBody());
-            }))
+            })
         ;
 
         return $clientMock;

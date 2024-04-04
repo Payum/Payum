@@ -5,30 +5,21 @@ use PHPUnit\Framework\TestCase;
 
 class RegistryInterfaceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayRegistryInterface()
+    public function testShouldImplementGatewayRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\GatewayRegistryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementStorageRegistryInterface()
+    public function testShouldImplementStorageRegistryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Core\Registry\StorageRegistryInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayFactoryInterface()
+    public function testShouldImplementGatewayFactoryInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Registry\RegistryInterface');
 

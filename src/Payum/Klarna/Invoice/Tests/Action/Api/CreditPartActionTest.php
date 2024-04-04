@@ -1,79 +1,47 @@
 <?php
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Tests\GenericApiAwareActionTest;
 use Payum\Klarna\Invoice\Action\Api\CreditPartAction;
 use Payum\Klarna\Invoice\Config;
 use Payum\Klarna\Invoice\Request\Api\CreditPart;
 use PHPUnit\Framework\TestCase;
 use PhpXmlRpc\Client;
 
-class CreditPartActionTest extends TestCase
+class CreditPartActionTest extends GenericApiAwareActionTest
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfBaseApiAwareAction()
+    protected function getActionClass(): string
+    {
+        return CreditPartAction::class;
+    }
+
+    protected function getApiClass()
+    {
+        return new Config();
+    }
+
+    public function testShouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditPartAction');
 
         $this->assertTrue($rc->isSubclassOf('Payum\Klarna\Invoice\Action\Api\BaseApiAwareAction'));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementsGatewayAwareInterface()
+    public function testShouldImplementsGatewayAwareInterface()
     {
         $rc = new \ReflectionClass('Payum\Klarna\Invoice\Action\Api\CreditPartAction');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayAwareInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
+    public function testShouldAllowSetGateway()
     {
-        new CreditPartAction();
+        $this->assertInstanceOf(GatewayAwareInterface::class, new CreditPartAction($this->createKlarnaMock()));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithKlarnaAsArgument()
-    {
-        new CreditPartAction($this->createKlarnaMock());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetGateway()
-    {
-        $action = new CreditPartAction($this->createKlarnaMock());
-
-        $action->setGateway($gateway = $this->createMock('Payum\Core\GatewayInterface'));
-
-        $this->assertAttributeSame($gateway, 'gateway', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetConfigAsApi()
-    {
-        $action = new CreditPartAction($this->createKlarnaMock());
-
-        $action->setApi($config = new Config());
-
-        $this->assertAttributeSame($config, 'config', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwApiNotSupportedIfNotConfigGivenAsApi()
+    public function testThrowApiNotSupportedIfNotConfigGivenAsApi()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $this->expectExceptionMessage('Not supported api given. It must be an instance of Payum\Klarna\Invoice\Config');
@@ -82,40 +50,28 @@ class CreditPartActionTest extends TestCase
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldSupportCreditPartWithArrayAsModel()
+    public function testShouldSupportCreditPartWithArrayAsModel()
     {
         $action = new CreditPartAction();
 
         $this->assertTrue($action->supports(new CreditPart(array())));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportAnythingNotCreditPart()
+    public function testShouldNotSupportAnythingNotCreditPart()
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotSupportCreditPartWithNotArrayAccessModel()
+    public function testShouldNotSupportCreditPartWithNotArrayAccessModel()
     {
         $action = new CreditPartAction();
 
         $this->assertFalse($action->supports(new CreditPart(new \stdClass())));
     }
 
-    /**
-     * @test
-     */
-    public function throwIfNotSupportedRequestGivenAsArgumentOnExecute()
+    public function testThrowIfNotSupportedRequestGivenAsArgumentOnExecute()
     {
         $this->expectException(\Payum\Core\Exception\RequestNotSupportedException::class);
         $action = new CreditPartAction();
@@ -123,10 +79,7 @@ class CreditPartActionTest extends TestCase
         $action->execute(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function throwIfDetailsDoNotHaveInvoiceNumber()
+    public function testThrowIfDetailsDoNotHaveInvoiceNumber()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('The invoice_number fields are required.');
@@ -135,10 +88,7 @@ class CreditPartActionTest extends TestCase
         $action->execute(new CreditPart(array()));
     }
 
-    /**
-     * @test
-     */
-    public function shouldCallKlarnaCreditPart()
+    public function testShouldCallKlarnaCreditPart()
     {
         $details = array(
             'invoice_number' => 'theInvNum',
@@ -156,7 +106,7 @@ class CreditPartActionTest extends TestCase
             ->expects($this->once())
             ->method('creditPart')
             ->with($details['invoice_number'])
-            ->will($this->returnValue('theRefundInvoiceNumber'))
+            ->willReturn('theRefundInvoiceNumber')
         ;
 
         $action = new CreditPartAction($klarnaMock);
@@ -169,10 +119,7 @@ class CreditPartActionTest extends TestCase
         $this->assertStringContainsString('theRefundInvoiceNumber', $actualDetails['refund_invoice_number']);
     }
 
-    /**
-     * @test
-     */
-    public function shouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
+    public function testShouldCatchKlarnaExceptionAndSetErrorInfoToDetails()
     {
         $details = array(
             'invoice_number' => 'theInvNum',
@@ -189,7 +136,7 @@ class CreditPartActionTest extends TestCase
         $klarnaMock
             ->expects($this->once())
             ->method('creditPart')
-            ->will($this->throwException(new \KlarnaException('theMessage', 123)))
+            ->willThrowException(new \KlarnaException('theMessage', 123))
         ;
 
         $action = new CreditPartAction($klarnaMock);
@@ -199,8 +146,8 @@ class CreditPartActionTest extends TestCase
         $action->execute($creditPart = new CreditPart($details));
 
         $actualDetails = $creditPart->getModel();
-        $this->assertEquals(123, $actualDetails['error_code']);
-        $this->assertEquals('theMessage', $actualDetails['error_message']);
+        $this->assertSame(123, $actualDetails['error_code']);
+        $this->assertSame('theMessage', $actualDetails['error_message']);
     }
 
     /**

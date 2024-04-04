@@ -1,55 +1,22 @@
 <?php
 namespace Payum\Core\Tests\Extension;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\GatewayInterface;
-use PHPUnit\Framework\TestCase;
+use Payum\Core\Tests\TestCase;
 
 class EndlessCycleDetectorExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldImplementExtensionInterface()
+    public function testShouldImplementExtensionInterface()
     {
         $rc = new \ReflectionClass('Payum\Core\Extension\EndlessCycleDetectorExtension');
 
         $this->assertTrue($rc->implementsInterface('Payum\Core\Extension\ExtensionInterface'));
     }
 
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithoutAnyArguments()
-    {
-        new EndlessCycleDetectorExtension();
-    }
-
-    /**
-     * @test
-     */
-    public function shouldSetDefaultLimitInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension();
-
-        $this->assertAttributeEquals(100, 'limit', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldAllowSetLimitInInConstructor()
-    {
-        $extension = new EndlessCycleDetectorExtension($expectedLimit = 55);
-
-        $this->assertAttributeEquals($expectedLimit, 'limit', $extension);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
+    public function testThrowIfCycleCounterMoreOrEqualsToNumberOfPreviousRequest()
     {
         $this->expectException(\Payum\Core\Exception\LogicException::class);
         $this->expectExceptionMessage('Possible endless cycle detected. ::onPreExecute was called 2 times before reach the limit.');
@@ -66,11 +33,10 @@ class EndlessCycleDetectorExtensionTest extends TestCase
         $extension->onPreExecute($context);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
+    public function testShouldNotThrowIfNumberOfPreviousRequestNotReachLimit()
     {
+        $this->expectNotToPerformAssertions();
+
         $gatewayMock = $this->createGatewayMock();
 
         $context = new Context($gatewayMock, new \stdClass(), array(
@@ -81,7 +47,11 @@ class EndlessCycleDetectorExtensionTest extends TestCase
 
         $extension = new EndlessCycleDetectorExtension($expectedLimit = 5);
 
-        $extension->onPreExecute($context);
+        try {
+            $extension->onPreExecute($context);
+        } catch (LogicException $e) {
+            $this->fail('Exception should not be thrown');
+        }
     }
 
     /**

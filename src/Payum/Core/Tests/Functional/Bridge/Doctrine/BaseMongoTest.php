@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\Types\Type;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 abstract class BaseMongoTest extends TestCase
 {
@@ -18,7 +19,7 @@ abstract class BaseMongoTest extends TestCase
     public function setUp(): void
     {
         if (false === (class_exists(\MongoDB\Client::class))) {
-            $this->markTestSkipped('Either mongo extension or\and doctrine\mongo-odm are not installed.');
+            $this->markTestSkipped('Either mongo extension or\and doctrine/mongodb-odm are not installed.');
         }
 
         Type::hasType('object') ?
@@ -31,8 +32,14 @@ abstract class BaseMongoTest extends TestCase
         $config->setProxyNamespace('PayumTestsProxies');
         $config->setHydratorDir(\sys_get_temp_dir());
         $config->setHydratorNamespace('PayumTestsHydrators');
-        $config->setMetadataDriverImpl($this->getMetadataDriverImpl($config));
-        $config->setMetadataCacheImpl(new ArrayCache());
+        $config->setMetadataDriverImpl($this->getMetadataDriverImpl());
+
+        if (method_exists($config, 'setMetadataCache')) {
+            $config->setMetadataCache(new ArrayAdapter());
+        } else {
+            $config->setMetadataCacheImpl(new ArrayCache());
+        }
+
         $config->setDefaultDB('payum_tests');
 
         $this->dm = DocumentManager::create(null, $config);
@@ -45,8 +52,6 @@ abstract class BaseMongoTest extends TestCase
     }
 
     /**
-     * @param Configuration $config
-     *
      * @return MappingDriver
      */
     abstract protected function getMetadataDriverImpl();

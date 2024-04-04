@@ -7,10 +7,7 @@ use Payum\Core\Tests\Mocks\Document\Token;
 
 class TokenTest extends MongoTest
 {
-    /**
-     * @test
-     */
-    public function shouldAllowPersist()
+    public function testShouldAllowPersist()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -18,12 +15,11 @@ class TokenTest extends MongoTest
 
         $this->dm->persist($token);
         $this->dm->flush();
+
+        $this->assertSame([$token], $this->dm->getRepository(Token::class)->findAll());
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowFindPersistedToken()
+    public function testShouldAllowFindPersistedToken()
     {
         $token = new Token();
         $token->setTargetUrl('anUrl');
@@ -42,9 +38,9 @@ class TokenTest extends MongoTest
 
         $this->assertNotSame($token, $foundToken);
 
-        $this->assertEquals($token->getHash(), $foundToken->getHash());
-        $this->assertEquals($token->getTargetUrl(), $foundToken->getTargetUrl());
-        $this->assertEquals($token->getAfterUrl(), $foundToken->getAfterUrl());
+        $this->assertSame($token->getHash(), $foundToken->getHash());
+        $this->assertSame($token->getTargetUrl(), $foundToken->getTargetUrl());
+        $this->assertSame($token->getAfterUrl(), $foundToken->getAfterUrl());
 
         $this->assertNotSame($token->getDetails(), $foundToken->getDetails());
         $this->assertEquals($token->getDetails(), $foundToken->getDetails());

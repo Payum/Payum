@@ -7,21 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class PayoutTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeSubClassOfGeneric()
+    public function testShouldBeSubClassOfGeneric()
     {
         $rc = new \ReflectionClass(Payout::class);
 
         $this->assertTrue($rc->isSubclassOf(Generic::class));
-    }
-
-    /**
-     * @test
-     */
-    public function couldBeConstructedWithModel()
-    {
-        new Payout(new \stdClass());
     }
 }

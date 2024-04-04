@@ -17,53 +17,28 @@ class CaptureOffsiteActionTest extends GenericActionTest
 
     protected $requestClass = Capture::class;
 
-    /**
-     * @test
-     */
-    public function shouldImplementActionInterface()
+    public function testShouldImplementActionInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ActionInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementGatewayAwareInterface()
+    public function testShouldImplementGatewayAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldImplementApiAwareInterface()
+    public function testShouldImplementApiAwareInterface()
     {
         $rc = new \ReflectionClass(CaptureOffsiteAction::class);
 
         $this->assertTrue($rc->implementsInterface(ApiAwareInterface::class));
     }
 
-    /**
-     * @test
-     */
-    public function shouldAllowSetApi()
-    {
-        $expectedApi = $this->createApiMock();
-
-        $action = new CaptureOffsiteAction();
-        $action->setApi($expectedApi);
-
-        $this->assertAttributeSame($expectedApi, 'api', $action);
-    }
-
-    /**
-     * @test
-     */
-    public function throwIfUnsupportedApiGiven()
+    public function testThrowIfUnsupportedApiGiven()
     {
         $this->expectException(\Payum\Core\Exception\UnsupportedApiException::class);
         $action = new CaptureOffsiteAction();
@@ -71,10 +46,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->setApi(new \stdClass());
     }
 
-    /**
-     * @test
-     */
-    public function shouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
+    public function testShouldRedirectToBe2billSiteIfExecCodeNotPresentInQuery()
     {
         $this->expectException(\Payum\Core\Reply\HttpPostRedirect::class);
         $model = array(
@@ -94,7 +66,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('prepareOffsitePayment')
             ->with($model)
-            ->will($this->returnValue($postArray))
+            ->willReturn($postArray)
         ;
 
         $gatewayMock = $this->createGatewayMock();
@@ -113,10 +85,7 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $action->execute($request);
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateModelWhenComeBackFromBe2billSite()
+    public function testShouldUpdateModelWhenComeBackFromBe2billSite()
     {
         $model = array(
             'AMOUNT' => 1000,
@@ -136,10 +105,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
             ->expects($this->once())
             ->method('execute')
             ->with($this->isInstanceOf('Payum\Core\Request\GetHttpRequest'))
-            ->will($this->returnCallback(function (GetHttpRequest $request) {
+            ->willReturnCallback(function (GetHttpRequest $request) {
                 $request->query['EXECCODE'] = 1;
                 $request->query['FOO'] = 'fooVal';
-            }))
+            })
         ;
 
         $action = new CaptureOffsiteAction();
@@ -155,10 +124,10 @@ class CaptureOffsiteActionTest extends GenericActionTest
         $this->assertArrayHasKey('EXECCODE', $actualModel);
 
         $this->assertArrayHasKey('FOO', $actualModel);
-        $this->assertEquals('fooVal', $actualModel['FOO']);
+        $this->assertSame('fooVal', $actualModel['FOO']);
 
         $this->assertArrayHasKey('CLIENTIDENT', $actualModel);
-        $this->assertEquals($model['CLIENTIDENT'], $actualModel['CLIENTIDENT']);
+        $this->assertSame($model['CLIENTIDENT'], $actualModel['CLIENTIDENT']);
     }
 
     /**
