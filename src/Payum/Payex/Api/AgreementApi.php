@@ -98,7 +98,7 @@ class AgreementApi extends BaseApi
     protected function getPxAgreementWsdl()
     {
         return $this->options['sandbox'] ?
-            'https://test-external.payex.com/pxagreement/pxagreement.asmx?wsdl' :
+            'https://external.externaltest.payex.com/pxagreement/pxagreement.asmx?wsdl' :
             'https://external.payex.com/pxagreement/pxagreement.asmx?wsdl'
         ;
     }
