@@ -18,25 +18,23 @@ _**Note**: Where **payum/offline** is a payum gateway, you can for example chang
 _**Note**: Use **payum/payum** if you want to install all gateways at once._
 {% endhint %}
 
-Enable the bundle in the kernel (only necessary for Symfony <=3):
+When using Symfony Flex, the bundle should automatically be added to the bundle config.
+
+If that did not happen, or if you are not using Symfony Flex, then enable the bundle in the config
 
 ```php
 <?php
-// app/AppKernel.php
+// config/bundles.php
 
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Payum\Bundle\PayumBundle\PayumBundle(),
-    );
-}
+return [
+    Payum\Bundle\PayumBundle\PayumBundle::class => ['all' => true],
+];
 ```
 
 Now let's import Payum's routes:
 
 ```yaml
-# app/config/routing.yml (In Symfony 4 & 5 config/routes.yaml )
+# config/routes.yml
 
 payum_all:
     resource: "@PayumBundle/Resources/config/routing/all.xml"
@@ -100,7 +98,7 @@ class Payment extends BasePayment
 Next, you have to add mapping information, and configure payum's storages:
 
 ```yml
-# config/packages/payum.yaml (Smyonfy >=4) or app/config/config.yml (Symfony <=3)
+# config/packages/payum.yaml
 
 payum:
     security:
@@ -113,13 +111,6 @@ payum:
     gateways:
         offline:
             factory: offline
-```
-
-To enable autowiring, you need to add this to your `config/services.yaml`:
-```yml
-services:
-    Payum\Core\Payum:
-        alias: "payum"
 ```
 
 _**Note**: You can add other gateways to the `gateways` key too._
@@ -192,7 +183,7 @@ class PaymentController extends Controller
     /**
      * @Route("/payment-done", name="payum_payment_done")
      */
-    public function doneAction(Request $request)
+    public function doneAction(Request $request, Payum $payum)
     {
         $token = $payum->getHttpRequestVerifier()->verify($request);
         
