@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use DI\ContainerBuilder;
 use LogicException;
 use Omnipay\Omnipay;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
@@ -9,6 +10,7 @@ use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
@@ -46,6 +48,7 @@ use Payum\Stripe\StripeJsGatewayFactory;
 use function in_array;
 use function strtolower;
 use function sys_get_temp_dir;
+use function trigger_error;
 
 class PayumBuilder
 {
@@ -315,10 +318,32 @@ class PayumBuilder
         if ($this->gatewayConfigs) {
             $gateways = $this->gateways;
             foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
+                $containerBuilder = new ContainerBuilder();
+
+                $containerBuilder->addDefinitions($gatewayConfig);
+                $containerBuilder->addDefinitions([
+                    'payum.security.token_storage' => fn () => $this->tokenStorage,
+                ]);
+
                 $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
                 unset($gatewayConfig['factory']);
 
-                $gateways[$name] = $gatewayFactory->create($gatewayConfig);
+                if ($gatewayFactory instanceof ContainerConfiguration) {
+                    $containerBuilder->addDefinitions($gatewayFactory->configureContainer());
+
+                    $gateways[$name] = $gatewayFactory->createGateway($containerBuilder->build());
+                } else {
+                    @trigger_error(
+                        sprintf(
+                            'Not implementing %s for gateway factory %s is deprecated since 2.0.',
+                            ContainerConfiguration::class,
+                            $gatewayFactory::class,
+                        ),
+                        E_USER_DEPRECATED
+                    );
+
+                    $gateways[$name] = $gatewayFactory->create($gatewayConfig);
+                }
             }
 
             $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
