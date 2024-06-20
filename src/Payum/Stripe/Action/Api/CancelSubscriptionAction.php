@@ -38,7 +38,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function setApi( $api )
+    public function setApi( $api ): void
     {
         $this->_setApi( $api );
         
@@ -49,7 +49,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function execute( $request )
+    public function execute( $request ): void
     {
         /** @var $request CancelSubscription */
         RequestNotSupportedException::assertSupports( $this, $request );
@@ -72,7 +72,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
                 $deletedSubscription    = $subscription->cancel();
             }
             
-            $model->replace( $deletedSubscription->toArray( true ) );
+            $model->replace( $deletedSubscription->toArray() );
         } catch ( Exception\ApiErrorException $e ) {
             $model->replace( $e->getJsonBody() );
         }

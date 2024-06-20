@@ -38,7 +38,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
     /**
      * {@inheritDoc}
      */
-    public function setApi( $api )
+    public function setApi( $api ): void
     {
         $this->_setApi( $api );
         
@@ -49,7 +49,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
     /**
      * {@inheritDoc}
      */
-    public function execute( $request )
+    public function execute( $request ): void
     {
         /** @var $request GetSubscriptions */
         RequestNotSupportedException::assertSupports( $this, $request );
