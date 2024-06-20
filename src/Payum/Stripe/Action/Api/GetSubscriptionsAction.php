@@ -30,15 +30,12 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
      * @var Keys
      */
     protected $keys;
-    
+
     public function __construct()
     {
         $this->apiClass = Keys::class;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -46,10 +43,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function execute($request): void
     {
         /** @var $request GetSubscriptions */
@@ -75,10 +69,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
             $model->replace($e->getJsonBody());
         }
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function supports($request): bool
     {
         return

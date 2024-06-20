@@ -30,15 +30,12 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
      * @var Keys
      */
     protected $keys;
-    
+
     public function __construct()
     {
         $this->apiClass = Keys::class;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function setApi($api)
     {
         $this->_setApi($api);
@@ -46,10 +43,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function execute($request): void
     {
         /** @var $request GetProducts */
@@ -75,10 +69,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
             $model->replace($e->getJsonBody());
         }
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function supports($request): bool
     {
         return

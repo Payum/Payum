@@ -30,15 +30,12 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
      * @var Keys
      */
     protected $keys;
-    
+
     public function __construct()
     {
         $this->apiClass = Keys::class;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function setApi($api)
     {
         $this->_setApi( $api );
@@ -46,10 +43,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function execute($request): void
     {
         /** @var $request CreatePrice */
@@ -75,10 +69,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
             $model->replace($e->getJsonBody());
         }
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     public function supports($request): bool
     {
         return
