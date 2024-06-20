@@ -1,4 +1,6 @@
-<?php namespace Payum\Stripe\Action\Api;
+<?php
+
+namespace Payum\Stripe\Action\Api;
 
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
@@ -22,7 +24,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
         setApi as _setApi;
     }
     use GatewayAwareTrait;
-    
+
     /**
      * @deprecated BC will be removed in 2.x. Use $this->api
      *
@@ -38,9 +40,9 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function setApi( $api ): void
+    public function setApi(): void
     {
-        $this->_setApi( $api );
+        $this->_setApi();
         
         // BC. will be removed in 2.x
         $this->keys = $this->api;
@@ -49,39 +51,39 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function execute( $request ): void
+    public function execute($request): void
     {
         /** @var $request CancelSubscription */
-        RequestNotSupportedException::assertSupports( $this, $request );
+        RequestNotSupportedException::assertSupports($this, $request);
         
-        $model = ArrayObject::ensureArrayObject( $request->getModel() );
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         
         try {
-            Stripe::setApiKey( $this->keys->getSecretKey() );
+            Stripe::setApiKey($this->keys->getSecretKey());
             
-            if ( class_exists( InstalledVersions::class ) ) {
+            if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
-                    InstalledVersions::getVersion( 'stripe/stripe-php' ),
+                    InstalledVersions::getVersion('stripe/stripe-php'),
                     Constants::PAYUM_URL
                 );
             }
             
-            $subscription   = Subscription::retrieve( $model['id'] );
+            $subscription   = Subscription::retrieve($model['id']);
             if ( $subscription ) {
-                $deletedSubscription    = $subscription->cancel();
+                $deletedSubscription = $subscription->cancel();
             }
             
-            $model->replace( $deletedSubscription->toArray() );
-        } catch ( Exception\ApiErrorException $e ) {
-            $model->replace( $e->getJsonBody() );
+            $model->replace($deletedSubscription->toArray());
+        } catch (Exception\ApiErrorException $e) {
+            $model->replace($e->getJsonBody());
         }
     }
     
     /**
      * {@inheritDoc}
      */
-    public function supports( $request ): bool
+    public function supports($request): bool
     {
         return
             $request instanceof CancelSubscription &&

@@ -1,4 +1,6 @@
-<?php namespace Payum\Stripe\Action\Api;
+<?php
+
+namespace Payum\Stripe\Action\Api;
 
 use Composer\InstalledVersions;
 use Payum\Core\Action\ActionInterface;
@@ -22,7 +24,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
         setApi as _setApi;
     }
     use GatewayAwareTrait;
-    
+
     /**
      * @deprecated BC will be removed in 2.x. Use $this->api
      *
@@ -38,7 +40,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
     /**
      * {@inheritDoc}
      */
-    public function setApi( $api ): void
+    public function setApi($api): void
     {
         $this->_setApi( $api );
         
@@ -49,36 +51,36 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
     /**
      * {@inheritDoc}
      */
-    public function execute( $request ): void
+    public function execute($request): void
     {
         /** @var $request CreatePrice */
-        RequestNotSupportedException::assertSupports( $this, $request );
+        RequestNotSupportedException::assertSupports($this, $request);
         
-        $model = ArrayObject::ensureArrayObject( $request->getModel() );
+        $model = ArrayObject::ensureArrayObject($request->getModel());
         
         try {
-            Stripe::setApiKey( $this->keys->getSecretKey() );
+            Stripe::setApiKey($this->keys->getSecretKey());
             
-            if ( class_exists( InstalledVersions::class ) ) {
+            if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
-                    InstalledVersions::getVersion( 'stripe/stripe-php' ),
+                    InstalledVersions::getVersion('stripe/stripe-php'),
                     Constants::PAYUM_URL
                 );
             }
             
-            $price  = Price::create( $model->toUnsafeArrayWithoutLocal() );
+            $price = Price::create($model->toUnsafeArrayWithoutLocal());
             
-            $model->replace( $price->toArray( true ) );
-        } catch ( Exception\ApiErrorException $e ) {
-            $model->replace( $e->getJsonBody() );
+            $model->replace($price->toArray(true));
+        } catch (Exception\ApiErrorException $e) {
+            $model->replace($e->getJsonBody());
         }
     }
     
     /**
      * {@inheritDoc}
      */
-    public function supports( $request ): bool
+    public function supports($request): bool
     {
         return
             $request instanceof CreatePrice &&
