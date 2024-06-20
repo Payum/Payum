@@ -12,11 +12,10 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
-use Stripe\Stripe;
-use Stripe\Exception;
-use Stripe\Subscription;
-
 use Payum\Stripe\Request\Api\CancelSubscription;
+use Stripe\Exception;
+use Stripe\Stripe;
+use Stripe\Subscription;
 
 class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -40,7 +39,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function setApi(): void
+    public function setApi($api)
     {
         $this->_setApi();
         

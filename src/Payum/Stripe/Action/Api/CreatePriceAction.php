@@ -12,11 +12,10 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
-use Stripe\Stripe;
-use Stripe\Exception;
-use Stripe\Price;
-
 use Payum\Stripe\Request\Api\CreatePrice;
+use Stripe\Exception;
+use Stripe\Stripe;
+use Stripe\Price;
 
 class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -40,7 +39,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
     /**
      * {@inheritDoc}
      */
-    public function setApi($api): void
+    public function setApi($api)
     {
         $this->_setApi( $api );
         
