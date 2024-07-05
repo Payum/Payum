@@ -39,7 +39,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
     public function setApi($api): void
     {
         $this->_setApi($api);
-        
+
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
@@ -63,7 +63,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
             }
 
             $product = Product::create($model->toUnsafeArrayWithoutLocal());
-            
+
             $model->replace($product->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

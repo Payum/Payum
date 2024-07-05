@@ -62,7 +62,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
                 );
             }
 
-            $subscriptions  = Subscription::all($model->toUnsafeArrayWithoutLocal());
+            $subscriptions = Subscription::all($model->toUnsafeArrayWithoutLocal());
 
             $model->replace($subscriptions->toArray());
         } catch (Exception\ApiErrorException $e) {

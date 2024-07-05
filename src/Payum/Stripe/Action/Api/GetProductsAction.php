@@ -14,8 +14,8 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\GetProducts;
 use Stripe\Exception;
-use Stripe\Stripe;
 use Stripe\Product;
+use Stripe\Stripe;
 
 class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -39,7 +39,7 @@ class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAw
     public function setApi($api): void
     {
         $this->_setApi($api);
-        
+
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
@@ -63,7 +63,7 @@ class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAw
             }
 
             $products = Product::all($model->toUnsafeArrayWithoutLocal());
-            
+
             $model->replace($products->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

@@ -39,7 +39,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
     public function setApi($api): void
     {
         $this->_setApi($api);
-        
+
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
@@ -53,7 +53,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
 
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -63,7 +63,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
             }
 
             $prices = Price::all($model->toUnsafeArrayWithoutLocal());
- 
+
             $model->replace($prices->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

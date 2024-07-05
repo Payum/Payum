@@ -39,7 +39,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     public function setApi($api): void
     {
         $this->_setApi();
-        
+
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
