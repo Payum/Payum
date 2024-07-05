@@ -36,7 +36,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
         
@@ -46,7 +46,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
 
     public function execute($request): void
     {
-        /** @var $request GetSubscriptions */
+        /** @var GetSubscriptions $request */
         RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());

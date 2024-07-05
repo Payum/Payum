@@ -36,7 +36,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
         
@@ -46,7 +46,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
 
     public function execute($request): void
     {
-        /** @var $request CreateProduct */
+        /** @var CreateProduct $request */
         RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());

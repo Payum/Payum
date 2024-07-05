@@ -36,7 +36,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
         
@@ -46,7 +46,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
 
     public function execute($request): void
     {
-        /** @var $request GetProducts */
+        /** @var GetPrices $request */
         RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());

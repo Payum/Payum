@@ -36,7 +36,7 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
         $this->apiClass = Keys::class;
     }
 
-    public function setApi($api)
+    public function setApi($api): void
     {
         $this->_setApi($api);
         
@@ -46,7 +46,7 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
 
     public function execute($request): void
     {
-        /** @var $request GetProducts */
+        /** @var GetCustomers $request */
         RequestNotSupportedException::assertSupports($this, $request);
         
         $model = ArrayObject::ensureArrayObject($request->getModel());
