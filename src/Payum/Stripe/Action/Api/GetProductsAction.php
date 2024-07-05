@@ -72,8 +72,7 @@ class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
     public function supports($request): bool
     {
-        return
-            $request instanceof GetProducts &&
+        return $request instanceof GetProducts &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

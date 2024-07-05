@@ -72,8 +72,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
 
     public function supports($request): bool
     {
-        return
-            $request instanceof GetSubscriptions &&
+        return $request instanceof GetSubscriptions &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

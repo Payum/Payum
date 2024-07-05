@@ -72,8 +72,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
     public function supports($request): bool
     {
-        return
-            $request instanceof CreatePrice &&
+        return $request instanceof CreatePrice &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

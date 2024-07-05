@@ -75,8 +75,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
 
     public function supports($request): bool
     {
-        return
-            $request instanceof CancelSubscription &&
+        return $request instanceof CancelSubscription &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

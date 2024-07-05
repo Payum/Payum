@@ -72,8 +72,7 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
 
     public function supports($request): bool
     {
-        return
-            $request instanceof GetPrices &&
+        return $request instanceof GetPrices &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

@@ -72,8 +72,7 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
 
     public function supports($request): bool
     {
-        return
-            $request instanceof GetCustomers &&
+        return $request instanceof GetCustomers &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }

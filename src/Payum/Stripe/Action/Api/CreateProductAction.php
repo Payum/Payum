@@ -72,8 +72,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
 
     public function supports($request): bool
     {
-        return
-            $request instanceof CreateProduct &&
+        return $request instanceof CreateProduct &&
             $request->getModel() instanceof \ArrayAccess
         ;
     }
