@@ -2534,32 +2534,32 @@ parameters:
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\CancelSubscriptionAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CancelSubscriptionAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\CreatePriceAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreatePriceAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\CreateProductAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/CreateProductAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\GetCustomersAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/GetCustomersAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\GetPricesAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/GetPricesAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\GetProductsAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
 			path: src/Payum/Stripe/Action/Api/GetProductsAction.php
-            
+
 		-
 			message: "#^Method Payum\\\\Stripe\\\\Action\\\\Api\\\\GetSubscriptionsAction\\:\\:_setApi\\(\\) has parameter \\$api with no type specified\\.$#"
 			count: 1
