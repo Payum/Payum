@@ -14,8 +14,8 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreateProduct;
 use Stripe\Exception;
-use Stripe\Stripe;
 use Stripe\Product;
+use Stripe\Stripe;
 
 class CreateProductAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {

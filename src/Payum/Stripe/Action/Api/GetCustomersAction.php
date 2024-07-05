@@ -13,9 +13,9 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\GetCustomers;
+use Stripe\Customer;
 use Stripe\Exception;
 use Stripe\Stripe;
-use Stripe\Customer;
 
 class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -48,7 +48,7 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
     {
         /** @var GetCustomers $request */
         RequestNotSupportedException::assertSupports($this, $request);
- 
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         try {

@@ -14,8 +14,8 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\CreatePrice;
 use Stripe\Exception;
-use Stripe\Stripe;
 use Stripe\Price;
+use Stripe\Stripe;
 
 class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -38,7 +38,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
     public function setApi($api): void
     {
-        $this->_setApi( $api );
+        $this->_setApi($api);
 
         // BC. will be removed in 2.x
         $this->keys = $this->api;

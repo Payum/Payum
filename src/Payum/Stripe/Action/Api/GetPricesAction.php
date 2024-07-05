@@ -14,8 +14,8 @@ use Payum\Stripe\Constants;
 use Payum\Stripe\Keys;
 use Payum\Stripe\Request\Api\GetPrices;
 use Stripe\Exception;
-use Stripe\Stripe;
 use Stripe\Price;
+use Stripe\Stripe;
 
 class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
