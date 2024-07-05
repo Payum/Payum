@@ -48,22 +48,22 @@ class GetPricesAction implements ActionInterface, GatewayAwareInterface, ApiAwar
     {
         /** @var GetPrices $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
             
-            if ( class_exists(InstalledVersions::class)) {
+            if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
                     InstalledVersions::getVersion('stripe/stripe-php'),
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $prices = Price::all($model->toUnsafeArrayWithoutLocal());
-            
+ 
             $model->replace($prices->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

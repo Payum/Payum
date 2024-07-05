@@ -48,12 +48,12 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
     {
         /** @var CreateProduct $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,7 +61,7 @@ class CreateProductAction implements ActionInterface, GatewayAwareInterface, Api
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $product = Product::create($model->toUnsafeArrayWithoutLocal());
             
             $model->replace($product->toArray());

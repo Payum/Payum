@@ -48,12 +48,12 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
     {
         /** @var CancelSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,12 +61,12 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
                     Constants::PAYUM_URL
                 );
             }
-            
-            $subscription   = Subscription::retrieve($model['id']);
-            if ( $subscription ) {
+
+            $subscription = Subscription::retrieve($model['id']);
+            if ($subscription) {
                 $deletedSubscription = $subscription->cancel();
             }
-            
+
             $model->replace($deletedSubscription->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

@@ -48,12 +48,12 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
     {
         /** @var CreatePrice $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,9 +61,9 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $price = Price::create($model->toUnsafeArrayWithoutLocal());
-            
+
             $model->replace($price->toArray(true));
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

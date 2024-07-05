@@ -39,7 +39,7 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
     public function setApi($api): void
     {
         $this->_setApi($api);
-        
+
         // BC. will be removed in 2.x
         $this->keys = $this->api;
     }
@@ -48,12 +48,12 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
     {
         /** @var GetSubscriptions $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,9 +61,9 @@ class GetSubscriptionsAction implements ActionInterface, GatewayAwareInterface, 
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $subscriptions  = Subscription::all($model->toUnsafeArrayWithoutLocal());
-            
+
             $model->replace($subscriptions->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

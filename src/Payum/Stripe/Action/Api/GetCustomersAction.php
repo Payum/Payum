@@ -48,12 +48,12 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
     {
         /** @var GetCustomers $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+ 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,9 +61,9 @@ class GetCustomersAction implements ActionInterface, GatewayAwareInterface, ApiA
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $customers = Customer::all($model->toUnsafeArrayWithoutLocal());
-            
+
             $model->replace($customers->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());

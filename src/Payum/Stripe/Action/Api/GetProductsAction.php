@@ -48,12 +48,12 @@ class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAw
     {
         /** @var GetProducts $request */
         RequestNotSupportedException::assertSupports($this, $request);
-        
+
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        
+
         try {
             Stripe::setApiKey($this->keys->getSecretKey());
-            
+
             if (class_exists(InstalledVersions::class)) {
                 Stripe::setAppInfo(
                     Constants::PAYUM_STRIPE_APP_NAME,
@@ -61,7 +61,7 @@ class GetProductsAction implements ActionInterface, GatewayAwareInterface, ApiAw
                     Constants::PAYUM_URL
                 );
             }
-            
+
             $products = Product::all($model->toUnsafeArrayWithoutLocal());
             
             $model->replace($products->toArray());
