@@ -64,7 +64,7 @@ class CreatePriceAction implements ActionInterface, GatewayAwareInterface, ApiAw
 
             $price = Price::create($model->toUnsafeArrayWithoutLocal());
 
-            $model->replace($price->toArray(true));
+            $model->replace($price->toArray());
         } catch (Exception\ApiErrorException $e) {
             $model->replace($e->getJsonBody());
         }

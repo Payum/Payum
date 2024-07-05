@@ -63,9 +63,7 @@ class CancelSubscriptionAction implements ActionInterface, GatewayAwareInterface
             }
 
             $subscription = Subscription::retrieve($model['id']);
-            if ($subscription) {
-                $deletedSubscription = $subscription->cancel();
-            }
+            $deletedSubscription = $subscription->cancel();
 
             $model->replace($deletedSubscription->toArray());
         } catch (Exception\ApiErrorException $e) {
