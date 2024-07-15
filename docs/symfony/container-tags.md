@@ -42,7 +42,7 @@ Attributes:
 * factory - define if you want to add the action to gateways created by the factory with given name.
 * gateway - define if you want to add the action to a gateway with given name
 * all - define if you want to add the action to all gateways
-* prepend - define if want your action to be put at the begging.
+* prepend - define if want your action to be put at the beginning.
 * alias - you can use alias if you' like to overwrite the default action or add a good looking name
 
 ### Api tag
@@ -65,7 +65,7 @@ Attributes:
 * factory - define if you want to add the extension to gateways created by the factory with given name.
 * gateway - define if you want to add the extension to a gateway with given name
 * all - define if you want to add the extension to all gateways
-* prepend - define if want your extension to be put at the begging.
+* prepend - define if want your extension to be put at the beginning.
 * alias - you can use alias if you' like to overwrite the default action or add a good looking name
 
 ### Extension tag
@@ -88,7 +88,7 @@ Attributes:
 * factory - define if you want to add the extension to gateways created by the factory with given name.
 * gateway - define if you want to add the extension to a gateway with given name
 * all - define if you want to add the extension to all gateways
-* prepend - define if want your extension to be put at the begging.
+* prepend - define if want your extension to be put at the beginning.
 * alias - you can use alias if you' like to overwrite the default action or add a good looking name
 
 ### Gateway factory tag
