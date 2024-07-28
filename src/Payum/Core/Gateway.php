@@ -17,9 +17,9 @@ use Throwable;
 class Gateway implements GatewayInterface
 {
     /**
-     * @var Action\ActionInterface[]
+     * @var list<class-string<Action\ActionInterface>|Action\ActionInterface>
      */
-    protected $actions = [];
+    protected array $actions = [];
 
     /**
      * @var mixed[]
@@ -35,7 +35,7 @@ class Gateway implements GatewayInterface
     /**
      * @var Context[]
      */
-    protected $stack = [];
+    protected array $stack = [];
 
     public function __construct()
     {
