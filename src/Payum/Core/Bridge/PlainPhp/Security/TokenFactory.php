@@ -35,7 +35,7 @@ class TokenFactory extends AbstractTokenFactory
     {
         $hierarchicalPath = HierarchicalPath::createFromUri($this->baseUrl);
         if ('php' === pathinfo($hierarchicalPath->getBasename(), PATHINFO_EXTENSION)) {
-            if(method_exists(Path::class, 'new')) {
+            if (method_exists(Path::class, 'new')) {
                 $pathComponent = Path::new($path);
             } else {
                 $pathComponent = new Path($path);
