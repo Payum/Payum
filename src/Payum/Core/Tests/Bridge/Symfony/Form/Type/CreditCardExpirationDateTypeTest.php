@@ -36,7 +36,7 @@ class CreditCardExpirationDateTypeTest extends TestCase
         $this->assertCount(11, $options['years']);
 
         $this->assertArrayHasKey('min_expiration_year', $options);
-        $this->assertEquals(date('Y'), $options['min_expiration_year']);
+        $this->assertSame(date('Y'), $options['min_expiration_year']);
 
         $this->assertArrayHasKey('max_expiration_year', $options);
         $this->assertEquals(date('Y') + 10, $options['max_expiration_year']);
