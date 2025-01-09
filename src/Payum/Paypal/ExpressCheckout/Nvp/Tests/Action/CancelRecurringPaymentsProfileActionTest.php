@@ -94,13 +94,17 @@ class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
     public function testShouldExecuteManageAndSyncActions()
     {
         $gatewayMock = $this->createGatewayMock();
+        $matcher = $this->exactly(2);
         $gatewayMock
-            ->expects($this->exactly(2))
-            ->method('execute')
-            ->withConsecutive(
-                array($this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class)),
-                array($this->isInstanceOf(Sync::class))
-            )
+            ->expects($matcher)
+            ->method('execute')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame($this->isInstanceOf(ManageRecurringPaymentsProfileStatus::class), $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame($this->isInstanceOf(Sync::class), $parameters[0]);
+            }
+        })
         ;
 
         $action = new CancelRecurringPaymentsProfileAction();
