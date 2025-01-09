@@ -1,6 +1,7 @@
 <?php
 namespace Payum\Core\Request;
 
+#[\AllowDynamicProperties]
 class GetHttpRequest
 {
     /**
