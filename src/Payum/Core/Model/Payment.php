@@ -158,7 +158,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->creditCard;
     }
 
-    public function setCreditCard(CreditCardInterface $creditCard = null): void
+    public function setCreditCard(?CreditCardInterface $creditCard = null): void
     {
         $this->creditCard = $creditCard;
     }
