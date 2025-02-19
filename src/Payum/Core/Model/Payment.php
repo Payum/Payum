@@ -171,7 +171,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
         return $this->bankAccount;
     }
 
-    public function setBankAccount(BankAccountInterface $bankAccount = null): void
+    public function setBankAccount(?BankAccountInterface $bankAccount = null): void
     {
         $this->bankAccount = $bankAccount;
     }
