@@ -27,7 +27,7 @@
 * [locastic/PayumPaylinkJustpay](https://github.com/locastic/PayumPaylinkJustpay)
 * [locastic/TcomPayWayPayum](https://github.com/locastic/TcomPayWayPayum)
 * [LedjIn/Sagepay](https://github.com/LedjIn/Sagepay)
-* [crevillo/payum-redsys](https://github.com/crevillo/payum-redsys)
+* [crevillo/payum-redsys](https://github.com/crevillo/payum-redsys) (^1.5)
 * [invit/payum-sofortueberweisung (abandoned)](https://github.com/invit/payum-sofortueberweisung)
 * [wiseape/payum-sofortuberweisung (abandoned)](https://github.com/wiseape/payum-sofortuberweisung)
 * [wiseape/payum-paymill](https://github.com/wiseape/payum-paymill)
@@ -55,6 +55,7 @@
 * [valiton/payum-payone](https://github.com/valiton/payum-payone)
 * [Setono/payum-quickpay](https://github.com/Setono/payum-quickpay)
 * [ilcleme/payum-tinkl](https://github.com/ilCleme/payum-tinkl)
+* [mrcmorales/payum-redsys](https://github.com/mrcmorales/payum-redsys) (^1.7)
 
 ### Omnipay gateways.
 
