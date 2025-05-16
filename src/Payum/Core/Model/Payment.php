@@ -182,7 +182,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param CreditCardInterface|null $creditCard
      */
-    public function setCreditCard(CreditCardInterface $creditCard = null)
+    public function setCreditCard(?CreditCardInterface $creditCard = null)
     {
         $this->creditCard = $creditCard;
     }
@@ -198,7 +198,7 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface
     /**
      * @param BankAccountInterface|null $bankAccount
      */
-    public function setBankAccount(BankAccountInterface $bankAccount = null)
+    public function setBankAccount(?BankAccountInterface $bankAccount = null)
     {
         $this->bankAccount = $bankAccount;
     }
