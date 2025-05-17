@@ -8,5 +8,5 @@ interface GenericTokenFactoryAwareInterface
      *
      * @return void
      */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null);
+    public function setGenericTokenFactory(?GenericTokenFactoryInterface $genericTokenFactory = null);
 }

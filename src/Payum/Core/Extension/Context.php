@@ -76,7 +76,7 @@ class Context
     /**
      * @param null|ReplyInterface $reply
      */
-    public function setReply(ReplyInterface $reply = null)
+    public function setReply(?ReplyInterface $reply = null)
     {
         $this->reply = $reply;
     }
@@ -92,7 +92,7 @@ class Context
     /**
      * @param \Exception|null $exception
      */
-    public function setException(\Exception $exception = null)
+    public function setException(?\Exception $exception = null)
     {
         $this->exception = $exception;
     }
