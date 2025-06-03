@@ -23,7 +23,7 @@ class GetHttpRequestAction implements ActionInterface
      * @param Request|null $httpRequest
      * @deprecated
      */
-    public function setHttpRequest(Request $httpRequest = null)
+    public function setHttpRequest(?Request $httpRequest = null)
     {
         $this->httpRequest = $httpRequest;
     }
@@ -31,7 +31,7 @@ class GetHttpRequestAction implements ActionInterface
     /**
      * @param RequestStack|null $httpRequestStack
      */
-    public function setHttpRequestStack(RequestStack $httpRequestStack = null)
+    public function setHttpRequestStack(?RequestStack $httpRequestStack = null)
     {
         $this->httpRequestStack = $httpRequestStack;
     }
