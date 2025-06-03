@@ -282,7 +282,7 @@ class PayumBuilder
      *
      * @return static
      */
-    public function setTokenStorage(StorageInterface $tokenStorage = null)
+    public function setTokenStorage(?StorageInterface $tokenStorage = null)
     {
         $this->tokenStorage = $tokenStorage;
 
@@ -313,7 +313,7 @@ class PayumBuilder
      *
      * @return static
      */
-    public function setCoreGatewayFactoryConfig(array $config = null)
+    public function setCoreGatewayFactoryConfig(?array $config = null)
     {
         $this->coreGatewayFactoryConfig = $config;
 
@@ -338,7 +338,7 @@ class PayumBuilder
      *
      * @return static
      */
-    public function setGatewayConfigStorage(StorageInterface $gatewayConfigStorage = null)
+    public function setGatewayConfigStorage(?StorageInterface $gatewayConfigStorage = null)
     {
         $this->gatewayConfigStorage = $gatewayConfigStorage;
 
@@ -350,7 +350,7 @@ class PayumBuilder
      *
      * @return static
      */
-    public function setMainRegistry(RegistryInterface $mainRegistry = null)
+    public function setMainRegistry(?RegistryInterface $mainRegistry = null)
     {
         $this->mainRegistry = $mainRegistry;
 
@@ -364,7 +364,7 @@ class PayumBuilder
      *
      * @return static
      */
-    public function setHttpClient(HttpClientInterface $httpClient = null)
+    public function setHttpClient(?HttpClientInterface $httpClient = null)
     {
         $this->httpClient = $httpClient;
 
