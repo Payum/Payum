@@ -22,7 +22,7 @@ class LoggerExtension implements ExtensionInterface, LoggerAwareInterface
     /**
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null)
     {
         $this->nullLogger = new NullLogger();
         $this->logger = $logger ?: $this->nullLogger;
