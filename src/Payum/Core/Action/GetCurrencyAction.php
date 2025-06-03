@@ -19,7 +19,7 @@ class GetCurrencyAction implements ActionInterface
     /**
      * @param ISO4217 $iso4217
      */
-    public function __construct(ISO4217 $iso4217 = null)
+    public function __construct(?ISO4217 $iso4217 = null)
     {
         if ($iso4217 instanceof ISO4217) {
             @trigger_error(sprintf('Passing an instance of %s in %s is deprecated and won\'t be supported in version 2.', ISO4217::class, __METHOD__), E_USER_DEPRECATED);

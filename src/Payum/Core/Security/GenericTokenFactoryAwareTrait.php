@@ -13,7 +13,7 @@ trait GenericTokenFactoryAwareTrait
      *
      * @return void
      */
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    public function setGenericTokenFactory(?GenericTokenFactoryInterface $genericTokenFactory = null)
     {
         $this->tokenFactory = $genericTokenFactory;
     }

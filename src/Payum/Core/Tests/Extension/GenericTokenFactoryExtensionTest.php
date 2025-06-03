@@ -105,7 +105,7 @@ class ActionGenericTokenFactoryAware implements ActionInterface, GenericTokenFac
     {
     }
 
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null)
+    public function setGenericTokenFactory(?GenericTokenFactoryInterface $genericTokenFactory = null)
     {
         $this->tokenFactory  = $genericTokenFactory;
     }

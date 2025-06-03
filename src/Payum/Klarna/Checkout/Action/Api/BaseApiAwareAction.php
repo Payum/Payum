@@ -24,7 +24,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
      */
     private $connector;
 
-    public function __construct(\Klarna_Checkout_ConnectorInterface $connector = null)
+    public function __construct(?\Klarna_Checkout_ConnectorInterface $connector = null)
     {
         $this->connector = $connector;
 
