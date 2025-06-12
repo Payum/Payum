@@ -60,7 +60,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         $this->assertInstanceOf('stdClass', $model);
-        $this->assertObjectHasProperty('notExistProperty', $model);
+        $this->assertTrue(property_exists($model, 'notExistProperty'));
     }
 
     public function testShouldKeepIdTheSameOnSeveralUpdates()
@@ -255,7 +255,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasProperty('payum_id', $model);
+        $this->assertTrue(property_exists($model, 'payum_id'));
         $this->assertNotEmpty($model->payum_id);
 
         $foundModel = $storage->find($model->payum_id);
@@ -264,7 +264,7 @@ class FilesystemStorageTest extends TestCase
         $this->assertSame($expectedPrice, $foundModel->getPrice());
         $this->assertSame($expectedCurrency, $foundModel->getCurrency());
 
-        $this->assertObjectHasProperty('payum_id', $foundModel);
+        $this->assertTrue(property_exists($foundModel, 'payum_id'));
         $this->assertNotEmpty($foundModel->payum_id);
     }
 
@@ -279,7 +279,7 @@ class FilesystemStorageTest extends TestCase
         $storage->update($model);
 
         //guard
-        $this->assertObjectHasProperty('payum_id', $model);
+        $this->assertTrue(property_exists($model, 'payum_id'));
         $this->assertNotEmpty($model->payum_id);
 
         $storage->delete($model);
