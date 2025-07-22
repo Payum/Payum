@@ -51,7 +51,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if (0 === strpos($targetPath, 'http')) {
-            $targetUri = HttpUri::createFromString($targetPath);
+            $targetUri = HttpUri::new($targetPath);
             $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
 
             $token->setTargetUrl((string) $targetUri);
@@ -60,7 +60,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
-            $afterUri = HttpUri::createFromString($afterPath);
+            $afterUri = HttpUri::new($afterPath);
             $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
             $token->setAfterUrl((string) $afterUri);
@@ -81,11 +81,11 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
      */
     protected function addQueryToUri(HttpUri $uri, array $query)
     {
-        $uriQuery = Query::createFromUri($uri)->withoutEmptyPairs();
+        $uriQuery = Query::fromUri($uri)->withoutEmptyPairs();
 
-        $query = array_replace($uriQuery->params(), $query);
+        $query = array_replace($uriQuery->parameters(), $query);
 
-        return $uri->withQuery((string) Query::createFromParams($query));
+        return $uri->withQuery((string) Query::fromVariable($query));
     }
 
     /**
