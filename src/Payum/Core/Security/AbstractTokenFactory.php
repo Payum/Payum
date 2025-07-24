@@ -1,9 +1,9 @@
 <?php
+
 namespace Payum\Core\Security;
 
-use League\Uri\Http as HttpUri;
 use League\Uri\Components\Query;
-use League\Uri\QueryString;
+use League\Uri\Http as HttpUri;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\Util\Random;
 use Payum\Core\Storage\IdentityInterface;
@@ -22,7 +22,7 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     protected $storageRegistry;
 
     /**
-     * @param StorageInterface         $tokenStorage
+     * @param StorageInterface $tokenStorage
      * @param StorageRegistryInterface $storageRegistry
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
@@ -34,8 +34,14 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createToken($gatewayName, $model, $targetPath, array $targetParameters = [], $afterPath = null, array $afterParameters = [])
-    {
+    public function createToken(
+        $gatewayName,
+        $model,
+        $targetPath,
+        array $targetParameters = [],
+        $afterPath = null,
+        array $afterParameters = []
+    ) {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->create();
         $token->setHash($token->getHash() ?: Random::generateToken());
@@ -51,19 +57,23 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
         }
 
         if (0 === strpos($targetPath, 'http')) {
-            $targetUri = HttpUri::new($targetPath);
+            $targetUri = method_exists(HttpUri::class, 'new') ? HttpUri::new($targetPath) : HttpUri::createFromString(
+                $targetPath
+            );
             $targetUri = $this->addQueryToUri($targetUri, $targetParameters);
 
-            $token->setTargetUrl((string) $targetUri);
+            $token->setTargetUrl((string)$targetUri);
         } else {
             $token->setTargetUrl($this->generateUrl($targetPath, $targetParameters));
         }
 
         if ($afterPath && 0 === strpos($afterPath, 'http')) {
-            $afterUri = HttpUri::new($afterPath);
+            $afterUri = method_exists(HttpUri::class, 'new') ? HttpUri::new($afterPath) : HttpUri::createFromString(
+                $afterPath
+            );
             $afterUri = $this->addQueryToUri($afterUri, $afterParameters);
 
-            $token->setAfterUrl((string) $afterUri);
+            $token->setAfterUrl((string)$afterUri);
         } elseif ($afterPath) {
             $token->setAfterUrl($this->generateUrl($afterPath, $afterParameters));
         }
@@ -81,16 +91,25 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
      */
     protected function addQueryToUri(HttpUri $uri, array $query)
     {
-        $uriQuery = Query::fromUri($uri)->withoutEmptyPairs();
+        $uriQuery = (method_exists(Query::class, 'fromUri') ?
+            Query::fromUri($uri) :
+            Query::createFromUri($uri)
+        )->withoutEmptyPairs();
 
         $query = array_replace($uriQuery->parameters(), $query);
 
-        return $uri->withQuery((string) Query::fromVariable($query));
+        if (method_exists(Query::class, 'fromVariable')) {
+            $params = (string)Query::fromVariable($query);
+        } else {
+            $params = (string)Query::createFromParams($query);
+        }
+
+        return $uri->withQuery($params);
     }
 
     /**
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return string
      */
