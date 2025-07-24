@@ -96,7 +96,10 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
             Query::createFromUri($uri)
         )->withoutEmptyPairs();
 
-        $query = array_replace($uriQuery->parameters(), $query);
+        $query = array_replace(
+            method_exists($uriQuery, 'parameters') ? $uriQuery->parameters() : $uriQuery->params(),
+            $query
+        );
 
         if (method_exists(Query::class, 'fromVariable')) {
             $params = (string)Query::fromVariable($query);
