@@ -43,7 +43,7 @@
         "alcohol/iso4217": "^4.0",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
-        "league/uri": "^6.4",
+        "league/uri": "^6.4 || ^7.0",
         "league/uri-components": "^2.2",
         "twig/twig": "^2.4 || ^3.0",
         "php-http/discovery": "^1.19"
