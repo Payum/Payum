@@ -46,7 +46,9 @@
         "league/uri": "^6.4",
         "league/uri-components": "^2.2",
         "twig/twig": "^2.4 || ^3.0",
-        "php-http/discovery": "^1.19"
+        "php-http/discovery": "^1.19",
+        "psr/container": "^2.0",
+        "php-di/php-di": "^7.0"
     },
     "require-dev": {
         "ext-curl": "*",
