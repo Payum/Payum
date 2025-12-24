@@ -80,6 +80,7 @@
         "php-http/guzzle6-adapter": "^1.1.1",
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
+        "roave/security-advisories": "dev-latest",
         "rector/rector": "^1.0.2"
     },
     "replace": {
