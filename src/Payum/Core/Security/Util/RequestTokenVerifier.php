@@ -20,10 +20,10 @@ class RequestTokenVerifier
             HttpUri::new($tokenUri) : HttpUri::createFromString($tokenUri);
 
 
-        $uriPath = method_exists(Path::class, 'new') ?
-            Path::new($uri) : Path::createFromUri($uri);
-        $altUriPath = method_exists(Path::class, 'new') ?
-            Path::new($altUri) : Path::createFromUri($altUri);
+        $uriPath = method_exists(Path::class, 'fromUri') ?
+            Path::fromUri($uri) : Path::createFromUri($uri);
+        $altUriPath = method_exists(Path::class, 'fromUri') ?
+            Path::fromUri($altUri) : Path::createFromUri($altUri);
 
         return rawurldecode((string) $uriPath) === rawurldecode((string) $altUriPath);
     }
