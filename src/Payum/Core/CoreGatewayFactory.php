@@ -86,6 +86,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         @trigger_error(sprintf('The %s is deprecated since 2.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class), E_USER_DEPRECATED);
 
         $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions($this->configureContainer());
         $containerBuilder->addDefinitions($config);
 
         $container = $containerBuilder->build();
@@ -94,9 +95,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
         $entries = $container->getKnownEntryNames();
 
+        // Skip entries that are already handled by createGateway() or shouldn't be in config
+        $entriesToSkip = [
+            GetTokenAction::class, // Already handled conditionally in createGateway()
+            RenderTemplateAction::class, // Already handled in createGateway()
+        ];
+
+        $configEntries = array_filter($entries, static fn (string $name): bool => ! in_array($name, $entriesToSkip, true));
+
         $config = ArrayObject::ensureArrayObject(array_combine(
-            $entries,
-            array_map(static fn (string $name) => $container->get($name), $entries)
+            $configEntries,
+            array_map(static fn (string $name) => $container->get($name), $configEntries)
         ));
 
         $this->buildActions($gateway, $config);
@@ -198,32 +207,50 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     throw new LogicException('The httplug.client could not be guessed. Install one of the following packages: php-http/guzzle7-adapter, php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
                 },
 
-                'payum.http_client' => static fn (): HttplugClient => new HttplugClient(Psr18ClientDiscovery::find()),
-                'payum.http_stream_factory' => static fn (): StreamFactoryInterface => Psr17FactoryDiscovery::findStreamFactory(),
-                'payum.http_message_factory' => static fn (): RequestFactoryInterface => Psr17FactoryDiscovery::findRequestFactory(),
+                // PSR-18/17 services - lazily discover if not provided
+                ClientInterface::class => static fn (): ClientInterface => Psr18ClientDiscovery::find(),
+                StreamFactoryInterface::class => static fn (): StreamFactoryInterface => Psr17FactoryDiscovery::findStreamFactory(),
+                RequestFactoryInterface::class => static fn (): RequestFactoryInterface => Psr17FactoryDiscovery::findRequestFactory(),
+
+                // Legacy Payum service names - delegate to PSR interfaces
+                'payum.http_client' => static fn (ContainerInterface $c): HttplugClient =>
+                    new HttplugClient($c->get(ClientInterface::class)),
+                'payum.http_stream_factory' => static fn (ContainerInterface $c): StreamFactoryInterface =>
+                    $c->get(StreamFactoryInterface::class),
+                'payum.http_message_factory' => static fn (ContainerInterface $c): RequestFactoryInterface =>
+                    $c->get(RequestFactoryInterface::class),
                 'payum.template.layout' => '@PayumCore/layout.html.twig',
 
                 'twig.env' => static fn () => new Environment(new ChainLoader()),
                 'payum.default_options' => [],
                 'payum.required_options' => [],
 
-                'payum.api.http_client' => get('payum.http_client'),
+                // Backwards compatibility arrays for deprecated build* methods
+                'payum.prepend_actions' => [],
+                'payum.prepend_apis' => [],
+                'payum.prepend_extensions' => [],
 
+                'payum.api.http_client' => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
+
+                // Token storage - should be provided externally
                 'payum.security.token_storage' => null,
 
                 'payum.paths' => [],
 
-                ClientInterface::class => get('payum.http_client'),
-                StreamFactoryInterface::class => get('payum.http_stream_factory'),
-                RequestFactoryInterface::class => get('payum.http_message_factory'),
-                ResponseFactoryInterface::class => get('payum.http_message_factory'),
+                // Additional aliases
+                ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface =>
+                    $c->get(RequestFactoryInterface::class),
+                Environment::class => static fn (ContainerInterface $c) => $c->get('twig.env'),
+                HttpClient::class => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
 
-                Environment::class => get('twig.env'),
+                // Actions
+                RenderTemplateAction::class => static fn (ContainerInterface $c) =>
+                    new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
 
-                HttpClient::class => get('payum.http_client'),
-
-                RenderTemplateAction::class => autowire()->constructor(layout: get('payum.template.layout')),
-                GetTokenAction::class => autowire()->constructor(tokenStorage: get('payum.security.token_storage')),
+                // GetTokenAction is conditionally added in createGateway() if token storage is available
+                GetTokenAction::class => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
+                    ? new GetTokenAction($c->get('payum.security.token_storage'))
+                    : throw new LogicException('Token storage must be configured to use GetTokenAction'),
             ]
         );
     }
@@ -246,6 +273,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         $gateway = new Gateway();
 
         foreach ($this->getActions() as $action) {
+            // Skip GetTokenAction if token storage is not configured
+            if ($action === GetTokenAction::class && ! $container->has('payum.security.token_storage')) {
+                continue;
+            }
+
             if (is_string($action)) {
                 $action = $container->get($action);
             }

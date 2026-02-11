@@ -50,7 +50,8 @@
         "php-http/discovery": "^1.19",
         "php-http/message-factory": "^1.1",
         "psr/container": "^2.0",
-        "psr/log": "^1 || ^2 || ^3"
+        "psr/log": "^1 || ^2 || ^3",
+        "php-http/message-factory": "^1.1"
     },
     "require-dev": {
         "ext-curl": "*",
