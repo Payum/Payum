@@ -3,6 +3,9 @@
 namespace Payum\Core;
 
 use DI\ContainerBuilder;
+use Exception;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use LogicException;
 use Omnipay\Omnipay;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
@@ -31,6 +34,12 @@ use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
@@ -121,6 +130,16 @@ class PayumBuilder
      * @var ?RegistryInterface<object>
      */
     protected ?RegistryInterface $mainRegistry = null;
+
+    /**
+     * @var ?ContainerInterface
+     */
+    protected ?ContainerInterface $globalContainer = null;
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $globalDefinitions = [];
 
     public function addDefaultStorages(): static
     {
@@ -278,16 +297,56 @@ class PayumBuilder
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * Add a global service definition that will be available to all gateways.
+     * This allows sharing services (like HTTP clients, loggers) across all gateway instances.
+     *
+     * @param class-string|string $id The service identifier (can be a class name or custom string)
+     * @param mixed $service The service instance or callable factory
+     * @return static
      */
-    public function getPayum(): Payum
+    public function addGlobalService(string $id, mixed $service): static
     {
+        $this->globalDefinitions[$id] = $service;
+
+        return $this;
+    }
+
+    /**
+     * Set a pre-built global container (for framework integration).
+     * When set, this container will be used instead of building one from global definitions.
+     *
+     * @param ContainerInterface $container
+     * @return static
+     */
+    public function setGlobalContainer(ContainerInterface $container): static
+    {
+        $this->globalContainer = $container;
+
+        return $this;
+    }
+
+    /**
+     * Build the global container with services shared across all gateways.
+     * This includes HTTP clients, token storage, token factories, and storage extensions.
+     *
+     * @return ContainerInterface
+     * @throws Exception
+     */
+    protected function buildGlobalContainer(): ContainerInterface
+    {
+        if ($this->globalContainer) {
+            return $this->globalContainer;
+        }
+
+        $builder = new ContainerBuilder();
+
         if (! $this->tokenStorage) {
             $this->addDefaultStorages();
         }
 
         /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */
         $storageRegistry = $this->buildRegistry([], $this->storages);
+
         $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $storageRegistry);
         $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory, array_replace([
             'capture' => 'capture.php',
@@ -296,8 +355,43 @@ class PayumBuilder
             'refund' => 'refund.php',
             'payout' => 'payout.php',
         ], $this->genericTokenFactoryPaths));
-
         $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
+        
+        $builder->addDefinitions([
+            HttpRequestVerifierInterface::class => $httpRequestVerifier,
+            GenericTokenFactoryInterface::class => $genericTokenFactory,
+            TokenFactoryInterface::class => $tokenFactory,
+            'payum.security.token_storage' => $this->tokenStorage,
+            ClientInterface::class => fn () => Psr18ClientDiscovery::find(),
+            StreamFactoryInterface::class => fn () => Psr17FactoryDiscovery::findStreamFactory(),
+            RequestFactoryInterface::class => fn () => Psr17FactoryDiscovery::findRequestFactory(),
+        ]);
+
+        foreach ($this->storages as $modelClass => $storage) {
+            $extensionName = 'payum.extension.storage_' .
+                strtolower(str_replace('\\', '_', $modelClass));
+            $builder->addDefinitions([
+                $extensionName => new StorageExtension($storage),
+            ]);
+        }
+
+        $builder->addDefinitions($this->globalDefinitions);
+
+        return $builder->build();
+    }
+
+    /**
+     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
+    public function getPayum(): Payum
+    {
+        $globalContainer = $this->buildGlobalContainer();
+
+        $genericTokenFactory = $globalContainer->get(GenericTokenFactoryInterface::class);
+        $httpRequestVerifier = $globalContainer->get(HttpRequestVerifierInterface::class);
 
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
@@ -320,10 +414,27 @@ class PayumBuilder
             foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
                 $containerBuilder = new ContainerBuilder();
 
-                $containerBuilder->addDefinitions($gatewayConfig);
                 $containerBuilder->addDefinitions([
-                    'payum.security.token_storage' => fn () => $this->tokenStorage,
+                    'payum.security.token_storage' => fn () => $globalContainer->get('payum.security.token_storage'),
+                    HttpRequestVerifierInterface::class => fn () => $globalContainer->get(HttpRequestVerifierInterface::class),
+                    GenericTokenFactoryInterface::class => fn () => $globalContainer->get(GenericTokenFactoryInterface::class),
+                    TokenFactoryInterface::class => fn () => $globalContainer->get(TokenFactoryInterface::class),
+                    ClientInterface::class => fn () => $globalContainer->get(ClientInterface::class),
+                    StreamFactoryInterface::class => fn () => $globalContainer->get(StreamFactoryInterface::class),
+                    RequestFactoryInterface::class => fn () => $globalContainer->get(RequestFactoryInterface::class),
                 ]);
+
+                // Add storage extensions from global container
+                foreach ($this->storages as $modelClass => $storage) {
+                    $extensionName = 'payum.extension.storage_' .
+                        strtolower(str_replace('\\', '_', $modelClass));
+                    $containerBuilder->addDefinitions([
+                        $extensionName => fn () => $globalContainer->get($extensionName),
+                    ]);
+                }
+
+                // Add gateway-specific config (overrides are possible)
+                $containerBuilder->addDefinitions($gatewayConfig);
 
                 $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
                 unset($gatewayConfig['factory']);
