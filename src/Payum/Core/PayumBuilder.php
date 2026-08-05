@@ -57,7 +57,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use function in_array;
 use function strtolower;
 use function sys_get_temp_dir;
-use function trigger_error;
+use function trigger_deprecation;
 
 class PayumBuilder
 {
@@ -330,10 +330,11 @@ class PayumBuilder
 
         $genericTokenFactory = $globalContainer->get(GenericTokenFactoryInterface::class);
         $httpRequestVerifier = $globalContainer->get(HttpRequestVerifierInterface::class);
+        $tokenStorage = $this->tokenStorage ?? $globalContainer->get('payum.security.token_storage');
 
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
-            'payum.security.token_storage' => $this->tokenStorage,
+            'payum.security.token_storage' => $tokenStorage,
         ], $this->coreGatewayFactoryConfig));
 
         $gatewayFactories = array_replace(
@@ -371,24 +372,23 @@ class PayumBuilder
                     ]);
                 }
 
-                // Add gateway-specific config (overrides are possible)
-                $containerBuilder->addDefinitions($gatewayConfig);
-
                 $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
                 unset($gatewayConfig['factory']);
 
                 if ($gatewayFactory instanceof ContainerConfiguration) {
                     $containerBuilder->addDefinitions($gatewayFactory->configureContainer());
 
+                    // Add gateway-specific config last, so that it overrides the factory defaults
+                    $containerBuilder->addDefinitions($gatewayConfig);
+
                     $gateways[$name] = $gatewayFactory->createGateway($containerBuilder->build());
                 } else {
-                    @trigger_error(
-                        sprintf(
-                            'Not implementing %s for gateway factory %s is deprecated since 2.0.',
-                            ContainerConfiguration::class,
-                            $gatewayFactory::class,
-                        ),
-                        E_USER_DEPRECATED
+                    trigger_deprecation(
+                        'payum/core',
+                        '2.0.0',
+                        'Not implementing %s for gateway factory %s is deprecated.',
+                        ContainerConfiguration::class,
+                        $gatewayFactory::class,
                     );
 
                     $gateways[$name] = $gatewayFactory->create($gatewayConfig);
@@ -398,7 +398,7 @@ class PayumBuilder
             $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
         }
 
-        return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $this->tokenStorage);
+        return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
     }
 
     /**
