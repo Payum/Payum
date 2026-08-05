@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use Closure;
 use DI\ContainerBuilder;
 use Exception;
 use GuzzleHttp\Psr7\Request;
@@ -45,6 +46,8 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionFunction;
+use ReflectionNamedType;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -53,11 +56,13 @@ use function array_combine;
 use function array_map;
 use function array_merge;
 use function class_exists;
-use function DI\autowire;
-use function DI\get;
+use function func_get_args;
+use function func_num_args;
 use function in_array;
 use function is_string;
 use function sprintf;
+use function str_starts_with;
+use function trigger_deprecation;
 use function trigger_error;
 use const E_USER_DEPRECATED;
 
@@ -86,33 +91,47 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         @trigger_error(sprintf('The %s is deprecated since 2.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class), E_USER_DEPRECATED);
 
         $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions($this->configureContainer());
         $containerBuilder->addDefinitions($config);
+        $containerBuilder->addDefinitions($this->configureContainer());
+        $containerBuilder->addDefinitions([
+            ArrayObject::class => static function (ContainerInterface $container) {
+                trigger_deprecation('payum/core', '2.0.0', 'The %s service is deprecated and will be removed in 3.0. Use the %s service instead.', ArrayObject::class, ContainerInterface::class);
+                return new class($container) extends ArrayObject {
+                    private ContainerInterface $container;
+
+                    public function __construct(ContainerInterface $container)
+                    {
+                        parent::__construct();
+
+                        $this->container = $container;
+                    }
+
+                    public function offsetGet($key): mixed
+                    {
+                        return $this->container->get($key);
+                    }
+                };
+            },
+        ]);
 
         $container = $containerBuilder->build();
 
-        $gateway = $this->createGateway($container);
-
         $entries = $container->getKnownEntryNames();
 
-        // Skip entries that are already handled by createGateway() or shouldn't be in config
-        $entriesToSkip = [
-            GetTokenAction::class, // Already handled conditionally in createGateway()
-            RenderTemplateAction::class, // Already handled in createGateway()
-        ];
-
-        $configEntries = array_filter($entries, static fn (string $name): bool => ! in_array($name, $entriesToSkip, true));
-
-        $config = ArrayObject::ensureArrayObject(array_combine(
-            $configEntries,
-            array_map(static fn (string $name) => $container->get($name), $configEntries)
+        $configArray = ArrayObject::ensureArrayObject($config);
+        $configArray->defaults(array_combine(
+            $entries,
+            array_map(static fn (string $name) => static fn () => $container->get($name), $entries)
         ));
 
-        $this->buildActions($gateway, $config);
-        $this->buildApis($gateway, $config);
-        $this->buildExtensions($gateway, $config);
+        $gateway = new Gateway();
 
-        return $gateway;
+        $this->buildClosures($configArray);
+        $this->buildActions($gateway, $configArray);
+        $this->buildApis($gateway, $configArray);
+        $this->buildExtensions($gateway, $configArray);
+
+        return $this->createGateway($container, $gateway);
     }
 
     /**
@@ -124,7 +143,18 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     {
         @trigger_error(sprintf('The %s is deprecated since 2.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class), E_USER_DEPRECATED);
 
-        return $this->configureContainer();
+        $containerConfig = $this->configureContainer();
+
+        $result = array_merge($containerConfig, $config);
+
+        if (isset($config['payum.paths'])) {
+            $result['payum.paths'] = array_merge(
+                $containerConfig['payum.paths'] ?? [],
+                $config['payum.paths']
+            );
+        }
+
+        return $result;
     }
 
     public function configureContainer(): array
@@ -169,7 +199,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
                     throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
                 },
-                'httplug.client' => static function (ContainerInterface $config) {
+                'httplug.client' => static function (ArrayObject $config) {
                     @trigger_error('Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0', E_USER_DEPRECATED);
 
                     if (class_exists(HttpClientDiscovery::class)) {
@@ -197,7 +227,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     }
 
                     if (class_exists(HttpCurlClient::class)) {
-                        return new HttpCurlClient($config->get('httplug.message_factory'), $config->get('httplug.stream_factory'));
+                        return new HttpCurlClient($config['httplug.message_factory'], $config['httplug.stream_factory']);
                     }
 
                     if (class_exists(HttpBuzzClient::class)) {
@@ -213,12 +243,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 RequestFactoryInterface::class => static fn (): RequestFactoryInterface => Psr17FactoryDiscovery::findRequestFactory(),
 
                 // Legacy Payum service names - delegate to PSR interfaces
-                'payum.http_client' => static fn (ContainerInterface $c): HttplugClient =>
-                    new HttplugClient($c->get(ClientInterface::class)),
-                'payum.http_stream_factory' => static fn (ContainerInterface $c): StreamFactoryInterface =>
-                    $c->get(StreamFactoryInterface::class),
-                'payum.http_message_factory' => static fn (ContainerInterface $c): RequestFactoryInterface =>
-                    $c->get(RequestFactoryInterface::class),
+                'payum.http_client' => static fn (ContainerInterface $c): HttplugClient => new HttplugClient($c->get(ClientInterface::class)),
+                'payum.http_stream_factory' => static fn (ContainerInterface $c): StreamFactoryInterface => $c->get(StreamFactoryInterface::class),
+                'payum.http_message_factory' => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
                 'payum.template.layout' => '@PayumCore/layout.html.twig',
 
                 'twig.env' => static fn () => new Environment(new ChainLoader()),
@@ -233,19 +260,34 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 'payum.api.http_client' => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
 
                 // Token storage - should be provided externally
-                'payum.security.token_storage' => null,
+                // 'payum.security.token_storage' => null,
 
-                'payum.paths' => [],
+                'payum.paths' => [
+                    'PayumCore' => __DIR__ . '/Resources/views',
+                ],
 
                 // Additional aliases
-                ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface =>
-                    $c->get(RequestFactoryInterface::class),
+                ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
                 Environment::class => static fn (ContainerInterface $c) => $c->get('twig.env'),
                 HttpClient::class => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
 
-                // Actions
-                RenderTemplateAction::class => static fn (ContainerInterface $c) =>
-                    new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
+                // BC: Deprecated action entries (used by deprecated buildActions method)
+                'payum.action.get_http_request' => static fn () => new GetHttpRequestAction(),
+                'payum.action.capture_payment' => static fn () => new CapturePaymentAction(),
+                'payum.action.authorize_payment' => static fn () => new AuthorizePaymentAction(),
+                'payum.action.payout_payout' => static fn () => new PayoutPayoutAction(),
+                'payum.action.execute_same_request_with_model_details' => static fn () => new ExecuteSameRequestWithModelDetailsAction(),
+                'payum.action.get_currency' => static fn () => new GetCurrencyAction(),
+                'payum.action.render_template' => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
+                'payum.action.get_token' => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
+                    ? new GetTokenAction($c->get('payum.security.token_storage'))
+                    : null,
+
+                // BC: Deprecated extension entries (used by deprecated buildExtensions method)
+                'payum.extension.endless_cycle_detector' => static fn () => new EndlessCycleDetectorExtension(),
+
+                // New DI approach: Action classes for createGateway()
+                RenderTemplateAction::class => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
 
                 // GetTokenAction is conditionally added in createGateway() if token storage is available
                 GetTokenAction::class => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
@@ -260,6 +302,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function createGateway(ContainerInterface $container): Gateway
     {
+
         TwigUtil::registerPaths(
             $container->get('twig.env'),
             array_merge(
@@ -270,11 +313,15 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             )
         );
 
-        $gateway = new Gateway();
+        if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {
+            $gateway = func_get_args()[1];
+        } else {
+            $gateway = new Gateway();
+        }
 
         foreach ($this->getActions() as $action) {
             // Skip GetTokenAction if token storage is not configured
-            if ($action === GetTokenAction::class && ! $container->has('payum.security.token_storage')) {
+            if (GetTokenAction::class === $action && ! $container->has('payum.security.token_storage')) {
                 continue;
             }
 
@@ -323,29 +370,37 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     protected function buildClosures(ArrayObject $config): void
     {
         @trigger_error(sprintf('The %s is deprecated since 2.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class), E_USER_DEPRECATED);
-        // with higher priority
-        foreach ([
-            'payum.http_client',
-            'payum.http_stream_factory',
-            'payum.http_message_factory',
 
-            'httplug.message_factory',
-            'httplug.stream_factory',
-            'httplug.client',
-
-            'payum.paths',
-            'twig.env',
-            'twig.register_paths',
-        ] as $name) {
-            $value = $config[$name];
-            if (is_callable($value)) {
-                $config[$name] = $value($config);
+        // Helper to check if closure expects ArrayObject
+        $canInvokeWithArrayObject = static function ($value): bool {
+            if (! $value instanceof Closure) {
+                return false;
             }
-        }
+
+            $reflection = new ReflectionFunction($value);
+            if (0 === $reflection->getNumberOfParameters()) {
+                return true;
+            }
+
+            $params = $reflection->getParameters();
+            $firstParam = $params[0];
+            return ! $firstParam->getType() || ($firstParam->getType() instanceof ReflectionNamedType && ArrayObject::class === $firstParam->getType()->getName());
+        };
+
+        /** @var ContainerInterface $container */
+        $container = $config[ContainerInterface::class]();
 
         foreach ($config as $name => $value) {
+            if (GetTokenAction::class === $name && ! $container->has('payum.security.token_storage')) {
+                continue;
+            }
+
             if (is_callable($value) && ! (is_string($value) && function_exists('\\' . $value))) {
-                $config[$name] = $value($config);
+                if ($canInvokeWithArrayObject($value)) {
+                    $config[$name] = $value($config);
+                } else {
+                    $config[$name] = $container->get($name);
+                }
             }
         }
     }
@@ -357,7 +412,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     {
         @trigger_error(sprintf('The %s is deprecated since 2.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class), E_USER_DEPRECATED);
         foreach ($config as $name => $value) {
-            if (str_starts_with($name, 'payum.action')) {
+            if (str_starts_with($name, 'payum.action') && null !== $value) {
                 $prepend = in_array($name, $config['payum.prepend_actions'], true);
 
                 $gateway->addAction($value, $prepend);

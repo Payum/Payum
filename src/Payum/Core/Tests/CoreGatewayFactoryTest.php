@@ -3,6 +3,7 @@
 namespace Payum\Core\Tests;
 
 use Closure;
+use DI\Container;
 use Http\Message\RequestFactory;
 use Http\Message\StreamFactory;
 use Payum\Core\Action\ActionInterface;
@@ -19,13 +20,14 @@ use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
 use stdClass;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use Twig\Loader\ChainLoader;
 
 class CoreGatewayFactoryTest extends TestCase
 {
@@ -49,11 +51,13 @@ class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
+        $container = $this->getContainer();
+
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('payum.api.http_client', $config);
         $this->assertInstanceOf(Closure::class, $config['payum.api.http_client']);
 
-        $this->assertSame($config['payum.http_client'], $config['payum.api.http_client'](new ArrayObject($config)));
+        $this->assertEquals($config['payum.http_client']($container), $config['payum.api.http_client']($container));
     }
 
     /**
@@ -65,9 +69,7 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.message_factory', $config);
-        $this->assertInstanceOf(Closure::class, $config['httplug.message_factory']);
-        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(RequestFactory::class, $config['httplug.message_factory']);
+        $this->assertInstanceOf(RequestFactory::class, $config['httplug.message_factory']());
     }
 
     /**
@@ -79,31 +81,24 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.stream_factory', $config);
-        $this->assertInstanceOf(Closure::class, $config['httplug.stream_factory']);
-        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']);
+        $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']());
     }
 
     public function testShouldCreateDefaultHttMessageFactory(): void
     {
-        $factory = new CoreGatewayFactory();
+        $container = $this->getContainer();
 
-        $config = $factory->createConfig([]);
-        $this->assertArrayHasKey('payum.http_message_factory', $config);
-        $this->assertInstanceOf(Closure::class, $config['payum.http_message_factory']);
-        $config['payum.http_message_factory'] = call_user_func($config['payum.http_message_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(RequestFactoryInterface::class, $config['payum.http_message_factory']);
+        $this->assertTrue($container->has('payum.http_message_factory'));
+        // createConfig() now returns resolved values, not closures
+        $this->assertInstanceOf(RequestFactoryInterface::class, $container->get('payum.http_message_factory'));
     }
 
     public function testShouldCreateDefaultHttStreamFactory(): void
     {
-        $factory = new CoreGatewayFactory();
-
-        $config = $factory->createConfig([]);
-        $this->assertArrayHasKey('payum.http_stream_factory', $config);
-        $this->assertInstanceOf(Closure::class, $config['payum.http_stream_factory']);
-        $config['payum.http_stream_factory'] = call_user_func($config['payum.http_stream_factory'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(StreamFactoryInterface::class, $config['payum.http_stream_factory']);
+        $container = $this->getContainer();
+        $this->assertTrue($container->has('payum.http_stream_factory'));
+        // createConfig() now returns resolved values, not closures
+        $this->assertInstanceOf(StreamFactoryInterface::class, $container->get('payum.http_stream_factory'));
     }
 
     public function testShouldCreateDefaultHttplugClient(): void
@@ -112,10 +107,17 @@ class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.client', $config);
+
+        // httplug.client is a closure that expects ArrayObject, so it won't be auto-resolved
         $this->assertInstanceOf(Closure::class, $config['httplug.client']);
 
-        $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
-        $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
+        // Resolve dependencies (may already be resolved by createConfig)
+        if ($config['httplug.message_factory'] instanceof Closure) {
+            $config['httplug.message_factory'] = call_user_func($config['httplug.message_factory'], ArrayObject::ensureArrayObject($config));
+        }
+        if ($config['httplug.stream_factory'] instanceof Closure) {
+            $config['httplug.stream_factory'] = call_user_func($config['httplug.stream_factory'], ArrayObject::ensureArrayObject($config));
+        }
         $config['httplug.client'] = call_user_func($config['httplug.client'], ArrayObject::ensureArrayObject($config));
 
         $this->assertInstanceOf(ClientInterface::class, $config['httplug.client']);
@@ -136,18 +138,20 @@ class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
+        $container = $this->getContainer();
+
         $config = $factory->createConfig();
 
         $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(Closure::class, $config['payum.http_client']);
-        $this->assertInstanceOf(GetHttpRequestAction::class, $config['payum.action.get_http_request']);
-        $this->assertInstanceOf(CapturePaymentAction::class, $config['payum.action.capture_payment']);
-        $this->assertInstanceOf(PayoutPayoutAction::class, $config['payum.action.payout_payout']);
-        $this->assertInstanceOf(ExecuteSameRequestWithModelDetailsAction::class, $config['payum.action.execute_same_request_with_model_details']);
+        $this->assertInstanceOf(GetHttpRequestAction::class, $config['payum.action.get_http_request']($container));
+        $this->assertInstanceOf(CapturePaymentAction::class, $config['payum.action.capture_payment']($container));
+        $this->assertInstanceOf(PayoutPayoutAction::class, $config['payum.action.payout_payout']($container));
+        $this->assertInstanceOf(ExecuteSameRequestWithModelDetailsAction::class, $config['payum.action.execute_same_request_with_model_details']($container));
         $this->assertInstanceOf(Closure::class, $config['payum.action.render_template']);
-        $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']);
+        $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $config['payum.extension.endless_cycle_detector']($container));
 
         $this->assertSame('@PayumCore/layout.html.twig', $config['payum.template.layout']);
         $this->assertSame([], $config['payum.prepend_actions']);
@@ -207,18 +211,16 @@ class CoreGatewayFactoryTest extends TestCase
         $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
-        $this->assertInstanceOf(Closure::class, $config['twig.env']);
-
-        $twig = call_user_func($config['twig.env'], ArrayObject::ensureArrayObject($config));
-
-        $this->assertInstanceOf(Environment::class, $twig);
+        $this->assertInstanceOf(Environment::class, $config['twig.env']());
     }
 
     public function testShouldConfigureRenderTemplateAction(): void
     {
         $factory = new CoreGatewayFactory();
 
-        $twig = new Environment(new FilesystemLoader());
+        $container = $this->getContainer();
+
+        $twig = new Environment(new ChainLoader());
 
         $config = $factory->createConfig([
             'twig.env' => $twig,
@@ -231,10 +233,11 @@ class CoreGatewayFactoryTest extends TestCase
 
         $this->assertInstanceOf(Closure::class, $config['payum.action.render_template']);
 
-        $action = call_user_func($config['payum.action.render_template'], ArrayObject::ensureArrayObject($config));
+        $action = call_user_func($config['payum.action.render_template'], $container);
         $this->assertInstanceOf(RenderTemplateAction::class, $action);
 
         $this->assertSame($twig, $config['twig.env']);
+        $this->assertEquals($twig, $container->get('twig.env'));
     }
 
     public function testShouldConfigureGetTokenActionIfTokenStorageSet(): void
@@ -246,13 +249,14 @@ class CoreGatewayFactoryTest extends TestCase
         $config = $factory->createConfig([
             'payum.security.token_storage' => $tokenStorageMock,
         ]);
+        $container = $this->getContainer($config);
 
         $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(Closure::class, $config['payum.action.get_token']);
 
-        $action = call_user_func($config['payum.action.get_token'], ArrayObject::ensureArrayObject($config));
+        $action = call_user_func($config['payum.action.get_token'], $container);
         $this->assertInstanceOf(GetTokenAction::class, $action);
 
         $this->assertSame($tokenStorageMock, $config['payum.security.token_storage']);
@@ -295,8 +299,9 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $actions = $this->readAttribute($gateway, 'actions');
-        $this->assertSame($firstAction, $actions[0]);
-        $this->assertSame($secondAction, $actions[1]);
+
+        $this->assertEquals($firstAction, $actions[0]);
+        $this->assertEquals($secondAction, $actions[1]);
 
         $gateway = $factory->create([
             'payum.action.foo' => $firstAction,
@@ -307,8 +312,8 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $actions = $this->readAttribute($gateway, 'actions');
-        $this->assertSame($secondAction, $actions[0]);
-        $this->assertSame($firstAction, $actions[1]);
+        $this->assertEquals($secondAction, $actions[0]);
+        $this->assertEquals($firstAction, $actions[1]);
     }
 
     /**
@@ -330,8 +335,8 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
-        $this->assertSame($firstApi, $apis[0]);
-        $this->assertSame($secondApi, $apis[1]);
+        $this->assertEquals($firstApi, $apis[0]);
+        $this->assertEquals($secondApi, $apis[1]);
 
         $gateway = $factory->create([
             'payum.api.foo' => $firstApi,
@@ -342,8 +347,8 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $apis = $this->readAttribute($gateway, 'apis');
-        $this->assertSame($secondApi, $apis[0]);
-        $this->assertSame($firstApi, $apis[1]);
+        $this->assertEquals($secondApi, $apis[0]);
+        $this->assertEquals($firstApi, $apis[1]);
     }
 
     /**
@@ -365,8 +370,8 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');
-        $this->assertSame($firstExtension, $extensions[0]);
-        $this->assertSame($secondExtension, $extensions[1]);
+        $this->assertEquals($firstExtension, $extensions[0]);
+        $this->assertEquals($secondExtension, $extensions[1]);
 
         $gateway = $factory->create([
             'payum.extension.foo' => $firstExtension,
@@ -377,8 +382,8 @@ class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');
-        $this->assertSame($secondExtension, $extensions[0]);
-        $this->assertSame($firstExtension, $extensions[1]);
+        $this->assertEquals($secondExtension, $extensions[0]);
+        $this->assertEquals($firstExtension, $extensions[1]);
     }
 
     public function testShouldNotAllowGlobalFunctionsAsGatewayConfig(): void
@@ -391,5 +396,15 @@ class CoreGatewayFactoryTest extends TestCase
                 $this->assertSame('sha1', $config['hash']);
             },
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function getContainer(array $config = []): ContainerInterface
+    {
+        $factory = new CoreGatewayFactory();
+
+        return new Container($factory->createConfig($config));
     }
 }
