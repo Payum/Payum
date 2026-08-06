@@ -47,7 +47,8 @@
         "league/uri-components": "^2.2",
         "twig/twig": "^2.4 || ^3.0",
         "php-http/discovery": "^1.19",
-        "php-http/message-factory": "^1.1"
+        "php-http/message-factory": "^1.1",
+        "psr/log": "^1 || ^2 || ^3"
     },
     "require-dev": {
         "ext-curl": "*",
@@ -60,7 +61,6 @@
         "doctrine/annotations": "^1.14.3 || ^2.0.1",
         "doctrine/persistence": "^2.0 || ^3.0",
         "phpunit/phpunit": "^9.6.11",
-        "psr/log": "~1.0",
         "laminas/laminas-db": "^2.0",
         "symfony/cache": "^4.4 || ^5.0 || ^6.0",
         "symfony/routing": "^4.4 || ^5.0 || ^6.0",
