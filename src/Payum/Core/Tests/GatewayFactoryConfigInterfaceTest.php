@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use DI\Container;
@@ -13,7 +15,7 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 
-class GatewayFactoryConfigInterfaceTest extends TestCase
+final class GatewayFactoryConfigInterfaceTest extends TestCase
 {
     public function testShouldBeInterface(): void
     {
@@ -128,7 +130,7 @@ class GatewayFactoryConfigInterfaceTest extends TestCase
 
         $this->assertInstanceOf(Gateway::class, $gateway);
         $this->assertSame([GatewayFactoryConfigStubAction::class], array_map(
-            'get_class',
+            get_class(...),
             self::readAttribute($gateway, 'actions')
         ));
         $this->assertSame(

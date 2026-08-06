@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use Iterator;
@@ -13,13 +15,11 @@ use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\GenericActionTest;
 use stdClass;
 
-class GetTokenActionTest extends GenericActionTest
+final class GetTokenActionTest extends GenericActionTest
 {
     protected $requestClass = GetToken::class;
 
     protected $actionClass = GetTokenAction::class;
-
-    protected $action;
 
     protected function setUp(): void
     {

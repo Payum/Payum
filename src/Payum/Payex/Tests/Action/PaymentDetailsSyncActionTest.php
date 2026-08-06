@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action;
 
 use ArrayAccess;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class PaymentDetailsSyncActionTest extends TestCase
+final class PaymentDetailsSyncActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

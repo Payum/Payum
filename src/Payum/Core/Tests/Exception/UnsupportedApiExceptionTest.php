@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -7,7 +9,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class UnsupportedApiExceptionTest extends TestCase
+final class UnsupportedApiExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfInvalidArgumentException(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Model\Identity;
@@ -7,7 +9,7 @@ use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\Token;
 use stdClass;
 
-class TokenTest extends MongoTest
+final class TokenTest extends MongoTest
 {
     public function testShouldAllowPersist(): void
     {

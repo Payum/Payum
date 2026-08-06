@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -9,7 +11,7 @@ use Payum\Paypal\Masspay\Nvp\Action\GetPayoutStatusAction;
 use Payum\Paypal\Masspay\Nvp\Api;
 use ReflectionClass;
 
-class GetPayoutStatusActionTest extends GenericActionTest
+final class GetPayoutStatusActionTest extends GenericActionTest
 {
     protected $requestClass = GetHumanStatus::class;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Model\ModelAggregateInterface;
@@ -8,7 +10,7 @@ use Payum\Core\Request\GetStatusInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GetStatusInterfaceTest extends TestCase
+final class GetStatusInterfaceTest extends TestCase
 {
     public function testShouldImplementModelAwareInterface(): void
     {

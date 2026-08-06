@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -13,7 +15,7 @@ use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class PayoutActionTest extends GenericActionTest
+final class PayoutActionTest extends GenericActionTest
 {
     protected $requestClass = Payout::class;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -17,7 +19,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ApiTest extends TestCase
+final class ApiTest extends TestCase
 {
     protected function setUp(): void
     {

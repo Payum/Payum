@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -19,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
+final class CancelRecurringPaymentsProfileActionTest extends GenericActionTest
 {
     /**
      * @var Generic

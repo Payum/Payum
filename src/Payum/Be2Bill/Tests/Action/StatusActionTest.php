@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Action\StatusAction;
@@ -7,7 +9,7 @@ use Payum\Be2Bill\Api;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
 
-class StatusActionTest extends GenericActionTest
+final class StatusActionTest extends GenericActionTest
 {
     protected $actionClass = StatusAction::class;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action\Api;
 
 use ArrayAccess;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class InitializeOrderActionTest extends TestCase
+final class InitializeOrderActionTest extends TestCase
 {
     protected $requiredFields = [
         'price' => 1000,

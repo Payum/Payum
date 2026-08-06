@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Stripe\StripeJsGatewayFactory;
 
-class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class StripeJsGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

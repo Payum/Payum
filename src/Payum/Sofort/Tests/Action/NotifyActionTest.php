@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Sofort\Tests\Action;
 
 use Payum\Core\GatewayAwareInterface;
@@ -12,7 +14,7 @@ use Payum\Sofort\Action\NotifyAction;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class NotifyActionTest extends GenericActionTest
+final class NotifyActionTest extends GenericActionTest
 {
     protected $requestClass = Notify::class;
 

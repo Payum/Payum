@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -8,7 +10,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\GetCreditCardTokenAction;
 use ReflectionClass;
 
-class GetCreditCardTokenActionTest extends GenericActionTest
+final class GetCreditCardTokenActionTest extends GenericActionTest
 {
     protected $requestClass = GetCreditCardToken::class;
 

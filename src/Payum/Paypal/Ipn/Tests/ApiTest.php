@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Ipn\Tests;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -15,7 +17,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use function http_build_query;
 
-class ApiTest extends TestCase
+final class ApiTest extends TestCase
 {
     public function testThrowIfSandboxOptionNotSetInConstructor(): void
     {

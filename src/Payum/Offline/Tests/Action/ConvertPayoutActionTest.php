@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Offline\Tests\Action;
 
 use Iterator;
@@ -13,7 +15,7 @@ use Payum\Offline\Action\ConvertPayoutAction;
 use Payum\Offline\Constants;
 use stdClass;
 
-class ConvertPayoutActionTest extends GenericActionTest
+final class ConvertPayoutActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertPayoutAction::class;
 

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
 use PHPUnit\Framework\TestCase;
 
-class ObtainTokenTemplateTest extends TestCase
+final class ObtainTokenTemplateTest extends TestCase
 {
     public function testShouldRenderObtainJsTokenTemplate(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class HttpRequestVerifierTest extends TestCase
+final class HttpRequestVerifierTest extends TestCase
 {
     public function testShouldImplementHttpRequestVerifierInterface(): void
     {

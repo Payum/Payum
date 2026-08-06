@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use ArrayAccess;
@@ -16,7 +18,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
 
-class AuthorizePaymentActionTest extends GenericActionTest
+final class AuthorizePaymentActionTest extends GenericActionTest
 {
     protected $requestClass = Authorize::class;
 
@@ -70,7 +72,7 @@ class AuthorizePaymentActionTest extends GenericActionTest
 
         $this->assertSame($payment, $authorize->getFirstModel());
         $this->assertInstanceOf(ArrayAccess::class, $authorize->getModel());
-        $this->assertNull($authorize->getToken());
+        $this->assertNotInstanceOf(TokenInterface::class, $authorize->getToken());
     }
 
     public function testShouldSetConvertedResultToPaymentAsDetails(): void

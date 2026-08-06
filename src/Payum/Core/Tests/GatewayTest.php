@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Exception;
@@ -21,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class GatewayTest extends TestCase
+final class GatewayTest extends TestCase
 {
     public function testShouldImplementGatewayInterface(): void
     {
@@ -316,7 +318,7 @@ class GatewayTest extends TestCase
                 $this->assertSame($request, $context->getRequest());
                 $this->assertSame($exception, $context->getException());
                 $this->assertSame($gateway, $context->getGateway());
-                $this->assertNull($context->getReply());
+                $this->assertNotInstanceOf(ReplyInterface::class, $context->getReply());
             })
         ;
 
@@ -554,7 +556,7 @@ class GatewayTest extends TestCase
             ->method('onPreExecute')
             ->with($this->isInstanceOf(Context::class))
             ->willReturnCallback(function (Context $context) use ($actionMock): void {
-                $this->assertNull($context->getAction());
+                $this->assertNotInstanceOf(ActionInterface::class, $context->getAction());
 
                 $context->setAction($actionMock);
             })
@@ -593,7 +595,7 @@ class GatewayTest extends TestCase
                 $this->assertSame($request, $context->getRequest());
                 $this->assertSame($gateway, $context->getGateway());
                 $this->assertSame($reply, $context->getReply());
-                $this->assertNull($context->getException());
+                $this->assertNotInstanceOf(Exception::class, $context->getException());
             })
         ;
 
@@ -679,7 +681,7 @@ class GatewayTest extends TestCase
 
         $actualReply = $gateway->execute($expectedRequest, true);
 
-        $this->assertNull($actualReply);
+        $this->assertNotInstanceOf(ReplyInterface::class, $actualReply);
     }
 
     public function testShouldCallExtensionOnPreExecute(): void
@@ -703,9 +705,9 @@ class GatewayTest extends TestCase
                 $this->assertSame($expectedRequest, $context->getRequest());
                 $this->assertSame($gateway, $context->getGateway());
 
-                $this->assertNull($context->getAction());
-                $this->assertNull($context->getReply());
-                $this->assertNull($context->getException());
+                $this->assertNotInstanceOf(ActionInterface::class, $context->getAction());
+                $this->assertNotInstanceOf(ReplyInterface::class, $context->getReply());
+                $this->assertNotInstanceOf(Exception::class, $context->getException());
             })
         ;
 
@@ -737,8 +739,8 @@ class GatewayTest extends TestCase
                 $this->assertSame($actionMock, $context->getAction());
                 $this->assertSame($gateway, $context->getGateway());
 
-                $this->assertNull($context->getReply());
-                $this->assertNull($context->getException());
+                $this->assertNotInstanceOf(ReplyInterface::class, $context->getReply());
+                $this->assertNotInstanceOf(Exception::class, $context->getException());
             })
         ;
 

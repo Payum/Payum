@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
@@ -7,7 +9,7 @@ use Payum\Payex\Request\Api\StopRecurringPayment;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class StopRecurringPaymentTest extends TestCase
+final class StopRecurringPaymentTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

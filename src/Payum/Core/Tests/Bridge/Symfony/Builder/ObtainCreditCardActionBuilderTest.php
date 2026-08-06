@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ObtainCreditCardActionBuilderTest extends TestCase
+final class ObtainCreditCardActionBuilderTest extends TestCase
 {
     public function testShouldBuildObtainCreditCardWithGivenTemplate(): void
     {

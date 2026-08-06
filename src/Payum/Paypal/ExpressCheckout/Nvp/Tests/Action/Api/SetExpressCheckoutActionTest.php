@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use ArrayAccess;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class SetExpressCheckoutActionTest extends TestCase
+final class SetExpressCheckoutActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

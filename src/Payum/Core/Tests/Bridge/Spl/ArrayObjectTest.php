@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Spl;
 
 use ArrayAccess;
@@ -13,7 +15,7 @@ use ReflectionClass;
 use ReturnTypeWillChange;
 use Traversable;
 
-class ArrayObjectTest extends TestCase
+final class ArrayObjectTest extends TestCase
 {
     public function testShouldBeSubClassOfArrayObject(): void
     {

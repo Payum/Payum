@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\DI;
 
 use DI\Container;
@@ -11,7 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use stdClass;
 
-class FallbackContainerTest extends TestCase
+final class FallbackContainerTest extends TestCase
 {
     public function testShouldImplementContainerInterface(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Capture;
@@ -7,7 +9,7 @@ use Payum\Core\Request\Generic;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class CaptureTest extends TestCase
+final class CaptureTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

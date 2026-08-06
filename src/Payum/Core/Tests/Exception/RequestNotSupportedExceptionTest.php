@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Action\ActionInterface;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class RequestNotSupportedExceptionTest extends TestCase
+final class RequestNotSupportedExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfInvalidArgumentException(): void
     {
@@ -29,7 +31,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertStringStartsWith('Request string is not supported.', $exception->getMessage());
 
         $this->assertSame('anRequest', $exception->getRequest());
-        $this->assertNull($exception->getAction());
+        $this->assertNotInstanceOf(ActionInterface::class, $exception->getAction());
     }
 
     public function testShouldCreateWithObjectRequest(): void
@@ -42,7 +44,7 @@ class RequestNotSupportedExceptionTest extends TestCase
         $this->assertStringStartsWith('Request stdClass is not supported.', $exception->getMessage());
 
         $this->assertSame($request, $exception->getRequest());
-        $this->assertNull($exception->getAction());
+        $this->assertNotInstanceOf(ActionInterface::class, $exception->getAction());
     }
 
     public function testShouldCreateWithActionAndStringRequest(): void

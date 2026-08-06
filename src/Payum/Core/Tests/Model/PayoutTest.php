@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Payout;
@@ -7,7 +9,7 @@ use Payum\Core\Model\PayoutInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class PayoutTest extends TestCase
+final class PayoutTest extends TestCase
 {
     public function testShouldExtendPayoutInterface(): void
     {

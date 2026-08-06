@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use KlarnaAddr;
 use Payum\Klarna\Invoice\Request\Api\GetAddresses;
 use PHPUnit\Framework\TestCase;
 
-class GetAddressesTest extends TestCase
+final class GetAddressesTest extends TestCase
 {
     public function testShouldAllowGetPnoSetInConstructor(): void
     {
@@ -42,7 +44,7 @@ class GetAddressesTest extends TestCase
     {
         $request = new GetAddresses('aPno');
 
-        $this->assertNull($request->getFirstAddress());
+        $this->assertNotInstanceOf(KlarnaAddr::class, $request->getFirstAddress());
     }
 
     public function testShouldAllowGetFirstAddress(): void

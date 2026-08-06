@@ -83,9 +83,9 @@
         "php-http/mock-client": "^1.0",
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
-        "rector/rector": "^1.0.2",
+        "rector/rector": "^2.6",
         "symplify/easy-coding-standard": "^13.2",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^2.2",
         "symfony/http-client": "^5.4 || ^6.2",
         "nyholm/psr7": "^1.8"
     },

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Registry\GatewayFactoryRegistryInterface;
@@ -9,7 +11,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class RegistryInterfaceTest extends TestCase
+final class RegistryInterfaceTest extends TestCase
 {
     public function testShouldImplementGatewayRegistryInterface(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Extension\Context;
@@ -9,7 +11,7 @@ use Payum\Core\Tests\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class ExtensionCollectionTest extends TestCase
+final class ExtensionCollectionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

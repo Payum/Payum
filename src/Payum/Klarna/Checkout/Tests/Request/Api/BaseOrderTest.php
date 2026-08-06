@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
 use Klarna_Checkout_Order;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class BaseOrderTest extends TestCase
+final class BaseOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

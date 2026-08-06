@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
 use Iterator;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class TokenFactoryTest extends TestCase
+final class TokenFactoryTest extends TestCase
 {
     public function testShouldImplementsTokenFactoryInterface(): void
     {

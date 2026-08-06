@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
@@ -7,7 +9,7 @@ use Payum\Payex\Request\Api\CheckOrder;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class CheckOrderTest extends TestCase
+final class CheckOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

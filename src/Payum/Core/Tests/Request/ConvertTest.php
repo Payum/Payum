@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\Convert;
@@ -7,7 +9,7 @@ use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ConvertTest extends TestCase
+final class ConvertTest extends TestCase
 {
     public function testCouldBeConstructedWithSourceModelAndTo(): void
     {

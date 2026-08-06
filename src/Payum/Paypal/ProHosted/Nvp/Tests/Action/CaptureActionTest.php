@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -17,7 +19,7 @@ use Payum\Paypal\ProHosted\Nvp\Request\Api\CreateButtonPayment;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class CaptureActionTest extends GenericActionTest
+final class CaptureActionTest extends GenericActionTest
 {
     protected $requestClass = Capture::class;
 

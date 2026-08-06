@@ -26,7 +26,7 @@ class GatewayFactoryBuilder
 
     public function __invoke()
     {
-        return call_user_func_array([$this, 'build'], func_get_args());
+        return call_user_func_array($this->build(...), func_get_args());
     }
 
     /**

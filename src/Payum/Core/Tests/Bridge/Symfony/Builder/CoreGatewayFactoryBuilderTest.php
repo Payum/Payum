@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\CoreGatewayFactoryBuilder;
@@ -9,7 +11,7 @@ use ReflectionClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class CoreGatewayFactoryBuilderTest extends TestCase
+final class CoreGatewayFactoryBuilderTest extends TestCase
 {
     public function testShouldImplementContainerAwareInterface(): void
     {

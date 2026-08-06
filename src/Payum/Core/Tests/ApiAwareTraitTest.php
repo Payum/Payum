@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareTrait;
@@ -8,7 +10,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class ApiAwareTraitTest extends TestCase
+final class ApiAwareTraitTest extends TestCase
 {
     public function testThrowIfSetApiButApiClassNotConfigured(): void
     {

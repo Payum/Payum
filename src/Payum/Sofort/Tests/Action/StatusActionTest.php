@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Sofort\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
@@ -7,7 +9,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Sofort\Action\StatusAction;
 use Payum\Sofort\Api;
 
-class StatusActionTest extends GenericActionTest
+final class StatusActionTest extends GenericActionTest
 {
     public const TRANSACTION_ID = '1597-FS16-234D-A324';
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse as SymfonyHttpResponse;
@@ -12,7 +14,7 @@ use Payum\Core\Reply\HttpResponse;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ReplyToSymfonyResponseConverterTest extends TestCase
+final class ReplyToSymfonyResponseConverterTest extends TestCase
 {
     public function testShouldReturnRedirectResponseIfPayumHttpRedirectReply(): void
     {
@@ -25,7 +27,7 @@ class ReplyToSymfonyResponseConverterTest extends TestCase
         $response = $converter->convert($reply);
 
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertStringContainsString('Redirecting to /foo/bar', $response->getContent());
+        $this->assertStringContainsString('Redirecting to /foo/bar', (string) $response->getContent());
         $this->assertSame(302, $response->getStatusCode());
 
         $headers = $response->headers->all();

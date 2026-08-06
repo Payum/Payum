@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class ConfirmOrderActionTest extends GenericActionTest
+final class ConfirmOrderActionTest extends GenericActionTest
 {
     protected $requestClass = ConfirmOrder::class;
 

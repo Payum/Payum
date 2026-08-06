@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action;
 
 use DateTime;
@@ -15,7 +17,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\ConvertPaymentAction;
 use stdClass;
 
-class ConvertPaymentActionTest extends GenericActionTest
+final class ConvertPaymentActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertPaymentAction::class;
 

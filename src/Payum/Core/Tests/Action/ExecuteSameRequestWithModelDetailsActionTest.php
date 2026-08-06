@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use ArrayAccess;
@@ -16,7 +18,7 @@ use Payum\Core\Tests\GenericActionTest;
 use ReflectionClass;
 use stdClass;
 
-class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
+final class ExecuteSameRequestWithModelDetailsActionTest extends GenericActionTest
 {
     protected $actionClass = ExecuteSameRequestWithModelDetailsAction::class;
 

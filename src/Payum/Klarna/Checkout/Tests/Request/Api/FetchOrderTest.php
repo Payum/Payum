@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Request\Api;
 
 use Payum\Klarna\Checkout\Request\Api\BaseOrder;
@@ -7,7 +9,7 @@ use Payum\Klarna\Checkout\Request\Api\FetchOrder;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class FetchOrderTest extends TestCase
+final class FetchOrderTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder(): void
     {

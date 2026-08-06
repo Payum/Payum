@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Masspay\Nvp\Tests;
 
 use Payum\Core\Exception\LogicException;
@@ -7,7 +9,7 @@ use Payum\Core\Gateway;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\Masspay\Nvp\PaypalMasspayGatewayFactory;
 
-class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

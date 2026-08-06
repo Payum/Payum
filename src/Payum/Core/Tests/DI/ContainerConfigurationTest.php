@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\DI;
 
 use DI\Container;
@@ -11,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 
-class ContainerConfigurationTest extends TestCase
+final class ContainerConfigurationTest extends TestCase
 {
     public function testShouldBeInterface(): void
     {

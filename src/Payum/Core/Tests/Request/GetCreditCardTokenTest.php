@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use ArrayObject;
@@ -8,7 +10,7 @@ use Payum\Core\Request\GetCreditCardToken;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GetCreditCardTokenTest extends TestCase
+final class GetCreditCardTokenTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

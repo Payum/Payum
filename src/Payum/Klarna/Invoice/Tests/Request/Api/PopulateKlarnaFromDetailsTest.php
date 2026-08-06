@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use ArrayObject;
@@ -9,7 +11,7 @@ use Payum\Klarna\Invoice\Request\Api\PopulateKlarnaFromDetails;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class PopulateKlarnaFromDetailsTest extends TestCase
+final class PopulateKlarnaFromDetailsTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder(): void
     {

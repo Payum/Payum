@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType;
@@ -10,7 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreditCardTypeTest extends TestCase
+final class CreditCardTypeTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractType(): void
     {

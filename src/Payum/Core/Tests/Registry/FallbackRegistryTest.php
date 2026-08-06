@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Registry;
 
 use Exception;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class FallbackRegistryTest extends TestCase
+final class FallbackRegistryTest extends TestCase
 {
     public function testShouldImplementsRegistryInterface(): void
     {
@@ -146,7 +148,6 @@ class FallbackRegistryTest extends TestCase
 
     public function testShouldTryFallbackIfInvalidArgumentExceptionThrownFromMainRegistryOnGetStorage(): void
     {
-        $this->createMock(StorageInterface::class);
         $expectedStorage = $this->createMock(StorageInterface::class);
 
         $mailRegistryMock = $this->createRegistryMock();

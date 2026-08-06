@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Extension;
 
 use Payum\Core\Bridge\Symfony\Event\ExecuteEvent;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class EventDispatcherExtensionTest extends TestCase
+final class EventDispatcherExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

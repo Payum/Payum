@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action;
 
 use Iterator;
@@ -14,7 +16,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\Masspay\Nvp\Action\ConvertPayoutAction;
 use stdClass;
 
-class ConvertPayoutActionTest extends GenericActionTest
+final class ConvertPayoutActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertPayoutAction::class;
 

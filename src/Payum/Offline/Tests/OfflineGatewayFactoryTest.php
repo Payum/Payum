@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Offline\Tests;
 
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Offline\OfflineGatewayFactory;
 
-class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

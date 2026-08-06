@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Iterator;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Component\Templating\EngineInterface;
 
-class RenderTemplateActionTest extends GenericActionTest
+final class RenderTemplateActionTest extends GenericActionTest
 {
     /**
      * @var string

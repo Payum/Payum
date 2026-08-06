@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Be2Bill\Tests\Action;
 
 use Payum\Be2Bill\Action\CaptureOffsiteAction;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class CaptureOffsiteActionTest extends GenericActionTest
+final class CaptureOffsiteActionTest extends GenericActionTest
 {
     protected $actionClass = CaptureOffsiteAction::class;
 

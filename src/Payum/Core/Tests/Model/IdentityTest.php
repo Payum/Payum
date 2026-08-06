@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identity;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class IdentityTest extends TestCase
+final class IdentityTest extends TestCase
 {
     public function testShouldImplementIdentityInterface(): void
     {

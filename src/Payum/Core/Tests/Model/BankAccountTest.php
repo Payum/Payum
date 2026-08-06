@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\BankAccount;
@@ -7,7 +9,7 @@ use Payum\Core\Model\BankAccountInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class BankAccountTest extends TestCase
+final class BankAccountTest extends TestCase
 {
     public function testShouldExtendBankAccountInterface(): void
     {

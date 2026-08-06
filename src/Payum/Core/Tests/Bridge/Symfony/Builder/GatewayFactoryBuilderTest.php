@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder;
@@ -7,7 +9,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class GatewayFactoryBuilderTest extends TestCase
+final class GatewayFactoryBuilderTest extends TestCase
 {
     public function testShouldBuildContainerAwareCoreGatewayFactory(): void
     {

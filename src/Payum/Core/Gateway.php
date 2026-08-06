@@ -145,7 +145,6 @@ class Gateway implements GatewayInterface
             }
 
             $prev = new ReflectionProperty('Exception', 'previous');
-            $prev->setAccessible(true);
             $prev->setValue($wrapper, $exception);
 
             throw $e;

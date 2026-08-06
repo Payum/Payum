@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Offline\Tests\Action;
 
 use ArrayAccess;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class RefundActionTest extends TestCase
+final class RefundActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action\Api;
 
 use ArrayAccess;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class CheckRecurringPaymentActionTest extends TestCase
+final class CheckRecurringPaymentActionTest extends TestCase
 {
     protected $requiredFields = [
         'agreementRef' => 'aRef',

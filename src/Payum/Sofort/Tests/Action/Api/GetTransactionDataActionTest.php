@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Sofort\Tests\Action\Api;
 
 use ArrayAccess;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class GetTransactionDataActionTest extends TestCase
+final class GetTransactionDataActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

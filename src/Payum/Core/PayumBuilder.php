@@ -437,9 +437,9 @@ class PayumBuilder
             },
             GenericTokenFactoryInterface::class => fn (ContainerInterface $c): GenericTokenFactoryInterface => $this->buildGenericTokenFactory($c->get(TokenFactoryInterface::class), $paths),
             HttpRequestVerifierInterface::class => fn (): HttpRequestVerifierInterface => $this->buildHttpRequestVerifier($tokenStorage),
-            ClientInterface::class => fn () => Psr18ClientDiscovery::find(),
-            StreamFactoryInterface::class => fn () => Psr17FactoryDiscovery::findStreamFactory(),
-            RequestFactoryInterface::class => fn () => Psr17FactoryDiscovery::findRequestFactory(),
+            ClientInterface::class => Psr18ClientDiscovery::find(...),
+            StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
+            RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {

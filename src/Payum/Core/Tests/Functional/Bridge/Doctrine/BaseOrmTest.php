@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\Common\Cache\ArrayCache;

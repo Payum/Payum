@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Extension;
 
 use ArrayObject;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class CreateCustomerExtensionTest extends TestCase
+final class CreateCustomerExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

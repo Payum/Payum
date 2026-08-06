@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpPostRedirect;
@@ -8,7 +10,7 @@ use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class HttpPostRedirectTest extends TestCase
+final class HttpPostRedirectTest extends TestCase
 {
     public function testShouldImplementReplyInterface(): void
     {

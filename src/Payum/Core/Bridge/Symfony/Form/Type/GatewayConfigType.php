@@ -35,8 +35,8 @@ class GatewayConfigType extends AbstractType
             ->add('factoryName', GatewayFactoriesChoiceType::class)
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'buildCredentials']);
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'buildCredentials']);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $this->buildCredentials(...));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $this->buildCredentials(...));
     }
 
     public function buildCredentials(FormEvent $event): void

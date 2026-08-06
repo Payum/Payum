@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Action\ActionInterface;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class GenericTokenFactoryExtensionTest extends TestCase
+final class GenericTokenFactoryExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

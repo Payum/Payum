@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Rest\Tests\Action;
 
 use ArrayObject;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class StatusActionTest extends TestCase
+final class StatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface(): void
     {

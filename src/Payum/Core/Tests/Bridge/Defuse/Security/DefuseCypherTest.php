@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Defuse\Security;
 
 use Defuse\Crypto\Key;
@@ -8,7 +10,7 @@ use Payum\Core\Security\CypherInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class DefuseCypherTest extends TestCase
+final class DefuseCypherTest extends TestCase
 {
     public function testShouldImplementCypherInterface(): void
     {

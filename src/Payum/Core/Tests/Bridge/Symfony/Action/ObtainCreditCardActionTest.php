@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
@@ -22,7 +24,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 
-class ObtainCreditCardActionTest extends TestCase
+final class ObtainCreditCardActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

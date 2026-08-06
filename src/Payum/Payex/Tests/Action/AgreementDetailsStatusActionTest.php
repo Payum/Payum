@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action;
 
 use ArrayAccess;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AgreementDetailsStatusActionTest extends TestCase
+final class AgreementDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

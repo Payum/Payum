@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action\Api;
 
 use ArrayAccess;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AuthorizeTokenActionTest extends TestCase
+final class AuthorizeTokenActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

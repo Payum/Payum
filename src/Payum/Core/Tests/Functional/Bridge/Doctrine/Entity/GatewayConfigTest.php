@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\GatewayConfig;
 
-class GatewayConfigTest extends OrmTest
+final class GatewayConfigTest extends OrmTest
 {
     public function testShouldAllowPersistWithSomeFieldsSet(): void
     {
@@ -41,6 +43,7 @@ class GatewayConfigTest extends OrmTest
 
         // guard
         $this->assertNotSame($gatewayConfig, $foundGatewayConfig);
+        $this->assertInstanceOf(GatewayConfig::class, $foundGatewayConfig);
 
         $this->assertSame($gatewayConfig->getId(), $foundGatewayConfig->getId());
     }

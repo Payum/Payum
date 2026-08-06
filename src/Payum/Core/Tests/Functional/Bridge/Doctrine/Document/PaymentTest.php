@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\Payment;
 
-class PaymentTest extends MongoTest
+final class PaymentTest extends MongoTest
 {
     public function testShouldAllowPersistEmpty(): void
     {

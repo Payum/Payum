@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetToken;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 
-class GetTokenTest extends TestCase
+final class GetTokenTest extends TestCase
 {
     public function testShouldAllowGetHashSetInConstructor(): void
     {

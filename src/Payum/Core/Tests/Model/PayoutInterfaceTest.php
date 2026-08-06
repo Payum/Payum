@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\DetailsAggregateInterface;
@@ -8,7 +10,7 @@ use Payum\Core\Model\PayoutInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class PayoutInterfaceTest extends TestCase
+final class PayoutInterfaceTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface(): void
     {

@@ -64,12 +64,10 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
         $this->klarna->clear();
 
         $rp = new ReflectionProperty($this->klarna, 'xmlrpc');
-        $rp->setAccessible(true);
         /** @var \xmlrpc_client $xmlrpc */
         $xmlrpc = $rp->getValue($this->klarna);
         $xmlrpc->verifyhost = $this->config->xmlRpcVerifyHost;
         $xmlrpc->verifypeer = $this->config->xmlRpcVerifyPeer;
-        $rp->setAccessible(false);
 
         return $this->klarna;
     }

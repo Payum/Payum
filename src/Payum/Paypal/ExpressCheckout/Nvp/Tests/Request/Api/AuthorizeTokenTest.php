@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AuthorizeTokenTest extends TestCase
+final class AuthorizeTokenTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

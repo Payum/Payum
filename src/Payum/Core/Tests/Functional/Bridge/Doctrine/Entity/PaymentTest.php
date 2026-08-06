@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\Payment;
 
-class PaymentTest extends OrmTest
+final class PaymentTest extends OrmTest
 {
     public function testShouldAllowPersistEmpty(): void
     {
@@ -52,6 +54,7 @@ class PaymentTest extends OrmTest
 
         // guard
         $this->assertNotSame($order, $foundOrder);
+        $this->assertInstanceOf(Payment::class, $foundOrder);
 
         $this->assertSame($order->getId(), $foundOrder->getId());
     }

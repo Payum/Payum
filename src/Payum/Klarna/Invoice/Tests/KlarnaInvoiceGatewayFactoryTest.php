@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 
-class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class KlarnaInvoiceGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

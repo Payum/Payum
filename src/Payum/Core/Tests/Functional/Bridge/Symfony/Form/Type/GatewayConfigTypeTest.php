@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\GatewayFactoryInterface;
@@ -14,7 +16,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormView;
 
-class GatewayConfigTypeTest extends TestCase
+final class GatewayConfigTypeTest extends TestCase
 {
     /**
      * @var  FormFactory

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\DetailsAggregateInterface;
@@ -8,7 +10,7 @@ use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class TokenInterfaceTest extends TestCase
+final class TokenInterfaceTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface(): void
     {

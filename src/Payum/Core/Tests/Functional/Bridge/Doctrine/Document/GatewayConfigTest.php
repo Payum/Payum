@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Document;
 
 use Payum\Core\Tests\Functional\Bridge\Doctrine\MongoTest;
 use Payum\Core\Tests\Mocks\Document\GatewayConfig;
 
-class GatewayConfigTest extends MongoTest
+final class GatewayConfigTest extends MongoTest
 {
     public function testShouldAllowPersistWithSomeFieldsSet(): void
     {

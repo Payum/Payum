@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Debug;
 
 use Payum\Core\Debug\Humanify;
@@ -8,7 +10,7 @@ use Payum\Core\Request\Capture;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class HumanifyTest extends TestCase
+final class HumanifyTest extends TestCase
 {
     public function testShouldBeAbstract(): void
     {

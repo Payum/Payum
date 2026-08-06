@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Functional\Resources\Views;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
 use PHPUnit\Framework\TestCase;
 
-class CaptureTemplateTest extends TestCase
+final class CaptureTemplateTest extends TestCase
 {
     public function testShouldRenderExpectedResult(): void
     {

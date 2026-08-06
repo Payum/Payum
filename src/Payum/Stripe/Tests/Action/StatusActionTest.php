@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
@@ -7,7 +9,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Stripe\Action\StatusAction;
 use Payum\Stripe\Constants;
 
-class StatusActionTest extends GenericActionTest
+final class StatusActionTest extends GenericActionTest
 {
     protected $requestClass = GetHumanStatus::class;
 

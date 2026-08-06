@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security\Util;
 
 use Payum\Core\Security\Util\Random;
 use PHPUnit\Framework\TestCase;
 
-class RandomTest extends TestCase
+final class RandomTest extends TestCase
 {
     public function testShouldAllowGenerateToken(): void
     {

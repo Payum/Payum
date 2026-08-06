@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\Gateway;
@@ -7,7 +9,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use ReflectionClass;
 
-class GatewayFactoryTest extends TestCase
+final class GatewayFactoryTest extends TestCase
 {
     public function testShouldImplementGatewayFactoryInterface(): void
     {

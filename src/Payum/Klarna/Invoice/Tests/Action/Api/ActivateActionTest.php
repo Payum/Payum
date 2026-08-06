@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Klarna;
@@ -18,7 +20,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use stdClass;
 
-class ActivateActionTest extends GenericApiAwareActionTest
+final class ActivateActionTest extends GenericApiAwareActionTest
 {
     public function testShouldBeSubClassOfBaseApiAwareAction(): void
     {
@@ -153,9 +155,7 @@ class ActivateActionTest extends GenericApiAwareActionTest
         $klarnaMock = $this->createMock(Klarna::class);
 
         $rp = new ReflectionProperty($klarnaMock, 'xmlrpc');
-        $rp->setAccessible(true);
         $rp->setValue($klarnaMock, $this->createMock(class_exists('xmlrpc_client') ? 'xmlrpc_client' : Client::class));
-        $rp->setAccessible(false);
 
         return $klarnaMock;
     }

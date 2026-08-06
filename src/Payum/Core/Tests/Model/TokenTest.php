@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identity;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class TokenTest extends TestCase
+final class TokenTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface(): void
     {

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security\Util;
 
 use Iterator;
 use Payum\Core\Security\Util\Mask;
 use PHPUnit\Framework\TestCase;
 
-class MaskTest extends TestCase
+final class MaskTest extends TestCase
 {
     public static function provideValues(): Iterator
     {

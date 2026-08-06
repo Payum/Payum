@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action\Api;
 
 use ArrayAccess;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class CreateButtonPaymentActionTest extends TestCase
+final class CreateButtonPaymentActionTest extends TestCase
 {
     public function testShouldImplementsApiAwareAction(): void
     {

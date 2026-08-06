@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use ArrayAccess;
@@ -9,7 +11,7 @@ use Payum\Core\Model\ArrayObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class ArrayObjectTest extends TestCase
+final class ArrayObjectTest extends TestCase
 {
     public function testShouldImplementArrayAccessInterface(): void
     {

@@ -3,19 +3,15 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
-use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
-use Rector\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector;
+use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
 use Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector;
@@ -57,20 +53,16 @@ return RectorConfig::configure()
         SimplifyUselessVariableRector::class,
         ShortenElseIfRector::class,
         SimplifyIfReturnBoolRector::class,
-        UnusedForeachValueToArrayKeysRector::class,
         ChangeArrayPushToArrayAssignRector::class,
         UnwrapSprintfOneArgumentRector::class,
-        FlipTypeControlToUseExclusiveTypeRector::class,
         InlineConstructorDefaultToPropertyRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
-        Utf8DecodeEncodeToMbConvertEncodingRector::class,
     ])
     ->withSkip([
         ClassPropertyAssignToConstructorPromotionRector::class,
-        MixedTypeRector::class,
         ReadOnlyPropertyRector::class,
-        FirstClassCallableRector::class,
         ReturnNeverTypeRector::class,
+        AssertArrayCastedObjectToAssertSameRector::class,
 
         // The withConsecutive() rewrites all produce subtly wrong code against this
         // suite, so they stay off until it moves to PHPUnit 10 and the rewrites can

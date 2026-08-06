@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use AuthorizeNetAIM_Response;
@@ -11,7 +13,7 @@ use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Tests\GenericActionTest;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class StatusActionTest extends GenericActionTest
+final class StatusActionTest extends GenericActionTest
 {
     protected $actionClass = StatusAction::class;
 

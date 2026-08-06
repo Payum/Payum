@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Iterator;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class GetBinaryStatusTest extends TestCase
+final class GetBinaryStatusTest extends TestCase
 {
     public static function provideIsXXXMethods(): Iterator
     {

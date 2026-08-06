@@ -242,9 +242,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 },
 
                 // PSR-18/17 services - lazily discover if not provided
-                ClientInterface::class => static fn (): ClientInterface => Psr18ClientDiscovery::find(),
-                StreamFactoryInterface::class => static fn (): StreamFactoryInterface => Psr17FactoryDiscovery::findStreamFactory(),
-                RequestFactoryInterface::class => static fn (): RequestFactoryInterface => Psr17FactoryDiscovery::findRequestFactory(),
+                ClientInterface::class => Psr18ClientDiscovery::find(...),
+                StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
+                RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
                 // Legacy Payum service names - delegate to PSR interfaces
                 'payum.http_client' => static fn (ContainerInterface $c): HttplugClient => new HttplugClient($c->get(ClientInterface::class)),

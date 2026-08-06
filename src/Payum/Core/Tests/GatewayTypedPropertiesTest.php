@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\Gateway;
@@ -8,7 +10,7 @@ use ReflectionNamedType;
 use ReflectionProperty;
 use TypeError;
 
-class GatewayTypedPropertiesTest extends TestCase
+final class GatewayTypedPropertiesTest extends TestCase
 {
     /**
      * @dataProvider provideTypedArrayProperties
@@ -30,7 +32,6 @@ class GatewayTypedPropertiesTest extends TestCase
     public function testShouldInitialisePropertyToAnEmptyArray(string $propertyName): void
     {
         $property = new ReflectionProperty(Gateway::class, $propertyName);
-        $property->setAccessible(true);
 
         $this->assertSame([], $property->getValue(new Gateway()));
     }
@@ -41,7 +42,6 @@ class GatewayTypedPropertiesTest extends TestCase
     public function testThrowsWhenPropertyIsSetToANonArrayValue(string $propertyName): void
     {
         $property = new ReflectionProperty(Gateway::class, $propertyName);
-        $property->setAccessible(true);
 
         $this->expectException(TypeError::class);
 

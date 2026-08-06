@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
@@ -7,7 +9,7 @@ use Payum\Klarna\Invoice\Request\Api\CreditInvoice;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class CreditInvoiceTest extends TestCase
+final class CreditInvoiceTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseOrder(): void
     {

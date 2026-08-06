@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Rest\Tests\Action;
 
 use ArrayObject;
@@ -12,7 +14,7 @@ use Payum\Paypal\Rest\Model\PaymentDetails;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class CaptureActionTest extends TestCase
+final class CaptureActionTest extends TestCase
 {
     public function testShouldSupportCaptureWithPaymentSdkModel(): void
     {

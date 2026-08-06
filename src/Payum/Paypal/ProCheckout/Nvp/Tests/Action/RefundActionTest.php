@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class RefundActionTest extends GenericActionTest
+final class RefundActionTest extends GenericActionTest
 {
     protected $actionClass = RefundAction::class;
 

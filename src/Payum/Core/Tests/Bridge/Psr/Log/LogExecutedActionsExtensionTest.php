@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use LogicException;
@@ -19,7 +21,7 @@ use ReflectionClass;
 use ReflectionObject;
 use stdClass;
 
-class LogExecutedActionsExtensionTest extends TestCase
+final class LogExecutedActionsExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

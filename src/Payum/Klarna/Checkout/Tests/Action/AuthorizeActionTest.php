@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Klarna_Checkout_Order;
@@ -27,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AuthorizeActionTest extends TestCase
+final class AuthorizeActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

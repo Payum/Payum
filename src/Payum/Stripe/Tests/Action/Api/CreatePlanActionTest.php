@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class CreatePlanActionTest extends TestCase
+final class CreatePlanActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface(): void
     {

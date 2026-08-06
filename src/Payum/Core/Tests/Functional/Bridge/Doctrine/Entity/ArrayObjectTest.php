@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\ArrayObject;
 
-class ArrayObjectTest extends OrmTest
+final class ArrayObjectTest extends OrmTest
 {
     public function testShouldAllowPersistEmpty(): void
     {

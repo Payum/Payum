@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Reply;
 
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Response;
 
-class HttpResponseTest extends TestCase
+final class HttpResponseTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseReply(): void
     {

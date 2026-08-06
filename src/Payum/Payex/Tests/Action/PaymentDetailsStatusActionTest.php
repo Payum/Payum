@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class PaymentDetailsStatusActionTest extends TestCase
+final class PaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

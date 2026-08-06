@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,7 +13,7 @@ use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class GetHttpRequestActionTest extends TestCase
+final class GetHttpRequestActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

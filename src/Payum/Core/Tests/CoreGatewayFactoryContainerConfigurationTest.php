@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use DI\Container;
@@ -40,7 +42,7 @@ use stdClass;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
-class CoreGatewayFactoryContainerConfigurationTest extends TestCase
+final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 {
     public function testShouldImplementContainerConfigurationInterface(): void
     {
@@ -366,13 +368,13 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             ExecuteSameRequestWithModelDetailsAction::class,
             RenderTemplateAction::class,
             GetCurrencyAction::class,
-        ], array_map('get_class', $actions));
+        ], array_map(get_class(...), $actions));
 
         $extensions = $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions');
 
         $this->assertSame([
             EndlessCycleDetectorExtension::class,
-        ], array_map('get_class', $extensions));
+        ], array_map(get_class(...), $extensions));
     }
 
     public function testCreateGatewayShouldSkipGetTokenActionWhenTokenStorageIsNotConfigured(): void
@@ -383,7 +385,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $actions = $this->readAttribute($gateway, 'actions');
 
-        $this->assertNotContains(GetTokenAction::class, array_map('get_class', $actions));
+        $this->assertNotContains(GetTokenAction::class, array_map(get_class(...), $actions));
     }
 
     public function testCreateGatewayShouldAddGetTokenActionWhenTokenStorageIsConfigured(): void
@@ -398,7 +400,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $actions = $this->readAttribute($gateway, 'actions');
 
-        $this->assertContains(GetTokenAction::class, array_map('get_class', $actions));
+        $this->assertContains(GetTokenAction::class, array_map(get_class(...), $actions));
     }
 
     public function testCreateGatewayShouldResolveActionsFromTheContainer(): void
@@ -421,7 +423,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $gateway = $factory->createGateway($this->buildContainer());
 
         $this->assertSame([CoreGatewayFactoryTestAction::class], array_map(
-            'get_class',
+            get_class(...),
             $this->readAttribute($gateway, 'actions')
         ));
     }
@@ -452,7 +454,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertSame([
             CoreGatewayFactoryTestPrependAction::class,
             CoreGatewayFactoryTestAction::class,
-        ], array_map('get_class', $this->readAttribute($gateway, 'actions')));
+        ], array_map(get_class(...), $this->readAttribute($gateway, 'actions')));
     }
 
     public function testCreateGatewayShouldPrependExtensionsImplementingPrependExtensionInterface(): void
@@ -482,7 +484,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertSame([
             CoreGatewayFactoryTestPrependExtension::class,
             CoreGatewayFactoryTestExtension::class,
-        ], array_map('get_class', $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions')));
+        ], array_map(get_class(...), $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions')));
     }
 
     public function testCreateGatewayShouldReuseTheGatewayGivenAsSecondArgument(): void
@@ -500,7 +502,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertSame([
             CoreGatewayFactoryTestPrependAction::class,
             CoreGatewayFactoryTestAction::class,
-        ], array_map('get_class', $this->readAttribute($gateway, 'actions')));
+        ], array_map(get_class(...), $this->readAttribute($gateway, 'actions')));
     }
 
     public function testCreateGatewayShouldIgnoreSecondArgumentWhichIsNotAGateway(): void
@@ -709,9 +711,9 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $gateway = $factory->create();
 
-        $actionClasses = array_map('get_class', $this->readAttribute($gateway, 'actions'));
+        $actionClasses = array_map(get_class(...), $this->readAttribute($gateway, 'actions'));
         $extensionClasses = array_map(
-            'get_class',
+            get_class(...),
             $this->readAttribute($this->readAttribute($gateway, 'extensions'), 'extensions')
         );
 
@@ -727,7 +729,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $gateway = $factory->create();
 
-        $this->assertNotContains(GetTokenAction::class, array_map('get_class', $this->readAttribute($gateway, 'actions')));
+        $this->assertNotContains(GetTokenAction::class, array_map(get_class(...), $this->readAttribute($gateway, 'actions')));
     }
 
     public function testCreateShouldAddGetTokenActionWhenTokenStorageIsConfigured(): void
@@ -738,7 +740,7 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             'payum.security.token_storage' => $this->createMock(StorageInterface::class),
         ]);
 
-        $this->assertContains(GetTokenAction::class, array_map('get_class', $this->readAttribute($gateway, 'actions')));
+        $this->assertContains(GetTokenAction::class, array_map(get_class(...), $this->readAttribute($gateway, 'actions')));
     }
 
     public function testCreateConfigShouldTriggerDeprecation(): void

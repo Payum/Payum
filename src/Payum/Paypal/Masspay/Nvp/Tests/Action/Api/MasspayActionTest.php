@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Masspay\Nvp\Tests\Action\Api;
 
 use Payum\Core\ApiAwareInterface;
@@ -11,7 +13,7 @@ use Payum\Paypal\Masspay\Nvp\Request\Api\Masspay;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class MasspayActionTest extends GenericActionTest
+final class MasspayActionTest extends GenericActionTest
 {
     protected $requestClass = Masspay::class;
 

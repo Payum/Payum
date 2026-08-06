@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class RecurringPaymentDetailsStatusActionTest extends TestCase
+final class RecurringPaymentDetailsStatusActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface(): void
     {

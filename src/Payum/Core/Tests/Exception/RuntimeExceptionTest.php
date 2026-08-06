@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception;
 
 use Payum\Core\Exception\ExceptionInterface;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RuntimeException;
 
-class RuntimeExceptionTest extends TestCase
+final class RuntimeExceptionTest extends TestCase
 {
     public function testShouldImplementExceptionInterface(): void
     {

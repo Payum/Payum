@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\ISO4217;
 
 use Payum\Core\ISO4217\Currency;
 use PHPUnit\Framework\TestCase;
 
-class CurrencyTest extends TestCase
+final class CurrencyTest extends TestCase
 {
     public function testShouldAllowGetInfoSetInConstructor(): void
     {

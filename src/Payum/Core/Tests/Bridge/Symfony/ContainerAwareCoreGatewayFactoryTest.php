@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -12,7 +14,7 @@ use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class ContainerAwareCoreGatewayFactoryTest extends TestCase
+final class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
     public function testShouldExtendCoreGatewayFactory(): void
     {

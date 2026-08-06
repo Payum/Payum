@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\HttpRequestVerifierBuilder;
@@ -8,7 +10,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
-class HttpRequestVerifierBuilderTest extends TestCase
+final class HttpRequestVerifierBuilderTest extends TestCase
 {
     public function testShouldBuildSymfonyHttpRequestVerifier(): void
     {

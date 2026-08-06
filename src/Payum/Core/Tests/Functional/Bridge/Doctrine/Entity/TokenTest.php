@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
 use Doctrine\ORM\Tools\SchemaValidator;
@@ -8,7 +10,7 @@ use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\Token;
 use stdClass;
 
-class TokenTest extends OrmTest
+final class TokenTest extends OrmTest
 {
     public function testShouldAllSchemasBeValid(): void
     {
@@ -48,6 +50,7 @@ class TokenTest extends OrmTest
         $foundToken = $this->em->find($token::class, $hash);
 
         $this->assertNotSame($token, $foundToken);
+        $this->assertInstanceOf(Token::class, $foundToken);
 
         $this->assertSame($token->getHash(), $foundToken->getHash());
         $this->assertSame($token->getTargetUrl(), $foundToken->getTargetUrl());

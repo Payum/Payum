@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Extension\StorageExtension;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class SimpleRegistryTest extends TestCase
+final class SimpleRegistryTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractRegistry(): void
     {
@@ -139,13 +141,13 @@ class SimpleRegistryTest extends TestCase
 
         $gatewayFooMock = $this->createMock(Gateway::class);
         $gatewayFooMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('addExtension')
         ;
 
         $gatewayBarMock = $this->createMock(Gateway::class);
         $gatewayBarMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('addExtension')
         ;
 

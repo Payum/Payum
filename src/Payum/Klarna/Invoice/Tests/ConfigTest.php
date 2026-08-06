@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests;
 
 use Klarna;
@@ -9,7 +11,7 @@ use KlarnaLanguage;
 use Payum\Klarna\Invoice\Config;
 use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends TestCase
+final class ConfigTest extends TestCase
 {
     public function testShouldAllowGetDefaultPublicProperties(): void
     {

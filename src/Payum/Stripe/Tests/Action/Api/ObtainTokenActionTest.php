@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action\Api;
 
 use ArrayObject;
@@ -20,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class ObtainTokenActionTest extends TestCase
+final class ObtainTokenActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

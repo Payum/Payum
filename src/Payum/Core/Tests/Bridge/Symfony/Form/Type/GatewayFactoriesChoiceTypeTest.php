@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
@@ -9,7 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GatewayFactoriesChoiceTypeTest extends TestCase
+final class GatewayFactoriesChoiceTypeTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractType(): void
     {

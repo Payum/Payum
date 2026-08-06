@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Reply;
 
 use ArrayObject;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class BaseModeAwareTest extends TestCase
+final class BaseModeAwareTest extends TestCase
 {
     public function testShouldImplementReplyInterface(): void
     {

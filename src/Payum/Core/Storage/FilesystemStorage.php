@@ -54,14 +54,11 @@ class FilesystemStorage extends AbstractStorage
         }
 
         $rp = new ReflectionProperty($model, $this->idProperty);
-        $rp->setAccessible(true);
 
         $id = $rp->getValue($model);
         if (! $id) {
             $rp->setValue($model, $id = uniqid('', true));
         }
-
-        $rp->setAccessible(false);
 
         $this->identityMap[$id] = $model;
         file_put_contents($this->storageDir . '/payum-model-' . $id, serialize($model));
@@ -72,7 +69,6 @@ class FilesystemStorage extends AbstractStorage
     protected function doDeleteModel(object $model): void
     {
         $rp = new ReflectionProperty($model, $this->idProperty);
-        $rp->setAccessible(true);
 
         if ($id = $rp->getValue($model)) {
             unlink($this->storageDir . '/payum-model-' . $id);
@@ -83,7 +79,6 @@ class FilesystemStorage extends AbstractStorage
     protected function doGetIdentity(object $model): Identity
     {
         $rp = new ReflectionProperty($model, $this->idProperty);
-        $rp->setAccessible(true);
 
         if (! $id = $rp->getValue($model)) {
             throw new LogicException('The model must be persisted before usage of this method');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use DI\Container;
@@ -35,7 +37,7 @@ use stdClass;
 use function DI\autowire;
 use function DI\get;
 
-class PayumBuilderGlobalContainerTest extends TestCase
+final class PayumBuilderGlobalContainerTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -61,7 +63,6 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $builder->addGlobalService(stdClass::class, $service);
 
         $ref = new ReflectionProperty($builder, 'globalDefinitions');
-        $ref->setAccessible(true);
 
         $this->assertSame([
             'foo' => 'fooVal',
@@ -77,7 +78,6 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $builder->addGlobalService('foo', 'fooNewVal');
 
         $ref = new ReflectionProperty($builder, 'globalDefinitions');
-        $ref->setAccessible(true);
 
         $this->assertSame([
             'foo' => 'fooNewVal',
@@ -100,7 +100,6 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $builder->setGlobalContainer($container);
 
         $ref = new ReflectionProperty($builder, 'globalContainer');
-        $ref->setAccessible(true);
 
         $this->assertSame($container, $ref->getValue($builder));
     }
@@ -152,7 +151,6 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(StorageInterface::class, $container->get('payum.security.token_storage'));
 
         $ref = new ReflectionProperty($builder, 'storages');
-        $ref->setAccessible(true);
 
         $this->assertArrayHasKey(Payment::class, $ref->getValue($builder));
         $this->assertArrayHasKey(ArrayObject::class, $ref->getValue($builder));
@@ -340,7 +338,6 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(StorageInterface::class, $container->get('payum.security.token_storage'));
 
         $ref = new ReflectionProperty($builder, 'storages');
-        $ref->setAccessible(true);
 
         $this->assertArrayHasKey(Payment::class, $ref->getValue($builder));
     }
@@ -356,12 +353,10 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $builder->buildGlobalContainer();
 
         $ref = new ReflectionProperty($builder, 'storages');
-        $ref->setAccessible(true);
 
         $this->assertSame([], $ref->getValue($builder));
 
         $ref = new ReflectionProperty($builder, 'tokenStorage');
-        $ref->setAccessible(true);
 
         $this->assertNull($ref->getValue($builder));
     }
@@ -865,7 +860,7 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($logger, $documentedAction->logger);
 
         // the core actions are still registered
-        $this->assertContains(GetHttpRequestAction::class, array_map('get_class', $actions));
+        $this->assertContains(GetHttpRequestAction::class, array_map(get_class(...), $actions));
     }
 
     /**
@@ -909,7 +904,7 @@ class PayumBuilderGlobalContainerTest extends TestCase
 
         $this->assertContains(
             DocumentedCaptureAction::class,
-            array_map('get_class', $this->readAttribute($gateway, 'actions'))
+            array_map(get_class(...), $this->readAttribute($gateway, 'actions'))
         );
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action;
 
 use Iterator;
@@ -12,7 +14,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Payex\Action\ConvertPaymentAction;
 use stdClass;
 
-class ConvertPaymentActionTest extends GenericActionTest
+final class ConvertPaymentActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertPaymentAction::class;
 

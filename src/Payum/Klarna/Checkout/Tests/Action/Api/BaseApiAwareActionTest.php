@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Klarna_Checkout_ConnectorInterface;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class BaseApiAwareActionTest extends TestCase
+final class BaseApiAwareActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

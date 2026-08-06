@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\Identificator;
@@ -8,7 +10,7 @@ use ReflectionClass;
 use Serializable;
 use stdClass;
 
-class IdentificatorTest extends TestCase
+final class IdentificatorTest extends TestCase
 {
     public function testShouldImplementSerializableInterface(): void
     {

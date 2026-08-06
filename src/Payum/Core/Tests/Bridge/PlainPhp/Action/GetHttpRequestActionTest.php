@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\PlainPhp\Action;
 
 use Iterator;
@@ -9,7 +11,7 @@ use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Tests\GenericActionTest;
 use stdClass;
 
-class GetHttpRequestActionTest extends GenericActionTest
+final class GetHttpRequestActionTest extends GenericActionTest
 {
     protected $requestClass = GetHttpRequest::class;
 

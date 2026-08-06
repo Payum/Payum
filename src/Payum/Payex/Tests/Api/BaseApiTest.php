@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -8,7 +10,7 @@ use Payum\Payex\Api\SoapClientFactory;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class BaseApiTest extends TestCase
+final class BaseApiTest extends TestCase
 {
     public function testShouldBeAbstract(): void
     {

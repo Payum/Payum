@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProCheckout\Nvp\Tests\Action;
 
 use Payum\Core\Request\GetHumanStatus;
@@ -7,7 +9,7 @@ use Payum\Core\Tests\GenericActionTest;
 use Payum\Paypal\ProCheckout\Nvp\Action\StatusAction;
 use Payum\Paypal\ProCheckout\Nvp\Api;
 
-class StatusActionTest extends GenericActionTest
+final class StatusActionTest extends GenericActionTest
 {
     protected $actionClass = StatusAction::class;
 

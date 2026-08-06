@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use DateTime;
@@ -9,7 +11,7 @@ use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\TestCase;
 use ReflectionClass;
 
-class CreditCardTest extends TestCase
+final class CreditCardTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface(): void
     {

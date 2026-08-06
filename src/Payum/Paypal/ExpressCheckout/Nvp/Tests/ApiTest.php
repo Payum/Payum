@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -14,7 +16,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ApiTest extends TestCase
+final class ApiTest extends TestCase
 {
     public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {

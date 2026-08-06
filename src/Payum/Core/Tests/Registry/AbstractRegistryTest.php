@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Registry;
 
 use Doctrine\Persistence\Proxy;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AbstractRegistryTest extends TestCase
+final class AbstractRegistryTest extends TestCase
 {
     public function testShouldImplementGatewayRegistryInterface(): void
     {

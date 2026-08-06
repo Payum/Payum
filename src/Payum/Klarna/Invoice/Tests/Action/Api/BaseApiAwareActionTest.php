@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class BaseApiAwareActionTest extends TestCase
+final class BaseApiAwareActionTest extends TestCase
 {
     public function testShouldImplementsApiAwareInterface(): void
     {

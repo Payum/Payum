@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetHttpRequest;
 use PHPUnit\Framework\TestCase;
 
-class GetHttpRequestTest extends TestCase
+final class GetHttpRequestTest extends TestCase
 {
     public function testShouldSetExpectedDefaultValuesInConstructor(): void
     {

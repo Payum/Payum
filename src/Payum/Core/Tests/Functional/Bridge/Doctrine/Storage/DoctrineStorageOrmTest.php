@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Storage;
 
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
@@ -7,7 +9,7 @@ use Payum\Core\Model\Identity;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\TestModel;
 
-class DoctrineStorageOrmTest extends OrmTest
+final class DoctrineStorageOrmTest extends OrmTest
 {
     public function testShouldUpdateModelAndSetId(): void
     {

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests;
 
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\ProHosted\Nvp\PaypalProHostedGatewayFactory;
 
-class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Be2Bill\Tests;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -11,7 +13,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ApiTest extends TestCase
+final class ApiTest extends TestCase
 {
     public function testThrowIfRequiredOptionsNotSetInConstructor(): void
     {

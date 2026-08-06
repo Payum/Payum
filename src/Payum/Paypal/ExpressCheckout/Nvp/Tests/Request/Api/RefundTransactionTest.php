@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Request\Api;
 
 use Payum\Core\Request\Generic;
@@ -7,7 +9,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\RefundTransaction;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class RefundTransactionTest extends TestCase
+final class RefundTransactionTest extends TestCase
 {
     public function testShouldBeSubClassOfGeneric(): void
     {

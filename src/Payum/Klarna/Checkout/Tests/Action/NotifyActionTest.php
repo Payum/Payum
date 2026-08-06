@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use Klarna_Checkout_Order;
@@ -14,7 +16,7 @@ use Payum\Klarna\Checkout\Request\Api\UpdateOrder;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class NotifyActionTest extends GenericActionTest
+final class NotifyActionTest extends GenericActionTest
 {
     protected $actionClass = NotifyAction::class;
 

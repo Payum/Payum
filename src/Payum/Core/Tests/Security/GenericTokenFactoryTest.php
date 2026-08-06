@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Exception\LogicException;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class GenericTokenFactoryTest extends TestCase
+final class GenericTokenFactoryTest extends TestCase
 {
     public function testShouldImplementGenericTokenFactoryInterface(): void
     {

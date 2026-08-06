@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception\Http;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -11,7 +13,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 
-class HttpExceptionTest extends TestCase
+final class HttpExceptionTest extends TestCase
 {
     public function testShouldBeSubClassOfRuntimeException(): void
     {

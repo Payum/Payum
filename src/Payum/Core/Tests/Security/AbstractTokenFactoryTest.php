@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Model\Identity;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AbstractTokenFactoryTest extends TestCase
+final class AbstractTokenFactoryTest extends TestCase
 {
     public function testShouldImplementsGenericTokenFactoryInterface(): void
     {
@@ -492,7 +494,7 @@ class AbstractTokenFactoryTest extends TestCase
         $factoryMock = $this->getMockForAbstractClass(AbstractTokenFactory::class, [$tokenStorage, $registry]);
         $factoryMock
             ->method('generateUrl')
-            ->willReturnCallback(fn ($path, array $args) => $path . '?' . http_build_query($args))
+            ->willReturnCallback(fn (string $path, array $args): string => $path . '?' . http_build_query($args))
         ;
 
         return $factoryMock;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Security;
 
 use Payum\Core\Exception\LogicException;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Serializable;
 
-class SensitiveValueTest extends TestCase
+final class SensitiveValueTest extends TestCase
 {
     public function testShouldBeFinal(): void
     {

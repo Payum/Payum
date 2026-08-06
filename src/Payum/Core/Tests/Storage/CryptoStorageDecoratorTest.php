@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Storage;
 
 use LogicException;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class CryptoStorageDecoratorTest extends TestCase
+final class CryptoStorageDecoratorTest extends TestCase
 {
     public function testShouldImplementStorageInterface(): void
     {

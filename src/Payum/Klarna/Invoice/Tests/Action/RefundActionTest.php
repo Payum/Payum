@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Action;
 
 use Payum\Core\Exception\LogicException;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class RefundActionTest extends TestCase
+final class RefundActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

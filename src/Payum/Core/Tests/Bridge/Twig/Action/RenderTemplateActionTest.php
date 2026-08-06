@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Twig\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Environment;
 
-class RenderTemplateActionTest extends TestCase
+final class RenderTemplateActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

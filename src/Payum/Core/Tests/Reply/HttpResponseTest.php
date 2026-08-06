@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Reply;
 
 use Payum\Core\Reply\HttpResponse;
@@ -7,7 +9,7 @@ use Payum\Core\Reply\ReplyInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class HttpResponseTest extends TestCase
+final class HttpResponseTest extends TestCase
 {
     public function testShouldImplementReplyInterface(): void
     {

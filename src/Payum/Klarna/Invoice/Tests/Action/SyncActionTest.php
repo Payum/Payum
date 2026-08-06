@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Action;
 
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class SyncActionTest extends TestCase
+final class SyncActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

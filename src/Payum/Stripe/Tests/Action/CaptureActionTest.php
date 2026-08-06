@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -14,7 +16,7 @@ use Payum\Stripe\Request\Api\ObtainToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class CaptureActionTest extends GenericActionTest
+final class CaptureActionTest extends GenericActionTest
 {
     protected $requestClass = Capture::class;
 

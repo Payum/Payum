@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\Rest\Tests;
 
 use PayPal\Rest\ApiContext;
@@ -8,7 +10,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 
-class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAllowCreateGatewayWithCustomConfig(): void
     {
@@ -36,7 +38,7 @@ class PaypalRestGatewayFactoryTest extends AbstractGatewayFactoryTest
             }
         }
 
-        $this->assertNotNull($apiContext);
+        $this->assertInstanceOf(ApiContext::class, $apiContext);
 
         $apiContextConfig = $apiContext->getConfig();
         foreach ($givenConfig as $k => $v) {

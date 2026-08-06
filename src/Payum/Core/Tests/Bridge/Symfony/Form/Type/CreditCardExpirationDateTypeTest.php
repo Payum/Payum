@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardExpirationDateType;
@@ -9,7 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreditCardExpirationDateTypeTest extends TestCase
+final class CreditCardExpirationDateTypeTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractType(): void
     {

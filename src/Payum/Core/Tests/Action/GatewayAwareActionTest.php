@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -8,7 +10,7 @@ use Payum\Core\GatewayAwareInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GatewayAwareActionTest extends TestCase
+final class GatewayAwareActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

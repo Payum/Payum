@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception;
 
 use LogicException;
@@ -7,7 +9,7 @@ use Payum\Core\Exception\ExceptionInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class LogicExceptionTest extends TestCase
+final class LogicExceptionTest extends TestCase
 {
     public function testShouldImplementExceptionInterface(): void
     {

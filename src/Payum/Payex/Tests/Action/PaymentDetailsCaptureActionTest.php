@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Action;
 
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class PaymentDetailsCaptureActionTest extends TestCase
+final class PaymentDetailsCaptureActionTest extends TestCase
 {
     public function testShouldImplementGatewayAwareInterface(): void
     {

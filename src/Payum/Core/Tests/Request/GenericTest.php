@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use ArrayObject;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class GenericTest extends TestCase
+final class GenericTest extends TestCase
 {
     public static function provideDifferentPhpTypes(): Iterator
     {

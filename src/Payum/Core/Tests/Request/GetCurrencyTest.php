@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\GetCurrency;
 use PHPUnit\Framework\TestCase;
 
-class GetCurrencyTest extends TestCase
+final class GetCurrencyTest extends TestCase
 {
     public function testShouldAllowGetCodeSetInConstructor(): void
     {

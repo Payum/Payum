@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class SyncActionTest extends TestCase
+final class SyncActionTest extends TestCase
 {
     public function testShouldImplementActionInterface(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Payex\Tests\Api;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -12,7 +14,7 @@ use ReflectionClass;
 use SoapClient;
 use stdClass;
 
-class RecurringApiTest extends TestCase
+final class RecurringApiTest extends TestCase
 {
     public function testShouldBeSubClassOfBaseApi(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Exception;
@@ -212,17 +214,17 @@ final class PayumTest extends TestCase
         $httpRedirect = new HttpRedirect('https://example.com');
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->willReturn($token);
 
         $token
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('aGateway');
 
         $gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('execute')
             ->with(new Capture($token))
             ->willReturn($httpRedirect);
@@ -254,17 +256,17 @@ final class PayumTest extends TestCase
         $httpRedirect = new HttpPostRedirect('example content');
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->willReturn($token);
 
         $token
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('aGateway');
 
         $gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('execute')
             ->with(new Capture($token))
             ->willReturn($httpRedirect);
@@ -311,22 +313,22 @@ HTML
         $gateway = $this->createMock(GatewayInterface::class);
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->willReturn($token);
 
         $token
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('aGateway');
 
         $token
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getAfterUrl')
             ->willReturn('https://example.com');
 
         $gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('execute')
             ->with(new Capture($token))
             ->willReturn(null);
@@ -357,17 +359,17 @@ HTML
         $token = $this->createMock(TokenInterface::class);
 
         $token
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('foo');
 
         $gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('execute')
             ->willReturnCallback(static fn (GetHumanStatus $status) => $status->setModel($paymentMock));
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->with([
                 'payum_token' => 'foo',
@@ -399,16 +401,16 @@ HTML
         $gateway = $this->createMock(GatewayInterface::class);
         $token = $this->createMock(TokenInterface::class);
 
-        $gateway->expects(self::once())
+        $gateway->expects($this->once())
             ->method('execute')
             ->with(new Notify($token));
 
-        $token->expects(self::once())
+        $token->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('foo');
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->with([
                 'payum_token' => 'foo',
@@ -440,18 +442,18 @@ HTML
         $gateway = $this->createMock(GatewayInterface::class);
         $token = $this->createMock(TokenInterface::class);
 
-        $gateway->expects(self::once())
+        $gateway->expects($this->once())
             ->method('execute')
             ->willThrowException(
                 new HttpResponse('error content', 400)
             );
 
-        $token->expects(self::once())
+        $token->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('foo');
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->with([
                 'payum_token' => 'foo',
@@ -487,19 +489,19 @@ HTML
         $gateway = $this->createMock(GatewayInterface::class);
         $token = $this->createMock(TokenInterface::class);
 
-        $gateway->expects(self::once())
+        $gateway->expects($this->once())
             ->method('execute')
             ->willThrowException(
                 new class() extends Exception implements ReplyInterface {
                 }
             );
 
-        $token->expects(self::once())
+        $token->expects($this->once())
             ->method('getGatewayName')
             ->willReturn('foo');
 
         $this->httpRequestVerifierMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('verify')
             ->with([
                 'payum_token' => 'foo',

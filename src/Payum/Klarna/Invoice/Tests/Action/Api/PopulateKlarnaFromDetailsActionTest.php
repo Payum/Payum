@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Invoice\Tests\Action\Api;
 
 use ArrayObject;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class PopulateKlarnaFromDetailsActionTest extends TestCase
+final class PopulateKlarnaFromDetailsActionTest extends TestCase
 {
     public function testShouldImplementsActionInterface(): void
     {

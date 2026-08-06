@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Storage;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class AbstractStorageTest extends TestCase
+final class AbstractStorageTest extends TestCase
 {
     public function testShouldImplementStorageInterface(): void
     {

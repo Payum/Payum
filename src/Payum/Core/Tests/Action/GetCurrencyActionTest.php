@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use Iterator;
@@ -10,7 +12,7 @@ use Payum\Core\Tests\GenericActionTest;
 use RuntimeException;
 use stdClass;
 
-class GetCurrencyActionTest extends GenericActionTest
+final class GetCurrencyActionTest extends GenericActionTest
 {
     protected $requestClass = GetCurrency::class;
 

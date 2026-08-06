@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Action;
 
 use ArrayObject;
@@ -19,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class AuthorizeRecurringActionTest extends GenericActionTest
+final class AuthorizeRecurringActionTest extends GenericActionTest
 {
     /**
      * @var Authorize

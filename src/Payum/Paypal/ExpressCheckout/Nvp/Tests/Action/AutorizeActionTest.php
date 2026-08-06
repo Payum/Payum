@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ExpressCheckout\Nvp\Tests\Action;
 
 use ArrayObject;
@@ -21,7 +23,7 @@ use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\SetExpressCheckout;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class AutorizeActionTest extends GenericActionTest
+final class AutorizeActionTest extends GenericActionTest
 {
     protected $requestClass = Authorize::class;
 

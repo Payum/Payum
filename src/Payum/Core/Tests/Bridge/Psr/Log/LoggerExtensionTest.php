@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Psr\Log;
 
 use Payum\Core\Action\ActionInterface;
@@ -16,7 +18,7 @@ use Psr\Log\NullLogger;
 use ReflectionClass;
 use stdClass;
 
-class LoggerExtensionTest extends TestCase
+final class LoggerExtensionTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {

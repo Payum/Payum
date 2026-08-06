@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Exception\LogicException;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class ObtainCreditCardTest extends TestCase
+final class ObtainCreditCardTest extends TestCase
 {
     public function testShouldBeSubClassOfGenericRequest(): void
     {

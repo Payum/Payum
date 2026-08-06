@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Klarna\Checkout\Tests\Action\Api;
 
 use Iterator;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class FetchOrderActionTest extends GenericActionTest
+final class FetchOrderActionTest extends GenericActionTest
 {
     protected $requestClass = FetchOrder::class;
 

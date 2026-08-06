@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Stripe\Tests;
 
 use Payum\Stripe\Keys;
 use PHPUnit\Framework\TestCase;
 
-class KeysTest extends TestCase
+final class KeysTest extends TestCase
 {
     public function testSouldAllowGetPublishableKeySetInConstructor(): void
     {

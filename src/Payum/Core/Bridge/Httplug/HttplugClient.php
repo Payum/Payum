@@ -2,7 +2,6 @@
 
 namespace Payum\Core\Bridge\Httplug;
 
-use Http\Client\HttpClient;
 use Payum\Core\HttpClientInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;

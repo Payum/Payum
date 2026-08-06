@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -7,7 +9,7 @@ use Payum\Core\Action\PrependActionInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class PrependActionInterfaceTest extends TestCase
+final class PrependActionInterfaceTest extends TestCase
 {
     public function testShouldBeInterface(): void
     {

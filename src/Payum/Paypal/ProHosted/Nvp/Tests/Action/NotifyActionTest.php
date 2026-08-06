@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Paypal\ProHosted\Nvp\Tests\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -12,7 +14,7 @@ use Payum\Paypal\ProHosted\Nvp\Action\NotifyAction;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
-class NotifyActionTest extends GenericActionTest
+final class NotifyActionTest extends GenericActionTest
 {
     protected $requestClass = Notify::class;
 

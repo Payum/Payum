@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Security;
 
 use Payum\Core\Bridge\Symfony\Security\TokenFactory;
@@ -15,7 +17,7 @@ use ReflectionClass;
 use stdClass;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TokenFactoryTest extends TestCase
+final class TokenFactoryTest extends TestCase
 {
     public function testShouldImplementsTokenFactoryInterface(): void
     {
@@ -506,7 +508,7 @@ class TokenFactoryTest extends TestCase
 
         $urlGenerator
             ->method('generate')
-            ->willReturnCallback(fn ($route, $parameters) => $route . '?' . http_build_query($parameters))
+            ->willReturnCallback(fn (string $route, array $parameters): string => $route . '?' . http_build_query($parameters))
         ;
 
         return $urlGenerator;

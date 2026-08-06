@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Doctrine\Storage;
 
 use Doctrine\Persistence\ObjectManager;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class DoctrineStorageTest extends TestCase
+final class DoctrineStorageTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractStorage(): void
     {

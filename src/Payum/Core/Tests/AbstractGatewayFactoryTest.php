@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\CoreGatewayFactory;
@@ -40,7 +42,6 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $factory = new $class([], $coreGatewayFactory);
 
         $ref = new ReflectionProperty($factory, 'coreGatewayFactory');
-        $ref->setAccessible(true);
         $this->assertSame($coreGatewayFactory, $ref->getValue($factory));
     }
 
@@ -85,7 +86,6 @@ abstract class AbstractGatewayFactoryTest extends TestCase
     protected function getPropertyValue(object $object, string $property)
     {
         $ref = new ReflectionProperty($object, $property);
-        $ref->setAccessible(true);
 
         return $ref->getValue($object);
     }

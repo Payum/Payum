@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Validator\Constraints;
 
 use Datetime;
@@ -7,7 +9,7 @@ use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate;
 use Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDateValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
+final class CreditCardDateValidatorTest extends ConstraintValidatorTestCase
 {
     public function testValidate(): void
     {

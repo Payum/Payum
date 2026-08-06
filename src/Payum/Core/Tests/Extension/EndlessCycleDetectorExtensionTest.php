@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Extension;
 
 use Payum\Core\Exception\LogicException;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use stdClass;
 
-class EndlessCycleDetectorExtensionTest extends TestCase
+final class EndlessCycleDetectorExtensionTest extends TestCase
 {
     public function testShouldImplementExtensionInterface(): void
     {

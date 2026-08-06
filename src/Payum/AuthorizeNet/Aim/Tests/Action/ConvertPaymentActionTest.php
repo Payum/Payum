@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\AuthorizeNet\Aim\Tests\Action;
 
 use Iterator;
@@ -14,7 +16,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Tests\GenericActionTest;
 use stdClass;
 
-class ConvertPaymentActionTest extends GenericActionTest
+final class ConvertPaymentActionTest extends GenericActionTest
 {
     protected $actionClass = ConvertPaymentAction::class;
 

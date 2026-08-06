@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use Payum\Core\Request\BaseGetStatus;
@@ -8,7 +10,7 @@ use Payum\Core\Request\GetStatusInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class BaseGetStatusTest extends TestCase
+final class BaseGetStatusTest extends TestCase
 {
     public function testShouldImplementGetStatusInterface(): void
     {

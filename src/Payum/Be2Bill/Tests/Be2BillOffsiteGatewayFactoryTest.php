@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Be2Bill\Tests;
 
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
 
-class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
+final class Be2BillOffsiteGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
     public function testShouldAddDefaultConfigPassedInConstructorWhileCreatingGatewayConfig(): void
     {

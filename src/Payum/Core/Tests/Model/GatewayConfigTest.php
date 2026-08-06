@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Model;
 
 use Payum\Core\Model\GatewayConfig;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GatewayConfigTest extends TestCase
+final class GatewayConfigTest extends TestCase
 {
     public function testShouldExtendDetailsAwareInterface(): void
     {

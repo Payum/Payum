@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Exception;
 
 use InvalidArgumentException;
@@ -7,7 +9,7 @@ use Payum\Core\Exception\ExceptionInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class InvalidArgumentExceptionExceptionTest extends TestCase
+final class InvalidArgumentExceptionExceptionTest extends TestCase
 {
     public function testShouldImplementExceptionInterface(): void
     {

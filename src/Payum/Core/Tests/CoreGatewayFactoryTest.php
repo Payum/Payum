@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Closure;
@@ -29,7 +31,7 @@ use stdClass;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
-class CoreGatewayFactoryTest extends TestCase
+final class CoreGatewayFactoryTest extends TestCase
 {
     public function testShouldImplementCoreGatewayFactoryInterface(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony;
 
 use Payum\Core\Bridge\Symfony\ContainerAwareRegistry;
@@ -13,7 +15,7 @@ use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class ContainerAwareRegistryTest extends TestCase
+final class ContainerAwareRegistryTest extends TestCase
 {
     public function testShouldBeSubClassOfAbstractRegistry(): void
     {

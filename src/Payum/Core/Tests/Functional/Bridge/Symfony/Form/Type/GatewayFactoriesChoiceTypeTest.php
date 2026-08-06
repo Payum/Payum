@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Functional\Bridge\Symfony\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\GatewayFactoriesChoiceType;
@@ -9,7 +11,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormView;
 
-class GatewayFactoriesChoiceTypeTest extends TestCase
+final class GatewayFactoriesChoiceTypeTest extends TestCase
 {
     /**
      * @var  FormFactory

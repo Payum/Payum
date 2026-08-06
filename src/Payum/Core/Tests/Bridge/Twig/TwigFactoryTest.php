@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Twig;
 
 use Payum\Core\Bridge\Twig\TwigFactory;
@@ -7,7 +9,7 @@ use Payum\Core\Gateway;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
-class TwigFactoryTest extends TestCase
+final class TwigFactoryTest extends TestCase
 {
     public function testShouldAllowCreateATwigEnvironment(): void
     {

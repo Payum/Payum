@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Registry;
 
 use Payum\Core\Exception\InvalidArgumentException;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-class DynamicRegistryTest extends TestCase
+final class DynamicRegistryTest extends TestCase
 {
     public function testShouldImplementsRegistryInterface(): void
     {

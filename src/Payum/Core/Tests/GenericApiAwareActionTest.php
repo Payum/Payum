@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests;
 
 use Payum\Core\ApiAwareInterface;
@@ -24,7 +26,6 @@ abstract class GenericApiAwareActionTest extends TestCase
         $api->setApi($apiClass);
 
         $rc = new ReflectionProperty($api, 'apiClass');
-        $rc->setAccessible(true);
 
         $this->assertInstanceOf($rc->getValue($api), $apiClass);
     }

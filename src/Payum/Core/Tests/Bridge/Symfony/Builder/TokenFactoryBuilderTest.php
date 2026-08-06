@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Bridge\Symfony\Builder;
 
 use Payum\Core\Bridge\Symfony\Builder\TokenFactoryBuilder;
@@ -10,7 +12,7 @@ use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TokenFactoryBuilderTest extends TestCase
+final class TokenFactoryBuilderTest extends TestCase
 {
     public function testShouldBuildSymfonyHttpRequestVerifier(): void
     {

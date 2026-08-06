@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Payum\Core\Tests\Request;
 
 use InvalidArgumentException;
@@ -7,7 +9,7 @@ use Iterator;
 use Payum\Core\Request\RenderTemplate;
 use PHPUnit\Framework\TestCase;
 
-class RenderTemplateTest extends TestCase
+final class RenderTemplateTest extends TestCase
 {
     public function testShouldAllowGetTemplateNameSetInConstructor(): void
     {
