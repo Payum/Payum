@@ -15,10 +15,11 @@ use Rector\ValueObject\PhpVersion;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
-use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector;
-use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
+use Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -65,13 +66,25 @@ return RectorConfig::configure()
         Utf8DecodeEncodeToMbConvertEncodingRector::class,
     ])
     ->withSkip([
-        AddSeeTestAnnotationRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
         MixedTypeRector::class,
-        FinalizePublicClassConstantRector::class,
         ReadOnlyPropertyRector::class,
         FirstClassCallableRector::class,
         ReturnNeverTypeRector::class,
+
+        // The withConsecutive() rewrites all produce subtly wrong code against this
+        // suite, so they stay off until it moves to PHPUnit 10 and the rewrites can
+        // be done by hand:
+        //  - narrowing willReturnOnConsecutiveCalls($stub) to willReturn($stub)
+        //    changes behaviour, because ConsecutiveCalls invokes a nested stub
+        //    while ReturnStub hands it back as-is -- returnCallback() and
+        //    throwException() silently stop firing;
+        //  - narrowing withConsecutive(['x'], ['x']) to with(['x']) treats the
+        //    argument list as a single expected argument;
+        //  - the PHPUnit 10 matcher idiom compares constraints with assertSame().
+        WithConsecutiveRector::class,
+        NarrowIdenticalWithConsecutiveRector::class,
+        SingleWithConsecutiveToWithRector::class,
 
         AddVoidReturnTypeWhereNoReturnRector::class => [
             __DIR__ . '/src/Payum/Core/GatewayFactory.php',
