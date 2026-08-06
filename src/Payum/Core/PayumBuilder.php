@@ -218,7 +218,7 @@ class PayumBuilder
     /**
      * @param ?StorageInterface<TokenInterface> $tokenStorage
      */
-    public function setTokenStorage(StorageInterface $tokenStorage = null): static
+    public function setTokenStorage(?StorageInterface $tokenStorage = null): static
     {
         $this->tokenStorage = $tokenStorage;
 
@@ -267,7 +267,7 @@ class PayumBuilder
     /**
      * @param RegistryInterface<object>|null $mainRegistry
      */
-    public function setMainRegistry(RegistryInterface $mainRegistry = null): static
+    public function setMainRegistry(?RegistryInterface $mainRegistry = null): static
     {
         $this->mainRegistry = $mainRegistry;
 

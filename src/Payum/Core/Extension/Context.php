@@ -70,7 +70,7 @@ class Context
         return $this->reply;
     }
 
-    public function setReply(ReplyInterface $reply = null): void
+    public function setReply(?ReplyInterface $reply = null): void
     {
         $this->reply = $reply;
     }
@@ -83,7 +83,7 @@ class Context
         return $this->exception;
     }
 
-    public function setException(Exception $exception = null): void
+    public function setException(?Exception $exception = null): void
     {
         $this->exception = $exception;
     }

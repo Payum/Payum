@@ -27,7 +27,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
 
     private Klarna $klarna;
 
-    public function __construct(Klarna $klarna = null)
+    public function __construct(?Klarna $klarna = null)
     {
         $this->klarna = $klarna ?: new Klarna();
 

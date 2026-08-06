@@ -27,7 +27,7 @@ class Convert
      * @param mixed $source
      * @param string $to
      */
-    public function __construct($source, $to, TokenInterface $token = null)
+    public function __construct($source, $to, ?TokenInterface $token = null)
     {
         $this->source = $source;
         $this->to = $to;

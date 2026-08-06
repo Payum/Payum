@@ -16,7 +16,7 @@ class GatewayFactory implements GatewayFactoryInterface
      */
     protected $defaultConfig;
 
-    public function __construct(array $defaultConfig = [], GatewayFactoryInterface $coreGatewayFactory = null)
+    public function __construct(array $defaultConfig = [], ?GatewayFactoryInterface $coreGatewayFactory = null)
     {
         $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
         $this->defaultConfig = $defaultConfig;
