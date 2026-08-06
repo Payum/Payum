@@ -4,5 +4,5 @@ namespace Payum\Core\Security;
 
 interface GenericTokenFactoryAwareInterface
 {
-    public function setGenericTokenFactory(GenericTokenFactoryInterface $genericTokenFactory = null);
+    public function setGenericTokenFactory(?GenericTokenFactoryInterface $genericTokenFactory = null);
 }

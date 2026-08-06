@@ -2,6 +2,9 @@
 
 namespace Payum\Core\Request;
 
+use AllowDynamicProperties;
+
+#[AllowDynamicProperties]
 class GetHttpRequest
 {
     /**
