@@ -10,7 +10,10 @@ class SoapClientFactoryTest extends TestCase
 {
     public function testShouldAllowCreateSoapClientWithDefaultClassAndOptions(): void
     {
-        $this->markTestSkipped('This test is skipped because it requires an external service to be available.');
+        if (! getenv('PAYUM_TEST_EXTERNAL_SERVICES')) {
+            $this->markTestSkipped('Set PAYUM_TEST_EXTERNAL_SERVICES to run tests that call an external service.');
+        }
+
         $factory = new SoapClientFactory();
 
         $client = $factory->createWsdlClient('https://external.externaltest.payex.com/pxorder/pxorder.asmx?WSDL');
@@ -20,7 +23,10 @@ class SoapClientFactoryTest extends TestCase
 
     public function testShouldAllowCreateSoapClientWithCustomClassAndOptions(): void
     {
-        $this->markTestSkipped('This test is skipped because it requires an external service to be available.');
+        if (! getenv('PAYUM_TEST_EXTERNAL_SERVICES')) {
+            $this->markTestSkipped('Set PAYUM_TEST_EXTERNAL_SERVICES to run tests that call an external service.');
+        }
+
         $options = [
             'trace' => true,
             'exceptions' => true,
