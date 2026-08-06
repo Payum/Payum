@@ -2,7 +2,7 @@
 
 ## 2.0.0 (TBD)
 
-* Drop support for PHP 7.x
+* Drop support for PHP 7.x and 8.0.x. The minimum supported version is PHP 8.1.x
 * Drop support for Twig 1.x
 * Remove payum/iso4217 package
 * Remove support for Propel storage
