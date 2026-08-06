@@ -2,6 +2,8 @@
 
 ### Frameworks
 
+_**Note**: Whichever framework you use,_ [_Framework integration_](di/framework-integration.md) _explains how to hand your application's container to Payum and share its services with your gateways._
+
 * [PayumBundle](./#symfony-payum-bundle) for [Symfony2](http://symfony.com/).
 * [PayumSilexProvider](./#silex-payum-provider) for [Silex](http://silex.sensiolabs.org/)
 * [PayumLaravelPackage](./#laravel-payum-package) for [Laravel](http://laravel.com/)

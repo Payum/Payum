@@ -4,7 +4,7 @@ In this chapter we show how to store a credit card safely and use in future. A c
 
 ### Store card
 
-This is a usual charge as we showed it in [get-it-started](get-it-started.md) with only these additions:
+This is a usual charge as we showed it in [Stripe.js](js.md) with only these additions:
 
 ```php
 <?php
@@ -38,7 +38,7 @@ $token = $getToken->token; // if not null you are done. store it somewhere
 
 ### Use stored card
 
-This is a usual charge as we showed it in [get-it-started](get-it-started.md) with only these additions:
+This is a usual charge as we showed it in [Stripe.js](js.md) with only these additions:
 
 ```php
 <?php

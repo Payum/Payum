@@ -2,6 +2,8 @@
 
 This chapter could be useful for a developer who wants to create a gateway on top of payum. The Payum provides a skeleton project which helps us a lots.
 
+_**Note**: A gateway factory declares its actions and services as container definitions. Read_ [_Writing a gateway factory_](di/getting-started.md#writing-a-gateway-factory) _for `configureContainer()`, `getActions()` and `getExtensions()`, and the_ [_migration guide_](di/migration-guide.md) _if you are porting a factory that still uses `populateConfig()`._
+
 1. Create new project
 
 ```bash

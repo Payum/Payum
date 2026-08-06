@@ -440,7 +440,18 @@ $payum = (new PayumBuilder())
 
 ## See Also
 
+- [Dependency Injection overview](README.md)
 - [Getting Started](getting-started.md)
 - [Customization Guide](customization.md)
 - [Migration Guide](migration-guide.md)
-- [Symfony PayumBundle Documentation](https://payum.gitbook.io/payum/v2/symfony)
+- [Symfony PayumBundle documentation](../symfony/get-it-started.md)
+- [Laravel package documentation](../laravel/get-it-started.md)
+- [Frameworks and e-commerce integration](../frameworks-and-e-commerce-integration.md)
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

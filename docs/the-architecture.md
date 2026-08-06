@@ -216,6 +216,8 @@ $gateway->addExtension(new StorageExtension($storage));
 
 ### All about API
 
+_**Note**: `ApiAwareInterface` and `ApiAwareTrait`, described below, are deprecated since Payum 2.0 and will be removed in 3.0. New code should receive its API through the constructor and let the container wire it up — see_ [_Dependency Injection_](di/README.md) _and the_ [_migration guide_](di/migration-guide.md)_._
+
 The gateway API has different versions? Or, a gateway provide official sdk? We already thought about these problems and you know what?
 
 Let's say gateway have different versions: first and second. And in the `FooAction` we want to use first api and `BarAction` second one. To solve this problem we have to implement _API aware action_ to the actions. When such api aware action is added to a gateway it tries to set an API, one by one, to the action until the action accepts one.
@@ -277,11 +279,42 @@ $gateway->addAction(new BarAction);
 
 _**Link**: See authorize.net_ [_capture action_](../src/Payum/AuthorizeNet/Aim/Action/CaptureAction.php)_._
 
+### Dependency injection
+
+The pieces described above — actions, extensions, storages and the APIs they talk to — are not assembled by hand. Since Payum 2.0 a [PHP-DI](https://php-di.org/) container builds them, and a gateway factory declares what belongs in it:
+
+```php
+<?php
+use Payum\Core\CoreGatewayFactory;
+use function DI\autowire;
+use function DI\get;
+
+class FooGatewayFactory extends CoreGatewayFactory
+{
+    public function configureContainer(): array
+    {
+        return array_merge(parent::configureContainer(), [
+            Api::class => autowire()->constructor(get('foo.secret')),
+            CaptureAction::class => autowire(),
+        ]);
+    }
+
+    public function getActions(): array
+    {
+        return array_merge(parent::getActions(), [CaptureAction::class]);
+    }
+}
+```
+
+Payum keeps one global container for the services every gateway shares — the PSR-18 HTTP client, the token storage, the token factories, the request verifier — and one container per gateway for that gateway's own actions and API clients. That is why two gateways configured side by side get the same HTTP client but their own, separately configured, API objects.
+
+_**Link**: The_ [_Dependency Injection_](di/README.md) _chapter covers this in full:_ [_getting started_](di/getting-started.md)_,_ [_customization_](di/customization.md)_,_ [_framework integration_](di/framework-integration.md) _and the_ [_migration guide_](di/migration-guide.md)_._
+
 ### Conclusion
 
 As a result of the architecture described above we end up with a well decoupled, easy to extend and reusable library. For example, you can add your domain specific actions or a logger extension. Thanks to its flexibility any task could be achieved.
 
-Next [Your order integration](your-order-integration.md).
+Next [Your order integration](your-order-integration.md), or read how the container wires all of this together in [Dependency Injection](di/README.md).
 
 ***
 

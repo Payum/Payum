@@ -22,6 +22,7 @@ layout:
 * #### General
   * [Get started](get-it-started.md)
   * [Architecture](the-architecture.md)
+  * [Dependency injection](di/README.md)
   * [Storages](storages.md)
   * [Configure gateway in backend](configure-gateway-in-backend.md)
   * [Encrypt gateway configs stored in database](encrypt-gateway-configs-stored-in-database.md)
@@ -37,6 +38,12 @@ layout:
   * [Payum vs Omnipay](payum-vs-omnipay.md)
   * [Symfony. The event dispatcher extension](event-dispatcher.md)
   * [How to contribute from sub repository](how-to-contribute-from-subrepository.md)
+* #### Dependency Injection
+  * [Overview](di/README.md)
+  * [Getting started](di/getting-started.md)
+  * [Customization](di/customization.md)
+  * [Framework integration](di/framework-integration.md)
+  * [Migration guide: v1.x to v2.0](di/migration-guide.md)
 * #### Authorize.Net AIM
   * [Get started](authorize-net/aim/get-it-started.md)
 * #### Be2Bill

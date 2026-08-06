@@ -4,7 +4,7 @@ Steps:
 
 * [Download libraries](get-it-started.md#download-libraries)
 * [Configure context](get-it-started.md#configure-context)
-* [Prepare gateway](get-it-started.md#prepare-gateway)
+* [Prepare payment](get-it-started.md#prepare-payment)
 
 _**Note** : We assume you followed all steps in basic_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._
 

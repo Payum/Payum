@@ -1,6 +1,6 @@
 # Authorize.Net AIM: Get started
 
-In this chapter we are going to talk about the most common task: purchase of a product using [Authorize.Net AIM](http://www.authorize.net/). We assume you already read basic [get it started](../get-it-started.md). Here we just show you modifications you have to put to the files shown there.
+In this chapter we are going to talk about the most common task: purchase of a product using [Authorize.Net AIM](http://www.authorize.net/). We assume you already read basic [get it started](../../get-it-started.md). Here we just show you modifications you have to put to the files shown there.
 
 ### Installation
 
@@ -36,7 +36,7 @@ $payum = (new PayumBuilder())
 
 ### prepare.php
 
-Here you have to modify a `gatewayName` value. Set it to `authorize_net`. The rest remain the same as described in basic [get it started](../get-it-started.md) documentation.
+Here you have to modify a `gatewayName` value. Set it to `authorize_net`. The rest remain the same as described in basic [get it started](../../get-it-started.md) documentation.
 
 ***
 

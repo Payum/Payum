@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](be2bill-onsite.md#download-libraries)
-* [Configure gateway](be2bill-onsite.md#configure-context)
+* [Configure gateway](be2bill-onsite.md#configure-gateway)
 * [Prepare payment](be2bill-onsite.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._

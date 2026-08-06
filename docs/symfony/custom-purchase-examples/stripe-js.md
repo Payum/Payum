@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](stripe-js.md#download-libraries)
-* [Configure gateway](stripe-js.md#configure-context)
+* [Configure gateway](stripe-js.md#configure-gateway)
 * [Prepare payment](stripe-js.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._

@@ -417,8 +417,11 @@ CaptureAction::class => autowire()
 
 ## Need Help?
 
+- 📖 [Dependency Injection overview](README.md)
 - 📖 [DI Getting Started Guide](getting-started.md)
 - 📖 [DI Customization Guide](customization.md)
+- 📖 [DI Framework Integration](framework-integration.md)
+- 📖 [Upgrade notes](../../UPGRADE.md)
 - 🐛 [Report Issues](https://github.com/Payum/Payum/issues)
 - 💬 [Community Discussions](https://github.com/Payum/Payum/discussions)
 
@@ -441,3 +444,11 @@ For PayumBuilder users:
 - [ ] Optionally override default services
 - [ ] Run tests and verify everything works
 - [ ] Consider using new DI features for better customization
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

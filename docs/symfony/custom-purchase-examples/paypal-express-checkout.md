@@ -3,8 +3,8 @@
 Steps:
 
 * [Download libraries](paypal-express-checkout.md#download-libraries)
-* [Configure gateway](paypal-express-checkout.md#configure-context)
-* [Prepare payment](paypal-express-checkout.md#prepare-payment)
+* [Configure gateway](paypal-express-checkout.md#configure-gateway)
+* [Prepare gateway](paypal-express-checkout.md#prepare-gateway)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._
 

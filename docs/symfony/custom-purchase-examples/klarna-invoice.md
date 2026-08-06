@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](klarna-invoice.md#download-libraries)
-* [Configure gateway](klarna-invoice.md#configure-context)
+* [Configure gateway](klarna-invoice.md#configure-gateway)
 * [Prepare payment](klarna-invoice.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._

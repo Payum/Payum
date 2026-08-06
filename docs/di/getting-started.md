@@ -266,9 +266,19 @@ style maps onto this one.
 - [Migration Guide](migration-guide.md) - Migrate your code from v1.x to v2.0
 - [Framework Integration](framework-integration.md) - Integrate with Symfony/Laravel
 - [The Architecture](../the-architecture.md) - Deep dive into Payum's architecture
+- [Develop a custom Payum gateway](../develop-gateway-with-payum.md) - Build a gateway from the skeleton
+- [Get started](../get-it-started.md) - The end-to-end payment flow
 
 ## Need Help?
 
 - 📖 [Full Documentation](https://payum.gitbook.io/payum/)
 - 🐛 [Report Issues](https://github.com/Payum/Payum/issues)
 - 💬 [Community Support](https://github.com/Payum/Payum/discussions)
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

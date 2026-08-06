@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](payex.md#download-libraries)
-* [Configure gateway](payex.md#configure-context)
+* [Configure gateway](payex.md#configure-gateway)
 * [Prepare payment](payex.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._

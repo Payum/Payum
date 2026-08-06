@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](stripe-via-omnipay.md#download-libraries)
-* [Configure gateway](stripe-via-omnipay.md#configure-context)
+* [Configure gateway](stripe-via-omnipay.md#configure-gateway)
 * [Prepare payment](stripe-via-omnipay.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration is the same as described there._

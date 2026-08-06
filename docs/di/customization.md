@@ -412,6 +412,17 @@ If you encounter circular dependency errors:
 
 ## See Also
 
+- [Dependency Injection overview](README.md)
 - [Getting Started](getting-started.md)
 - [Migration Guide](migration-guide.md)
 - [Framework Integration](framework-integration.md)
+- [Storages](../storages.md)
+- [The Architecture](../the-architecture.md)
+
+***
+
+### Supporting Payum
+
+Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+
+* [Become a sponsor](https://github.com/sponsors/Payum)

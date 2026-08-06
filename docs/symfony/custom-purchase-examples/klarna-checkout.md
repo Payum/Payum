@@ -3,7 +3,7 @@
 Steps:
 
 * [Download libraries](klarna-checkout.md#download-libraries)
-* [Configure gateway](klarna-checkout.md#configure-context)
+* [Configure gateway](klarna-checkout.md#configure-gateway)
 * [Prepare payment](klarna-checkout.md#prepare-payment)
 
 _**Note**: We assume you followed all steps in_ [_get it started_](../get-it-started.md) _and your basic configuration same as described there._

@@ -64,6 +64,10 @@ _**Note**: There are other_ [_storages_](storages.md) _available. Such as Doctri
 
 _**Note**: Consider using something other than `FilesystemStorage` in production._
 
+{% hint style="info" %}
+_**Note**: `PayumBuilder` configures a_ [_dependency injection container_](di/README.md) _for you. To share a service such as a logger or your own HTTP client with every gateway, or to replace one of Payum's defaults, see_ [_Dependency Injection_](di/getting-started.md)_._
+{% endhint %}
+
 ### prepare.php
 
 At this stage we have to create an order. Add some information into it. Create a capture token and delegate the job to [capture.php](examples/capture-script.md) script. Here's an offline gateway example:
