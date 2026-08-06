@@ -155,7 +155,12 @@ Each gateway container is assembled from three layers. Later layers win:
 2. The shared services listed above (so a global service always wins over a factory default)
 3. The config passed to `addGateway()` (so a single gateway can override anything)
 
-Anything not defined in any of those layers is autowired by PHP-DI.
+Anything not defined in any of those layers is looked up in the global container, and otherwise autowired
+by PHP-DI.
+
+If you gave Payum a container of your own with `setGlobalContainer()`, that container sits in front of the
+global one: your services win, and Payum's defaults fill in whatever you did not provide. See
+[Using Your Own Container](customization.md#advanced-using-your-own-container).
 
 ## Writing a Gateway Factory
 

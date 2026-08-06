@@ -104,14 +104,12 @@ services:
 
 ### Advanced: Using Symfony Container Directly
 
-Symfony's container is already PSR-11, so it can be handed to `setGlobalContainer()` directly. Note that
-this **replaces** Payum's global container: the container you pass must define Payum's own shared services
-(`GenericTokenFactoryInterface`, `HttpRequestVerifierInterface`, `payum.security.token_storage`, and the
-PSR-17/18 services if your gateways make HTTP calls). See
-[Pre-building the Global Container](customization.md#advanced-pre-building-the-global-container).
+Symfony's container is already PSR-11, so it can be handed to `setGlobalContainer()` directly. Your
+container is consulted first and Payum's own services fill in the rest, so you only declare what you want to
+control — see [Using Your Own Container](customization.md#advanced-using-your-own-container).
 
-Since Symfony service ids are strings rather than class names by default, an adapter is usually needed to
-map Payum's ids onto your services:
+Since Symfony service ids are strings rather than class names by default, an adapter is useful to map
+Payum's ids onto your services:
 
 ```php
 <?php
@@ -334,10 +332,12 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
-Remember that a pre-built container replaces Payum's own, so `$yourContainer` must provide
-`GenericTokenFactoryInterface`, `HttpRequestVerifierInterface` and `payum.security.token_storage`
-(the last one can also come from `setTokenStorage()`). With an adapter around a non-PHP-DI container,
-those service ids are also the ones your gateways can resolve.
+`$yourContainer` only needs the services you want to provide yourself; Payum falls back to its own for
+everything else. Declare `payum.security.token_storage`, `TokenFactoryInterface`,
+`GenericTokenFactoryInterface` or `HttpRequestVerifierInterface` there to take over any of them.
+
+To have one of your own services injected into a gateway's actions, register it with `addGlobalService()`
+as well — Payum cannot discover the ids of a container that does not list its entries.
 
 ## Best Practices
 

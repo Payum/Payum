@@ -4,8 +4,10 @@ namespace Payum\Core\Tests;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use InvalidArgumentException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
+use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Extension\StorageExtension;
@@ -16,6 +18,7 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
@@ -254,23 +257,101 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($client, $container->get(ClientInterface::class));
     }
 
-    public function testBuildGlobalContainerShouldReturnThePresetContainer(): void
+    public function testBuildGlobalContainerShouldPreferThePresetContainerOverPayumsOwnServices(): void
     {
-        $expectedContainer = new Container();
+        $client = $this->createMock(ClientInterface::class);
+
+        $presetContainer = new Container();
+        $presetContainer->set(ClientInterface::class, $client);
 
         $container = (new ExposedGlobalContainerPayumBuilder())
             ->addDefaultStorages()
-            ->setGlobalContainer($expectedContainer)
+            ->setGlobalContainer($presetContainer)
             ->buildGlobalContainer()
         ;
 
-        $this->assertSame($expectedContainer, $container);
+        $this->assertSame($client, $container->get(ClientInterface::class));
     }
 
-    public function testBuildGlobalContainerShouldNotAddDefaultStoragesWhenAContainerIsPreset(): void
+    public function testBuildGlobalContainerShouldFallBackToPayumsOwnServicesWhenThePresetContainerHasNone(): void
+    {
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer(new Container())
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertInstanceOf(HttpRequestVerifierInterface::class, $container->get(HttpRequestVerifierInterface::class));
+        $this->assertInstanceOf(GenericTokenFactoryInterface::class, $container->get(GenericTokenFactoryInterface::class));
+        $this->assertInstanceOf(TokenFactoryInterface::class, $container->get(TokenFactoryInterface::class));
+        $this->assertInstanceOf(StorageInterface::class, $container->get('payum.security.token_storage'));
+        $this->assertInstanceOf(ClientInterface::class, $container->get(ClientInterface::class));
+    }
+
+    public function testBuildGlobalContainerShouldBuildPayumsTokenFactoryOnTopOfThePresetContainersTokenStorage(): void
+    {
+        $tokenStorage = $this->createMock(StorageInterface::class);
+
+        $presetContainer = new Container();
+        $presetContainer->set('payum.security.token_storage', $tokenStorage);
+
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->setGlobalContainer($presetContainer)
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertSame($tokenStorage, $container->get('payum.security.token_storage'));
+        $this->assertSame(
+            $tokenStorage,
+            $this->readAttribute($container->get(HttpRequestVerifierInterface::class), 'tokenStorage')
+        );
+        $this->assertSame(
+            $tokenStorage,
+            $this->readAttribute($container->get(TokenFactoryInterface::class), 'tokenStorage')
+        );
+    }
+
+    public function testBuildGlobalContainerShouldBuildPayumsGenericTokenFactoryOnTopOfThePresetContainersTokenFactory(): void
+    {
+        $tokenFactory = $this->createMock(TokenFactoryInterface::class);
+
+        $presetContainer = new Container();
+        $presetContainer->set(TokenFactoryInterface::class, $tokenFactory);
+
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($presetContainer)
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertSame(
+            $tokenFactory,
+            $this->readAttribute($container->get(GenericTokenFactoryInterface::class), 'tokenFactory')
+        );
+    }
+
+    public function testBuildGlobalContainerShouldAddDefaultStoragesWhenThePresetContainerHasNoTokenStorage(): void
     {
         $builder = new ExposedGlobalContainerPayumBuilder();
         $builder->setGlobalContainer(new Container());
+
+        $container = $builder->buildGlobalContainer();
+
+        $this->assertInstanceOf(StorageInterface::class, $container->get('payum.security.token_storage'));
+
+        $ref = new ReflectionProperty($builder, 'storages');
+        $ref->setAccessible(true);
+
+        $this->assertArrayHasKey(Payment::class, $ref->getValue($builder));
+    }
+
+    public function testBuildGlobalContainerShouldNotAddDefaultStoragesWhenThePresetContainerHasATokenStorage(): void
+    {
+        $presetContainer = new Container();
+        $presetContainer->set('payum.security.token_storage', $this->createMock(StorageInterface::class));
+
+        $builder = new ExposedGlobalContainerPayumBuilder();
+        $builder->setGlobalContainer($presetContainer);
 
         $builder->buildGlobalContainer();
 
@@ -285,16 +366,19 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertNull($ref->getValue($builder));
     }
 
-    public function testBuildGlobalContainerShouldIgnoreGlobalServicesWhenAContainerIsPreset(): void
+    public function testBuildGlobalContainerShouldStillExposeGlobalServicesWhenAContainerIsPreset(): void
     {
+        $service = new stdClass();
+
         $container = (new ExposedGlobalContainerPayumBuilder())
             ->addDefaultStorages()
             ->setGlobalContainer(new Container())
-            ->addGlobalService('acme.service', new stdClass())
+            ->addGlobalService('acme.service', $service)
             ->buildGlobalContainer()
         ;
 
-        $this->assertFalse($container->has('acme.service'));
+        $this->assertTrue($container->has('acme.service'));
+        $this->assertSame($service, $container->get('acme.service'));
     }
 
     public function testGetPayumShouldUseTheSecurityServicesFromTheGlobalContainer(): void
@@ -404,21 +488,17 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($tokenStorage, $payum->getTokenStorage());
     }
 
-    public function testGetPayumShouldFailWhenNeitherTheBuilderNorThePresetContainerProvideATokenStorage(): void
+    public function testGetPayumShouldWorkWithAContainerProvidingNoneOfPayumsServices(): void
     {
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions([
-            GenericTokenFactoryInterface::class => $this->createMock(GenericTokenFactoryInterface::class),
-            HttpRequestVerifierInterface::class => $this->createMock(HttpRequestVerifierInterface::class),
-        ]);
-
-        $this->expectException(NotFoundExceptionInterface::class);
-        $this->expectExceptionMessage('payum.security.token_storage');
-
-        (new PayumBuilder())
-            ->setGlobalContainer($containerBuilder->build())
+        $payum = (new PayumBuilder())
+            ->setGlobalContainer(new Container())
             ->getPayum()
         ;
+
+        $this->assertInstanceOf(Payum::class, $payum);
+        $this->assertInstanceOf(HttpRequestVerifierInterface::class, $payum->getHttpRequestVerifier());
+        $this->assertInstanceOf(GenericTokenFactoryInterface::class, $payum->getTokenFactory());
+        $this->assertInstanceOf(StorageInterface::class, $payum->getTokenStorage());
     }
 
     public function testShouldCreateGatewayWithTheContainerConfigurationFactory(): void
@@ -643,6 +723,45 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($service, $factory->container->get('acme.service'));
     }
 
+    public function testShouldResolveServicesOfAPresetContainerWhichCannotEnumerateItsEntriesFromAGateway(): void
+    {
+        $service = new stdClass();
+
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer(new OpaqueContainer([
+                'acme.service' => $service,
+            ]))
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertTrue($factory->container->has('acme.service'));
+        $this->assertSame($service, $factory->container->get('acme.service'));
+    }
+
+    public function testShouldStillResolvePayumsOwnServicesFromAGatewayWhenThePresetContainerCannotEnumerate(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer(new OpaqueContainer())
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertInstanceOf(StorageInterface::class, $factory->container->get('payum.security.token_storage'));
+        $this->assertInstanceOf(GenericTokenFactoryInterface::class, $factory->container->get(GenericTokenFactoryInterface::class));
+        $this->assertInstanceOf(ClientInterface::class, $factory->container->get(ClientInterface::class));
+    }
+
     public function testShouldNotDelegateTheContainerItselfToThePresetGlobalContainer(): void
     {
         $globalContainer = (new ContainerBuilder())->build();
@@ -661,8 +780,9 @@ class PayumBuilderGlobalContainerTest extends TestCase
             ->getPayum()
         ;
 
-        $this->assertSame($factory->container, $factory->container->get(ContainerInterface::class));
+        // A gateway is injected with its own container, never with the global one
         $this->assertNotSame($globalContainer, $factory->container->get(ContainerInterface::class));
+        $this->assertNotSame($globalContainer, $factory->container);
     }
 
     public function testShouldGiveTheGlobalServicesPrecedenceOverTheGatewayFactoryDefaults(): void
@@ -746,6 +866,39 @@ class PayumBuilderGlobalContainerTest extends TestCase
 
         // the core actions are still registered
         $this->assertContains(GetHttpRequestAction::class, array_map('get_class', $actions));
+    }
+
+    /**
+     * Guards the framework integration documented in docs/di: an application container which cannot list
+     * its entries plus addGlobalService() for what the gateways need injected.
+     */
+    public function testShouldInjectAGlobalServiceIntoAnActionWhenThePresetContainerCannotEnumerate(): void
+    {
+        $logger = new NullLogger();
+
+        $payum = (new PayumBuilder())
+            ->setGlobalContainer(new OpaqueContainer())
+            ->addGlobalService(LoggerInterface::class, $logger)
+            ->addGatewayFactory('documented', new DocumentedGatewayFactory())
+            ->addGateway('documented', [
+                'factory' => 'documented',
+            ])
+            ->getPayum()
+        ;
+
+        $documentedAction = null;
+        foreach ($this->readAttribute($payum->getGateway('documented'), 'actions') as $action) {
+            if ($action instanceof DocumentedCaptureAction) {
+                $documentedAction = $action;
+            }
+        }
+
+        $this->assertInstanceOf(DocumentedCaptureAction::class, $documentedAction);
+        $this->assertSame($logger, $documentedAction->logger);
+
+        // Payum's own services are still there, without the application declaring any of them
+        $this->assertInstanceOf(GenericTokenFactory::class, $payum->getTokenFactory());
+        $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());
     }
 
     public function testShouldStillSupportTheDeprecatedCreateApiOnADocumentedGatewayFactory(): void
@@ -954,6 +1107,35 @@ class LegacyGatewayFactoryStub implements GatewayFactoryInterface
 
 class GlobalContainerTestModel
 {
+}
+
+/**
+ * A PSR-11 container which, like most framework containers, cannot list what it holds.
+ */
+class OpaqueContainer implements ContainerInterface
+{
+    /**
+     * @param array<string, mixed> $services
+     */
+    public function __construct(
+        private array $services = []
+    ) {
+    }
+
+    public function get(string $id): mixed
+    {
+        if (! $this->has($id)) {
+            throw new class('Service ' . $id . ' not found') extends InvalidArgumentException implements NotFoundExceptionInterface {
+            };
+        }
+
+        return $this->services[$id];
+    }
+
+    public function has(string $id): bool
+    {
+        return isset($this->services[$id]);
+    }
 }
 
 class DocumentedApi

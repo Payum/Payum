@@ -160,53 +160,24 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
-## Advanced: Pre-building the Global Container
+## Advanced: Using Your Own Container
 
-For advanced use cases (e.g., framework integration), you can build and provide the entire global container
-with `setGlobalContainer()`.
+For framework integration you can hand your application's container to `setGlobalContainer()`. It is placed
+**in front of** Payum's global container: a service is looked up in your container first, and whatever it
+does not have comes from Payum's defaults.
 
-**This replaces Payum's global container completely.** Payum will not build one of its own, which means:
-
-- The container you pass has to define Payum's own shared services itself. At a minimum
-  `GenericTokenFactoryInterface`, `HttpRequestVerifierInterface` and `payum.security.token_storage`
-  (the latter can be supplied with `setTokenStorage()` instead), plus `TokenFactoryInterface` and the
-  PSR-17/18 services if your gateways make HTTP calls.
-- `addGlobalService()` is ignored — register those services in your own container instead.
-- `addDefaultStorages()` still registers storages on the builder, but the storage extensions are expected
-  from your container.
+That means you only declare the services you actually want to provide yourself. There is no need to
+re-create the token factory, the request verifier or the HTTP client just to get a container accepted.
 
 ```php
 <?php
 
 use DI\ContainerBuilder;
-use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
-use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
-use Payum\Core\Security\GenericTokenFactory;
-use Payum\Core\Security\GenericTokenFactoryInterface;
-use Payum\Core\Security\HttpRequestVerifierInterface;
-use Payum\Core\Security\TokenFactoryInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 
-// Build your own container
+// Only what you want to control yourself
 $builder = new ContainerBuilder();
 $builder->addDefinitions([
-    // Payum's own shared services
-    'payum.security.token_storage' => $tokenStorage,
-    TokenFactoryInterface::class => fn () => new TokenFactory($tokenStorage, $storageRegistry, 'https://example.com'),
-    GenericTokenFactoryInterface::class => fn (ContainerInterface $c) => new GenericTokenFactory(
-        $c->get(TokenFactoryInterface::class),
-        [
-            'capture' => 'capture.php',
-            'notify' => 'notify.php',
-            'authorize' => 'authorize.php',
-            'refund' => 'refund.php',
-            'payout' => 'payout.php',
-        ]
-    ),
-    HttpRequestVerifierInterface::class => fn () => new HttpRequestVerifier($tokenStorage),
-
-    // Your own services
     ClientInterface::class => function () {
         return new \GuzzleHttp\Client(['timeout' => 60]);
     },
@@ -215,21 +186,40 @@ $builder->addDefinitions([
     },
 ]);
 
-$container = $builder->build();
-
-// Provide it to PayumBuilder
 $payum = (new PayumBuilder())
-    ->setGlobalContainer($container)
+    ->setGlobalContainer($builder->build())
     // ... add gateways
     ->getPayum();
 ```
 
-Pass a PHP-DI container and everything in it — including `'my.custom.service'` — is available from every
-gateway. Any other PSR-11 container shares only the service ids listed above; register anything else you
-want your gateways to see under one of those ids, or use `addGlobalService()` instead.
+Here the gateways use your Guzzle client, while the token storage, token factories and request verifier are
+still the ones Payum builds. Override any of them by adding a definition for
+`payum.security.token_storage`, `TokenFactoryInterface`, `GenericTokenFactoryInterface` or
+`HttpRequestVerifierInterface` to your container — Payum picks them up and builds the rest on top of them.
+Define the token storage there and the default storages are not created at all.
 
-If you only need to add or replace a handful of services, `addGlobalService()` is the better fit — it
-leaves Payum's own services in place.
+`addGlobalService()` keeps working alongside a container of your own; those services are layered under it.
+
+### Reaching Your Services From a Gateway
+
+Pass a PHP-DI container and everything in it — including `'my.custom.service'` — can be injected into your
+gateway's actions.
+
+Most framework containers cannot list what they hold, so Payum has no way to know which ids to make
+injectable. Register those with `addGlobalService()`, which works alongside your container:
+
+```php
+<?php
+
+$payum = (new PayumBuilder())
+    ->setGlobalContainer($frameworkContainer)
+
+    // Makes the logger injectable into gateway actions
+    ->addGlobalService(LoggerInterface::class, fn () => $frameworkContainer->get('logger'))
+
+    // ... add gateways
+    ->getPayum();
+```
 
 ## Accessing Services
 
