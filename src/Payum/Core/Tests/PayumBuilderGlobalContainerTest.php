@@ -4,6 +4,8 @@ namespace Payum\Core\Tests;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Extension\StorageExtension;
@@ -23,8 +25,12 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ReflectionProperty;
 use stdClass;
+use function DI\autowire;
+use function DI\get;
 
 class PayumBuilderGlobalContainerTest extends TestCase
 {
@@ -564,6 +570,122 @@ class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertTrue($factory->container->get('acme.sandbox'));
     }
 
+    public function testShouldPassTheServicesAddedWithAddGlobalServiceToTheGatewayContainer(): void
+    {
+        $service = new stdClass();
+
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('acme.service', $service)
+            ->addGlobalService(GlobalContainerTestModel::class, $model = new GlobalContainerTestModel())
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertTrue($factory->container->has('acme.service'));
+        $this->assertSame($service, $factory->container->get('acme.service'));
+        $this->assertSame($model, $factory->container->get(GlobalContainerTestModel::class));
+    }
+
+    public function testShouldShareTheServicesAddedWithAddGlobalServiceBetweenGateways(): void
+    {
+        $firstFactory = new ContainerConfigurationGatewayFactoryStub();
+        $secondFactory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('acme.service', static fn (): stdClass => new stdClass())
+            ->addGatewayFactory('first_factory', $firstFactory)
+            ->addGatewayFactory('second_factory', $secondFactory)
+            ->addGateway('first', [
+                'factory' => 'first_factory',
+            ])
+            ->addGateway('second', [
+                'factory' => 'second_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame(
+            $firstFactory->container->get('acme.service'),
+            $secondFactory->container->get('acme.service')
+        );
+    }
+
+    public function testShouldPassTheEntriesOfAPresetGlobalContainerToTheGatewayContainer(): void
+    {
+        $service = new stdClass();
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions([
+            GenericTokenFactoryInterface::class => $this->createMock(GenericTokenFactoryInterface::class),
+            HttpRequestVerifierInterface::class => $this->createMock(HttpRequestVerifierInterface::class),
+            'payum.security.token_storage' => $this->createMock(StorageInterface::class),
+            'acme.service' => $service,
+        ]);
+
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer($containerBuilder->build())
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($service, $factory->container->get('acme.service'));
+    }
+
+    public function testShouldNotDelegateTheContainerItselfToThePresetGlobalContainer(): void
+    {
+        $globalContainer = (new ContainerBuilder())->build();
+        $globalContainer->set(GenericTokenFactoryInterface::class, $this->createMock(GenericTokenFactoryInterface::class));
+        $globalContainer->set(HttpRequestVerifierInterface::class, $this->createMock(HttpRequestVerifierInterface::class));
+        $globalContainer->set('payum.security.token_storage', $this->createMock(StorageInterface::class));
+
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer($globalContainer)
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($factory->container, $factory->container->get(ContainerInterface::class));
+        $this->assertNotSame($globalContainer, $factory->container->get(ContainerInterface::class));
+    }
+
+    public function testShouldGiveTheGlobalServicesPrecedenceOverTheGatewayFactoryDefaults(): void
+    {
+        $client = $this->createMock(ClientInterface::class);
+
+        $factory = new ContainerConfigurationGatewayFactoryStub([
+            ClientInterface::class => $this->createMock(ClientInterface::class),
+        ]);
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ClientInterface::class, $client)
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($client, $factory->container->get(ClientInterface::class));
+    }
+
     public function testShouldGiveTheGatewayConfigPrecedenceOverTheGlobalServices(): void
     {
         $client = $this->createMock(ClientInterface::class);
@@ -583,6 +705,59 @@ class PayumBuilderGlobalContainerTest extends TestCase
         ;
 
         $this->assertSame($gatewayClient, $factory->container->get(ClientInterface::class));
+    }
+
+    /**
+     * Guards the gateway factory pattern documented in docs/di.
+     */
+    public function testShouldSupportTheDocumentedGatewayFactoryPattern(): void
+    {
+        $logger = new NullLogger();
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(LoggerInterface::class, $logger)
+            ->addGatewayFactory('documented', new DocumentedGatewayFactory())
+            ->addGateway('documented', [
+                'factory' => 'documented',
+                'documented.client_id' => 'theClientId',
+                'documented.sandbox' => false,
+            ])
+            ->getPayum()
+        ;
+
+        $actions = $this->readAttribute($payum->getGateway('documented'), 'actions');
+
+        $documentedAction = null;
+        foreach ($actions as $action) {
+            if ($action instanceof DocumentedCaptureAction) {
+                $documentedAction = $action;
+            }
+        }
+
+        $this->assertInstanceOf(DocumentedCaptureAction::class, $documentedAction);
+
+        // the gateway config reaches the api through get()
+        $this->assertSame('theClientId', $documentedAction->api->clientId);
+        $this->assertFalse($documentedAction->api->sandbox);
+
+        // the global service reaches the action
+        $this->assertSame($logger, $documentedAction->logger);
+
+        // the core actions are still registered
+        $this->assertContains(GetHttpRequestAction::class, array_map('get_class', $actions));
+    }
+
+    public function testShouldStillSupportTheDeprecatedCreateApiOnADocumentedGatewayFactory(): void
+    {
+        $gateway = (new DocumentedGatewayFactory())->create([
+            LoggerInterface::class => new NullLogger(),
+        ]);
+
+        $this->assertContains(
+            DocumentedCaptureAction::class,
+            array_map('get_class', $this->readAttribute($gateway, 'actions'))
+        );
     }
 
     public function testShouldFallBackToTheLegacyGatewayFactoryApi(): void
@@ -779,4 +954,58 @@ class LegacyGatewayFactoryStub implements GatewayFactoryInterface
 
 class GlobalContainerTestModel
 {
+}
+
+class DocumentedApi
+{
+    public function __construct(
+        public string $clientId,
+        public bool $sandbox
+    ) {
+    }
+}
+
+class DocumentedCaptureAction implements ActionInterface
+{
+    public function __construct(
+        public DocumentedApi $api,
+        public LoggerInterface $logger
+    ) {
+    }
+
+    public function execute($request): void
+    {
+    }
+
+    public function supports($request): bool
+    {
+        return false;
+    }
+}
+
+class DocumentedGatewayFactory extends CoreGatewayFactory
+{
+    public function configureContainer(): array
+    {
+        return array_merge(parent::configureContainer(), [
+            'documented.client_id' => '',
+            'documented.sandbox' => true,
+
+            DocumentedApi::class => autowire()
+                ->constructor(
+                    clientId: get('documented.client_id'),
+                    sandbox: get('documented.sandbox')
+                ),
+
+            DocumentedCaptureAction::class => autowire()
+                ->constructorParameter('api', get(DocumentedApi::class)),
+        ]);
+    }
+
+    public function getActions(): array
+    {
+        return array_merge(parent::getActions(), [
+            DocumentedCaptureAction::class,
+        ]);
+    }
 }
