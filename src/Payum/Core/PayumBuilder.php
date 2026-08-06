@@ -17,6 +17,7 @@ use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\DI\FallbackContainer;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
@@ -370,7 +371,11 @@ class PayumBuilder
                     // ... and finally the gateway config, which overrides both.
                     $containerBuilder->addDefinitions($gatewayConfig);
 
-                    $gateways[$name] = $gatewayFactory->createGateway($containerBuilder->build());
+                    // Anything the gateway container does not know about is looked up globally, so that
+                    // services of a container which cannot list its entries stay reachable too.
+                    $gateways[$name] = $gatewayFactory->createGateway(
+                        new FallbackContainer($containerBuilder->build(), $globalContainer)
+                    );
                 } else {
                     trigger_deprecation(
                         'payum/core',
@@ -394,38 +399,44 @@ class PayumBuilder
      * Build the global container with services shared across all gateways.
      * This includes HTTP clients, token storage, token factories, and storage extensions.
      *
+     * A container set with setGlobalContainer() is put in front of it, so that an application only has to
+     * declare the services it actually wants to provide itself and keeps Payum's defaults for the rest.
+     *
      * @throws Exception
      */
     protected function buildGlobalContainer(): ContainerInterface
     {
-        if ($this->globalContainer) {
-            return $this->globalContainer;
-        }
-
-        $builder = new ContainerBuilder();
-
-        if (! $this->tokenStorage) {
-            $this->addDefaultStorages();
-        }
+        $tokenStorage = $this->resolveTokenStorage();
 
         /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */
         $storageRegistry = $this->buildRegistry([], $this->storages);
 
-        $tokenFactory = $this->buildTokenFactory($this->tokenStorage, $storageRegistry);
-        $genericTokenFactory = $this->buildGenericTokenFactory($tokenFactory, array_replace([
+        $paths = array_replace([
             'capture' => 'capture.php',
             'notify' => 'notify.php',
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
             'payout' => 'payout.php',
-        ], $this->genericTokenFactoryPaths));
-        $httpRequestVerifier = $this->buildHttpRequestVerifier($this->tokenStorage);
+        ], $this->genericTokenFactoryPaths);
+
+        $presetContainer = $this->globalContainer;
+
+        $builder = new ContainerBuilder();
 
         $builder->addDefinitions([
-            HttpRequestVerifierInterface::class => $httpRequestVerifier,
-            GenericTokenFactoryInterface::class => $genericTokenFactory,
-            TokenFactoryInterface::class => $tokenFactory,
-            'payum.security.token_storage' => $this->tokenStorage,
+            'payum.security.token_storage' => $tokenStorage,
+
+            // Payum's own token factory, unless the application brought its own. Resolving it here rather
+            // than only in the fallback keeps the generic factory below built on top of the right one.
+            TokenFactoryInterface::class => function () use ($presetContainer, $tokenStorage, $storageRegistry) {
+                if ($presetContainer?->has(TokenFactoryInterface::class)) {
+                    return $presetContainer->get(TokenFactoryInterface::class);
+                }
+
+                return $this->buildTokenFactory($tokenStorage, $storageRegistry);
+            },
+            GenericTokenFactoryInterface::class => fn (ContainerInterface $c): GenericTokenFactoryInterface => $this->buildGenericTokenFactory($c->get(TokenFactoryInterface::class), $paths),
+            HttpRequestVerifierInterface::class => fn (): HttpRequestVerifierInterface => $this->buildHttpRequestVerifier($tokenStorage),
             ClientInterface::class => fn () => Psr18ClientDiscovery::find(),
             StreamFactoryInterface::class => fn () => Psr17FactoryDiscovery::findStreamFactory(),
             RequestFactoryInterface::class => fn () => Psr17FactoryDiscovery::findRequestFactory(),
@@ -439,7 +450,35 @@ class PayumBuilder
 
         $builder->addDefinitions($this->globalDefinitions);
 
-        return $builder->build();
+        $container = $builder->build();
+
+        if ($this->globalContainer) {
+            $container = new FallbackContainer($this->globalContainer, $container);
+        }
+
+        return $container;
+    }
+
+    /**
+     * The token storage in effect: the one set on the builder, else the one the application's container
+     * provides, else Payum's default storages.
+     *
+     * @return StorageInterface<TokenInterface>
+     */
+    protected function resolveTokenStorage(): StorageInterface
+    {
+        if (! $this->tokenStorage && $this->globalContainer?->has('payum.security.token_storage')) {
+            /** @var StorageInterface<TokenInterface> $tokenStorage */
+            $tokenStorage = $this->globalContainer->get('payum.security.token_storage');
+
+            return $tokenStorage;
+        }
+
+        if (! $this->tokenStorage) {
+            $this->addDefaultStorages();
+        }
+
+        return $this->tokenStorage;
     }
 
     /**
@@ -467,16 +506,8 @@ class PayumBuilder
         // Everything registered with addGlobalService() is shared as well.
         $ids = array_merge($ids, array_keys($this->globalDefinitions));
 
-        // A pre-built PHP-DI container can be asked for the rest of what it holds. Its own entries are
-        // left out, so that a gateway keeps being injected with its own container.
-        if ($globalContainer instanceof Container) {
-            $ids = array_merge($ids, array_diff($globalContainer->getKnownEntryNames(), [
-                ContainerInterface::class,
-                Container::class,
-                FactoryInterface::class,
-                InvokerInterface::class,
-            ]));
-        }
+        // Plus the rest of what the global container is able to report.
+        $ids = array_merge($ids, $this->getKnownEntryNames($globalContainer));
 
         $definitions = [];
         foreach (array_unique($ids) as $id) {
@@ -484,6 +515,28 @@ class PayumBuilder
         }
 
         return $definitions;
+    }
+
+    /**
+     * The ids a container can report, if any. The container's own entries are left out, so that a gateway
+     * keeps being injected with its own container rather than the global one.
+     *
+     * @return list<string>
+     */
+    protected function getKnownEntryNames(ContainerInterface $container): array
+    {
+        $names = [];
+
+        if ($container instanceof FallbackContainer || $container instanceof Container) {
+            $names = $container->getKnownEntryNames();
+        }
+
+        return array_values(array_diff($names, [
+            ContainerInterface::class,
+            Container::class,
+            FactoryInterface::class,
+            InvokerInterface::class,
+        ]));
     }
 
     /**
