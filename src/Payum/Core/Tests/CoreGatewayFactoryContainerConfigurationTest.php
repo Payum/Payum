@@ -623,10 +623,10 @@ class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         ]);
 
         $this->assertInstanceOf(ArrayObject::class, $capturedArrayObject);
-        $this->assertTrue(isset($capturedArrayObject['payum.template.layout']));
-        $this->assertTrue(isset($capturedArrayObject['payum.action.probe']));
-        $this->assertFalse(isset($capturedArrayObject['payum.security.token_storage']));
-        $this->assertFalse(isset($capturedArrayObject['an.unknown.service']));
+        $this->assertArrayHasKey('payum.template.layout', $capturedArrayObject);
+        $this->assertArrayHasKey('payum.action.probe', $capturedArrayObject);
+        $this->assertArrayNotHasKey('payum.security.token_storage', $capturedArrayObject);
+        $this->assertArrayNotHasKey('an.unknown.service', $capturedArrayObject);
     }
 
     public function testCreateShouldPrependLegacyConfiguredActionImplementingPrependActionInterface(): void
