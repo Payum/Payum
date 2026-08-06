@@ -2,7 +2,6 @@
 
 namespace Payum\Core;
 
-use ReflectionType;
 use Closure;
 use DI\ContainerBuilder;
 use Exception;
@@ -49,6 +48,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionFunction;
 use ReflectionNamedType;
+use ReflectionType;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
 use Twig\Error\LoaderError;
