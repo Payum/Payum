@@ -65,7 +65,7 @@ jobs:
         run: bin/phpunit
 
   mongodb:
-    name: Unit ( PHP ${{ matrix.php }} + MongoDB ${{ matrix.mongodb }} )
+    name: Unit ( PHP ${{ matrix.php }} + MongoDB ${{ matrix.mongodb }} + ext-mongodb ${{ matrix.driver }}.x )
     runs-on: ubuntu-latest
 
     strategy:
@@ -73,13 +73,21 @@ jobs:
       matrix:
         php: ['8.1', '8.2', '8.3', '8.4', '8.5']
         mongodb: ['8.0']
+        driver: ['2']
         include:
           # Server compatibility is a property of ext-mongodb / doctrine-odm rather
           # than of the PHP version, so older servers only need one PHP version.
           - php: '8.1'
             mongodb: '6.0'
+            driver: '2'
           - php: '8.1'
             mongodb: '7.0'
+            driver: '2'
+          # ext-mongodb 1.x is still widely deployed, and Composer resolves it to a
+          # different mongodb/mongodb major, so keep one job on the latest 1.x.
+          - php: '8.1'
+            mongodb: '8.0'
+            driver: '1'
 
     steps:
       - name: Checkout
@@ -89,7 +97,7 @@ jobs:
         uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # v2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, opcache, mysql, pdo_mysql, mongodb
+          extensions: intl, opcache, mysql, pdo_mysql, mongodb-${{ matrix.driver }}
           coverage: none
 
       - name: Start MongoDB

@@ -4,8 +4,11 @@
 
 * Drop support for PHP 7.x and 8.0.x. The minimum supported version is PHP 8.1.x
 * Drop support for Twig 1.x
+* Drop support for doctrine/persistence 1.x. The minimum supported version is 2.0
 * Remove payum/iso4217 package
 * Remove support for Propel storage
+* Add support for doctrine/persistence 3.x
+* Add support for ext-mongodb 2.x, which requires doctrine/mongodb-odm 2.11 or newer
 
 ## 1.5.0 (2018-01-09)
 
