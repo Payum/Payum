@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use ReflectionType;
 use Closure;
 use DI\ContainerBuilder;
 use Exception;
@@ -386,7 +387,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
             $params = $reflection->getParameters();
             $firstParam = $params[0];
-            return ! $firstParam->getType() || ($firstParam->getType() instanceof ReflectionNamedType && ArrayObject::class === $firstParam->getType()->getName());
+            return ! $firstParam->getType() instanceof ReflectionType || ($firstParam->getType() instanceof ReflectionNamedType && ArrayObject::class === $firstParam->getType()->getName());
         };
 
         /** @var ContainerInterface $container */
