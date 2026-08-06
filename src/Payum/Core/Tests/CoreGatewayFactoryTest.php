@@ -144,7 +144,6 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(Closure::class, $config['payum.http_client']);
@@ -169,7 +168,6 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertIsArray($config['payum.paths']);
@@ -190,7 +188,6 @@ final class CoreGatewayFactoryTest extends TestCase
             ],
         ]);
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertIsArray($config['payum.paths']);
@@ -210,7 +207,6 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(Environment::class, $config['twig.env']());
@@ -228,7 +224,6 @@ final class CoreGatewayFactoryTest extends TestCase
             'twig.env' => $twig,
         ]);
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertSame($twig, $config['twig.env']);
@@ -253,7 +248,6 @@ final class CoreGatewayFactoryTest extends TestCase
         ]);
         $container = $this->getContainer($config);
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertInstanceOf(Closure::class, $config['payum.action.get_token']);
@@ -272,8 +266,6 @@ final class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);

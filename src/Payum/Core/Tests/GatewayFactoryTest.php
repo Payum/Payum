@@ -32,8 +32,6 @@ final class GatewayFactoryTest extends TestCase
         $factory = new GatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
     }
 }

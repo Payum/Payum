@@ -19,8 +19,6 @@ final class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -33,8 +31,6 @@ final class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalProHostedGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
 
@@ -55,8 +51,6 @@ final class PaypalProHostedGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalProHostedGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('paypal_pro_hosted', $config['payum.factory_name']);

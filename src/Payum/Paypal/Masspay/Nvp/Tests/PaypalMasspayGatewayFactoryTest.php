@@ -20,8 +20,6 @@ final class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -34,8 +32,6 @@ final class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalMasspayGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
@@ -54,8 +50,6 @@ final class PaypalMasspayGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new PaypalMasspayGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('paypal_masspay_nvp', $config['payum.factory_name']);

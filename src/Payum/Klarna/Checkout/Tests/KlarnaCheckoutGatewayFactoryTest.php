@@ -19,8 +19,6 @@ final class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -33,8 +31,6 @@ final class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new KlarnaCheckoutGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals(
@@ -54,8 +50,6 @@ final class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new KlarnaCheckoutGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('klarna_checkout', $config['payum.factory_name']);
@@ -79,7 +73,6 @@ final class KlarnaCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertIsArray($config['payum.paths']);

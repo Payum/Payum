@@ -18,8 +18,6 @@ final class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -33,8 +31,6 @@ final class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertSame([], $config['payum.default_options']);
     }
@@ -44,8 +40,6 @@ final class OfflineGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new OfflineGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('offline', $config['payum.factory_name']);

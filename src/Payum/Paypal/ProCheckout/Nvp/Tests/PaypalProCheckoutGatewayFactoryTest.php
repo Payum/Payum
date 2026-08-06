@@ -19,8 +19,6 @@ final class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTe
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -33,8 +31,6 @@ final class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTe
         $factory = new PaypalProCheckoutGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals([
@@ -52,8 +48,6 @@ final class PaypalProCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTe
         $factory = new PaypalProCheckoutGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('paypal_pro_checkout_nvp', $config['payum.factory_name']);

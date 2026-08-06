@@ -71,8 +71,6 @@ abstract class AbstractGatewayFactoryTest extends TestCase
         $factory = new $class();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
     }
 

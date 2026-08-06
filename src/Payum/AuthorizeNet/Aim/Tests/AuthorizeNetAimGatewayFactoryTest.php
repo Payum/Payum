@@ -19,8 +19,6 @@ final class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -33,8 +31,6 @@ final class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new AuthorizeNetAimGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertEquals([
@@ -49,8 +45,6 @@ final class AuthorizeNetAimGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new AuthorizeNetAimGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('authorize_net_aim', $config['payum.factory_name']);

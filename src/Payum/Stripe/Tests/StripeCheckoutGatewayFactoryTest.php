@@ -19,8 +19,6 @@ final class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('foo', $config);
         $this->assertSame('fooVal', $config['foo']);
 
@@ -34,8 +32,6 @@ final class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
-
         $this->assertArrayHasKey('payum.default_options', $config);
         $this->assertSame([
             'publishable_key' => '',
@@ -48,8 +44,6 @@ final class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory = new StripeCheckoutGatewayFactory();
 
         $config = $factory->createConfig();
-
-        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('payum.factory_name', $config);
         $this->assertSame('stripe_checkout', $config['payum.factory_name']);
@@ -73,7 +67,6 @@ final class StripeCheckoutGatewayFactoryTest extends AbstractGatewayFactoryTest
 
         $config = $factory->createConfig();
 
-        $this->assertIsArray($config);
         $this->assertNotEmpty($config);
 
         $this->assertIsArray($config['payum.paths']);
