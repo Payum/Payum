@@ -3,6 +3,9 @@ name: Rector
 on:
     pull_request: ~
 
+permissions:
+    contents: read
+
 jobs:
     rector:
         name: Rector
