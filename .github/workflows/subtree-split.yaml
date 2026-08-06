@@ -11,13 +11,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 0
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+        uses: "shimataro/ssh-key-action@87a8f067114a8ce263df83e9ed5c849953548bc3" # v2.8.1
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}

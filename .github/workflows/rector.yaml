@@ -1,30 +1,35 @@
-# github action that checks code with Rector
 name: Rector
 
 on:
-    pull_request: null
+    pull_request: ~
 
 jobs:
     rector:
         runs-on: ubuntu-latest
         steps:
-            -
-                uses: actions/checkout@v4
+            - name: Checkout
+              if: github.event.pull_request.head.repo.full_name == github.repository
+              uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+              with:
+                # Must be used to trigger workflow after push
+                token: ${{ secrets.ACCESS_TOKEN }}
 
-            -
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 8.3
-                    coverage: none
+            - name: Setup PHP
+              uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # v2.37.2
+              with:
+                php-version: 8.5
+                coverage: none
 
-            -   uses: "ramsey/composer-install@v3"
+            - name: Install dependencies
+              uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
-            -   run: bin/rector --ansi
+            - name: Run Rector
+              run: bin/rector --ansi
 
-            -
-                # commit only to core contributors who have repository access
-                uses: stefanzweifel/git-auto-commit-action@v5
-                with:
-                    commit_message: '[rector] Rector fixes'
-                    commit_author: 'GitHub Action <actions@github.com>'
-                    commit_user_email: 'action@github.com'
+            - name: Commit Rector fixes
+              # commit only to core contributors who have repository access
+              uses: "stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d" # v7.2.0
+              with:
+                commit_message: '[rector] Rector fixes'
+                commit_author: 'GitHub Action <actions@github.com>'
+                commit_user_email: 'action@github.com'

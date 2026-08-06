@@ -18,34 +18,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php: 8.0
           - php: 8.1
           - php: 8.2
           - php: 8.3
+          - php: 8.4
+          - php: 8.5
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # v2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, opcache, mysql, pdo_mysql, :xdebug
-
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+          extensions: intl, opcache, mysql, pdo_mysql
+          coverage: none
 
       - name: Install dependencies
-        run: composer update $COMPOSER_FLAGS
+        uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
       - name: Run unit tests
         run: bin/phpunit
@@ -58,31 +49,27 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php: 8.0
+          - php: 8.1
+          - php: 8.2
+          - php: 8.3
+          - php: 8.4
+          - php: 8.5
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # v2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, opcache, mysql, pdo_mysql, :xdebug
-
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+          extensions: intl, opcache, mysql, pdo_mysql
+          coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-lowest --prefer-stable
+        uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
+        with:
+          dependency-versions: "lowest"
 
       - name: Run unit tests
         run: bin/phpunit
@@ -94,36 +81,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [8.0, 8.1, 8.2, 8.3]
+        include:
+          - php: 8.1
+            mongodb: [6, 7, 8]
+          - php: 8.2
+            mongodb: [6, 7, 8]
+          - php: 8.3
+            mongodb: [6, 7, 8]
+          - php: 8.4
+            mongodb: [6, 7, 8]
+          - php: 8.5
+            mongodb: [6, 7, 8]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: "shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240" # v2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: intl, opcache, mysql, pdo_mysql, mongodb, :xdebug
+          extensions: intl, opcache, mysql, pdo_mysql, mongodb
+          coverage: none
 
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
+        uses: "supercharge/mongodb-github-action@315db7fe45ac2880b7758f1933e6e5d59afd5e94" # v1.12.1
         with:
-          mongodb-version: 6.0
-
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
+          mongodb-version: ${{ matrix.mongodb }}
 
       - name: Install dependencies
-        run: composer update
+        uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
       - name: Install Doctrine Mongodb ODM
         run: composer require doctrine/mongodb-odm --with-all-dependencies
