@@ -51,7 +51,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        //it is possible to set zero amount for create agreement request.
+        // it is possible to set zero amount for create agreement request.
         if (
             $model['PAYERID'] &&
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_NOT_INITIATED === $model['CHECKOUTSTATUS'] &&
@@ -83,7 +83,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        //todo check all payment statuses.
+        // todo check all payment statuses.
         if (
             Api::CHECKOUTSTATUS_PAYMENT_COMPLETED === $model['CHECKOUTSTATUS'] ||
             Api::CHECKOUTSTATUS_PAYMENT_ACTION_COMPLETED === $model['CHECKOUTSTATUS']

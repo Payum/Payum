@@ -76,7 +76,7 @@ class OrderApi extends BaseApi
     public const ORDERSTATUS_NOT_FOUND = 2;
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxorder/initialize8/
+     * @see http://www.payexpim.com/technical-reference/pxorder/initialize8/
      *
      * @var array
      *
@@ -86,11 +86,11 @@ class OrderApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        //DEPRICATED. Send in as empty string.
+        // DEPRICATED. Send in as empty string.
         $parameters['externalID'] = '';
 
         if (isset($parameters['orderId'])) {
-            //On request it requires orderID fields when in response it is orderId.
+            // On request it requires orderID fields when in response it is orderId.
             $parameters['orderID'] = $parameters['orderId'];
             unset($parameters['orderId']);
         }
@@ -120,7 +120,7 @@ class OrderApi extends BaseApi
     }
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxorder/complete-2/
+     * @see http://www.payexpim.com/technical-reference/pxorder/complete-2/
      *
      * @return array
      */
@@ -137,7 +137,7 @@ class OrderApi extends BaseApi
     }
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxorder/check2/
+     * @see http://www.payexpim.com/technical-reference/pxorder/check2/
      *
      * @return array
      */

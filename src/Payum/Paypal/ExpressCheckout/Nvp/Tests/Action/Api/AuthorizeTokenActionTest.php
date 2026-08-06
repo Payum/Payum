@@ -144,8 +144,8 @@ class AuthorizeTokenActionTest extends TestCase
 
         $request = new AuthorizeToken([
             'TOKEN' => 'aToken',
-            //payer id means that the user already authorize the token.
-            //Entered his login\passowrd and press enter at paypal side.
+            // payer id means that the user already authorize the token.
+            // Entered his login\passowrd and press enter at paypal side.
             'PAYERID' => 'aPayerId',
         ]);
 

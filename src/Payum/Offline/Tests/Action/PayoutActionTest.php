@@ -65,7 +65,7 @@ class PayoutActionTest extends TestCase
 
         $request = new Payout($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -83,7 +83,7 @@ class PayoutActionTest extends TestCase
 
         $request = new Payout($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -101,7 +101,7 @@ class PayoutActionTest extends TestCase
 
         $request = new Payout($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);

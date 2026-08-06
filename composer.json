@@ -84,7 +84,7 @@
         "defuse/php-encryption": "^2",
         "ext-soap": "*",
         "rector/rector": "^1.0.2",
-        "symplify/easy-coding-standard": "^12.0",
+        "symplify/easy-coding-standard": "^13.2",
         "phpstan/phpstan": "^1.10",
         "symfony/http-client": "^5.4 || ^6.2",
         "nyholm/psr7": "^1.8"

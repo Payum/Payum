@@ -16,7 +16,7 @@ interface ActionInterface
     /**
      * @param mixed $request
      *
-     * @return boolean
+     * @return bool
      */
     public function supports($request);
 }

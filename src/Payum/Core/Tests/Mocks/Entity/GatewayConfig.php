@@ -15,7 +15,7 @@ class GatewayConfig extends BaseGatewayConfig
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer
+     * @var int
      */
     protected $id;
 

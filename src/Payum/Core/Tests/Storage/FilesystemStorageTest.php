@@ -132,7 +132,7 @@ class FilesystemStorageTest extends TestCase
 
         $model = $storage->create();
 
-        //guard
+        // guard
         $this->assertNull($model->getId());
 
         $storage->identify($model);
@@ -196,7 +196,7 @@ class FilesystemStorageTest extends TestCase
         $model = $storage->create();
         $storage->update($model);
 
-        //guard
+        // guard
         $this->assertNotEmpty($model->getId());
 
         $foundModel = $storage->find($model->getId());
@@ -216,12 +216,12 @@ class FilesystemStorageTest extends TestCase
         $model = $storage->create();
         $storage->update($model);
 
-        //guard
+        // guard
         $this->assertNotEmpty($model->getId());
 
         $identity = $storage->identify($model);
 
-        //guard
+        // guard
         $this->assertInstanceOf(Identity::class, $identity);
 
         $foundModel = $storage->find($identity);
@@ -261,7 +261,7 @@ class FilesystemStorageTest extends TestCase
 
         $storage->update($model);
 
-        //guard
+        // guard
         $this->assertObjectHasProperty('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 
@@ -285,7 +285,7 @@ class FilesystemStorageTest extends TestCase
 
         $storage->update($model);
 
-        //guard
+        // guard
         $this->assertObjectHasProperty('payum_id', $model);
         $this->assertNotEmpty($model->payum_id);
 

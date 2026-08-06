@@ -10,54 +10,54 @@ use PhpCsFixer\Fixer\ClassNotation\SingleClassElementPerStatementFixer;
 use PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
-use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\ExplicitIndirectVariableFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\FunctionToConstantFixer;
 use PhpCsFixer\Fixer\Operator\NewWithBracesFixer;
 use PhpCsFixer\Fixer\Operator\StandardizeIncrementFixer;
+use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitMethodCasingFixer;
 use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\StringNotation\SingleQuoteFixer;
+use PhpCsFixer\Fixer\Whitespace\TypesSpacesFixer;
+use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
-use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->paths([__DIR__ . '/src']);
-
-    $ecsConfig->rule(YodaStyleFixer::class);
-
-    $ecsConfig->rules([
-        PhpUnitMethodCasingFixer::class,
-        FunctionToConstantFixer::class,
-        ExplicitStringVariableFixer::class,
-        ExplicitIndirectVariableFixer::class,
-        NewWithBracesFixer::class,
-        StandardizeIncrementFixer::class,
-        SelfAccessorFixer::class,
-        MagicConstantCasingFixer::class,
-        NoUselessElseFixer::class,
-        SingleQuoteFixer::class,
-        OrderedClassElementsFixer::class,
-        VoidReturnFixer::class,
-    ]);
-
-    $ecsConfig->ruleWithConfiguration(SingleClassElementPerStatementFixer::class, ['elements' => ['const', 'property']]);
-    $ecsConfig->ruleWithConfiguration(ClassDefinitionFixer::class, ['single_line' => \true]);
-
-    $ecsConfig->sets([
-        SetList::PSR_12,
-        SetList::SPACES,
-        SetList::DOCBLOCK,
-        SetList::COMMENTS,
-        SetList::PHPUNIT,
-        SetList::NAMESPACES,
-        SetList::CLEAN_CODE,
-        SetList::ARRAY,
-    ]);
-
-    $ecsConfig->skip([
-        VoidReturnFixer::class => [
-            __DIR__ . '/src/Payum/Core/GatewayFactory.php',
+return ECSConfig::configure()
+    ->withPaths([
+        __DIR__ . '/src',
+        __DIR__ . '/rector.php',
+        __FILE__,
+    ])
+    ->withPreparedSets(psr12: true, common: true, cleanCode: true)
+    ->withRules(
+        [
+            YodaStyleFixer::class,
+            PhpUnitMethodCasingFixer::class,
+            FunctionToConstantFixer::class,
+            ExplicitStringVariableFixer::class,
+            ExplicitIndirectVariableFixer::class,
+            NewWithBracesFixer::class,
+            StandardizeIncrementFixer::class,
+            SelfAccessorFixer::class,
+            MagicConstantCasingFixer::class,
+            NoUselessElseFixer::class,
+            SingleQuoteFixer::class,
+            OrderedClassElementsFixer::class,
+            VoidReturnFixer::class,
         ]
+    )
+    ->withConfiguredRule(SingleClassElementPerStatementFixer::class, [
+        'elements' => ['const', 'property'],
+    ])
+    ->withConfiguredRule(ClassDefinitionFixer::class, [
+        'single_line' => \true,
+    ])
+    ->withConfiguredRule(GeneralPhpdocAnnotationRemoveFixer::class, [
+        'annotations' => [],
+    ])
+    ->withSkip([
+        MethodChainingNewlineFixer::class,
+        TypesSpacesFixer::class,
+        UnaryOperatorSpacesFixer::class,
     ]);
-};

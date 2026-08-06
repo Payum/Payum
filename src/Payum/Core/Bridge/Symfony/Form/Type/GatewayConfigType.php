@@ -43,7 +43,7 @@ class GatewayConfigType extends AbstractType
     {
         /** @var array $data */
         $data = $event->getData();
-        if (is_null($data)) {
+        if (null === $data) {
             return;
         }
 

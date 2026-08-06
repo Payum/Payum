@@ -31,7 +31,7 @@ class BankAccount implements BankAccountInterface
     /**
      * The bank's country code (ISO 3166-1 ALPHA-2)
      *
-     * @link https://en.wikipedia.org/wiki/ISO_3166-1
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1
      * @var string
      */
     private $bankCountryCode;
@@ -44,7 +44,7 @@ class BankAccount implements BankAccountInterface
     /**
      * The bank's BIC code
      *
-     * @link https://en.wikipedia.org/wiki/ISO_9362
+     * @see https://en.wikipedia.org/wiki/ISO_9362
      * @var string
      */
     private $bic;

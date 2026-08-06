@@ -24,7 +24,8 @@ class ReplyToSymfonyResponseConverter
     {
         if ($reply instanceof SymfonyHttpResponse) {
             return $reply->getResponse();
-        } elseif ($reply instanceof HttpResponse) {
+        }
+        if ($reply instanceof HttpResponse) {
             $headers = $reply->getHeaders();
             $headers['X-Status-Code'] = $reply->getStatusCode();
 

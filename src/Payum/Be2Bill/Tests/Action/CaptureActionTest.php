@@ -79,7 +79,7 @@ class CaptureActionTest extends GenericActionTest
             'CARDCODE' => '1234432112344321',
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -142,7 +142,7 @@ class CaptureActionTest extends GenericActionTest
             'CLIENTIP' => '127.0.0.1',
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -194,7 +194,7 @@ class CaptureActionTest extends GenericActionTest
             'CLIENTIP' => '127.0.0.1',
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -247,7 +247,7 @@ class CaptureActionTest extends GenericActionTest
             'CLIENTIP' => '127.0.0.1',
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);

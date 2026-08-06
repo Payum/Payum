@@ -84,7 +84,7 @@ class PaymentDetailsStatusActionTest extends TestCase
 
         $status = new GetHumanStatus([]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -102,7 +102,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -121,7 +121,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -138,7 +138,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -158,7 +158,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -178,7 +178,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -198,7 +198,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -218,7 +218,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -237,7 +237,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -259,7 +259,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -278,7 +278,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -296,7 +296,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -314,7 +314,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -332,7 +332,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -353,7 +353,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -371,7 +371,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -389,7 +389,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -407,7 +407,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -425,7 +425,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -443,7 +443,7 @@ class PaymentDetailsStatusActionTest extends TestCase
             'autoPay' => false,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);

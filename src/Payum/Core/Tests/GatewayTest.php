@@ -473,7 +473,7 @@ class GatewayTest extends TestCase
             ->expects($this->once())
             ->method('onPostExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function (Context $context) use ($exception, $newException): void {
+            ->willReturnCallback(function (Context $context): void {
                 throw new InvalidArgumentException('Another error.');
             })
         ;
@@ -699,7 +699,7 @@ class GatewayTest extends TestCase
             ->expects($this->once())
             ->method('onPreExecute')
             ->with($this->isInstanceOf(Context::class))
-            ->willReturnCallback(function (Context $context) use ($expectedRequest, $actionMock, $gateway): void {
+            ->willReturnCallback(function (Context $context) use ($expectedRequest, $gateway): void {
                 $this->assertSame($expectedRequest, $context->getRequest());
                 $this->assertSame($gateway, $context->getGateway());
 

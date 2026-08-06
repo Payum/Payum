@@ -21,7 +21,7 @@ class PaymentDetailsStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
+        // TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
 
@@ -64,7 +64,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        //A purchase has been done, but check the transactionStatus to see the result
+        // A purchase has been done, but check the transactionStatus to see the result
         if (OrderApi::ORDERSTATUS_COMPLETED === $model['orderStatus']) {
             if (OrderApi::TRANSACTIONSTATUS_CANCEL === $model['transactionStatus']) {
                 $request->markCanceled();
@@ -88,7 +88,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                 return;
             }
 
-            //If you are running 2-phase transactions, you should check that the node transactionStatus contains 3 (authorize)
+            // If you are running 2-phase transactions, you should check that the node transactionStatus contains 3 (authorize)
             if (OrderApi::PURCHASEOPERATION_AUTHORIZATION === $model['purchaseOperation']) {
                 if (OrderApi::TRANSACTIONSTATUS_AUTHORIZE === $model['transactionStatus']) {
                     $request->markCaptured();
@@ -96,13 +96,13 @@ class PaymentDetailsStatusAction implements ActionInterface
                     return;
                 }
 
-                //Anything else indicates that the transaction has failed or is still processing
+                // Anything else indicates that the transaction has failed or is still processing
                 $request->markFailed();
 
                 return;
             }
 
-            //If you are running 1-phase transactions, you should check that the node transactionStatus contains 0 (sale)
+            // If you are running 1-phase transactions, you should check that the node transactionStatus contains 0 (sale)
             if (OrderApi::PURCHASEOPERATION_SALE === $model['purchaseOperation']) {
                 if (is_numeric($model['transactionStatus']) && OrderApi::TRANSACTIONSTATUS_SALE === $model['transactionStatus']) {
                     $request->markCaptured();
@@ -110,7 +110,7 @@ class PaymentDetailsStatusAction implements ActionInterface
                     return;
                 }
 
-                //Anything else indicates that the transaction has failed or is still processing
+                // Anything else indicates that the transaction has failed or is still processing
                 $request->markFailed();
 
                 return;
@@ -127,7 +127,7 @@ class PaymentDetailsStatusAction implements ActionInterface
             return;
         }
 
-        //PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
+        // PxOrder.Complete can return orderStatus 1 for 2 weeks after PxOrder.Initialize is called. Afterwards the orderStatus will be set to 2
         if (OrderApi::ORDERSTATUS_NOT_FOUND === $model['orderStatus']) {
             $request->markExpired();
 
@@ -155,7 +155,7 @@ class PaymentDetailsStatusAction implements ActionInterface
         if ($model['recurring']) {
             return true;
         }
-        //Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
+        // Make sure it is not auto pay payment. There is an other capture action for auto pay payments;
         return isset($model['autoPay']) && ! $model['autoPay'];
     }
 }

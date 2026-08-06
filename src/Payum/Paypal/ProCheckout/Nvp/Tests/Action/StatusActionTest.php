@@ -19,7 +19,7 @@ class StatusActionTest extends GenericActionTest
 
         $status = new GetHumanStatus([]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -35,7 +35,7 @@ class StatusActionTest extends GenericActionTest
             'RESULT' => 123,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -52,7 +52,7 @@ class StatusActionTest extends GenericActionTest
             'RESULT' => Api::RESULT_SUCCESS,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -70,7 +70,7 @@ class StatusActionTest extends GenericActionTest
             'ORIGID' => 'anId',
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -86,7 +86,7 @@ class StatusActionTest extends GenericActionTest
             'RESULT' => 1,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -97,7 +97,7 @@ class StatusActionTest extends GenericActionTest
             'RESULT' => 100000,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -114,7 +114,7 @@ class StatusActionTest extends GenericActionTest
             'RESULT' => Api::RESULT_SUCCESS,
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);

@@ -83,7 +83,7 @@ class AgreementDetailsStatusActionTest extends TestCase
             'agreementRef' => 'aRef',
         ]);
 
-        //guard
+        // guard
         $status->markCaptured();
 
         $action->execute($status);
@@ -100,7 +100,7 @@ class AgreementDetailsStatusActionTest extends TestCase
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_NOTVERIFIED,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -117,7 +117,7 @@ class AgreementDetailsStatusActionTest extends TestCase
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_VERIFIED,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -134,7 +134,7 @@ class AgreementDetailsStatusActionTest extends TestCase
             'agreementStatus' => AgreementApi::AGREEMENTSTATUS_DELETED,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -151,7 +151,7 @@ class AgreementDetailsStatusActionTest extends TestCase
             'errorCode' => 'not-ok',
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);

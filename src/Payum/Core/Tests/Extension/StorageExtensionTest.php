@@ -225,7 +225,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldUpdateModelOneTimeOnLatestOnPostExecute(): void
     {
-        //when previous is empty
+        // when previous is empty
 
         $expectedModel = new stdClass();
 
@@ -259,7 +259,7 @@ class StorageExtensionTest extends TestCase
 
     public function testShouldNotUpdateModelIfNotLatestOnPostExecute(): void
     {
-        //when previous is NOT empty
+        // when previous is NOT empty
 
         $expectedModel = new stdClass();
 

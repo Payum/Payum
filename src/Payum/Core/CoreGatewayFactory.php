@@ -84,7 +84,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     /**
      * @param array<string, mixed> $config
      *
-     * @throws ContainerExceptionInterface | NotFoundExceptionInterface | Exception
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface|Exception
      */
     public function create(array $config = []): Gateway
     {
@@ -303,7 +303,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @throws ContainerExceptionInterface | NotFoundExceptionInterface | LoaderError
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface|LoaderError
      */
     public function createGateway(ContainerInterface $container): Gateway
     {

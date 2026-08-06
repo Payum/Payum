@@ -59,7 +59,7 @@ class CaptureActionTest extends GenericActionTest
             'AMOUNT' => 10,
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -121,7 +121,7 @@ class CaptureActionTest extends GenericActionTest
             'EXPDATE' => '1016',
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -173,7 +173,7 @@ class CaptureActionTest extends GenericActionTest
             'AMOUNT' => 10,
         ]);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);

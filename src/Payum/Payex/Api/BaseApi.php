@@ -80,7 +80,7 @@ abstract class BaseApi
         $orderedParameters = [];
         foreach ($parametersKeys as $parametersKey) {
             if (! isset($parameters[$parametersKey])) {
-                //TODO exception?
+                // TODO exception?
                 continue;
             }
 
@@ -114,7 +114,7 @@ abstract class BaseApi
         if (array_key_exists('status', $inputResult) && is_array($inputResult['status'])) {
             $statuses = $inputResult['status'];
 
-            //agreement.autoPay seems has a bug. it returns two sub arrays inside status. Lets take the first as status.
+            // agreement.autoPay seems has a bug. it returns two sub arrays inside status. Lets take the first as status.
             if (is_array(current($statuses))) {
                 $statuses = array_shift($statuses);
             }

@@ -21,7 +21,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
+        // TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
 
@@ -66,7 +66,7 @@ class AutoPayPaymentDetailsStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //Make sure it is not recurring payment. There is an status action for recurring payments;
+        // Make sure it is not recurring payment. There is an status action for recurring payments;
         if ($model['recurring']) {
             return false;
         }

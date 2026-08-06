@@ -43,7 +43,7 @@ class CaptureOffsiteAction implements ActionInterface, ApiAwareInterface, Gatewa
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
-        //we are back from be2bill site so we have to just update model.
+        // we are back from be2bill site so we have to just update model.
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);
         } else {

@@ -99,7 +99,6 @@ class DynamicRegistry implements RegistryInterface
         $gateways = [];
         foreach ($this->gatewayConfigStore->findBy([]) as $gatewayConfig) {
             /** @var GatewayConfigInterface $gatewayConfig */
-
             $gateways[$gatewayConfig->getGatewayName()] = $this->getGateway($gatewayConfig->getGatewayName());
         }
 
@@ -140,7 +139,7 @@ class DynamicRegistry implements RegistryInterface
     /**
      * @deprecated since 1.3.3 will be removed in 2.0
      *
-     * @param boolean $backwardCompatibility
+     * @param bool $backwardCompatibility
      */
     public function setBackwardCompatibility($backwardCompatibility): void
     {

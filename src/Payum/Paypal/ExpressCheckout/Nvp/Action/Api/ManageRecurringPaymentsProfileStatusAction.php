@@ -20,9 +20,6 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
         $this->apiClass = Api::class;
     }
 
-    /**
-     * [@inheritdoc}
-     */
     public function execute($request): void
     {
         /** @var ManageRecurringPaymentsProfileStatus $request */
@@ -37,9 +34,6 @@ class ManageRecurringPaymentsProfileStatusAction implements ActionInterface, Api
         );
     }
 
-    /**
-     * [@inheritdoc}
-     */
     public function supports($request)
     {
         return $request instanceof ManageRecurringPaymentsProfileStatus &&

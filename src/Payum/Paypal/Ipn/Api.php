@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
 /**
- * @link https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
+ * @see https://www.x.com/developers/paypal/documentation-tools/ipn/integration-guide/IPNIntro
  */
 class Api
 {

@@ -232,7 +232,7 @@ class Api
      */
     public function calculateHash(array $params): string
     {
-        #Alpha sort
+        # Alpha sort
         ksort($params);
 
         $clearString = $this->options['password'];

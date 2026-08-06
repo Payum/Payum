@@ -134,7 +134,7 @@ class CreditCard implements CreditCardInterface
         $this->securedNumber = SensitiveValue::ensureSensitive($number);
         $this->maskedNumber = Mask::mask($this->securedNumber->peek());
 
-        //BC
+        // BC
         $this->number = $this->securedNumber->peek();
     }
 

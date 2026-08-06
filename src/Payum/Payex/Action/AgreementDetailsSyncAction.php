@@ -26,7 +26,7 @@ class AgreementDetailsSyncAction implements ActionInterface, GatewayAwareInterfa
     {
         return $request instanceof Sync &&
             $request->getModel() instanceof ArrayAccess &&
-            //Make sure it is payment. Apparently an order(payment) does not have this field.
+            // Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&
             ! $request->getModel()->offsetExists('orderId')
         ;

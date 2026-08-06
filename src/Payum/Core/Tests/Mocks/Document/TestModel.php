@@ -13,7 +13,7 @@ class TestModel extends BaseTestModel
     /**
      * @Mongo\Id
      *
-     * @var integer
+     * @var int
      */
     protected $id;
 

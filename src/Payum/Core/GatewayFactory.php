@@ -5,7 +5,7 @@ namespace Payum\Core;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\DI\ContainerConfiguration;
 
-class GatewayFactory implements GatewayFactoryInterface /*, ContainerConfiguration */ // This class will implement ContainerConfiguration from version 3.0, and will remove the GatewayFactoryInterface
+class GatewayFactory implements GatewayFactoryInterface /* , ContainerConfiguration */ // This class will implement ContainerConfiguration from version 3.0, and will remove the GatewayFactoryInterface
 {
     /**
      * @var GatewayFactoryInterface

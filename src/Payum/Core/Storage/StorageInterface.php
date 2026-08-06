@@ -16,8 +16,6 @@ interface StorageInterface
 
     /**
      * @param T $model
-     *
-     * @return boolean
      */
     public function support(object $model): bool;
 

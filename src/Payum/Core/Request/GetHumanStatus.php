@@ -139,7 +139,7 @@ class GetHumanStatus extends BaseGetStatus
     /**
      * @param string $expectedStatus
      *
-     * @return boolean
+     * @return bool
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {

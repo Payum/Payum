@@ -50,7 +50,7 @@ class ArrayObjectTest extends OrmTest
 
         $foundModel = $this->em->find($model::class, $id);
 
-        //guard
+        // guard
         $this->assertNotSame($model, $foundModel);
 
         $this->assertEquals(iterator_to_array($model), iterator_to_array($foundModel));

@@ -13,7 +13,7 @@ use Payum\Core\GatewayInterface;
 class SimpleRegistry extends AbstractRegistry
 {
     /**
-     * @var boolean[]
+     * @var bool[]
      */
     protected array $initializedStorageExtensions;
 
@@ -25,7 +25,7 @@ class SimpleRegistry extends AbstractRegistry
     /**
      * @deprecated since 1.3.3 and will be removed in 2.x. It is here for BC
      *
-     * @param boolean $bool
+     * @param bool $bool
      */
     public function setAddStorageExtensions($bool): void
     {

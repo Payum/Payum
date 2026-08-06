@@ -23,8 +23,7 @@ class GetCreditCardTokenActionTest extends GenericActionTest
 
     public function testShouldDoNothingIfPaymentHasNoCustomerSet(): void
     {
-        $model = [
-        ];
+        $model = [];
 
         $action = new GetCreditCardTokenAction();
 

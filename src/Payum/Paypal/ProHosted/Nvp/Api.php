@@ -13,10 +13,10 @@ use Psr\Http\Message\StreamFactoryInterface;
 use function http_build_query;
 
 /**
- * @link https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution
- * @link https://www.paypalobjects.com/webstatic/en_GB/developer/docs/pdf/hostedsolution_uk.pdf
- * @link https://developer.paypal.com/docs/classic/api/button-manager/BMCreateButton_API_Operation_NVP/
- * L_ERRORCODE @link https://developer.paypal.com/webapps/developer/docs/classic/api/errorcodes/#id09C3GA00GR1
+ * @see https://developer.paypal.com/webapps/developer/docs/classic/products/website-payments-pro-hosted-solution
+ * @see https://www.paypalobjects.com/webstatic/en_GB/developer/docs/pdf/hostedsolution_uk.pdf
+ * @see https://developer.paypal.com/docs/classic/api/button-manager/BMCreateButton_API_Operation_NVP/
+ * L_ERRORCODE @see https://developer.paypal.com/webapps/developer/docs/classic/api/errorcodes/#id09C3GA00GR1
  */
 class Api
 {

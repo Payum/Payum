@@ -29,7 +29,7 @@ class RecurringApi extends BaseApi
     public const RECURRINGSTATUS_FAILED = 6;
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
+     * @see http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-start/
      *
      * @return array
      */
@@ -42,7 +42,7 @@ class RecurringApi extends BaseApi
             unset($parameters['orderId']);
         }
 
-        //Deprecated, set to blank.
+        // Deprecated, set to blank.
         $parameters['notifyUrl'] = '';
 
         $parameters['hash'] = $this->calculateHash($parameters, [
@@ -63,7 +63,7 @@ class RecurringApi extends BaseApi
     }
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
+     * @see http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
      * @return array
      */
@@ -80,7 +80,7 @@ class RecurringApi extends BaseApi
     }
 
     /**
-     * @link http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
+     * @see http://www.payexpim.com/technical-reference/pxrecurring/pxrecurring-stop/
      *
      * @return array
      */

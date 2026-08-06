@@ -15,19 +15,19 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     public function markNew();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isNew();
 
     public function markCaptured();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCaptured();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAuthorized();
 
@@ -36,54 +36,54 @@ interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterfac
     public function markPayedout();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPayedout();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRefunded();
 
     public function markRefunded();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSuspended();
 
     public function markSuspended();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isExpired();
 
     public function markExpired();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCanceled();
 
     public function markCanceled();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPending();
 
     public function markPending();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFailed();
 
     public function markFailed();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isUnknown();
 

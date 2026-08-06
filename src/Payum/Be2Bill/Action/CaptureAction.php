@@ -76,7 +76,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
             }
         }
 
-        //instruction must have an alias set (e.g oneclick payment) or credit card info.
+        // instruction must have an alias set (e.g oneclick payment) or credit card info.
         if (! ($model['ALIAS'] || $model->validateNotEmpty($cardFields, false))) {
             throw new LogicException('Either credit card fields or its alias has to be set.');
         }

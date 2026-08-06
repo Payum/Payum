@@ -74,7 +74,7 @@ class CaptureActionTest extends GenericActionTest
             ->method('execute')
             ->withConsecutive([$this->isInstanceOf(ObtainToken::class)], [$this->isInstanceOf(CreateCharge::class)])
             ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(function (ObtainToken $request) use ($model): void {
+                $this->returnCallback(function (ObtainToken $request): void {
                     $this->assertInstanceOf(ArrayObject::class, $request->getModel());
                     $this->assertSame([
                         'foo' => 'fooVal',

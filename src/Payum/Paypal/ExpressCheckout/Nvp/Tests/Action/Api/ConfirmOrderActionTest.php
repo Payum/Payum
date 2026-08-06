@@ -53,7 +53,7 @@ class ConfirmOrderActionTest extends GenericActionTest
                 $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->method = 'GET';
                 }),
-                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model): void {
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel): void {
                     $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                     $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 
@@ -105,7 +105,7 @@ class ConfirmOrderActionTest extends GenericActionTest
                 $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->method = 'POST';
                 }),
-                $this->returnCallback(function (RenderTemplate $request) use ($firstModel, $model): void {
+                $this->returnCallback(function (RenderTemplate $request) use ($firstModel): void {
                     $this->assertSame('theConfirmOrderTemplate', $request->getTemplateName());
                     $this->assertSame($firstModel, $request->getParameters()['firstModel']);
 

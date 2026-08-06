@@ -50,7 +50,7 @@ class PaymentTest extends OrmTest
 
         $foundOrder = $this->em->find($order::class, $id);
 
-        //guard
+        // guard
         $this->assertNotSame($order, $foundOrder);
 
         $this->assertSame($order->getId(), $foundOrder->getId());

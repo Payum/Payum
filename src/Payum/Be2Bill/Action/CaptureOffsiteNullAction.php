@@ -27,7 +27,7 @@ class CaptureOffsiteNullAction implements ActionInterface, GatewayAwareInterface
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        //we are back from be2bill site so we have to just update model.
+        // we are back from be2bill site so we have to just update model.
         if (empty($httpRequest->query['EXTRADATA'])) {
             throw new HttpResponse('The capture is invalid. Code Be2Bell1', 400);
         }

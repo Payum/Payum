@@ -78,7 +78,7 @@ class ArrayObjectTest extends TestCase
             'baz' => 'bazNew',
         ]);
 
-        //guard
+        // guard
         $this->assertInstanceOf(Traversable::class, $traversable);
 
         $expectedArray = [

@@ -299,7 +299,8 @@ final class PayumTest extends TestCase
         </form>
     </body>
 </html>
-HTML,
+HTML
+            ,
             $response->getContent()
         );
     }

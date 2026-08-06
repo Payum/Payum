@@ -47,7 +47,7 @@ class SofortGatewayFactory extends GatewayFactory
                 /**
                  * This adds possibility to disable use of notification url.
                  * Could be useful in dev environments which is not accessable from the Internet.
-                 * @link https://github.com/Payum/Payum/issues/628
+                 * @see https://github.com/Payum/Payum/issues/628
                  */
                 'disable_notification' => false,
             ];

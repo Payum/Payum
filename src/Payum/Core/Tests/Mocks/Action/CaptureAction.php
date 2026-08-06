@@ -20,7 +20,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             $this->gateway->execute(new AuthorizeRequest());
         }
 
-        //sell code here.
+        // sell code here.
     }
 
     public function supports($request)

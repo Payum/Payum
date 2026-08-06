@@ -510,8 +510,7 @@ class CaptureActionTest extends GenericActionTest
 
     public function testShouldNotAddNotifyUrlIfTokenFactoryNotSet(): void
     {
-        $details = new ArrayObject([
-        ]);
+        $details = new ArrayObject([]);
 
         $captureToken = new Token();
         $captureToken->setGatewayName('theGatewayName');

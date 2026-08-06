@@ -17,7 +17,7 @@ class AgreementApi extends BaseApi
     {
         $parameters['accountNumber'] = $this->options['account_number'];
 
-        //Deprecated, set to blank.
+        // Deprecated, set to blank.
         $parameters['notifyUrl'] = '';
 
         $parameters['hash'] = $this->calculateHash($parameters, [

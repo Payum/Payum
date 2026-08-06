@@ -21,7 +21,7 @@ class AgreementDetailsStatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
+        // TODO: It may be not correct for all cases. This does NOT indicate wether the transaction requested was successful, only wether the request was carried out successfully.
         if ($model['errorCode'] && OrderApi::ERRORCODE_OK != $model['errorCode']) {
             $request->markFailed();
 
@@ -62,7 +62,7 @@ class AgreementDetailsStatusAction implements ActionInterface
     {
         return $request instanceof GetStatusInterface &&
             $request->getModel() instanceof ArrayAccess &&
-            //Make sure it is payment. Apparently an order(payment) does not have this field.
+            // Make sure it is payment. Apparently an order(payment) does not have this field.
             $request->getModel()->offsetExists('agreementRef') &&
             ! $request->getModel()->offsetExists('orderId')
         ;

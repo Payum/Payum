@@ -34,7 +34,7 @@ class AutoPayPaymentDetailsCaptureAction implements ActionInterface, GatewayAwar
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        //Make sure it is not recurring payment. There is an other capture action for recurring payments;
+        // Make sure it is not recurring payment. There is an other capture action for recurring payments;
         if ($model['recurring']) {
             return false;
         }

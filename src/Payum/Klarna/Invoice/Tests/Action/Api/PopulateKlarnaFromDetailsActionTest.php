@@ -127,7 +127,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
         $action->execute($request);
 
-        //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
+        // Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
     public function testShouldNotFaileIfEmptyDetailsGiven(): void
@@ -144,7 +144,7 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
         $action->execute($request);
 
-        //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
+        // Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 
     public function testShouldCorrectlyPutPartialArticles(): void
@@ -175,6 +175,6 @@ class PopulateKlarnaFromDetailsActionTest extends TestCase
 
         $action->execute($request);
 
-        //Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
+        // Klarna does not provide a way to get data from its object. So we just test that there werent any errors.
     }
 }

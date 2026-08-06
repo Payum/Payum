@@ -103,7 +103,7 @@ class ObtainTokenActionTest extends TestCase
                 $this->returnCallback(function (GetHttpRequest $request): void {
                     $request->method = 'GET';
                 }),
-                $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey, $model): void {
+                $this->returnCallback(function (RenderTemplate $request) use ($templateName, $publishableKey): void {
                     $this->assertSame($templateName, $request->getTemplateName());
 
                     $context = $request->getParameters();

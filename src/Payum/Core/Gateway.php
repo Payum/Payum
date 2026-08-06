@@ -125,7 +125,6 @@ class Gateway implements GatewayInterface
             $this->onPostExecuteWithException($context);
         }
 
-        return;
     }
 
     protected function onPostExecuteWithException(Context $context): void

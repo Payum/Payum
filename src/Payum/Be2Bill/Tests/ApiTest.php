@@ -132,7 +132,7 @@ class ApiTest extends TestCase
             'sandbox' => true,
         ], $this->createHttpClientMock(), $this->createHttpMessageFactory(), $this->createHttpStreamFactory());
 
-        //guard
+        // guard
         $this->assertNotSame($invalidHash, $api->calculateHash($params));
 
         $params['HASH'] = $invalidHash;

@@ -56,7 +56,7 @@ class ArrayObjectTest extends TestCase
 
         $model['foo'] = 'theFoo';
 
-        //guard
+        // guard
         $this->assertArrayHasKey('foo', $model);
 
         unset($model['foo']);

@@ -66,7 +66,7 @@ class RefundActionTest extends TestCase
 
         $request = new Refund($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -84,7 +84,7 @@ class RefundActionTest extends TestCase
 
         $request = new Refund($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);

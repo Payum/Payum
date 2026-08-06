@@ -22,7 +22,7 @@ class StatusActionTest extends GenericActionTest
             'status' => 'not-supported-status',
         ]);
 
-        //guard
+        // guard
         $status->markNew();
 
         $action->execute($status);
@@ -36,7 +36,7 @@ class StatusActionTest extends GenericActionTest
 
         $status = new GetBinaryStatus([]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -50,7 +50,7 @@ class StatusActionTest extends GenericActionTest
 
         $status = new GetBinaryStatus([]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -66,7 +66,7 @@ class StatusActionTest extends GenericActionTest
             'status' => Constants::STATUS_CHECKOUT_INCOMPLETE,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -82,7 +82,7 @@ class StatusActionTest extends GenericActionTest
             'status' => Constants::STATUS_CHECKOUT_COMPLETE,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -98,7 +98,7 @@ class StatusActionTest extends GenericActionTest
             'reservation' => 'aNumber',
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -114,7 +114,7 @@ class StatusActionTest extends GenericActionTest
             'invoice_number' => 'aNum',
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -130,7 +130,7 @@ class StatusActionTest extends GenericActionTest
             'error_code' => 'aCode',
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -147,7 +147,7 @@ class StatusActionTest extends GenericActionTest
             'invoice_number' => 'aNum',
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);
@@ -164,7 +164,7 @@ class StatusActionTest extends GenericActionTest
             'status' => Constants::STATUS_CREATED,
         ]);
 
-        //guard
+        // guard
         $status->markUnknown();
 
         $action->execute($status);

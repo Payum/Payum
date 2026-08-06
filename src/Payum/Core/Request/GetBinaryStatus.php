@@ -4,11 +4,11 @@ namespace Payum\Core\Request;
 
 class GetBinaryStatus extends BaseGetStatus
 {
-    public const STATUS_PAYEDOUT = 4_194_304; //2^22
+    public const STATUS_PAYEDOUT = 4_194_304; // 2^22
 
-    public const STATUS_UNKNOWN = 2_097_152; //2^21
+    public const STATUS_UNKNOWN = 2_097_152; // 2^21
 
-    public const STATUS_FAILED = 1_048_576; //2^20
+    public const STATUS_FAILED = 1_048_576; // 2^20
 
     public const STATUS_SUSPENDED = 524288; // 2^19
 
@@ -16,7 +16,7 @@ class GetBinaryStatus extends BaseGetStatus
 
     public const STATUS_PENDING = 1024; // 2^10
 
-    public const STATUS_CANCELED = 32; //2^5
+    public const STATUS_CANCELED = 32; // 2^5
 
     public const STATUS_REFUNDED = 16; // 2^4
 
@@ -24,7 +24,7 @@ class GetBinaryStatus extends BaseGetStatus
 
     public const STATUS_CAPTURED = 4; // 2^2
 
-    public const STATUS_NEW = 2; //2^1
+    public const STATUS_NEW = 2; // 2^1
 
     public function markCaptured(): void
     {
@@ -139,7 +139,7 @@ class GetBinaryStatus extends BaseGetStatus
     /**
      * @param int $expectedStatus
      *
-     * @return boolean
+     * @return bool
      */
     protected function isCurrentStatusEqualTo($expectedStatus)
     {

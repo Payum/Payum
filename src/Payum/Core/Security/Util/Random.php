@@ -14,7 +14,7 @@ namespace Payum\Core\Security\Util;
 /**
  * This is adopted version ot TokenGenerator class from FOSUserBundle
  *
- * @link https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Util/TokenGenerator.php
+ * @see https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Util/TokenGenerator.php
  */
 class Random
 {

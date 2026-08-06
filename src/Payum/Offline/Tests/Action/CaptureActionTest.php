@@ -65,7 +65,7 @@ class CaptureActionTest extends TestCase
 
         $request = new Capture($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -83,7 +83,7 @@ class CaptureActionTest extends TestCase
 
         $request = new Capture($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);
@@ -101,7 +101,7 @@ class CaptureActionTest extends TestCase
 
         $request = new Capture($details);
 
-        //guard
+        // guard
         $this->assertTrue($action->supports($request));
 
         $action->execute($request);

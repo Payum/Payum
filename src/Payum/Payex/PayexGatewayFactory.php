@@ -100,12 +100,12 @@ class PayexGatewayFactory extends GatewayFactory
             'payum.action.api.check_agreement' => new CheckAgreementAction(),
             'payum.action.api.auto_pay_agreement' => new AutoPayAgreementAction(),
 
-            //recurring actions
+            // recurring actions
             'payum.action.api.start_recurring_gateway' => new StartRecurringPaymentAction(),
             'payum.action.api.stop_recurring_gateway' => new StopRecurringPaymentAction(),
             'payum.action.api.check_recurring_gateway' => new CheckRecurringPaymentAction(),
 
-            //order actions
+            // order actions
             'payum.action.api.initialize_order' => new InitializeOrderAction(),
             'payum.action.api.complete_order' => new CompleteOrderAction(),
             'payum.action.api.check_order' => new CheckOrderAction(),
