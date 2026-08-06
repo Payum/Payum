@@ -36,10 +36,5 @@
     "autoload": {
         "psr-0": { "Payum\\Payex": "" }
     },
-    "target-dir": "Payum/Payex",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Payex"
 }

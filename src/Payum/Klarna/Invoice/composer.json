@@ -37,10 +37,5 @@
     "autoload": {
         "psr-0": { "Payum\\Klarna\\Invoice": "" }
     },
-    "target-dir": "Payum/Klarna/Invoice",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Klarna/Invoice"
 }

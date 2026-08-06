@@ -34,10 +34,5 @@
     "autoload": {
         "psr-0": { "Payum\\AuthorizeNet\\Aim": "" }
     },
-    "target-dir": "Payum/AuthorizeNet/Aim",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/AuthorizeNet/Aim"
 }

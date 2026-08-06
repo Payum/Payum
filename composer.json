@@ -116,10 +116,5 @@
     },
     "autoload": {
         "psr-4": { "Payum\\": "src/Payum/" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev"
-        }
     }
 }

@@ -23,11 +23,11 @@ function split_new_repo()
     (
         cd $TMP_DIR;
         git clone $REMOTE_URL .;
-        git checkout -b master;
+        git checkout -b $CURRENT_BRANCH;
         touch foo;
         git add foo;
         git commit -m "foo";
-        git push origin master;
+        git push origin $CURRENT_BRANCH;
     );
 
     SHA1=`./bin/splitsh-lite --prefix=$1`

@@ -38,10 +38,5 @@
     "autoload": {
         "psr-0": { "Payum\\Offline": "" }
     },
-    "target-dir": "Payum/Offline",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Offline"
 }

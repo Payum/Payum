@@ -62,7 +62,7 @@ $paypal->execute(new Capture($model));
 ## Resources
 
 * [Site](https://payum.forma-pro.com/)
-* [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#general)
+* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#general)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

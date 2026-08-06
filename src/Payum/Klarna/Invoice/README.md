@@ -8,7 +8,6 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 ---
 
 # KlarnaInvoice
-[![Build Status](https://travis-ci.org/Payum/KlarnaInvoice.png?branch=master)](https://travis-ci.org/Payum/KlarnaInvoice)
 [![Total Downloads](https://poser.pugx.org/payum/klarna-invoice/d/total.png)](https://packagist.org/packages/payum/klarna-invoice)
 [![Latest Stable Version](https://poser.pugx.org/payum/klarna-invoice/version.png)](https://packagist.org/packages/payum/klarna-invoice)
 
@@ -17,7 +16,7 @@ The Payum extension. It provides [Klarna Invoice](https://klarna.com/buy-klarna/
 ## Resources
 
 * [Site](https://payum.forma-pro.com/)
-* [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#klarna-invoice)
+* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#klarna-invoice)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

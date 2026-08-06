@@ -36,10 +36,5 @@
     "autoload": {
         "psr-0": { "Payum\\Paypal\\ProCheckout\\Nvp": "" }
     },
-    "target-dir": "Payum/Paypal/ProCheckout/Nvp",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Paypal/ProCheckout/Nvp"
 }

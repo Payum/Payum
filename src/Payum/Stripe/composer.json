@@ -33,10 +33,5 @@
     "autoload": {
         "psr-0": { "Payum\\Stripe": "" }
     },
-    "target-dir": "Payum/Stripe",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Stripe"
 }

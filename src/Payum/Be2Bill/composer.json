@@ -33,10 +33,5 @@
     "autoload": {
         "psr-0": { "Payum\\Be2Bill": "" }
     },
-    "target-dir": "Payum/Be2Bill",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Be2Bill"
 }

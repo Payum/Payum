@@ -8,7 +8,6 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 ---
 
 # PaypalExpressCheckoutNvp
-[![Build Status](https://travis-ci.org/Payum/PaypalExpressCheckoutNvp.png?branch=master)](https://travis-ci.org/Payum/PaypalExpressCheckoutNvp)
 [![Total Downloads](https://poser.pugx.org/payum/paypal-express-checkout-nvp/d/total.png)](https://packagist.org/packages/payum/paypal-express-checkout-nvp)
 [![Latest Stable Version](https://poser.pugx.org/payum/paypal-express-checkout-nvp/version.png)](https://packagist.org/packages/payum/paypal-express-checkout-nvp)
 
@@ -17,7 +16,7 @@ The Payum extension. It provides [Paypal ExpressCheckout](https://www.paypal.com
 ## Resources
 
 * [Site](https://payum.forma-pro.com/)
-* [Documentation](https://github.com/Payum/Payum/blob/master/docs/index.md#paypal-express-checkout)
+* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#paypal-express-checkout)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

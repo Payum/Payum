@@ -31,10 +31,5 @@
     "autoload": {
         "psr-0": { "Payum\\Skeleton": "" }
     },
-    "target-dir": "Payum/Skeleton",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Skeleton"
 }

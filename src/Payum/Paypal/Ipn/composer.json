@@ -32,10 +32,5 @@
     "autoload": {
         "psr-0": { "Payum\\Paypal\\Ipn": "" }
     },
-    "target-dir": "Payum/Paypal/Ipn",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Paypal/Ipn"
 }

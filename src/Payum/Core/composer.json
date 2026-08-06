@@ -94,10 +94,5 @@
     "autoload": {
         "psr-0": { "Payum\\Core\\": "" }
     },
-    "target-dir": "Payum/Core",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Core"
 }

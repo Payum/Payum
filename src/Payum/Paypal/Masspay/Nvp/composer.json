@@ -32,10 +32,5 @@
     "autoload": {
         "psr-0": { "Payum\\Paypal\\Masspay\\Nvp": "" }
     },
-    "target-dir": "Payum/Paypal/Masspay/Nvp",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Paypal/Masspay/Nvp"
 }

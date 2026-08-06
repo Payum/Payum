@@ -37,10 +37,5 @@
     "autoload": {
         "psr-0": { "Payum\\Klarna\\Checkout": "" }
     },
-    "target-dir": "Payum/Klarna/Checkout",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+    "target-dir": "Payum/Klarna/Checkout"
 }

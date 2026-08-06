@@ -2,7 +2,7 @@ name: Subtree Split
 
 on:
   push:
-    branches: [master, 1.x, 1.7.x]
+    branches: [2.x, 1.x, 1.7.x]
 
 jobs:
   subtree-split:
