@@ -23,7 +23,7 @@ Reduce Your Development Time with Payum integrating more than 50 payment service
 
 ## Resources
 
-* [Documentation](https://payum.gitbook.io/payum/)
+* [Documentation](https://docs.payum.dev/)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 
