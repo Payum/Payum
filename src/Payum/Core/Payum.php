@@ -156,8 +156,6 @@ class Payum implements RegistryInterface
 
         $reply = $gateway->execute(new PayumRequest\Capture($token), true);
 
-        $this->httpRequestVerifier->invalidate($token);
-
         if ($reply instanceof HttpRedirect) {
             return new RedirectResponse($reply->getUrl(), $reply->getStatusCode(), $reply->getHeaders());
         }
