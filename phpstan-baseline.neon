@@ -937,72 +937,6 @@ parameters:
 			path: src/Payum/Core/Security/CryptedInterface.php
 
 		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createAuthorizeToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCancelToken\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCancelToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCancelToken\(\) has parameter \$afterPath with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCancelToken\(\) has parameter \$gatewayName with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCancelToken\(\) has parameter \$model with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createCaptureToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createPayoutToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createRefundToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createToken\(\) has parameter \$afterParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
-			message: '#^Method Payum\\Core\\Security\\GenericTokenFactory\:\:createToken\(\) has parameter \$targetParameters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Payum/Core/Security/GenericTokenFactory.php
-
-		-
 			message: '#^Method Payum\\Core\\Security\\GenericTokenFactoryAwareInterface\:\:setGenericTokenFactory\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -3196,12 +3130,6 @@ parameters:
 			message: '#^Call to an undefined method Payum\\Core\\Action\\ActionInterface\:\:setGateway\(\)\.$#'
 			identifier: method.notFound
 			count: 3
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
-
-		-
-			message: '#^Dead catch \- Payum\\Core\\Reply\\HttpResponse is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 2
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
 
 		-
