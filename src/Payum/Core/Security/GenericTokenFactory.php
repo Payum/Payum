@@ -7,7 +7,7 @@ use Payum\Core\Exception\LogicException;
 class GenericTokenFactory implements GenericTokenFactoryInterface
 {
     /**
-     * @param list<string> $paths
+     * @param array<string, string> $paths
      */
     public function __construct(
         protected TokenFactoryInterface $tokenFactory,
@@ -17,7 +17,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $targetPath
      * @param array<string, scalar> $targetParameters
      * @param string|null $afterPath
@@ -39,7 +39,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $afterPath
      * @param array<string, scalar> $afterParameters
      *
@@ -62,7 +62,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $afterPath
      * @param array<string, scalar> $afterParameters
      *
@@ -79,7 +79,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $afterPath
      * @param array<string, scalar> $afterParameters
      *
@@ -99,7 +99,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $afterPath
      * @param array<string, scalar> $afterParameters
      *
@@ -119,7 +119,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      * @param string|null $afterPath
      * @param array<string, scalar> $afterParameters
      *
@@ -142,7 +142,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface
 
     /**
      * @param string $gatewayName
-     * @param object|array $model
+     * @param object|array<string, scalar> $model
      *
      * @return TokenInterface
      */
