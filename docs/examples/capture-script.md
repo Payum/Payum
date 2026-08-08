@@ -44,17 +44,21 @@ try {
 
 _**Note**: If you've got the "Unsupported reply" you have to add an if condition for that reply. Inside the If statement you have to convert the reply to http response._
 
-This is how you can create a capture url.
+This is how you can create a capture url. `prepare()` stores `$details` in its registered
+storage and hands back the token:
 
 ```php
 <?php
 
 include __DIR__.'/config.php';
 
-$token = $payum->getTokenFactory()->createCaptureToken($gatewayName, $details, 'afterCaptureUrl');
+$token = $payum->prepare($gatewayName, $details, 'afterCaptureUrl');
 
 header("Location: ".$token->getTargetUrl());
 ```
+
+Omit the third argument to use the `done` path configured on the builder, which defaults to
+`done.php`.
 
 Back to [examples](index.md)
 

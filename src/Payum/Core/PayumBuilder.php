@@ -58,6 +58,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use function array_replace;
 use function in_array;
 use function strtolower;
 use function sys_get_temp_dir;
@@ -417,6 +418,7 @@ class PayumBuilder
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
             'payout' => 'payout.php',
+            'done' => 'done.php',
         ], $this->genericTokenFactoryPaths);
 
         $presetContainer = $this->globalContainer;
