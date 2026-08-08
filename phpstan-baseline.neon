@@ -97,30 +97,6 @@ parameters:
 			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
 
 		-
-			message: '#^Method Payum\\Core\\Bridge\\Doctrine\\Types\\ObjectType\:\:convertToDatabaseValue\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
-
-		-
-			message: '#^Method Payum\\Core\\Bridge\\Doctrine\\Types\\ObjectType\:\:convertToDatabaseValue\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
-
-		-
-			message: '#^Method Payum\\Core\\Bridge\\Doctrine\\Types\\ObjectType\:\:convertToPHPValue\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
-
-		-
-			message: '#^Method Payum\\Core\\Bridge\\Doctrine\\Types\\ObjectType\:\:convertToPHPValue\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Payum/Core/Bridge/Doctrine/Types/ObjectType.php
-
-		-
 			message: '#^Call to function method_exists\(\) with Laminas\\Db\\TableGateway\\TableGateway and ''delete'' will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
@@ -1369,74 +1345,8 @@ parameters:
 			path: src/Payum/Core/Tests/Extension/StorageExtensionTest.php
 
 		-
-			message: '#^Call to method setDefaultDB\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setHydratorDir\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setHydratorNamespace\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setMetadataCache\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setMetadataCacheImpl\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setMetadataDriverImpl\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setProxyDir\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to method setProxyNamespace\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Configuration\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to static method addType\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Types\\Type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to static method create\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to static method hasType\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Types\\Type\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Call to static method overrideType\(\) on an unknown class Doctrine\\ODM\\MongoDB\\Types\\Type\.$#'
-			identifier: class.notFound
+			message: '#^Call to function method_exists\(\) with Doctrine\\ODM\\MongoDB\\Configuration and ''setMetadataCache'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
 
@@ -1447,14 +1357,8 @@ parameters:
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
 
 		-
-			message: '#^Instantiated class Doctrine\\ODM\\MongoDB\\Configuration not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
-
-		-
-			message: '#^Property Payum\\Core\\Tests\\Functional\\Bridge\\Doctrine\\BaseMongoTest\:\:\$dm has unknown class Doctrine\\ODM\\MongoDB\\DocumentManager as its type\.$#'
-			identifier: class.notFound
+			message: '#^Parameter \#1 \$cacheImpl of method Doctrine\\ODM\\MongoDB\\Configuration\:\:setMetadataCacheImpl\(\) expects Doctrine\\Common\\Cache\\Cache, Doctrine\\Common\\Cache\\ArrayCache given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
 
@@ -1483,118 +1387,10 @@ parameters:
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
 
 		-
-			message: '#^Call to method clear\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method find\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method flush\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 4
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method getRepository\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method persist\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 4
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method refresh\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
 			message: '#^Comparison operation "\>\=" between int\<80100, 80599\> and 70400 is always true\.$#'
 			identifier: greaterOrEqual.alwaysTrue
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Call to method clear\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method find\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method flush\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 3
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method getRepository\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method persist\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 3
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method refresh\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/GatewayConfigTest.php
-
-		-
-			message: '#^Call to method clear\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method find\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method flush\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 4
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method getRepository\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method persist\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 4
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method refresh\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
 
 		-
 			message: '#^Comparison operation "\>\=" between int\<80100, 80599\> and 70400 is always true\.$#'
@@ -1607,78 +1403,12 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
-
-		-
-			message: '#^Call to method clear\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
-
-		-
-			message: '#^Call to method find\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
-
-		-
-			message: '#^Call to method flush\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
-
-		-
-			message: '#^Call to method getRepository\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
-
-		-
-			message: '#^Call to method persist\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/TokenTest.php
 
 		-
 			message: '#^Parameter \#1 \$details of method Payum\\Core\\Model\\Payment\:\:setDetails\(\) expects array\|Traversable, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Entity/PaymentTest.php
-
-		-
-			message: '#^Instantiated class Doctrine\\ODM\\MongoDB\\Mapping\\Driver\\AnnotationDriver not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
-
-		-
-			message: '#^Instantiated class Doctrine\\ODM\\MongoDB\\Mapping\\Driver\\XmlDriver not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
-
-		-
-			message: '#^Parameter \#1 \$nestedDriver of method Doctrine\\Persistence\\Mapping\\Driver\\MappingDriverChain\:\:addDriver\(\) expects Doctrine\\Persistence\\Mapping\\Driver\\MappingDriver, Doctrine\\ODM\\MongoDB\\Mapping\\Driver\\AnnotationDriver given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
-
-		-
-			message: '#^Parameter \#1 \$nestedDriver of method Doctrine\\Persistence\\Mapping\\Driver\\MappingDriverChain\:\:addDriver\(\) expects Doctrine\\Persistence\\Mapping\\Driver\\MappingDriver, Doctrine\\ODM\\MongoDB\\Mapping\\Driver\\XmlDriver given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/MongoTest.php
-
-		-
-			message: '#^Call to method clear\(\) on an unknown class Doctrine\\ODM\\MongoDB\\DocumentManager\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Storage/DoctrineStorageMongoOdmTest.php
-
-		-
-			message: '#^Parameter \#1 \$objectManager of class Payum\\Core\\Bridge\\Doctrine\\Storage\\DoctrineStorage constructor expects Doctrine\\Persistence\\ObjectManager, Doctrine\\ODM\\MongoDB\\DocumentManager given\.$#'
-			identifier: argument.type
-			count: 6
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Storage/DoctrineStorageMongoOdmTest.php
 
 		-
 			message: '#^Call to method expects\(\) on an unknown class Payum\\Bundle\\PayumBundle\\DependencyInjection\\Factory\\Gateway\\GatewayFactoryInterface\.$#'
@@ -3130,6 +2860,12 @@ parameters:
 			message: '#^Call to an undefined method Payum\\Core\\Action\\ActionInterface\:\:setGateway\(\)\.$#'
 			identifier: method.notFound
 			count: 3
+			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
+
+		-
+			message: '#^Dead catch \- Payum\\Core\\Reply\\HttpResponse is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 2
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/ConfirmOrderActionTest.php
 
 		-
