@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use Exception;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
@@ -524,5 +527,187 @@ HTML
         $payum->notify([
             'payum_token' => 'foo',
         ]);
+    }
+
+    public function testPrepareReturnsTheCaptureTokenBuiltFromTheGatewayNameAndModel(): void
+    {
+        $payment = new Payment();
+        $token = $this->createMock(TokenInterface::class);
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $payment, 'done.php', [])
+            ->willReturn($token);
+
+        $payum = $this->createPayumWithStorageFor(Payment::class);
+
+        $this->assertSame($token, $payum->prepare('aGateway', $payment, 'done.php'));
+    }
+
+    public function testPrepareUpdatesTheModelInTheStorageResolvedForItsOwnClass(): void
+    {
+        $payment = new Payment();
+
+        $this->storageMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->identicalTo($payment))
+            ->willReturn($payment);
+
+        $this->tokenFactoryMock
+            ->method('createCaptureToken')
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        $payum = $this->createPayumWithStorageFor(Payment::class);
+
+        $payum->prepare('aGateway', $payment);
+    }
+
+    public function testPrepareUpdatesTheModelBeforeCreatingTheToken(): void
+    {
+        $payment = new Payment();
+        $calls = [];
+
+        $this->storageMock
+            ->method('update')
+            ->willReturnCallback(function (object $model) use (&$calls): object {
+                $calls[] = 'update';
+
+                return $model;
+            });
+
+        $this->tokenFactoryMock
+            ->method('createCaptureToken')
+            ->willReturnCallback(function () use (&$calls): TokenInterface {
+                $calls[] = 'createCaptureToken';
+
+                return $this->createMock(TokenInterface::class);
+            });
+
+        $payum = $this->createPayumWithStorageFor(Payment::class);
+
+        $payum->prepare('aGateway', $payment);
+
+        $this->assertSame(['update', 'createCaptureToken'], $calls);
+    }
+
+    public function testPrepareFallsBackToTheDefaultAfterPathFromTheConstructor(): void
+    {
+        $payment = new Payment();
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $payment, 'complete.php', [])
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        $payum = $this->createPayumWithStorageFor(Payment::class, 'complete.php');
+
+        $payum->prepare('aGateway', $payment, 'complete.php');
+    }
+
+    public function testPrepareUsesDonePhpWhenNoDefaultAfterPathIsGiven(): void
+    {
+        $payment = new Payment();
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $payment, 'done.php', [])
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        $payum = $this->createPayumWithStorageFor(Payment::class);
+
+        $payum->prepare('aGateway', $payment, 'done.php');
+    }
+
+    public function testPrepareAllowsAnExplicitAfterPathToOverrideTheDefault(): void
+    {
+        $payment = new Payment();
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $payment, 'thanks.php', [])
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        $payum = $this->createPayumWithStorageFor(Payment::class, 'complete.php');
+
+        $payum->prepare('aGateway', $payment, 'thanks.php');
+    }
+
+    public function testPrepareForwardsTheAfterParameters(): void
+    {
+        $payment = new Payment();
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $payment, 'thanks.php', [
+                'order' => 'anId',
+            ])
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        $payum = $this->createPayumWithStorageFor(Payment::class);
+
+        $payum->prepare('aGateway', $payment, 'thanks.php', [
+            'order' => 'anId',
+        ]);
+    }
+
+    public function testPrepareAcceptsAModelWhichIsNotAPaymentInterface(): void
+    {
+        $details = new ArrayObject();
+        $token = $this->createMock(TokenInterface::class);
+
+        $this->storageMock
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->identicalTo($details))
+            ->willReturn($details);
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $details, 'done.php', [])
+            ->willReturn($token);
+
+        $payum = $this->createPayumWithStorageFor(ArrayObject::class);
+
+        $this->assertSame($token, $payum->prepare('aGateway', $details, 'done.php'));
+    }
+
+    public function testPrepareThrowsWhenTheModelHasNoRegisteredStorage(): void
+    {
+        $this->tokenFactoryMock
+            ->expects($this->never())
+            ->method('createCaptureToken');
+
+        $payum = $this->createPayumWithStorageFor(ArrayObject::class);
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $payum->prepare('aGateway', new Payment());
+    }
+
+    /**
+     * @param class-string $modelClass
+     *
+     * @return Payum<object>
+     */
+    private function createPayumWithStorageFor(string $modelClass, ?string $defaultAfterPath = null): Payum
+    {
+        $registry = new SimpleRegistry([], [
+            $modelClass => $this->storageMock,
+        ]);
+
+        return new Payum(
+            $registry,
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+            ...(null === $defaultAfterPath ? [] : [$defaultAfterPath])
+        );
     }
 }

@@ -28,6 +28,7 @@ use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
@@ -192,6 +193,7 @@ final class PayumBuilderTest extends TestCase
                     'authorize' => 'authorize.php',
                     'refund' => 'refund.php',
                     'payout' => 'payout.php',
+                    'done' => 'done.php'
                 ], $paths);
 
                 return $expectedTokenFactory;
@@ -211,6 +213,7 @@ final class PayumBuilderTest extends TestCase
             'authorize' => 'authorize_custom.php',
             'refund' => 'refund_custom.php',
             'payout' => 'payout_custom.php',
+            'done' => 'done_custom.php'
         ];
 
         $payum = (new PayumBuilder())
@@ -225,6 +228,43 @@ final class PayumBuilderTest extends TestCase
         $ref = new ReflectionProperty($genericTokenFactory, 'paths');
 
         $this->assertSame($expectedPaths, $ref->getValue($genericTokenFactory));
+    }
+
+    public function testShouldUseDonePhpAsThePrepareAfterPathByDefault(): void
+    {
+        $payum = $this->buildPayumCapturingThePrepareAfterPath('done.php');
+
+        $payum->prepare('aGateway', new Payment(), 'done.php');
+    }
+
+    public function testShouldUseCustomDonePathFromGenericTokenFactoryPathsForPrepare(): void
+    {
+        $payum = $this->buildPayumCapturingThePrepareAfterPath('complete.php', [
+            'done' => 'complete.php',
+        ]);
+
+        $payum->prepare('aGateway', new Payment(), 'complete.php');
+    }
+
+    public function testShouldNotAddTheDonePathToTheGenericTokenFactoryPaths(): void
+    {
+        $seenPaths = null;
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGenericTokenFactoryPaths([
+                'done' => 'complete.php',
+            ])
+            ->setGenericTokenFactory(function ($tokenFactory, $paths) use (&$seenPaths) {
+                $seenPaths = $paths;
+
+                return $this->createGenericTokenFactoryMock();
+            })
+            ->getPayum()
+        ;
+
+        $this->assertIsArray($seenPaths);
+        $this->assertSame('capture.php', $seenPaths['capture']);
     }
 
     public function testThrowsIfGenericTokenFactoryBuilderReturnInvalidInstance(): void
@@ -787,6 +827,33 @@ final class PayumBuilderTest extends TestCase
     protected function createGenericTokenFactoryMock(): MockObject | GenericTokenFactoryInterface
     {
         return $this->createMock(GenericTokenFactoryInterface::class);
+    }
+
+    /**
+     * Builds a Payum whose token factory asserts the after path prepare() hands it.
+     *
+     * @param array<string, string> $genericTokenFactoryPaths
+     *
+     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     */
+    private function buildPayumCapturingThePrepareAfterPath(
+        string $expectedAfterPath,
+        array $genericTokenFactoryPaths = []
+    ): Payum {
+        $tokenFactory = $this->createGenericTokenFactoryMock();
+        $tokenFactory
+            ->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', $this->isInstanceOf(Payment::class), $expectedAfterPath, [])
+            ->willReturn($this->createMock(TokenInterface::class));
+
+        return (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addStorage(Payment::class, $this->createMock(StorageInterface::class))
+            ->setGenericTokenFactoryPaths($genericTokenFactoryPaths)
+            ->setGenericTokenFactory(fn () => $tokenFactory)
+            ->getPayum()
+        ;
     }
 }
 

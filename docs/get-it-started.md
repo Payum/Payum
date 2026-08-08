@@ -46,9 +46,6 @@ Here we can put our gateways, storages. Also we can configure security component
 
 use Payum\Core\PayumBuilder;
 use Payum\Core\Payum;
-use Payum\Core\Model\Payment;
-
-$paymentClass = Payment::class;
 
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
@@ -70,20 +67,19 @@ _**Note**: `PayumBuilder` configures a_ [_dependency injection container_](di/RE
 
 ### prepare.php
 
-At this stage we have to create an order. Add some information into it. Create a capture token and delegate the job to [capture.php](examples/capture-script.md) script. Here's an offline gateway example:
+At this stage we have to create an order and add some information into it. `prepare()` then stores it and gives you back a capture token, which delegates the job to the [capture.php](examples/capture-script.md) script. Here's an offline gateway example:
 
 ```php
 <?php
 // prepare.php
 
+use Payum\Core\Model\Payment;
+
 include __DIR__.'/config.php';
 
 $gatewayName = 'aGateway';
 
-/** @var \Payum\Core\Payum $payum */
-$storage = $payum->getStorage($paymentClass);
-
-$payment = $storage->create();
+$payment = new Payment();
 $payment->setNumber(uniqid());
 $payment->setCurrencyCode('EUR');
 $payment->setTotalAmount(123); // 1.23 EUR
@@ -97,13 +93,37 @@ $payment->setDetails(array(
   // 'L_PAYMENTREQUEST_0_DESC0' => 'A desc',
 ));
 
-
-$storage->update($payment);
-
-$captureToken = $payum->getTokenFactory()->createCaptureToken($gatewayName, $payment, 'done.php');
+/** @var \Payum\Core\Payum $payum */
+$captureToken = $payum->prepare($gatewayName, $payment);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
+
+`prepare()` finds the storage registered for the model you give it, persists the model, and
+builds the capture token. It works with any model that has a storage: a `Payment`, an
+`ArrayObject` of raw gateway details, or [your own order class](your-order-integration.md).
+
+Once captured, the payer is sent to `done.php`. Pass a third argument to send them elsewhere:
+
+```php
+$captureToken = $payum->prepare($gatewayName, $payment, 'thanks.php');
+```
+
+To change it for every payment instead, set it once on the builder:
+
+```php
+$payum = (new \Payum\Core\PayumBuilder())
+    ->setGenericTokenFactoryPaths(['done' => 'thanks.php'])
+    // ...
+    ->getPayum()
+;
+```
+
+{% hint style="info" %}
+_**Note**: doing this by hand still works. `prepare()` is shorthand for `getStorage()`, `update()`
+and_ [_`getTokenFactory()->createCaptureToken()`_](examples/capture-script.md)_, which you can call
+yourself when you need more control._
+{% endhint %}
 
 _**Note**: There are examples for all_ [_supported gateways_](supported-gateways.md)_._
 

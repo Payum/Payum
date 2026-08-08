@@ -117,6 +117,33 @@ class Payum implements RegistryInterface
     }
 
     /**
+     * Persist the model and create the capture token that starts the payment.
+     *
+     * The storage is resolved from the model's own class, so any model with a registered
+     * storage works here: a Payment, an ArrayObject of gateway details, or your own order
+     * class. When no after path is given the one configured on the builder is used.
+     *
+     * @param array<string, mixed> $afterParameters
+     *
+     * @throws InvalidArgumentException if the model has no registered storage
+     */
+    public function prepare(
+        string $gatewayName,
+        object $model,
+        ?string $afterPath = null,
+        array $afterParameters = []
+    ): TokenInterface {
+        $this->getStorage($model::class)->update($model);
+
+        return $this->tokenFactory->createCaptureToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters
+        );
+    }
+
+    /**
      * @param Request|array<string, mixed>|null $request
      *
      * @throws Exception

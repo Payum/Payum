@@ -85,16 +85,12 @@ use App\Model\Payment;
 
 include __DIR__.'/config.php';
 
-/** @var \Payum\Core\Payum $payum */
-$storage = $payum->getStorage('App\Model\Payment');
-
-$order = $storage->create();
 $order = new Payment;
 $order->price = 1;
 $order->currency = 'USD';
-$storage->update($order);
 
-$captureToken = $payum->getTokenFactory()->createCaptureToken('foo', $order, 'done.php');
+/** @var \Payum\Core\Payum $payum */
+$captureToken = $payum->prepare('foo', $order);
 
 header("Location: ".$captureToken->getTargetUrl());
 ```
