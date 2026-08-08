@@ -193,7 +193,7 @@ final class PayumBuilderTest extends TestCase
                     'authorize' => 'authorize.php',
                     'refund' => 'refund.php',
                     'payout' => 'payout.php',
-                    'done' => 'done.php'
+                    'done' => 'done.php',
                 ], $paths);
 
                 return $expectedTokenFactory;
@@ -213,7 +213,7 @@ final class PayumBuilderTest extends TestCase
             'authorize' => 'authorize_custom.php',
             'refund' => 'refund_custom.php',
             'payout' => 'payout_custom.php',
-            'done' => 'done_custom.php'
+            'done' => 'done_custom.php',
         ];
 
         $payum = (new PayumBuilder())
