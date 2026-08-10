@@ -46,6 +46,7 @@ use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
+use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -262,6 +263,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 MiddlewareCollection::class => self::defaultMiddleware(...),
                 EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
                 LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
+                RecordPaymentStatusMiddleware::class => static fn (): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(),
                 PersistStateMiddleware::class => static fn (ContainerInterface $c): PersistStateMiddleware => new PersistStateMiddleware(
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
@@ -339,7 +341,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         return (new MiddlewareCollection())
             ->with(EndlessCycleDetectorMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
-            ->with(PersistStateMiddleware::class);
+            ->with(PersistStateMiddleware::class)
+            ->with(RecordPaymentStatusMiddleware::class);
     }
 
     public function createGateway(ContainerInterface $container): Gateway

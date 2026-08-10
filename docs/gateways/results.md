@@ -75,11 +75,59 @@ match (true) {
 
 ### Status
 
-`$result->status` is a `PaymentStatus`:
+`$result->status` is the payment's state after this operation:
 
 `New`, `Pending`, `Authorized`, `Captured`, `Refunded`, `PartiallyRefunded`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
 
 It is string-backed, so it can be persisted or sent as JSON. One backing value does not match its case name — `PaidOut` is backed by `'payedout'` — so compare the case rather than the spelling.
+
+**It is null when the operation concluded nothing about the payment.** A refund that was declined leaves a captured payment captured; a capture that was declined leaves the payment where it was, so the customer can try another card. Say otherwise only when the failure really is terminal:
+
+```php
+RefundResult::failed($failure);                          // the payment is unchanged
+CaptureResult::failed($failure, PaymentStatus::Failed);  // this payment is finished
+```
+
+A handler never writes to the payment. It declares the payment's new state as part of its answer, the same way it declares what the customer must do next, and Payum commits it.
+
+### Keeping the status on the payment
+
+Implement `Payum\Core\Model\HasPaymentStatus` on your payment and Payum keeps it current after every command:
+
+```php
+use Payum\Core\Model\HasPaymentStatus;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Result\PaymentStatus;
+
+class Payment implements PaymentInterface, HasPaymentStatus
+{
+    #[ORM\Column(enumType: PaymentStatus::class)]
+    private PaymentStatus $status = PaymentStatus::New;
+
+    public function getStatus(): PaymentStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(PaymentStatus $status): void
+    {
+        $this->status = $status;
+    }
+}
+```
+
+The status is then readable without going near a gateway, and queryable in whatever the payment is stored in — "every pending payment older than an hour" becomes an ordinary query.
+
+Read it through `PaymentStatuses`, which returns null for a payment that does not track one — meaning nobody knows, which is not the same as `New`:
+
+```php
+use Payum\Core\Model\PaymentStatuses;
+
+PaymentStatuses::of($payment);        // ?PaymentStatus
+PaymentStatuses::isTracked($payment); // bool
+```
+
+A payment that does not implement the interface has no status stored, exactly as before.
 
 ### Failures and exceptions
 

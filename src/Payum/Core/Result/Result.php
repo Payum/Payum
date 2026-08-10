@@ -17,10 +17,13 @@ namespace Payum\Core\Result;
 abstract class Result
 {
     /**
+     * @param PaymentStatus|null $status the payment's state after this operation. Null when the operation
+     *                                  concluded nothing about it — a refund that was declined leaves the
+     *                                  payment exactly as it was
      * @param array<string, mixed> $raw the PSP's own payload, kept for the application's use
      */
     public function __construct(
-        public readonly PaymentStatus $status,
+        public readonly ?PaymentStatus $status,
         public readonly ?NextAction $next = null,
         public readonly ?string $transactionId = null,
         public readonly ?Failure $failure = null,

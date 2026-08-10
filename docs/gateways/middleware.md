@@ -85,8 +85,11 @@ What core registers, outermost first:
 | `EndlessCycleDetectorMiddleware` | 1000 | Stops a handler that dispatches its way into a loop |
 | `LegacyExtensionMiddleware` | 500 | Runs the gateway's registered extensions |
 | `PersistStateMiddleware` | 100 | Writes the PSP state back onto the payment |
+| `RecordPaymentStatusMiddleware` | 50 | Commits the status the handler declared, when the payment tracks one |
 
-So anything you register at the default 0 runs inside all three, closest to the handler.
+So anything you register at the default 0 runs inside all four, closest to the handler.
+
+Two of them behave deliberately differently when a handler throws, and it is worth knowing which is which. `PersistStateMiddleware` writes anyway — a PSP token recorded just before a failure has to survive, or the retry opens a second checkout. `RecordPaymentStatusMiddleware` writes nothing, because an exception means nobody learned what the status is.
 
 ### Middleware belonging to one gateway
 
