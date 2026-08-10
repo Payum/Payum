@@ -24,6 +24,8 @@ use Payum\Core\DI\FallbackContainer;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
@@ -63,6 +65,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use function array_merge;
 use function array_replace;
+use function DI\autowire;
 use function in_array;
 use function is_a;
 use function strtolower;
@@ -369,29 +372,40 @@ class PayumBuilder
 
         $gateways = [];
 
-        foreach ($this->gateways as $name => $gateway) {
-            if ($gateway instanceof \Payum\Core\Config\GatewayConfig) {
-                $containerBuilder = new ContainerBuilder();
-
-                $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
-                $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
-
-                if ($gateway instanceof ContainerConfiguration) {
-                    // The gateway factory defaults come first, ...
-                    $containerBuilder->addDefinitions($gateway->configureContainer());
-                }
-
-                $containerBuilder->addDefinitions([
-                    $gateway::class => $gateway,
-                    GatewayConfig::class => $gateway,
-                ]);
-
-                $gateways[$name] = $coreGatewayFactory->createGateway(
-                    new FallbackContainer($containerBuilder->build(), $globalContainer)
-                );
-
-                unset($this->gateways[$name]);
+        foreach ($this->gateways as $name => $config) {
+            if (! $config instanceof GatewayConfig) {
+                continue;
             }
+
+            $gatewayClass = $config->getGatewayClass();
+            $gateway = new $gatewayClass();
+
+            $containerBuilder = new ContainerBuilder();
+
+            // Core defaults first, then the services shared by every gateway, then what the gateway
+            // declares for itself. Last wins.
+            $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
+            $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
+
+            if ($gateway instanceof ContainerConfiguration) {
+                $containerBuilder->addDefinitions($gateway->configureContainer());
+            }
+
+            $handlerDefinitions = array_map(static fn (string $handlerClass) => autowire($handlerClass), HandlerMap::fromHandlers($gateway->handlers())->bindings());
+
+            $containerBuilder->addDefinitions($handlerDefinitions);
+            $containerBuilder->addDefinitions([
+                $config::class => $config,
+                GatewayConfig::class => $config,
+                $gatewayClass => $gateway,
+                PaymentGateway::class => $gateway,
+            ]);
+
+            $gateways[$name] = $coreGatewayFactory->createGateway(
+                new FallbackContainer($containerBuilder->build(), $globalContainer)
+            );
+
+            unset($this->gateways[$name]);
         }
 
         // Whatever is left in $this->gateways is a legacy instance rather than a config -- the loop above
@@ -525,6 +539,10 @@ class PayumBuilder
             },
             GenericTokenFactoryInterface::class => fn (ContainerInterface $c): GenericTokenFactoryInterface => $this->buildGenericTokenFactory($c->get(TokenFactoryInterface::class), $paths),
             HttpRequestVerifierInterface::class => fn (): HttpRequestVerifierInterface => $this->buildHttpRequestVerifier($tokenStorage),
+
+            // Storages only. A command carrying just a token needs this to load the payment its token
+            // points at, and building it without gateways keeps it clear of the registry below.
+            StorageRegistryInterface::class => $storageRegistry,
             ClientInterface::class => Psr18ClientDiscovery::find(...),
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
@@ -582,6 +600,7 @@ class PayumBuilder
             HttpRequestVerifierInterface::class,
             GenericTokenFactoryInterface::class,
             TokenFactoryInterface::class,
+            StorageRegistryInterface::class,
             ClientInterface::class,
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,

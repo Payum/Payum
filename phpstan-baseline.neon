@@ -337,12 +337,6 @@ parameters:
 			path: src/Payum/Core/Gateway.php
 
 		-
-			message: '#^Method Payum\\Core\\Gateway\:\:execute\(\) should return Payum\\Core\\Reply\\ReplyInterface\|null but return statement is missing\.$#'
-			identifier: return.missing
-			count: 1
-			path: src/Payum/Core/Gateway.php
-
-		-
 			message: '#^Method Payum\\Core\\GatewayAwareInterface\:\:setGateway\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1

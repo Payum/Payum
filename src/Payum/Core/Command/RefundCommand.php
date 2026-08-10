@@ -27,8 +27,8 @@ final class RefundCommand implements CommandInterface
      * @param string|null $reason some PSPs record a reason code and surface it in their dashboard
      */
     public function __construct(
-        public readonly ?TokenInterface $token = null,
-        public readonly ?PaymentInterface $payment = null,
+        private readonly ?TokenInterface $token = null,
+        private readonly ?PaymentInterface $payment = null,
         public readonly ?int $amount = null,
         public readonly ?string $reason = null,
         public readonly ?string $idempotencyKey = null,
@@ -54,5 +54,15 @@ final class RefundCommand implements CommandInterface
     public static function forToken(TokenInterface $token, ?int $amount = null, ?string $reason = null): self
     {
         return new self(token: $token, amount: $amount, reason: $reason);
+    }
+
+    public function payment(): ?PaymentInterface
+    {
+        return $this->payment;
+    }
+
+    public function token(): ?TokenInterface
+    {
+        return $this->token;
     }
 }

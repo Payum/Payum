@@ -24,8 +24,8 @@ final class AuthorizeCommand implements CommandInterface
      * @param int|null $amount in minor units. Null authorises the payment's full amount
      */
     public function __construct(
-        public readonly ?TokenInterface $token = null,
-        public readonly ?PaymentInterface $payment = null,
+        private readonly ?TokenInterface $token = null,
+        private readonly ?PaymentInterface $payment = null,
         public readonly ?int $amount = null,
         public readonly ?string $idempotencyKey = null,
     ) {
@@ -50,5 +50,15 @@ final class AuthorizeCommand implements CommandInterface
     public static function forToken(TokenInterface $token, ?int $amount = null, ?string $idempotencyKey = null): self
     {
         return new self(token: $token, amount: $amount, idempotencyKey: $idempotencyKey);
+    }
+
+    public function payment(): ?PaymentInterface
+    {
+        return $this->payment;
+    }
+
+    public function token(): ?TokenInterface
+    {
+        return $this->token;
     }
 }

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Payum\Core\Command;
 
 use Payum\Core\Gateway\Capability;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Result\Result;
+use Payum\Core\Security\TokenInterface;
 
 /**
  * What the caller wants done. Immutable.
@@ -27,4 +29,17 @@ interface CommandInterface
      * can never disagree.
      */
     public static function capability(): Capability;
+
+    /**
+     * The payment being operated on, when the caller had one to hand.
+     *
+     * Null when the command carries only a token; core then resolves the payment from the token's
+     * identity.
+     */
+    public function payment(): ?PaymentInterface;
+
+    /**
+     * The token this command arrived on, when it came in over HTTP.
+     */
+    public function token(): ?TokenInterface;
 }

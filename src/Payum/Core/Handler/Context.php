@@ -96,6 +96,21 @@ final class Context
         return $this->httpRequest;
     }
 
+    /**
+     * The state to write back, or null when the handler never touched it.
+     *
+     * Deliberately the ArrayObject rather than toUnsafeArray(): a SensitiveValue must stay wrapped on
+     * its way into storage.
+     *
+     * @internal for the executor
+     *
+     * @return ArrayObject<string, mixed>|null
+     */
+    public function pendingState(): ?ArrayObject
+    {
+        return $this->state;
+    }
+
     public function payment(): ?PaymentInterface
     {
         return $this->payment;
