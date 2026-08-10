@@ -14,6 +14,7 @@ use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Result;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 final class MiddlewareCollectionTest extends TestCase
 {
@@ -133,7 +134,7 @@ final class MiddlewareCollectionTest extends TestCase
     public function testShouldThrowWhenAnEntryIsNotMiddleware(): void
     {
         $container = new Container([
-            'not_middleware' => new \stdClass(),
+            'not_middleware' => new stdClass(),
         ]);
 
         $this->expectException(LogicException::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests;
 
+use Exception;
 use League\Uri\Uri;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
@@ -17,6 +18,7 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
+use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
@@ -27,6 +29,7 @@ use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 final class MiddlewarePipelineTest extends TestCase
 {
@@ -108,7 +111,7 @@ final class MiddlewarePipelineTest extends TestCase
             $this->buildPayum()->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
 
             $this->fail('Expected the handler to throw.');
-        } catch (\RuntimeException) {
+        } catch (RuntimeException) {
             // A checkout id written before the failure has to survive, or the retry opens a second one.
             $this->assertSame('chk_1', $payment->getDetails()['checkout_id']);
         }
@@ -144,9 +147,9 @@ final class MiddlewarePipelineTest extends TestCase
             $gateway->execute(CaptureCommand::forPayment($payment));
 
             $this->fail('Expected the handler to throw.');
-        } catch (\RuntimeException) {
+        } catch (RuntimeException) {
             $this->assertContains('onPostExecute', $extension->calls);
-            $this->assertInstanceOf(\RuntimeException::class, $extension->seenException);
+            $this->assertInstanceOf(RuntimeException::class, $extension->seenException);
         }
     }
 
@@ -212,7 +215,7 @@ final class RecordingExtension implements ExtensionInterface
 
     public mixed $seenRequest = null;
 
-    public ?\Exception $seenException = null;
+    public ?Exception $seenException = null;
 
     public function onPreExecute(ExtensionContext $context): void
     {
@@ -259,7 +262,7 @@ final class PipelineGateway implements PaymentGateway, DeclaresMiddleware
 
     public function logo(): Logo
     {
-        return Logo\Url::create('https://acme.test/logo.svg');
+        return Url::create('https://acme.test/logo.svg');
     }
 
     public function name(): string
@@ -301,7 +304,7 @@ final class PipelineCaptureHandler implements CaptureHandlerInterface
         }
 
         if ($state['explode']) {
-            throw new \RuntimeException('psp exploded');
+            throw new RuntimeException('psp exploded');
         }
 
         return CaptureResult::captured('txn_1');

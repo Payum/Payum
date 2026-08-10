@@ -49,7 +49,7 @@ final class LegacyExtensionMiddleware implements MiddlewareInterface, GatewayAwa
 
     public function process(CommandInterface $command, Context $context, callable $next): Result
     {
-        if (null === $this->gateway) {
+        if (! $this->gateway instanceof Gateway) {
             return $next($command, $context);
         }
 
