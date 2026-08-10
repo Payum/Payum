@@ -7,6 +7,7 @@ namespace Payum\Core\Tests;
 use Exception;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\ArrayObject;
@@ -23,6 +24,8 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
+use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
@@ -207,6 +210,96 @@ final class PayumTest extends TestCase
             'foo' => $fooGatewayFactory,
             'bar' => $barGatewayFactory,
         ], $payum->getGatewayFactories());
+    }
+
+    public function testCaptureMethodThrowsForANextActionItCannotTurnIntoAResponse(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $gateway = $this->createMock(Gateway::class);
+
+        $this->httpRequestVerifierMock
+            ->expects($this->once())
+            ->method('verify')
+            ->willReturn($token);
+
+        $token
+            ->expects($this->once())
+            ->method('getGatewayName')
+            ->willReturn('aGateway');
+
+        $gateway
+            ->expects($this->once())
+            ->method('supportsCommand')
+            ->willReturn(true);
+
+        $gateway
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(CaptureResult::pending(new RenderTemplate('@Acme/form.html.twig')));
+
+        // Redirecting to the after URL here would tell the application the payment finished.
+        $token
+            ->expects($this->never())
+            ->method('getAfterUrl');
+
+        $payum = new Payum(
+            new SimpleRegistry([
+                'aGateway' => $gateway,
+            ]),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock
+        );
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(RenderTemplate::class);
+
+        $payum->capture(Request::create('/capture'));
+    }
+
+    public function testCaptureMethodRedirectsToTheAfterUrlWhenTheCommandIsFinished(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $gateway = $this->createMock(Gateway::class);
+
+        $this->httpRequestVerifierMock
+            ->expects($this->once())
+            ->method('verify')
+            ->willReturn($token);
+
+        $token
+            ->expects($this->once())
+            ->method('getGatewayName')
+            ->willReturn('aGateway');
+
+        $token
+            ->expects($this->once())
+            ->method('getAfterUrl')
+            ->willReturn('https://example.com/done');
+
+        $gateway
+            ->expects($this->once())
+            ->method('supportsCommand')
+            ->willReturn(true);
+
+        $gateway
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(CaptureResult::captured('txn_1'));
+
+        $payum = new Payum(
+            new SimpleRegistry([
+                'aGateway' => $gateway,
+            ]),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock
+        );
+
+        $response = $payum->capture(Request::create('/capture'));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('https://example.com/done', $response->getTargetUrl());
     }
 
     public function testCaptureMethodRepliesHttpRedirect(): void

@@ -71,7 +71,7 @@ match (true) {
 };
 ```
 
-`Payum::capture()` already does this for `Redirect` and `PostRedirect` and returns a Symfony response, so most applications never write the `match` themselves.
+`Payum::capture()` already does this for `Redirect` and `PostRedirect` and returns a Symfony response, so most applications never write the `match` themselves. It redirects to the token's after URL when `next` is null, and throws for any other next action rather than reporting a payment as finished when it is not — dispatch the command yourself when you need to act on those.
 
 ### Status
 
