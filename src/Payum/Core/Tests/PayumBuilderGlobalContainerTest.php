@@ -12,6 +12,7 @@ use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
@@ -1009,7 +1010,7 @@ class ExposedGlobalContainerPayumBuilder extends PayumBuilder
     }
 }
 
-class ContainerConfigurationGatewayFactoryStub implements GatewayFactoryInterface, ContainerConfiguration
+class ContainerConfigurationGatewayFactoryStub implements GatewayFactoryInterface, ContainerConfiguration, CreatesGateway
 {
     public ?ContainerInterface $container = null;
 

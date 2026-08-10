@@ -4,6 +4,7 @@ namespace Payum\Core;
 
 use Exception;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Command\CommandInterface;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -11,8 +12,11 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Reply\ReplyInterface;
+use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Throwable;
+use function func_num_args;
+use function trigger_deprecation;
 
 class Gateway implements GatewayInterface
 {
@@ -36,6 +40,8 @@ class Gateway implements GatewayInterface
      * @var Context[]
      */
     protected array $stack = [];
+
+    protected ContainerInterface $container;
 
     public function __construct()
     {
@@ -81,8 +87,32 @@ class Gateway implements GatewayInterface
         $this->extensions->addExtension($extension, $forcePrepend);
     }
 
-    public function execute($request, $catchReply = false)
+    public function execute(/* CommandInterface */ $request, $catchReply = false)
     {
+        if (func_num_args() > 1) {
+            trigger_deprecation(
+                'payum/core',
+                '2.0',
+                'Passing the $catchReply argument to %s is deprecated and will be removed in 3.0. Use %s::execute($request) instead.',
+                __METHOD__,
+                __CLASS__
+            );
+        }
+
+        if ($request instanceof CommandInterface) {
+            // @TODO: Handle commands
+            return null;
+        }
+
+        trigger_deprecation(
+            'payum/core',
+            '2.0',
+            'Not passing a %s instance to %s is deprecated and will not be supported in 3.0. Use %s::execute(CommandInterface $request) instead.',
+            CommandInterface::class,
+            __METHOD__,
+            __CLASS__
+        );
+
         $context = new Context($this, $request, $this->stack);
 
         $this->stack[] = $context;
@@ -125,6 +155,12 @@ class Gateway implements GatewayInterface
             $this->onPostExecuteWithException($context);
         }
 
+    }
+
+    public function setContainer(ContainerInterface $container): self
+    {
+        $this->container = $container;
+        return $this;
     }
 
     protected function onPostExecuteWithException(Context $context): void
