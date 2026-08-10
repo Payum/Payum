@@ -39,7 +39,7 @@ class TwigUtil
                 $twig->setLoader(new ChainLoader([$currentLoader, $payumLoader]));
             }
 
-            static::$storage->attach($twig, $payumLoader);
+            static::$storage->offsetSet($twig, $payumLoader);
         }
     }
 }

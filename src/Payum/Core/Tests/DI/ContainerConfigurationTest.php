@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\DI;
 
+use ReflectionMethod;
 use DI\Container;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
@@ -48,7 +49,7 @@ final class ContainerConfigurationTest extends TestCase
         // gateway declare its services without having to know how a Gateway is built.
         $this->assertFalse($rc->hasMethod('createGateway'));
         $this->assertSame(['configureContainer'], array_map(
-            static fn (\ReflectionMethod $method): string => $method->getName(),
+            static fn (ReflectionMethod $method): string => $method->getName(),
             $rc->getMethods(),
         ));
     }

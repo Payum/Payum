@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests;
 
+use Payum\Core\Result\NextAction;
+use Payum\Core\Metadata\Logo\Url;
 use League\Uri\Uri;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
@@ -74,7 +76,7 @@ final class CommandDispatchTest extends TestCase
         // handler it is now on its second pass is the state written during the first.
         $second = $gateway->execute(CaptureCommand::forPayment($payment));
 
-        $this->assertNull($second->next);
+        $this->assertNotInstanceOf(NextAction::class, $second->next);
         $this->assertSame(PaymentStatus::Captured, $second->status);
         $this->assertSame('txn_1', $second->transactionId);
     }
@@ -196,7 +198,7 @@ final class AcmeGateway implements PaymentGateway
 
     public function logo(): Logo
     {
-        return Logo\Url::create('https://acme.test/logo.svg');
+        return Url::create('https://acme.test/logo.svg');
     }
 
     public function name(): string

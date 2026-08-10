@@ -44,7 +44,7 @@ final class CaptureCommand implements CommandInterface
         public readonly ?int $amount = null,
         public readonly ?string $idempotencyKey = null,
     ) {
-        if (null === $this->token && null === $this->payment) {
+        if (!$this->token instanceof TokenInterface && !$this->payment instanceof PaymentInterface) {
             throw new LogicException(sprintf(
                 'A %s needs either a token or a payment: it has to know what it is capturing.',
                 self::class,

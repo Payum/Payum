@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Payum\Core\Exception;
 
+use Payum\Core\Result\Result;
 use Payum\Core\Command\CommandInterface;
 use function sprintf;
 
 class CommandNotSupportedException extends InvalidArgumentException
 {
     /**
-     * @var CommandInterface<\Payum\Core\Result\Result>
+     * @var CommandInterface<Result>
      */
     protected CommandInterface $command;
 
     /**
-     * @param CommandInterface<\Payum\Core\Result\Result> $command
+     * @param CommandInterface<Result> $command
      */
     public static function create(CommandInterface $command): self
     {
@@ -30,7 +31,7 @@ class CommandNotSupportedException extends InvalidArgumentException
     }
 
     /**
-     * @return CommandInterface<\Payum\Core\Result\Result>
+     * @return CommandInterface<Result>
      */
     public function getCommand(): CommandInterface
     {
