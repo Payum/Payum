@@ -223,6 +223,10 @@ class Payum implements RegistryInterface
     {
         $next = $result->next;
 
+        if (null === $next) {
+            return new RedirectResponse($token->getAfterUrl());
+        }
+
         if ($next instanceof Redirect) {
             return new RedirectResponse($next->url, $next->statusCode, $next->headers);
         }
@@ -233,6 +237,14 @@ class Payum implements RegistryInterface
             return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
         }
 
-        return new RedirectResponse($token->getAfterUrl());
+        // Anything else needs a renderer or a decision this method cannot make. Sending the customer to
+        // the after URL would say the payment is finished when it is not.
+        throw new LogicException(sprintf(
+            '%s cannot turn %s into a response; it handles %s and %s. Execute the command yourself and act on the result.',
+            __METHOD__,
+            $next::class,
+            Redirect::class,
+            PostRedirect::class,
+        ));
     }
 }
