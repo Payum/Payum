@@ -7,6 +7,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Result\Result;
 
+/**
+ * @method bool supportsCommand(class-string<CommandInterface<Result>> $commandClass) Whether a handler is registered for the command. Implemented by Payum\Core\Gateway; annotated rather than declared so implementations of this interface keep working.
+ */
 interface GatewayInterface
 {
     /**
