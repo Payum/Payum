@@ -58,17 +58,13 @@ try {
 }
 ```
 
-To branch without catching, narrow to the concrete gateway first — `RegistryInterface::getGateway()` is typed to `Payum\Core\GatewayInterface`, which has no such method:
+To branch without catching, ask first:
 
 ```php
-use Payum\Core\Gateway;
-
-if ($gateway instanceof Gateway && $gateway->supportsCommand(RefundCommand::class)) {
+if ($gateway->supportsCommand(RefundCommand::class)) {
     $gateway->execute(RefundCommand::forToken($token));
 }
 ```
-
-Reading the gateway's capabilities is usually the better question to ask, since that is what an application renders a refund button from.
 
 ### From a handler
 

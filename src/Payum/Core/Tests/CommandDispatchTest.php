@@ -9,7 +9,6 @@ use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\CommandNotSupportedException;
-use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
@@ -105,9 +104,10 @@ final class CommandDispatchTest extends TestCase
 
     public function testShouldReportWhichCommandsItSupports(): void
     {
+        // Called straight off the registry, which is typed to GatewayInterface. That this analyses is
+        // the point of the @method annotation on it.
         $gateway = $this->buildPayum()->getGateway('acme');
 
-        $this->assertInstanceOf(Gateway::class, $gateway);
         $this->assertTrue($gateway->supportsCommand(CaptureCommand::class));
         $this->assertFalse($gateway->supportsCommand(RefundCommand::class));
     }
