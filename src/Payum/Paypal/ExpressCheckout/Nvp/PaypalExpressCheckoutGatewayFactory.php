@@ -3,7 +3,6 @@
 namespace Payum\Paypal\ExpressCheckout\Nvp;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\GatewayFactory;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\AuthorizeTokenAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\Api\ConfirmOrderAction;
@@ -32,20 +31,8 @@ use Payum\Paypal\ExpressCheckout\Nvp\Action\PaymentDetailsSyncAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsStatusAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\RecurringPaymentDetailsSyncAction;
 
-class PaypalExpressCheckoutGatewayFactory extends GatewayFactory implements ContainerConfiguration
+class PaypalExpressCheckoutGatewayFactory extends GatewayFactory
 {
-    public function configureContainer(): array
-    {
-        // Nothing legacy-specific to declare. The Api definition this gateway needs lives on
-        // ExpressCheckoutGateway, which is where a service a gateway needs belongs; the v1 actions on
-        // this path get their Api the old way, through payum.api.
-        //
-        // No createGateway() either: assembly is uniform now, so PayumBuilder falls back to
-        // CoreGatewayFactory for anything that does not implement CreatesGateway. This used to delegate
-        // there by hand.
-        return [];
-    }
-
     protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
