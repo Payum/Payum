@@ -4,7 +4,6 @@ namespace Payum\Core;
 
 use Exception;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
@@ -17,12 +16,13 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Middleware\MiddlewareCollection;
+use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
-use Payum\Core\Security\TokenInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -58,6 +58,8 @@ class Gateway implements GatewayInterface
     protected ContainerInterface $container;
 
     protected ?HandlerMap $handlerMap = null;
+
+    protected ?Pipeline $pipeline = null;
 
     /**
      * The name this gateway is registered under. Set by the builder; null when built by hand.
@@ -111,6 +113,11 @@ class Gateway implements GatewayInterface
     public function addExtension(ExtensionInterface $extension, $forcePrepend = false): void
     {
         $this->extensions->addExtension($extension, $forcePrepend);
+    }
+
+    public function getExtensions(): ExtensionCollection
+    {
+        return $this->extensions;
     }
 
     public function execute(/* CommandInterface */ $request, $catchReply = false)
@@ -312,30 +319,64 @@ class Gateway implements GatewayInterface
             );
         }
 
+        $context = $this->buildContext($command);
+        $this->commandStack[] = $context;
+
+        try {
+            return $this->pipeline()->process(
+                $command,
+                $context,
+                fn (CommandInterface $c, HandlerContext $ctx): Result => $this->handle($serviceId, $c, $ctx),
+            );
+        } finally {
+            array_pop($this->commandStack);
+        }
+    }
+
+    /**
+     * @param class-string<HandlerInterface> $serviceId
+     * @param CommandInterface<Result> $command
+     */
+    private function handle(string $serviceId, CommandInterface $command, HandlerContext $context): Result
+    {
         $handler = $this->container->get($serviceId);
 
         if (! $handler instanceof HandlerInterface || ! method_exists($handler, 'handle')) {
             throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
         }
 
-        $context = $this->buildContext($command);
-        $this->commandStack[] = $context;
+        $result = $handler->handle($command, $context);
 
-        try {
-            $result = $handler->handle($command, $context);
-
-            if (! $result instanceof Result) {
-                throw new LogicException(sprintf('%s::handle() must return a %s.', $handler::class, Result::class));
-            }
-
-            return $result;
-        } finally {
-            array_pop($this->commandStack);
-
-            // In finally rather than on success: a PSP token written before a later failure still has to
-            // survive, or the retry opens a second checkout.
-            $this->persistState($command, $context);
+        if (! $result instanceof Result) {
+            throw new LogicException(sprintf('%s::handle() must return a %s.', $handler::class, Result::class));
         }
+
+        return $result;
+    }
+
+    /**
+     * Built once and reused. A sub-command dispatched from a handler comes back through the same pipeline,
+     * which is what makes nesting work.
+     */
+    private function pipeline(): Pipeline
+    {
+        if ($this->pipeline instanceof Pipeline) {
+            return $this->pipeline;
+        }
+
+        $collection = $this->container->has(MiddlewareCollection::class)
+            ? $this->container->get(MiddlewareCollection::class)
+            : new MiddlewareCollection();
+
+        $middleware = $collection->resolve($this->container);
+
+        foreach ($middleware as $one) {
+            if ($one instanceof GatewayAwareInterface) {
+                $one->setGateway($this);
+            }
+        }
+
+        return $this->pipeline = new Pipeline($middleware);
     }
 
     /**
@@ -381,33 +422,5 @@ class Gateway implements GatewayInterface
             ->find($identity);
 
         return $model instanceof PaymentInterface ? $model : null;
-    }
-
-    /**
-     * @param CommandInterface<Result> $command
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    private function persistState(CommandInterface $command, HandlerContext $context): void
-    {
-        $payment = $context->payment();
-        $state = $context->pendingState();
-
-        if (! $payment instanceof PaymentInterface || ! $state instanceof ArrayObject) {
-            return;
-        }
-
-        $payment->setDetails($state);
-
-        // Core writes back only what it loaded. A payment handed to the command directly belongs to the
-        // caller, who persists it on their own terms.
-        if (! $command->token() instanceof TokenInterface || ! $this->container->has(StorageRegistryInterface::class)) {
-            return;
-        }
-
-        $this->container->get(StorageRegistryInterface::class)
-            ->getStorage($payment::class)
-            ->update($payment);
     }
 }

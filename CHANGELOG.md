@@ -2,6 +2,8 @@
 
 ## 2.0.0 (TBD)
 
+* Add a middleware pipeline around command execution. `Payum\Core\Middleware\MiddlewareInterface` wraps a command, `PayumBuilder::addMiddleware()` registers one for every gateway, and a gateway declares its own through `Payum\Core\Gateway\DeclaresMiddleware`
+* Extensions registered on a gateway now run for commands too, through `Payum\Core\Middleware\LegacyExtensionMiddleware`
 * Add a command/handler model for gateways. A gateway describes itself and ships handlers that answer typed commands and return a result, instead of being assembled by a factory and interrupted by thrown replies. See the Gateways chapter in the docs
 * Add `Payum\Core\Gateway\GatewayInterface`, which a gateway implements to declare its name, logo, website, config class and handlers. It replaces the gateway factory
 * Add `Payum\Core\Config\GatewayConfig` for typed, self-validating gateway credentials, and `PayumBuilder::registerGateway()` to register one

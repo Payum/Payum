@@ -131,4 +131,4 @@ $payum = (new PayumBuilder())
 
 `setGlobalContainer()` puts an application's own container in front of Payum's defaults, so a framework declares only what it wants to override. See [Framework integration](../di/framework-integration.md).
 
-Next: [Migrating a gateway from 1.x](migrating-from-v1.md).
+Next: [Middleware](middleware.md).
