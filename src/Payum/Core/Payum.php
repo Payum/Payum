@@ -15,6 +15,7 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
+use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\Result;
@@ -223,7 +224,7 @@ class Payum implements RegistryInterface
     {
         $next = $result->next;
 
-        if (null === $next) {
+        if (! $next instanceof NextAction) {
             return new RedirectResponse($token->getAfterUrl());
         }
 
