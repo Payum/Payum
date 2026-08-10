@@ -37,18 +37,6 @@ Two rules keep the boundaries honest:
 * **Constructor** for anything that lives as long as the gateway — the api, the config, storages, a renderer, a logger.
 * **Context** for anything that exists only for this execution — the payment, the token, the inbound HTTP request, the PSP state.
 
-### What changed from 1.x
-
-| 1.x | 2.0 |
-| :--- | :--- |
-| `Payum\Core\Request\Capture` and friends, mutable | `CaptureCommand`, immutable |
-| `ActionInterface` selected by `supports()` | A handler interface per command, selected by type |
-| `execute()` returns `void`, throws a `Reply` | `execute()` returns a `Result` carrying a `NextAction` |
-| `GatewayFactory::populateConfig()` and a flat array | A gateway class and a typed config object |
-| `addApi()` / `ApiAwareInterface` | The api injected through the constructor |
-| `GetHumanStatus` / `GetBinaryStatus` | `PaymentStatus` on the result |
-| `GetHttpRequest` sub-request | `$context->httpRequest()`, PSR-7 |
-
 ### Read next
 
 * [Defining a gateway](defining-a-gateway.md) — the gateway class and its metadata

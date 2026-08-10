@@ -51,7 +51,7 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
-That is all the wiring there is. The config names its gateway, the gateway names its handlers, and Payum builds the container from there — no factory to register, no array of `payum.action.*` keys.
+That is all the wiring there is. The config names its gateway, the gateway names its handlers, and Payum builds the container from there.
 
 Passing a config to the wrong gateway is caught immediately:
 

@@ -1,6 +1,6 @@
 # Results
 
-A handler returns a result rather than throwing. Every result carries the same core, and each command adds what only it has.
+Every result carries the same core, and each command adds what only it has.
 
 ```php
 $result->status;         // PaymentStatus
@@ -75,11 +75,11 @@ match (true) {
 
 ### Status
 
-`PaymentStatus` replaces `GetHumanStatus` and `GetBinaryStatus`. The backing values are the 1.x strings, so anything already persisted stays valid.
+`$result->status` is a `PaymentStatus`:
 
 `New`, `Pending`, `Authorized`, `Captured`, `Refunded`, `PartiallyRefunded`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
 
-`PartiallyRefunded` is the one genuinely new state — 1.x could not tell a half-refunded payment from a fully refunded one. `PaidOut` keeps the misspelled `'payedout'` backing value on purpose, so stored rows keep working.
+It is string-backed, so it can be persisted or sent as JSON. One backing value does not match its case name — `PaidOut` is backed by `'payedout'` — so compare the case rather than the spelling.
 
 ### Failures and exceptions
 
