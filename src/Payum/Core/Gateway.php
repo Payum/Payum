@@ -5,14 +5,25 @@ namespace Payum\Core;
 use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Handler\Context as HandlerContext;
+use Payum\Core\Handler\HandlerInterface;
+use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Result\Result;
+use Payum\Core\Security\GenericTokenFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionProperty;
 use Throwable;
 use function func_num_args;
@@ -42,6 +53,13 @@ class Gateway implements GatewayInterface
     protected array $stack = [];
 
     protected ContainerInterface $container;
+
+    protected ?HandlerMap $handlerMap = null;
+
+    /**
+     * @var list<HandlerContext>
+     */
+    protected array $commandStack = [];
 
     public function __construct()
     {
@@ -100,8 +118,7 @@ class Gateway implements GatewayInterface
         }
 
         if ($request instanceof CommandInterface) {
-            // @TODO: Handle commands
-            return null;
+            return $this->dispatch($request);
         }
 
         trigger_deprecation(
@@ -155,11 +172,29 @@ class Gateway implements GatewayInterface
             $this->onPostExecuteWithException($context);
         }
 
+        return null;
     }
 
     public function setContainer(ContainerInterface $container): self
     {
         $this->container = $container;
+        return $this;
+    }
+
+    /**
+     * Whether this gateway has a handler for the given command.
+     *
+     * @param class-string<CommandInterface<Result>> $commandClass
+     */
+    public function supportsCommand(string $commandClass): bool
+    {
+        return null !== $this->handlerMap?->serviceIdFor($commandClass);
+    }
+
+    public function setHandlerMap(HandlerMap $handlerMap): self
+    {
+        $this->handlerMap = $handlerMap;
+
         return $this;
     }
 
@@ -236,5 +271,118 @@ class Gateway implements GatewayInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function dispatch(CommandInterface $command): Result
+    {
+        $serviceId = $this->handlerMap?->serviceIdFor($command::class);
+
+        if (null === $serviceId) {
+            throw CommandNotSupportedException::create($command);
+        }
+
+        $handler = $this->container->get($serviceId);
+
+        if (! $handler instanceof HandlerInterface || ! method_exists($handler, 'handle')) {
+            throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
+        }
+
+        $context = $this->buildContext($command);
+        $this->commandStack[] = $context;
+
+        try {
+            $result = $handler->handle($command, $context);
+
+            if (! $result instanceof Result) {
+                throw new LogicException(sprintf('%s::handle() must return a %s.', $handler::class, Result::class));
+            }
+
+            return $result;
+        } finally {
+            array_pop($this->commandStack);
+
+            // In finally rather than on success: a PSP token written before a later failure still has to
+            // survive, or the retry opens a second checkout.
+            $this->persistState($command, $context);
+        }
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function buildContext(CommandInterface $command): HandlerContext
+    {
+        return new HandlerContext(
+            $this,
+            $command,
+            $this->container->get(\Payum\Core\Gateway\GatewayInterface::class),
+            $this->container->get(ServerRequestInterface::class),
+            $this->container->get(GenericTokenFactoryInterface::class),
+            $this->resolvePayment($command),
+            $command->token(),
+            $this->commandStack,
+        );
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function resolvePayment(CommandInterface $command): ?PaymentInterface
+    {
+        if (null !== $payment = $command->payment()) {
+            return $payment;
+        }
+
+        $identity = $command->token()?->getDetails();
+
+        if (null === $identity || ! $this->container->has(StorageRegistryInterface::class)) {
+            return null;
+        }
+
+        $model = $this->container->get(StorageRegistryInterface::class)
+            ->getStorage($identity->getClass())
+            ->find($identity);
+
+        return $model instanceof PaymentInterface ? $model : null;
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function persistState(CommandInterface $command, HandlerContext $context): void
+    {
+        $payment = $context->payment();
+        $state = $context->pendingState();
+
+        if (null === $payment || null === $state) {
+            return;
+        }
+
+        $payment->setDetails($state);
+
+        // Core writes back only what it loaded. A payment handed to the command directly belongs to the
+        // caller, who persists it on their own terms.
+        if (null === $command->token() || ! $this->container->has(StorageRegistryInterface::class)) {
+            return;
+        }
+
+        $this->container->get(StorageRegistryInterface::class)
+            ->getStorage($payment::class)
+            ->update($payment);
     }
 }

@@ -40,12 +40,16 @@ use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\Handler\HandlerMap;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionFunction;
 use ReflectionNamedType;
@@ -246,6 +250,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 ClientInterface::class => Psr18ClientDiscovery::find(...),
                 StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
                 RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
+                ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
+                ServerRequestInterface::class => static fn (ContainerInterface $c): ServerRequestInterface => $c
+                    ->get(ServerRequestFactoryInterface::class)
+                    ->createServerRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/', $_SERVER)
+                    ->withQueryParams($_GET)
+                    ->withParsedBody($_POST)
+                    ->withCookieParams($_COOKIE),
 
                 // Legacy Payum service names - delegate to PSR interfaces
                 'payum.http_client' => static fn (ContainerInterface $c): HttplugClient => new HttplugClient($c->get(ClientInterface::class)),
@@ -308,6 +319,20 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function createGateway(ContainerInterface $container): Gateway
     {
+        if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {
+            $gateway = func_get_args()[1];
+        } else {
+            $gateway = new Gateway();
+        }
+
+        $gateway->setContainer($container);
+
+        if ($container->has(PaymentGateway::class)) {
+            return $gateway->setHandlerMap(
+                HandlerMap::fromHandlers($container->get(PaymentGateway::class)->handlers())
+            );
+        }
+
         if ($container->has('twig.env')) {
             TwigUtil::registerPaths(
                 $container->get('twig.env'),
@@ -318,14 +343,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     (array) $container->get('payum.paths'),
                 )
             );
-        } else {
-            dd($container, debug_backtrace());
-        }
-
-        if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {
-            $gateway = func_get_args()[1];
-        } else {
-            $gateway = new Gateway();
         }
 
         foreach ($this->getActions() as $action) {
@@ -346,8 +363,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
             $gateway->addExtension($extension, $extension instanceof PrependExtensionInterface);
         }
-
-        $gateway->setContainer($container);
 
         return $gateway;
     }

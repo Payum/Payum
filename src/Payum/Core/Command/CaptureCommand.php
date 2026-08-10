@@ -39,8 +39,8 @@ final class CaptureCommand implements CommandInterface
      * @param string|null $idempotencyKey passed to PSPs that accept one, so a retry cannot double-charge
      */
     public function __construct(
-        public readonly ?TokenInterface $token = null,
-        public readonly ?PaymentInterface $payment = null,
+        private readonly ?TokenInterface $token = null,
+        private readonly ?PaymentInterface $payment = null,
         public readonly ?int $amount = null,
         public readonly ?string $idempotencyKey = null,
     ) {
@@ -65,5 +65,15 @@ final class CaptureCommand implements CommandInterface
     public static function forToken(TokenInterface $token, ?int $amount = null, ?string $idempotencyKey = null): self
     {
         return new self(token: $token, amount: $amount, idempotencyKey: $idempotencyKey);
+    }
+
+    public function payment(): ?PaymentInterface
+    {
+        return $this->payment;
+    }
+
+    public function token(): ?TokenInterface
+    {
+        return $this->token;
     }
 }

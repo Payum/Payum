@@ -12,8 +12,12 @@ use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
+use Payum\Core\Result\NextAction\PostRedirect;
+use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
@@ -154,7 +158,11 @@ class Payum implements RegistryInterface
 
         $gateway = $this->getGateway($token->getGatewayName());
 
-        $reply = $gateway->execute(new CaptureCommand($token), true);
+        if ($gateway instanceof Gateway && $gateway->supportsCommand(CaptureCommand::class)) {
+            return $this->respondTo($gateway->execute(new CaptureCommand($token)), $token);
+        }
+
+        $reply = $gateway->execute(new Capture($token), true);
 
         if ($reply instanceof HttpRedirect) {
             return new RedirectResponse($reply->getUrl(), $reply->getStatusCode(), $reply->getHeaders());
@@ -203,5 +211,28 @@ class Payum implements RegistryInterface
         } catch (ReplyInterface $reply) {
             throw new LogicException('Unsupported reply', $reply->getCode(), $reply);
         }
+    }
+
+    /**
+     * Turns what a handler decided into an HTTP response.
+     *
+     * A null next action means there is nothing left for the customer to do, so the application takes
+     * over at the token's after URL.
+     */
+    private function respondTo(Result $result, TokenInterface $token): Response
+    {
+        $next = $result->next;
+
+        if ($next instanceof Redirect) {
+            return new RedirectResponse($next->url, $next->statusCode, $next->headers);
+        }
+
+        if ($next instanceof PostRedirect) {
+            $reply = new HttpPostRedirect($next->url, $next->fields);
+
+            return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
+        }
+
+        return new RedirectResponse($token->getAfterUrl());
     }
 }
