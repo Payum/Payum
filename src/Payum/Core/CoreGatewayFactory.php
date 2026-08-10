@@ -42,6 +42,11 @@ use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
+use Payum\Core\Middleware\LegacyExtensionMiddleware;
+use Payum\Core\Middleware\MiddlewareCollection;
+use Payum\Core\Middleware\PersistStateMiddleware;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -251,6 +256,16 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
                 RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
                 ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
+
+                // Middleware wrapping command execution. The collection is what decides the order;
+                // PayumBuilder replaces it with the defaults plus whatever the application and the
+                // gateway registered.
+                MiddlewareCollection::class => static fn (): MiddlewareCollection => self::defaultMiddleware(),
+                EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
+                LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
+                PersistStateMiddleware::class => static fn (ContainerInterface $c): PersistStateMiddleware => new PersistStateMiddleware(
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                ),
                 ServerRequestInterface::class => static fn (ContainerInterface $c): ServerRequestInterface => $c
                     ->get(ServerRequestFactoryInterface::class)
                     ->createServerRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/', $_SERVER)
@@ -317,6 +332,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     /**
      * @throws ContainerExceptionInterface|NotFoundExceptionInterface|LoaderError
      */
+    /**
+     * The middleware every gateway gets, before anything the application or the gateway adds.
+     */
+    public static function defaultMiddleware(): MiddlewareCollection
+    {
+        return (new MiddlewareCollection())
+            ->with(EndlessCycleDetectorMiddleware::class)
+            ->with(LegacyExtensionMiddleware::class)
+            ->with(PersistStateMiddleware::class);
+    }
+
     public function createGateway(ContainerInterface $container): Gateway
     {
         if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {

@@ -24,8 +24,11 @@ use Payum\Core\DI\FallbackContainer;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway\DeclaresMiddleware;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Middleware\MiddlewareCollection;
+use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
@@ -144,12 +147,19 @@ class PayumBuilder
      */
     protected ?RegistryInterface $mainRegistry = null;
 
+    protected MiddlewareCollection $middleware;
+
     protected ?ContainerInterface $globalContainer = null;
 
     /**
      * @var array<string, mixed>
      */
     protected array $globalDefinitions = [];
+
+    public function __construct()
+    {
+        $this->middleware = new MiddlewareCollection();
+    }
 
     public function addDefaultStorages(): static
     {
@@ -319,10 +329,25 @@ class PayumBuilder
     /**
      * Add a global service definition that will be available to all gateways.
      * This allows sharing services (like HTTP clients, loggers) across all gateway instances.
-     *
-     * @param class-string|string $id The service identifier (can be a class name or custom string)
-     * @param mixed $service The service instance or callable factory
      */
+    /**
+     * Registers middleware that wraps every command, on every gateway.
+     *
+     * This is where most middleware belongs: logging, locking and idempotency are not specific to any one
+     * gateway. A package shipping middleware registers it here too, or contributes the container id and
+     * lets the integration add it.
+     *
+     * @param class-string<MiddlewareInterface>|MiddlewareInterface $middleware a container id or an instance
+     * @param int|null $priority higher runs further out. Defaults to what the middleware declares through
+     *                           Payum\Core\Middleware\HasPriority, or 0
+     */
+    public function addMiddleware(string | MiddlewareInterface $middleware, ?int $priority = null): static
+    {
+        $this->middleware = $this->middleware->with($middleware, $priority);
+
+        return $this;
+    }
+
     public function addGlobalService(string $id, mixed $service): static
     {
         $this->globalDefinitions[$id] = $service;
@@ -393,7 +418,20 @@ class PayumBuilder
 
             $handlerDefinitions = array_map(autowire(...), HandlerMap::fromHandlers($gateway->handlers())->bindings());
 
+            // Core defaults first, then what the application registered, then the gateway's own, so a
+            // gateway's middleware runs innermost on equal priority.
+            $middleware = CoreGatewayFactory::defaultMiddleware()->merge($this->middleware);
+
+            if ($gateway instanceof DeclaresMiddleware) {
+                foreach ($gateway->middleware() as $gatewayMiddleware) {
+                    $middleware = $middleware->with($gatewayMiddleware);
+                }
+            }
+
             $containerBuilder->addDefinitions($handlerDefinitions);
+            $containerBuilder->addDefinitions([
+                MiddlewareCollection::class => $middleware,
+            ]);
             $containerBuilder->addDefinitions([
                 $config::class => $config,
                 GatewayConfig::class => $config,
