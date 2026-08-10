@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Core\Middleware;
 
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Handler\Context;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
+use Payum\Core\Security\TokenInterface;
 
 /**
  * Writes the PSP state a handler produced back onto the payment.
@@ -50,7 +53,7 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
         $payment = $context->payment();
         $state = $context->pendingState();
 
-        if (null === $payment || null === $state) {
+        if (! $payment instanceof PaymentInterface || ! $state instanceof ArrayObject) {
             return;
         }
 
@@ -58,7 +61,7 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
 
         // Core writes back only what it loaded. A payment handed to the command directly belongs to the
         // caller, who persists it on their own terms.
-        if (null === $command->token() || null === $this->storages) {
+        if (! $command->token() instanceof TokenInterface || ! $this->storages instanceof StorageRegistryInterface) {
             return;
         }
 

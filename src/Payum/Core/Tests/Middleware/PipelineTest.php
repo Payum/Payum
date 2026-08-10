@@ -17,6 +17,8 @@ use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
+use Throwable;
 
 final class PipelineTest extends TestCase
 {
@@ -94,11 +96,11 @@ final class PipelineTest extends TestCase
             (new Pipeline([$middleware]))->process(
                 $this->command(),
                 $this->context(),
-                static fn () => throw new \RuntimeException('psp exploded'),
+                static fn () => throw new RuntimeException('psp exploded'),
             );
 
             $this->fail('Expected the exception to propagate.');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->assertSame('psp exploded', $e->getMessage());
             $this->assertSame('psp exploded', $middleware->seen?->getMessage());
         }
@@ -167,13 +169,13 @@ final class ReplaceCommandMiddleware implements MiddlewareInterface
 
 final class RecordingFailureMiddleware implements MiddlewareInterface
 {
-    public ?\Throwable $seen = null;
+    public ?Throwable $seen = null;
 
     public function process(CommandInterface $command, Context $context, callable $next): Result
     {
         try {
             return $next($command, $context);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->seen = $e;
 
             throw $e;

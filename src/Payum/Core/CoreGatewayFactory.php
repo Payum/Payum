@@ -61,7 +61,6 @@ use ReflectionNamedType;
 use ReflectionType;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 use Twig\Loader\ChainLoader;
 use function array_combine;
 use function array_map;
@@ -260,7 +259,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // Middleware wrapping command execution. The collection is what decides the order;
                 // PayumBuilder replaces it with the defaults plus whatever the application and the
                 // gateway registered.
-                MiddlewareCollection::class => static fn (): MiddlewareCollection => self::defaultMiddleware(),
+                MiddlewareCollection::class => self::defaultMiddleware(...),
                 EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
                 LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
                 PersistStateMiddleware::class => static fn (ContainerInterface $c): PersistStateMiddleware => new PersistStateMiddleware(
