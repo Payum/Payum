@@ -69,11 +69,11 @@ final class RefundHandler implements RefundHandlerInterface
 }
 ```
 
-Listing the class in `handlers()` is the whole mapping — Payum reads which handler interface it implements and takes the command from that signature. There is no `supports()`, and no array to keep in sync.
+Listing the class in `handlers()` is the whole mapping — Payum reads which handler interface it implements and takes the command from that signature.
 
 _**Link**:_ [_Commands_](gateways/commands.md) _and_ [_Handlers_](gateways/handlers.md)_._
 
-### Results instead of thrown replies
+### Results
 
 A handler returns. Control flow lives in `$result->next`, which describes *intent* — never an HTTP response — so a bridge turns it into one and a JSON API can serialise it straight to a mobile client.
 
@@ -97,7 +97,7 @@ Everything belonging to a single execution arrives on the context: the payment, 
 $context->state();        // PSP state, an ArrayObject over the payment's details
 $context->payment();
 $context->token();
-$context->httpRequest();  // PSR-7, replaces the GetHttpRequest sub-request
+$context->httpRequest();  // PSR-7
 $context->tokens();       // mint a notify or second-hop token
 $context->execute($cmd);  // dispatch a sub-command
 ```

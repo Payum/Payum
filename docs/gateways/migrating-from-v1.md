@@ -197,6 +197,17 @@ final class CaptureHandler implements CaptureHandlerInterface
 
 You do not have to port everything at once. A gateway can keep its factory and actions while a single handler moves across — `execute()` routes by argument type, so the two coexist in the same package.
 
+### Dispatching a command at a gateway you have not ported
+
+You get a `CommandNotSupportedException` saying so, rather than one that reads like a missing handler:
+
+```
+Gateway "legacy" handles no commands, so it cannot handle Payum\Core\Command\CaptureCommand.
+It is built from actions: dispatch the matching Payum\Core\Request instead, or port it to handlers.
+```
+
+`$e->getSupportedCommands()` is empty and `$e->getGatewayClass()` is null for such a gateway, so code choosing between the two paths can branch on either.
+
 ### Things that do not carry over
 
 * Actions relying on `supports()` returning true for requests Payum no longer creates internally.

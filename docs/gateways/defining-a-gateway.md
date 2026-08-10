@@ -1,6 +1,6 @@
 # Defining a gateway
 
-A gateway class is the whole definition: what it is called, what it looks like, which config it takes, and which handlers it ships. It replaces the gateway factory.
+A gateway class is the whole definition: what it is called, what it looks like, which config it takes, and which handlers it ships.
 
 ```php
 <?php

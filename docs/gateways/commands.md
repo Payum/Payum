@@ -63,17 +63,10 @@ try {
     $gateway->execute(RefundCommand::forToken($token));
 } catch (CommandNotSupportedException $e) {
     $e->getGatewayName();       // 'acme_eu'
-    $e->getGatewayClass();      // Acme\Payum\AcmeGateway, null for a 1.x gateway
+    $e->getGatewayClass();      // Acme\Payum\AcmeGateway
     $e->getSupportedCommands(); // the commands it does handle
     $e->getCommand();           // the one you dispatched
 }
-```
-
-Dispatch a command at a gateway still built from actions and it says so, rather than leaving you to guess:
-
-```
-Gateway "legacy" handles no commands, so it cannot handle Payum\Core\Command\CaptureCommand.
-It is built from actions: dispatch the matching Payum\Core\Request instead, or port it to handlers.
 ```
 
 To branch without catching, ask first:

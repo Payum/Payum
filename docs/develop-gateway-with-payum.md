@@ -157,8 +157,6 @@ $payum = (new PayumBuilder())
 $result = $payum->getGateway('acme')->execute(CaptureCommand::forToken($token));
 ```
 
-There is no factory to register and no array of options.
-
 ### Next
 
 * [Defining a gateway](gateways/defining-a-gateway.md) — metadata and capabilities

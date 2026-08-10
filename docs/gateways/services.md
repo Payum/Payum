@@ -109,7 +109,7 @@ The decorator implements the same handler interface, so nothing else changes.
 
 ### Two api versions
 
-Two classes, two entries. No `ApiAwareInterface`, no `UnsupportedApiException` — the handler asks for the one it wants:
+Two classes, two entries. Each handler asks for the one it wants:
 
 ```php
 final class CaptureHandler implements CaptureHandlerInterface
