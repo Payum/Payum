@@ -19,9 +19,10 @@ This section explains how the container is put together, how to customize it, an
 | Upgrading from Payum 1.x | [Migration guide](migration-guide.md) |
 | Replacing the HTTP client, logger or token storage | [Customization](customization.md) |
 | Wiring Payum into Symfony or Laravel | [Framework integration](framework-integration.md) |
-| Writing your own gateway | [Getting started](getting-started.md#writing-a-gateway-factory), then [Develop a custom Payum gateway](../develop-gateway-with-payum.md) |
+| Writing your own gateway | [Gateways](../gateways/README.md), then [Develop a custom Payum gateway](../develop-gateway-with-payum.md) |
+| Porting a 1.x gateway | [Migrating a gateway from 1.x](../gateways/migrating-from-v1.md) |
 
-See [The Architecture](../the-architecture.md) for the request/action/reply model that the container wires up.
+See [The Architecture](../the-architecture.md) for the model the container wires up, and [Services](../gateways/services.md) for what a 2.0 gateway gets from the container without declaring anything.
 
 ***
 

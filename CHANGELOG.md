@@ -2,6 +2,17 @@
 
 ## 2.0.0 (TBD)
 
+* Add a command/handler model for gateways. A gateway describes itself and ships handlers that answer typed commands and return a result, instead of being assembled by a factory and interrupted by thrown replies. See the Gateways chapter in the docs
+* Add `Payum\Core\Gateway\GatewayInterface`, which a gateway implements to declare its name, logo, website, config class and handlers. It replaces the gateway factory
+* Add `Payum\Core\Config\GatewayConfig` for typed, self-validating gateway credentials, and `PayumBuilder::registerGateway()` to register one
+* Add `Payum\Core\Command\{CaptureCommand, AuthorizeCommand, RefundCommand}` and a handler interface per command
+* Add `Payum\Core\Result\Result` with `PaymentStatus`, a `NextAction` describing what the customer must do, and a `Failure` carrying a portable reason plus the PSP's own code. Declines are results; infrastructure faults remain exceptions
+* Add `Payum\Core\Handler\Context`, giving a handler the payment, the token, the inbound PSR-7 request and the PSP state
+* Add `Payum\Core\Gateway\Capability`. Operation capabilities are derived from the handlers a gateway ships; `DeclaresCapabilities` covers the rest
+* `Gateway::execute()` now accepts a command and returns a result. Passing anything else keeps the 1.x action behaviour, so existing gateways are unaffected
+* `Payum\Core\DI\ContainerConfiguration` now declares only `configureContainer()`, so a gateway can contribute service definitions without knowing how a gateway is assembled. Assembly moved to `Payum\Core\DI\CreatesGateway`
+* Declare `psr/http-message` and `psr/http-factory`, which core relies on directly
+
 * Drop support for PHP 7.x and 8.0.x. The minimum supported version is PHP 8.1.x
 * Drop support for Twig 1.x
 * Drop support for doctrine/persistence 1.x. The minimum supported version is 2.0

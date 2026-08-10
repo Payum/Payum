@@ -1,64 +1,170 @@
 # Develop a custom Payum gateway
 
-This chapter could be useful for a developer who wants to create a gateway on top of payum. The Payum provides a skeleton project which helps us a lots.
+A gateway describes itself and ships handlers that answer commands. This page is the short version; the [Gateways](gateways/README.md) chapter is the full reference.
 
-_**Note**: A gateway factory declares its actions and services as container definitions. Read_ [_Writing a gateway factory_](di/getting-started.md#writing-a-gateway-factory) _for `configureContainer()`, `getActions()` and `getExtensions()`, and the_ [_migration guide_](di/migration-guide.md) _if you are porting a factory that still uses `populateConfig()`._
+_**Note**: gateways written for 1.x keep working and are still supported. If you are porting one, read the_ [_migration guide_](gateways/migrating-from-v1.md)_._
 
-1. Create new project
+### 1. Scaffold the package
 
 ```bash
 $ composer create-project payum/skeleton
 ```
 
-2. Replace all occurrences of `payum` with your vendor name. It may be your github name, for now let's say you choose: `acme`.
-3. Replace all occurrences of `skeleton` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `paypal`.
-4. Register a gateway factory to the payum's builder and create a gateway:
+Replace `payum` with your vendor name and `skeleton` with the gateway name.
+
+### 2. The config
+
+Credentials, as a value object that validates itself:
 
 ```php
 <?php
+namespace Acme\Payum\Config;
 
+use Payum\Core\Config\GatewayConfig;
+use Payum\Core\Exception\LogicException;
+use Acme\Payum\AcmeGateway;
+
+final class AcmeConfig implements GatewayConfig
+{
+    public function __construct(
+        public readonly string $secretKey,
+        public readonly bool $sandbox = false,
+    ) {
+        if ('' === $secretKey) {
+            throw new LogicException('Acme needs a secret key.');
+        }
+    }
+
+    public function getGatewayClass(): string
+    {
+        return AcmeGateway::class;
+    }
+}
+```
+
+### 3. The api
+
+The only thing that talks to the PSP. Every argument here is already a container entry, so it is autowired with no service definition:
+
+```php
+<?php
+namespace Acme\Payum\Api;
+
+use Acme\Payum\Config\AcmeConfig;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+
+final class AcmeApi
+{
+    public function __construct(
+        private readonly AcmeConfig $config,
+        private readonly ClientInterface $httpClient,
+        private readonly RequestFactoryInterface $requestFactory,
+    ) {
+    }
+
+    public function createCheckout(array $parameters): array { /* … */ }
+    public function retrieveCheckout(string $id): array { /* … */ }
+}
+```
+
+### 4. A handler
+
+One interface per command, so `handle()` is typed on both sides. Capture is re-entrant: the PSP returns the customer to the capture token's own URL, so the same command runs again and the handler reads the state it wrote to know which pass it is on.
+
+```php
+<?php
+namespace Acme\Payum\Handler;
+
+use Acme\Payum\Api\AcmeApi;
+use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Handler\CaptureHandlerInterface;
+use Payum\Core\Handler\Context;
+use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\NextAction\Redirect;
+
+final class CaptureHandler implements CaptureHandlerInterface
+{
+    public function __construct(private readonly AcmeApi $api)
+    {
+    }
+
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        $state = $context->state();
+
+        if ($state['checkout_id']) {
+            $checkout = $this->api->retrieveCheckout($state['checkout_id']);
+
+            return 'paid' === $checkout['status']
+                ? CaptureResult::captured($checkout['charge_id'], $checkout['amount'])
+                : CaptureResult::pending(raw: $checkout);
+        }
+
+        $checkout = $this->api->createCheckout([
+            'return_url' => $context->token()?->getTargetUrl(),
+            'amount' => $command->amount ?? $context->payment()?->getTotalAmount(),
+            'currency' => $context->payment()?->getCurrencyCode(),
+        ]);
+
+        $state['checkout_id'] = $checkout['id'];
+
+        return CaptureResult::pending(new Redirect($checkout['url']));
+    }
+}
+```
+
+### 5. The gateway
+
+```php
+<?php
+namespace Acme\Payum;
+
+use Acme\Payum\Config\AcmeConfig;
+use Acme\Payum\Handler\CaptureHandler;
+use League\Uri\Uri;
+use Payum\Core\Gateway\GatewayInterface;
+use Payum\Core\Metadata\Logo;
+
+final class AcmeGateway implements GatewayInterface
+{
+    public function name(): string        { return 'Acme Payments'; }
+    public function logo(): Logo          { return Logo\Path::create(__DIR__ . '/Resources/logo.svg'); }
+    public function websiteUrl(): Uri     { return Uri::new('https://developer.acme.test'); }
+    public function configClass(): string { return AcmeConfig::class; }
+
+    public function handlers(): array     { return [CaptureHandler::class]; }
+}
+```
+
+Listing the handler is the whole mapping — Payum reads which handler interface it implements and takes the command from there. It also derives `Capability::Capture` from that, so capabilities cannot drift from what the gateway actually does.
+
+No constructor arguments, so an application can read the name, logo and config class before any credentials exist.
+
+### 6. Use it
+
+```php
+<?php
+use Payum\Core\Command\CaptureCommand;
 use Payum\Core\PayumBuilder;
+use Acme\Payum\Config\AcmeConfig;
 
-$defaultConfig = [];
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->registerGateway('acme', new AcmeConfig('sk_test_…', sandbox: true))
+    ->getPayum();
 
-$payum = (new PayumBuilder)
-    ->addGatewayFactory('paypal', new \Acme\Paypal\PaypalGatewayFactory($defaultConfig))
-
-    ->addGateway('paypal', [
-        'factory' => 'paypal',
-        'sandbox' => true,
-    ])
-
-    ->getPayum()
-;
+$result = $payum->getGateway('acme')->execute(CaptureCommand::forToken($token));
 ```
 
-Or, if your are working on the bases of Symfony, you can define it in a service that way :
+There is no factory to register and no array of options.
 
-```yml
-    acme.paypal_gateway_factory:
-        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
-        arguments: [Acme\Paypal\PaypalGatewayFactory]
-        tags:
-            - { name: payum.gateway_factory_builder, factory: paypal }
-```
+### Next
 
-5. While using the gateway implement all method where you get `Not implemented` exception:
-
-```php
-<?php
-
-use Payum\Core\Request\Capture;
-
-/** @var \Payum\Core\Payum $payum */
-$paypal = $payum->getGateway('paypal');
-
-$model = new \ArrayObject([
-  // ...
-]);
-
-$paypal->execute(new Capture($model));
-```
+* [Defining a gateway](gateways/defining-a-gateway.md) — metadata and capabilities
+* [Handlers](gateways/handlers.md) — the context, state, and re-entrant capture
+* [Results](gateways/results.md) — next actions, status, failures
+* [Services](gateways/services.md) — overriding and decorating
 
 ***
 
