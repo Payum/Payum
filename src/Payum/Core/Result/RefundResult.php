@@ -17,7 +17,7 @@ final class RefundResult extends Result
      * @param int|null $refundedAmount in minor units
      */
     public function __construct(
-        PaymentStatus $status,
+        ?PaymentStatus $status,
         ?NextAction $next = null,
         ?string $transactionId = null,
         ?Failure $failure = null,
@@ -28,11 +28,16 @@ final class RefundResult extends Result
     }
 
     /**
+     * The operation did not succeed. By default this says nothing about the payment's status: a declined
+     * refund leaves it where it was, which is what lets a customer try again.
+     *
+     * Pass $status when the failure is terminal and the payment really has moved.
+     *
      * @param array<string, mixed> $raw
      */
-    public static function failed(Failure $failure, array $raw = []): self
+    public static function failed(Failure $failure, ?PaymentStatus $status = null, array $raw = []): self
     {
-        return new self(PaymentStatus::Failed, failure: $failure, raw: $raw);
+        return new self($status, failure: $failure, raw: $raw);
     }
 
     /**
