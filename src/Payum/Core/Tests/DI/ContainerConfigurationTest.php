@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\DI;
 
-use ReflectionMethod;
 use DI\Container;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
@@ -13,6 +12,7 @@ use Payum\Core\Gateway;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionNamedType;
 
 final class ContainerConfigurationTest extends TestCase

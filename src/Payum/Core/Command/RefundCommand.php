@@ -33,7 +33,7 @@ final class RefundCommand implements CommandInterface
         public readonly ?string $reason = null,
         public readonly ?string $idempotencyKey = null,
     ) {
-        if (!$this->token instanceof TokenInterface && !$this->payment instanceof PaymentInterface) {
+        if (! $this->token instanceof TokenInterface && ! $this->payment instanceof PaymentInterface) {
             throw new LogicException(sprintf(
                 'A %s needs either a token or a payment: it has to know what it is refunding.',
                 self::class,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Payum\Core\Exception;
 
-use Payum\Core\Result\Result;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Result\Result;
 use function sprintf;
 
 class CommandNotSupportedException extends InvalidArgumentException

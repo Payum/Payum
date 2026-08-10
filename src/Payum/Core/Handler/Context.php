@@ -154,7 +154,7 @@ final class Context
      */
     public function state(): ArrayObject
     {
-        if (!$this->payment instanceof PaymentInterface) {
+        if (! $this->payment instanceof PaymentInterface) {
             throw new LogicException('There is no payment in this context, so there is no state to read.');
         }
 
