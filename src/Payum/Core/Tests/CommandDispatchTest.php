@@ -102,6 +102,49 @@ final class CommandDispatchTest extends TestCase
         $gateway->execute(RefundCommand::forPayment($this->buildPayment()));
     }
 
+    public function testShouldSayWhichGatewayCouldNotHandleTheCommand(): void
+    {
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        try {
+            $gateway->execute(RefundCommand::forPayment($this->buildPayment()));
+
+            $this->fail('Expected a CommandNotSupportedException.');
+        } catch (CommandNotSupportedException $e) {
+            // The registered name, which is what identifies the gateway when it is picked at runtime.
+            $this->assertStringContainsString('"acme"', $e->getMessage());
+            $this->assertStringContainsString('Acme Payments', $e->getMessage());
+            $this->assertStringContainsString(CaptureCommand::class, $e->getMessage());
+
+            $this->assertSame('acme', $e->getGatewayName());
+            $this->assertSame(AcmeGateway::class, $e->getGatewayClass());
+            $this->assertSame([CaptureCommand::class], $e->getSupportedCommands());
+            $this->assertInstanceOf(RefundCommand::class, $e->getCommand());
+        }
+    }
+
+    public function testShouldSayAGatewayBuiltFromActionsHandlesNoCommands(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGateway('legacy', [
+                'factory' => 'offline',
+            ])
+            ->getPayum();
+
+        try {
+            $payum->getGateway('legacy')->execute(CaptureCommand::forPayment($this->buildPayment()));
+
+            $this->fail('Expected a CommandNotSupportedException.');
+        } catch (CommandNotSupportedException $e) {
+            $this->assertStringContainsString('"legacy"', $e->getMessage());
+            $this->assertStringContainsString('handles no commands', $e->getMessage());
+            $this->assertSame('legacy', $e->getGatewayName());
+            $this->assertNull($e->getGatewayClass());
+            $this->assertSame([], $e->getSupportedCommands());
+        }
+    }
+
     public function testShouldReportWhichCommandsItSupports(): void
     {
         // Called straight off the registry, which is typed to GatewayInterface. That this analyses is

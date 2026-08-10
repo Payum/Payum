@@ -13,6 +13,7 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
@@ -57,6 +58,11 @@ class Gateway implements GatewayInterface
     protected ContainerInterface $container;
 
     protected ?HandlerMap $handlerMap = null;
+
+    /**
+     * The name this gateway is registered under. Set by the builder; null when built by hand.
+     */
+    protected ?string $name = null;
 
     /**
      * @var list<HandlerContext>
@@ -193,6 +199,18 @@ class Gateway implements GatewayInterface
         return null !== $this->handlerMap?->serviceIdFor($commandClass);
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setHandlerMap(HandlerMap $handlerMap): self
     {
         $this->handlerMap = $handlerMap;
@@ -286,7 +304,12 @@ class Gateway implements GatewayInterface
         $serviceId = $this->handlerMap?->serviceIdFor($command::class);
 
         if (null === $serviceId) {
-            throw CommandNotSupportedException::create($command);
+            throw CommandNotSupportedException::create(
+                $command,
+                $this->name,
+                $this->container->has(PaymentGateway::class) ? $this->container->get(PaymentGateway::class) : null,
+                $this->handlerMap?->commands() ?? [],
+            );
         }
 
         $handler = $this->container->get($serviceId);
@@ -326,7 +349,7 @@ class Gateway implements GatewayInterface
         return new HandlerContext(
             $this,
             $command,
-            $this->container->get(\Payum\Core\Gateway\GatewayInterface::class),
+            $this->container->get(PaymentGateway::class),
             $this->container->get(ServerRequestInterface::class),
             $this->container->get(GenericTokenFactoryInterface::class),
             $this->resolvePayment($command),

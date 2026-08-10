@@ -458,6 +458,14 @@ class PayumBuilder
 
         }
 
+        // Every assembled gateway learns the name it is registered under, so anything reporting a
+        // problem can say which gateway it happened on when the gateway is picked at runtime.
+        foreach ($gateways as $gatewayName => $gateway) {
+            if ($gateway instanceof Gateway) {
+                $gateway->setName($gatewayName);
+            }
+        }
+
         $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
 
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
