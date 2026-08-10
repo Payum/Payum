@@ -35,7 +35,7 @@ abstract class Result
      */
     public function isSuccessful(): bool
     {
-        return null === $this->failure && in_array(
+        return !$this->failure instanceof Failure && in_array(
             $this->status,
             [PaymentStatus::Authorized, PaymentStatus::Captured, PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded, PaymentStatus::PaidOut],
             true,
@@ -44,7 +44,7 @@ abstract class Result
 
     public function isFailed(): bool
     {
-        return null !== $this->failure || PaymentStatus::Failed === $this->status;
+        return $this->failure instanceof Failure || PaymentStatus::Failed === $this->status;
     }
 
     /**
@@ -52,6 +52,6 @@ abstract class Result
      */
     public function requiresInteraction(): bool
     {
-        return null !== $this->next;
+        return $this->next instanceof NextAction;
     }
 }

@@ -391,7 +391,7 @@ class PayumBuilder
                 $containerBuilder->addDefinitions($gateway->configureContainer());
             }
 
-            $handlerDefinitions = array_map(static fn (string $handlerClass) => autowire($handlerClass), HandlerMap::fromHandlers($gateway->handlers())->bindings());
+            $handlerDefinitions = array_map(autowire(...), HandlerMap::fromHandlers($gateway->handlers())->bindings());
 
             $containerBuilder->addDefinitions($handlerDefinitions);
             $containerBuilder->addDefinitions([

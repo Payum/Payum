@@ -27,15 +27,9 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withImportNames()
-    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withPhpVersion(PhpVersion::PHP_81)
     ->withSets([
-        LevelSetList::UP_TO_PHP_82,
-
-        // PHP
-        SetList::PHP_72,
-        SetList::PHP_73,
-        SetList::PHP_74,
-        SetList::PHP_80,
+        LevelSetList::UP_TO_PHP_85,
 
         // Code Quality
         SetList::INSTANCEOF,

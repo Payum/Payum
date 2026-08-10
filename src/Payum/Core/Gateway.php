@@ -2,6 +2,8 @@
 
 namespace Payum\Core;
 
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Security\TokenInterface;
 use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Command\CommandInterface;
@@ -113,7 +115,7 @@ class Gateway implements GatewayInterface
                 '2.0',
                 'Passing the $catchReply argument to %s is deprecated and will be removed in 3.0. Use %s::execute($request) instead.',
                 __METHOD__,
-                __CLASS__
+                self::class
             );
         }
 
@@ -127,7 +129,7 @@ class Gateway implements GatewayInterface
             'Not passing a %s instance to %s is deprecated and will not be supported in 3.0. Use %s::execute(CommandInterface $request) instead.',
             CommandInterface::class,
             __METHOD__,
-            __CLASS__
+            self::class
         );
 
         $context = new Context($this, $request, $this->stack);
@@ -341,7 +343,7 @@ class Gateway implements GatewayInterface
      */
     private function resolvePayment(CommandInterface $command): ?PaymentInterface
     {
-        if (null !== $payment = $command->payment()) {
+        if (($payment = $command->payment()) instanceof PaymentInterface) {
             return $payment;
         }
 
@@ -369,7 +371,7 @@ class Gateway implements GatewayInterface
         $payment = $context->payment();
         $state = $context->pendingState();
 
-        if (null === $payment || null === $state) {
+        if (!$payment instanceof PaymentInterface || !$state instanceof ArrayObject) {
             return;
         }
 
@@ -377,7 +379,7 @@ class Gateway implements GatewayInterface
 
         // Core writes back only what it loaded. A payment handed to the command directly belongs to the
         // caller, who persists it on their own terms.
-        if (null === $command->token() || ! $this->container->has(StorageRegistryInterface::class)) {
+        if (!$command->token() instanceof TokenInterface || ! $this->container->has(StorageRegistryInterface::class)) {
             return;
         }
 
