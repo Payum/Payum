@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use Deprecated;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\FactoryInterface;
@@ -16,7 +17,9 @@ use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\Config\GatewayConfig;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\FallbackContainer;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
@@ -58,8 +61,10 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use function array_merge;
 use function array_replace;
 use function in_array;
+use function is_a;
 use function strtolower;
 use function sys_get_temp_dir;
 use function trigger_deprecation;
@@ -107,7 +112,7 @@ class PayumBuilder
     protected ?StorageInterface $gatewayConfigStorage = null;
 
     /**
-     * @var GatewayInterface[]
+     * @var GatewayInterface[]|GatewayConfig[]
      */
     protected array $gateways = [];
 
@@ -171,10 +176,20 @@ class PayumBuilder
     }
 
     /**
+     * @deprecated addGateway is deprecated and will be removed in 2.0. Use registerGateway() instead.
+     *
      * @param GatewayInterface|array<string, mixed> $gateway
      */
+    #[Deprecated('addGateway is deprecated and will be removed in 2.0. Use registerGateway() instead.', '2.0.0')]
     public function addGateway(string $name, GatewayInterface | array $gateway): static
     {
+        trigger_deprecation(
+            'payum/core',
+            '2.0.0',
+            '%s is deprecated and will be removed in 2.0. Use %s instead.',
+            __METHOD__,
+            'registerGateway'
+        );
         if ($gateway instanceof GatewayInterface) {
             $this->gateways[$name] = $gateway;
         } else {
@@ -337,6 +352,7 @@ class PayumBuilder
         $httpRequestVerifier = $globalContainer->get(HttpRequestVerifierInterface::class);
         $tokenStorage = $this->tokenStorage ?? $globalContainer->get('payum.security.token_storage');
 
+        /** @var CoreGatewayFactory $coreGatewayFactory */
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
             'payum.security.token_storage' => $tokenStorage,
@@ -351,18 +367,49 @@ class PayumBuilder
 
         $gatewayFactories['core'] = $coreGatewayFactory;
 
-        $registry = $this->buildRegistry($this->gateways, $this->storages, $gatewayFactories);
+        $gateways = [];
+
+        foreach ($this->gateways as $name => $gateway) {
+            if ($gateway instanceof \Payum\Core\Config\GatewayConfig) {
+                $containerBuilder = new ContainerBuilder();
+
+                $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
+                $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
+
+                if ($gateway instanceof ContainerConfiguration) {
+                    // The gateway factory defaults come first, ...
+                    $containerBuilder->addDefinitions($gateway->configureContainer());
+                }
+
+                $containerBuilder->addDefinitions([
+                    $gateway::class => $gateway,
+                    GatewayConfig::class => $gateway,
+                ]);
+
+                $gateways[$name] = $coreGatewayFactory->createGateway(
+                    new FallbackContainer($containerBuilder->build(), $globalContainer)
+                );
+
+                unset($this->gateways[$name]);
+            }
+        }
+
+        // Whatever is left in $this->gateways is a legacy instance rather than a config -- the loop above
+        // unset each config as it built it. Merged unconditionally: these have to reach the registry even
+        // when no gateway was registered by config.
+        $gateways = array_merge($this->gateways, $gateways);
 
         if ($this->gatewayConfigs) {
-            $gateways = $this->gateways;
+            $factoryRegistry = $this->buildRegistry([], $this->storages, $gatewayFactories);
             foreach ($this->gatewayConfigs as $name => $gatewayConfig) {
-                $gatewayFactory = $registry->getGatewayFactory($gatewayConfig['factory']);
+                $gatewayFactory = $factoryRegistry->getGatewayFactory($gatewayConfig['factory']);
                 unset($gatewayConfig['factory']);
 
                 if ($gatewayFactory instanceof ContainerConfiguration) {
                     $containerBuilder = new ContainerBuilder();
 
                     // The gateway factory defaults come first, ...
+                    $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
                     $containerBuilder->addDefinitions($gatewayFactory->configureContainer());
 
                     // ... then the services shared by every gateway, so that they win over the factory
@@ -374,9 +421,14 @@ class PayumBuilder
 
                     // Anything the gateway container does not know about is looked up globally, so that
                     // services of a container which cannot list its entries stay reachable too.
-                    $gateways[$name] = $gatewayFactory->createGateway(
-                        new FallbackContainer($containerBuilder->build(), $globalContainer)
-                    );
+                    $container = new FallbackContainer($containerBuilder->build(), $globalContainer);
+
+                    // Assembly is uniform unless a factory says otherwise, which is why CreatesGateway is
+                    // separate from ContainerConfiguration: a gateway declares services without having to
+                    // know how a Gateway is built.
+                    $gateways[$name] = $gatewayFactory instanceof CreatesGateway
+                        ? $gatewayFactory->createGateway($container)
+                        : $coreGatewayFactory->createGateway($container);
                 } else {
                     trigger_deprecation(
                         'payum/core',
@@ -390,10 +442,44 @@ class PayumBuilder
                 }
             }
 
-            $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
         }
 
+        $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+
         return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
+    }
+
+    /**
+     * Registers a gateway from its typed config.
+     *
+     * The config names its descriptor, and the descriptor names everything else -- handlers, metadata,
+     * the services it needs. Nothing about the gateway is spelled out here, which is the point: adding a
+     * capability is adding a handler class, not editing the application's wiring.
+     *
+     * Container assembly and the command => handler map are built later, in getPayum().
+     */
+    public function registerGateway(string $name, GatewayConfig $config): self
+    {
+        // That this is a gateway is guaranteed by getGatewayClass()'s return type; re-checking would be
+        // dead code. Instantiated bare, which every gateway must support -- see the note on
+        // Payum\Core\Gateway\GatewayInterface about why metadata has to be readable without credentials.
+        $gatewayClass = $config->getGatewayClass();
+        $gateway = new $gatewayClass();
+
+        // This, on the other hand, is the one mistake the type system cannot see -- registering, say, a
+        // Paypal config against the Stripe gateway. Both sides only promise "a GatewayConfig".
+        if (! is_a($config, $gateway->configClass())) {
+            throw new LogicException(sprintf(
+                '%s is configured by %s, but %s was given.',
+                $gatewayClass,
+                $gateway->configClass(),
+                $config::class,
+            ));
+        }
+
+        $this->gateways[$name] = $config;
+
+        return $this;
     }
 
     /**

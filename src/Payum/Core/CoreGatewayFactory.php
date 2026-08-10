@@ -37,6 +37,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -66,7 +67,7 @@ use function trigger_deprecation;
 use function trigger_error;
 use const E_USER_DEPRECATED;
 
-class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfiguration, GatewayFactoryConfigInterface
+class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfiguration, CreatesGateway, GatewayFactoryConfigInterface
 {
     /**
      * @var array<string, mixed>
@@ -307,16 +308,19 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function createGateway(ContainerInterface $container): Gateway
     {
-
-        TwigUtil::registerPaths(
-            $container->get('twig.env'),
-            array_merge(
-                [
-                    'PayumCore' => __DIR__ . '/Resources/views',
-                ],
-                (array) $container->get('payum.paths'),
-            )
-        );
+        if ($container->has('twig.env')) {
+            TwigUtil::registerPaths(
+                $container->get('twig.env'),
+                array_merge(
+                    [
+                        'PayumCore' => __DIR__ . '/Resources/views',
+                    ],
+                    (array) $container->get('payum.paths'),
+                )
+            );
+        } else {
+            dd($container, debug_backtrace());
+        }
 
         if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {
             $gateway = func_get_args()[1];
@@ -342,6 +346,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
             $gateway->addExtension($extension, $extension instanceof PrependExtensionInterface);
         }
+
+        $gateway->setContainer($container);
 
         return $gateway;
     }

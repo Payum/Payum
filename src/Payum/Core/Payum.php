@@ -3,6 +3,7 @@
 namespace Payum\Core;
 
 use Exception;
+use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\PaymentInterface;
@@ -11,7 +12,6 @@ use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
-use Payum\Core\Request as PayumRequest;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
 use Payum\Core\Security\GenericTokenFactoryInterface;
@@ -154,7 +154,7 @@ class Payum implements RegistryInterface
 
         $gateway = $this->getGateway($token->getGatewayName());
 
-        $reply = $gateway->execute(new PayumRequest\Capture($token), true);
+        $reply = $gateway->execute(new CaptureCommand($token), true);
 
         if ($reply instanceof HttpRedirect) {
             return new RedirectResponse($reply->getUrl(), $reply->getStatusCode(), $reply->getHeaders());

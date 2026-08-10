@@ -7,6 +7,7 @@ namespace Payum\Core\Tests\DI;
 use DI\Container;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Gateway;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -39,9 +40,22 @@ final class ContainerConfigurationTest extends TestCase
         $this->assertSame('array', $returnType->getName());
     }
 
-    public function testShouldDefineCreateGatewayMethodTakingContainerAndReturningGateway(): void
+    public function testShouldNotDefineCreateGateway(): void
     {
         $rc = new ReflectionClass(ContainerConfiguration::class);
+
+        // Assembling a Gateway is CreatesGateway's job. Keeping it off this interface is what lets a
+        // gateway declare its services without having to know how a Gateway is built.
+        $this->assertFalse($rc->hasMethod('createGateway'));
+        $this->assertSame(['configureContainer'], array_map(
+            static fn (\ReflectionMethod $method): string => $method->getName(),
+            $rc->getMethods(),
+        ));
+    }
+
+    public function testCreatesGatewayShouldDefineCreateGatewayMethodTakingContainerAndReturningGateway(): void
+    {
+        $rc = new ReflectionClass(CreatesGateway::class);
 
         $this->assertTrue($rc->hasMethod('createGateway'));
 
@@ -70,7 +84,7 @@ final class ContainerConfigurationTest extends TestCase
 
     public function testShouldAllowCustomImplementation(): void
     {
-        $configuration = new class() implements ContainerConfiguration {
+        $configuration = new class() implements ContainerConfiguration, CreatesGateway {
             public function configureContainer(): array
             {
                 return [
@@ -85,6 +99,7 @@ final class ContainerConfigurationTest extends TestCase
         };
 
         $this->assertInstanceOf(ContainerConfiguration::class, $configuration);
+        $this->assertInstanceOf(CreatesGateway::class, $configuration);
         $this->assertSame([
             'foo' => 'fooVal',
         ], $configuration->configureContainer());
