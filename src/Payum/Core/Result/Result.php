@@ -35,7 +35,7 @@ abstract class Result
      */
     public function isSuccessful(): bool
     {
-        return !$this->failure instanceof Failure && in_array(
+        return ! $this->failure instanceof Failure && in_array(
             $this->status,
             [PaymentStatus::Authorized, PaymentStatus::Captured, PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded, PaymentStatus::PaidOut],
             true,

@@ -2,10 +2,9 @@
 
 namespace Payum\Core;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Security\TokenInterface;
 use Exception;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
@@ -22,6 +21,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -371,7 +371,7 @@ class Gateway implements GatewayInterface
         $payment = $context->payment();
         $state = $context->pendingState();
 
-        if (!$payment instanceof PaymentInterface || !$state instanceof ArrayObject) {
+        if (! $payment instanceof PaymentInterface || ! $state instanceof ArrayObject) {
             return;
         }
 
@@ -379,7 +379,7 @@ class Gateway implements GatewayInterface
 
         // Core writes back only what it loaded. A payment handed to the command directly belongs to the
         // caller, who persists it on their own terms.
-        if (!$command->token() instanceof TokenInterface || ! $this->container->has(StorageRegistryInterface::class)) {
+        if (! $command->token() instanceof TokenInterface || ! $this->container->has(StorageRegistryInterface::class)) {
             return;
         }
 
