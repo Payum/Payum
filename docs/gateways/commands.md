@@ -48,14 +48,32 @@ $result = $gateway->execute(CaptureCommand::forToken($token));
 
 If the gateway declares no handler for that command you get a `Payum\Core\Exception\CommandNotSupportedException`:
 
+```
+Gateway "acme_eu" (Acme Payments) does not handle Payum\Core\Command\RefundCommand.
+It handles Payum\Core\Command\CaptureCommand. Add a handler for
+Payum\Core\Command\RefundCommand to Acme\Payum\AcmeGateway::handlers().
+```
+
+It names the gateway by the name it is registered under, which is what you need when the gateway is picked at runtime, and the same details are readable off the exception:
+
 ```php
 use Payum\Core\Exception\CommandNotSupportedException;
 
 try {
     $gateway->execute(RefundCommand::forToken($token));
 } catch (CommandNotSupportedException $e) {
-    // $e->getCommand()
+    $e->getGatewayName();       // 'acme_eu'
+    $e->getGatewayClass();      // Acme\Payum\AcmeGateway, null for a 1.x gateway
+    $e->getSupportedCommands(); // the commands it does handle
+    $e->getCommand();           // the one you dispatched
 }
+```
+
+Dispatch a command at a gateway still built from actions and it says so, rather than leaving you to guess:
+
+```
+Gateway "legacy" handles no commands, so it cannot handle Payum\Core\Command\CaptureCommand.
+It is built from actions: dispatch the matching Payum\Core\Request instead, or port it to handlers.
 ```
 
 To branch without catching, ask first:
