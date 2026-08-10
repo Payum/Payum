@@ -164,6 +164,11 @@ global one: your services win, and Payum's defaults fill in whatever you did not
 
 ## Writing a Gateway Factory
 
+> **This describes the 1.x gateway model, which is still supported.** From 2.0 a gateway declares itself
+> and its handlers instead of being assembled by a factory — see [Gateways](../gateways/README.md), and
+> [Migrating a gateway from 1.x](../gateways/migrating-from-v1.md) if you are porting one. A gateway
+> registered with `registerGateway()` needs no factory, and never uses `getActions()` or `getExtensions()`.
+
 A gateway factory declares the services its gateway needs and which of them are actions and extensions.
 Extend `CoreGatewayFactory` and override the methods you care about:
 
@@ -235,7 +240,10 @@ class MyEarlyAction implements ActionInterface, PrependActionInterface
 ```
 
 You only need to override `createGateway()` when you have to do something to the `Gateway` itself that
-`getActions()`/`getExtensions()` cannot express.
+`getActions()`/`getExtensions()` cannot express, and it must be declared by implementing
+`Payum\Core\DI\CreatesGateway`. `ContainerConfiguration` itself declares only `configureContainer()`,
+so anything contributing service definitions — including a 2.0 gateway — does not have to know how a
+`Gateway` is assembled.
 
 ### Registering the Factory
 

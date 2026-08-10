@@ -1,8 +1,145 @@
 # The Architecture
 
-The code snippets presented below are only for demonstration purposes (pseudo code). Their goal is to illustrate the general approach to various tasks. To see real life examples please follow the links provided when appropriate. In general, you have to create a [_request_](../src/Payum/Core/Request/Generic.php) , implement [_action_](../src/Payum/Core/Action/ActionInterface.php) in order to know what to do with such request. And use _gateway_ that implements [_gateway interface_](../src/Payum/Core/GatewayInterface.php). This is where things get processed. This interface forces us to specify route to possible actions and can execute the request. So, gateway is the place where a request and an action meet together.
+Every payment operation goes through a **gateway**. You dispatch a **command** saying what you want done, the gateway routes it to the **handler** that answers it, and you get back a **result** saying what happened and whether the customer still has something to do.
 
-_**Note**: If you'd like to see real world examples we have provided you with a sandbox:_ [_online_](http://sandbox.payum.forma-dev.com)_,_ [_code_](https://github.com/Payum/PayumBundleSandbox)_._
+```php
+<?php
+use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Result\NextAction\Redirect;
+
+$result = $payum->getGateway('acme')->execute(CaptureCommand::forToken($token));
+
+if ($result->next instanceof Redirect) {
+    header('Location: ' . $result->next->url);
+    exit;
+}
+
+$result->status;        // PaymentStatus::Captured
+$result->transactionId;
+```
+
+_**Note**: gateways written for 1.x — actions, `supports()`, thrown replies — keep working and are still supported. `execute()` decides by what you pass it. That model is described at the_ [_bottom of this page_](the-architecture.md#the-1-x-model)_._
+
+### Gateways
+
+A gateway class is the definition: what it is called, which config it takes, which handlers it ships.
+
+```php
+<?php
+final class AcmeGateway implements GatewayInterface
+{
+    public function name(): string        { return 'Acme Payments'; }
+    public function logo(): Logo          { return Logo\Path::create(__DIR__ . '/Resources/logo.svg'); }
+    public function websiteUrl(): Uri     { return Uri::new('https://developer.acme.test'); }
+    public function configClass(): string { return AcmeConfig::class; }
+
+    public function handlers(): array     { return [CaptureHandler::class, RefundHandler::class]; }
+}
+```
+
+It takes no constructor arguments, so an application can list every installed gateway before any credentials exist — which is what an "add a payment method" screen needs. Credentials live in a config object:
+
+```php
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->registerGateway('acme', new AcmeConfig('sk_live_…'))
+    ->getPayum();
+```
+
+_**Link**:_ [_Defining a gateway_](gateways/defining-a-gateway.md) _and_ [_Configuration_](gateways/configuration.md)_._
+
+### Commands and handlers
+
+A command is immutable intent. A handler answers exactly one of them, and there is one handler interface per command so both sides of `handle()` are typed.
+
+```php
+<?php
+final class RefundHandler implements RefundHandlerInterface
+{
+    public function __construct(private readonly AcmeApi $api)
+    {
+    }
+
+    public function handle(RefundCommand $command, Context $context): RefundResult
+    {
+        $refund = $this->api->refund($context->state()['charge_id'], $command->amount);
+
+        return RefundResult::refunded($refund['id'], $refund['amount']);
+    }
+}
+```
+
+Listing the class in `handlers()` is the whole mapping — Payum reads which handler interface it implements and takes the command from that signature. There is no `supports()`, and no array to keep in sync.
+
+_**Link**:_ [_Commands_](gateways/commands.md) _and_ [_Handlers_](gateways/handlers.md)_._
+
+### Results instead of thrown replies
+
+A handler returns. Control flow lives in `$result->next`, which describes *intent* — never an HTTP response — so a bridge turns it into one and a JSON API can serialise it straight to a mobile client.
+
+| Next action | Means |
+| :--- | :--- |
+| `Redirect`, `PostRedirect` | Send the customer to another URL |
+| `RenderTemplate` | Show a page the gateway owns — a card form, a wallet button |
+| `Challenge` | A step-up, 3-D Secure being the usual one |
+| `Poll` | The PSP has not settled. Ask again later |
+| `null` | Finished |
+
+A declined card is a result, not an exception — `$result->failure` carries a portable reason plus the PSP's own code. Infrastructure faults, like an unreachable host or a rejected API key, still throw.
+
+_**Link**:_ [_Results_](gateways/results.md)_._
+
+### The context
+
+Everything belonging to a single execution arrives on the context: the payment, the token, the inbound PSR-7 request, and the PSP state that has to survive between requests.
+
+```php
+$context->state();        // PSP state, an ArrayObject over the payment's details
+$context->payment();
+$context->token();
+$context->httpRequest();  // PSR-7, replaces the GetHttpRequest sub-request
+$context->tokens();       // mint a notify or second-hop token
+$context->execute($cmd);  // dispatch a sub-command
+```
+
+The dividing line is lifetime: **constructor** for anything that lives as long as the gateway, **context** for anything that exists only for this execution.
+
+### Capture runs more than once
+
+The PSP returns the customer to the capture token's own URL, so Payum dispatches the identical `CaptureCommand` again. The handler works out which pass it is on from the state it wrote:
+
+```php
+if ($state['checkout_id']) {
+    // second pass: the customer has been and come back
+    return CaptureResult::captured(…);
+}
+
+$state['checkout_id'] = $this->api->createCheckout(…)['id'];
+
+return CaptureResult::pending(new Redirect($url));
+```
+
+Payum does not track phases. Some gateways need one pass, some three, and a 3-D Secure step-up can add one at any point.
+
+### Dependency injection
+
+Payum builds a [PHP-DI](https://php-di.org/) container per gateway, layered over one global container holding what every gateway shares — the PSR-18 client, the token storage, the token factories, the request verifier. That is why two gateways get the same HTTP client but their own, separately configured, api objects.
+
+For most gateways nothing needs declaring: an api whose constructor takes only container entries is autowired. When autowiring cannot reach something, the gateway implements `ContainerConfiguration`.
+
+_**Link**:_ [_Services_](gateways/services.md) _and the_ [_Dependency Injection_](di/README.md) _chapter._
+
+### Persisting models
+
+Before the customer is sent to the gateway you usually want the payment stored. That is handled by a [_storage_](../src/Payum/Core/Storage/StorageInterface.php). Payum writes the PSP state back onto the payment after a handler returns, and persists it when it was the one that loaded it — a payment you handed to a command yourself stays yours to persist.
+
+[Doctrine](../src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php), [Laminas Table Gateway](../src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php) and [filesystem](../src/Payum/Core/Storage/FilesystemStorage.php) (tests only) storages are supported.
+
+***
+
+## The 1.x model
+
+Still supported, and what every gateway in this repository currently uses. You create a [_request_](../src/Payum/Core/Request/Generic.php), implement an [_action_](../src/Payum/Core/Action/ActionInterface.php) that says it `supports()` it, and the gateway routes between them.
 
 ```php
 <?php
@@ -12,30 +149,21 @@ use Payum\Core\Request\Capture;
 $gateway = new Gateway;
 $gateway->addAction(new CaptureAction);
 
-//CaptureAction does its job.
-$gateway->execute($capture = new Capture(array(
-    'amount' => 100,
-    'currency' => 'USD'
-));
+$gateway->execute($capture = new Capture(['amount' => 100, 'currency' => 'USD']));
 
 var_export($capture->getModel());
 ```
 
 ```php
 <?php
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\Capture;
-
 class CaptureAction implements ActionInterface
 {
     public function execute($request)
     {
-       $model = $request->getModel();
+        $model = $request->getModel();
 
-       //capture payment logic here
-
-       $model['status'] = 'success';
-       $model['transaction_id'] = 'an_id';
+        $model['status'] = 'success';
+        $model['transaction_id'] = 'an_id';
     }
 
     public function supports($request)
@@ -45,45 +173,31 @@ class CaptureAction implements ActionInterface
 }
 ```
 
-That's the big picture. Now let's talk about the details:
+### Sub requests
 
-_**Link**: See a real world example:_ [_CaptureController_](https://github.com/Payum/PayumBundle/blob/master/Controller/CaptureController.php)_._
-
-### Sub Requests
-
-An action does not want to do all the job alone, so it delegates some responsibilities to other actions. In order to achieve this the action must be a _gateway aware_ action. Only then, it can create a sub request and pass it to the gateway.
+An action delegates by creating a sub request. It must be *gateway aware* to do so.
 
 ```php
 <?php
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
-
 class FooAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
-    
+
     public function execute($request)
     {
-        //do its jobs
-
-        // delegate some job to bar action.
         $this->gateway->execute(new BarRequest);
     }
 }
 ```
 
-_**Link**: See paypal_ [_CaptureAction_](https://github.com/Payum/PaypalExpressCheckoutNvp/blob/master/Action/CaptureAction.php)_._
+The 2.0 equivalent is `$context->execute()`, and most sub-requests become plain method calls on the api.
 
-### Replys
+### Replies
 
-What about redirects or a credit card form? Some gateways, like Paypal ExpressCheckout for instance, require authorization on their side. Payum can handle such cases and for that we use something called [_replys_](../src/Payum/Core/Reply/Base.php). It is a special object which extends an exception hence could be thrown. You can throw a http redirect reply for example at any time and catch it at a top level.
+[_Replies_](../src/Payum/Core/Reply/Base.php) extend `Exception`, so they can be thrown from anywhere and caught at the top level.
 
 ```php
 <?php
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Reply\HttpRedirect;
-
 class FooAction implements ActionInterface
 {
     public function execute($request)
@@ -93,45 +207,32 @@ class FooAction implements ActionInterface
 }
 ```
 
-Above we see an action which throws a reply. The reply is about redirecting a user to another url. Next code example demonstrate how you catch and process it.
-
 ```php
 <?php
-
-use Payum\Core\Reply\HttpRedirect;
-
 try {
-    /** @var \Payum\Core\Gateway $gateway */
-    $gateway->addAction(new FooAction);
-
     $gateway->execute(new FooRequest);
 } catch (HttpRedirect $reply) {
-    header( 'Location: '.$reply->getUrl());
+    header('Location: ' . $reply->getUrl());
     exit;
 }
 ```
 
-_**Link**: See real world example:_ [_AuthorizeTokenAction_](../src/Payum/Paypal/ExpressCheckout/Nvp/Action/Api/AuthorizeTokenAction.php)_._
+The 2.0 equivalent is `return CaptureResult::pending(new Redirect(…))`, caught by a `match` rather than a `try`.
 
 ### Managing status
 
-Good status handling is very important. Statuses must not be hard coded and should be easy to reuse, hence we use the [_interface_](../src/Payum/Core/Request/GetStatusInterface.php) to handle this. The [Status request](../src/Payum/Core/Request/GetHumanStatus.php) is provided by default by our library, however you are free to use your own and you can do so by implementing the status interface.
-
 ```php
 <?php
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\GetStatusInterface;
-
 class FooAction implements ActionInterface
 {
     public function execute($request)
     {
         if ('success condition') {
-           $request->markCaptured();
-        } else if ('pending condition') {
-           $request->markPending();
+            $request->markCaptured();
+        } elseif ('pending condition') {
+            $request->markPending();
         } else {
-           $request->markUnknown();
+            $request->markUnknown();
         }
     }
 
@@ -142,179 +243,52 @@ class FooAction implements ActionInterface
 }
 ```
 
-```php
-<?php
-
-use Payum\Core\Request\GetHumanStatus;
-
-/** @var \Payum\Core\Gateway $gateway */
-$gateway->addAction(new FooAction);
-
-$gateway->execute($status = new GetHumanStatus);
-
-$status->isCaptured();
-$status->isPending();
-
-// or
-
-$status->getValue();
-```
-
-_**Link**: The status logic could be a bit complicated_ [_as paypal one_](../src/Payum/Paypal/ExpressCheckout/Nvp/Action/PaymentDetailsStatusAction.php) _or pretty simple as_ [_authorize.net one_](../src/Payum/AuthorizeNet/Aim/Action/StatusAction.php)_._
+The 2.0 equivalent is `PaymentStatus` on the result. Its backing values are these same strings, so stored data stays valid.
 
 ### Extensions
 
-There must be a way to extend the gateway with custom logic. [_Extension_](../src/Payum/Core/Extension/ExtensionInterface.php) to the rescue. Let's look at the example below. Imagine you want to check permissions before a user can capture the payment:
+An [_extension_](../src/Payum/Core/Extension/ExtensionInterface.php) wraps every execution — checking permissions, logging, persisting models.
 
 ```php
 <?php
-use Payum\Core\Extension\ExtensionInterface;
-use Payum\Core\Extension\Context;
-
 class PermissionExtension implements ExtensionInterface
 {
     public function onPreExecute(Context $context)
     {
-        $request = $context->getRequest();
-        
-        if (! in_array('ROLE_CUSTOMER', $request->getModel()->getRoles())) {
+        if (! in_array('ROLE_CUSTOMER', $context->getRequest()->getModel()->getRoles())) {
             throw new Exception('The user does not have the required roles.');
         }
-
-        // congrats, user has enough rights.
     }
 }
 ```
 
-```php
-<?php
+Extensions run on the action path. Cross-cutting concerns on the command path move to middleware.
 
-/** @var \Payum\Core\Gateway $gateway */
-$gateway->addExtension(new PermissionExtension);
+### API aware actions
 
-// here is the place where the exception may be thrown.
-$gateway->execute(new FooRequest);
-```
-
-_**Link**: The_ [_storage extension_](../src/Payum/Core/Extension/StorageExtension.php) _is a built-in extension._
-
-### Persisting models
-
-Before you are redirected to the gateway side, you may want to store data somewhere, right? We take care of that too. This is handled by [_storage_](../src/Payum/Core/Storage/StorageInterface.php) and its [_storage extension_](../src/Payum/Core/Extension/StorageExtension.php) for gateway. The extension can solve two tasks. First it can save a model after the request is processed. Second, it can find a model by its id before the request is processed. Currently [Doctrine](../src/Payum/Core/Bridge/Doctrine/Storage/DoctrineStorage.php) [Laminas Table Gateway](../src/Payum/Core/Bridge/Laminas/Storage/TableGatewayStorage.php) and [filesystem](../src/Payum/Core/Storage/FilesystemStorage.php) (use it for tests only!) storages are supported.
+_**Note**: `ApiAwareInterface`, `ApiAwareTrait` and `addApi()` are deprecated since 2.0 and will be removed in 3.0. A handler receives its api through the constructor, and two api versions are simply two classes._
 
 ```php
 <?php
-use Payum\Core\Gateway;
-use Payum\Core\Extension\StorageExtension;
-
-/** @var \Payum\Core\Storage\StorageInterface $storage */
-$storage = new FooStorage;
-
-$gateway = new Gateway;
-$gateway->addExtension(new StorageExtension($storage));
-```
-
-### All about API
-
-_**Note**: `ApiAwareInterface` and `ApiAwareTrait`, described below, are deprecated since Payum 2.0 and will be removed in 3.0. New code should receive its API through the constructor and let the container wire it up — see_ [_Dependency Injection_](di/README.md) _and the_ [_migration guide_](di/migration-guide.md)_._
-
-The gateway API has different versions? Or, a gateway provide official sdk? We already thought about these problems and you know what?
-
-Let's say gateway have different versions: first and second. And in the `FooAction` we want to use first api and `BarAction` second one. To solve this problem we have to implement _API aware action_ to the actions. When such api aware action is added to a gateway it tries to set an API, one by one, to the action until the action accepts one.
-
-```php
-<?php
-use Payum\Core\ApiAwareInterface;
-use Payum\Core\ApiAwareTrait;
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Exception\UnsupportedApiException;
-
 class FooAction implements ActionInterface, ApiAwareInterface
 {
     use ApiAwareTrait;
-    
-    public function __construct() 
-    {
-        $this->apiClass = Api::class;    
-    }    
-    
-    
-    public function execute($request) 
-    {
-        $this->api; // Api::class 
-    }
-}
 
-class BarAction implements ActionInterface, ApiAwareInterface
-{
-    use ApiAwareTrait;
-    
-    public function __construct() 
+    public function __construct()
     {
-        $this->apiClass = AnotherApi::class;    
-    }    
-    
-    
-    public function execute($request) 
+        $this->apiClass = Api::class;
+    }
+
+    public function execute($request)
     {
-        $this->api; // AnotherApi::class 
+        $this->api;
     }
 }
 ```
-
-```php
-<?php
-use Payum\Core\Gateway;
-
-$gateway = new Gateway;
-$gateway->addApi(new FirstApi);
-$gateway->addApi(new SecondApi);
-
-// here the ApiVersionOne will be injected to FooAction
-$gateway->addAction(new FooAction);
-
-// here the ApiVersionTwo will be injected to BarAction
-$gateway->addAction(new BarAction);
-```
-
-_**Link**: See authorize.net_ [_capture action_](../src/Payum/AuthorizeNet/Aim/Action/CaptureAction.php)_._
-
-### Dependency injection
-
-The pieces described above — actions, extensions, storages and the APIs they talk to — are not assembled by hand. Since Payum 2.0 a [PHP-DI](https://php-di.org/) container builds them, and a gateway factory declares what belongs in it:
-
-```php
-<?php
-use Payum\Core\CoreGatewayFactory;
-use function DI\autowire;
-use function DI\get;
-
-class FooGatewayFactory extends CoreGatewayFactory
-{
-    public function configureContainer(): array
-    {
-        return array_merge(parent::configureContainer(), [
-            Api::class => autowire()->constructor(get('foo.secret')),
-            CaptureAction::class => autowire(),
-        ]);
-    }
-
-    public function getActions(): array
-    {
-        return array_merge(parent::getActions(), [CaptureAction::class]);
-    }
-}
-```
-
-Payum keeps one global container for the services every gateway shares — the PSR-18 HTTP client, the token storage, the token factories, the request verifier — and one container per gateway for that gateway's own actions and API clients. That is why two gateways configured side by side get the same HTTP client but their own, separately configured, API objects.
-
-_**Link**: The_ [_Dependency Injection_](di/README.md) _chapter covers this in full:_ [_getting started_](di/getting-started.md)_,_ [_customization_](di/customization.md)_,_ [_framework integration_](di/framework-integration.md) _and the_ [_migration guide_](di/migration-guide.md)_._
 
 ### Conclusion
 
-As a result of the architecture described above we end up with a well decoupled, easy to extend and reusable library. For example, you can add your domain specific actions or a logger extension. Thanks to its flexibility any task could be achieved.
-
-Next [Your order integration](your-order-integration.md), or read how the container wires all of this together in [Dependency Injection](di/README.md).
+Next: [Your order integration](your-order-integration.md), the [Gateways](gateways/README.md) chapter, or [Dependency Injection](di/README.md).
 
 ***
 

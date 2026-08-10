@@ -3,6 +3,10 @@
 Here we describe basic steps required by all supported gateways. We are going to setup models, storages, a security layer and so on. All that stuff will be used later.
 
 {% hint style="info" %}
+_**Note**: This page sets up the models, storages and security layer every gateway needs, which is unchanged. How a gateway itself is written changed in 2.0 — see the_ [_Gateways_](gateways/README.md) _chapter._
+{% endhint %}
+
+{% hint style="info" %}
 _**Note**: If you are working with **Symfony framework** look read the bundle's_ [_documentation_](./#symfony-payum-bundle) _instead._
 {% endhint %}
 
