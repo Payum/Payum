@@ -6,6 +6,7 @@ namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Handler\Context;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
@@ -38,7 +39,7 @@ final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPri
 
         // A null status means the operation concluded nothing about the payment — a declined refund
         // leaves a captured payment captured.
-        if (null !== $payment && $result->status instanceof PaymentStatus) {
+        if ($payment instanceof PaymentInterface && $result->status instanceof PaymentStatus) {
             PaymentStatuses::set($payment, $result->status);
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Middleware;
 
+use DI\Container;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
@@ -27,6 +28,7 @@ use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 
 final class RecordPaymentStatusMiddlewareTest extends TestCase
 {
@@ -70,10 +72,10 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         $payment->setStatus(PaymentStatus::Pending);
 
         try {
-            $this->dispatch($payment, static fn () => throw new \RuntimeException('psp exploded'));
+            $this->dispatch($payment, static fn () => throw new RuntimeException('psp exploded'));
 
             $this->fail('Expected the exception to propagate.');
-        } catch (\RuntimeException) {
+        } catch (RuntimeException) {
             // An exception means we did not learn the status, which is not the same as learning it failed.
             $this->assertSame(PaymentStatus::Pending, $payment->getStatus());
         }
@@ -95,7 +97,7 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
 
         // Resolved through the collection, so this exercises the real priorities rather than an order
         // written by hand here.
-        $middleware = CoreDefaults::statusAndPersistence($storage)->resolve(new \DI\Container());
+        $middleware = CoreDefaults::statusAndPersistence($storage)->resolve(new Container());
 
         (new Pipeline($middleware))->process(
             CaptureCommand::forToken($this->createMock(TokenInterface::class)),
