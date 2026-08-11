@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use League\Uri\Uri;
+use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\Handler\CancelHandlerInterface;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
@@ -18,6 +20,7 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\Redirect;
@@ -118,7 +121,7 @@ final class CommandDispatchTest extends TestCase
 
             $this->assertSame('acme', $e->getGatewayName());
             $this->assertSame(AcmeGateway::class, $e->getGatewayClass());
-            $this->assertSame([CaptureCommand::class], $e->getSupportedCommands());
+            $this->assertSame([CaptureCommand::class, CancelCommand::class], $e->getSupportedCommands());
             $this->assertInstanceOf(RefundCommand::class, $e->getCommand());
         }
     }
@@ -143,6 +146,17 @@ final class CommandDispatchTest extends TestCase
             $this->assertNull($e->getGatewayClass());
             $this->assertSame([], $e->getSupportedCommands());
         }
+    }
+
+    public function testShouldDispatchACancel(): void
+    {
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        $result = $gateway->execute(CancelCommand::forPayment($this->buildPayment(), 'merchant_abandoned'));
+
+        $this->assertInstanceOf(CancelResult::class, $result);
+        $this->assertSame(PaymentStatus::Canceled, $result->status);
+        $this->assertSame('merchant_abandoned', AcmeCancelHandler::$seenReason);
     }
 
     public function testShouldReportWhichCommandsItSupports(): void
@@ -236,7 +250,7 @@ final class AcmeGateway implements PaymentGateway
 
     public function handlers(): array
     {
-        return [AcmeCaptureHandler::class];
+        return [AcmeCaptureHandler::class, AcmeCancelHandler::class];
     }
 
     public function logo(): Logo
@@ -252,6 +266,18 @@ final class AcmeGateway implements PaymentGateway
     public function websiteUrl(): Uri
     {
         return Uri::new('https://acme.test');
+    }
+}
+
+final class AcmeCancelHandler implements CancelHandlerInterface
+{
+    public static ?string $seenReason = null;
+
+    public function handle(CancelCommand $command, Context $context): CancelResult
+    {
+        self::$seenReason = $command->reason;
+
+        return CancelResult::canceled('void_1');
     }
 }
 

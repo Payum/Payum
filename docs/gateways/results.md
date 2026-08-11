@@ -19,6 +19,7 @@ $result->requiresInteraction();  // $next !== null
 | `CaptureResult` | `capturedAmount` |
 | `AuthorizeResult` | `authorizedAmount`, `expiresAt` |
 | `RefundResult` | `refundedAmount` |
+| `CancelResult` | — |
 
 ### Building one
 

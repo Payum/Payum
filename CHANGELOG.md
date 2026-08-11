@@ -9,7 +9,7 @@
 * Add a command/handler model for gateways. A gateway describes itself and ships handlers that answer typed commands and return a result, instead of being assembled by a factory and interrupted by thrown replies. See the Gateways chapter in the docs
 * Add `Payum\Core\Gateway\GatewayInterface`, which a gateway implements to declare its name, logo, website, config class and handlers. It replaces the gateway factory
 * Add `Payum\Core\Config\GatewayConfig` for typed, self-validating gateway credentials, and `PayumBuilder::registerGateway()` to register one
-* Add `Payum\Core\Command\{CaptureCommand, AuthorizeCommand, RefundCommand}` and a handler interface per command
+* Add `Payum\Core\Command\{CaptureCommand, AuthorizeCommand, RefundCommand, CancelCommand}` and a handler interface per command
 * Add `Payum\Core\Result\Result` with `PaymentStatus`, a `NextAction` describing what the customer must do, and a `Failure` carrying a portable reason plus the PSP's own code. Declines are results; infrastructure faults remain exceptions
 * Add `Payum\Core\Handler\Context`, giving a handler the payment, the token, the inbound PSR-7 request and the PSP state
 * Add `Payum\Core\Gateway\Capability`. Operation capabilities are derived from the handlers a gateway ships; `DeclaresCapabilities` covers the rest

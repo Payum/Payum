@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Handler;
 
+use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway\Capability;
+use Payum\Core\Handler\CancelHandlerInterface;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Handler\RefundHandlerInterface;
+use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\RefundResult;
 use PHPUnit\Framework\TestCase;
@@ -45,9 +48,24 @@ final class HandlerMapTest extends TestCase
 
     public function testShouldDeriveCapabilitiesFromTheCommandsItHandles(): void
     {
-        $map = HandlerMap::fromHandlers([CaptureHandlerStub::class, RefundHandlerStub::class]);
+        $map = HandlerMap::fromHandlers([
+            CaptureHandlerStub::class,
+            RefundHandlerStub::class,
+            CancelHandlerStub::class,
+        ]);
 
-        $this->assertSame([Capability::Capture, Capability::Refund], $map->capabilities());
+        $this->assertSame(
+            [Capability::Capture, Capability::Refund, Capability::Cancel],
+            $map->capabilities(),
+        );
+    }
+
+    public function testShouldMapCancel(): void
+    {
+        $map = HandlerMap::fromHandlers([CancelHandlerStub::class]);
+
+        $this->assertSame(CancelHandlerInterface::class, $map->serviceIdFor(CancelCommand::class));
+        $this->assertSame([CancelCommand::class], $map->commands());
     }
 
     public function testShouldBeEmptyWhenThereAreNoHandlers(): void
@@ -97,6 +115,14 @@ final class RefundHandlerStub implements RefundHandlerInterface
     public function handle(RefundCommand $command, Context $context): RefundResult
     {
         return RefundResult::refunded();
+    }
+}
+
+final class CancelHandlerStub implements CancelHandlerInterface
+{
+    public function handle(CancelCommand $command, Context $context): CancelResult
+    {
+        return CancelResult::canceled();
     }
 }
 
