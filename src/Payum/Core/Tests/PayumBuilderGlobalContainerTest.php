@@ -13,6 +13,7 @@ use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
+use Payum\Core\DI\ListableContainerInterface;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
@@ -897,6 +898,75 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(HttpRequestVerifier::class, $payum->getHttpRequestVerifier());
     }
 
+    /**
+     * A container which is not a PHP-DI one but is able to report its entries has those entries turned
+     * into definitions of the gateway containers, so that they can be autowired.
+     */
+    public function testShouldInjectAServiceOfAListablePresetContainerIntoAnAction(): void
+    {
+        $logger = new NullLogger();
+
+        $payum = (new PayumBuilder())
+            ->setGlobalContainer(new ListableContainer([
+                LoggerInterface::class => $logger,
+            ]))
+            ->addGatewayFactory('documented', new DocumentedGatewayFactory())
+            ->addGateway('documented', [
+                'factory' => 'documented',
+            ])
+            ->getPayum()
+        ;
+
+        $documentedAction = null;
+        foreach ($this->readAttribute($payum->getGateway('documented'), 'actions') as $action) {
+            if ($action instanceof DocumentedCaptureAction) {
+                $documentedAction = $action;
+            }
+        }
+
+        $this->assertInstanceOf(DocumentedCaptureAction::class, $documentedAction);
+        $this->assertSame($logger, $documentedAction->logger);
+    }
+
+    public function testShouldShareTheEntriesOfAListablePresetContainerWithTheGatewayContainer(): void
+    {
+        $service = new stdClass();
+
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer(new ListableContainer([
+                'acme.service' => $service,
+            ]))
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertTrue($factory->container->has('acme.service'));
+        $this->assertSame($service, $factory->container->get('acme.service'));
+    }
+
+    public function testShouldStillResolvePayumsOwnServicesWithAListablePresetContainer(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        (new PayumBuilder())
+            ->setGlobalContainer(new ListableContainer())
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertInstanceOf(StorageInterface::class, $factory->container->get('payum.security.token_storage'));
+        $this->assertInstanceOf(GenericTokenFactoryInterface::class, $factory->container->get(GenericTokenFactoryInterface::class));
+        $this->assertInstanceOf(ClientInterface::class, $factory->container->get(ClientInterface::class));
+    }
+
     public function testShouldStillSupportTheDeprecatedCreateApiOnADocumentedGatewayFactory(): void
     {
         $gateway = (new DocumentedGatewayFactory())->create([
@@ -1131,6 +1201,26 @@ class OpaqueContainer implements ContainerInterface
     public function has(string $id): bool
     {
         return isset($this->services[$id]);
+    }
+}
+
+/**
+ * A PSR-11 container which is not a PHP-DI one but is able to report the entries it holds.
+ */
+class ListableContainer extends OpaqueContainer implements ListableContainerInterface
+{
+    /**
+     * @param array<string, mixed> $services
+     */
+    public function __construct(
+        private array $services = []
+    ) {
+        parent::__construct($services);
+    }
+
+    public function getKnownEntryNames(): array
+    {
+        return array_keys($this->services);
     }
 }
 

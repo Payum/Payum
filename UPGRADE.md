@@ -21,6 +21,17 @@
   * The `Payum\Core\Bridge\Httplug\HttplugClient` is deprecated and will be removed in 3.0. Use PSR-18 HTTP Client instead
   * The `payum.http_client` config option will return an instance of `Psr\Http\Client\ClientInterface` in a future version.
     * Change all type-hints from `Payum\Core\HttpClientInterface` or `Payum\Core\Bridge\Httplug\HttplugClient` to `Psr\Http\Client\ClientInterface`
+* Gateways are now built with a dependency injection container (php-di). See [docs/di](docs/di/README.md).
+  * A gateway factory should implement `Payum\Core\DI\ContainerConfiguration` and define its services in
+    `configureContainer()`, its actions in `getActions()` and its extensions in `getExtensions()`.
+  * `Payum\Core\GatewayFactoryInterface::create()` and `createConfig()`, `Payum\Core\GatewayFactory::populateConfig()`
+    and the `payum.action.*` / `payum.extension.*` config options are deprecated. A gateway factory which does not
+    implement `Payum\Core\DI\ContainerConfiguration` still works, but triggers a deprecation.
+  * `Payum\Core\Bridge\Spl\ArrayObject` as a service is deprecated. Type-hint `Psr\Container\ContainerInterface` instead.
+  * An application can hand its own PSR-11 container to `Payum\Core\PayumBuilder::setGlobalContainer()`, or register
+    single services with `Payum\Core\PayumBuilder::addGlobalService()`. Implement
+    `Payum\Core\DI\ListableContainerInterface` on your container to have its services autowired into gateway actions.
+* The whole `Payum\Core\Bridge\Symfony` namespace is deprecated. Use the same classes from `payum/payum-bundle` instead.
 
 ## 1.5.0
 

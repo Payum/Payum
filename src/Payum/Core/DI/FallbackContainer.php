@@ -15,7 +15,7 @@ use function array_values;
  * This lets an application hand its own container to Payum without having to re-declare every service
  * Payum needs: whatever the application defines wins, the rest comes from Payum's own defaults.
  */
-final class FallbackContainer implements ContainerInterface
+final class FallbackContainer implements ListableContainerInterface
 {
     public function __construct(
         private ContainerInterface $primary,
@@ -36,8 +36,9 @@ final class FallbackContainer implements ContainerInterface
     }
 
     /**
-     * The ids of both containers, as far as they are able to report them. A container which cannot
-     * enumerate its entries contributes nothing.
+     * The ids of both containers, as far as they are able to report them. Only a container which is
+     * able to enumerate its entries - a PHP-DI container or a ListableContainerInterface - contributes
+     * anything here, any other one contributes nothing.
      *
      * @return list<string>
      */
@@ -54,8 +55,8 @@ final class FallbackContainer implements ContainerInterface
      */
     private static function knownEntryNamesOf(ContainerInterface $container): array
     {
-        if ($container instanceof self) {
-            return $container->getKnownEntryNames();
+        if ($container instanceof ListableContainerInterface) {
+            return array_values($container->getKnownEntryNames());
         }
 
         if ($container instanceof Container) {
