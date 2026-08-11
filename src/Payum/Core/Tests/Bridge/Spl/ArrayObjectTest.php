@@ -24,6 +24,36 @@ final class ArrayObjectTest extends TestCase
         $this->assertTrue($rc->isSubclassOf(\ArrayObject::class));
     }
 
+    public function testEnsureArrayObjectShouldReturnTheGivenArrayObjectAsIs(): void
+    {
+        $array = new ArrayObject([
+            'foo' => 'fooVal',
+        ]);
+
+        $this->assertSame($array, ArrayObject::ensureArrayObject($array));
+    }
+
+    public function testEnsureArrayObjectShouldWrapAnArray(): void
+    {
+        $array = ArrayObject::ensureArrayObject([
+            'foo' => 'fooVal',
+        ]);
+
+        $this->assertInstanceOf(ArrayObject::class, $array);
+        $this->assertSame('fooVal', $array['foo']);
+    }
+
+    public function testEnsureArrayObjectShouldWrapAModelWhichIsAnArrayAccessOfItsOwn(): void
+    {
+        $model = new \Payum\Core\Model\ArrayObject();
+        $model['foo'] = 'fooVal';
+
+        $array = ArrayObject::ensureArrayObject($model);
+
+        $this->assertInstanceOf(ArrayObject::class, $array);
+        $this->assertSame('fooVal', $array['foo']);
+    }
+
     public function testShouldAllowGetPreviouslySetValueByIndex(): void
     {
         $array = new ArrayObject();
