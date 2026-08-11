@@ -3,6 +3,18 @@ name: Subtree Split
 on:
   push:
     branches: [2.x, 1.x, 1.7.x]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to split. Defaults to the branch selected above."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: subtree-split-${{ inputs.branch || github.ref_name }}
 
 jobs:
   subtree-split:
@@ -13,6 +25,7 @@ jobs:
       - name: Checkout
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
+          ref: ${{ inputs.branch || github.ref_name }}
           fetch-depth: 0
           token: ${{ secrets.ACCESS_TOKEN }}
 
@@ -22,8 +35,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
+      - name: Install splitsh-lite
+        run: bin/install-splitsh-lite
+
       - name: Run subtree-split
+        env:
+          BRANCH: ${{ inputs.branch || github.ref_name }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          bin/subtree-split
+          bin/subtree-split "$BRANCH"

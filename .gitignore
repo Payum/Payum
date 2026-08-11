@@ -4,7 +4,11 @@ composer.lock
 phpunit.xml
 cov
 vendor
-bin
+bin/*
+!bin/install-splitsh-lite
+!bin/release
+!bin/subsplits
+!bin/subtree-split
 src/Payum/Core/Bridge/Propel2/Model/Base
 src/Payum/Core/Bridge/Propel2/Model/Map
 .phpunit.result.cache

@@ -1,56 +1,153 @@
 #!/usr/bin/env bash
-
-# TODO: prepare changelog
+#
+# Publishes an existing tag of this repository to every split repository.
+#
+#     bin/release <tag> [branch]
+#
+# For every package in bin/subsplits this
+#
+#     1. splits the package out of <tag> with splitsh-lite,
+#     2. creates <tag> on the split repository, signed, pointing at that split
+#        commit, and
+#     3. creates a GitHub release for it with generated release notes.
+#
+# <tag> has to exist in this repository already; this script never creates it
+# here. When [branch] is given the split branches are brought up to date first,
+# exactly as bin/subtree-split does on every push.
+#
+# Needs: splitsh-lite (bin/install-splitsh-lite), an SSH key with write access
+# to the Payum organisation, a GPG key able to sign tags, and gh authenticated
+# with a token that can create releases across the organisation.
 
 set -e
+set -u
 
-if (( "$#" != 1 ))
+if (( "$#" < 1 ))
 then
-    echo "Tag has to be provided"
+    echo "Tag has to be provided: bin/release <tag> [branch]" >&2
     exit 1
 fi
 
-./bin/subtree-split
+TAG="$1"
+BRANCH="${2:-}"
+SPLITSH_LITE="${SPLITSH_LITE:-./bin/splitsh-lite}"
+export SPLITSH_LITE
+SUBSPLITS="$(dirname "$0")/subsplits"
+SPLIT_REF="refs/heads/payum-release-split"
 
-CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+function subsplits()
+{
+    grep -Ev '^[[:space:]]*(#|$)' "$SUBSPLITS"
+}
 
-for REMOTE in origin core paypal-express-checkout paypal-pro-checkout paypal-pro-hosted authorize-net-aim be2bill paypal-masspay \
-    paypal-ipn paypal-rest offline payex klarna-checkout klarna-invoice stripe sofort skeleton
+if ! git rev-parse -q --verify "refs/tags/$TAG" > /dev/null
+then
+    echo "Tag $TAG does not exist in this repository" >&2
+    exit 1
+fi
+
+TAG_OBJECT=$(git rev-parse "refs/tags/$TAG")
+TAG_COMMIT=$(git rev-parse "$TAG^{commit}")
+
+# Bring the split branches up to date first, so that the commit the tag ends up
+# pointing at is reachable from the split branch as well.
+if [[ -n "$BRANCH" ]]
+then
+    if ! git rev-parse -q --verify "refs/remotes/origin/$BRANCH" > /dev/null
+    then
+        echo "::warning::origin/$BRANCH does not exist, skipping the branch split"
+        BRANCH=""
+    elif ! git merge-base --is-ancestor "$TAG_COMMIT" "origin/$BRANCH"
+    then
+        echo "::warning::$TAG is not contained in origin/$BRANCH, skipping the branch split"
+        BRANCH=""
+    fi
+fi
+
+if [[ -n "$BRANCH" ]]
+then
+    "$(dirname "$0")/subtree-split" "$BRANCH"
+fi
+
+# splitsh-lite splits a ref, so the tagged commit needs one of its own unless it
+# happens to be the tip of the branch that was just split.
+if [[ -n "$BRANCH" ]] && [[ "$TAG_COMMIT" == "$(git rev-parse "origin/$BRANCH")" ]]
+then
+    ORIGIN="origin/$BRANCH"
+else
+    ORIGIN="${SPLIT_REF#refs/heads/}"
+    git update-ref "$SPLIT_REF" "$TAG_COMMIT"
+fi
+
+# Split every package before publishing anything, so that a failure here cannot
+# leave half of the packages released.
+SPLIT_SHAS=()
+
+while IFS='|' read -r PREFIX REMOTE REPOSITORY
 do
+    echo "Splitting $REPOSITORY out of $TAG"
+
+    SHA1=$($SPLITSH_LITE --prefix="$PREFIX" --origin="$ORIGIN")
+
+    if [[ -z "$SHA1" ]]
+    then
+        echo "Could not split $PREFIX out of $TAG" >&2
+        exit 1
+    fi
+
+    SPLIT_SHAS+=("$SHA1")
+done < <(subsplits)
+
+git update-ref -d "$SPLIT_REF" 2> /dev/null || true
+
+# The tag has to be created under its real name for the tag object to carry it,
+# and this repository already holds that name, so it is put back afterwards.
+function restore_tag()
+{
+    git tag -d "$TAG" > /dev/null 2>&1 || true
+    git update-ref "refs/tags/$TAG" "$TAG_OBJECT"
+}
+
+trap restore_tag EXIT
+
+git tag -d "$TAG" > /dev/null
+
+INDEX=0
+
+while IFS='|' read -r PREFIX REMOTE REPOSITORY
+do
+    SHA1="${SPLIT_SHAS[$INDEX]}"
+    INDEX=$((INDEX + 1))
+    REMOTE_URL="git@github.com:$REPOSITORY.git"
+
     echo ""
-    echo ""
-    echo "Releasing $REMOTE";
+    echo "Releasing $REPOSITORY $TAG ($SHA1)"
 
-	TMP_DIR="/tmp/payum-repo"
-    REMOTE_URL=`git remote get-url $REMOTE`
+    if [[ -n "$(git ls-remote --tags "$REMOTE_URL" "refs/tags/$TAG")" ]]
+    then
+        echo "Tag $TAG already exists on $REPOSITORY"
+    else
+        git tag -s "$TAG" "$SHA1" -m "Release $TAG"
+        git push "$REMOTE_URL" "refs/tags/$TAG"
+        git tag -d "$TAG" > /dev/null
+    fi
 
-    rm -rf $TMP_DIR;
-    mkdir $TMP_DIR;
+    if gh release view "$TAG" --repo "$REPOSITORY" > /dev/null 2>&1
+    then
+        echo "Release $TAG already exists on $REPOSITORY"
+        continue
+    fi
 
-    (
-        cd $TMP_DIR;
-        git clone $REMOTE_URL . --depth=200
-        git checkout $CURRENT_BRANCH;
-        # gsort comes with coreutils packages. brew install coreutils
-        LAST_RELEASE=$(git tag -l [0-9].* | gsort -V | tail -n1 )
-        if [[ -z "$LAST_RELEASE" ]]; then
-            echo "There has not been any releases. Releasing $1";
+    PRERELEASE=""
 
-            git tag $1 -s -m "Release $1"
-            git push origin --tags
-        else
-            echo "Last release $LAST_RELEASE";
+    case "$TAG" in
+        *-*) PRERELEASE="--prerelease" ;;
+    esac
 
-            CHANGES_SINCE_LAST_RELEASE=$(git log "$LAST_RELEASE"..."$CURRENT_BRANCH")
-            CHANGES_SINCE_LAST_RELEASE="$CHANGES_SINCE_LAST_RELEASE" | xargs echo -n
-            if [[ ! -z "$CHANGES_SINCE_LAST_RELEASE" ]]; then
-                echo "There are changes since last release. Releasing $1";
-
-                git tag $1 -s -m "Release $1"
-                git push origin --tags
-            else
-                echo "No change since last release.";
-            fi
-        fi
-    )
-done
+    gh release create "$TAG" \
+        --repo "$REPOSITORY" \
+        --title "Release $TAG" \
+        --verify-tag \
+        --generate-notes \
+        $PRERELEASE
+done < <(subsplits)
