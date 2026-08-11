@@ -20,7 +20,7 @@ final class PaymentStatuses
      */
     public static function of(object $payment): ?PaymentStatus
     {
-        return $payment instanceof HasPaymentStatus ? $payment->getStatus() : null;
+        return $payment instanceof StatusAwareInterface ? $payment->getStatus() : null;
     }
 
     /**
@@ -28,7 +28,7 @@ final class PaymentStatuses
      */
     public static function set(object $payment, PaymentStatus $status): bool
     {
-        if (! $payment instanceof HasPaymentStatus) {
+        if (! $payment instanceof StatusAwareInterface) {
             return false;
         }
 
@@ -39,6 +39,6 @@ final class PaymentStatuses
 
     public static function isTracked(object $payment): bool
     {
-        return $payment instanceof HasPaymentStatus;
+        return $payment instanceof StatusAwareInterface;
     }
 }
