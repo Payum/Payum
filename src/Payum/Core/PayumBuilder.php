@@ -21,6 +21,7 @@ use Payum\Core\Config\GatewayConfig;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\FallbackContainer;
+use Payum\Core\DI\ListableContainerInterface;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
@@ -680,7 +681,7 @@ class PayumBuilder
     {
         $names = [];
 
-        if ($container instanceof FallbackContainer || $container instanceof Container) {
+        if ($container instanceof ListableContainerInterface || $container instanceof Container) {
             $names = $container->getKnownEntryNames();
         }
 

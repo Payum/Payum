@@ -142,6 +142,43 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
+Services reached this way are resolvable from a gateway, but they cannot be autowired into the
+constructor of an action: Payum only turns the entries of a container into gateway container
+definitions when the container can report them. Implement
+`Payum\Core\DI\ListableContainerInterface` on the adapter to get that. A Symfony `ServiceLocator`
+is a good fit, since it both narrows what Payum can see and lists what it holds:
+
+```php
+<?php
+
+namespace App\DependencyInjection;
+
+use Payum\Core\DI\ListableContainerInterface;
+use Symfony\Contracts\Service\ServiceProviderInterface;
+
+class PayumContainerAdapter implements ListableContainerInterface
+{
+    public function __construct(
+        private ServiceProviderInterface $locator
+    ) {}
+
+    public function get(string $id): mixed
+    {
+        return $this->locator->get($id);
+    }
+
+    public function has(string $id): bool
+    {
+        return $this->locator->has($id);
+    }
+
+    public function getKnownEntryNames(): array
+    {
+        return array_keys($this->locator->getProvidedServices());
+    }
+}
+```
+
 For most applications the `addGlobalService()` approach shown above is simpler and does not require you to
 re-declare Payum's own services.
 

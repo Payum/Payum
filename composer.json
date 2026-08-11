@@ -92,7 +92,7 @@
         "nyholm/psr7": "^1.8"
     },
     "replace": {
-        "payum/core": "^1",
+        "payum/core": "^1 || ^2",
         "payum/paypal-express-checkout-nvp": "self.version",
         "payum/paypal-pro-checkout-nvp": "self.version",
         "payum/paypal-rest": "self.version",

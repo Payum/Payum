@@ -206,7 +206,9 @@ Pass a PHP-DI container and everything in it — including `'my.custom.service'`
 gateway's actions.
 
 Most framework containers cannot list what they hold, so Payum has no way to know which ids to make
-injectable. Register those with `addGlobalService()`, which works alongside your container:
+injectable. There are two ways around that.
+
+Register the ones you need with `addGlobalService()`, which works alongside your container:
 
 ```php
 <?php
@@ -220,6 +222,37 @@ $payum = (new PayumBuilder())
     // ... add gateways
     ->getPayum();
 ```
+
+Or, when your container is able to report its entries, let it say so by implementing
+`Payum\Core\DI\ListableContainerInterface`. Payum then makes every one of them injectable, without
+you having to list them one by one:
+
+```php
+<?php
+
+use Payum\Core\DI\ListableContainerInterface;
+
+class MyContainer implements ListableContainerInterface
+{
+    public function get(string $id): mixed { /* ... */ }
+
+    public function has(string $id): bool { /* ... */ }
+
+    public function getKnownEntryNames(): array
+    {
+        return ['logger', 'my.custom.service'];
+    }
+}
+
+$payum = (new PayumBuilder())
+    ->setGlobalContainer(new MyContainer())
+
+    // ... add gateways
+    ->getPayum();
+```
+
+A container which implements neither stays fully usable - its services are still resolved through the
+gateway containers - they just cannot be autowired.
 
 ## Accessing Services
 

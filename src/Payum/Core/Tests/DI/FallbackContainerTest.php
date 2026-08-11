@@ -7,6 +7,7 @@ namespace Payum\Core\Tests\DI;
 use DI\Container;
 use DI\ContainerBuilder;
 use Payum\Core\DI\FallbackContainer;
+use Payum\Core\DI\ListableContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -20,6 +21,13 @@ final class FallbackContainerTest extends TestCase
         $rc = new ReflectionClass(FallbackContainer::class);
 
         $this->assertTrue($rc->implementsInterface(ContainerInterface::class));
+    }
+
+    public function testShouldImplementListableContainerInterface(): void
+    {
+        $rc = new ReflectionClass(FallbackContainer::class);
+
+        $this->assertTrue($rc->implementsInterface(ListableContainerInterface::class));
     }
 
     public function testShouldBeFinal(): void
@@ -201,6 +209,38 @@ final class FallbackContainerTest extends TestCase
         $this->assertSame($expected, $container->get('foo'));
     }
 
+    public function testShouldReportTheKnownEntryNamesOfAListableContainer(): void
+    {
+        $container = new FallbackContainer(
+            new ListableContainerStub([
+                'foo' => 'fooVal',
+            ]),
+            $this->buildContainer([
+                'bar' => 'barVal',
+            ])
+        );
+
+        $names = $container->getKnownEntryNames();
+
+        $this->assertContains('foo', $names);
+        $this->assertContains('bar', $names);
+    }
+
+    public function testShouldResolveAServiceOfAListableContainer(): void
+    {
+        $expected = new stdClass();
+
+        $container = new FallbackContainer(
+            new ListableContainerStub([
+                'foo' => $expected,
+            ]),
+            $this->buildContainer()
+        );
+
+        $this->assertTrue($container->has('foo'));
+        $this->assertSame($expected, $container->get('foo'));
+    }
+
     /**
      * @param array<string, mixed> $definitions
      */
@@ -210,5 +250,34 @@ final class FallbackContainerTest extends TestCase
         $builder->addDefinitions($definitions);
 
         return $builder->build();
+    }
+}
+
+/**
+ * A container which is not a PHP-DI one but is able to report its entries.
+ */
+final class ListableContainerStub implements ListableContainerInterface
+{
+    /**
+     * @param array<string, mixed> $services
+     */
+    public function __construct(
+        private array $services = []
+    ) {
+    }
+
+    public function get(string $id): mixed
+    {
+        return $this->services[$id];
+    }
+
+    public function has(string $id): bool
+    {
+        return isset($this->services[$id]);
+    }
+
+    public function getKnownEntryNames(): array
+    {
+        return array_keys($this->services);
     }
 }
