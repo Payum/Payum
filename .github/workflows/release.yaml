@@ -1,28 +1,33 @@
 name: Release Version
 
 on:
+  milestone:
+    types: [closed]
   release:
     types: [published]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to publish. Must already exist in this repository."
+        description: "Version to release, for example 1.7.8."
         required: true
         type: string
       branch:
-        description: "Branch the tag was cut from. Its splits are updated first."
+        description: "Branch to release from. Derived from the version when empty."
         required: false
         type: string
 
+# contents: write lets GITHUB_TOKEN create this repository's own release.
+# Creating it with ACCESS_TOKEN instead would publish a release event and run
+# this workflow a second time.
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: release-${{ inputs.tag || github.event.release.tag_name }}
+  group: release-${{ inputs.tag || github.event.release.tag_name || github.event.milestone.title }}
 
 jobs:
   release:
-    name: Release ${{ inputs.tag || github.event.release.tag_name }}
+    name: Release ${{ inputs.tag || github.event.release.tag_name || github.event.milestone.title }}
     runs-on: ubuntu-latest
 
     steps:
@@ -52,11 +57,12 @@ jobs:
 
       - name: Run release
         env:
-          TAG: ${{ inputs.tag || github.event.release.tag_name }}
-          BRANCH: ${{ inputs.branch || github.event.release.target_commitish }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name || github.event.milestone.title }}
+          BRANCH: ${{ inputs.branch }}
           TAGGER_NAME: ${{ steps.gpg.outputs.name }}
           TAGGER_EMAIL: ${{ steps.gpg.outputs.email }}
           GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ORIGIN_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "$TAGGER_NAME"
           git config user.email "$TAGGER_EMAIL"

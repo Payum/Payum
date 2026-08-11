@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 #
-# Publishes an existing tag of this repository to every split repository.
+# Releases a version of this repository and every package split out of it.
 #
 #     bin/release <tag> [branch]
 #
-# For every package in bin/subsplits this
+# Closing a milestone is what starts a release, and a milestone only carries its
+# title, so this works out the rest. It tags this repository and publishes a
+# GitHub release for it, then for every package in bin/subsplits
 #
 #     1. splits the package out of <tag> with splitsh-lite,
 #     2. creates <tag> on the split repository, signed, pointing at that split
 #        commit, and
 #     3. creates a GitHub release for it with generated release notes.
 #
-# <tag> has to exist in this repository already; this script never creates it
-# here. When [branch] is given the split branches are brought up to date first,
-# exactly as bin/subtree-split does on every push.
+# Every step is skipped when it has already been done, so re-running a release
+# is safe. When [branch] is omitted it is derived from the tag: 1.7.8 is cut
+# from 1.7.x, 2.0.0 from 2.x. Given a branch, the split branches are brought up
+# to date first, exactly as bin/subtree-split does on every push.
+#
+# Set ORIGIN_GH_TOKEN to create this repository's own release under a different
+# token than the split repositories use.
 #
 # Needs: splitsh-lite (bin/install-splitsh-lite), an SSH key with write access
 # to the Payum organisation, a GPG key able to sign tags, and gh authenticated
@@ -34,16 +40,79 @@ SPLITSH_LITE="${SPLITSH_LITE:-./bin/splitsh-lite}"
 export SPLITSH_LITE
 SUBSPLITS="$(dirname "$0")/subsplits"
 SPLIT_REF="refs/heads/payum-release-split"
+ORIGIN_GH_TOKEN="${ORIGIN_GH_TOKEN:-}"
+# GITHUB_REPOSITORY is always set by Actions; the remote is only parsed when
+# running this by hand. git config is used rather than `git remote get-url`
+# because that one applies url.<base>.insteadOf rewrites.
+ORIGIN_REPO="${GITHUB_REPOSITORY:-$(git config --get remote.origin.url | sed -E 's#^(git@[^:]*:|https://[^/]*/)##; s#\.git$##')}"
+
+PRERELEASE=""
+
+case "$TAG" in
+    *-*) PRERELEASE="--prerelease" ;;
+esac
 
 function subsplits()
 {
     grep -Ev '^[[:space:]]*(#|$)' "$SUBSPLITS"
 }
 
+# This repository's own release is created under ORIGIN_GH_TOKEN when set, so
+# that a release made by CI does not trigger this workflow a second time.
+function origin_gh()
+{
+    if [[ -n "$ORIGIN_GH_TOKEN" ]]
+    then
+        GH_TOKEN="$ORIGIN_GH_TOKEN" gh "$@"
+    else
+        gh "$@"
+    fi
+}
+
+if [[ ! "$TAG" =~ ^[0-9] ]]
+then
+    echo "$TAG does not look like a version, refusing to release it" >&2
+    exit 1
+fi
+
+# A closed milestone names the version but not the branch it comes from, so
+# 1.7.8 has to find 1.7.x and 2.0.0 has to find 2.x.
+if [[ -z "$BRANCH" ]]
+then
+    for CANDIDATE in "${TAG%.*}.x" "${TAG%%.*}.x"
+    do
+        if git rev-parse -q --verify "refs/remotes/origin/$CANDIDATE" > /dev/null
+        then
+            BRANCH="$CANDIDATE"
+            break
+        fi
+    done
+
+    if [[ -z "$BRANCH" ]]
+    then
+        echo "Could not work out which branch $TAG is cut from, pass it as the second argument" >&2
+        exit 1
+    fi
+elif ! git rev-parse -q --verify "refs/remotes/origin/$BRANCH" > /dev/null
+then
+    echo "origin/$BRANCH does not exist" >&2
+    exit 1
+fi
+
+echo "Releasing $TAG from origin/$BRANCH"
+
+# Tag this repository if closing the milestone is what got us here.
 if ! git rev-parse -q --verify "refs/tags/$TAG" > /dev/null
 then
-    echo "Tag $TAG does not exist in this repository" >&2
-    exit 1
+    if [[ -n "$(git ls-remote --tags origin "refs/tags/$TAG")" ]]
+    then
+        git fetch --quiet origin "refs/tags/$TAG:refs/tags/$TAG"
+    else
+        echo "Tagging $ORIGIN_REPO $TAG at origin/$BRANCH"
+
+        git tag -s "$TAG" "origin/$BRANCH" -m "Release $TAG"
+        git push origin "refs/tags/$TAG"
+    fi
 fi
 
 TAG_OBJECT=$(git rev-parse "refs/tags/$TAG")
@@ -51,17 +120,24 @@ TAG_COMMIT=$(git rev-parse "$TAG^{commit}")
 
 # Bring the split branches up to date first, so that the commit the tag ends up
 # pointing at is reachable from the split branch as well.
-if [[ -n "$BRANCH" ]]
+if ! git merge-base --is-ancestor "$TAG_COMMIT" "origin/$BRANCH"
 then
-    if ! git rev-parse -q --verify "refs/remotes/origin/$BRANCH" > /dev/null
-    then
-        echo "::warning::origin/$BRANCH does not exist, skipping the branch split"
-        BRANCH=""
-    elif ! git merge-base --is-ancestor "$TAG_COMMIT" "origin/$BRANCH"
-    then
-        echo "::warning::$TAG is not contained in origin/$BRANCH, skipping the branch split"
-        BRANCH=""
-    fi
+    echo "::warning::$TAG is not contained in origin/$BRANCH, skipping the branch split"
+    BRANCH=""
+fi
+
+if origin_gh release view "$TAG" --repo "$ORIGIN_REPO" > /dev/null 2>&1
+then
+    echo "Release $TAG already exists on $ORIGIN_REPO"
+else
+    echo "Releasing $ORIGIN_REPO $TAG"
+
+    origin_gh release create "$TAG" \
+        --repo "$ORIGIN_REPO" \
+        --title "Release $TAG" \
+        --verify-tag \
+        --generate-notes \
+        $PRERELEASE
 fi
 
 if [[ -n "$BRANCH" ]]
@@ -137,12 +213,6 @@ do
         echo "Release $TAG already exists on $REPOSITORY"
         continue
     fi
-
-    PRERELEASE=""
-
-    case "$TAG" in
-        *-*) PRERELEASE="--prerelease" ;;
-    esac
 
     gh release create "$TAG" \
         --repo "$REPOSITORY" \
