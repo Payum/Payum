@@ -56,7 +56,7 @@ final class FallbackContainer implements ListableContainerInterface
     private static function knownEntryNamesOf(ContainerInterface $container): array
     {
         if ($container instanceof ListableContainerInterface) {
-            return array_values($container->getKnownEntryNames());
+            return $container->getKnownEntryNames();
         }
 
         if ($container instanceof Container) {
