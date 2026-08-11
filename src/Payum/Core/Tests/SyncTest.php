@@ -14,10 +14,10 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Handler\SyncHandlerInterface;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
-use Payum\Core\Model\HasPaymentStatus;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Payout;
+use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -163,7 +163,7 @@ final class AcmeSyncHandler implements SyncHandlerInterface
     }
 }
 
-class TrackedSyncPayment extends Payment implements HasPaymentStatus
+class TrackedSyncPayment extends Payment implements StatusAwareInterface
 {
     private PaymentStatus $status = PaymentStatus::New;
 
