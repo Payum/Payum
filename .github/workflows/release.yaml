@@ -1,23 +1,63 @@
 name: Release Version
 
 on:
-  milestone:
-    types: [closed]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish. Must already exist in this repository."
+        required: true
+        type: string
+      branch:
+        description: "Branch the tag was cut from. Its splits are updated first."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.event.release.tag_name }}
 
 jobs:
-  tag-release:
-    name: Release
+  release:
+    name: Release ${{ inputs.tag || github.event.release.tag_name }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Download splitsh-lite
-        run: |
-          wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
-          tar -xvf lite_linux_amd64.tar.gz
-          mv  ./splitsh-lite bin/splitsh-lite
+      - name: Install SSH key
+        uses: "shimataro/ssh-key-action@87a8f067114a8ce263df83e9ed5c849953548bc3" # v2.8.1
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Import GPG key
+        id: gpg
+        uses: "crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd" # v7.0.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_tag_gpgsign: true
+
+      - name: Install splitsh-lite
+        run: bin/install-splitsh-lite
 
       - name: Run release
-        run: bin/release ${{ github.event.milestone.title }}
+        env:
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          BRANCH: ${{ inputs.branch || github.event.release.target_commitish }}
+          TAGGER_NAME: ${{ steps.gpg.outputs.name }}
+          TAGGER_EMAIL: ${{ steps.gpg.outputs.email }}
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config user.name "$TAGGER_NAME"
+          git config user.email "$TAGGER_EMAIL"
+          bin/release "$TAG" "$BRANCH"

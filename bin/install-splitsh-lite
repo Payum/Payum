@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# Downloads splitsh-lite into bin/splitsh-lite (or $1).
+#
+# splitsh-lite is used instead of `git subtree split` because the two no longer
+# agree: measured against the splits published from 2.x, git 2.55's subtree
+# split puts 6 of the 16 packages on different commits, so switching would
+# rewrite the history of the read-only split repositories. It is also ~35x
+# slower per package.
+#
+# v1.0.1 is the last splitsh-lite release that ships prebuilt binaries, and is
+# the build that produced every split published so far. It is pinned by
+# checksum: bin/splitsh-lite used to be committed to this repository, and the
+# linux checksum below is that exact binary.
+
+set -e
+
+VERSION=v1.0.1
+TARGET="${1:-bin/splitsh-lite}"
+
+case "$(uname -s)/$(uname -m)" in
+    Linux/x86_64)
+        ASSET=lite_linux_amd64.tar.gz
+        CHECKSUM=ec46c5a409422bf55b26f7de1faab67c2320362934947f984872b3aedc4a9d99
+        ;;
+    Darwin/x86_64)
+        ASSET=lite_darwin_amd64.tar.gz
+        CHECKSUM=b9da62bdf77919f4c6ce6c44d38e9a3c14e0eff99d2866124c5061b628dec92f
+        ;;
+    *)
+        cat >&2 <<MESSAGE
+splitsh-lite $VERSION publishes linux/amd64 and darwin/amd64 builds only, and the
+darwin/amd64 build segfaults under Rosetta on Apple Silicon. There is no binary
+for $(uname -s)/$(uname -m).
+
+Run the split on GitHub Actions instead:
+
+    gh workflow run subtree-split.yaml --ref <branch>
+    gh workflow run release.yaml -f tag=<tag>
+
+MESSAGE
+        exit 1
+        ;;
+esac
+
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+curl -fsSL -o "$TMP_DIR/splitsh-lite.tar.gz" \
+    "https://github.com/splitsh/lite/releases/download/$VERSION/$ASSET"
+tar -xzf "$TMP_DIR/splitsh-lite.tar.gz" -C "$TMP_DIR"
+
+if command -v sha256sum > /dev/null; then
+    echo "$CHECKSUM  $TMP_DIR/splitsh-lite" | sha256sum --check --status
+else
+    echo "$CHECKSUM  $TMP_DIR/splitsh-lite" | shasum --algorithm 256 --check --status
+fi
+
+mkdir -p "$(dirname "$TARGET")"
+mv "$TMP_DIR/splitsh-lite" "$TARGET"
+chmod +x "$TARGET"
+
+echo "splitsh-lite $VERSION installed to $TARGET"

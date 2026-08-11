@@ -1,0 +1,25 @@
+# Packages published as read-only subtree splits.
+#
+# One line per package:
+#
+#     <prefix in this repository>|<git remote name>|<GitHub repository>
+#
+# Read by bin/subtree-split and bin/release; this is the single source of truth
+# for both. Order is the order the packages are split in.
+
+src/Payum/Core/|core|Payum/Core
+src/Payum/AuthorizeNet/Aim/|authorize-net-aim|Payum/AuthorizeNetAim
+src/Payum/Be2Bill|be2bill|Payum/Be2Bill
+src/Payum/Paypal/ExpressCheckout/Nvp|paypal-express-checkout|Payum/PaypalExpressCheckoutNvp
+src/Payum/Paypal/Masspay/Nvp|paypal-masspay|Payum/PaypalMasspayNvp
+src/Payum/Paypal/ProCheckout/Nvp|paypal-pro-checkout|Payum/PaypalProCheckoutNvp
+src/Payum/Paypal/ProHosted/Nvp|paypal-pro-hosted|Payum/PaypalProHostedNvp
+src/Payum/Paypal/Ipn|paypal-ipn|Payum/PaypalIpn
+src/Payum/Paypal/Rest|paypal-rest|Payum/PaypalRest
+src/Payum/Offline|offline|Payum/Offline
+src/Payum/Payex|payex|Payum/Payex
+src/Payum/Klarna/Checkout|klarna-checkout|Payum/KlarnaCheckout
+src/Payum/Klarna/Invoice|klarna-invoice|Payum/KlarnaInvoice
+src/Payum/Sofort|sofort|Payum/Sofort
+src/Payum/Stripe|stripe|Payum/Stripe
+src/Payum/Skeleton|skeleton|Payum/Skeleton
