@@ -9,6 +9,7 @@ A command is what the caller wants done. It is immutable, carries no services, a
 | `Payum\Core\Command\CaptureCommand` | `Capture` | `CaptureResult` | `amount`, `idempotencyKey` |
 | `Payum\Core\Command\AuthorizeCommand` | `Authorize` | `AuthorizeResult` | `amount`, `idempotencyKey` |
 | `Payum\Core\Command\RefundCommand` | `Refund` | `RefundResult` | `amount`, `reason`, `idempotencyKey` |
+| `Payum\Core\Command\CancelCommand` | `Cancel` | `CancelResult` | `reason`, `idempotencyKey` |
 
 ### Building one
 
@@ -33,7 +34,12 @@ CaptureCommand::forToken($token, idempotencyKey: $order->getUuid());
 
 // Partial refund with a reason the PSP will record.
 RefundCommand::forPayment($payment, amount: 500, reason: 'damaged_on_arrival');
+
+// Void an authorization the merchant has decided not to settle.
+CancelCommand::forPayment($payment, reason: 'out_of_stock');
 ```
+
+Cancel calls a payment off before the money moves — voiding an authorization, or abandoning a payment the customer never completed. It is not a refund, which gives back money already taken, and it carries no amount because it is all or nothing.
 
 Give it neither a token nor a payment and the constructor throws — it has to know what it is operating on.
 
