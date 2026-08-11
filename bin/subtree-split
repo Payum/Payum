@@ -17,11 +17,15 @@ BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
 SPLITSH_LITE="${SPLITSH_LITE:-./bin/splitsh-lite}"
 SUBSPLITS="$(dirname "$0")/subsplits"
 
+# The split repositories are generated from this one, so the split is the only
+# correct history they can have and anything else on the branch is stale. That
+# happens whenever this repository's history is rewritten or a branch is
+# renamed, which is why the push is forced rather than left to be rejected.
 function split()
 {
     # split_new_repo $1 $2
     SHA1=`$SPLITSH_LITE --prefix=$1 --origin=origin/$BRANCH`
-    git push $2 "$SHA1:refs/heads/$BRANCH"
+    git push $2 "$SHA1:refs/heads/$BRANCH" -f
 }
 
 function split_new_repo()
