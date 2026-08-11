@@ -14,8 +14,8 @@ use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
-use Payum\Core\Model\HasPaymentStatus;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Failure;
@@ -171,7 +171,7 @@ final class CoreDefaults
     }
 }
 
-class TrackedPayment extends Payment implements HasPaymentStatus
+class TrackedPayment extends Payment implements StatusAwareInterface
 {
     private PaymentStatus $status = PaymentStatus::New;
 
@@ -205,7 +205,7 @@ final class StatusSpyStorage implements StorageInterface
 
     public function update(object $model): object
     {
-        $this->statusWhenUpdated = $model instanceof HasPaymentStatus ? $model->getStatus() : null;
+        $this->statusWhenUpdated = $model instanceof StatusAwareInterface ? $model->getStatus() : null;
 
         return $model;
     }

@@ -92,14 +92,14 @@ A handler never writes to the payment. It declares the payment's new state as pa
 
 ### Keeping the status on the payment
 
-Implement `Payum\Core\Model\HasPaymentStatus` on your payment and Payum keeps it current after every command:
+Implement `Payum\Core\Model\StatusAwareInterface` on your payment — or your payout — and Payum keeps it current after every command:
 
 ```php
-use Payum\Core\Model\HasPaymentStatus;
+use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Result\PaymentStatus;
 
-class Payment implements PaymentInterface, HasPaymentStatus
+class Payment implements PaymentInterface, StatusAwareInterface
 {
     #[ORM\Column(enumType: PaymentStatus::class)]
     private PaymentStatus $status = PaymentStatus::New;

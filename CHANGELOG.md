@@ -2,7 +2,7 @@
 
 ## 2.0.0 (TBD)
 
-* Add `Payum\Core\Model\HasPaymentStatus`. A payment implementing it has its status kept current by Payum after every command, which makes it readable without a gateway and queryable in storage. Read it through `Payum\Core\Model\PaymentStatuses`
+* Add `Payum\Core\Model\StatusAwareInterface`. A subject implementing it has its status kept current by Payum after every command, which makes it readable without a gateway and queryable in storage. Read it through `Payum\Core\Model\PaymentStatuses`
 * `Result::$status` is now null when an operation concluded nothing about the payment, so a declined refund no longer reads as a failed payment. `failed()` takes an optional status for a failure that really is terminal
 * Add a middleware pipeline around command execution. `Payum\Core\Middleware\MiddlewareInterface` wraps a command, `PayumBuilder::addMiddleware()` registers one for every gateway, and a gateway declares its own through `Payum\Core\Gateway\DeclaresMiddleware`
 * Extensions registered on a gateway now run for commands too, through `Payum\Core\Middleware\LegacyExtensionMiddleware`
