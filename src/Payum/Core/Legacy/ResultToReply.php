@@ -8,6 +8,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\Result;
@@ -29,7 +30,7 @@ final class ResultToReply
         $next = $result->next;
 
         return match (true) {
-            null === $next => null,
+            ! $next instanceof NextAction => null,
             $next instanceof Redirect => new HttpRedirect($next->url, $next->statusCode, $next->headers),
             $next instanceof PostRedirect => new HttpPostRedirect($next->url, $next->fields),
             // Rendering, 3-D Secure and polling have no reply to become. A 1.x caller has nowhere to put

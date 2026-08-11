@@ -14,6 +14,7 @@ use Payum\Core\Handler\CancelHandlerInterface;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
+use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
@@ -29,6 +30,7 @@ use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -165,7 +167,7 @@ final class LegacyRequestTest extends TestCase
     {
         return (new PayumBuilder())
             ->addDefaultStorages()
-            ->addStorage(LegacyTrackedPayment::class, new \Payum\Core\Storage\FilesystemStorage(
+            ->addStorage(LegacyTrackedPayment::class, new FilesystemStorage(
                 sys_get_temp_dir(),
                 LegacyTrackedPayment::class,
                 'number',
@@ -197,7 +199,7 @@ final class LegacyGateway implements PaymentGateway
 
     public function logo(): Logo
     {
-        return Logo\Url::create('https://acme.test/logo.svg');
+        return Url::create('https://acme.test/logo.svg');
     }
 
     public function name(): string
