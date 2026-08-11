@@ -193,10 +193,13 @@ class ArrayObject extends \ArrayObject
     }
 
     /**
-     * @param array<string, mixed>|ArrayObject<string, mixed>|\ArrayObject<string, mixed>|null $input
+     * Accepts everything the constructor does, so that a model which is an ArrayAccess of its own - a
+     * Payum\Core\Model\ArrayObject for instance - can be wrapped as well.
+     *
+     * @param array<string, mixed>|ArrayObject<string, mixed>|\ArrayObject<string, mixed>|ArrayAccess<string, mixed>|Traversable<string, mixed>|null $input
      * @return ArrayObject<string, mixed>
      */
-    public static function ensureArrayObject(array | self | \ArrayObject | null $input): self
+    public static function ensureArrayObject(array | self | \ArrayObject | ArrayAccess | Traversable | null $input): self
     {
         return $input instanceof static ? $input : new self($input);
     }
