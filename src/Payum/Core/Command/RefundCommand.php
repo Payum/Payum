@@ -7,6 +7,7 @@ namespace Payum\Core\Command;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway\Capability;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\RefundResult;
 use Payum\Core\Security\TokenInterface;
 
@@ -57,6 +58,11 @@ final class RefundCommand implements CommandInterface
     }
 
     public function payment(): ?PaymentInterface
+    {
+        return $this->payment;
+    }
+
+    public function subject(): ?SubjectInterface
     {
         return $this->payment;
     }

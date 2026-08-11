@@ -10,6 +10,8 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
@@ -46,7 +48,7 @@ final class Context
         private readonly GatewayInterface $gateway,
         private readonly ServerRequestInterface $httpRequest,
         private readonly GenericTokenFactoryInterface $tokenFactory,
-        private readonly ?PaymentInterface $payment = null,
+        private readonly ?SubjectInterface $subject = null,
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
     ) {
@@ -111,9 +113,29 @@ final class Context
         return $this->state;
     }
 
+    /**
+     * What this command is operating on, whatever it is. Handlers normally want one of the narrower
+     * accessors below.
+     */
+    public function subject(): ?SubjectInterface
+    {
+        return $this->subject;
+    }
+
+    /**
+     * Null when the subject is not a payment, which is the case for a payout.
+     */
     public function payment(): ?PaymentInterface
     {
-        return $this->payment;
+        return $this->subject instanceof PaymentInterface ? $this->subject : null;
+    }
+
+    /**
+     * Null when the subject is not a payout.
+     */
+    public function payout(): ?PayoutInterface
+    {
+        return $this->subject instanceof PayoutInterface ? $this->subject : null;
     }
 
     /**
@@ -154,13 +176,13 @@ final class Context
      */
     public function state(): ArrayObject
     {
-        if (! $this->payment instanceof PaymentInterface) {
-            throw new LogicException('There is no payment in this context, so there is no state to read.');
+        if (! $this->subject instanceof SubjectInterface) {
+            throw new LogicException('There is nothing in this context to read state from.');
         }
 
         // Cached, so every call within one execution mutates the same instance. Core writes it back onto
         // the payment after the handler returns -- inline for now, PersistStateMiddleware later.
-        return $this->state ??= ArrayObject::ensureArrayObject($this->payment->getDetails());
+        return $this->state ??= ArrayObject::ensureArrayObject($this->subject->getDetails());
     }
 
     /**

@@ -8,6 +8,7 @@ A handler answers exactly one command. There is one interface per command, so bo
 | `AuthorizeCommand` | `Payum\Core\Handler\AuthorizeHandlerInterface` |
 | `RefundCommand` | `Payum\Core\Handler\RefundHandlerInterface` |
 | `CancelCommand` | `Payum\Core\Handler\CancelHandlerInterface` |
+| `PayoutCommand` | `Payum\Core\Handler\PayoutHandlerInterface` |
 
 ```php
 <?php
@@ -67,7 +68,9 @@ Do not take the payment, the token or the HTTP request. Those belong to a single
 | Method | What it gives you |
 | :--- | :--- |
 | `state()` | The PSP state carried across requests, as an `ArrayObject` |
-| `payment()` | The payment, resolved from the command or loaded from its token |
+| `subject()` | What the command operates on, resolved from the command or loaded from its token |
+| `payment()` | The subject when it is a payment, else null |
+| `payout()` | The subject when it is a payout, else null |
 | `token()` | The token this execution arrived on, if any |
 | `httpRequest()` | The inbound request as PSR-7 |
 | `tokens()` | The token factory, for minting a notify or second-hop URL |

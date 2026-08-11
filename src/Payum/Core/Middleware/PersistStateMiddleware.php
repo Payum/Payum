@@ -7,7 +7,7 @@ namespace Payum\Core\Middleware;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Handler\Context;
-use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
@@ -50,21 +50,21 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
      */
     private function persist(CommandInterface $command, Context $context): void
     {
-        $payment = $context->payment();
+        $subject = $context->subject();
         $state = $context->pendingState();
 
-        if (! $payment instanceof PaymentInterface || ! $state instanceof ArrayObject) {
+        if (! $subject instanceof SubjectInterface || ! $state instanceof ArrayObject) {
             return;
         }
 
-        $payment->setDetails($state);
+        $subject->setDetails($state);
 
-        // Core writes back only what it loaded. A payment handed to the command directly belongs to the
+        // Core writes back only what it loaded. A model handed to the command directly belongs to the
         // caller, who persists it on their own terms.
         if (! $command->token() instanceof TokenInterface || ! $this->storages instanceof StorageRegistryInterface) {
             return;
         }
 
-        $this->storages->getStorage($payment::class)->update($payment);
+        $this->storages->getStorage($subject::class)->update($subject);
     }
 }

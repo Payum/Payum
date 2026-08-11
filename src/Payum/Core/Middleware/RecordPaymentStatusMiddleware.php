@@ -6,8 +6,8 @@ namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Handler\Context;
-use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PaymentStatuses;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 
@@ -35,12 +35,12 @@ final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPri
         // not learn what the payment's status is, and guessing would be worse than leaving it.
         $result = $next($command, $context);
 
-        $payment = $context->payment();
+        $subject = $context->subject();
 
         // A null status means the operation concluded nothing about the payment — a declined refund
         // leaves a captured payment captured.
-        if ($payment instanceof PaymentInterface && $result->status instanceof PaymentStatus) {
-            PaymentStatuses::set($payment, $result->status);
+        if ($subject instanceof SubjectInterface && $result->status instanceof PaymentStatus) {
+            PaymentStatuses::set($subject, $result->status);
         }
 
         return $result;
