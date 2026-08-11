@@ -5,7 +5,7 @@ namespace Payum\Core\Model;
 /**
  * @method array getDetails()
  */
-interface PaymentInterface extends CreditCardPaymentInterface, DetailsAggregateInterface, DetailsAwareInterface
+interface PaymentInterface extends CreditCardPaymentInterface, SubjectInterface
 {
     /**
      * @return string

@@ -48,7 +48,7 @@ final class CancelCommandTest extends TestCase
     public function testShouldRefuseToBeBuiltWithNothingToCancel(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('needs either a token or a payment');
+        $this->expectExceptionMessage('needs either a token or something to cancel');
 
         new CancelCommand();
     }

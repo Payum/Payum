@@ -5,7 +5,7 @@ namespace Payum\Core\Model;
 /**
  * @method array getDetails()
  */
-interface PayoutInterface extends DetailsAggregateInterface, DetailsAwareInterface
+interface PayoutInterface extends SubjectInterface
 {
     /**
      * @return string

@@ -20,6 +20,7 @@ $result->requiresInteraction();  // $next !== null
 | `AuthorizeResult` | `authorizedAmount`, `expiresAt` |
 | `RefundResult` | `refundedAmount` |
 | `CancelResult` | — |
+| `PayoutResult` | `paidOutAmount` |
 
 ### Building one
 

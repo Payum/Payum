@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Command;
 
 use Payum\Core\Gateway\Capability;
-use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 
@@ -31,12 +31,13 @@ interface CommandInterface
     public static function capability(): Capability;
 
     /**
-     * The payment being operated on, when the caller had one to hand.
+     * What is being operated on -- a payment, a payout -- when the caller had it to hand.
      *
-     * Null when the command carries only a token; core then resolves the payment from the token's
-     * identity.
+     * Null when the command carries only a token, which is the usual case for anything arriving over
+     * HTTP: core then resolves the subject from the token's identity. Handlers should read the resolved
+     * one from the context rather than this.
      */
-    public function payment(): ?PaymentInterface;
+    public function subject(): ?SubjectInterface;
 
     /**
      * The token this command arrived on, when it came in over HTTP.

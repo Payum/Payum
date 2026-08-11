@@ -10,6 +10,7 @@ A command is what the caller wants done. It is immutable, carries no services, a
 | `Payum\Core\Command\AuthorizeCommand` | `Authorize` | `AuthorizeResult` | `amount`, `idempotencyKey` |
 | `Payum\Core\Command\RefundCommand` | `Refund` | `RefundResult` | `amount`, `reason`, `idempotencyKey` |
 | `Payum\Core\Command\CancelCommand` | `Cancel` | `CancelResult` | `reason`, `idempotencyKey` |
+| `Payum\Core\Command\PayoutCommand` | `Payout` | `PayoutResult` | `idempotencyKey` |
 
 ### Building one
 
@@ -39,7 +40,28 @@ RefundCommand::forPayment($payment, amount: 500, reason: 'damaged_on_arrival');
 CancelCommand::forPayment($payment, reason: 'out_of_stock');
 ```
 
-Cancel calls a payment off before the money moves — voiding an authorization, or abandoning a payment the customer never completed. It is not a refund, which gives back money already taken, and it carries no amount because it is all or nothing.
+Cancel calls it off before the money moves — voiding an authorization, abandoning a payment the customer never completed, or stopping a payout that has not gone out. It is not a refund, which gives back money already taken, and it carries no amount because it is all or nothing.
+
+### What a command operates on
+
+Every command acts on a **subject**: a payment for most of them, a payout for `PayoutCommand`. Both implement `Payum\Core\Model\SubjectInterface`, which is all core needs — details it can read and write, and a class to look a storage up by.
+
+```php
+// a payout is not a payment
+PayoutCommand::forPayout($payout);
+
+// cancelling does not care which it is
+CancelCommand::forPayment($payment);
+CancelCommand::forPayout($payout);
+```
+
+The subject on the command is **what the caller supplied**, which is null whenever the command carries only a token — the usual case for anything arriving over HTTP. Core resolves the real one from the token's identity, so a handler reads it from the context instead:
+
+```php
+$context->subject();   // whatever it is
+$context->payment();   // null when it is not a payment
+$context->payout();    // null when it is not a payout
+```
 
 Give it neither a token nor a payment and the constructor throws — it has to know what it is operating on.
 

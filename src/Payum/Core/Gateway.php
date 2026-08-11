@@ -18,7 +18,7 @@ use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\Pipeline;
-use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Result\Result;
@@ -393,7 +393,7 @@ class Gateway implements GatewayInterface
             $this->container->get(PaymentGateway::class),
             $this->container->get(ServerRequestInterface::class),
             $this->container->get(GenericTokenFactoryInterface::class),
-            $this->resolvePayment($command),
+            $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,
         );
@@ -405,10 +405,10 @@ class Gateway implements GatewayInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function resolvePayment(CommandInterface $command): ?PaymentInterface
+    private function resolveSubject(CommandInterface $command): ?SubjectInterface
     {
-        if (($payment = $command->payment()) instanceof PaymentInterface) {
-            return $payment;
+        if (($subject = $command->subject()) instanceof SubjectInterface) {
+            return $subject;
         }
 
         $identity = $command->token()?->getDetails();
@@ -421,6 +421,6 @@ class Gateway implements GatewayInterface
             ->getStorage($identity->getClass())
             ->find($identity);
 
-        return $model instanceof PaymentInterface ? $model : null;
+        return $model instanceof SubjectInterface ? $model : null;
     }
 }
