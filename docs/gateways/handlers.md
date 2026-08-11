@@ -9,6 +9,7 @@ A handler answers exactly one command. There is one interface per command, so bo
 | `RefundCommand` | `Payum\Core\Handler\RefundHandlerInterface` |
 | `CancelCommand` | `Payum\Core\Handler\CancelHandlerInterface` |
 | `PayoutCommand` | `Payum\Core\Handler\PayoutHandlerInterface` |
+| `SyncCommand` | `Payum\Core\Handler\SyncHandlerInterface` |
 
 ```php
 <?php

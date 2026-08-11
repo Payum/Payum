@@ -11,6 +11,7 @@ A command is what the caller wants done. It is immutable, carries no services, a
 | `Payum\Core\Command\RefundCommand` | `Refund` | `RefundResult` | `amount`, `reason`, `idempotencyKey` |
 | `Payum\Core\Command\CancelCommand` | `Cancel` | `CancelResult` | `reason`, `idempotencyKey` |
 | `Payum\Core\Command\PayoutCommand` | `Payout` | `PayoutResult` | `idempotencyKey` |
+| `Payum\Core\Command\SyncCommand` | `Sync` | `SyncResult` | — |
 
 ### Building one
 
@@ -41,6 +42,20 @@ CancelCommand::forPayment($payment, reason: 'out_of_stock');
 ```
 
 Cancel calls it off before the money moves — voiding an authorization, abandoning a payment the customer never completed, or stopping a payout that has not gone out. It is not a refund, which gives back money already taken, and it carries no amount because it is all or nothing.
+
+### Refreshing from the PSP
+
+`SyncCommand` asks the PSP what it currently thinks and records the answer, which is how a stored status catches up after a webhook that never arrived:
+
+```php
+$result = $gateway->execute(SyncCommand::forPayment($payment));
+
+$result->status;   // whatever the PSP says
+```
+
+It is for callers — an admin screen with a refresh button, a reconciliation job. A handler that needs fresh data mid-flow calls its api directly instead; dispatching a command to fetch something it uses two lines later is indirection for its own sake.
+
+It reads rather than mutates, so it takes no idempotency key. Not every PSP offers a way to re-read, which is why `Capability::Sync` is a capability like any other rather than something assumed.
 
 ### What a command operates on
 
