@@ -27,6 +27,8 @@ enum Capability: string
 
     case Refund = 'refund';
 
+    case Sync = 'sync';
+
     // Nuance -- declared, because no handler list implies them.
     case MultiCurrency = 'multi_currency';
 

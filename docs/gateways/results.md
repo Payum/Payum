@@ -21,6 +21,7 @@ $result->requiresInteraction();  // $next !== null
 | `RefundResult` | `refundedAmount` |
 | `CancelResult` | — |
 | `PayoutResult` | `paidOutAmount` |
+| `SyncResult` | — |
 
 ### Building one
 

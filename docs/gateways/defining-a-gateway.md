@@ -108,7 +108,7 @@ The full set:
 
 | Derived from `handlers()` | Declared |
 | :--- | :--- |
-| `Authorize`, `Cancel`, `Capture`, `Payout`, `Refund` | `MultiCurrency`, `PartialCapture`, `PartialRefund`, `Recurring`, `StoredPaymentMethods`, `ThreeDSecure`, `Webhooks` |
+| `Authorize`, `Cancel`, `Capture`, `Payout`, `Refund`, `Sync` | `MultiCurrency`, `PartialCapture`, `PartialRefund`, `Recurring`, `StoredPaymentMethods`, `ThreeDSecure`, `Webhooks` |
 
 The enum is string-backed, so a capability list can be persisted, sent as JSON, or rendered in an admin screen.
 
