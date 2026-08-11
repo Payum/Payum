@@ -16,11 +16,18 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Legacy\RequestToCommand;
+use Payum\Core\Legacy\ResultToReply;
+use Payum\Core\Legacy\StatusMarker;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\Pipeline;
+use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Request\Generic;
+use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -144,6 +151,13 @@ class Gateway implements GatewayInterface
             __METHOD__,
             self::class
         );
+
+        // A gateway built from handlers has no actions to find, so a 1.x request would report itself
+        // unsupported. Translate instead: an application should not break because a gateway package it
+        // depends on moved to handlers.
+        if ($this->handlerMap instanceof HandlerMap && ! $this->findActionSupported($request)) {
+            return $this->executeThroughHandlers($request, $catchReply);
+        }
 
         $context = new Context($this, $request, $this->stack);
 
@@ -400,10 +414,90 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param CommandInterface<Result> $command
-     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     */
+    /**
+     * Answers a 1.x request with the handler that means the same thing.
+     *
+     * Throws the matching reply when the handler decided the customer has somewhere to be, which is how a
+     * 1.x caller expects to hear about it.
+     */
+    private function executeThroughHandlers(object $request, bool $catchReply): ?Base
+    {
+        if ($request instanceof GetStatusInterface) {
+            $this->answerStatus($request);
+
+            return null;
+        }
+
+        $subject = $this->resolveSubjectOf($request);
+        $command = RequestToCommand::translate($request, $subject);
+
+        if (! $command instanceof CommandInterface || ! $this->supportsCommand($command::class)) {
+            throw RequestNotSupportedException::create($request);
+        }
+
+        $reply = ResultToReply::translate($this->dispatch($command));
+
+        if (! $reply instanceof Base) {
+            return null;
+        }
+
+        if ($catchReply) {
+            return $reply;
+        }
+
+        throw $reply;
+    }
+
+    /**
+     * A gateway built from handlers has no status action. It has something better: the status recorded
+     * after every command, which is what this reads.
+     *
+     * A subject that tracks no status leaves the request marked unknown, since nobody knows.
+     */
+    private function answerStatus(GetStatusInterface $request): void
+    {
+        $subject = $this->resolveSubjectOf($request);
+
+        if ($subject instanceof SubjectInterface) {
+            // 1.x actions do this, and it is what makes getFirstModel() return the payment rather than
+            // the token it arrived on -- which Payum::done() relies on.
+            $request->setModel($subject);
+        }
+
+        StatusMarker::mark($request, $subject instanceof SubjectInterface ? PaymentStatuses::of($subject) : null);
+    }
+
+    /**
+     * The subject a 1.x request is about, from the model it carries or the token it arrived on.
+     */
+    private function resolveSubjectOf(object $request): ?SubjectInterface
+    {
+        if (! $request instanceof Generic) {
+            return null;
+        }
+
+        if (($model = $request->getFirstModel()) instanceof SubjectInterface) {
+            return $model;
+        }
+
+        $identity = $request->getToken()?->getDetails();
+
+        if (null === $identity || ! $this->container->has(StorageRegistryInterface::class)) {
+            return null;
+        }
+
+        $model = $this->container->get(StorageRegistryInterface::class)
+            ->getStorage($identity->getClass())
+            ->find($identity);
+
+        return $model instanceof SubjectInterface ? $model : null;
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
      */
     private function resolveSubject(CommandInterface $command): ?SubjectInterface
     {

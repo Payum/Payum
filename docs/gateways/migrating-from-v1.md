@@ -214,9 +214,41 @@ It is built from actions: dispatch the matching Payum\Core\Request instead, or p
 * Anything depending on the order in which Payum's own actions ran.
 * Extensions, on the command path. Cross-cutting concerns move to middleware.
 
-### Applications
+### Applications do not have to change at all
 
-An application usually changes one line. `Payum::capture()`, `Payum::done()` and the token flow are unchanged, and `Payum::capture()` dispatches a command when the gateway has a handler for it and the 1.x `Capture` request when it does not.
+A gateway package releases on its own schedule, so an application should not break because one of its dependencies moved to handlers. It does not: a 1.x request sent to a ported gateway is translated to the command that means the same thing, run through the handler, and answered the way 1.x expects.
+
+```php
+// unchanged, still works after the gateway ports
+$gateway = $payum->getGateway($token->getGatewayName());
+
+try {
+    $gateway->execute(new Capture($token));
+} catch (HttpRedirect $reply) {
+    header('Location: ' . $reply->getUrl());
+}
+```
+
+`Payum::capture()`, `Payum::done()`, the token factory and the token flow are all unchanged.
+
+What translates:
+
+| 1.x request | Answered by |
+| :--- | :--- |
+| `Capture`, `Authorize`, `Refund` | the matching handler |
+| `Cancel`, `Sync` | the matching handler, for a payment or a payout |
+| `Payout` | the payout handler |
+| `GetHumanStatus`, `GetBinaryStatus` | the status recorded on the subject |
+| `Notify` | nothing yet — webhooks are their own piece of work |
+
+Two limits worth knowing:
+
+- A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown rather than guessed at.
+- A handler returning `RenderTemplate`, `Challenge` or `Poll` has no 1.x reply to become, so those throw rather than report the payment finished when it is not. A gateway using them needs a caller that acts on a `Result`.
+
+### Moving your own code across
+
+When you are ready, the call site becomes:
 
 ```php
 -$reply = $gateway->execute(new Capture($token), true);
