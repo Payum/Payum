@@ -41,4 +41,4 @@ Here you have to modify a `gatewayName` value. Set it to `offline`. The rest rem
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
-* [Become a sponsor](https://github.com/sponsors/Payum)
+* [Become a sponsor](https://github.com/sponsors/payum)

@@ -6,7 +6,7 @@
         "payment",
         "klarna"
     ],
-    "homepage": "https://payum.forma-pro.com",
+    "homepage": "https://docs.payum.dev",
     "license": "MIT",
     "authors": [
         {
@@ -15,7 +15,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "https://payum.forma-pro.com/"
+            "homepage": "https://docs.payum.dev/"
         },
         {
             "name":     "Community contributions",

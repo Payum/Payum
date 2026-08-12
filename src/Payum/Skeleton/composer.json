@@ -3,7 +3,7 @@
     "type": "project",
     "description": "The Payum extension. Rapid extension development",
     "keywords": ["payment"],
-    "homepage": "https://payum.forma-pro.com",
+    "homepage": "https://docs.payum.dev",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "https://payum.forma-pro.com/"
+            "homepage": "https://docs.payum.dev/"
         },
         {
             "name":     "Community contributions",

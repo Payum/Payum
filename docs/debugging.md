@@ -41,4 +41,4 @@ As you see it shows stack of executed actions. Also it shows some details about 
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
-* [Become a sponsor](https://github.com/sponsors/Payum)
+* [Become a sponsor](https://github.com/sponsors/payum)
