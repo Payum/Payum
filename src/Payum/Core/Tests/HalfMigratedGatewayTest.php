@@ -14,6 +14,7 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
+use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
@@ -156,7 +157,7 @@ final class HalfGateway implements PaymentGateway, DeclaresActions
 
     public function logo(): Logo
     {
-        return Logo\Url::create('https://acme.test/logo.svg');
+        return Url::create('https://acme.test/logo.svg');
     }
 
     public function name(): string
@@ -192,7 +193,7 @@ final class PureGateway implements PaymentGateway
 
     public function logo(): Logo
     {
-        return Logo\Url::create('https://acme.test/logo.svg');
+        return Url::create('https://acme.test/logo.svg');
     }
 
     public function name(): string
