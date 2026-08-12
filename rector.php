@@ -14,7 +14,6 @@ use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
-use Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -35,12 +34,9 @@ return RectorConfig::configure()
         SetList::INSTANCEOF,
 
         // PHPUnit
-        PHPUnitSetList::PHPUNIT_40,
-        PHPUnitSetList::PHPUNIT_50,
-        PHPUnitSetList::PHPUNIT_60,
-        PHPUnitSetList::PHPUNIT_70,
-        PHPUnitSetList::PHPUNIT_80,
-        PHPUnitSetList::PHPUNIT_90,
+        PHPUnitSetList::COMPOSER_BASED,
+        PHPUnitSetList::PHPUNIT_MOCK_TO_STUB,
+        PHPUnitSetList::PHPUNIT_NARROW_ASSERTS,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
     ])
     ->withRules([
@@ -68,7 +64,6 @@ return RectorConfig::configure()
         //  - narrowing withConsecutive(['x'], ['x']) to with(['x']) treats the
         //    argument list as a single expected argument;
         //  - the PHPUnit 10 matcher idiom compares constraints with assertSame().
-        WithConsecutiveRector::class,
         NarrowIdenticalWithConsecutiveRector::class,
         SingleWithConsecutiveToWithRector::class,
 
