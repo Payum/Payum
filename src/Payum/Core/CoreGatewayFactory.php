@@ -40,6 +40,7 @@ use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
+use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
@@ -355,10 +356,21 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
         $gateway->setContainer($container);
 
+        $declaredActions = [];
+
         if ($container->has(PaymentGateway::class)) {
-            return $gateway->setHandlerMap(
-                HandlerMap::fromHandlers($container->get(PaymentGateway::class)->handlers())
-            );
+            $paymentGateway = $container->get(PaymentGateway::class);
+
+            $gateway->setHandlerMap(HandlerMap::fromHandlers($paymentGateway->handlers()));
+
+            // A gateway that has finished moving gets nothing else: no actions, no extensions, no Twig
+            // environment it will never render with. One still holding actions says so, and then needs
+            // core's own alongside them, since an action dispatching GetHttpRequest expects an answer.
+            if (! $paymentGateway instanceof DeclaresActions) {
+                return $gateway;
+            }
+
+            $declaredActions = $paymentGateway->actions();
         }
 
         if ($container->has('twig.env')) {
@@ -373,7 +385,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             );
         }
 
-        foreach ($this->getActions() as $action) {
+        foreach ([...$this->getActions(), ...$declaredActions] as $action) {
             // Skip GetTokenAction if token storage is not configured
             if (GetTokenAction::class === $action && ! $container->has('payum.security.token_storage')) {
                 continue;

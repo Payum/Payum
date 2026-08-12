@@ -246,6 +246,37 @@ Two limits worth knowing:
 - A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown rather than guessed at.
 - A handler returning `RenderTemplate`, `Challenge` or `Poll` has no 1.x reply to become, so those throw rather than report the payment finished when it is not. A gateway using them needs a caller that acts on a `Result`.
 
+### Moving one operation at a time
+
+A gateway does not have to port everything at once. List the actions you have not moved yet and they keep working beside the handlers you have:
+
+```php
+use Payum\Core\Gateway\DeclaresActions;
+use Payum\Core\Gateway\GatewayInterface;
+
+final class AcmeGateway implements GatewayInterface, DeclaresActions
+{
+    public function handlers(): array
+    {
+        return [CaptureHandler::class];      // ported
+    }
+
+    public function actions(): array
+    {
+        return [RefundAction::class];        // not yet
+    }
+}
+```
+
+`Capture` goes to the handler. `Refund` falls through to the action. When the last action becomes a handler, drop the interface.
+
+Declaring any action brings core's own actions and extensions along, since an action dispatching `GetHttpRequest` or `RenderTemplate` still expects an answer. A gateway that declares none gets a clean gateway with no 1.x machinery on it at all.
+
+Two ordering rules worth knowing:
+
+- **Handlers are asked before actions.** They have to be: a token is a `DetailsAggregateInterface`, so core's `ExecuteSameRequestWithModelDetailsAction` claims `Capture($token)`. Asking actions first would swallow almost every request before a handler saw it.
+- **Except for status requests**, where an action wins. A gateway still holding a status action reads the details of whatever has not moved, which is more than the recorded status knows.
+
 ### Moving your own code across
 
 When you are ready, the call site becomes:
