@@ -36,6 +36,22 @@ use Payum\Core\Security\TokenInterface;
 final class RequestToCommand
 {
     /**
+     * Whether a request has a command that means the same thing, without looking anything up.
+     *
+     * Worth asking before {@see self::translate()}, which resolves the subject a request points at and so
+     * may go to storage to do it.
+     */
+    public static function supports(object $request): bool
+    {
+        return $request instanceof Capture
+            || $request instanceof Authorize
+            || $request instanceof Refund
+            || $request instanceof Cancel
+            || $request instanceof Sync
+            || $request instanceof Payout;
+    }
+
+    /**
      * Null when nothing means the same thing, or when there is nothing usable to point a command at. The
      * caller then behaves as it did before, which is to say it reports the request as unsupported.
      *
@@ -46,10 +62,11 @@ final class RequestToCommand
      */
     public static function translate(object $request, ?SubjectInterface $subject = null): ?CommandInterface
     {
-        if (! $request instanceof Generic) {
+        if (! self::supports($request)) {
             return null;
         }
 
+        /** @var Generic $request */
         $token = $request->getToken();
         $subject ??= $request->getFirstModel() instanceof SubjectInterface ? $request->getFirstModel() : null;
 

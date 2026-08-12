@@ -4,6 +4,7 @@
 
 * Add `Payum\Core\Model\StatusAwareInterface`. A subject implementing it has its status kept current by Payum after every command, which makes it readable without a gateway and queryable in storage. Read it through `Payum\Core\Model\PaymentStatuses`
 * `Result::$status` is now null when an operation concluded nothing about the payment, so a declined refund no longer reads as a failed payment. `failed()` takes an optional status for a failure that really is terminal
+* Add `Payum\Core\Gateway\DeclaresActions`, so a gateway can keep the 1.x actions it has not ported beside the handlers it has and move one operation at a time. Handlers answer first; anything without one falls through to the actions
 * A 1.x request sent to a gateway built from handlers is translated to the command that means the same thing, so an application keeps working when a gateway package ports. `Capture`, `Authorize`, `Refund`, `Cancel`, `Payout` and `Sync` translate; `GetHumanStatus` and `GetBinaryStatus` are answered from the recorded status
 * Fix `Payum::done()` against a gateway built from handlers, which previously reported `GetHumanStatus` as unsupported
 * Add a middleware pipeline around command execution. `Payum\Core\Middleware\MiddlewareInterface` wraps a command, `PayumBuilder::addMiddleware()` registers one for every gateway, and a gateway declares its own through `Payum\Core\Gateway\DeclaresMiddleware`

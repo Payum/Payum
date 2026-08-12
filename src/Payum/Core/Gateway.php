@@ -152,11 +152,30 @@ class Gateway implements GatewayInterface
             self::class
         );
 
-        // A gateway built from handlers has no actions to find, so a 1.x request would report itself
-        // unsupported. Translate instead: an application should not break because a gateway package it
-        // depends on moved to handlers.
-        if ($this->handlerMap instanceof HandlerMap && ! $this->findActionSupported($request)) {
-            return $this->executeThroughHandlers($request, $catchReply);
+        // A 1.x request is answered by the handler that means the same thing, when the gateway has one.
+        //
+        // Handlers are asked first on purpose. Core's own actions claim requests broadly -- a token is a
+        // DetailsAggregateInterface, so ExecuteSameRequestWithModelDetailsAction supports Capture($token)
+        // -- and asking actions first would swallow every request before a handler ever saw it. Asking
+        // handlers first is also what a gateway part-way through moving needs: what it has ported goes to
+        // a handler, and the rest falls through to the actions it still has.
+        if ($this->handlerMap instanceof HandlerMap) {
+            if ($request instanceof GetStatusInterface) {
+                // A gateway still holding a status action reads the details of whatever has not moved,
+                // which is more than the recorded status knows. Only answer from the record when nothing
+                // else claims it.
+                if (! $this->findActionSupported($request)) {
+                    $this->answerStatus($request);
+
+                    return null;
+                }
+            } elseif (RequestToCommand::supports($request)) {
+                $command = RequestToCommand::translate($request, $this->resolveSubjectOf($request));
+
+                if ($command instanceof CommandInterface && $this->supportsCommand($command::class)) {
+                    return $this->replyFor($this->dispatch($command), $catchReply);
+                }
+            }
         }
 
         $context = new Context($this, $request, $this->stack);
@@ -414,31 +433,15 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    /**
-     * Answers a 1.x request with the handler that means the same thing.
+     * Tells a 1.x caller what a handler decided, the way it expects to hear it.
      *
-     * Throws the matching reply when the handler decided the customer has somewhere to be, which is how a
-     * 1.x caller expects to hear about it.
+     * Throws the matching reply when the customer has somewhere to be, or returns it when the caller
+     * asked to catch it. A result with nothing left to do answers with null, the same as a 1.x action
+     * returning without throwing.
      */
-    private function executeThroughHandlers(object $request, bool $catchReply): ?Base
+    private function replyFor(Result $result, bool $catchReply): ?Base
     {
-        if ($request instanceof GetStatusInterface) {
-            $this->answerStatus($request);
-
-            return null;
-        }
-
-        $subject = $this->resolveSubjectOf($request);
-        $command = RequestToCommand::translate($request, $subject);
-
-        if (! $command instanceof CommandInterface || ! $this->supportsCommand($command::class)) {
-            throw RequestNotSupportedException::create($request);
-        }
-
-        $reply = ResultToReply::translate($this->dispatch($command));
+        $reply = ResultToReply::translate($result);
 
         if (! $reply instanceof Base) {
             return null;
