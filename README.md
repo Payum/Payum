@@ -6,7 +6,7 @@
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
-- [Become a sponsor](https://github.com/sponsors/Payum)
+- [Become a sponsor](https://github.com/sponsors/payum)
 
 ---
 
@@ -20,6 +20,14 @@ Payum is an MIT-licensed open source project with its ongoing development made p
 [![PHP Version Require](https://poser.pugx.org/payum/payum/require/php)](https://packagist.org/packages/payum/payum)
 
 Reduce Your Development Time with Payum integrating more than 50 payment services simultaneously. Payum is one of the most popular bug-free solution that has over 1 000 000 downloads already. It is friendly for all top PHP frameworks and was successfully installed and tested by thousands of developers worldwide
+
+## Sponsors
+
+Payum is supported by:
+
+* [GitBook](https://www.gitbook.com/) — hosts our [documentation](https://docs.payum.dev/)
+
+If you'd like to see your company here, please [become a sponsor](https://github.com/sponsors/payum).
 
 ## Resources
 
