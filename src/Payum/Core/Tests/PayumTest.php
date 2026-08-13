@@ -275,7 +275,6 @@ final class PayumTest extends TestCase
             ->method('getGatewayName')
             ->willReturn('aGateway');
 
-        // The payment is not finished, so the customer must not be sent on to the after URL.
         $token
             ->expects($this->never())
             ->method('getAfterUrl');
