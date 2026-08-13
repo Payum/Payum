@@ -13,7 +13,11 @@ namespace Payum\Core\Gateway;
  * docs/gateways/templates.md.
  *
  * A namespace declared here wins over the same namespace in `payum.paths`, so a gateway can override
- * a template core ships.
+ * a template core ships. That precedence is decided per gateway container, and holds cleanly under
+ * core's default wiring, where each gateway builds its own Twig `Environment`. An application that
+ * shares one `Environment` across gateways shares the namespaces registered on it too -- `TwigUtil`
+ * keeps a single loader per `Environment` in a static map, so the precedence above becomes a race
+ * between whichever gateway registers its paths first.
  */
 interface DeclaresTemplates
 {

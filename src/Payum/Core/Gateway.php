@@ -244,7 +244,10 @@ class Gateway implements GatewayInterface
      * The renderer this gateway's templates resolve against.
      *
      * Narrower than exposing the container: what a caller acting on a RenderTemplate needs is this and
-     * nothing else. Each gateway has its own container, so two gateways cannot collide on a namespace.
+     * nothing else. With core's default wiring each gateway's container builds its own Twig
+     * `Environment`, so namespaces stay isolated between gateways. An application that supplies one
+     * shared `Environment` to every gateway shares the namespaces too -- see the note in
+     * docs/gateways/templates.md.
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

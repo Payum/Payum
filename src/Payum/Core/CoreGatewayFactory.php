@@ -298,27 +298,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // Token storage - should be provided externally
                 // 'payum.security.token_storage' => null,
 
-                'payum.paths' => [
-                    'PayumCore' => __DIR__ . '/Resources/views',
-                ],
+                'payum.paths' => self::corePaths(),
 
                 // What a renderer actually resolves against: the paths the application supplied,
                 // plus whatever the gateway ships. Separate from 'payum.paths' because that one is a
                 // plain array the deprecated createConfig() calls array_merge() on.
-                'payum.template_paths' => static function (ContainerInterface $c): array {
-                    $paths = array_merge(
-                        [
-                            'PayumCore' => __DIR__ . '/Resources/views',
-                        ],
-                        (array) $c->get('payum.paths'),
-                    );
-
-                    $gateway = $c->has(PaymentGateway::class) ? $c->get(PaymentGateway::class) : null;
-
-                    return $gateway instanceof DeclaresTemplates
-                        ? array_merge($paths, $gateway->templatePaths())
-                        : $paths;
-                },
+                'payum.template_paths' => static fn (ContainerInterface $c): array => self::composeTemplatePaths($c),
 
                 // Twig is a hard requirement of payum/core, so there is always a renderer. An
                 // integration on another engine binds its own against the same id.
@@ -405,7 +390,15 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         // The action path only. A gateway that ships only handlers returns above this, and reaches its
         // templates through the renderer instead, which registers the same paths when it is built.
         if ($container->has('twig.env')) {
-            TwigUtil::registerPaths($container->get('twig.env'), $container->get('payum.template_paths'));
+            // createGateway() is a public extension point (Payum\Core\DI\CreatesGateway): a caller may
+            // hand it a container that never went through configureContainer() and so never got
+            // 'payum.template_paths' defined. Composing it here rather than requiring it keeps that
+            // container working.
+            $templatePaths = $container->has('payum.template_paths')
+                ? $container->get('payum.template_paths')
+                : self::composeTemplatePaths($container);
+
+            TwigUtil::registerPaths($container->get('twig.env'), $templatePaths);
         }
 
         foreach ([...$this->getActions(), ...$declaredActions] as $action) {
@@ -536,5 +529,38 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 $gateway->addExtension($value, $prepend);
             }
         }
+    }
+
+    /**
+     * The directory core ships its own templates under. Shared by the 'payum.paths' default and
+     * composeTemplatePaths(), so the path is written in exactly one place.
+     *
+     * @return array<string, string>
+     */
+    private static function corePaths(): array
+    {
+        return [
+            'PayumCore' => __DIR__ . '/Resources/views',
+        ];
+    }
+
+    /**
+     * What a renderer actually resolves against: core's own default, then the application's
+     * 'payum.paths', then the container's gateway's own templatePaths() if it declares any.
+     *
+     * A public extension point calls this too: createGateway() falls back to composing here when a
+     * hand-built container was not given a 'payum.template_paths' entry of its own.
+     *
+     * @return array<string, string>
+     */
+    private static function composeTemplatePaths(ContainerInterface $c): array
+    {
+        $paths = array_merge(self::corePaths(), (array) $c->get('payum.paths'));
+
+        $gateway = $c->has(PaymentGateway::class) ? $c->get(PaymentGateway::class) : null;
+
+        return $gateway instanceof DeclaresTemplates
+            ? array_merge($paths, $gateway->templatePaths())
+            : $paths;
     }
 }
