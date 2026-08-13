@@ -20,6 +20,8 @@ use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
+use Payum\Core\Gateway\DeclaresTemplates;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
@@ -199,6 +201,60 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $this->assertArrayHasKey('FooNamespace', $config['payum.paths']);
         $this->assertSame('FooPath', $config['payum.paths']['FooNamespace']);
+    }
+
+    public function testShouldComposeTemplatePathsFromPayumPaths(): void
+    {
+        $paths = $this->getContainer()->get('payum.template_paths');
+
+        $this->assertIsArray($paths);
+        $this->assertArrayHasKey('PayumCore', $paths);
+        $this->assertStringEndsWith('Resources/views', $paths['PayumCore']);
+        $this->assertFileExists($paths['PayumCore']);
+    }
+
+    public function testShouldMergeTemplatePathsDeclaredByTheGateway(): void
+    {
+        $container = $this->getContainer([
+            PaymentGateway::class => new class() implements DeclaresTemplates {
+                public function templatePaths(): array
+                {
+                    return [
+                        'PayumAcme' => '/acme/views',
+                    ];
+                }
+            },
+        ]);
+
+        $paths = $container->get('payum.template_paths');
+
+        $this->assertSame('/acme/views', $paths['PayumAcme']);
+        $this->assertArrayHasKey('PayumCore', $paths);
+    }
+
+    public function testShouldLetTheGatewayWinOnATemplateNamespaceCollision(): void
+    {
+        $container = $this->getContainer([
+            PaymentGateway::class => new class() implements DeclaresTemplates {
+                public function templatePaths(): array
+                {
+                    return [
+                        'PayumCore' => '/acme/views',
+                    ];
+                }
+            },
+        ]);
+
+        $this->assertSame('/acme/views', $container->get('payum.template_paths')['PayumCore']);
+    }
+
+    public function testShouldComposeTemplatePathsWhenTheGatewayDeclaresNone(): void
+    {
+        $container = $this->getContainer([
+            PaymentGateway::class => new stdClass(),
+        ]);
+
+        $this->assertArrayHasKey('PayumCore', $container->get('payum.template_paths'));
     }
 
     public function testShouldConfigureTwigEnvironmentGatewayConfig(): void
