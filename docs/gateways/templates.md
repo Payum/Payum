@@ -43,9 +43,18 @@ src/Payum/Acme/
     └── obtain_token.html.twig
 ```
 
-A namespace declared here wins over the same namespace supplied by the application, so a gateway can
-override a template core ships. Each gateway gets its own container and its own Twig environment, so
-two gateways cannot collide.
+A namespace declared here wins over the same namespace supplied by the application. `array_merge` keeps
+one directory per namespace, so declaring `PayumCore` **replaces** the namespace rather than shadowing a
+single file — a gateway overriding it has to ship everything Twig would otherwise find there, not just
+the one file it means to change.
+
+With core's default wiring each gateway's container builds its own Twig `Environment`, so namespaces
+stay isolated between gateways. An application that supplies one shared `Environment` to every
+gateway — which is what a typical Symfony or Laravel integration does — shares the namespaces too:
+`TwigUtil` keeps a single loader per `Environment` in a static map, so two gateways declaring the same
+namespace silently resolve through whichever one registered its paths first, and a gateway overriding
+`PayumCore` can hijack another gateway's layout. The failure mode is a silently wrong template, not an
+error.
 
 ### The renderer
 
@@ -84,19 +93,50 @@ if ($result->next instanceof RenderTemplate) {
 `Payum::capture()` already does this and returns a Symfony response, so most applications never write
 it.
 
+`renderer()` is not declared on `Payum\Core\Gateway\GatewayInterface`, the metadata interface a gateway
+implements. What `Payum::getGateway()` returns is `Payum\Core\GatewayInterface`, the executor, which
+gets `renderer()` through a `@method` annotation; the method itself is implemented on
+`Payum\Core\Gateway`. A third-party class implementing only `Payum\Core\GatewayInterface` would not
+have it.
+
 ### Another engine
 
-Bind your own implementation against the same id. Whole-application defaults go on the builder:
+Bind your own implementation against the same id, **per gateway**, from `configureContainer()` — layer
+3 in the last-wins ordering described in [Services](services.md):
 
 ```php
-$payum = (new PayumBuilder())
-    ->addGlobalService(RendererInterface::class, new BladeRenderer($factory))
-    ->registerGateway('acme', new AcmeConfig(…))
-    ->getPayum();
+use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\Gateway\GatewayInterface;
+use Payum\Core\Template\RendererInterface;
+use Psr\Container\ContainerInterface;
+
+final class AcmeGateway implements GatewayInterface, ContainerConfiguration
+{
+    public function configureContainer(): array
+    {
+        return [
+            RendererInterface::class => static fn (ContainerInterface $c): RendererInterface => new BladeRenderer(
+                $c->get('payum.template_paths'),
+            ),
+        ];
+    }
+}
 ```
 
-The paths a renderer should resolve against are in the container as `payum.template_paths` — the
-application's `payum.paths` composed with every gateway's `templatePaths()`.
+`payum.template_paths` is what a renderer resolves against: core's own `PayumCore` default, then the
+application's `payum.paths`, then this gateway's own `templatePaths()` if it declares any — each
+gateway's container composes only what that one gateway contributes, not what every gateway in the
+application declares.
+
+`PayumBuilder::addGlobalService(RendererInterface::class, …)` looks like the natural place for a
+whole-application default instead. It does not work for a renderer that needs
+`payum.template_paths`: everything registered with `addGlobalService()` is rebuilt against the
+**global** container (`PayumBuilder::buildSharedDefinitions()` rewrites every id to
+`fn () => $globalContainer->get($id)`), and the global container never defines `payum.template_paths` —
+that entry exists only on a gateway's own container. A renderer wired with `addGlobalService()` and
+asked to resolve `payum.template_paths` throws `DI\NotFoundException: No entry or class found for
+'payum.template_paths'`. Bind per gateway instead, or give the renderer its paths some other way that
+does not go through the global container.
 
 **A template name is engine-specific.** A gateway naming `@PayumAcme/obtain_token.html.twig` has named
 a Twig template; Blade would want `payum-acme::obtain_token`. A renderer may translate names if it
