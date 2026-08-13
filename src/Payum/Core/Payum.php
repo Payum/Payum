@@ -18,6 +18,7 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
 use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
@@ -160,7 +161,7 @@ class Payum implements RegistryInterface
         $gateway = $this->getGateway($token->getGatewayName());
 
         if ($gateway instanceof Gateway && $gateway->supportsCommand(CaptureCommand::class)) {
-            return $this->respondTo($gateway->execute(new CaptureCommand($token)), $token);
+            return $this->respondTo($gateway->execute(new CaptureCommand($token)), $token, $gateway);
         }
 
         $reply = $gateway->execute(new Capture($token), true);
@@ -220,7 +221,7 @@ class Payum implements RegistryInterface
      * A null next action means there is nothing left for the customer to do, so the application takes
      * over at the token's after URL.
      */
-    private function respondTo(Result $result, TokenInterface $token): Response
+    private function respondTo(Result $result, TokenInterface $token, Gateway $gateway): Response
     {
         $next = $result->next;
 
@@ -238,14 +239,19 @@ class Payum implements RegistryInterface
             return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
         }
 
-        // Anything else needs a renderer or a decision this method cannot make. Sending the customer to
-        // the after URL would say the payment is finished when it is not.
+        if ($next instanceof RenderTemplate) {
+            return new Response($gateway->renderer()->render($next->template, $next->context));
+        }
+
+        // Anything else needs a decision this method cannot make. Sending the customer to the after URL
+        // would say the payment is finished when it is not.
         throw new LogicException(sprintf(
-            '%s cannot turn %s into a response; it handles %s and %s. Execute the command yourself and act on the result.',
+            '%s cannot turn %s into a response; it handles %s, %s and %s. Execute the command yourself and act on the result.',
             __METHOD__,
             $next::class,
             Redirect::class,
             PostRedirect::class,
+            RenderTemplate::class,
         ));
     }
 }
