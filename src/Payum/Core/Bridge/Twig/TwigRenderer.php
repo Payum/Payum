@@ -11,9 +11,6 @@ use function array_replace;
 
 /**
  * Renders with Twig, adding the layout every Payum template extends.
- *
- * Registering the paths here rather than during gateway assembly is deliberate: a gateway that ships
- * only handlers never reaches the assembly-time hook, and its templates still have to resolve.
  */
 final class TwigRenderer implements RendererInterface
 {

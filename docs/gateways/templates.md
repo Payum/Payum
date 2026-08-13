@@ -1,7 +1,7 @@
 # Templates
 
-A handler that needs to show the customer a page — a card form, a wallet button, a "we are checking"
-screen — returns a `RenderTemplate` next action naming a template the gateway ships.
+When a handler needs to show the customer a page — a card form, a wallet button, a "we are checking"
+screen — it returns a `RenderTemplate` next action naming a template your gateway ships.
 
 ```php
 use Payum\Core\Result\NextAction\RenderTemplate;
@@ -14,9 +14,22 @@ return CaptureResult::pending(new RenderTemplate('@PayumAcme/obtain_token.html.t
 It carries the name and the context, never rendered output, so the application's own renderer and
 layout stay in charge.
 
-### Declaring where they live
+Three steps get you there.
 
-Implement `DeclaresTemplates` and return namespace => directory:
+### 1. Ship the template files
+
+Put them beside the gateway:
+
+```
+src/Payum/Acme/
+├── AcmeGateway.php
+└── Resources/views/
+    └── obtain_token.html.twig
+```
+
+### 2. Tell Payum where they are
+
+Implement `DeclaresTemplates` and point a namespace at that directory:
 
 ```php
 <?php
@@ -34,29 +47,60 @@ final class AcmeGateway implements GatewayInterface, DeclaresTemplates
 }
 ```
 
-Put the files beside the gateway:
+The namespace is how handlers name the templates: `@PayumAcme/obtain_token.html.twig`.
 
+**Name it after your gateway** — `Payum` plus the gateway name is the convention. Two rules keep you
+out of trouble:
+
+* **Never use `PayumCore`.** Declaring it replaces core's own templates instead of adding to them,
+  including the layout every Payum template extends. You would have to ship replacements for all of
+  them.
+* **Pick something distinctive.** An application can configure Payum so that every gateway shares one
+  Twig environment. Two gateways declaring the same namespace then collide, and one silently renders
+  the other's templates. A namespace nobody else would choose avoids it.
+
+### 3. Write the template
+
+The layout is available to every template as `layout`:
+
+```twig
+{% extends layout %}
+
+{% block payum_body %}
+    <form action="{{ actionUrl }}" method="post">…</form>
+{% endblock %}
 ```
-src/Payum/Acme/
-├── AcmeGateway.php
-└── Resources/views/
-    └── obtain_token.html.twig
+
+Extend it rather than writing a whole HTML document, so your page picks up whatever the application
+has configured. It defaults to `@PayumCore/layout.html.twig`; an application changes it with the
+`payum.template.layout` setting.
+
+### That is all a gateway has to do
+
+`Payum::capture()` renders the template and returns the response, so a gateway never writes rendering
+code:
+
+```php
+$response = $payum->capture($request); // 200, carrying your rendered template
 ```
 
-A namespace declared here wins over the same namespace supplied by the application. `array_merge` keeps
-one directory per namespace, so declaring `PayumCore` **replaces** the namespace rather than shadowing a
-single file — a gateway overriding it has to ship everything Twig would otherwise find there, not just
-the one file it means to change.
+An application that drives commands itself reaches the renderer from the gateway:
 
-With core's default wiring each gateway's container builds its own Twig `Environment`, so namespaces
-stay isolated between gateways. An application that supplies one shared `Environment` to every
-gateway — which is what a typical Symfony or Laravel integration does — shares the namespaces too:
-`TwigUtil` keeps a single loader per `Environment` in a static map, so two gateways declaring the same
-namespace silently resolve through whichever one registered its paths first, and a gateway overriding
-`PayumCore` can hijack another gateway's layout. The failure mode is a silently wrong template, not an
-error.
+```php
+$result = $gateway->execute(CaptureCommand::forToken($token));
 
-### The renderer
+if ($result->next instanceof RenderTemplate) {
+    echo $gateway->renderer()->render($result->next->template, $result->next->context);
+}
+```
+
+`renderer()` lives on `Payum\Core\Gateway`, which is what `$payum->getGateway()` hands you.
+
+### Using another templating engine
+
+Everything above assumes Twig, which is what core ships and what most gateways want. This section is
+for an integration replacing it — a Laravel package rendering with Blade, say. Skip it if you are
+writing a gateway.
 
 `Payum\Core\Template\RendererInterface` is the whole contract:
 
@@ -67,42 +111,8 @@ interface RendererInterface
 }
 ```
 
-Core binds it to `Bridge\Twig\TwigRenderer`, which registers the declared paths and makes the
-configured layout available to every template as `layout`:
-
-```twig
-{% extends layout %}
-
-{% block payum_body %}
-    <form action="{{ actionUrl }}" method="post">…</form>
-{% endblock %}
-```
-
-The layout is `payum.template.layout`, `@PayumCore/layout.html.twig` by default.
-
-Reach the renderer from a gateway when you are acting on a result yourself:
-
-```php
-$result = $gateway->execute(CaptureCommand::forToken($token));
-
-if ($result->next instanceof RenderTemplate) {
-    echo $gateway->renderer()->render($result->next->template, $result->next->context);
-}
-```
-
-`Payum::capture()` already does this and returns a Symfony response, so most applications never write
-it.
-
-`renderer()` is not declared on `Payum\Core\Gateway\GatewayInterface`, the metadata interface a gateway
-implements. What `Payum::getGateway()` returns is `Payum\Core\GatewayInterface`, the executor, which
-gets `renderer()` through a `@method` annotation; the method itself is implemented on
-`Payum\Core\Gateway`. A third-party class implementing only `Payum\Core\GatewayInterface` would not
-have it.
-
-### Another engine
-
-Bind your own implementation against the same id, **per gateway**, from `configureContainer()` — layer
-3 in the last-wins ordering described in [Services](services.md):
+Bind your own implementation against the same id, **per gateway**, from `configureContainer()` — see
+the last-wins ordering in [Services](services.md):
 
 ```php
 use Payum\Core\DI\ContainerConfiguration;
@@ -124,19 +134,14 @@ final class AcmeGateway implements GatewayInterface, ContainerConfiguration
 ```
 
 `payum.template_paths` is what a renderer resolves against: core's own `PayumCore` default, then the
-application's `payum.paths`, then this gateway's own `templatePaths()` if it declares any — each
-gateway's container composes only what that one gateway contributes, not what every gateway in the
-application declares.
+application's `payum.paths`, then this gateway's `templatePaths()`. It exists only on a gateway's own
+container.
 
-`PayumBuilder::addGlobalService(RendererInterface::class, …)` looks like the natural place for a
-whole-application default instead. It does not work for a renderer that needs
-`payum.template_paths`: everything registered with `addGlobalService()` is rebuilt against the
-**global** container (`PayumBuilder::buildSharedDefinitions()` rewrites every id to
-`fn () => $globalContainer->get($id)`), and the global container never defines `payum.template_paths` —
-that entry exists only on a gateway's own container. A renderer wired with `addGlobalService()` and
-asked to resolve `payum.template_paths` throws `DI\NotFoundException: No entry or class found for
-'payum.template_paths'`. Bind per gateway instead, or give the renderer its paths some other way that
-does not go through the global container.
+That last point matters, because `PayumBuilder::addGlobalService(RendererInterface::class, …)` looks
+like the natural place for an application-wide default and does not work here. A globally registered
+service is built by the application-wide container, which has no `payum.template_paths`, so a renderer
+wired that way throws when it asks for one. Bind per gateway, or give your renderer its paths some
+other way.
 
 **A template name is engine-specific.** A gateway naming `@PayumAcme/obtain_token.html.twig` has named
 a Twig template; Blade would want `payum-acme::obtain_token`. A renderer may translate names if it

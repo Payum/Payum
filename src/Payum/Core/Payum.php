@@ -243,8 +243,6 @@ class Payum implements RegistryInterface
             return new Response($gateway->renderer()->render($next->template, $next->context));
         }
 
-        // Anything else needs a decision this method cannot make. Sending the customer to the after URL
-        // would say the payment is finished when it is not.
         throw new LogicException(sprintf(
             '%s cannot turn %s into a response; it handles %s, %s and %s. Execute the command yourself and act on the result.',
             __METHOD__,

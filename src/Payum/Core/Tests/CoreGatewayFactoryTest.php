@@ -270,10 +270,6 @@ final class CoreGatewayFactoryTest extends TestCase
 
     public function testShouldRegisterTheGatewaysDeclaredNamespaceOnTheRawTwigEnvironmentWhenItStillDeclaresActions(): void
     {
-        // Pins the reason createGateway() reaches for payum.template_paths instead of registering
-        // nothing on this path: a gateway migrating from actions to handlers can implement both
-        // DeclaresActions and DeclaresTemplates at once, and its declared namespace has to resolve on
-        // the 1.x action path -- through the raw twig.env -- as well as through the renderer.
         $gateway = new class() implements DeclaresActions, DeclaresTemplates {
             /**
              * @return list<class-string<HandlerInterface>>

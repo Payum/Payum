@@ -25,8 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * End to end: a gateway that ships only handlers declares its templates, a handler names one, and
- * Payum::capture() renders it. The gateway deliberately implements no 1.x interfaces, because that is
- * the path on which template paths used never to be registered at all.
+ * Payum::capture() renders it.
  */
 final class TemplateRenderingTest extends TestCase
 {
@@ -75,7 +74,6 @@ final class TemplateRenderingTest extends TestCase
         $payum = $this->buildPayum();
         $token = $payum->prepare('acme', $this->buildPayment(), 'done.php');
 
-        // The default verifier returns a TokenInterface handed to it directly, so no URL round trip.
         $response = $payum->capture([
             'payum_token' => $token,
         ]);
