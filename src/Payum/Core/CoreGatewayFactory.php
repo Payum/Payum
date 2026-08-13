@@ -41,6 +41,7 @@ use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
+use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
@@ -299,6 +300,24 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     'PayumCore' => __DIR__ . '/Resources/views',
                 ],
 
+                // What a renderer actually resolves against: the paths the application supplied,
+                // plus whatever the gateway ships. Separate from 'payum.paths' because that one is a
+                // plain array the deprecated createConfig() calls array_merge() on.
+                'payum.template_paths' => static function (ContainerInterface $c): array {
+                    $paths = array_merge(
+                        [
+                            'PayumCore' => __DIR__ . '/Resources/views',
+                        ],
+                        (array) $c->get('payum.paths'),
+                    );
+
+                    $gateway = $c->has(PaymentGateway::class) ? $c->get(PaymentGateway::class) : null;
+
+                    return $gateway instanceof DeclaresTemplates
+                        ? array_merge($paths, $gateway->templatePaths())
+                        : $paths;
+                },
+
                 // Additional aliases
                 ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
                 Environment::class => static fn (ContainerInterface $c) => $c->get('twig.env'),
@@ -373,16 +392,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             $declaredActions = $paymentGateway->actions();
         }
 
+        // The action path only. A gateway that ships only handlers returns above this, and reaches its
+        // templates through the renderer instead, which registers the same paths when it is built.
         if ($container->has('twig.env')) {
-            TwigUtil::registerPaths(
-                $container->get('twig.env'),
-                array_merge(
-                    [
-                        'PayumCore' => __DIR__ . '/Resources/views',
-                    ],
-                    (array) $container->get('payum.paths'),
-                )
-            );
+            TwigUtil::registerPaths($container->get('twig.env'), $container->get('payum.template_paths'));
         }
 
         foreach ([...$this->getActions(), ...$declaredActions] as $action) {
