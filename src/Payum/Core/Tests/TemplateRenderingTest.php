@@ -7,7 +7,6 @@ namespace Payum\Core\Tests;
 use League\Uri\Uri;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Config\GatewayConfig;
-use Payum\Core\Gateway;
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
@@ -51,7 +50,6 @@ final class TemplateRenderingTest extends TestCase
     public function testShouldRenderATemplateTheGatewayShips(): void
     {
         $gateway = $this->buildPayum()->getGateway('acme');
-        assert($gateway instanceof Gateway);
 
         $html = $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
             'actionUrl' => 'https://acme.test/pay',
@@ -65,7 +63,6 @@ final class TemplateRenderingTest extends TestCase
     public function testShouldStillResolveTheTemplatesCoreShips(): void
     {
         $gateway = $this->buildPayum()->getGateway('acme');
-        assert($gateway instanceof Gateway);
 
         $this->assertStringContainsString(
             '<!DOCTYPE html>',
