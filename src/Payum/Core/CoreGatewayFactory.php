@@ -303,7 +303,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // What a renderer actually resolves against: the paths the application supplied,
                 // plus whatever the gateway ships. Separate from 'payum.paths' because that one is a
                 // plain array the deprecated createConfig() calls array_merge() on.
-                'payum.template_paths' => static fn (ContainerInterface $c): array => self::composeTemplatePaths($c),
+                'payum.template_paths' => self::composeTemplatePaths(...),
 
                 // Twig is a hard requirement of payum/core, so there is always a renderer. An
                 // integration on another engine binds its own against the same id.
