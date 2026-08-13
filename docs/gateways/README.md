@@ -44,6 +44,7 @@ Two rules keep the boundaries honest:
 * [Commands](commands.md) — what you can dispatch
 * [Handlers](handlers.md) — answering a command, and the re-entrant capture
 * [Results](results.md) — what comes back
+* [Templates](templates.md) — showing the customer a page the gateway owns
 * [Services](services.md) — the container, autowiring, and overriding
 * [Middleware](middleware.md) — wrapping command execution
 * [Migrating a gateway from 1.x](migrating-from-v1.md)

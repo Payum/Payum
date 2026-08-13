@@ -74,7 +74,7 @@ match (true) {
 };
 ```
 
-`Payum::capture()` already does this for `Redirect` and `PostRedirect` and returns a Symfony response, so most applications never write the `match` themselves. It redirects to the token's after URL when `next` is null, and throws for any other next action rather than reporting a payment as finished when it is not — dispatch the command yourself when you need to act on those.
+`Payum::capture()` already does this for `Redirect`, `PostRedirect` and `RenderTemplate` and returns a Symfony response, so most applications never write the `match` themselves. It redirects to the token's after URL when `next` is null, and throws for `Challenge` and `Poll` rather than reporting a payment as finished when it is not — dispatch the command yourself when you need to act on those. See [Templates](templates.md) for what a gateway has to declare before `RenderTemplate` will resolve.
 
 ### Status
 
@@ -150,4 +150,4 @@ $result->failure->isRetriable();
 
 Only `Network` and `RateLimited` are retriable. Retrying a declined card just declines again, and some PSPs read it as card testing.
 
-Next: [Services](services.md).
+Next: [Templates](templates.md).
