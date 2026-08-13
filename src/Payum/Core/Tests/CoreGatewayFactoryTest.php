@@ -21,9 +21,11 @@ use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
+use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerInterface;
@@ -207,12 +209,19 @@ final class CoreGatewayFactoryTest extends TestCase
 
     public function testShouldComposeTemplatePathsFromPayumPaths(): void
     {
-        $paths = $this->getContainer()->get('payum.template_paths');
+        $paths = $this->getContainer([
+            'payum.paths' => [
+                'FooNamespace' => 'FooPath',
+            ],
+        ])->get('payum.template_paths');
 
         $this->assertIsArray($paths);
         $this->assertArrayHasKey('PayumCore', $paths);
         $this->assertStringEndsWith('Resources/views', $paths['PayumCore']);
         $this->assertFileExists($paths['PayumCore']);
+
+        $this->assertArrayHasKey('FooNamespace', $paths);
+        $this->assertSame('FooPath', $paths['FooNamespace']);
     }
 
     public function testShouldMergeTemplatePathsDeclaredByTheGateway(): void
@@ -257,6 +266,46 @@ final class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $this->assertArrayHasKey('PayumCore', $container->get('payum.template_paths'));
+    }
+
+    public function testShouldRegisterTheGatewaysDeclaredNamespaceOnTheRawTwigEnvironmentWhenItStillDeclaresActions(): void
+    {
+        // Pins the reason createGateway() reaches for payum.template_paths instead of registering
+        // nothing on this path: a gateway migrating from actions to handlers can implement both
+        // DeclaresActions and DeclaresTemplates at once, and its declared namespace has to resolve on
+        // the 1.x action path -- through the raw twig.env -- as well as through the renderer.
+        $gateway = new class() implements DeclaresActions, DeclaresTemplates {
+            /**
+             * @return list<class-string<HandlerInterface>>
+             */
+            public function handlers(): array
+            {
+                return [];
+            }
+
+            /**
+             * @return list<class-string<ActionInterface>>
+             */
+            public function actions(): array
+            {
+                return [];
+            }
+
+            public function templatePaths(): array
+            {
+                return [
+                    'PayumAcme' => __DIR__ . '/Resources/views',
+                ];
+            }
+        };
+
+        $container = $this->getContainer([
+            PaymentGateway::class => $gateway,
+        ]);
+
+        (new CoreGatewayFactory())->createGateway($container);
+
+        $this->assertTrue($container->get('twig.env')->getLoader()->exists('@PayumAcme/obtain_token.html.twig'));
     }
 
     public function testShouldConfigureATwigRendererByDefault(): void

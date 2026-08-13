@@ -33,8 +33,10 @@ final class ResultToReply
             ! $next instanceof NextAction => null,
             $next instanceof Redirect => new HttpRedirect($next->url, $next->statusCode, $next->headers),
             $next instanceof PostRedirect => new HttpPostRedirect($next->url, $next->fields),
-            // Rendering, 3-D Secure and polling have no reply to become. A 1.x caller has nowhere to put
-            // them, and inventing something would report the payment as finished when it is not.
+            // Rendering, 3-D Secure and polling still throw here, not because no reply could represent
+            // them -- Payum\Core\Reply\HttpResponse is exactly the shape a render result needs -- but
+            // because this converter is static and has no renderer to build one with. Inventing a reply
+            // some other way would report the payment as finished when it is not.
             default => throw new LogicException(sprintf(
                 '%s has no 1.x reply to become. The gateway needs a caller that acts on a %s.',
                 $next::class,
