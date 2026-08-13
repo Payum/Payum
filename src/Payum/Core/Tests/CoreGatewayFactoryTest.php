@@ -16,6 +16,7 @@ use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
@@ -24,6 +25,7 @@ use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -255,6 +257,13 @@ final class CoreGatewayFactoryTest extends TestCase
         ]);
 
         $this->assertArrayHasKey('PayumCore', $container->get('payum.template_paths'));
+    }
+
+    public function testShouldConfigureATwigRendererByDefault(): void
+    {
+        $renderer = $this->getContainer()->get(RendererInterface::class);
+
+        $this->assertInstanceOf(TwigRenderer::class, $renderer);
     }
 
     public function testShouldConfigureTwigEnvironmentGatewayConfig(): void

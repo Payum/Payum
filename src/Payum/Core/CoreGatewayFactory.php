@@ -35,6 +35,7 @@ use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
@@ -50,6 +51,7 @@ use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -317,6 +319,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                         ? array_merge($paths, $gateway->templatePaths())
                         : $paths;
                 },
+
+                // Twig is a hard requirement of payum/core, so there is always a renderer. An
+                // integration on another engine binds its own against the same id.
+                RendererInterface::class => static fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
+                    $c->get('twig.env'),
+                    $c->get('payum.template.layout'),
+                    $c->get('payum.template_paths'),
+                ),
 
                 // Additional aliases
                 ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
