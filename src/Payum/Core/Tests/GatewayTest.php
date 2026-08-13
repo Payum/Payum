@@ -19,7 +19,9 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Template\RendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use stdClass;
 
@@ -30,6 +32,23 @@ final class GatewayTest extends TestCase
         $rc = new ReflectionClass(Gateway::class);
 
         $this->assertTrue($rc->implementsInterface(GatewayInterface::class));
+    }
+
+    public function testShouldResolveTheRendererFromItsContainer(): void
+    {
+        $renderer = $this->createMock(RendererInterface::class);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->with(RendererInterface::class)
+            ->willReturn($renderer);
+
+        $gateway = new Gateway();
+        $gateway->setContainer($container);
+
+        $this->assertSame($renderer, $gateway->renderer());
     }
 
     public function testShouldAllowAddActionAppendByDefault(): void

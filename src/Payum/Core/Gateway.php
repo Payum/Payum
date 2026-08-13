@@ -30,6 +30,7 @@ use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -237,6 +238,20 @@ class Gateway implements GatewayInterface
     public function supportsCommand(string $commandClass): bool
     {
         return null !== $this->handlerMap?->serviceIdFor($commandClass);
+    }
+
+    /**
+     * The renderer this gateway's templates resolve against.
+     *
+     * Narrower than exposing the container: what a caller acting on a RenderTemplate needs is this and
+     * nothing else. Each gateway has its own container, so two gateways cannot collide on a namespace.
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function renderer(): RendererInterface
+    {
+        return $this->container->get(RendererInterface::class);
     }
 
     public function setName(string $name): self
