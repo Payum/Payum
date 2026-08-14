@@ -18,7 +18,7 @@ final class TwigRenderer implements RendererInterface
     /**
      * Registers $paths and an absolute-path loader on $twig, mutating it.
      *
-     * @param array<string, string> $paths namespace => directory
+     * @param array<string, string|list<string>> $paths namespace => directory, or a list of directories
      *
      * @throws LoaderError
      */
@@ -27,7 +27,13 @@ final class TwigRenderer implements RendererInterface
         private readonly string $layout,
         array $paths = [],
     ) {
-        TwigUtil::registerPaths($twig, $paths);
+        foreach ($paths as $namespace => $directories) {
+            foreach ((array) $directories as $directory) {
+                TwigUtil::registerPaths($twig, [
+                    $namespace => $directory,
+                ]);
+            }
+        }
 
         $loader = $twig->getLoader();
 

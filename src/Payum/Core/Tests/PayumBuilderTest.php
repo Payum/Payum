@@ -952,6 +952,71 @@ final class PayumBuilderTest extends TestCase
         }
     }
 
+    public function testShouldRegisterANamespaceAGatewayDeclares(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderNamespaceConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'Pay 123',
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+                'amount' => 123,
+            ]),
+        );
+    }
+
+    public function testShouldAcceptKeysAndNamespacesInOneDeclaration(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderBothFormsConfig())
+            ->getPayum();
+
+        $renderer = $payum->getGateway('acme')->renderer();
+
+        $this->assertStringContainsString('Pay 1', $renderer->render('payum.template.both.checkout', [
+            'amount' => 1,
+        ]));
+        $this->assertStringContainsString('Pay 2', $renderer->render('@PayumBuilderBoth/builder_checkout.html.twig', [
+            'amount' => 2,
+        ]));
+    }
+
+    public function testShouldThrowWhenADeclaredPathIsNeitherFileNorDirectory(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderMissingPathConfig());
+
+        try {
+            $builder->getPayum();
+
+            $this->fail('Expected a LogicException.');
+        } catch (PayumLogicException $e) {
+            $this->assertStringContainsString(BuilderMissingPathGateway::class, $e->getMessage());
+            $this->assertStringContainsString('payum.template.missing.checkout', $e->getMessage());
+            $this->assertStringContainsString('/does/not/exist.html.twig', $e->getMessage());
+        }
+    }
+
+    public function testShouldLetTwoGatewaysDeclareTheSameNamespace(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('one', new BuilderNamespaceConfig())
+            ->registerGateway('two', new BuilderSharedNamespaceConfig())
+            ->getPayum();
+
+        $renderer = $payum->getGateway('one')->renderer();
+
+        $this->assertStringContainsString('Pay 5', $renderer->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+            'amount' => 5,
+        ]));
+        $this->assertStringContainsString('shared', $renderer->render('@PayumBuilderAcme/shared_only.html.twig'));
+    }
+
     /**
      * @return MockObject|RegistryInterface<object>
      */
@@ -1128,5 +1193,178 @@ final class BuilderRendererDeclaringGateway implements PaymentGateway, Container
     public function websiteUrl(): Uri
     {
         return Uri::new('https://rogue.test');
+    }
+}
+
+final class BuilderNamespaceConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderNamespaceGateway::class;
+    }
+}
+
+final class BuilderNamespaceGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderNamespaceConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'PayumBuilderAcme' => __DIR__ . '/Resources/views',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+}
+
+final class BuilderSharedNamespaceConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderSharedNamespaceGateway::class;
+    }
+}
+
+final class BuilderSharedNamespaceGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderSharedNamespaceConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://shared.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Shared';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'PayumBuilderAcme' => __DIR__ . '/Resources/views/shared',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://shared.test');
+    }
+}
+
+final class BuilderBothFormsConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderBothFormsGateway::class;
+    }
+}
+
+final class BuilderBothFormsGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderBothFormsConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://both.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Both';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'PayumBuilderBoth' => __DIR__ . '/Resources/views',
+            'payum.template.both.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://both.test');
+    }
+}
+
+final class BuilderMissingPathConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderMissingPathGateway::class;
+    }
+}
+
+final class BuilderMissingPathGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderMissingPathConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://missing.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Missing';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'payum.template.missing.checkout' => '/does/not/exist.html.twig',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://missing.test');
     }
 }

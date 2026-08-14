@@ -79,6 +79,8 @@ use function array_replace;
 use function DI\autowire;
 use function in_array;
 use function is_a;
+use function is_dir;
+use function is_file;
 use function ltrim;
 use function strtolower;
 use function sys_get_temp_dir;
@@ -376,9 +378,12 @@ class PayumBuilder
         return $this;
     }
 
-    public function setTemplate(string $key, string $file): static
+    /**
+     * @param string $name a template key, or an engine-native name such as `@PayumAcme/checkout.html.twig`
+     */
+    public function setTemplate(string $name, string $file): static
     {
-        $this->templates[$key] = $file;
+        $this->templates[$name] = $file;
 
         return $this;
     }
@@ -624,7 +629,7 @@ class PayumBuilder
 
         $presetContainer = $this->globalContainer;
 
-        $templates = $this->composeTemplates();
+        [$templates, $namespaces] = $this->composeTemplates();
 
         $builder = new ContainerBuilder();
 
@@ -650,7 +655,7 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
-            RendererInterface::class => fn (): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers()),
+            RendererInterface::class => fn (): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($namespaces)),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {
@@ -971,11 +976,12 @@ class PayumBuilder
     }
 
     /**
-     * @return array<string, string>
+     * @return array{0: array<string, string>, 1: array<string, list<string>>} keys => file, namespaces => directories
      */
     private function composeTemplates(): array
     {
         $templates = [];
+        $namespaces = [];
         $declaredBy = [];
 
         foreach ($this->gateways as $config) {
@@ -990,37 +996,52 @@ class PayumBuilder
                 continue;
             }
 
-            foreach ($gateway->templates() as $key => $file) {
-                if (isset($declaredBy[$key]) && $declaredBy[$key] !== $gatewayClass) {
+            foreach ($gateway->templates() as $name => $path) {
+                if (is_dir($path)) {
+                    $namespaces[$name][] = $path;
+
+                    continue;
+                }
+
+                if (! is_file($path)) {
+                    throw new PayumLogicException(sprintf(
+                        '%s declares "%s" as %s, which is neither a file nor a directory.',
+                        $gatewayClass,
+                        $name,
+                        $path,
+                    ));
+                }
+
+                if (isset($declaredBy[$name]) && $declaredBy[$name] !== $gatewayClass) {
                     throw new PayumLogicException(sprintf(
                         'Template key "%s" is declared by both %s and %s.',
-                        $key,
-                        $declaredBy[$key],
+                        $name,
+                        $declaredBy[$name],
                         $gatewayClass,
                     ));
                 }
 
-                $declaredBy[$key] = $gatewayClass;
-                $templates[$key] = $file;
+                $declaredBy[$name] = $gatewayClass;
+                $templates[$name] = $path;
             }
         }
 
-        return array_replace($templates, $this->templates);
+        return [array_replace($templates, $this->templates), $namespaces];
     }
 
     /**
+     * @param array<string, list<string>> $namespaces
+     *
      * @return array<string, RendererInterface>
      */
-    private function composeRenderers(): array
+    private function composeRenderers(array $namespaces): array
     {
+        $paths = array_replace([
+            'PayumCore' => [__DIR__ . '/Resources/views'],
+        ], $namespaces);
+
         return array_replace([
-            'twig' => new TwigRenderer(
-                new Environment(new ChainLoader()),
-                $this->layout,
-                [
-                    'PayumCore' => __DIR__ . '/Resources/views',
-                ],
-            ),
+            'twig' => new TwigRenderer(new Environment(new ChainLoader()), $this->layout, $paths),
         ], $this->renderers);
     }
 }
