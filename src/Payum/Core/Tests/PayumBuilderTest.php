@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use League\Uri\Uri;
+use LogicException;
 use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
@@ -14,7 +15,7 @@ use Payum\Core\Config\GatewayConfig;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\LogicException as PayumLogicException;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\DeclaresTemplates;
@@ -867,6 +868,22 @@ final class PayumBuilderTest extends TestCase
         );
     }
 
+    public function testShouldNotTreatTheSameGatewayClassRegisteredTwiceAsACollision(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme_live', new BuilderTemplateConfig())
+            ->registerGateway('acme_test', new BuilderTemplateConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString('Pay 123', $payum->getGateway('acme_live')->renderer()->render('payum.template.acme.checkout', [
+            'amount' => 123,
+        ]));
+        $this->assertStringContainsString('Pay 123', $payum->getGateway('acme_test')->renderer()->render('payum.template.acme.checkout', [
+            'amount' => 123,
+        ]));
+    }
+
     public function testShouldThrowWhenTwoGatewaysDeclareTheSameTemplateKey(): void
     {
         $builder = (new PayumBuilder())
@@ -878,7 +895,7 @@ final class PayumBuilderTest extends TestCase
             $builder->getPayum();
 
             $this->fail('Expected a LogicException.');
-        } catch (LogicException $e) {
+        } catch (PayumLogicException $e) {
             $this->assertStringContainsString('payum.template.acme.checkout', $e->getMessage());
             $this->assertStringContainsString(BuilderTemplateGateway::class, $e->getMessage());
             $this->assertStringContainsString(BuilderClashingTemplateGateway::class, $e->getMessage());
@@ -895,7 +912,7 @@ final class PayumBuilderTest extends TestCase
             $builder->getPayum();
 
             $this->fail('Expected a LogicException.');
-        } catch (LogicException $e) {
+        } catch (PayumLogicException $e) {
             $this->assertStringContainsString(BuilderRendererDeclaringGateway::class, $e->getMessage());
             $this->assertStringContainsString(RendererInterface::class, $e->getMessage());
         }
