@@ -113,6 +113,19 @@ final class TwigRendererTest extends TestCase
         );
     }
 
+    public function testShouldRenderTheFragmentLayoutWithoutAPageWrapper(): void
+    {
+        $renderer = new TwigRenderer($this->twig(), '@PayumCore/fragment.html.twig', [
+            'PayumCore' => __DIR__ . '/../../../Resources/views',
+        ]);
+
+        $output = $renderer->render('@PayumCore/fragment.html.twig');
+
+        $this->assertStringNotContainsString('<!DOCTYPE html>', $output);
+        $this->assertStringNotContainsString('<html>', $output);
+        $this->assertStringNotContainsString('<body>', $output);
+    }
+
     /**
      * @param array<string, string> $templates
      */

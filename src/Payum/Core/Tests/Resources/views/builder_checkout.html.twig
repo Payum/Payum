@@ -1,1 +1,3 @@
-Pay {{ amount|default('nothing') }}
+{% extends layout %}
+
+{% block payum_body %}Pay {{ amount|default('nothing') }}{% endblock %}

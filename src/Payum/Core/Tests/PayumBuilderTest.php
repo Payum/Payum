@@ -836,6 +836,22 @@ final class PayumBuilderTest extends TestCase
         ]));
     }
 
+    public function testShouldLetTheApplicationRenderIntoTheFragmentLayout(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->setLayout('@PayumCore/fragment.html.twig')
+            ->getPayum();
+
+        $output = $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout', [
+            'amount' => 123,
+        ]);
+
+        $this->assertStringNotContainsString('<!DOCTYPE html>', $output);
+        $this->assertStringContainsString('Pay 123', $output);
+    }
+
     public function testShouldLetTheApplicationOverrideAGatewaysTemplate(): void
     {
         $payum = (new PayumBuilder())
