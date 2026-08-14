@@ -10,6 +10,7 @@ use Exception;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Invoker\InvokerInterface;
+use LogicException;
 use Omnipay\Omnipay;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
@@ -23,7 +24,7 @@ use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\FallbackContainer;
 use Payum\Core\DI\ListableContainerInterface;
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\LogicException as PayumLogicException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway\DeclaresMiddleware;
@@ -388,10 +389,6 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * The layout every Twig template renders into. An application embedding Payum's output in its own
-     * page calls setLayout('@PayumCore/fragment.html.twig'), or points it at a layout of its own.
-     */
     public function setLayout(string $layout): static
     {
         $this->layout = $layout;
@@ -450,7 +447,7 @@ class PayumBuilder
             $gateway = new $gatewayClass();
 
             if ($gateway instanceof ContainerConfiguration && array_key_exists(RendererInterface::class, $gateway->configureContainer())) {
-                throw new LogicException(sprintf(
+                throw new PayumLogicException(sprintf(
                     '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Use PayumBuilder::setTemplate() to override a template instead.',
                     $gatewayClass,
                     RendererInterface::class,
@@ -986,8 +983,8 @@ class PayumBuilder
             }
 
             foreach ($gateway->templates() as $key => $file) {
-                if (isset($declaredBy[$key])) {
-                    throw new LogicException(sprintf(
+                if (isset($declaredBy[$key]) && $declaredBy[$key] !== $gatewayClass) {
+                    throw new PayumLogicException(sprintf(
                         'Template key "%s" is declared by both %s and %s.',
                         $key,
                         $declaredBy[$key],
