@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Bridge\Twig;
 
+use Payum\Core\Bridge\Twig\AbsolutePathLoader;
 use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Template\RendererInterface;
 use PHPUnit\Framework\TestCase;
@@ -86,6 +87,30 @@ final class TwigRendererTest extends TestCase
         ]);
 
         $this->assertStringContainsString('<!DOCTYPE html>', $renderer->render('@PayumCore/layout.html.twig'));
+    }
+
+    public function testShouldRegisterTheAbsolutePathLoaderOnlyOnce(): void
+    {
+        $twig = $this->twig();
+        $paths = [
+            'PayumCore' => __DIR__ . '/../../../Resources/views',
+        ];
+
+        new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths);
+        $renderer = new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths);
+
+        /** @var ChainLoader $loader */
+        $loader = $twig->getLoader();
+        $absolutePathLoaders = array_filter(
+            $loader->getLoaders(),
+            static fn ($registered): bool => $registered instanceof AbsolutePathLoader,
+        );
+
+        $this->assertCount(1, $absolutePathLoaders);
+        $this->assertStringContainsString(
+            '<!DOCTYPE html>',
+            $renderer->render(__DIR__ . '/../../../Resources/views/layout.html.twig'),
+        );
     }
 
     /**
