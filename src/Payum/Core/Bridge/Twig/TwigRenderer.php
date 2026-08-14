@@ -7,6 +7,7 @@ namespace Payum\Core\Bridge\Twig;
 use Payum\Core\Template\RendererInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
+use Twig\Loader\ChainLoader;
 use function array_replace;
 
 /**
@@ -25,6 +26,21 @@ final class TwigRenderer implements RendererInterface
         array $paths = [],
     ) {
         TwigUtil::registerPaths($twig, $paths);
+
+        $loader = $twig->getLoader();
+
+        if (! $loader instanceof ChainLoader) {
+            $loader = new ChainLoader([$loader]);
+            $twig->setLoader($loader);
+        }
+
+        foreach ($loader->getLoaders() as $registered) {
+            if ($registered instanceof AbsolutePathLoader) {
+                return;
+            }
+        }
+
+        $loader->addLoader(new AbsolutePathLoader());
     }
 
     public function render(string $template, array $context = []): string
