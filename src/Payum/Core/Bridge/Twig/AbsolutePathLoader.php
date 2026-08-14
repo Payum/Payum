@@ -33,7 +33,7 @@ final class AbsolutePathLoader implements LoaderInterface
             throw new LoaderError(sprintf('Template "%s" does not exist.', $name));
         }
 
-        $code = file_get_contents($name);
+        $code = @file_get_contents($name);
 
         if (false === $code) {
             throw new LoaderError(sprintf('Template "%s" could not be read.', $name));
