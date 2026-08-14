@@ -55,6 +55,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
+use Twig\TwigFunction;
 
 final class PayumBuilderTest extends TestCase
 {
@@ -1017,6 +1020,58 @@ final class PayumBuilderTest extends TestCase
         $this->assertStringContainsString('shared', $renderer->render('@PayumBuilderAcme/shared_only.html.twig'));
     }
 
+    public function testShouldUseTheTwigEnvironmentTheApplicationRegistersUnderTwigEnv(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('twig.env', $twig)
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    public function testShouldUseTheTwigEnvironmentTheApplicationRegistersUnderTheClassName(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(Environment::class, $twig)
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    public function testShouldRegisterGatewayNamespacesOnTheApplicationsOwnEnvironment(): void
+    {
+        $twig = new Environment(new ChainLoader());
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('twig.env', $twig)
+            ->registerGateway('acme', new BuilderNamespaceConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'Pay 7',
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+                'amount' => 7,
+            ]),
+        );
+    }
+
     /**
      * @return MockObject|RegistryInterface<object>
      */
@@ -1366,5 +1421,48 @@ final class BuilderMissingPathGateway implements PaymentGateway, DeclaresTemplat
     public function websiteUrl(): Uri
     {
         return Uri::new('https://missing.test');
+    }
+}
+
+final class BuilderAppTwigConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderAppTwigGateway::class;
+    }
+}
+
+final class BuilderAppTwigGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderAppTwigConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://apptwig.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'AppTwig';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'payum.template.apptwig.greeting' => __DIR__ . '/Resources/views/app_greeting.html.twig',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://apptwig.test');
     }
 }

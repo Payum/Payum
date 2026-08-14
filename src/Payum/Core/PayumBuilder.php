@@ -655,7 +655,7 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
-            RendererInterface::class => fn (): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($namespaces)),
+            RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($c, $namespaces)),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {
@@ -1034,14 +1034,33 @@ class PayumBuilder
      *
      * @return array<string, RendererInterface>
      */
-    private function composeRenderers(array $namespaces): array
+    private function composeRenderers(ContainerInterface $c, array $namespaces): array
     {
         $paths = array_replace([
             'PayumCore' => [__DIR__ . '/Resources/views'],
         ], $namespaces);
 
         return array_replace([
-            'twig' => new TwigRenderer(new Environment(new ChainLoader()), $this->layout, $paths),
+            'twig' => new TwigRenderer($this->resolveTwigEnvironment($c), $this->layout, $paths),
         ], $this->renderers);
+    }
+
+    private function resolveTwigEnvironment(ContainerInterface $c): Environment
+    {
+        // has() alone is not enough: PHP-DI reports true for any instantiable class, including
+        // Environment when nothing registered it, then throws autowiring its LoaderInterface argument.
+        $known = $this->getKnownEntryNames($c);
+
+        foreach (['twig.env', Environment::class] as $id) {
+            if (in_array($id, $known, true)) {
+                $environment = $c->get($id);
+
+                if ($environment instanceof Environment) {
+                    return $environment;
+                }
+            }
+        }
+
+        return new Environment(new ChainLoader());
     }
 }
