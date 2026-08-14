@@ -10,22 +10,24 @@ use Exception;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Invoker\InvokerInterface;
-use LogicException;
 use Omnipay\Omnipay;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\FallbackContainer;
 use Payum\Core\DI\ListableContainerInterface;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway\DeclaresMiddleware;
+use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Middleware\MiddlewareCollection;
@@ -47,6 +49,8 @@ use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
+use Payum\Core\Template\TemplateRenderer;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
@@ -67,6 +71,8 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
 use function array_merge;
 use function array_replace;
 use function DI\autowire;
@@ -156,6 +162,18 @@ class PayumBuilder
      * @var array<string, mixed>
      */
     protected array $globalDefinitions = [];
+
+    /**
+     * @var array<string, string>
+     */
+    protected array $templates = [];
+
+    /**
+     * @var array<string, RendererInterface>
+     */
+    protected array $renderers = [];
+
+    protected string $layout = '@PayumCore/layout.html.twig';
 
     public function __construct()
     {
@@ -356,6 +374,31 @@ class PayumBuilder
         return $this;
     }
 
+    public function setTemplate(string $key, string $file): static
+    {
+        $this->templates[$key] = $file;
+
+        return $this;
+    }
+
+    public function addRenderer(string $extension, RendererInterface $renderer): static
+    {
+        $this->renderers[$extension] = $renderer;
+
+        return $this;
+    }
+
+    /**
+     * The layout every Twig template renders into. An application embedding Payum's output in its own
+     * page calls setLayout('@PayumCore/fragment.html.twig'), or points it at a layout of its own.
+     */
+    public function setLayout(string $layout): static
+    {
+        $this->layout = $layout;
+
+        return $this;
+    }
+
     /**
      * Set a pre-built global container (for framework integration).
      * When set, this container will be used instead of building one from global definitions.
@@ -405,6 +448,14 @@ class PayumBuilder
 
             $gatewayClass = $config->getGatewayClass();
             $gateway = new $gatewayClass();
+
+            if ($gateway instanceof ContainerConfiguration && array_key_exists(RendererInterface::class, $gateway->configureContainer())) {
+                throw new LogicException(sprintf(
+                    '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Use PayumBuilder::setTemplate() to override a template instead.',
+                    $gatewayClass,
+                    RendererInterface::class,
+                ));
+            }
 
             $containerBuilder = new ContainerBuilder();
 
@@ -593,6 +644,8 @@ class PayumBuilder
             ClientInterface::class => Psr18ClientDiscovery::find(...),
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
+
+            RendererInterface::class => new TemplateRenderer($this->composeTemplates(), $this->composeRenderers()),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {
@@ -910,5 +963,59 @@ class PayumBuilder
         }
 
         return $coreGatewayFactory ?: new CoreGatewayFactory($config);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function composeTemplates(): array
+    {
+        $templates = [];
+        $declaredBy = [];
+
+        foreach ($this->gateways as $config) {
+            if (! $config instanceof GatewayConfig) {
+                continue;
+            }
+
+            $gatewayClass = $config->getGatewayClass();
+            $gateway = new $gatewayClass();
+
+            if (! $gateway instanceof DeclaresTemplates) {
+                continue;
+            }
+
+            foreach ($gateway->templates() as $key => $file) {
+                if (isset($declaredBy[$key])) {
+                    throw new LogicException(sprintf(
+                        'Template key "%s" is declared by both %s and %s.',
+                        $key,
+                        $declaredBy[$key],
+                        $gatewayClass,
+                    ));
+                }
+
+                $declaredBy[$key] = $gatewayClass;
+                $templates[$key] = $file;
+            }
+        }
+
+        return array_replace($templates, $this->templates);
+    }
+
+    /**
+     * @return array<string, RendererInterface>
+     */
+    private function composeRenderers(): array
+    {
+        return array_replace([
+            'twig' => new TwigRenderer(
+                new Environment(new ChainLoader()),
+                $this->layout,
+                [
+                    'PayumCore' => __DIR__ . '/Resources/views',
+                ],
+            ),
+        ], $this->renderers);
     }
 }

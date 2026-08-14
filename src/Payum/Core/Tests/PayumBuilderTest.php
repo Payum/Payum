@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests;
 
-use LogicException;
+use League\Uri\Uri;
 use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
+use Payum\Core\Config\GatewayConfig;
 use Payum\Core\CoreGatewayFactory;
+use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
+use Payum\Core\Gateway\DeclaresTemplates;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Metadata\Logo;
+use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
@@ -30,6 +37,8 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
+use Payum\Core\Template\TemplateRenderer;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
@@ -811,6 +820,87 @@ final class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Gateway::class, $gateway);
     }
 
+    public function testShouldComposeTheTemplateRegistryFromRegisteredGateways(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->getPayum();
+
+        $renderer = $payum->getGateway('acme')->renderer();
+
+        $this->assertInstanceOf(TemplateRenderer::class, $renderer);
+        $this->assertStringContainsString('Pay 123', $renderer->render('payum.template.acme.checkout', [
+            'amount' => 123,
+        ]));
+    }
+
+    public function testShouldLetTheApplicationOverrideAGatewaysTemplate(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->setTemplate('payum.template.acme.checkout', __DIR__ . '/Resources/views/override.html.twig')
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'overridden',
+            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
+        );
+    }
+
+    public function testShouldLetTheApplicationRegisterARendererForAnotherFileType(): void
+    {
+        $custom = $this->createMock(RendererInterface::class);
+        $custom->expects($this->once())->method('render')->willReturn('from the custom engine');
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->setTemplate('payum.template.acme.checkout', '/app/views/checkout.custom')
+            ->addRenderer('custom', $custom)
+            ->getPayum();
+
+        $this->assertSame(
+            'from the custom engine',
+            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
+        );
+    }
+
+    public function testShouldThrowWhenTwoGatewaysDeclareTheSameTemplateKey(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->registerGateway('other', new BuilderClashingTemplateConfig());
+
+        try {
+            $builder->getPayum();
+
+            $this->fail('Expected a LogicException.');
+        } catch (LogicException $e) {
+            $this->assertStringContainsString('payum.template.acme.checkout', $e->getMessage());
+            $this->assertStringContainsString(BuilderTemplateGateway::class, $e->getMessage());
+            $this->assertStringContainsString(BuilderClashingTemplateGateway::class, $e->getMessage());
+        }
+    }
+
+    public function testShouldThrowWhenAGatewayDeclaresItsOwnRenderer(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderRendererDeclaringConfig());
+
+        try {
+            $builder->getPayum();
+
+            $this->fail('Expected a LogicException.');
+        } catch (LogicException $e) {
+            $this->assertStringContainsString(BuilderRendererDeclaringGateway::class, $e->getMessage());
+            $this->assertStringContainsString(RendererInterface::class, $e->getMessage());
+        }
+    }
+
     /**
      * @return MockObject|RegistryInterface<object>
      */
@@ -859,4 +949,133 @@ final class PayumBuilderTest extends TestCase
 
 class TestModel
 {
+}
+
+final class BuilderTemplateConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderTemplateGateway::class;
+    }
+}
+
+final class BuilderTemplateGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderTemplateConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'payum.template.acme.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+}
+
+final class BuilderClashingTemplateConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderClashingTemplateGateway::class;
+    }
+}
+
+final class BuilderClashingTemplateGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderClashingTemplateConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://other.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Other';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'payum.template.acme.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://other.test');
+    }
+}
+
+final class BuilderRendererDeclaringConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderRendererDeclaringGateway::class;
+    }
+}
+
+final class BuilderRendererDeclaringGateway implements PaymentGateway, ContainerConfiguration
+{
+    public function configClass(): string
+    {
+        return BuilderRendererDeclaringConfig::class;
+    }
+
+    public function configureContainer(): array
+    {
+        return [
+            RendererInterface::class => static fn (): RendererInterface => throw new LogicException('never built'),
+        ];
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://rogue.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Rogue';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://rogue.test');
+    }
 }
