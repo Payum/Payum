@@ -67,6 +67,27 @@ final class TwigRendererTest extends TestCase
         );
     }
 
+    public function testShouldRenderATemplateGivenAsAnAbsolutePath(): void
+    {
+        $renderer = new TwigRenderer($this->twig(), '@PayumCore/layout.html.twig', [
+            'PayumCore' => __DIR__ . '/../../../Resources/views',
+        ]);
+
+        $this->assertStringContainsString(
+            '<!DOCTYPE html>',
+            $renderer->render(__DIR__ . '/../../../Resources/views/layout.html.twig'),
+        );
+    }
+
+    public function testShouldStillRenderANamespacedName(): void
+    {
+        $renderer = new TwigRenderer($this->twig(), '@PayumCore/layout.html.twig', [
+            'PayumCore' => __DIR__ . '/../../../Resources/views',
+        ]);
+
+        $this->assertStringContainsString('<!DOCTYPE html>', $renderer->render('@PayumCore/layout.html.twig'));
+    }
+
     /**
      * @param array<string, string> $templates
      */
