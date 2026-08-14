@@ -91,4 +91,60 @@ final class TemplateRendererTest extends TestCase
             $this->assertStringContainsString("addRenderer('blade.php'", $e->getMessage());
         }
     }
+
+    public function testShouldPassAnEngineNativeNameStraightToTheRenderer(): void
+    {
+        $twig = $this->createMock(RendererInterface::class);
+        $twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('@PayumAcme/checkout.html.twig', [
+                'amount' => 123,
+            ])
+            ->willReturn('<form>pay</form>');
+
+        $renderer = new TemplateRenderer([], [
+            'twig' => $twig,
+        ]);
+
+        $this->assertSame('<form>pay</form>', $renderer->render('@PayumAcme/checkout.html.twig', [
+            'amount' => 123,
+        ]));
+    }
+
+    public function testShouldPreferARegisteredKeyOverTheEngine(): void
+    {
+        $twig = $this->createMock(RendererInterface::class);
+        $twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('/app/views/override.html.twig', [])
+            ->willReturn('overridden');
+
+        $renderer = new TemplateRenderer([
+            '@PayumAcme/checkout.html.twig' => '/app/views/override.html.twig',
+        ], [
+            'twig' => $twig,
+        ]);
+
+        $this->assertSame('overridden', $renderer->render('@PayumAcme/checkout.html.twig'));
+    }
+
+    public function testShouldStillThrowForAnUnregisteredNameThatIsNotEngineNative(): void
+    {
+        $renderer = new TemplateRenderer([
+            'payum.template.acme.checkout' => '/acme/views/checkout.html.twig',
+        ], [
+            'twig' => $this->createMock(RendererInterface::class),
+        ]);
+
+        try {
+            $renderer->render('payum.template.acme.chekout');
+
+            $this->fail('Expected a LogicException.');
+        } catch (LogicException $e) {
+            $this->assertStringContainsString('payum.template.acme.chekout', $e->getMessage());
+            $this->assertStringContainsString('payum.template.acme.checkout', $e->getMessage());
+        }
+    }
 }

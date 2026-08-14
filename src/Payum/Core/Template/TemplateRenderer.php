@@ -10,6 +10,7 @@ use function basename;
 use function implode;
 use function sprintf;
 use function str_ends_with;
+use function str_starts_with;
 use function strlen;
 use function strpos;
 use function substr;
@@ -31,23 +32,29 @@ final class TemplateRenderer implements RendererInterface
     }
 
     /**
-     * @param string $template a template key, resolved to a file before rendering
+     * @param string $template a registered template key, or an engine-native name such as
+     *                         `@PayumAcme/checkout.html.twig`
      *
-     * @throws LogicException if the key is not registered, or no renderer handles the file it resolves to
+     * @throws LogicException if the name is neither registered nor engine-native, or no renderer handles
+     *                        the file it resolves to
      */
     public function render(string $template, array $context = []): string
     {
-        if (! isset($this->templates[$template])) {
-            throw new LogicException(sprintf(
-                'No template is registered under "%s". Registered keys: %s.',
-                $template,
-                [] === $this->templates ? 'none' : implode(', ', array_keys($this->templates)),
-            ));
+        if (isset($this->templates[$template])) {
+            $file = $this->templates[$template];
+
+            return $this->rendererFor($file)->render($file, $context);
         }
 
-        $file = $this->templates[$template];
+        if (str_starts_with($template, '@')) {
+            return $this->rendererFor($template)->render($template, $context);
+        }
 
-        return $this->rendererFor($file)->render($file, $context);
+        throw new LogicException(sprintf(
+            'No template is registered under "%s". Registered keys: %s.',
+            $template,
+            [] === $this->templates ? 'none' : implode(', ', array_keys($this->templates)),
+        ));
     }
 
     private function rendererFor(string $file): RendererInterface
