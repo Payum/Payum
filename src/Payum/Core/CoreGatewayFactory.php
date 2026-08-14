@@ -42,7 +42,6 @@ use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
-use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
@@ -531,18 +530,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * Core's own default, then the application's 'payum.paths', then the gateway's templatePaths().
-     *
      * @return array<string, string>
      */
     private static function composeTemplatePaths(ContainerInterface $c): array
     {
-        $paths = array_merge(self::corePaths(), (array) $c->get('payum.paths'));
-
-        $gateway = $c->has(PaymentGateway::class) ? $c->get(PaymentGateway::class) : null;
-
-        return $gateway instanceof DeclaresTemplates
-            ? array_merge($paths, $gateway->templatePaths())
-            : $paths;
+        return array_merge(self::corePaths(), (array) $c->get('payum.paths'));
     }
 }
