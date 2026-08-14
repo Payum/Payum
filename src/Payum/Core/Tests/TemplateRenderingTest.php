@@ -111,6 +111,41 @@ final class TemplateRenderingTest extends TestCase
         ])->getContent());
     }
 
+    public function testShouldLetAGatewayTemplateIncludeASibling(): void
+    {
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        $this->assertStringContainsString(
+            'partial content',
+            $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
+                'actionUrl' => 'https://acme.test/pay',
+                'amount' => 123,
+            ]),
+        );
+    }
+
+    public function testShouldLetTheApplicationOverrideANamespacedTemplate(): void
+    {
+        $custom = $this->createMock(RendererInterface::class);
+        $custom
+            ->expects($this->once())
+            ->method('render')
+            ->with('/app/views/obtain_token.custom', $this->anything())
+            ->willReturn('rendered by the application');
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new AcmeTemplateConfig())
+            ->setTemplate('@PayumAcme/obtain_token.html.twig', '/app/views/obtain_token.custom')
+            ->addRenderer('custom', $custom)
+            ->getPayum();
+
+        $this->assertSame(
+            'rendered by the application',
+            $payum->getGateway('acme')->renderer()->render('@PayumAcme/obtain_token.html.twig'),
+        );
+    }
+
     private function buildPayment(): Payment
     {
         $payment = new Payment();
@@ -166,6 +201,7 @@ final class AcmeTemplateGateway implements PaymentGateway, DeclaresTemplates
     public function templates(): array
     {
         return [
+            'PayumAcme' => __DIR__ . '/Resources/views',
             'payum.template.acme.obtain_token' => __DIR__ . '/Resources/views/obtain_token.html.twig',
         ];
     }
