@@ -28,6 +28,11 @@ final class TemplateRenderer implements RendererInterface
     ) {
     }
 
+    /**
+     * @param string $template a template key, resolved to a file before rendering
+     *
+     * @throws LogicException if the key is not registered, or no renderer handles the file it resolves to
+     */
     public function render(string $template, array $context = []): string
     {
         if (! isset($this->templates[$template])) {
