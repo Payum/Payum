@@ -655,7 +655,7 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
-            RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($c, $namespaces)),
+            RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($c, $namespaces, array_values($templates))),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {
@@ -998,6 +998,13 @@ class PayumBuilder
 
             foreach ($gateway->templates() as $name => $path) {
                 if (is_dir($path)) {
+                    if ('PayumCore' === $name) {
+                        throw new PayumLogicException(sprintf(
+                            '%s declares the namespace "PayumCore", which is reserved for Payum\'s own views.',
+                            $gatewayClass,
+                        ));
+                    }
+
                     $namespaces[$name][] = $path;
 
                     continue;
@@ -1031,17 +1038,18 @@ class PayumBuilder
 
     /**
      * @param array<string, list<string>> $namespaces
+     * @param list<string> $files the permitted absolute paths, i.e. the composed template registry's values
      *
      * @return array<string, RendererInterface>
      */
-    private function composeRenderers(ContainerInterface $c, array $namespaces): array
+    private function composeRenderers(ContainerInterface $c, array $namespaces, array $files): array
     {
         $paths = array_replace([
             'PayumCore' => [__DIR__ . '/Resources/views'],
         ], $namespaces);
 
         return array_replace([
-            'twig' => new TwigRenderer($this->resolveTwigEnvironment($c), $this->layout, $paths),
+            'twig' => new TwigRenderer($this->resolveTwigEnvironment($c), $this->layout, $paths, $files),
         ], $this->renderers);
     }
 

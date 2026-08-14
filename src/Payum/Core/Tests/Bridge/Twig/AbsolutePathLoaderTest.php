@@ -13,14 +13,14 @@ final class AbsolutePathLoaderTest extends TestCase
 {
     public function testShouldImplementTwigLoaderInterface(): void
     {
-        $this->assertInstanceOf(LoaderInterface::class, new AbsolutePathLoader());
+        $this->assertInstanceOf(LoaderInterface::class, new AbsolutePathLoader([]));
     }
 
     public function testShouldReadTheFileAtTheGivenPath(): void
     {
         $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
 
-        $source = (new AbsolutePathLoader())->getSourceContext($file);
+        $source = (new AbsolutePathLoader([$file]))->getSourceContext($file);
 
         $this->assertStringContainsString('<!DOCTYPE html>', $source->getCode());
         $this->assertSame($file, $source->getName());
@@ -39,7 +39,7 @@ final class AbsolutePathLoaderTest extends TestCase
             $this->expectException(LoaderError::class);
             $this->expectExceptionMessage(sprintf('Template "%s" could not be read.', $file));
 
-            (new AbsolutePathLoader())->getSourceContext($file);
+            (new AbsolutePathLoader([$file]))->getSourceContext($file);
         } finally {
             chmod($file, 0644);
             unlink($file);
@@ -48,24 +48,58 @@ final class AbsolutePathLoaderTest extends TestCase
 
     public function testShouldOnlyClaimPathsThatExist(): void
     {
-        $loader = new AbsolutePathLoader();
+        $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
+        $loader = new AbsolutePathLoader([$file]);
 
-        $this->assertTrue($loader->exists(__DIR__ . '/../../../Resources/views/layout.html.twig'));
+        $this->assertTrue($loader->exists($file));
         $this->assertFalse($loader->exists('@PayumCore/layout.html.twig'));
         $this->assertFalse($loader->exists('/nope/missing.html.twig'));
+    }
+
+    public function testShouldNotClaimAnExistingFileThatIsNotInTheAllowlist(): void
+    {
+        $registered = __DIR__ . '/../../../Resources/views/layout.html.twig';
+        $unregistered = __DIR__ . '/../../../Resources/views/fragment.html.twig';
+
+        $loader = new AbsolutePathLoader([$registered]);
+
+        $this->assertTrue($loader->exists($registered));
+        $this->assertFalse($loader->exists($unregistered));
+    }
+
+    public function testShouldRefuseToReadAFileThatIsNotInTheAllowlist(): void
+    {
+        $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
+        $loader = new AbsolutePathLoader([]);
+
+        $this->expectException(LoaderError::class);
+        $this->expectExceptionMessage(sprintf('Template "%s" is not registered.', $file));
+
+        $loader->getSourceContext($file);
+    }
+
+    public function testShouldRefuseToReportFreshnessForAFileThatIsNotInTheAllowlist(): void
+    {
+        $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
+        $loader = new AbsolutePathLoader([]);
+
+        $this->expectException(LoaderError::class);
+        $this->expectExceptionMessage(sprintf('Template "%s" is not registered.', $file));
+
+        $loader->isFresh($file, time());
     }
 
     public function testShouldKeyTheCacheOnThePath(): void
     {
         $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
 
-        $this->assertSame($file, (new AbsolutePathLoader())->getCacheKey($file));
+        $this->assertSame($file, (new AbsolutePathLoader([$file]))->getCacheKey($file));
     }
 
     public function testShouldReportFreshnessAgainstTheFileMtime(): void
     {
         $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
-        $loader = new AbsolutePathLoader();
+        $loader = new AbsolutePathLoader([$file]);
 
         $this->assertTrue($loader->isFresh($file, filemtime($file) + 10));
         $this->assertFalse($loader->isFresh($file, filemtime($file) - 10));
