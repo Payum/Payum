@@ -72,8 +72,8 @@ final class TemplateRenderingTest extends TestCase
         ]);
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('https://acme.test/pay', $response->getContent());
-        $this->assertStringContainsString('Pay 123', $response->getContent());
+        $this->assertStringContainsString('https://acme.test/pay', (string) $response->getContent());
+        $this->assertStringContainsString('Pay 123', (string) $response->getContent());
     }
 
     public function testShouldTranslateRenderTemplateToAnHttpResponseOnTheLegacyReplyPath(): void
