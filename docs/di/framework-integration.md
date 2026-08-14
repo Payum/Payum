@@ -182,6 +182,12 @@ class PayumContainerAdapter implements ListableContainerInterface
 For most applications the `addGlobalService()` approach shown above is simpler and does not require you to
 re-declare Payum's own services.
 
+One service always needs `addGlobalService()` regardless of whether the rest come through
+`setGlobalContainer()`: a Twig `Environment` registered under `twig.env` on the container handed to
+`setGlobalContainer()` is not seen by Payum's template renderer, which is built from the container Payum
+assembles itself. Register it with `addGlobalService('twig.env', …)` instead — see
+[Supplying your own Twig environment](../gateways/templates.md#supplying-your-own-twig-environment).
+
 ## Laravel Integration
 
 ### Using Service Provider

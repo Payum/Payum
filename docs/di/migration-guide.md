@@ -163,12 +163,15 @@ class MyGatewayFactory extends CoreGatewayFactory
 }
 ```
 
-Two things worth noting:
+A few things worth noting:
 
 - `CoreGatewayFactory` already implements `ContainerConfiguration`, so `extends CoreGatewayFactory` is
   enough — you do not have to repeat `implements ContainerConfiguration`.
 - `populateConfig()` is replaced by `configureContainer()`. Drop it; there is nothing to keep for
   backwards compatibility.
+- `payum.paths` serves the action path — it is correct here because this factory's actions still
+  resolve their own templates through it. A gateway ported to handlers declares its templates through
+  `Payum\Core\Gateway\DeclaresTemplates` instead — see [Templates](../gateways/templates.md).
 
 ### Registering the Factory
 

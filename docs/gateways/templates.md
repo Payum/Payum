@@ -27,9 +27,12 @@ src/Payum/Acme/
     └── checkout.html.twig
 ```
 
-### 2. Declare the keys
+### 2. Declare the templates
 
-Implement `DeclaresTemplates` and map each key to the absolute path of its file:
+Implement `DeclaresTemplates`. What each entry points at decides what it registers: a **directory**
+registers a Twig namespace, a **file** registers a template key.
+
+#### Declaring a namespace
 
 ```php
 <?php
@@ -41,7 +44,7 @@ final class AcmeGateway implements GatewayInterface, DeclaresTemplates
     public function templates(): array
     {
         return [
-            'payum.template.acme.checkout' => __DIR__ . '/Resources/views/checkout.html.twig',
+            'PayumAcme' => __DIR__ . '/Resources/views',
         ];
     }
 
@@ -49,12 +52,73 @@ final class AcmeGateway implements GatewayInterface, DeclaresTemplates
 }
 ```
 
-A handler only ever names the key — `payum.template.acme.checkout` — never the file behind it.
+A directory registers a Twig namespace, so templates under it can `{% include %}` and `{% import %}`
+each other — a partial, a set of macros, another template shipped alongside it. A key alone cannot do
+this: it resolves straight to one absolute file, with no namespace for a relative `{% include %}` to
+resolve against. Prefer a namespace once a gateway ships more than one template, a partial, or macros.
+
+**Do not name a namespace `PayumCore`.** Core registers its own views — including the layout every
+template extends — under that name, and a gateway declaring the same namespace replaces it rather than
+adding to it.
+
+#### Declaring a template key
+
+```php
+public function templates(): array
+{
+    return [
+        'payum.template.acme.checkout' => __DIR__ . '/Resources/views/checkout.html.twig',
+    ];
+}
+```
+
+A file registers a template key instead. A key is the stable override point: it keeps working when the
+gateway later renames or moves the file behind it.
 
 **Write the key out in full.** The convention is `payum.template.{gateway}.{name}`. Two gateways
 declaring the same key is a build-time error: `PayumBuilder::getPayum()` throws before either gateway
-can be used. Registering the same gateway class twice under different names — a live and a test
-account, say — is not a collision. It is one declaration, used twice.
+can be used. Sharing a namespace is not a collision — Twig searches a namespace's directories in the
+order they were registered, so two gateways can point the same namespace at their own directory.
+Registering the same gateway class twice under different names — a live and a test account, say — is
+not a collision either. It is one declaration, used twice.
+
+A declared value that is neither an existing file nor an existing directory is also a build-time error,
+naming the gateway.
+
+#### Both together
+
+One `templates()` return can hold both kinds of entry:
+
+```php
+public function templates(): array
+{
+    return [
+        'PayumAcme' => __DIR__ . '/Resources/views',
+        'payum.template.acme.checkout' => __DIR__ . '/Resources/views/checkout.html.twig',
+    ];
+}
+```
+
+Ship a namespace so a gateway's own templates can include each other, and a key alongside it for the
+one template a handler names and an application might want to override.
+
+#### Naming one from a handler
+
+A handler names either form the same way, as `RenderTemplate`'s first argument — the key:
+
+```php
+return CaptureResult::pending(new RenderTemplate('payum.template.acme.checkout', [
+    'actionUrl' => $context->token()?->getTargetUrl(),
+]));
+```
+
+or the namespaced name:
+
+```php
+return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [
+    'actionUrl' => $context->token()?->getTargetUrl(),
+]));
+```
 
 ### 3. Write the template
 
@@ -100,15 +164,40 @@ One renderer, shared by every gateway, resolves every key — Twig, unless the a
 something else. A gateway declaring `Payum\Core\Template\RendererInterface` from
 `configureContainer()` is a build-time error: replacing the shared renderer would break every other
 gateway's templates, including the layout every one of them extends. An application overrides one
-template at a time instead — the next section shows how.
-
-### Overriding a template
+template at a time instead — the sections below show how.
 
 Everything from here on is for an application embedding Payum, not for a gateway shipping one. Skip it
 if you are writing a gateway.
 
-`PayumBuilder::setTemplate()` rebinds a key to a different file. `PayumBuilder::addRenderer()`
-registers whatever renders that file:
+### Supplying your own Twig environment
+
+By default, Payum renders with a Twig `Environment` it builds itself. An application supplies its own
+instead by registering it under `twig.env` (or `Twig\Environment::class`) with
+`PayumBuilder::addGlobalService()`:
+
+```php
+$payum = (new PayumBuilder())
+    ->addGlobalService('twig.env', $container->get('twig'))
+    ->setLayout('@App/payum.html.twig')
+    ->getPayum();
+```
+
+Gateway templates then render with the application's own functions, filters, globals and extensions —
+which is what a custom layout usually needs. Payum still registers core's and every gateway's
+namespaces onto that environment, so gateway templates keep resolving.
+
+This only takes effect through `addGlobalService()`. A `twig.env` registered on a container supplied
+through `PayumBuilder::setGlobalContainer()` is not seen: the environment is resolved from the
+container Payum builds itself, which sees `addGlobalService()` entries but not a preset container's.
+Register the environment with `addGlobalService()` even in an application that otherwise wires Payum
+through `setGlobalContainer()` — see [Framework integration](../di/framework-integration.md).
+
+### Overriding a template
+
+`PayumBuilder::setTemplate()` rebinds a key — or an engine-native name such as
+`@PayumAcme/checkout.html.twig` — to a different file. Payum checks its own mapping before falling
+through to the engine, so overriding a namespaced name works the same way as overriding a key.
+`PayumBuilder::addRenderer()` registers whatever renders that file:
 
 ```php
 $payum = (new PayumBuilder())
@@ -117,6 +206,9 @@ $payum = (new PayumBuilder())
     ->addRenderer('blade.php', new BladeRenderer(…))
     ->getPayum();
 ```
+
+`setTemplate('@PayumAcme/checkout.html.twig', '/app/views/checkout.blade.php')` overrides a namespaced
+template the same way.
 
 A renderer is the whole contract:
 
