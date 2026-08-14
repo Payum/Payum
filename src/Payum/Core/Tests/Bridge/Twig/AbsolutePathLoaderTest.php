@@ -6,6 +6,7 @@ namespace Payum\Core\Tests\Bridge\Twig;
 
 use Payum\Core\Bridge\Twig\AbsolutePathLoader;
 use PHPUnit\Framework\TestCase;
+use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 
 final class AbsolutePathLoaderTest extends TestCase
@@ -23,6 +24,26 @@ final class AbsolutePathLoaderTest extends TestCase
 
         $this->assertStringContainsString('<!DOCTYPE html>', $source->getCode());
         $this->assertSame($file, $source->getName());
+    }
+
+    public function testShouldThrowWhenTheFileExistsButCannotBeRead(): void
+    {
+        if (function_exists('posix_getuid') && 0 === posix_getuid()) {
+            $this->markTestSkipped('File permissions are not enforced for the root user.');
+        }
+
+        $file = tempnam(sys_get_temp_dir(), 'payum-twig-unreadable-');
+        chmod($file, 0000);
+
+        try {
+            $this->expectException(LoaderError::class);
+            $this->expectExceptionMessage(sprintf('Template "%s" could not be read.', $file));
+
+            (new AbsolutePathLoader())->getSourceContext($file);
+        } finally {
+            chmod($file, 0644);
+            unlink($file);
+        }
     }
 
     public function testShouldOnlyClaimPathsThatExist(): void

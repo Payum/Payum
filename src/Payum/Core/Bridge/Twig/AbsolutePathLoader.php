@@ -33,7 +33,13 @@ final class AbsolutePathLoader implements LoaderInterface
             throw new LoaderError(sprintf('Template "%s" does not exist.', $name));
         }
 
-        return new Source((string) file_get_contents($name), $name, $name);
+        $code = file_get_contents($name);
+
+        if (false === $code) {
+            throw new LoaderError(sprintf('Template "%s" could not be read.', $name));
+        }
+
+        return new Source($code, $name, $name);
     }
 
     public function isFresh(string $name, int $time): bool
