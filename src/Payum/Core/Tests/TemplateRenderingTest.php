@@ -53,11 +53,15 @@ final class TemplateRenderingTest extends TestCase
 
     public function testShouldStillResolveTheTemplatesCoreShips(): void
     {
-        $gateway = $this->buildPayum()->getGateway('acme');
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new AcmeTemplateConfig())
+            ->setTemplate('payum.template.core.layout', __DIR__ . '/../Resources/views/layout.html.twig')
+            ->getPayum();
 
         $this->assertStringContainsString(
             '<!DOCTYPE html>',
-            $gateway->renderer()->render('@PayumCore/layout.html.twig'),
+            $payum->getGateway('acme')->renderer()->render('payum.template.core.layout'),
         );
     }
 
