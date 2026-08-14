@@ -1070,6 +1070,11 @@ final class PayumBuilderTest extends TestCase
                 'amount' => 7,
             ]),
         );
+
+        $this->assertTrue(
+            $twig->getLoader()->exists('@PayumBuilderAcme/builder_checkout.html.twig'),
+            'The namespace must be registered on the literal environment instance the application supplied, not a freshly built one.',
+        );
     }
 
     /**
