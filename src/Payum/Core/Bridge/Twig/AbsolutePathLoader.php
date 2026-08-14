@@ -9,17 +9,29 @@ use Twig\Loader\LoaderInterface;
 use Twig\Source;
 use function file_get_contents;
 use function filemtime;
+use function in_array;
 use function is_file;
 use function sprintf;
 
 /**
  * Loads a template by absolute filesystem path, for names that are paths rather than Twig namespaces.
+ *
+ * Restricted to an allowlist: the environment this is attached to may be an application's shared Twig
+ * service, and without one this would let any code sharing that environment read arbitrary files by path.
  */
 final class AbsolutePathLoader implements LoaderInterface
 {
+    /**
+     * @param list<string> $files the only absolute paths this loader will serve
+     */
+    public function __construct(
+        private readonly array $files,
+    ) {
+    }
+
     public function exists(string $name): bool
     {
-        return is_file($name);
+        return in_array($name, $this->files, true) && is_file($name);
     }
 
     public function getCacheKey(string $name): string
@@ -29,6 +41,10 @@ final class AbsolutePathLoader implements LoaderInterface
 
     public function getSourceContext(string $name): Source
     {
+        if (! in_array($name, $this->files, true)) {
+            throw new LoaderError(sprintf('Template "%s" is not registered.', $name));
+        }
+
         if (! is_file($name)) {
             throw new LoaderError(sprintf('Template "%s" does not exist.', $name));
         }
@@ -44,6 +60,10 @@ final class AbsolutePathLoader implements LoaderInterface
 
     public function isFresh(string $name, int $time): bool
     {
+        if (! in_array($name, $this->files, true)) {
+            throw new LoaderError(sprintf('Template "%s" is not registered.', $name));
+        }
+
         if (! is_file($name)) {
             throw new LoaderError(sprintf('Template "%s" does not exist.', $name));
         }

@@ -46,6 +46,8 @@ final class TemplateRenderer implements RendererInterface
             return $this->rendererFor($file)->render($file, $context);
         }
 
+        // Twig's own namespace syntax, hardcoded on purpose: non-Twig namespaces are out of scope here and
+        // go through setTemplate() instead.
         if (str_starts_with($template, '@')) {
             return $this->rendererFor($template)->render($template, $context);
         }

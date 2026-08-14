@@ -56,6 +56,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
 use Twig\Environment;
+use Twig\Error\LoaderError;
 use Twig\Loader\ChainLoader;
 use Twig\TwigFunction;
 
@@ -1004,6 +1005,22 @@ final class PayumBuilderTest extends TestCase
         }
     }
 
+    public function testShouldThrowWhenAGatewayDeclaresTheReservedPayumCoreNamespace(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderReservedNamespaceConfig());
+
+        try {
+            $builder->getPayum();
+
+            $this->fail('Expected a LogicException.');
+        } catch (PayumLogicException $e) {
+            $this->assertStringContainsString(BuilderReservedNamespaceGateway::class, $e->getMessage());
+            $this->assertStringContainsString('PayumCore', $e->getMessage());
+        }
+    }
+
     public function testShouldLetTwoGatewaysDeclareTheSameNamespace(): void
     {
         $payum = (new PayumBuilder())
@@ -1075,6 +1092,34 @@ final class PayumBuilderTest extends TestCase
             $twig->getLoader()->exists('@PayumBuilderAcme/builder_checkout.html.twig'),
             'The namespace must be registered on the literal environment instance the application supplied, not a freshly built one.',
         );
+    }
+
+    public function testShouldNotLetTheApplicationsEnvironmentLoadAnAbsolutePathOutsideTheRegistry(): void
+    {
+        $twig = new Environment(new ChainLoader());
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('twig.env', $twig)
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->getPayum();
+
+        // Renders once so the AbsolutePathLoader is attached to $twig.
+        $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout', [
+            'amount' => 123,
+        ]);
+
+        $this->assertStringContainsString('Pay 123', $twig->render(
+            __DIR__ . '/Resources/views/builder_checkout.html.twig',
+            [
+                'amount' => 123,
+                'layout' => '@PayumCore/layout.html.twig',
+            ],
+        ), 'A file the registry does contain must still render.');
+
+        $this->expectException(LoaderError::class);
+
+        $twig->render(__DIR__ . '/Resources/views/override.html.twig');
     }
 
     /**
@@ -1296,6 +1341,49 @@ final class BuilderNamespaceGateway implements PaymentGateway, DeclaresTemplates
     public function websiteUrl(): Uri
     {
         return Uri::new('https://acme.test');
+    }
+}
+
+final class BuilderReservedNamespaceConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderReservedNamespaceGateway::class;
+    }
+}
+
+final class BuilderReservedNamespaceGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return BuilderReservedNamespaceConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://reserved.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Reserved';
+    }
+
+    public function templates(): array
+    {
+        return [
+            'PayumCore' => __DIR__ . '/Resources/views',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://reserved.test');
     }
 }
 

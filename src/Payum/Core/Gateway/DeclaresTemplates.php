@@ -19,6 +19,9 @@ namespace Payum\Core\Gateway;
  * Keys are written out in full, by convention `payum.template.{gateway}.{name}`. Two gateways declaring
  * the same key is an error; sharing a namespace is not.
  *
+ * Which one a value becomes is decided by `is_dir()`: a typo'd file path that happens to exist as a
+ * directory registers a namespace instead of a key, and the key silently never gets registered.
+ *
  * See docs/gateways/templates.md.
  */
 interface DeclaresTemplates

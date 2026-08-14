@@ -70,14 +70,13 @@ final class TwigRendererTest extends TestCase
 
     public function testShouldRenderATemplateGivenAsAnAbsolutePath(): void
     {
+        $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
+
         $renderer = new TwigRenderer($this->twig(), '@PayumCore/layout.html.twig', [
             'PayumCore' => __DIR__ . '/../../../Resources/views',
-        ]);
+        ], [$file]);
 
-        $this->assertStringContainsString(
-            '<!DOCTYPE html>',
-            $renderer->render(__DIR__ . '/../../../Resources/views/layout.html.twig'),
-        );
+        $this->assertStringContainsString('<!DOCTYPE html>', $renderer->render($file));
     }
 
     public function testShouldStillRenderANamespacedName(): void
@@ -95,9 +94,10 @@ final class TwigRendererTest extends TestCase
         $paths = [
             'PayumCore' => __DIR__ . '/../../../Resources/views',
         ];
+        $file = __DIR__ . '/../../../Resources/views/layout.html.twig';
 
-        new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths);
-        $renderer = new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths);
+        new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths, [$file]);
+        $renderer = new TwigRenderer($twig, '@PayumCore/layout.html.twig', $paths, [$file]);
 
         /** @var ChainLoader $loader */
         $loader = $twig->getLoader();
@@ -107,10 +107,20 @@ final class TwigRendererTest extends TestCase
         );
 
         $this->assertCount(1, $absolutePathLoaders);
-        $this->assertStringContainsString(
-            '<!DOCTYPE html>',
-            $renderer->render(__DIR__ . '/../../../Resources/views/layout.html.twig'),
-        );
+        $this->assertStringContainsString('<!DOCTYPE html>', $renderer->render($file));
+    }
+
+    public function testShouldSearchEveryDirectoryRegisteredUnderANamespace(): void
+    {
+        $renderer = new TwigRenderer($this->twig(), '@PayumCore/layout.html.twig', [
+            'PayumCore' => [
+                __DIR__ . '/../../Resources/views',
+                __DIR__ . '/../../Resources/views/shared',
+            ],
+        ]);
+
+        $this->assertStringContainsString('overridden', $renderer->render('@PayumCore/override.html.twig'));
+        $this->assertStringContainsString('shared', $renderer->render('@PayumCore/shared_only.html.twig'));
     }
 
     public function testShouldRenderTheFragmentLayoutWithoutAPageWrapper(): void

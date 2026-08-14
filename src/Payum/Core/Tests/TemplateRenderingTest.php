@@ -111,6 +111,19 @@ final class TemplateRenderingTest extends TestCase
         ])->getContent());
     }
 
+    public function testShouldFallThroughToTheRendererForANamespacedNameNotRegisteredAsAKey(): void
+    {
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        $this->assertStringContainsString(
+            'Pay 123',
+            $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
+                'actionUrl' => 'https://acme.test/pay',
+                'amount' => 123,
+            ]),
+        );
+    }
+
     public function testShouldLetAGatewayTemplateIncludeASibling(): void
     {
         $gateway = $this->buildPayum()->getGateway('acme');
