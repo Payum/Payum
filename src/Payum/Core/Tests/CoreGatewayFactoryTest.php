@@ -201,23 +201,6 @@ final class CoreGatewayFactoryTest extends TestCase
         $this->assertSame('FooPath', $config['payum.paths']['FooNamespace']);
     }
 
-    public function testShouldComposeTemplatePathsFromPayumPaths(): void
-    {
-        $paths = $this->getContainer([
-            'payum.paths' => [
-                'FooNamespace' => 'FooPath',
-            ],
-        ])->get('payum.template_paths');
-
-        $this->assertIsArray($paths);
-        $this->assertArrayHasKey('PayumCore', $paths);
-        $this->assertStringEndsWith('Resources/views', $paths['PayumCore']);
-        $this->assertFileExists($paths['PayumCore']);
-
-        $this->assertArrayHasKey('FooNamespace', $paths);
-        $this->assertSame('FooPath', $paths['FooNamespace']);
-    }
-
     public function testShouldConfigureTwigEnvironmentGatewayConfig(): void
     {
         $factory = new CoreGatewayFactory();

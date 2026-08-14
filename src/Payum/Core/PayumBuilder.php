@@ -79,6 +79,7 @@ use function array_replace;
 use function DI\autowire;
 use function in_array;
 use function is_a;
+use function ltrim;
 use function strtolower;
 use function sys_get_temp_dir;
 use function trigger_deprecation;
@@ -382,9 +383,12 @@ class PayumBuilder
         return $this;
     }
 
+    /**
+     * @param RendererInterface $renderer receives a resolved absolute file path, never a key
+     */
     public function addRenderer(string $extension, RendererInterface $renderer): static
     {
-        $this->renderers[$extension] = $renderer;
+        $this->renderers[ltrim($extension, '.')] = $renderer;
 
         return $this;
     }
@@ -446,7 +450,9 @@ class PayumBuilder
             $gatewayClass = $config->getGatewayClass();
             $gateway = new $gatewayClass();
 
-            if ($gateway instanceof ContainerConfiguration && array_key_exists(RendererInterface::class, $gateway->configureContainer())) {
+            $gatewayDefinitions = $gateway instanceof ContainerConfiguration ? $gateway->configureContainer() : null;
+
+            if (null !== $gatewayDefinitions && array_key_exists(RendererInterface::class, $gatewayDefinitions)) {
                 throw new PayumLogicException(sprintf(
                     '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Use PayumBuilder::setTemplate() to override a template instead.',
                     $gatewayClass,
@@ -461,8 +467,8 @@ class PayumBuilder
             $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
             $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
 
-            if ($gateway instanceof ContainerConfiguration) {
-                $containerBuilder->addDefinitions($gateway->configureContainer());
+            if (null !== $gatewayDefinitions) {
+                $containerBuilder->addDefinitions($gatewayDefinitions);
             }
 
             $handlerDefinitions = array_map(autowire(...), HandlerMap::fromHandlers($gateway->handlers())->bindings());
@@ -618,6 +624,8 @@ class PayumBuilder
 
         $presetContainer = $this->globalContainer;
 
+        $templates = $this->composeTemplates();
+
         $builder = new ContainerBuilder();
 
         $builder->addDefinitions([
@@ -642,7 +650,7 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
-            RendererInterface::class => new TemplateRenderer($this->composeTemplates(), $this->composeRenderers()),
+            RendererInterface::class => fn (): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers()),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {

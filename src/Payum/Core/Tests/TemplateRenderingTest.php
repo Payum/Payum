@@ -17,6 +17,8 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\Capture;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Security\TokenInterface;
@@ -72,6 +74,18 @@ final class TemplateRenderingTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertStringContainsString('https://acme.test/pay', $response->getContent());
         $this->assertStringContainsString('Pay 123', $response->getContent());
+    }
+
+    public function testShouldTranslateRenderTemplateToAnHttpResponseOnTheLegacyReplyPath(): void
+    {
+        $payum = $this->buildPayum();
+        $token = $payum->prepare('acme', $this->buildPayment(), 'done.php');
+
+        $reply = $payum->getGateway('acme')->execute(new Capture($token), true);
+
+        $this->assertInstanceOf(HttpResponse::class, $reply);
+        $this->assertStringContainsString('https://acme.test/pay', $reply->getContent());
+        $this->assertStringContainsString('Pay 123', $reply->getContent());
     }
 
     public function testShouldLetTheApplicationOverrideTheTemplateWithAnotherEngine(): void

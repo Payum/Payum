@@ -25,9 +25,11 @@ use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\Base;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Template\RendererInterface;
@@ -447,11 +449,16 @@ class Gateway implements GatewayInterface
      *
      * Throws the matching reply when the customer has somewhere to be, or returns it when the caller
      * asked to catch it. A result with nothing left to do answers with null, the same as a 1.x action
-     * returning without throwing.
+     * returning without throwing. A RenderTemplate is rendered here, since ResultToReply has no renderer
+     * to resolve it with.
      */
     private function replyFor(Result $result, bool $catchReply): ?Base
     {
-        $reply = ResultToReply::translate($result);
+        $next = $result->next;
+
+        $reply = $next instanceof RenderTemplate
+            ? new HttpResponse($this->renderer()->render($next->template, $next->context))
+            : ResultToReply::translate($result);
 
         if (! $reply instanceof Base) {
             return null;

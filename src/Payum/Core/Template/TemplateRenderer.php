@@ -11,6 +11,8 @@ use function implode;
 use function sprintf;
 use function str_ends_with;
 use function strlen;
+use function strpos;
+use function substr;
 use function usort;
 
 /**
@@ -61,10 +63,14 @@ final class TemplateRenderer implements RendererInterface
             }
         }
 
+        $dot = strpos($name, '.');
+        $extension = false === $dot ? $name : substr($name, $dot + 1);
+
         throw new LogicException(sprintf(
-            'No renderer is registered for "%s", which %s resolves to. Register one with PayumBuilder::addRenderer().',
+            'No renderer is registered for "%s", which %s resolves to. Register one with PayumBuilder::addRenderer(\'%s\', …).',
             $name,
             $file,
+            $extension,
         ));
     }
 }

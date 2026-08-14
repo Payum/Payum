@@ -884,6 +884,24 @@ final class PayumBuilderTest extends TestCase
         );
     }
 
+    public function testShouldTolerateALeadingDotOnTheRegisteredExtension(): void
+    {
+        $custom = $this->createMock(RendererInterface::class);
+        $custom->expects($this->once())->method('render')->willReturn('from the custom engine');
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig())
+            ->setTemplate('payum.template.acme.checkout', '/app/views/checkout.custom')
+            ->addRenderer('.custom', $custom)
+            ->getPayum();
+
+        $this->assertSame(
+            'from the custom engine',
+            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
+        );
+    }
+
     public function testShouldNotTreatTheSameGatewayClassRegisteredTwiceAsACollision(): void
     {
         $payum = (new PayumBuilder())
