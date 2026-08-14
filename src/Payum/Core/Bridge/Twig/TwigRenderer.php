@@ -16,6 +16,8 @@ use function array_replace;
 final class TwigRenderer implements RendererInterface
 {
     /**
+     * Registers $paths and an absolute-path loader on $twig, mutating it.
+     *
      * @param array<string, string> $paths namespace => directory
      *
      * @throws LoaderError
@@ -43,6 +45,9 @@ final class TwigRenderer implements RendererInterface
         $loader->addLoader(new AbsolutePathLoader());
     }
 
+    /**
+     * @param string $template a resolved absolute file path, not a key
+     */
     public function render(string $template, array $context = []): string
     {
         return $this->twig->render($template, array_replace([

@@ -48,6 +48,12 @@ final class AbsolutePathLoader implements LoaderInterface
             throw new LoaderError(sprintf('Template "%s" does not exist.', $name));
         }
 
-        return filemtime($name) <= $time;
+        $mtime = filemtime($name);
+
+        if (false === $mtime) {
+            throw new LoaderError(sprintf('Template "%s" could not be read.', $name));
+        }
+
+        return $mtime < $time;
     }
 }

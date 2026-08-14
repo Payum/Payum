@@ -69,5 +69,6 @@ final class AbsolutePathLoaderTest extends TestCase
 
         $this->assertTrue($loader->isFresh($file, filemtime($file) + 10));
         $this->assertFalse($loader->isFresh($file, filemtime($file) - 10));
+        $this->assertFalse($loader->isFresh($file, filemtime($file)));
     }
 }

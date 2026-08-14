@@ -297,8 +297,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
                 'payum.paths' => self::corePaths(),
 
-                'payum.template_paths' => self::composeTemplatePaths(...),
-
                 // Additional aliases
                 ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
                 Environment::class => static fn (ContainerInterface $c) => $c->get('twig.env'),
@@ -374,11 +372,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         }
 
         if ($container->has('twig.env')) {
-            $templatePaths = $container->has('payum.template_paths')
-                ? $container->get('payum.template_paths')
-                : self::composeTemplatePaths($container);
-
-            TwigUtil::registerPaths($container->get('twig.env'), $templatePaths);
+            TwigUtil::registerPaths($container->get('twig.env'), self::composeTemplatePaths($container));
         }
 
         foreach ([...$this->getActions(), ...$declaredActions] as $action) {

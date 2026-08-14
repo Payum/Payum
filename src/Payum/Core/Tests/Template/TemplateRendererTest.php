@@ -87,8 +87,8 @@ final class TemplateRendererTest extends TestCase
 
             $this->fail('Expected a LogicException.');
         } catch (LogicException $e) {
-            $this->assertStringContainsString('blade.php', $e->getMessage());
             $this->assertStringContainsString('/app/views/checkout.blade.php', $e->getMessage());
+            $this->assertStringContainsString("addRenderer('blade.php'", $e->getMessage());
         }
     }
 }
