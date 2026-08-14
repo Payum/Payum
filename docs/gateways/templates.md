@@ -104,15 +104,8 @@ one template a handler names and an application might want to override.
 
 #### Naming one from a handler
 
-A handler names either form the same way, as `RenderTemplate`'s first argument — the key:
-
-```php
-return CaptureResult::pending(new RenderTemplate('payum.template.acme.checkout', [
-    'actionUrl' => $context->token()?->getTargetUrl(),
-]));
-```
-
-or the namespaced name:
+A handler names either form the same way, as `RenderTemplate`'s first argument. The example at the top
+of this page names the key; naming a namespaced template instead looks the same:
 
 ```php
 return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [

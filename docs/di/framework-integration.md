@@ -382,6 +382,9 @@ everything else. Declare `payum.security.token_storage`, `TokenFactoryInterface`
 To have one of your own services injected into a gateway's actions, register it with `addGlobalService()`
 as well — Payum cannot discover the ids of a container that does not list its entries.
 
+The same is true of a Twig environment registered under `twig.env` — see
+[Supplying your own Twig environment](../gateways/templates.md#supplying-your-own-twig-environment).
+
 ## Best Practices
 
 ### 1. Singleton Registration
