@@ -54,6 +54,7 @@
 * [valiton/payum-payone](https://github.com/valiton/payum-payone)
 * [Setono/payum-quickpay](https://github.com/Setono/payum-quickpay)
 * [ilcleme/payum-tinkl](https://github.com/ilCleme/payum-tinkl)
+* [karser/payum-saferpay](https://github.com/karser/PayumSaferpay)
 
 ### Omnipay gateways.
 

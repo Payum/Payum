@@ -117,13 +117,17 @@ class CancelActionTest extends \PHPUnit\Framework\TestCase
     public function testShouldExecuteDoVoidIfTransactionIdSet()
     {
         $gatewayMock = $this->createGatewayMock();
+        $matcher = $this->exactly(2);
         $gatewayMock
-            ->expects($this->exactly(2))
-            ->method('execute')
-            ->withConsecutive(
-                array($this->isInstanceOf(DoVoid::class)),
-                array($this->isInstanceOf(Sync::class))
-            )
+            ->expects($matcher)
+            ->method('execute')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame($this->isInstanceOf(DoVoid::class), $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame($this->isInstanceOf(Sync::class), $parameters[0]);
+            }
+        })
         ;
 
         $action = new CancelAction();

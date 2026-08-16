@@ -162,7 +162,7 @@ class OrderApi extends BaseApi
     protected function getPxOrderWsdl()
     {
         return $this->options['sandbox'] ?
-            'https://test-external.payex.com/pxorder/pxorder.asmx?wsdl' :
+            'https://external.externaltest.payex.com/pxorder/pxorder.asmx?wsdl' :
             'https://external.payex.com/pxorder/pxorder.asmx?wsdl'
         ;
     }

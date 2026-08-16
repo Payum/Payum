@@ -112,7 +112,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPreCapture()
+    public function testShouldDoNothingIfCreateCustomerRequestFailedOnPreCapture()
     {
         $model = new \ArrayObject([
             'card' => 'theCardToken',
@@ -145,13 +145,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $extension->onPreExecute($context);
 
         $this->assertEquals([
-            'status' => Constants::STATUS_FAILED,
+            'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
-                'customer' => [
-                    'id' => null,
-                    'card' => 'theCardToken',
-                ]
             ],
         ], (array) $request->getModel());
     }
@@ -388,7 +384,7 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         ], (array) $request->getModel());
     }
 
-    public function testShouldSetStatusFailedIfCreateCustomerRequestFailedOnPostObtainToken()
+    public function testShouldDoNothingIfCreateCustomerRequestFailedOnPostObtainToken()
     {
         $model = new \ArrayObject([
             'card' => 'theCardToken',
@@ -421,13 +417,9 @@ class CreateCustomerExtensionTest extends \PHPUnit\Framework\TestCase
         $extension->onPostExecute($context);
 
         $this->assertEquals([
-            'status' => Constants::STATUS_FAILED,
+            'card' => 'theCardToken',
             'local' => [
                 'save_card' => true,
-                'customer' => [
-                    'id' => null,
-                    'card' => 'theCardToken',
-                ]
             ],
         ], (array) $request->getModel());
     }

@@ -126,7 +126,7 @@ class Api
             $varName = $method;
             $varName = strtolower(preg_replace('/([^A-Z])([A-Z])/', '$1_$2', substr($varName, 3)));
 
-            if (is_array($params) && count($params) == 2) {
+            if ((is_array($params) || $params instanceof Countable) && count($params) == 2) {
                 $fields[$varName] = $transactionData->$method($params[0], $params[1]);
             } elseif ($params !== '') {
                 $fields[$varName] = $transactionData->$method($params);
@@ -163,5 +163,15 @@ class Api
         }
 
         return $fields;
+    }
+
+    /**
+     * @param string $optionName
+     *
+     * @return mixed
+     */
+    public function getOption(string $optionName)
+    {
+        return $this->options[$optionName] ?? null;
     }
 }
