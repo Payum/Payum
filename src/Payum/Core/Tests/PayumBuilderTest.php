@@ -61,6 +61,7 @@ use stdClass;
 use Twig\Environment;
 use Twig\Error\SyntaxError;
 use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
 final class PayumBuilderTest extends TestCase
@@ -978,6 +979,32 @@ final class PayumBuilderTest extends TestCase
         $this->assertTrue(
             $twig->getLoader()->exists('@PayumBuilderAcme/builder_checkout.html.twig'),
             'The namespace must be registered on the literal environment instance the application supplied, not a freshly built one.',
+        );
+    }
+
+    public function testShouldLetTheApplicationOverrideOneTemplateInAGatewaysNamespace(): void
+    {
+        $loader = new FilesystemLoader();
+        $loader->addPath(__DIR__ . '/Resources/views/override', 'PayumBuilderAcme');
+
+        $twig = new Environment($loader);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('twig.env', $twig)
+            ->registerGateway('acme', new BuilderNamespaceConfig())
+            ->getPayum();
+
+        $renderer = $payum->getGateway('acme')->renderer();
+
+        $this->assertStringContainsString(
+            'overridden by the application',
+            $renderer->render('@PayumBuilderAcme/builder_checkout.html.twig'),
+        );
+
+        $this->assertStringContainsString(
+            'partial content',
+            $renderer->render('@PayumBuilderAcme/_partial.html.twig'),
         );
     }
 
