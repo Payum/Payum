@@ -40,7 +40,6 @@ use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
-use Payum\Core\Template\TemplateRenderer;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
@@ -60,7 +59,6 @@ use ReflectionProperty;
 use RuntimeException;
 use stdClass;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\ChainLoader;
 use Twig\TwigFunction;
@@ -830,21 +828,6 @@ final class PayumBuilderTest extends TestCase
         $this->assertInstanceOf(Gateway::class, $gateway);
     }
 
-    public function testShouldComposeTheTemplateRegistryFromRegisteredGateways(): void
-    {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->getPayum();
-
-        $renderer = $payum->getGateway('acme')->renderer();
-
-        $this->assertInstanceOf(TemplateRenderer::class, $renderer);
-        $this->assertStringContainsString('Pay 123', $renderer->render('payum.template.acme.checkout', [
-            'amount' => 123,
-        ]));
-    }
-
     public function testShouldLetTheApplicationRenderIntoTheFragmentLayout(): void
     {
         $payum = (new PayumBuilder())
@@ -853,96 +836,12 @@ final class PayumBuilderTest extends TestCase
             ->setLayout('@PayumCore/fragment.html.twig')
             ->getPayum();
 
-        $output = $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout', [
+        $output = $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
             'amount' => 123,
         ]);
 
         $this->assertStringNotContainsString('<!DOCTYPE html>', $output);
         $this->assertStringContainsString('Pay 123', $output);
-    }
-
-    public function testShouldLetTheApplicationOverrideAGatewaysTemplate(): void
-    {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->setTemplate('payum.template.acme.checkout', __DIR__ . '/Resources/views/override.html.twig')
-            ->getPayum();
-
-        $this->assertStringContainsString(
-            'overridden',
-            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
-        );
-    }
-
-    public function testShouldLetTheApplicationRegisterARendererForAnotherFileType(): void
-    {
-        $custom = $this->createMock(RendererInterface::class);
-        $custom->expects($this->once())->method('render')->willReturn('from the custom engine');
-
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->setTemplate('payum.template.acme.checkout', '/app/views/checkout.custom')
-            ->addRenderer('custom', $custom)
-            ->getPayum();
-
-        $this->assertSame(
-            'from the custom engine',
-            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
-        );
-    }
-
-    public function testShouldTolerateALeadingDotOnTheRegisteredExtension(): void
-    {
-        $custom = $this->createMock(RendererInterface::class);
-        $custom->expects($this->once())->method('render')->willReturn('from the custom engine');
-
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->setTemplate('payum.template.acme.checkout', '/app/views/checkout.custom')
-            ->addRenderer('.custom', $custom)
-            ->getPayum();
-
-        $this->assertSame(
-            'from the custom engine',
-            $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout'),
-        );
-    }
-
-    public function testShouldNotTreatTheSameGatewayClassRegisteredTwiceAsACollision(): void
-    {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme_live', new BuilderTemplateConfig())
-            ->registerGateway('acme_test', new BuilderTemplateConfig())
-            ->getPayum();
-
-        $this->assertStringContainsString('Pay 123', $payum->getGateway('acme_live')->renderer()->render('payum.template.acme.checkout', [
-            'amount' => 123,
-        ]));
-        $this->assertStringContainsString('Pay 123', $payum->getGateway('acme_test')->renderer()->render('payum.template.acme.checkout', [
-            'amount' => 123,
-        ]));
-    }
-
-    public function testShouldThrowWhenTwoGatewaysDeclareTheSameTemplateKey(): void
-    {
-        $builder = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->registerGateway('other', new BuilderClashingTemplateConfig());
-
-        try {
-            $builder->getPayum();
-
-            $this->fail('Expected a LogicException.');
-        } catch (PayumLogicException $e) {
-            $this->assertStringContainsString('payum.template.acme.checkout', $e->getMessage());
-            $this->assertStringContainsString(BuilderTemplateGateway::class, $e->getMessage());
-            $this->assertStringContainsString(BuilderClashingTemplateGateway::class, $e->getMessage());
-        }
     }
 
     public function testShouldThrowWhenAGatewayDeclaresItsOwnRenderer(): void
@@ -976,24 +875,7 @@ final class PayumBuilderTest extends TestCase
         );
     }
 
-    public function testShouldAcceptKeysAndNamespacesInOneDeclaration(): void
-    {
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new BuilderBothFormsConfig())
-            ->getPayum();
-
-        $renderer = $payum->getGateway('acme')->renderer();
-
-        $this->assertStringContainsString('Pay 1', $renderer->render('payum.template.both.checkout', [
-            'amount' => 1,
-        ]));
-        $this->assertStringContainsString('Pay 2', $renderer->render('@PayumBuilderBoth/builder_checkout.html.twig', [
-            'amount' => 2,
-        ]));
-    }
-
-    public function testShouldThrowWhenADeclaredPathIsNeitherFileNorDirectory(): void
+    public function testShouldThrowWhenADeclaredNamespaceDirectoryDoesNotExist(): void
     {
         $builder = (new PayumBuilder())
             ->addDefaultStorages()
@@ -1005,8 +887,8 @@ final class PayumBuilderTest extends TestCase
             $this->fail('Expected a LogicException.');
         } catch (PayumLogicException $e) {
             $this->assertStringContainsString(BuilderMissingPathGateway::class, $e->getMessage());
-            $this->assertStringContainsString('payum.template.missing.checkout', $e->getMessage());
-            $this->assertStringContainsString('/does/not/exist.html.twig', $e->getMessage());
+            $this->assertStringContainsString('PayumBuilderMissing', $e->getMessage());
+            $this->assertStringContainsString('/does/not/exist', $e->getMessage());
         }
     }
 
@@ -1055,7 +937,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1072,7 +954,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1099,34 +981,6 @@ final class PayumBuilderTest extends TestCase
         );
     }
 
-    public function testShouldNotLetTheApplicationsEnvironmentLoadAnAbsolutePathOutsideTheRegistry(): void
-    {
-        $twig = new Environment(new ChainLoader());
-
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->addGlobalService('twig.env', $twig)
-            ->registerGateway('acme', new BuilderTemplateConfig())
-            ->getPayum();
-
-        // Renders once so the AbsolutePathLoader is attached to $twig.
-        $payum->getGateway('acme')->renderer()->render('payum.template.acme.checkout', [
-            'amount' => 123,
-        ]);
-
-        $this->assertStringContainsString('Pay 123', $twig->render(
-            __DIR__ . '/Resources/views/builder_checkout.html.twig',
-            [
-                'amount' => 123,
-                'layout' => '@PayumCore/layout.html.twig',
-            ],
-        ), 'A file the registry does contain must still render.');
-
-        $this->expectException(LoaderError::class);
-
-        $twig->render(__DIR__ . '/Resources/views/override.html.twig');
-    }
-
     public function testShouldUseTheTwigEnvironmentAPresetGlobalContainerRegistersUnderTwigEnv(): void
     {
         $twig = new Environment(new ChainLoader());
@@ -1145,7 +999,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1167,7 +1021,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1210,7 +1064,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1228,7 +1082,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1243,7 +1097,7 @@ final class PayumBuilderTest extends TestCase
         // one the application registers.
         $this->expectException(SyntaxError::class);
 
-        $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.unregistered_greeting');
+        $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting_unregistered.html.twig');
     }
 
     /**
@@ -1326,59 +1180,16 @@ final class BuilderTemplateGateway implements PaymentGateway, DeclaresTemplates
         return 'Acme';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
-            'payum.template.acme.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
+            'PayumBuilderAcme' => __DIR__ . '/Resources/views',
         ];
     }
 
     public function websiteUrl(): Uri
     {
         return Uri::new('https://acme.test');
-    }
-}
-
-final class BuilderClashingTemplateConfig implements GatewayConfig
-{
-    public function getGatewayClass(): string
-    {
-        return BuilderClashingTemplateGateway::class;
-    }
-}
-
-final class BuilderClashingTemplateGateway implements PaymentGateway, DeclaresTemplates
-{
-    public function configClass(): string
-    {
-        return BuilderClashingTemplateConfig::class;
-    }
-
-    public function handlers(): array
-    {
-        return [];
-    }
-
-    public function logo(): Logo
-    {
-        return Url::create('https://other.test/logo.svg');
-    }
-
-    public function name(): string
-    {
-        return 'Other';
-    }
-
-    public function templates(): array
-    {
-        return [
-            'payum.template.acme.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
-        ];
-    }
-
-    public function websiteUrl(): Uri
-    {
-        return Uri::new('https://other.test');
     }
 }
 
@@ -1455,7 +1266,7 @@ final class BuilderNamespaceGateway implements PaymentGateway, DeclaresTemplates
         return 'Acme';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
             'PayumBuilderAcme' => __DIR__ . '/Resources/views',
@@ -1498,7 +1309,7 @@ final class BuilderReservedNamespaceGateway implements PaymentGateway, DeclaresT
         return 'Reserved';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
             'PayumCore' => __DIR__ . '/Resources/views',
@@ -1541,7 +1352,7 @@ final class BuilderSharedNamespaceGateway implements PaymentGateway, DeclaresTem
         return 'Shared';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
             'PayumBuilderAcme' => __DIR__ . '/Resources/views/shared',
@@ -1551,50 +1362,6 @@ final class BuilderSharedNamespaceGateway implements PaymentGateway, DeclaresTem
     public function websiteUrl(): Uri
     {
         return Uri::new('https://shared.test');
-    }
-}
-
-final class BuilderBothFormsConfig implements GatewayConfig
-{
-    public function getGatewayClass(): string
-    {
-        return BuilderBothFormsGateway::class;
-    }
-}
-
-final class BuilderBothFormsGateway implements PaymentGateway, DeclaresTemplates
-{
-    public function configClass(): string
-    {
-        return BuilderBothFormsConfig::class;
-    }
-
-    public function handlers(): array
-    {
-        return [];
-    }
-
-    public function logo(): Logo
-    {
-        return Url::create('https://both.test/logo.svg');
-    }
-
-    public function name(): string
-    {
-        return 'Both';
-    }
-
-    public function templates(): array
-    {
-        return [
-            'PayumBuilderBoth' => __DIR__ . '/Resources/views',
-            'payum.template.both.checkout' => __DIR__ . '/Resources/views/builder_checkout.html.twig',
-        ];
-    }
-
-    public function websiteUrl(): Uri
-    {
-        return Uri::new('https://both.test');
     }
 }
 
@@ -1628,10 +1395,10 @@ final class BuilderMissingPathGateway implements PaymentGateway, DeclaresTemplat
         return 'Missing';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
-            'payum.template.missing.checkout' => '/does/not/exist.html.twig',
+            'PayumBuilderMissing' => '/does/not/exist',
         ];
     }
 
@@ -1671,13 +1438,10 @@ final class BuilderAppTwigGateway implements PaymentGateway, DeclaresTemplates
         return 'AppTwig';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
-            'payum.template.apptwig.greeting' => __DIR__ . '/Resources/views/app_greeting.html.twig',
-            // A distinct file from the one above, so a test rendering it never reuses a Twig template
-            // class another test already compiled with a working app_greeting function.
-            'payum.template.apptwig.unregistered_greeting' => __DIR__ . '/Resources/views/app_greeting_unregistered.html.twig',
+            'PayumBuilderAppTwig' => __DIR__ . '/Resources/views',
         ];
     }
 

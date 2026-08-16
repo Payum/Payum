@@ -23,7 +23,6 @@ use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
-use Payum\Core\Template\RendererInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,20 +45,7 @@ final class TemplateRenderingTest extends TestCase
         $result = $gateway->execute(CaptureCommand::forPayment($this->buildPayment()));
 
         $this->assertInstanceOf(RenderTemplate::class, $result->next);
-        $this->assertSame('payum.template.acme.obtain_token', $result->next->template);
-    }
-
-    public function testShouldRenderATemplateTheGatewayShips(): void
-    {
-        $gateway = $this->buildPayum()->getGateway('acme');
-
-        $html = $gateway->renderer()->render('payum.template.acme.obtain_token', [
-            'actionUrl' => 'https://acme.test/pay',
-            'amount' => 123,
-        ]);
-
-        $this->assertStringContainsString('https://acme.test/pay', $html);
-        $this->assertStringContainsString('Pay 123', $html);
+        $this->assertSame('@PayumAcme/obtain_token.html.twig', $result->next->template);
     }
 
     public function testShouldRenderTheTemplateThroughCapture(): void
@@ -88,40 +74,17 @@ final class TemplateRenderingTest extends TestCase
         $this->assertStringContainsString('Pay 123', $reply->getContent());
     }
 
-    public function testShouldLetTheApplicationOverrideTheTemplateWithAnotherEngine(): void
-    {
-        $custom = $this->createMock(RendererInterface::class);
-        $custom
-            ->expects($this->once())
-            ->method('render')
-            ->with('/app/views/obtain_token.custom', $this->anything())
-            ->willReturn('rendered by the application');
-
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new AcmeTemplateConfig())
-            ->setTemplate('payum.template.acme.obtain_token', '/app/views/obtain_token.custom')
-            ->addRenderer('custom', $custom)
-            ->getPayum();
-
-        $token = $payum->prepare('acme', $this->buildPayment(), 'done.php');
-
-        $this->assertSame('rendered by the application', $payum->capture([
-            'payum_token' => $token,
-        ])->getContent());
-    }
-
-    public function testShouldFallThroughToTheRendererForANamespacedNameNotRegisteredAsAKey(): void
+    public function testShouldRenderTheNamespacedTemplateTheGatewayShips(): void
     {
         $gateway = $this->buildPayum()->getGateway('acme');
 
-        $this->assertStringContainsString(
-            'Pay 123',
-            $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
-                'actionUrl' => 'https://acme.test/pay',
-                'amount' => 123,
-            ]),
-        );
+        $html = $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
+            'actionUrl' => 'https://acme.test/pay',
+            'amount' => 123,
+        ]);
+
+        $this->assertStringContainsString('https://acme.test/pay', $html);
+        $this->assertStringContainsString('Pay 123', $html);
     }
 
     public function testShouldLetAGatewayTemplateIncludeASibling(): void
@@ -134,28 +97,6 @@ final class TemplateRenderingTest extends TestCase
                 'actionUrl' => 'https://acme.test/pay',
                 'amount' => 123,
             ]),
-        );
-    }
-
-    public function testShouldLetTheApplicationOverrideANamespacedTemplate(): void
-    {
-        $custom = $this->createMock(RendererInterface::class);
-        $custom
-            ->expects($this->once())
-            ->method('render')
-            ->with('/app/views/obtain_token.custom', $this->anything())
-            ->willReturn('rendered by the application');
-
-        $payum = (new PayumBuilder())
-            ->addDefaultStorages()
-            ->registerGateway('acme', new AcmeTemplateConfig())
-            ->setTemplate('@PayumAcme/obtain_token.html.twig', '/app/views/obtain_token.custom')
-            ->addRenderer('custom', $custom)
-            ->getPayum();
-
-        $this->assertSame(
-            'rendered by the application',
-            $payum->getGateway('acme')->renderer()->render('@PayumAcme/obtain_token.html.twig'),
         );
     }
 
@@ -211,11 +152,10 @@ final class AcmeTemplateGateway implements PaymentGateway, DeclaresTemplates
         return 'Acme Templates';
     }
 
-    public function templates(): array
+    public function templateNamespaces(): array
     {
         return [
             'PayumAcme' => __DIR__ . '/Resources/views',
-            'payum.template.acme.obtain_token' => __DIR__ . '/Resources/views/obtain_token.html.twig',
         ];
     }
 
@@ -229,7 +169,7 @@ final class AcmeTemplateCaptureHandler implements CaptureHandlerInterface
 {
     public function handle(CaptureCommand $command, Context $context): CaptureResult
     {
-        return CaptureResult::pending(new RenderTemplate('payum.template.acme.obtain_token', [
+        return CaptureResult::pending(new RenderTemplate('@PayumAcme/obtain_token.html.twig', [
             'actionUrl' => 'https://acme.test/pay',
             'amount' => 123,
         ]));

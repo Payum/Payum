@@ -7,27 +7,21 @@ namespace Payum\Core\Gateway;
 /**
  * Optional. Implement when a gateway ships templates of its own.
  *
- *     [
- *         'PayumAcme' => __DIR__ . '/Resources/views',
- *         'payum.template.acme.checkout' => __DIR__ . '/Resources/views/checkout.html.twig',
- *     ]
+ *     ['PayumAcme' => __DIR__ . '/Resources/views']
  *
- * A directory registers a Twig namespace, so handlers can name `@PayumAcme/checkout.html.twig` and
- * templates can include each other. A file registers a template key, which an application can rebind to
- * a template of its own.
+ * Handlers then name `@PayumAcme/checkout.html.twig`, and templates under that directory can include and
+ * import each other through the same namespace.
  *
- * Keys are written out in full, by convention `payum.template.{gateway}.{name}`. Two gateways declaring
- * the same key is an error; sharing a namespace is not.
- *
- * Which one a value becomes is decided by `is_dir()`: a typo'd file path that happens to exist as a
- * directory registers a namespace instead of a key, and the key silently never gets registered.
+ * Name the namespace after the gateway. `PayumCore` is reserved for Payum's own views and declaring it is
+ * an error. Two gateways sharing a namespace is not an error: Twig searches a namespace's directories in
+ * the order they were registered.
  *
  * See docs/gateways/templates.md.
  */
 interface DeclaresTemplates
 {
     /**
-     * @return array<string, string> template key => absolute file path, or namespace => directory
+     * @return array<string, string> Twig namespace => directory
      */
-    public function templates(): array;
+    public function templateNamespaces(): array;
 }
