@@ -51,7 +51,6 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
-use Payum\Core\Template\TemplateRenderer;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
 use Payum\Offline\OfflineGatewayFactory;
@@ -80,8 +79,6 @@ use function DI\autowire;
 use function in_array;
 use function is_a;
 use function is_dir;
-use function is_file;
-use function ltrim;
 use function strtolower;
 use function sys_get_temp_dir;
 use function trigger_deprecation;
@@ -166,16 +163,6 @@ class PayumBuilder
      * @var array<string, mixed>
      */
     protected array $globalDefinitions = [];
-
-    /**
-     * @var array<string, string>
-     */
-    protected array $templates = [];
-
-    /**
-     * @var array<string, RendererInterface>
-     */
-    protected array $renderers = [];
 
     protected string $layout = '@PayumCore/layout.html.twig';
 
@@ -378,26 +365,6 @@ class PayumBuilder
         return $this;
     }
 
-    /**
-     * @param string $name a template key, or an engine-native name such as `@PayumAcme/checkout.html.twig`
-     */
-    public function setTemplate(string $name, string $file): static
-    {
-        $this->templates[$name] = $file;
-
-        return $this;
-    }
-
-    /**
-     * @param RendererInterface $renderer receives a resolved absolute file path, never a key
-     */
-    public function addRenderer(string $extension, RendererInterface $renderer): static
-    {
-        $this->renderers[ltrim($extension, '.')] = $renderer;
-
-        return $this;
-    }
-
     public function setLayout(string $layout): static
     {
         $this->layout = $layout;
@@ -459,7 +426,7 @@ class PayumBuilder
 
             if (null !== $gatewayDefinitions && array_key_exists(RendererInterface::class, $gatewayDefinitions)) {
                 throw new PayumLogicException(sprintf(
-                    '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Use PayumBuilder::setTemplate() to override a template instead.',
+                    '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Register your own directory under the gateway\'s template namespace instead.',
                     $gatewayClass,
                     RendererInterface::class,
                 ));
@@ -629,7 +596,7 @@ class PayumBuilder
 
         $presetContainer = $this->globalContainer;
 
-        [$templates, $namespaces] = $this->composeTemplates();
+        $namespaces = $this->composeTemplateNamespaces();
 
         $builder = new ContainerBuilder();
 
@@ -655,7 +622,13 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
-            RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TemplateRenderer($templates, $this->composeRenderers($c, $namespaces, array_values($templates))),
+            RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
+                $this->resolveTwigEnvironment($c),
+                $this->layout,
+                array_replace([
+                    'PayumCore' => [__DIR__ . '/Resources/views'],
+                ], $namespaces),
+            ),
         ]);
 
         foreach ($this->storages as $modelClass => $storage) {
@@ -976,13 +949,11 @@ class PayumBuilder
     }
 
     /**
-     * @return array{0: array<string, string>, 1: array<string, list<string>>} keys => file, namespaces => directories
+     * @return array<string, list<string>> Twig namespace => directories, in registration order
      */
-    private function composeTemplates(): array
+    private function composeTemplateNamespaces(): array
     {
-        $templates = [];
         $namespaces = [];
-        $declaredBy = [];
 
         foreach ($this->gateways as $config) {
             if (! $config instanceof GatewayConfig) {
@@ -996,61 +967,28 @@ class PayumBuilder
                 continue;
             }
 
-            foreach ($gateway->templates() as $name => $path) {
-                if (is_dir($path)) {
-                    if ('PayumCore' === $name) {
-                        throw new PayumLogicException(sprintf(
-                            '%s declares the namespace "PayumCore", which is reserved for Payum\'s own views.',
-                            $gatewayClass,
-                        ));
-                    }
-
-                    $namespaces[$name][] = $path;
-
-                    continue;
-                }
-
-                if (! is_file($path)) {
+            foreach ($gateway->templateNamespaces() as $namespace => $directory) {
+                if ('PayumCore' === $namespace) {
                     throw new PayumLogicException(sprintf(
-                        '%s declares "%s" as %s, which is neither a file nor a directory.',
-                        $gatewayClass,
-                        $name,
-                        $path,
-                    ));
-                }
-
-                if (isset($declaredBy[$name]) && $declaredBy[$name] !== $gatewayClass) {
-                    throw new PayumLogicException(sprintf(
-                        'Template key "%s" is declared by both %s and %s.',
-                        $name,
-                        $declaredBy[$name],
+                        '%s declares the namespace "PayumCore", which is reserved for Payum\'s own views.',
                         $gatewayClass,
                     ));
                 }
 
-                $declaredBy[$name] = $gatewayClass;
-                $templates[$name] = $path;
+                if (! is_dir($directory)) {
+                    throw new PayumLogicException(sprintf(
+                        '%s declares the namespace "%s" as %s, which is not a directory.',
+                        $gatewayClass,
+                        $namespace,
+                        $directory,
+                    ));
+                }
+
+                $namespaces[$namespace][] = $directory;
             }
         }
 
-        return [array_replace($templates, $this->templates), $namespaces];
-    }
-
-    /**
-     * @param array<string, list<string>> $namespaces
-     * @param list<string> $files the permitted absolute paths, i.e. the composed template registry's values
-     *
-     * @return array<string, RendererInterface>
-     */
-    private function composeRenderers(ContainerInterface $c, array $namespaces, array $files): array
-    {
-        $paths = array_replace([
-            'PayumCore' => [__DIR__ . '/Resources/views'],
-        ], $namespaces);
-
-        return array_replace([
-            'twig' => new TwigRenderer($this->resolveTwigEnvironment($c), $this->layout, $paths, $files),
-        ], $this->renderers);
+        return $namespaces;
     }
 
     private function resolveTwigEnvironment(ContainerInterface $c): Environment

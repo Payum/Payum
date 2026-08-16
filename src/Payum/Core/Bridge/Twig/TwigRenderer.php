@@ -7,7 +7,6 @@ namespace Payum\Core\Bridge\Twig;
 use Payum\Core\Template\RendererInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
-use Twig\Loader\ChainLoader;
 use function array_replace;
 
 /**
@@ -16,10 +15,9 @@ use function array_replace;
 final class TwigRenderer implements RendererInterface
 {
     /**
-     * Registers $paths and an absolute-path loader on $twig, mutating it.
+     * Registers $paths on $twig, mutating it.
      *
      * @param array<string, string|list<string>> $paths namespace => directory, or a list of directories
-     * @param list<string> $files the only absolute paths the loader will serve
      *
      * @throws LoaderError
      */
@@ -27,7 +25,6 @@ final class TwigRenderer implements RendererInterface
         private readonly Environment $twig,
         private readonly string $layout,
         array $paths = [],
-        array $files = [],
     ) {
         foreach ($paths as $namespace => $directories) {
             foreach ((array) $directories as $directory) {
@@ -36,25 +33,10 @@ final class TwigRenderer implements RendererInterface
                 ]);
             }
         }
-
-        $loader = $twig->getLoader();
-
-        if (! $loader instanceof ChainLoader) {
-            $loader = new ChainLoader([$loader]);
-            $twig->setLoader($loader);
-        }
-
-        foreach ($loader->getLoaders() as $registered) {
-            if ($registered instanceof AbsolutePathLoader) {
-                return;
-            }
-        }
-
-        $loader->addLoader(new AbsolutePathLoader($files));
     }
 
     /**
-     * @param string $template a resolved absolute file path, not a key
+     * @param string $template a Twig template name, e.g. `@PayumAcme/checkout.html.twig`
      */
     public function render(string $template, array $context = []): string
     {
