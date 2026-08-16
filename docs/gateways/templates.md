@@ -179,12 +179,6 @@ Gateway templates then render with the application's own functions, filters, glo
 which is what a custom layout usually needs. Payum still registers core's and every gateway's
 namespaces onto that environment, so gateway templates keep resolving.
 
-This only takes effect through `addGlobalService()`. A `twig.env` registered on a container supplied
-through `PayumBuilder::setGlobalContainer()` is not seen: the environment is resolved from the
-container Payum builds itself, which sees `addGlobalService()` entries but not a preset container's.
-Register the environment with `addGlobalService()` even in an application that otherwise wires Payum
-through `setGlobalContainer()` — see [Framework integration](../di/framework-integration.md).
-
 ### Overriding a template
 
 `PayumBuilder::setTemplate()` rebinds a key — or an engine-native name such as
