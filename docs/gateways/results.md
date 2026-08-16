@@ -47,7 +47,7 @@ RefundResult::partiallyRefunded($transactionId, $amount);
 | :--- | :--- | :--- |
 | `Redirect` | `url`, `statusCode`, `headers` | Send the customer to another URL |
 | `PostRedirect` | `url`, `fields` | Same, by POST — normally a self-submitting form |
-| `RenderTemplate` | `template` (key), `context` | Show a page the gateway owns: a card form, a wallet button |
+| `RenderTemplate` | `template` (Twig template name), `context` | Show a page the gateway owns: a card form, a wallet button |
 | `Challenge` | `url`, `parameters`, `version` | A step-up, 3-D Secure being the usual one |
 | `Poll` | `retryAfterSeconds` | Nothing to show; the PSP has not settled. Ask again later |
 | `null` | | Finished, one way or another |
