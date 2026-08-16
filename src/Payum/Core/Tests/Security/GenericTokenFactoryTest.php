@@ -278,6 +278,67 @@ final class GenericTokenFactoryTest extends TestCase
         $this->assertSame($authorizeToken, $actualToken);
     }
 
+    public function testShouldPassFinalPathToTheAfterTokenWhenCreatingAuthorizeToken(): void
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new stdClass();
+        $authorizePath = 'theAuthorizePath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = [
+            'after' => 'val',
+        ];
+        $finalPath = 'theFinalPath';
+        $finalParameters = [
+            'final' => 'val',
+        ];
+
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $authorizeToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->atLeast(2))
+            ->method('createToken')
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    $finalPath,
+                    $finalParameters,
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $authorizePath,
+                    [],
+                    $afterUrl,
+                    [],
+                ]
+            )
+            ->willReturnOnConsecutiveCalls($afterToken, $authorizeToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
+            'authorize' => $authorizePath,
+        ]);
+
+        $actualToken = $factory->createAuthorizeToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters,
+            $finalPath,
+            $finalParameters
+        );
+
+        $this->assertSame($authorizeToken, $actualToken);
+    }
+
     public function testThrowIfRefundPathNotConfigured(): void
     {
         $this->expectException(LogicException::class);
@@ -683,6 +744,67 @@ final class GenericTokenFactoryTest extends TestCase
             $model,
             $afterPath,
             $afterParameters
+        );
+
+        $this->assertSame($payoutToken, $actualToken);
+    }
+
+    public function testShouldPassFinalPathToTheAfterTokenWhenCreatingPayoutToken(): void
+    {
+        $gatewayName = 'theGatewayName';
+        $model = new stdClass();
+        $payoutPath = 'thePayoutPath';
+        $afterPath = 'theAfterPath';
+        $afterUrl = 'theAfterUrl';
+        $afterParameters = [
+            'after' => 'val',
+        ];
+        $finalPath = 'theFinalPath';
+        $finalParameters = [
+            'final' => 'val',
+        ];
+
+        $afterToken = new Token();
+        $afterToken->setTargetUrl($afterUrl);
+
+        $payoutToken = new Token();
+
+        $tokenFactoryMock = $this->createTokenFactoryMock();
+        $tokenFactoryMock
+            ->expects($this->atLeast(2))
+            ->method('createToken')
+            ->withConsecutive(
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $afterPath,
+                    $afterParameters,
+                    $finalPath,
+                    $finalParameters,
+                ],
+                [
+                    $gatewayName,
+                    $this->identicalTo($model),
+                    $payoutPath,
+                    [],
+                    $afterUrl,
+                    [],
+                ]
+            )
+            ->willReturnOnConsecutiveCalls($afterToken, $payoutToken)
+        ;
+
+        $factory = new GenericTokenFactory($tokenFactoryMock, [
+            'payout' => $payoutPath,
+        ]);
+
+        $actualToken = $factory->createPayoutToken(
+            $gatewayName,
+            $model,
+            $afterPath,
+            $afterParameters,
+            $finalPath,
+            $finalParameters
         );
 
         $this->assertSame($payoutToken, $actualToken);

@@ -302,6 +302,56 @@ final class PayumTest extends TestCase
         $this->assertSame('https://example.com/done', $response->getTargetUrl());
     }
 
+    public function testCaptureMethodThrowsAClearExceptionWhenTheTokenHasNoAfterUrl(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $gateway = $this->createMock(Gateway::class);
+
+        $this->httpRequestVerifierMock
+            ->expects($this->once())
+            ->method('verify')
+            ->willReturn($token);
+
+        $token
+            ->expects($this->once())
+            ->method('getGatewayName')
+            ->willReturn('aGateway');
+
+        $token
+            ->expects($this->once())
+            ->method('getAfterUrl')
+            ->willReturn(null);
+
+        $token
+            ->expects($this->once())
+            ->method('getHash')
+            ->willReturn('theTokenHash');
+
+        $gateway
+            ->expects($this->once())
+            ->method('supportsCommand')
+            ->willReturn(true);
+
+        $gateway
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(CaptureResult::captured('txn_1'));
+
+        $payum = new Payum(
+            new SimpleRegistry([
+                'aGateway' => $gateway,
+            ]),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock
+        );
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('theTokenHash');
+
+        $payum->capture(Request::create('/capture'));
+    }
+
     public function testCaptureMethodRepliesHttpRedirect(): void
     {
         $token = $this->createMock(TokenInterface::class);
