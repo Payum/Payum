@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests;
 
+use DI\ContainerBuilder;
 use League\Uri\Uri;
 use LogicException;
 use Omnipay\Dummy\Gateway as OmnipayGateway;
@@ -53,10 +54,14 @@ use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
+use RuntimeException;
 use stdClass;
 use Twig\Environment;
 use Twig\Error\LoaderError;
+use Twig\Error\SyntaxError;
 use Twig\Loader\ChainLoader;
 use Twig\TwigFunction;
 
@@ -1122,6 +1127,125 @@ final class PayumBuilderTest extends TestCase
         $twig->render(__DIR__ . '/Resources/views/override.html.twig');
     }
 
+    public function testShouldUseTheTwigEnvironmentAPresetGlobalContainerRegistersUnderTwigEnv(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions([
+            'twig.env' => $twig,
+        ]);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($containerBuilder->build())
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    public function testShouldUseTheTwigEnvironmentAPresetGlobalContainerRegistersUnderTheClassName(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions([
+            Environment::class => $twig,
+        ]);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($containerBuilder->build())
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    /**
+     * A plain PSR-11 container, like most framework containers, cannot enumerate its entries. Payum has to
+     * fall back to has() for it rather than relying on the enumeration a PHP-DI container affords.
+     */
+    public function testShouldUseTheTwigEnvironmentAPlainPsr11PresetGlobalContainerRegistersUnderTwigEnv(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $container = new class($twig) implements ContainerInterface {
+            public function __construct(
+                private readonly Environment $twig
+            ) {
+            }
+
+            public function get(string $id): mixed
+            {
+                if ('twig.env' === $id) {
+                    return $this->twig;
+                }
+
+                throw new class() extends RuntimeException implements NotFoundExceptionInterface {
+                };
+            }
+
+            public function has(string $id): bool
+            {
+                return 'twig.env' === $id;
+            }
+        };
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($container)
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    public function testShouldStillUseTheTwigEnvironmentRegisteredViaAddGlobalServiceWhenAPresetContainerIsAlsoSet(): void
+    {
+        $twig = new Environment(new ChainLoader());
+        $twig->addFunction(new TwigFunction('app_greeting', static fn (): string => 'from the app twig'));
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer((new ContainerBuilder())->build())
+            ->addGlobalService('twig.env', $twig)
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        $this->assertStringContainsString(
+            'from the app twig',
+            $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.greeting'),
+        );
+    }
+
+    public function testShouldFallBackToPayumsOwnTwigEnvironmentWhenNeitherIsRegistered(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderAppTwigConfig())
+            ->getPayum();
+
+        // Payum's own environment has no app_greeting function: the template can only render with the
+        // one the application registers.
+        $this->expectException(SyntaxError::class);
+
+        $payum->getGateway('acme')->renderer()->render('payum.template.apptwig.unregistered_greeting');
+    }
+
     /**
      * @return MockObject|RegistryInterface<object>
      */
@@ -1551,6 +1675,9 @@ final class BuilderAppTwigGateway implements PaymentGateway, DeclaresTemplates
     {
         return [
             'payum.template.apptwig.greeting' => __DIR__ . '/Resources/views/app_greeting.html.twig',
+            // A distinct file from the one above, so a test rendering it never reuses a Twig template
+            // class another test already compiled with a working app_greeting function.
+            'payum.template.apptwig.unregistered_greeting' => __DIR__ . '/Resources/views/app_greeting_unregistered.html.twig',
         ];
     }
 

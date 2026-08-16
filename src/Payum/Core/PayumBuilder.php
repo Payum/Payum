@@ -1055,13 +1055,13 @@ class PayumBuilder
 
     private function resolveTwigEnvironment(ContainerInterface $c): Environment
     {
-        // has() alone is not enough: PHP-DI reports true for any instantiable class, including
-        // Environment when nothing registered it, then throws autowiring its LoaderInterface argument.
-        $known = $this->getKnownEntryNames($c);
+        foreach ([$this->globalContainer, $c] as $container) {
+            if (! $container instanceof ContainerInterface) {
+                continue;
+            }
 
-        foreach (['twig.env', Environment::class] as $id) {
-            if (in_array($id, $known, true)) {
-                $environment = $c->get($id);
+            foreach (['twig.env', Environment::class] as $id) {
+                $environment = $this->findTwigEnvironment($container, $id);
 
                 if ($environment instanceof Environment) {
                     return $environment;
@@ -1070,5 +1070,28 @@ class PayumBuilder
         }
 
         return new Environment(new ChainLoader());
+    }
+
+    /**
+     * has() alone is not enough: PHP-DI reports true for any instantiable class, including Environment
+     * when nothing registered it, then throws autowiring its LoaderInterface argument. So an enumerable
+     * container - PHP-DI or a ListableContainerInterface - is probed by enumeration; any other container,
+     * which cannot report its entries, is probed with has() instead.
+     */
+    private function findTwigEnvironment(ContainerInterface $container, string $id): ?Environment
+    {
+        $enumerable = $container instanceof ListableContainerInterface || $container instanceof Container;
+
+        $has = $enumerable
+            ? in_array($id, $this->getKnownEntryNames($container), true)
+            : $container->has($id);
+
+        if (! $has) {
+            return null;
+        }
+
+        $environment = $container->get($id);
+
+        return $environment instanceof Environment ? $environment : null;
     }
 }
