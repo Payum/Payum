@@ -2,6 +2,12 @@
 
 ## 2.0.0 (TBD)
 
+* Add template rendering for gateways built from handlers. A handler returns `Payum\Core\Result\NextAction\RenderTemplate` naming a Twig template and `Payum::capture()` renders it, so a gateway ships a card form or a wallet button without writing rendering code. The result carries the template name and its context, never markup, which is what leaves the application's layout in charge
+* Add `Payum\Core\Gateway\DeclaresTemplates`, so a gateway declares the Twig namespaces for the templates it ships. Templates under a namespace can include and import each other, and an application overrides one by registering its own directory under the same namespace
+* Add `Payum\Core\Template\RendererInterface` and `Payum\Core\Bridge\Twig\TwigRenderer`. One renderer serves every gateway and is reached through `Payum::renderer()`; a gateway declaring its own is a build-time error, since replacing it would break every other gateway's templates
+* Payum renders with the application's own Twig environment when one is registered as `twig.env` or `Twig\Environment`, through `PayumBuilder::addGlobalService()` or `setGlobalContainer()`, so gateway templates pick up its functions, filters, globals and extensions
+* Add `PayumBuilder::setLayout()`, pointing every gateway template at a layout of your own. `@PayumCore/fragment.html.twig` renders the same blocks with no surrounding HTML document, for embedding Payum's output in a page of your own
+* Every template is given the gateway, the subject, the token and the command by `Payum\Core\Middleware\TemplateRenderMiddleware`, so a handler naming a template does not have to pass them. Anything the handler passes under the same name wins
 * Add `Payum\Core\Model\StatusAwareInterface`. A subject implementing it has its status kept current by Payum after every command, which makes it readable without a gateway and queryable in storage. Read it through `Payum\Core\Model\PaymentStatuses`
 * `Result::$status` is now null when an operation concluded nothing about the payment, so a declined refund no longer reads as a failed payment. `failed()` takes an optional status for a failure that really is terminal
 * Add `Payum\Core\Gateway\DeclaresActions`, so a gateway can keep the 1.x actions it has not ported beside the handlers it has and move one operation at a time. Handlers answer first; anything without one falls through to the actions
@@ -22,7 +28,7 @@
 * Declare `psr/http-message` and `psr/http-factory`, which core relies on directly
 
 * Drop support for PHP 7.x and 8.0.x. The minimum supported version is PHP 8.1.x
-* Drop support for Twig 1.x
+* Drop support for Twig 1.x and 2.x. The minimum supported version is Twig 3.0
 * Drop support for doctrine/persistence 1.x. The minimum supported version is 2.0
 * Remove payum/iso4217 package
 * Remove support for Propel storage
