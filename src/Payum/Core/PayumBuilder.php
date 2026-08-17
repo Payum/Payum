@@ -533,7 +533,13 @@ class PayumBuilder
 
         $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
 
-        return new Payum($registry, $httpRequestVerifier, $genericTokenFactory, $tokenStorage);
+        return new Payum(
+            $registry,
+            $httpRequestVerifier,
+            $genericTokenFactory,
+            $tokenStorage,
+            $globalContainer->get(RendererInterface::class),
+        );
     }
 
     /**

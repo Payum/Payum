@@ -24,6 +24,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,20 +49,45 @@ class Payum implements RegistryInterface
      */
     protected StorageInterface $tokenStorage;
 
+    protected ?RendererInterface $renderer;
+
     /**
      * @param RegistryInterface<StorageType> $registry
      * @param StorageInterface<TokenInterface> $tokenStorage
+     * @param RendererInterface|null $renderer optional only so hand-built instances keep working; PayumBuilder always supplies one
      */
     public function __construct(
         RegistryInterface $registry,
         HttpRequestVerifierInterface $httpRequestVerifier,
         GenericTokenFactoryInterface $tokenFactory,
-        StorageInterface $tokenStorage
+        StorageInterface $tokenStorage,
+        ?RendererInterface $renderer = null
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
         $this->tokenFactory = $tokenFactory;
         $this->tokenStorage = $tokenStorage;
+        $this->renderer = $renderer;
+    }
+
+    /**
+     * Renders the template a RenderTemplate result names.
+     *
+     * One renderer serves every gateway, which is why it lives here rather than on a gateway: a gateway
+     * cannot replace it, and reaching it through one implied otherwise.
+     */
+    public function renderer(): RendererInterface
+    {
+        if (! $this->renderer instanceof RendererInterface) {
+            throw new LogicException(sprintf(
+                'This %s was built without a renderer. Build it with %s, or pass a %s to the constructor.',
+                self::class,
+                PayumBuilder::class,
+                RendererInterface::class,
+            ));
+        }
+
+        return $this->renderer;
     }
 
     public function getGatewayFactory(string $name): GatewayFactoryInterface
@@ -161,7 +187,7 @@ class Payum implements RegistryInterface
         $gateway = $this->getGateway($token->getGatewayName());
 
         if ($gateway instanceof Gateway && $gateway->supportsCommand(CaptureCommand::class)) {
-            return $this->respondTo($gateway->execute(new CaptureCommand($token)), $token, $gateway);
+            return $this->respondTo($gateway->execute(new CaptureCommand($token)), $token);
         }
 
         $reply = $gateway->execute(new Capture($token), true);
@@ -221,7 +247,7 @@ class Payum implements RegistryInterface
      * A null next action means there is nothing left for the customer to do, so the application takes
      * over at the token's after URL.
      */
-    private function respondTo(Result $result, TokenInterface $token, Gateway $gateway): Response
+    private function respondTo(Result $result, TokenInterface $token): Response
     {
         $next = $result->next;
 
@@ -240,7 +266,7 @@ class Payum implements RegistryInterface
         }
 
         if ($next instanceof RenderTemplate) {
-            return new Response($gateway->renderer()->render($next->template, $next->context));
+            return new Response($this->renderer()->render($next->template, $next->context));
         }
 
         throw new LogicException(sprintf(

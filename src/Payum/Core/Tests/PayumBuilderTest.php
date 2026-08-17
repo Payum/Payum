@@ -837,7 +837,7 @@ final class PayumBuilderTest extends TestCase
             ->setLayout('@PayumCore/fragment.html.twig')
             ->getPayum();
 
-        $output = $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+        $output = $payum->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
             'amount' => 123,
         ]);
 
@@ -870,7 +870,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'Pay 123',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+            $payum->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
                 'amount' => 123,
             ]),
         );
@@ -917,7 +917,7 @@ final class PayumBuilderTest extends TestCase
             ->registerGateway('two', new BuilderSharedNamespaceConfig())
             ->getPayum();
 
-        $renderer = $payum->getGateway('one')->renderer();
+        $renderer = $payum->renderer();
 
         $this->assertStringContainsString('Pay 5', $renderer->render('@PayumBuilderAcme/builder_checkout.html.twig', [
             'amount' => 5,
@@ -938,7 +938,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -955,7 +955,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -971,7 +971,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'Pay 7',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
+            $payum->renderer()->render('@PayumBuilderAcme/builder_checkout.html.twig', [
                 'amount' => 7,
             ]),
         );
@@ -995,7 +995,7 @@ final class PayumBuilderTest extends TestCase
             ->registerGateway('acme', new BuilderNamespaceConfig())
             ->getPayum();
 
-        $renderer = $payum->getGateway('acme')->renderer();
+        $renderer = $payum->renderer();
 
         $this->assertStringContainsString(
             'overridden by the application',
@@ -1026,7 +1026,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1048,7 +1048,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1091,7 +1091,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1109,7 +1109,7 @@ final class PayumBuilderTest extends TestCase
 
         $this->assertStringContainsString(
             'from the app twig',
-            $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
+            $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting.html.twig'),
         );
     }
 
@@ -1124,7 +1124,7 @@ final class PayumBuilderTest extends TestCase
         // one the application registers.
         $this->expectException(SyntaxError::class);
 
-        $payum->getGateway('acme')->renderer()->render('@PayumBuilderAppTwig/app_greeting_unregistered.html.twig');
+        $payum->renderer()->render('@PayumBuilderAppTwig/app_greeting_unregistered.html.twig');
     }
 
     /**

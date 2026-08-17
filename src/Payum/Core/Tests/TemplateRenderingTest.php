@@ -76,9 +76,7 @@ final class TemplateRenderingTest extends TestCase
 
     public function testShouldRenderTheNamespacedTemplateTheGatewayShips(): void
     {
-        $gateway = $this->buildPayum()->getGateway('acme');
-
-        $html = $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
+        $html = $this->buildPayum()->renderer()->render('@PayumAcme/obtain_token.html.twig', [
             'actionUrl' => 'https://acme.test/pay',
             'amount' => 123,
         ]);
@@ -89,11 +87,9 @@ final class TemplateRenderingTest extends TestCase
 
     public function testShouldLetAGatewayTemplateIncludeASibling(): void
     {
-        $gateway = $this->buildPayum()->getGateway('acme');
-
         $this->assertStringContainsString(
             'partial content',
-            $gateway->renderer()->render('@PayumAcme/obtain_token.html.twig', [
+            $this->buildPayum()->renderer()->render('@PayumAcme/obtain_token.html.twig', [
                 'actionUrl' => 'https://acme.test/pay',
                 'amount' => 123,
             ]),
