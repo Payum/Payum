@@ -139,25 +139,26 @@ code:
 $response = $payum->capture($request); // 200, carrying your rendered template
 ```
 
-An application that drives commands itself reaches the renderer from the gateway:
+An application that drives commands itself asks Payum for the renderer:
 
 ```php
-$result = $gateway->execute(CaptureCommand::forToken($token));
+$result = $payum->getGateway('acme')->execute(CaptureCommand::forToken($token));
 
 if ($result->next instanceof RenderTemplate) {
-    echo $gateway->renderer()->render($result->next->template, $result->next->context);
+    echo $payum->renderer()->render($result->next->template, $result->next->context);
 }
 ```
 
-`renderer()` lives on `Payum\Core\Gateway`, which is what `$payum->getGateway()` hands you. It renders
-the template the same way `Payum::capture()` does.
+`renderer()` lives on `Payum\Core\Payum`, and renders the template the same way `Payum::capture()` does.
 
 ### The renderer belongs to the application
 
-One Twig renderer, shared by every gateway, renders every namespaced template. A gateway declaring
-`Payum\Core\Template\RendererInterface` from `configureContainer()` is a build-time error: replacing the
-shared renderer would break every other gateway's templates, including the layout every one of them
-extends. An application overrides one template at a time instead — the sections below show how.
+One Twig renderer, shared by every gateway, renders every namespaced template. That is why `renderer()`
+is on `Payum` rather than on a gateway: there is one to reach, whichever gateway produced the result. A
+gateway declaring `Payum\Core\Template\RendererInterface` from `configureContainer()` is a build-time
+error: replacing the shared renderer would break every other gateway's templates, including the layout
+every one of them extends. An application overrides one template at a time instead — the sections below
+show how.
 
 Everything from here on is for an application embedding Payum, not for a gateway shipping one. Skip it
 if you are writing a gateway.

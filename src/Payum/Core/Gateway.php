@@ -242,15 +242,6 @@ class Gateway implements GatewayInterface
         return null !== $this->handlerMap?->serviceIdFor($commandClass);
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function renderer(): RendererInterface
-    {
-        return $this->container->get(RendererInterface::class);
-    }
-
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -457,7 +448,7 @@ class Gateway implements GatewayInterface
         $next = $result->next;
 
         $reply = $next instanceof RenderTemplate
-            ? new HttpResponse($this->renderer()->render($next->template, $next->context))
+            ? new HttpResponse($this->container->get(RendererInterface::class)->render($next->template, $next->context))
             : ResultToReply::translate($result);
 
         if (! $reply instanceof Base) {

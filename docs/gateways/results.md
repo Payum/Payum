@@ -66,7 +66,7 @@ match (true) {
         'url' => $result->next->url,
         'fields' => $result->next->fields,
     ]),
-    $result->next instanceof RenderTemplate => print $gateway->renderer()->render(
+    $result->next instanceof RenderTemplate => print $payum->renderer()->render(
         $result->next->template,
         $result->next->context,
     ),

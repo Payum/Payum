@@ -70,6 +70,36 @@ final class PayumTest extends TestCase
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
     }
 
+    public function testShouldReturnTheRendererItWasBuiltWith(): void
+    {
+        $renderer = $this->createMock(RendererInterface::class);
+
+        $payum = new Payum(
+            new SimpleRegistry(),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+            $renderer,
+        );
+
+        $this->assertSame($renderer, $payum->renderer());
+    }
+
+    public function testShouldFailWhenAskedForARendererItWasNotBuiltWith(): void
+    {
+        $payum = new Payum(
+            new SimpleRegistry(),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+        );
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('was built without a renderer');
+
+        $payum->renderer();
+    }
+
     public function testShouldAllowGetHttpRequestVerifierSetInConstructor(): void
     {
         $payum = new Payum(
@@ -291,11 +321,6 @@ final class PayumTest extends TestCase
                 'amount' => 123,
             ])));
 
-        $gateway
-            ->expects($this->once())
-            ->method('renderer')
-            ->willReturn($renderer);
-
         $renderer
             ->expects($this->once())
             ->method('render')
@@ -310,7 +335,8 @@ final class PayumTest extends TestCase
             ]),
             $this->httpRequestVerifierMock,
             $this->tokenFactoryMock,
-            $this->storageMock
+            $this->storageMock,
+            $renderer
         );
 
         $response = $payum->capture(Request::create('/capture'));
@@ -747,22 +773,7 @@ HTML
         $this->assertSame(['update', 'createCaptureToken'], $calls);
     }
 
-    public function testPrepareFallsBackToTheDefaultAfterPathFromTheConstructor(): void
-    {
-        $payment = new Payment();
-
-        $this->tokenFactoryMock
-            ->expects($this->once())
-            ->method('createCaptureToken')
-            ->with('aGateway', $payment, 'complete.php', [])
-            ->willReturn($this->createMock(TokenInterface::class));
-
-        $payum = $this->createPayumWithStorageFor(Payment::class, 'complete.php');
-
-        $payum->prepare('aGateway', $payment, 'complete.php');
-    }
-
-    public function testPrepareUsesDonePhpWhenNoDefaultAfterPathIsGiven(): void
+    public function testPrepareForwardsTheAfterPath(): void
     {
         $payment = new Payment();
 
@@ -775,21 +786,6 @@ HTML
         $payum = $this->createPayumWithStorageFor(Payment::class);
 
         $payum->prepare('aGateway', $payment, 'done.php');
-    }
-
-    public function testPrepareAllowsAnExplicitAfterPathToOverrideTheDefault(): void
-    {
-        $payment = new Payment();
-
-        $this->tokenFactoryMock
-            ->expects($this->once())
-            ->method('createCaptureToken')
-            ->with('aGateway', $payment, 'thanks.php', [])
-            ->willReturn($this->createMock(TokenInterface::class));
-
-        $payum = $this->createPayumWithStorageFor(Payment::class, 'complete.php');
-
-        $payum->prepare('aGateway', $payment, 'thanks.php');
     }
 
     public function testPrepareForwardsTheAfterParameters(): void
@@ -851,7 +847,7 @@ HTML
      *
      * @return Payum<object>
      */
-    private function createPayumWithStorageFor(string $modelClass, ?string $defaultAfterPath = null): Payum
+    private function createPayumWithStorageFor(string $modelClass): Payum
     {
         $registry = new SimpleRegistry([], [
             $modelClass => $this->storageMock,
@@ -862,7 +858,6 @@ HTML
             $this->httpRequestVerifierMock,
             $this->tokenFactoryMock,
             $this->storageMock,
-            ...(null === $defaultAfterPath ? [] : [$defaultAfterPath])
         );
     }
 }
