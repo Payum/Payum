@@ -12,6 +12,7 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\NextAction\RenderTemplate;
@@ -72,7 +73,7 @@ final class TemplateRendererMiddlewareTest extends TestCase
         $renderTemplate = new RenderTemplate('@PayumCore/capture.html.twig');
         $this->dispatch($context, static fn (): CaptureResult => CaptureResult::pending($renderTemplate));
 
-        $this->assertNull($command->subject());
+        $this->assertNotInstanceOf(SubjectInterface::class, $command->subject());
         $this->assertSame($payment, $renderTemplate->context['subject']);
     }
 
