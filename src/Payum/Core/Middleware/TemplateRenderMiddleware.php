@@ -16,12 +16,12 @@ use function array_merge;
 final class TemplateRenderMiddleware implements MiddlewareInterface, HasPriority
 {
     /**
-     * Above the default of 0, so a RenderTemplate returned by middleware an application or a gateway
-     * registers is filled in the same way a handler's is.
+     * Outermost, so every RenderTemplate leaving the pipeline is filled in, whichever middleware or
+     * handler produced it.
      */
     public static function priority(): int
     {
-        return 75;
+        return 2000;
     }
 
     public function process(CommandInterface $command, Context $context, callable $next): Result

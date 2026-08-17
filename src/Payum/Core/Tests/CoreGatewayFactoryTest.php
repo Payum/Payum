@@ -406,10 +406,10 @@ final class CoreGatewayFactoryTest extends TestCase
         $resolved = CoreGatewayFactory::defaultMiddleware()->resolve($this->getContainer());
 
         $this->assertSame([
+            TemplateRenderMiddleware::class,
             EndlessCycleDetectorMiddleware::class,
             LegacyExtensionMiddleware::class,
             PersistStateMiddleware::class,
-            TemplateRenderMiddleware::class,
             RecordPaymentStatusMiddleware::class,
         ], array_map(static fn (object $middleware): string => $middleware::class, $resolved));
     }

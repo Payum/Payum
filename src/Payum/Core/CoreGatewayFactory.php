@@ -340,11 +340,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     public static function defaultMiddleware(): MiddlewareCollection
     {
         return (new MiddlewareCollection())
+            ->with(TemplateRenderMiddleware::class)
             ->with(EndlessCycleDetectorMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)
-            ->with(TemplateRenderMiddleware::class)
         ;
     }
 
