@@ -78,8 +78,9 @@ has configured. It defaults to `@PayumCore/layout.html.twig`; an application cha
 
 ### What every template is given
 
-Alongside whatever your handler passes, Payum adds these on its own. You do not have to thread them
-through the `RenderTemplate` yourself.
+Alongside whatever your handler passes, Payum adds these on its own, in
+`TemplateRenderMiddleware` — see [Middleware](middleware.md). You do not have to thread them through the
+`RenderTemplate` yourself.
 
 | Variable | What it is |
 | :--- | :--- |
