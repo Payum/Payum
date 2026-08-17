@@ -85,11 +85,14 @@ What core registers, outermost first:
 | `EndlessCycleDetectorMiddleware` | 1000 | Stops a handler that dispatches its way into a loop |
 | `LegacyExtensionMiddleware` | 500 | Runs the gateway's registered extensions |
 | `PersistStateMiddleware` | 100 | Writes the PSP state back onto the payment |
+| `TemplateRenderMiddleware` | 75 | Fills in the variables every template gets |
 | `RecordPaymentStatusMiddleware` | 50 | Commits the status the handler declared, when the payment tracks one |
 
-So anything you register at the default 0 runs inside all four, closest to the handler.
+So anything you register at the default 0 runs inside all five, closest to the handler.
 
 Two of them behave deliberately differently when a handler throws, and it is worth knowing which is which. `PersistStateMiddleware` writes anyway — a PSP token recorded just before a failure has to survive, or the retry opens a second checkout. `RecordPaymentStatusMiddleware` writes nothing, because an exception means nobody learned what the status is.
+
+`TemplateRenderMiddleware` is why a handler returning `new RenderTemplate('@PayumAcme/checkout.html.twig')` with no context still gets a template that can name the gateway and post a form back to the token. On the way out it adds `gateway`, `subject`, `token`, `command` and `context` to any `RenderTemplate` result, leaving anything the handler passed under the same name alone — see [Templates](templates.md). It sits above `RecordPaymentStatusMiddleware` and below the default 0, so it covers results from the handler and from middleware you register, which is everything that produces one.
 
 ### Middleware belonging to one gateway
 

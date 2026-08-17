@@ -10,8 +10,15 @@ use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use function array_merge;
 
+/**
+ * Fills in the variables every template gets, so a handler naming a template does not have to pass them.
+ */
 final class TemplateRenderMiddleware implements MiddlewareInterface, HasPriority
 {
+    /**
+     * Above the default of 0, so a RenderTemplate returned by middleware an application or a gateway
+     * registers is filled in the same way a handler's is.
+     */
     public static function priority(): int
     {
         return 75;

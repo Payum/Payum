@@ -26,8 +26,7 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
     }
 
     /**
-     * Innermost of the middleware core registers, so the state is written before anything outside it sees
-     * the result.
+     * Outside the middleware that mutate the payment, so their changes are included in the write.
      */
     public static function priority(): int
     {

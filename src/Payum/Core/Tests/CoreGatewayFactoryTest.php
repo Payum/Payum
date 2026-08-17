@@ -16,11 +16,20 @@ use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Command\CommandInterface;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Handler\Context;
+use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
+use Payum\Core\Middleware\LegacyExtensionMiddleware;
+use Payum\Core\Middleware\MiddlewareInterface;
+use Payum\Core\Middleware\PersistStateMiddleware;
+use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\TemplateRenderMiddleware;
+use Payum\Core\Result\Result;
 use Payum\Core\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
@@ -390,6 +399,35 @@ final class CoreGatewayFactoryTest extends TestCase
                 $this->assertSame('sha1', $config['hash']);
             },
         ]);
+    }
+
+    public function testShouldRegisterTheDefaultMiddlewareOutermostFirst(): void
+    {
+        $resolved = CoreGatewayFactory::defaultMiddleware()->resolve($this->getContainer());
+
+        $this->assertSame([
+            EndlessCycleDetectorMiddleware::class,
+            LegacyExtensionMiddleware::class,
+            PersistStateMiddleware::class,
+            TemplateRenderMiddleware::class,
+            RecordPaymentStatusMiddleware::class,
+        ], array_map(static fn (object $middleware): string => $middleware::class, $resolved));
+    }
+
+    public function testShouldRunTheDefaultMiddlewareOutsideAnythingRegisteredWithoutAPriority(): void
+    {
+        $app = new class() implements MiddlewareInterface {
+            public function process(CommandInterface $command, Context $context, callable $next): Result
+            {
+                return $next($command, $context);
+            }
+        };
+
+        $resolved = CoreGatewayFactory::defaultMiddleware()
+            ->with($app)
+            ->resolve($this->getContainer());
+
+        $this->assertSame($app, end($resolved));
     }
 
     /**
