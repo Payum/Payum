@@ -1,0 +1,10 @@
+{% extends layout %}
+
+{% block payum_body %}
+    <p>{{ gateway.name }}</p>
+    <img src="{{ gateway.logo.value }}" alt="{{ gateway.name }}">
+    <p>{{ subject.totalAmount }} {{ subject.currencyCode }}</p>
+    <p>{{ subject.description }}</p>
+    <form action="{{ token.targetUrl }}" method="post"></form>
+    <a href="{{ token.afterUrl }}">done</a>
+{% endblock %}

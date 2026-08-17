@@ -19,8 +19,8 @@ final class RenderTemplate implements NextAction
      * @param array<string, mixed> $context
      */
     public function __construct(
-        public readonly string $template,
-        public readonly array $context = [],
+        public string $template,
+        public array $context = [],
     ) {
     }
 }
