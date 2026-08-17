@@ -100,12 +100,34 @@ final class TemplateRenderingTest extends TestCase
         );
     }
 
+    public function testShouldGiveATemplateTheGatewaySubjectAndTokenWithoutTheHandlerPassingThem(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('auto', new AutoContextConfig())
+            ->getPayum();
+
+        $token = $payum->prepare('auto', $this->buildPayment(), 'done.php');
+
+        $body = $payum->capture([
+            'payum_token' => $token,
+        ])->getContent();
+
+        $this->assertStringContainsString('Auto Context', $body);
+        $this->assertStringContainsString('https://auto.test/logo.svg', $body);
+        $this->assertStringContainsString('123 EUR', $body);
+        $this->assertStringContainsString('An order', $body);
+        $this->assertStringContainsString($token->getTargetUrl(), $body);
+        $this->assertStringContainsString($token->getAfterUrl(), $body);
+    }
+
     private function buildPayment(): Payment
     {
         $payment = new Payment();
         $payment->setNumber(uniqid());
         $payment->setCurrencyCode('EUR');
         $payment->setTotalAmount(123);
+        $payment->setDescription('An order');
 
         return $payment;
     }
@@ -173,5 +195,56 @@ final class AcmeTemplateCaptureHandler implements CaptureHandlerInterface
             'actionUrl' => 'https://acme.test/pay',
             'amount' => 123,
         ]));
+    }
+}
+
+final class AutoContextConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AutoContextGateway::class;
+    }
+}
+
+final class AutoContextGateway implements PaymentGateway, DeclaresTemplates
+{
+    public function configClass(): string
+    {
+        return AutoContextConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AutoContextCaptureHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://auto.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Auto Context';
+    }
+
+    public function templateNamespaces(): array
+    {
+        return [
+            'PayumAutoContext' => __DIR__ . '/Resources/views',
+        ];
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://developer.auto.test');
+    }
+}
+
+final class AutoContextCaptureHandler implements CaptureHandlerInterface
+{
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        return CaptureResult::pending(new RenderTemplate('@PayumAutoContext/auto_context.html.twig'));
     }
 }

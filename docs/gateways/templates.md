@@ -76,6 +76,59 @@ Extend it rather than writing a whole HTML document, so your page picks up whate
 has configured. It defaults to `@PayumCore/layout.html.twig`; an application changes it with
 `PayumBuilder::setLayout()` — see below.
 
+### What every template is given
+
+Alongside whatever your handler passes, Payum adds these on its own. You do not have to thread them
+through the `RenderTemplate` yourself.
+
+| Variable | What it is |
+| :--- | :--- |
+| `layout` | The layout to extend |
+| `gateway` | The gateway being processed — name, logo, website |
+| `subject` | What is being paid: a payment, or a payout |
+| `token` | The token this execution belongs to, when there is one |
+| `command` | The command being handled |
+
+**`gateway`** is your gateway's own metadata, so a template can label itself without hard-coding a name:
+
+```twig
+<h1>Pay with {{ gateway.name }}</h1>
+<img src="{{ gateway.logo.value }}" alt="{{ gateway.name }}">
+```
+
+**`subject`** is the payment for a payment command, which is where the amount and currency live:
+
+```twig
+<p>{{ subject.totalAmount }} {{ subject.currencyCode }}</p>
+<p>{{ subject.description }}</p>
+```
+
+**`token`** is what you post a form back to. `targetUrl` returns the customer to this same command, which
+is how a two-step capture resumes; `afterUrl` is where the payment finishes:
+
+```twig
+<form action="{{ token.targetUrl }}" method="post">
+    <button type="submit">Pay</button>
+</form>
+```
+
+`subject` and `token` can both be null — a payout has no payment, and a command dispatched without a
+token has no token. Guard them if your template runs in either case:
+
+```twig
+{% if token %}
+    <form action="{{ token.targetUrl }}" method="post">…</form>
+{% endif %}
+```
+
+Anything your handler passes wins, so you can override any of these by naming them yourself:
+
+```php
+return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [
+    'subject' => $somethingElse,
+]));
+```
+
 ### That is all a gateway has to do
 
 `Payum::capture()` renders the template and returns the response, so a gateway never writes rendering

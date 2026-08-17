@@ -48,6 +48,7 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -268,6 +269,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 PersistStateMiddleware::class => static fn (ContainerInterface $c): PersistStateMiddleware => new PersistStateMiddleware(
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
+                TemplateRenderMiddleware::class => static fn (): TemplateRenderMiddleware => new TemplateRenderMiddleware(),
                 ServerRequestInterface::class => static fn (ContainerInterface $c): ServerRequestInterface => $c
                     ->get(ServerRequestFactoryInterface::class)
                     ->createServerRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/', $_SERVER)
@@ -330,7 +332,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @throws ContainerExceptionInterface|NotFoundExceptionInterface|LoaderError
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
     /**
      * The middleware every gateway gets, before anything the application or the gateway adds.
@@ -341,7 +343,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             ->with(EndlessCycleDetectorMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
-            ->with(RecordPaymentStatusMiddleware::class);
+            ->with(RecordPaymentStatusMiddleware::class)
+            ->with(TemplateRenderMiddleware::class)
+        ;
     }
 
     public function createGateway(ContainerInterface $container): Gateway
