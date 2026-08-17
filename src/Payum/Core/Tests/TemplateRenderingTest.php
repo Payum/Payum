@@ -109,12 +109,12 @@ final class TemplateRenderingTest extends TestCase
             'payum_token' => $token,
         ])->getContent();
 
-        $this->assertStringContainsString('Auto Context', $body);
-        $this->assertStringContainsString('https://auto.test/logo.svg', $body);
-        $this->assertStringContainsString('123 EUR', $body);
-        $this->assertStringContainsString('An order', $body);
-        $this->assertStringContainsString($token->getTargetUrl(), $body);
-        $this->assertStringContainsString($token->getAfterUrl(), $body);
+        $this->assertStringContainsString('Auto Context', (string) $body);
+        $this->assertStringContainsString('https://auto.test/logo.svg', (string) $body);
+        $this->assertStringContainsString('123 EUR', (string) $body);
+        $this->assertStringContainsString('An order', (string) $body);
+        $this->assertStringContainsString($token->getTargetUrl(), (string) $body);
+        $this->assertStringContainsString($token->getAfterUrl(), (string) $body);
     }
 
     private function buildPayment(): Payment
