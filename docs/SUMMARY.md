@@ -13,6 +13,7 @@
   * [Results](gateways/results.md)
   * [Services](gateways/services.md)
   * [Middleware](gateways/middleware.md)
+  * [Webhooks](gateways/webhooks.md)
   * [Migrating a gateway from 1.x](gateways/migrating-from-v1.md)
 * [Dependency Injection](di/README.md)
   * [Getting started](di/getting-started.md)

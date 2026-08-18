@@ -39,6 +39,22 @@ RefundResult::refunded($transactionId, $amount);
 RefundResult::partiallyRefunded($transactionId, $amount);
 ```
 
+### `NotifyResult`
+
+What a PSP's message amounted to.
+
+```php
+NotifyResult::handled(PaymentStatus::Captured, transactionId: 'txn_1');
+NotifyResult::ignored();                                          // an event type you do not care about
+NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('[accepted]'));
+```
+
+`ignored()` leaves the payment alone and still answers the PSP successfully. A null status means the
+event concluded nothing about the payment.
+
+It carries one thing no other result does: an `Acknowledgement`, which is the HTTP answer the PSP gets.
+Leave it null and the answer is 204, which nearly every PSP accepts.
+
 ### Next actions
 
 `next` says what the customer must do before the operation can finish. It describes intent, never an HTTP response, so a bridge turns it into one — and a JSON API can serialise it straight to a mobile client.

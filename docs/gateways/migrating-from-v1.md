@@ -19,6 +19,7 @@ Gateways written for 1.x keep working on 2.0 and are still supported. `Gateway::
 | `ApiAwareInterface` / `addApi()` | The api on the constructor |
 | `GatewayFactory::populateConfig()` | A gateway class and a config object |
 | `payum.action.*` container keys | `handlers()` on the gateway |
+| `NotifyAction` | `NotifyHandlerInterface` — the signature check moves into `verify()`, and the `HttpResponse` the action threw becomes an `Acknowledgement` on the result |
 
 Mirror the directory layout so the map stays obvious:
 
@@ -239,7 +240,7 @@ What translates:
 | `Cancel`, `Sync` | the matching handler, for a payment or a payout |
 | `Payout` | the payout handler |
 | `GetHumanStatus`, `GetBinaryStatus` | the status recorded on the subject |
-| `Notify` | nothing yet — webhooks are their own piece of work |
+| `Notify` | the notify handler — see [Webhooks](webhooks.md) |
 
 Two limits worth knowing:
 

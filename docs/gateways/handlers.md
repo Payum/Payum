@@ -10,6 +10,7 @@ A handler answers exactly one command. There is one interface per command, so bo
 | `CancelCommand` | `Payum\Core\Handler\CancelHandlerInterface` |
 | `PayoutCommand` | `Payum\Core\Handler\PayoutHandlerInterface` |
 | `SyncCommand` | `Payum\Core\Handler\SyncHandlerInterface` |
+| `NotifyCommand` | `Payum\Core\Handler\NotifyHandlerInterface` |
 
 ```php
 <?php
@@ -79,6 +80,13 @@ Do not take the payment, the token or the HTTP request. Those belong to a single
 | `execute()` | Dispatch a sub-command |
 | `previous()` | The enclosing executions, when a handler dispatched into another |
 | `command()` | The command being handled |
+| `gatewayName()` | The name this gateway is registered under |
+| `notifyUrl()` | A URL the PSP can post notifications about this payment to |
+| `notifyToken()` | The token behind that URL |
+
+`NotifyHandlerInterface` is the one handler whose `handle()` takes three parameters — the verified event
+arrives between the command and the context, and it has a `verify()` alongside. See
+[Webhooks](webhooks.md).
 
 ### Capture runs more than once
 
