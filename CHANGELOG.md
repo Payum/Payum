@@ -2,6 +2,12 @@
 
 ## 2.0.0 (TBD)
 
+* Add `Payum\Core\Command\NotifyCommand` and `Payum\Core\Handler\NotifyHandlerInterface`, so a gateway built from handlers can receive what a PSP sends when a payment changes. Checking that a message is genuine and acting on it are separate methods: `verify()` returns a `Payum\Core\Handler\WebhookEvent` or throws, and `handle()` is given the event it produced, so a gateway cannot quietly skip the check
+* A gateway whose PSP signs nothing says so with `WebhookEvent::unverified()` and re-reads the state with a `SyncCommand`, which makes the absence of a signature visible rather than looking like an omission
+* `Payum\Core\Result\NotifyResult` carries a `Payum\Core\Result\Acknowledgement`, which is the answer the PSP gets. It defaults to 204 and exists for the PSPs that insist on a particular body. A message that fails verification is answered 400 with nothing in it
+* Add `Payum\Core\Handler\Context::notifyUrl()`, `notifyToken()` and `gatewayName()`, so a gateway that takes a notification address per payment builds one in a line instead of reaching for the token factory
+* The PSR-7 request Payum builds from globals now reads its body from `php://input`, so a gateway can check a signature over the raw payload. An application that registers its own `Psr\Http\Message\ServerRequestInterface` is unaffected
+* `Payum\Core\Request\Notify` is translated to `NotifyCommand`, and a notify handler's acknowledgement is translated back to the `HttpResponse` reply a 1.x notify script catches
 * Add template rendering for gateways built from handlers. A handler returns `Payum\Core\Result\NextAction\RenderTemplate` naming a Twig template and `Payum::capture()` renders it, so a gateway ships a card form or a wallet button without writing rendering code. The result carries the template name and its context, never markup, which is what leaves the application's layout in charge
 * Add `Payum\Core\Gateway\DeclaresTemplates`, so a gateway declares the Twig namespaces for the templates it ships. Templates under a namespace can include and import each other, and an application overrides one by registering its own directory under the same namespace
 * Add `Payum\Core\Template\RendererInterface` and `Payum\Core\Bridge\Twig\TwigRenderer`. One renderer serves every gateway and is reached through `Payum::renderer()`; a gateway declaring its own is a build-time error, since replacing it would break every other gateway's templates

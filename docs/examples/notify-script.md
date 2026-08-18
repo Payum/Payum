@@ -6,6 +6,31 @@ You can use this script if a gateway allows setting notification url per payment
 <?php
 //notify.php
 
+use Payum\Core\Payum;
+
+include __DIR__.'/config.php';
+
+/** @var Payum $payum */
+
+$response = $payum->notify();
+
+foreach ($response->headers->all() as $name => $values) {
+    foreach ($values as $value) {
+        header($name.': '.$value, false);
+    }
+}
+
+http_response_code($response->getStatusCode());
+echo $response->getContent();
+```
+
+`notify()` verifies the token, finds the gateway and answers the PSP. For a gateway that has not moved
+to handlers, the manual form still works:
+
+```php
+<?php
+//notify.php
+
 use Payum\Core\Request\Notify;
 use Payum\Core\Payum;
 use Payum\Core\Reply\HttpResponse;
