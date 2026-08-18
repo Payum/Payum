@@ -30,11 +30,11 @@ final class ResultToReply
      */
     public static function translate(Result $result): ?Base
     {
-        if ($result instanceof NotifyResult && $result->acknowledge instanceof Acknowledgement) {
+        if ($result instanceof NotifyResult && $result->acknowledgement instanceof Acknowledgement) {
             return new HttpResponse(
-                $result->acknowledge->body,
-                $result->acknowledge->status,
-                $result->acknowledge->headers,
+                $result->acknowledgement->body,
+                $result->acknowledgement->status,
+                $result->acknowledgement->headers,
             );
         }
 
