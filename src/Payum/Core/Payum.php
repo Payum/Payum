@@ -200,7 +200,7 @@ class Payum implements RegistryInterface
             return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
         }
 
-        return new RedirectResponse($token->getAfterUrl());
+        return $this->redirectToAfterUrl($token);
     }
 
     /**
@@ -252,7 +252,7 @@ class Payum implements RegistryInterface
         $next = $result->next;
 
         if (! $next instanceof NextAction) {
-            return new RedirectResponse($token->getAfterUrl());
+            return $this->redirectToAfterUrl($token);
         }
 
         if ($next instanceof Redirect) {
@@ -277,5 +277,28 @@ class Payum implements RegistryInterface
             PostRedirect::class,
             RenderTemplate::class,
         ));
+    }
+
+    /**
+     * A token with no afterUrl usually means it was created as an intermediate step
+     * (e.g. GenericTokenFactory::createAuthorizeToken()'s $afterPath token) without telling
+     * the factory where that step should lead once it finishes on its own. Fail with a
+     * message pointing at the cause instead of Symfony's generic "empty URL" exception.
+     */
+    private function redirectToAfterUrl(TokenInterface $token): RedirectResponse
+    {
+        $afterUrl = $token->getAfterUrl();
+
+        if (! $afterUrl) {
+            throw new LogicException(sprintf(
+                'The token "%s" has no afterUrl to redirect to. If it was created as an intermediate '
+                . 'step (for example via GenericTokenFactory::createAuthorizeToken() or '
+                . 'createPayoutToken()), pass a $finalPath so that token also knows where to redirect '
+                . 'once it completes on its own.',
+                $token->getHash()
+            ));
+        }
+
+        return new RedirectResponse($afterUrl);
     }
 }
