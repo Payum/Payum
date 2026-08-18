@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use League\Uri\Uri;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CancelHandlerInterface;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
+use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
@@ -102,6 +105,32 @@ final class LegacyRequestTest extends TestCase
         $this->expectException(RequestNotSupportedException::class);
 
         $gateway->execute(new Notify($this->buildPayment()));
+    }
+
+    public function testShouldTranslateANotifyRequestCarryingAToken(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+
+        $command = RequestToCommand::translate(new Notify($token));
+
+        $this->assertInstanceOf(NotifyCommand::class, $command);
+        $this->assertSame($token, $command->token());
+    }
+
+    public function testShouldTranslateANotifyRequestCarryingAPayment(): void
+    {
+        $payment = new Payment();
+
+        $command = RequestToCommand::translate(new Notify($payment));
+
+        $this->assertInstanceOf(NotifyCommand::class, $command);
+        $this->assertSame($payment, $command->subject());
+    }
+
+    public function testShouldNotTranslateANotifyRequestCarryingOnlyDetails(): void
+    {
+        // The surviving 1.x NotifyActions match on an ArrayAccess model. Leave those requests to them.
+        $this->assertNull(RequestToCommand::translate(new Notify(new ArrayObject())));
     }
 
     public function testShouldAnswerAOneXStatusRequestFromTheRecordedStatus(): void
