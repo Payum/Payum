@@ -36,6 +36,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionClass;
 use stdClass;
@@ -168,6 +169,15 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertInstanceOf(ClientInterface::class, $container->get(ClientInterface::class));
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+    }
+
+    public function testShouldBuildARequestWhoseBodyCanBeRead(): void
+    {
+        $request = $this->buildContainer()->get(ServerRequestInterface::class);
+
+        // A PSP signs the raw body. A request built from superglobals alone has none.
+        $this->assertSame('php://input', $request->getBody()->getMetadata('uri'));
+        $this->assertTrue($request->getBody()->isReadable());
     }
 
     public function testShouldResolvePayumHttpClientAsHttplugClientWrappingThePsr18Client(): void

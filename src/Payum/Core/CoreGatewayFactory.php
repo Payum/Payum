@@ -270,12 +270,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
                 TemplateRenderMiddleware::class => static fn (): TemplateRenderMiddleware => new TemplateRenderMiddleware(),
+                // The body is read from php://input rather than left empty: a PSP signs the raw bytes,
+                // and $_POST is empty for the JSON payloads most of them send. An application with a
+                // framework should register its own request instead, through
+                // PayumBuilder::addGlobalService(), which overrides this.
                 ServerRequestInterface::class => static fn (ContainerInterface $c): ServerRequestInterface => $c
                     ->get(ServerRequestFactoryInterface::class)
                     ->createServerRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/', $_SERVER)
                     ->withQueryParams($_GET)
                     ->withParsedBody($_POST)
-                    ->withCookieParams($_COOKIE),
+                    ->withCookieParams($_COOKIE)
+                    ->withBody($c->get(StreamFactoryInterface::class)->createStreamFromFile('php://input', 'r')),
 
                 // Legacy Payum service names - delegate to PSR interfaces
                 'payum.http_client' => static fn (ContainerInterface $c): HttplugClient => new HttplugClient($c->get(ClientInterface::class)),
