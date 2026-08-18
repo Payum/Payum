@@ -8,9 +8,12 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
 use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\Result;
 use function sprintf;
 
@@ -27,6 +30,14 @@ final class ResultToReply
      */
     public static function translate(Result $result): ?Base
     {
+        if ($result instanceof NotifyResult && $result->acknowledge instanceof Acknowledgement) {
+            return new HttpResponse(
+                $result->acknowledge->body,
+                $result->acknowledge->status,
+                $result->acknowledge->headers,
+            );
+        }
+
         $next = $result->next;
 
         return match (true) {

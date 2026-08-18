@@ -8,6 +8,7 @@ use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\PayoutCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Command\SyncCommand;
@@ -18,6 +19,7 @@ use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\Generic;
+use Payum\Core\Request\Notify;
 use Payum\Core\Request\Payout;
 use Payum\Core\Request\Refund;
 use Payum\Core\Request\Sync;
@@ -48,7 +50,9 @@ final class RequestToCommand
             || $request instanceof Refund
             || $request instanceof Cancel
             || $request instanceof Sync
-            || $request instanceof Payout;
+            || $request instanceof Payout
+            || $request instanceof Notify
+        ;
     }
 
     /**
@@ -101,6 +105,13 @@ final class RequestToCommand
                 $token instanceof TokenInterface => SyncCommand::forToken($token),
                 $payout instanceof PayoutInterface => SyncCommand::forPayout($payout),
                 $payment instanceof PaymentInterface => SyncCommand::forPayment($payment),
+                default => null,
+            },
+            // A notify may point at nothing at all, but a request that resolved to neither a token nor a
+            // payment is one of the 1.x actions that match on a details array. Leave it to them.
+            $request instanceof Notify => match (true) {
+                $token instanceof TokenInterface => NotifyCommand::forToken($token),
+                $payment instanceof PaymentInterface => NotifyCommand::forPayment($payment),
                 default => null,
             },
             $request instanceof Payout => match (true) {
