@@ -32,6 +32,20 @@
     single services with `Payum\Core\PayumBuilder::addGlobalService()`. Implement
     `Payum\Core\DI\ListableContainerInterface` on your container to have its services autowired into gateway actions.
 * The whole `Payum\Core\Bridge\Symfony` namespace is deprecated. Use the same classes from `payum/payum-bundle` instead.
+* Webhooks are handled by a command. `Payum::notify()` dispatches `Payum\Core\Command\NotifyCommand`
+  against a gateway built from handlers, and falls back to `Payum\Core\Request\Notify` for one that
+  still ships actions, so nothing needs changing to keep working.
+  * A gateway porting its `NotifyAction` implements `Payum\Core\Handler\NotifyHandlerInterface`. The
+    signature check goes in `verify()`; the rest goes in `handle()`, which is given the
+    `Payum\Core\Handler\WebhookEvent` that `verify()` returned.
+  * A `Payum\Core\Reply\HttpResponse` the action used to throw becomes a
+    `Payum\Core\Result\Acknowledgement` on the returned `Payum\Core\Result\NotifyResult`. Returning none
+    answers 204.
+  * `Payum\Core\Gateway\Capability::Webhooks` is now derived from shipping a notify handler. A gateway
+    declaring it through `DeclaresCapabilities` still works.
+* The `Psr\Http\Message\ServerRequestInterface` Payum builds from PHP's superglobals now has its body
+  populated from `php://input`, which is what lets a gateway verify a signature over the raw payload.
+  Applications registering their own request through `PayumBuilder::addGlobalService()` are unaffected.
 
 ## 1.5.0
 
