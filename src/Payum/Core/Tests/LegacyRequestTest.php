@@ -97,11 +97,11 @@ final class LegacyRequestTest extends TestCase
         $this->assertTrue(LegacyCancelHandler::$dispatched);
     }
 
-    public function testShouldReportARequestWithNoEquivalentAsUnsupported(): void
+    public function testShouldReportNotifyAsUnsupportedWhenTheGatewayShipsNoHandlerForIt(): void
     {
         $gateway = $this->buildPayum()->getGateway('acme');
 
-        // Notify has no command behind it yet, so nothing changes for it.
+        // The request translates to NotifyCommand fine; this gateway just ships no handler for it.
         $this->expectException(RequestNotSupportedException::class);
 
         $gateway->execute(new Notify($this->buildPayment()));

@@ -22,6 +22,7 @@ $result->requiresInteraction();  // $next !== null
 | `CancelResult` | — |
 | `PayoutResult` | `paidOutAmount` |
 | `SyncResult` | — |
+| `NotifyResult` | `acknowledgement` |
 
 ### Building one
 
