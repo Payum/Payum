@@ -302,8 +302,8 @@ class Payum implements RegistryInterface
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
 
-        $acknowledgement = $result instanceof NotifyResult && $result->acknowledge instanceof Acknowledgement
-            ? $result->acknowledge
+        $acknowledgement = $result instanceof NotifyResult && $result->acknowledgement instanceof Acknowledgement
+            ? $result->acknowledgement
             : Acknowledgement::noContent();
 
         return new Response($acknowledgement->body, $acknowledgement->status, $acknowledgement->headers);

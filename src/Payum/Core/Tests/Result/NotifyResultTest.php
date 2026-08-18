@@ -24,8 +24,8 @@ final class NotifyResultTest extends TestCase
     {
         $result = NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('[accepted]'));
 
-        $this->assertInstanceOf(Acknowledgement::class, $result->acknowledge);
-        $this->assertSame('[accepted]', $result->acknowledge->body);
+        $this->assertInstanceOf(Acknowledgement::class, $result->acknowledgement);
+        $this->assertSame('[accepted]', $result->acknowledgement->body);
     }
 
     public function testShouldLeaveThePaymentAloneForAnEventItDoesNotCareAbout(): void
@@ -33,7 +33,7 @@ final class NotifyResultTest extends TestCase
         $result = NotifyResult::ignored();
 
         $this->assertNull($result->status);
-        $this->assertNull($result->acknowledge);
+        $this->assertNull($result->acknowledgement);
         $this->assertFalse($result->isFailed());
     }
 

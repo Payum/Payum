@@ -17,13 +17,12 @@ final class NotifyResult extends Result
      */
     public function __construct(
         ?PaymentStatus $status,
-        ?NextAction $next = null,
         ?string $transactionId = null,
         ?Failure $failure = null,
         array $raw = [],
-        public readonly ?Acknowledgement $acknowledge = null,
+        public readonly ?Acknowledgement $acknowledgement = null,
     ) {
-        parent::__construct($status, $next, $transactionId, $failure, $raw);
+        parent::__construct($status, null, $transactionId, $failure, $raw);
     }
 
     /**
@@ -36,12 +35,12 @@ final class NotifyResult extends Result
      */
     public static function handled(
         ?PaymentStatus $status = null,
-        ?Acknowledgement $acknowledge = null,
+        ?Acknowledgement $acknowledgement = null,
         ?string $transactionId = null,
         ?Failure $failure = null,
         array $raw = [],
     ): self {
-        return new self($status, transactionId: $transactionId, failure: $failure, raw: $raw, acknowledge: $acknowledge);
+        return new self($status, transactionId: $transactionId, failure: $failure, raw: $raw, acknowledgement: $acknowledgement);
     }
 
     /**
@@ -51,8 +50,8 @@ final class NotifyResult extends Result
      * it was not recognised makes the PSP redeliver it on a backoff schedule for as long as it keeps
      * failing.
      */
-    public static function ignored(?Acknowledgement $acknowledge = null): self
+    public static function ignored(?Acknowledgement $acknowledgement = null): self
     {
-        return new self(null, acknowledge: $acknowledge);
+        return new self(null, acknowledgement: $acknowledgement);
     }
 }
