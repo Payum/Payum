@@ -48,6 +48,11 @@ final class NotifyHandler implements NotifyHandlerInterface
             return NotifyResult::ignored();
         }
 
+        if ($context->state()['checkout_id'] !== $event->payload['checkout_id']) {
+            // Genuine, but about a different payment -- do not act on it.
+            return NotifyResult::ignored();
+        }
+
         return NotifyResult::handled(PaymentStatus::Captured, transactionId: $event->payload['transaction']);
     }
 }
@@ -67,6 +72,26 @@ disguise, and this is the method that has to stay fast.
 Throw `WebhookNotVerifiedException` when the message is not genuine. Payum answers the caller 400 with
 an empty body and leaves the payment untouched. The exception's message is for your log — telling
 whoever sent the message which check failed only helps them get it right next time.
+
+Verifying proves the message came from the PSP. It does not prove the message is about *this* payment.
+Core applies the result's status to the subject resolved from the notify token, never from the event —
+so a genuine, correctly signed event replayed against a different payment's notify URL would mark that
+payment captured too. Compare the PSP's own reference in the event against the one you stored when you
+created the checkout, as the handler above does, and decline the event on a mismatch.
+
+### The request body
+
+`Payum::notify($request)` uses the request you pass it only to verify the token in the URL. The PSR-7
+request a handler's `verify()` sees comes from the container instead, and by default that reads
+`php://input`. Under RoadRunner or FrankenPHP, where nothing lands in `php://input`, or once a framework
+has already consumed the body, that read comes back empty — every signature check then fails, and every
+message gets a silent 400 that is hard to debug.
+
+Register your own request and Payum uses that instead:
+
+```php
+$payumBuilder->addGlobalService(ServerRequestInterface::class, $request);
+```
 
 ### When the PSP signs nothing
 
@@ -150,9 +175,11 @@ $state = $context->state();
 $state['notify_url'] ??= $context->notifyUrl();
 ```
 
-Gateways with a single endpoint configured in the PSP's dashboard need none of this — point that
-endpoint at your notify script and Payum works out which gateway a message belongs to from the token in
-the URL.
+Gateways with a single endpoint configured in the PSP's dashboard can skip minting one of these per
+payment — point that one endpoint at your notify script and Payum still works out which gateway a
+message belongs to from the token in the URL. But a token minted for the gateway alone carries no
+payment: `$context->payment()` is null and `$context->state()` throws, so there is nothing for Payum to
+record a status onto. That handler has to find the payment itself from the event payload.
 
 ### Testing one
 
