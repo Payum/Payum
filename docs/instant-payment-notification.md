@@ -14,6 +14,8 @@ A notification is an HTTP request the PSP's servers make to yours, with nobody's
 
 `Payum::notify()` verifies the token in the URL, works out which gateway it belongs to, and hands the message to that gateway. A gateway built from handlers answers it with its notify handler; the payment is updated for you, and the PSP gets back whatever the handler decided to answer. You do not parse the request or write the response — call `notify()` and let it run.
 
+The request a notify handler verifies is not the one you pass to `notify()` — see [the request body](gateways/webhooks.md#the-request-body) if signature checks fail under RoadRunner, FrankenPHP, or any framework that reads the body before Payum does.
+
 ### Reacting to a change
 
 Read the status Payum recorded rather than asking the gateway again:
