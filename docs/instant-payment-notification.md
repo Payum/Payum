@@ -27,7 +27,7 @@ $payment = $payum->getStorage(Payment::class)->find($identity);
 PaymentStatuses::of($payment);   // the status Payum recorded after the last command
 ```
 
-This works because your payment implements `Payum\Core\Model\StatusAwareInterface`. A subject implementing it has its status kept current automatically, so it is readable without a gateway and queryable straight from storage — list every payment stuck `Pending`, or every one that reached `Captured` today, without executing anything.
+`PaymentStatuses::of()` returns `null` unless your payment implements `Payum\Core\Model\StatusAwareInterface` — nothing is recorded to read otherwise. Implement it on your own payment class and Payum keeps the status current after every command, so it becomes readable without a gateway and queryable straight from storage — list every payment stuck `Pending`, or every one that reached `Captured` today, without executing anything. See [Keeping the status on the payment](gateways/results.md#keeping-the-status-on-the-payment) for how.
 
 ### If a notification never arrives
 
