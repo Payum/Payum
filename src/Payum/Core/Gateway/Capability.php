@@ -29,6 +29,8 @@ enum Capability: string
 
     case Sync = 'sync';
 
+    case Webhooks = 'webhooks';
+
     // Nuance -- declared, because no handler list implies them.
     case MultiCurrency = 'multi_currency';
 
@@ -41,6 +43,4 @@ enum Capability: string
     case StoredPaymentMethods = 'stored_payment_methods';
 
     case ThreeDSecure = 'three_d_secure';
-
-    case Webhooks = 'webhooks';
 }
