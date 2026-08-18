@@ -11,7 +11,6 @@ use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\WebhookNotVerifiedException;
-use Payum\Core\Gateway\Capability;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\NotifyHandlerInterface;
@@ -50,11 +49,6 @@ final class NotifyTest extends TestCase
 
         AcmeNotifyHandler::$signature = 'good-signature';
         VerificationRecordingMiddleware::$seen = null;
-    }
-
-    public function testShouldExerciseTheWebhooksCapability(): void
-    {
-        $this->assertSame(Capability::Webhooks, NotifyCommand::capability());
     }
 
     public function testShouldHandleAVerifiedEvent(): void

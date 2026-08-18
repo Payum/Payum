@@ -12,6 +12,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
@@ -66,6 +67,10 @@ return RectorConfig::configure()
         //  - the PHPUnit 10 matcher idiom compares constraints with assertSame().
         NarrowIdenticalWithConsecutiveRector::class,
         SingleWithConsecutiveToWithRector::class,
+
+        // assertNotInstanceOf(PaymentStatus::class, $x) passes for null AND for any other object,
+        // whereas assertNull($x) pins the one value these tests mean:
+        AssertEmptyNullableObjectToAssertInstanceofRector::class,
 
         AddVoidReturnTypeWhereNoReturnRector::class => [
             __DIR__ . '/src/Payum/Core/GatewayFactory.php',

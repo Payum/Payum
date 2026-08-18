@@ -75,7 +75,7 @@ Some do not. Say so, rather than leaving the check out:
 ```php
 public function verify(ServerRequestInterface $request): WebhookEvent
 {
-    return WebhookEvent::unverified($request->getParsedBody());
+    return WebhookEvent::unverified((array) $request->getParsedBody());
 }
 ```
 
