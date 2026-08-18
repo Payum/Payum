@@ -12,6 +12,7 @@ A command is what the caller wants done. It is immutable, carries no services, a
 | `Payum\Core\Command\CancelCommand` | `Cancel` | `CancelResult` | `reason`, `idempotencyKey` |
 | `Payum\Core\Command\PayoutCommand` | `Payout` | `PayoutResult` | `idempotencyKey` |
 | `Payum\Core\Command\SyncCommand` | `Sync` | `SyncResult` | — |
+| `Payum\Core\Command\NotifyCommand` | `Webhooks` | `NotifyResult` | — |
 
 ### Building one
 
@@ -56,6 +57,21 @@ $result->status;   // whatever the PSP says
 It is for callers — an admin screen with a refresh button, a reconciliation job. A handler that needs fresh data mid-flow calls its api directly instead; dispatching a command to fetch something it uses two lines later is indirection for its own sake.
 
 It reads rather than mutates, so it takes no idempotency key. Not every PSP offers a way to re-read, which is why `Capability::Sync` is a capability like any other rather than something assumed.
+
+### Receiving what a PSP sends
+
+`NotifyCommand` carries a message a PSP sent. It is the one command that may point at nothing:
+
+```php
+NotifyCommand::forToken($token);      // arrived on a notify token, which is the usual case
+NotifyCommand::forPayment($payment);  // you already know which payment it is about
+NotifyCommand::forGateway();          // your application routed the endpoint itself
+```
+
+Which payment an event belongs to is something verification works out, so there is nothing to point at
+until the message has been read. It takes no idempotency key either — it sends nothing to the PSP.
+
+See [Webhooks](webhooks.md) for the handler.
 
 ### What a command operates on
 
