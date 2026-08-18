@@ -38,6 +38,8 @@ final class Context
      */
     private ?ArrayObject $state = null;
 
+    private ?TokenInterface $mintedNotifyToken = null;
+
     /**
      * @param CommandInterface<Result> $command
      * @param list<self> $previous the enclosing executions, when a handler dispatches a sub-command
@@ -51,6 +53,7 @@ final class Context
         private readonly ?SubjectInterface $subject = null,
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
+        private readonly ?string $gatewayName = null,
     ) {
     }
 
@@ -204,5 +207,47 @@ final class Context
     public function tokens(): GenericTokenFactoryInterface
     {
         return $this->tokenFactory;
+    }
+
+    /**
+     * The name this gateway is registered under, which every token the factory mints needs.
+     *
+     * Null for a gateway assembled by hand rather than through PayumBuilder.
+     */
+    public function gatewayName(): ?string
+    {
+        return $this->gatewayName;
+    }
+
+    /**
+     * A long-lived token whose URL the PSP posts to when something happens.
+     *
+     * Points at this execution's subject, or at the gateway alone when there is none.
+     *
+     * @throws LogicException when the gateway is registered under no name
+     */
+    public function notifyToken(): TokenInterface
+    {
+        if (null === $this->gatewayName) {
+            throw new LogicException(
+                'This gateway is not registered under a name, so a notify token has nothing to name as its gateway. Register it with PayumBuilder::registerGateway().'
+            );
+        }
+
+        return $this->mintedNotifyToken ??= $this->tokenFactory->createNotifyToken($this->gatewayName, $this->subject);
+    }
+
+    /**
+     * The URL to hand a PSP that takes a notification address per payment.
+     *
+     * Minted once for this execution. Reusing it across requests is the gateway's own business: keep it
+     * in {@see self::state()} and mint only when it is absent, or a customer who retries gets a second
+     * token row.
+     *
+     * @throws LogicException when the gateway is registered under no name
+     */
+    public function notifyUrl(): string
+    {
+        return $this->notifyToken()->getTargetUrl();
     }
 }

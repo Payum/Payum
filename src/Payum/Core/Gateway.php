@@ -432,6 +432,7 @@ class Gateway implements GatewayInterface
             $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,
+            $this->name,
         );
     }
 
