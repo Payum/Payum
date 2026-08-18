@@ -5,6 +5,7 @@ namespace Payum\Core;
 use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -16,6 +17,7 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
@@ -381,7 +383,22 @@ class Gateway implements GatewayInterface
             throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
         }
 
-        $result = $handler->handle($command, $context);
+        if ($handler instanceof NotifyHandlerInterface) {
+            if (! $command instanceof NotifyCommand) {
+                throw new LogicException(sprintf(
+                    '%s handles %s, but %s was dispatched.',
+                    $handler::class,
+                    NotifyCommand::class,
+                    $command::class,
+                ));
+            }
+
+            // Verification runs here rather than during dispatch so that middleware wraps it: a message
+            // that fails the check is something an application will want to see.
+            $result = $handler->handle($command, $handler->verify($context->httpRequest()), $context);
+        } else {
+            $result = $handler->handle($command, $context);
+        }
 
         if (! $result instanceof Result) {
             throw new LogicException(sprintf('%s::handle() must return a %s.', $handler::class, Result::class));
