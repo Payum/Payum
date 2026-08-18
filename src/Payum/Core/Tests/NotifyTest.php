@@ -171,6 +171,56 @@ final class NotifyTest extends TestCase
         $this->assertInstanceOf(WebhookNotVerifiedException::class, VerificationRecordingMiddleware::$seen);
     }
 
+    public function testShouldAnswerThePspWithWhatTheHandlerAskedFor(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('good-signature'));
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('[accepted]', $response->getContent());
+    }
+
+    public function testShouldAnswerNoContentWhenTheHandlerNamesNothing(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('good-signature', 'invoice.drafted'));
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
+
+        $this->assertSame(204, $response->getStatusCode());
+    }
+
+    public function testShouldAnswerBadRequestWithoutSayingWhyWhenVerificationFails(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('forged'));
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
+
+        // Whoever failed the check is misconfigured or probing. Neither is helped by the detail.
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame('', $response->getContent());
+    }
+
+    /**
+     * @param Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>> $payum
+     */
+    private function mintNotifyToken(Payum $payum): TokenInterface
+    {
+        $payment = $this->buildPayment();
+        $payum->getStorage($payment::class)->update($payment);
+
+        return $payum->getTokenFactory()->createNotifyToken('acme', $payment);
+    }
+
     private function buildPayment(): Payment
     {
         $payment = new Payment();

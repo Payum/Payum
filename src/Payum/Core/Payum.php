@@ -4,8 +4,10 @@ namespace Payum\Core;
 
 use Exception;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
@@ -15,10 +17,12 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
+use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\NextAction\RenderTemplate;
+use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
@@ -230,6 +234,10 @@ class Payum implements RegistryInterface
         $token = $this->httpRequestVerifier->verify($request ?: Request::createFromGlobals());
         $gateway = $this->getGateway($token->getGatewayName());
 
+        if ($gateway instanceof Gateway && $gateway->supportsCommand(NotifyCommand::class)) {
+            return $this->acknowledge($gateway, $token);
+        }
+
         try {
             $gateway->execute(new Notify($token));
 
@@ -277,5 +285,27 @@ class Payum implements RegistryInterface
             PostRedirect::class,
             RenderTemplate::class,
         ));
+    }
+
+    /**
+     * Runs a webhook and turns the handler's answer into the response the PSP is waiting for.
+     *
+     * A handler that named no acknowledgement gets 204, which every PSP accepts. A message that failed
+     * verification gets 400 with nothing in it; the exception carries the reason, for the application to
+     * log.
+     */
+    private function acknowledge(Gateway $gateway, TokenInterface $token): Response
+    {
+        try {
+            $result = $gateway->execute(NotifyCommand::forToken($token));
+        } catch (WebhookNotVerifiedException) {
+            return new Response('', Response::HTTP_BAD_REQUEST);
+        }
+
+        $acknowledgement = $result instanceof NotifyResult && $result->acknowledge instanceof Acknowledgement
+            ? $result->acknowledge
+            : Acknowledgement::noContent();
+
+        return new Response($acknowledgement->body, $acknowledgement->status, $acknowledgement->headers);
     }
 }
