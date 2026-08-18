@@ -6,6 +6,7 @@ namespace Payum\Core\Tests;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use League\Uri\Uri;
+use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
@@ -18,6 +19,7 @@ use Payum\Core\Handler\SyncHandlerInterface;
 use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
+use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\StatusAwareInterface;
@@ -27,6 +29,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\PaymentStatus;
+use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
@@ -46,6 +49,7 @@ final class NotifyTest extends TestCase
         ];
 
         AcmeNotifyHandler::$signature = 'good-signature';
+        VerificationRecordingMiddleware::$seen = null;
     }
 
     public function testShouldExerciseTheWebhooksCapability(): void
@@ -147,6 +151,24 @@ final class NotifyTest extends TestCase
         // The event was taken on trust, so the answer comes from asking the PSP rather than from the
         // message.
         $this->assertSame(PaymentStatus::Refunded, $result->status);
+    }
+
+    public function testShouldRunVerificationInsideThePipeline(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addMiddleware(new VerificationRecordingMiddleware())
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+
+        try {
+            $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment()));
+        } catch (WebhookNotVerifiedException) {
+            // The point of the test is what the middleware saw before this was rethrown.
+        }
+
+        $this->assertInstanceOf(WebhookNotVerifiedException::class, VerificationRecordingMiddleware::$seen);
     }
 
     private function buildPayment(): Payment
@@ -323,6 +345,22 @@ final class TrustingSyncHandler implements SyncHandlerInterface
     public function handle(SyncCommand $command, Context $context): SyncResult
     {
         return SyncResult::synced(PaymentStatus::Refunded, 'txn_2');
+    }
+}
+
+final class VerificationRecordingMiddleware implements MiddlewareInterface
+{
+    public static ?WebhookNotVerifiedException $seen = null;
+
+    public function process(CommandInterface $command, Context $context, callable $next): Result
+    {
+        try {
+            return $next($command, $context);
+        } catch (WebhookNotVerifiedException $e) {
+            self::$seen = $e;
+
+            throw $e;
+        }
     }
 }
 
