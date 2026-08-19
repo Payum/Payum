@@ -24,6 +24,6 @@ jobs:
             - name: Install dependencies
               uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
-            # Reports without writing: run `bin/rector process` locally to apply the fixes.
+            # Reports without writing: run `vendor/bin/rector process` locally to apply the fixes.
             - name: Run Rector
-              run: bin/rector process --dry-run --ansi
+              run: vendor/bin/rector process --dry-run --ansi

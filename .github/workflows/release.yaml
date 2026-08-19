@@ -53,7 +53,7 @@ jobs:
           git_tag_gpgsign: true
 
       - name: Install splitsh-lite
-        run: bin/install-splitsh-lite
+        run: scripts/install-splitsh-lite
 
       - name: Run release
         env:
@@ -66,4 +66,4 @@ jobs:
         run: |
           git config user.name "$TAGGER_NAME"
           git config user.email "$TAGGER_EMAIL"
-          bin/release "$TAG" "$BRANCH"
+          scripts/release "$TAG" "$BRANCH"

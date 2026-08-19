@@ -36,7 +36,7 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Install splitsh-lite
-        run: bin/install-splitsh-lite
+        run: scripts/install-splitsh-lite
 
       - name: Run subtree-split
         env:
@@ -44,4 +44,4 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          bin/subtree-split "$BRANCH"
+          scripts/subtree-split "$BRANCH"

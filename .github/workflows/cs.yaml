@@ -26,7 +26,7 @@ jobs:
         run: composer require doctrine/mongodb-odm --with-all-dependencies
 
       - name: Run PHPStan
-        run: bin/phpstan
+        run: vendor/bin/phpstan
 
   coding-standard:
     name: Coding Standard
@@ -46,4 +46,4 @@ jobs:
         uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
       - name: Run easy-coding-standard
-        run: bin/ecs check
+        run: vendor/bin/ecs check

@@ -2,11 +2,11 @@
 #
 # Releases a version of this repository and every package split out of it.
 #
-#     bin/release <tag> [branch]
+#     scripts/release <tag> [branch]
 #
 # Closing a milestone is what starts a release, and a milestone only carries its
 # title, so this works out the rest. It tags this repository and publishes a
-# GitHub release for it, then for every package in bin/subsplits
+# GitHub release for it, then for every package in scripts/subsplits
 #
 #     1. splits the package out of <tag> with splitsh-lite,
 #     2. creates <tag> on the split repository, signed, pointing at that split
@@ -16,12 +16,12 @@
 # Every step is skipped when it has already been done, so re-running a release
 # is safe. When [branch] is omitted it is derived from the tag: 1.7.8 is cut
 # from 1.7.x, 2.0.0 from 2.x. Given a branch, the split branches are brought up
-# to date first, exactly as bin/subtree-split does on every push.
+# to date first, exactly as scripts/subtree-split does on every push.
 #
 # Set ORIGIN_GH_TOKEN to create this repository's own release under a different
 # token than the split repositories use.
 #
-# Needs: splitsh-lite (bin/install-splitsh-lite), an SSH key with write access
+# Needs: splitsh-lite (scripts/install-splitsh-lite), an SSH key with write access
 # to the Payum organisation, a GPG key able to sign tags, and gh authenticated
 # with a token that can create releases across the organisation.
 
@@ -30,13 +30,13 @@ set -u
 
 if (( "$#" < 1 ))
 then
-    echo "Tag has to be provided: bin/release <tag> [branch]" >&2
+    echo "Tag has to be provided: scripts/release <tag> [branch]" >&2
     exit 1
 fi
 
 TAG="$1"
 BRANCH="${2:-}"
-SPLITSH_LITE="${SPLITSH_LITE:-./bin/splitsh-lite}"
+SPLITSH_LITE="${SPLITSH_LITE:-./scripts/splitsh-lite}"
 export SPLITSH_LITE
 SUBSPLITS="$(dirname "$0")/subsplits"
 SPLIT_REF="refs/heads/payum-release-split"
