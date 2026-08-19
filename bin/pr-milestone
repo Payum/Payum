@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+#
+# Puts a pull request on the open milestone belonging to the branch it targets.
+#
+#     bin/pr-milestone <pr-number> [--dry-run]
+#     bin/pr-milestone --branch <branch> [--dry-run]
+#
+# A release branch has exactly one open milestone, so the milestone is looked up
+# rather than worked out: every open milestone is mapped back to the branch it
+# would be cut from, and the one that maps to the pull request's base branch
+# wins. That mapping is the same one bin/release applies to the title of a
+# closed milestone, which is what keeps the two from drifting apart -- the
+# milestone assigned here is by construction the one bin/release will cut from
+# that branch.
+#
+# Pull requests targeting anything that is not a release branch are left alone.
+# A release branch with no open milestone, or with more than one, is an error:
+# the first cannot be released and the second makes the branch ambiguous.
+#
+# Given --branch instead of a pull request nothing is assigned and the milestone
+# is only reported, which is how the mapping is checked by hand.
+#
+# Needs: gh authenticated with a token that can read milestones and write pull
+# requests.
+
+set -e
+set -u
+
+PR=""
+BRANCH=""
+DRY_RUN=""
+
+while (( "$#" ))
+do
+    case "$1" in
+        --dry-run)
+            DRY_RUN=1
+            ;;
+        --branch)
+            if (( "$#" < 2 ))
+            then
+                echo "--branch needs a branch name" >&2
+                exit 1
+            fi
+
+            shift
+            BRANCH="$1"
+            ;;
+        -*)
+            echo "Unknown option $1" >&2
+            exit 1
+            ;;
+        *)
+            PR="$1"
+            ;;
+    esac
+
+    shift
+done
+
+if [[ -z "$PR" && -z "$BRANCH" ]]
+then
+    echo "Pull request has to be provided: bin/pr-milestone <pr-number> [--dry-run]" >&2
+    exit 1
+fi
+
+# GITHUB_REPOSITORY is always set by Actions; the remote is only parsed when
+# running this by hand. git config is used rather than `git remote get-url`
+# because that one applies url.<base>.insteadOf rewrites.
+REPO="${GITHUB_REPOSITORY:-$(git config --get remote.origin.url | sed -E 's#^(git@[^:]*:|https://[^/]*/)##; s#\.git$##')}"
+
+function fail()
+{
+    if [[ -n "${GITHUB_ACTIONS:-}" ]]
+    then
+        echo "::error::$*"
+    else
+        echo "$*" >&2
+    fi
+
+    exit 1
+}
+
+function notice()
+{
+    echo "${GITHUB_ACTIONS:+::notice::}$*"
+}
+
+CURRENT_MILESTONE=0
+
+if [[ -n "$PR" ]]
+then
+    PR_FIELDS="$(gh api "repos/$REPO/pulls/$PR" -q '[.base.ref, (.milestone.number // 0)] | @tsv')"
+    IFS=$'\t' read -r PR_BRANCH CURRENT_MILESTONE <<< "$PR_FIELDS"
+    BRANCH="${BRANCH:-$PR_BRANCH}"
+fi
+
+if [[ ! "$BRANCH" =~ ^[0-9]+(\.[0-9]+)?\.x$ ]]
+then
+    notice "$BRANCH is not a release branch, leaving the milestone alone"
+    exit 0
+fi
+
+BRANCHES="$(gh api "repos/$REPO/branches?per_page=100" --paginate -q '.[].name')"
+
+function branch_exists()
+{
+    grep -Fxq -- "$1" <<< "$BRANCHES"
+}
+
+# 1.7.8 is cut from 1.7.x and 2.0.0 from 2.x, so the more specific branch is
+# tried first and the major one is the fallback. Mirrors bin/release.
+function milestone_branch()
+{
+    local TITLE="$1"
+    local CANDIDATE
+
+    for CANDIDATE in "${TITLE%.*}.x" "${TITLE%%.*}.x"
+    do
+        if branch_exists "$CANDIDATE"
+        then
+            echo "$CANDIDATE"
+            return
+        fi
+    done
+}
+
+MILESTONES="$(gh api "repos/$REPO/milestones?state=open&per_page=100" --paginate -q '.[] | [.number, .title] | @tsv')"
+
+NUMBER=""
+TITLE=""
+MATCHED=""
+
+while IFS=$'\t' read -r CANDIDATE_NUMBER CANDIDATE_TITLE
+do
+    [[ "$CANDIDATE_TITLE" =~ ^[0-9] ]] || continue
+    [[ "$(milestone_branch "$CANDIDATE_TITLE")" == "$BRANCH" ]] || continue
+
+    NUMBER="$CANDIDATE_NUMBER"
+    TITLE="$CANDIDATE_TITLE"
+    MATCHED="$MATCHED $CANDIDATE_TITLE"
+done <<< "$MILESTONES"
+
+if [[ -z "$NUMBER" ]]
+then
+    fail "$REPO has no open milestone for $BRANCH, open one before merging into it"
+fi
+
+if [[ "$MATCHED" != " $TITLE" ]]
+then
+    fail "$REPO has more than one open milestone for $BRANCH:$MATCHED"
+fi
+
+if [[ -z "$PR" ]]
+then
+    echo "$BRANCH -> $TITLE (#$NUMBER)"
+    exit 0
+fi
+
+if [[ "$CURRENT_MILESTONE" == "$NUMBER" ]]
+then
+    notice "Pull request #$PR is already on $TITLE"
+    exit 0
+fi
+
+if [[ -n "$DRY_RUN" ]]
+then
+    notice "Would put pull request #$PR on $TITLE (#$NUMBER)"
+    exit 0
+fi
+
+gh api --method PATCH "repos/$REPO/issues/$PR" -F "milestone=$NUMBER" --silent
+
+notice "Put pull request #$PR on $TITLE (#$NUMBER)"
