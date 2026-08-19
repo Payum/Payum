@@ -40,4 +40,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ inputs.pr || github.event.pull_request.number }}
-        run: bin/pr-milestone "$PR"
+        run: vendor/bin/pr-milestone "$PR"

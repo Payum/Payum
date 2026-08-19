@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 #
-# Splits every package listed in bin/subsplits out of this repository and pushes
+# Splits every package listed in scripts/subsplits out of this repository and pushes
 # it to its read-only split repository.
 #
-#     bin/subtree-split [branch]
+#     scripts/subtree-split [branch]
 #
 # The branch defaults to the currently checked out one. Pushing needs an SSH key
 # with write access to the Payum organisation, and splitsh-lite has to be
-# installed first (bin/install-splitsh-lite). Set SPLITSH_LITE to use a binary
-# from somewhere other than ./bin/splitsh-lite.
+# installed first (scripts/install-splitsh-lite). Set SPLITSH_LITE to use a binary
+# from somewhere other than ./scripts/splitsh-lite.
 
 set -e
 set -x
 
 BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
-SPLITSH_LITE="${SPLITSH_LITE:-./bin/splitsh-lite}"
+SPLITSH_LITE="${SPLITSH_LITE:-./scripts/splitsh-lite}"
 SUBSPLITS="$(dirname "$0")/subsplits"
 
 # The split repositories are generated from this one, so the split is the only

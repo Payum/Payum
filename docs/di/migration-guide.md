@@ -346,7 +346,7 @@ migrate at your own pace.
 ### 1. Run Existing Tests
 
 ```bash
-bin/phpunit
+vendor/bin/phpunit
 ```
 
 Your existing tests should keep passing.

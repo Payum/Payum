@@ -111,7 +111,6 @@
         "jms/serializer": "<3.15.0"
     },
     "config": {
-        "bin-dir": "bin",
         "allow-plugins": {
             "php-http/discovery": true
         }

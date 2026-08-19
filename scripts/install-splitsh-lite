@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Downloads splitsh-lite into bin/splitsh-lite (or $1).
+# Downloads splitsh-lite into scripts/splitsh-lite (or $1).
 #
 # splitsh-lite is used instead of `git subtree split` because the two no longer
 # agree: measured against the splits published from 2.x, git 2.55's subtree
@@ -10,13 +10,13 @@
 #
 # v1.0.1 is the last splitsh-lite release that ships prebuilt binaries, and is
 # the build that produced every split published so far. It is pinned by
-# checksum: bin/splitsh-lite used to be committed to this repository, and the
+# checksum: scripts/splitsh-lite used to be committed to this repository, and the
 # linux checksum below is that exact binary.
 
 set -e
 
 VERSION=v1.0.1
-TARGET="${1:-bin/splitsh-lite}"
+TARGET="${1:-scripts/splitsh-lite}"
 
 case "$(uname -s)/$(uname -m)" in
     Linux/x86_64)

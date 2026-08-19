@@ -2,15 +2,15 @@
 #
 # Puts a pull request on the open milestone belonging to the branch it targets.
 #
-#     bin/pr-milestone <pr-number> [--dry-run]
-#     bin/pr-milestone --branch <branch> [--dry-run]
+#     scripts/pr-milestone <pr-number> [--dry-run]
+#     scripts/pr-milestone --branch <branch> [--dry-run]
 #
 # A release branch has exactly one open milestone, so the milestone is looked up
 # rather than worked out: every open milestone is mapped back to the branch it
 # would be cut from, and the one that maps to the pull request's base branch
-# wins. That mapping is the same one bin/release applies to the title of a
+# wins. That mapping is the same one scripts/release applies to the title of a
 # closed milestone, which is what keeps the two from drifting apart -- the
-# milestone assigned here is by construction the one bin/release will cut from
+# milestone assigned here is by construction the one scripts/release will cut from
 # that branch.
 #
 # Pull requests targeting anything that is not a release branch are left alone.
@@ -60,7 +60,7 @@ done
 
 if [[ -z "$PR" && -z "$BRANCH" ]]
 then
-    echo "Pull request has to be provided: bin/pr-milestone <pr-number> [--dry-run]" >&2
+    echo "Pull request has to be provided: scripts/pr-milestone <pr-number> [--dry-run]" >&2
     exit 1
 fi
 
@@ -109,7 +109,7 @@ function branch_exists()
 }
 
 # 1.7.8 is cut from 1.7.x and 2.0.0 from 2.x, so the more specific branch is
-# tried first and the major one is the fallback. Mirrors bin/release.
+# tried first and the major one is the fallback. Mirrors scripts/release.
 function milestone_branch()
 {
     local TITLE="$1"
