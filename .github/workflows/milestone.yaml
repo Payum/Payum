@@ -10,34 +10,17 @@ on:
         required: true
         type: string
 
-# pull_request_target rather than pull_request: a pull request opened from a
-# fork gets a read-only token under pull_request and could never be put on a
-# milestone. Nothing from the pull request is checked out or run here -- the
-# checkout is of the base branch and the token only assigns the milestone.
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
-
-concurrency:
-  group: milestone-${{ inputs.pr || github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
   milestone:
-    name: Assign milestone
-    runs-on: ubuntu-latest
-    # An edited event fires for the title and the body as well. Only a changed
-    # base branch changes which milestone applies, so one set by hand survives
-    # every other edit.
-    if: github.event.action != 'edited' || github.event.changes.base.ref.from != null
-
-    steps:
-      - name: Checkout
-        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
-
-      - name: Run pr-milestone
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR: ${{ inputs.pr || github.event.pull_request.number }}
-        run: vendor/bin/pr-milestone "$PR"
+    # Tracked at @main rather than pinned to a commit the way the third-party
+    # actions in the other workflows are: SolidWorx/actions is ours and is
+    # deliberately published without release tags.
+    uses: SolidWorx/actions/.github/workflows/pr-milestone.yml@main
+    with:
+      pr: ${{ inputs.pr }}
+    # A reusable workflow can only narrow what it was granted, so the caller is
+    # where these have to be given.
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
