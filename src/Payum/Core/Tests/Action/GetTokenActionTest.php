@@ -7,7 +7,6 @@ namespace Payum\Core\Tests\Action;
 use Iterator;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Model\Identity;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetToken;
 use Payum\Core\Security\TokenInterface;
@@ -48,7 +47,7 @@ final class GetTokenActionTest extends GenericActionTest
         $tokenStorage
             ->expects($this->once())
             ->method('find')
-            ->with(new Identity($hash, TokenInterface::class))
+            ->with($hash)
             ->willReturn($token)
         ;
 
@@ -71,7 +70,7 @@ final class GetTokenActionTest extends GenericActionTest
         $tokenStorage
             ->expects($this->once())
             ->method('find')
-            ->with(new Identity($hash, TokenInterface::class))
+            ->with($hash)
             ->willReturn(null)
         ;
 

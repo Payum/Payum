@@ -28,13 +28,14 @@ use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Action\PrependActionInterface;
+use Payum\Core\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Httplug\HttplugClient;
-use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
@@ -50,6 +51,7 @@ use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -289,6 +291,16 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 'payum.template.layout' => '@PayumCore/layout.html.twig',
 
                 'twig.env' => static fn () => new Environment(new ChainLoader()),
+
+                // The application registers its own through PayumBuilder, which wins over this one: a
+                // renderer is shared by every gateway, so this default only covers a gateway built
+                // straight from the factory.
+                RendererInterface::class => static fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
+                    $c->get('twig.env'),
+                    $c->get('payum.template.layout'),
+                    self::composeTemplatePaths($c),
+                ),
+
                 'payum.default_options' => [],
                 'payum.required_options' => [],
 
@@ -310,13 +322,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 HttpClient::class => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
 
                 // BC: Deprecated action entries (used by deprecated buildActions method)
-                'payum.action.get_http_request' => static fn () => new GetHttpRequestAction(),
+                'payum.action.get_http_request' => static fn (ContainerInterface $c) => $c->get(GetHttpRequestAction::class),
                 'payum.action.capture_payment' => static fn () => new CapturePaymentAction(),
                 'payum.action.authorize_payment' => static fn () => new AuthorizePaymentAction(),
                 'payum.action.payout_payout' => static fn () => new PayoutPayoutAction(),
                 'payum.action.execute_same_request_with_model_details' => static fn () => new ExecuteSameRequestWithModelDetailsAction(),
                 'payum.action.get_currency' => static fn () => new GetCurrencyAction(),
-                'payum.action.render_template' => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
+                'payum.action.render_template' => static fn (ContainerInterface $c) => $c->get(RenderTemplateAction::class),
                 'payum.action.get_token' => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
                     ? new GetTokenAction($c->get('payum.security.token_storage'))
                     : null,
@@ -324,8 +336,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // BC: Deprecated extension entries (used by deprecated buildExtensions method)
                 'payum.extension.endless_cycle_detector' => static fn () => new EndlessCycleDetectorExtension(),
 
-                // New DI approach: Action classes for createGateway()
-                RenderTemplateAction::class => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get('twig.env'), $c->get('payum.template.layout')),
+                // The 1.x information requests, answered from the services 2.0 injects. A gateway still
+                // dispatching GetHttpRequest or RenderTemplate needs nothing registered by hand.
+                GetHttpRequestAction::class => static fn (ContainerInterface $c) => new GetHttpRequestAction($c->get(ServerRequestInterface::class)),
+                RenderTemplateAction::class => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get(RendererInterface::class)),
 
                 // GetTokenAction is conditionally added in createGateway() if token storage is available
                 GetTokenAction::class => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
