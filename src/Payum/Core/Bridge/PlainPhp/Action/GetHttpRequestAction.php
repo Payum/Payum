@@ -4,13 +4,16 @@ namespace Payum\Core\Bridge\PlainPhp\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Handler\Context;
 use Payum\Core\Request\GetHttpRequest;
 use function trigger_deprecation;
 
-trigger_deprecation('payum/core', '2.0.0', 'The %s\GetHttpRequestAction class is deprecated and will be removed in 3.0. Use %s instead, which reads the PSR-7 request the container holds.', __NAMESPACE__, \Payum\Core\Action\GetHttpRequestAction::class);
+trigger_deprecation('payum/core', '2.0.0', 'The %s\GetHttpRequestAction class is deprecated and will be removed in 3.0. Stop registering it: core answers GetHttpRequest on its own. Port the action dispatching it to a handler, which reads the request from %s::httpRequest().', __NAMESPACE__, Context::class);
 
 /**
- * @deprecated since 2.0, removed in 3.0. Use {@see \Payum\Core\Action\GetHttpRequestAction} instead.
+ * @deprecated since 2.0, removed in 3.0. Core answers `GetHttpRequest` on its own, so remove this
+ *             action. Port the action dispatching it to a handler and read
+ *             {@see \Payum\Core\Handler\Context::httpRequest()}.
  */
 class GetHttpRequestAction implements ActionInterface
 {

@@ -11,6 +11,10 @@ use Payum\Core\Template\RendererInterface;
 /**
  * Answers the 1.x RenderTemplate from the renderer the application registered.
  *
+ * This is what keeps an unported gateway working, not somewhere to write new code: a handler names its
+ * template by returning a {@see \Payum\Core\Result\NextAction\RenderTemplate} result, which the same
+ * renderer resolves.
+ *
  * The layout is the renderer's business, so nothing is added to the context here.
  */
 class RenderTemplateAction implements ActionInterface
