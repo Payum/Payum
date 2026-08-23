@@ -47,20 +47,25 @@
   populated from `php://input`, which is what lets a gateway verify a signature over the raw payload.
   Applications registering their own request through `PayumBuilder::addGlobalService()` are unaffected.
 * The 1.x information requests a gateway dispatches to core are answered from the services 2.0 injects.
-  Nothing needs registering for it, and the request objects are filled in exactly as before.
-  * `Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction` is deprecated. `GetHttpRequest` is answered
-    by `Payum\Core\Action\GetHttpRequestAction`, which reads the container's
-    `Psr\Http\Message\ServerRequestInterface` instead of `$_GET` / `$_REQUEST` / `php://input`. Register
-    your framework's request with `PayumBuilder::addGlobalService()` and every 1.x action sees it.
-    `GetHttpRequest::$request` is the merge of the query and the parsed body, which is what `$_REQUEST`
-    held; `$headers` is now populated on the plain-PHP path, keyed as PSR-7 keys them.
-  * `Payum\Core\Bridge\Twig\Action\RenderTemplateAction` is deprecated. `RenderTemplate` is answered by
-    `Payum\Core\Action\RenderTemplateAction`, which renders through
-    `Payum\Core\Template\RendererInterface`. The layout is the renderer's, so
-    `PayumBuilder::setLayout()` and template overrides now apply to 1.x actions too.
+  This buys you time rather than a destination: the way forward is still to port the action to a handler,
+  where the same information arrives on `Payum\Core\Handler\Context` with nothing to dispatch. Until then
+  nothing needs registering, and the request objects are filled in exactly as before.
+  * `Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction` is deprecated — stop registering it, core
+    answers `GetHttpRequest` on its own. It now reads the container's
+    `Psr\Http\Message\ServerRequestInterface` rather than `$_GET` / `$_REQUEST` / `php://input`, so
+    registering your framework's request with `PayumBuilder::addGlobalService()` is enough for every
+    unported action to see it. `GetHttpRequest::$request` is the merge of the query and the parsed body,
+    which is what `$_REQUEST` held; `$headers` is now populated on the plain-PHP path, keyed as PSR-7
+    keys them. A ported action reads `Context::httpRequest()` and dispatches nothing.
+  * `Payum\Core\Bridge\Twig\Action\RenderTemplateAction` is deprecated — stop registering it, core
+    answers `RenderTemplate` on its own, through `Payum\Core\Template\RendererInterface`. The layout is
+    the renderer's, so `PayumBuilder::setLayout()` and template overrides now apply to unported actions
+    too. A ported action names its template by returning a
+    `Payum\Core\Result\NextAction\RenderTemplate` result, which the same renderer resolves.
   * `Payum\Core\Action\GetTokenAction` looks the token up by hash rather than by an identity naming
     `Payum\Core\Security\TokenInterface`. A custom storage keyed on that interface should key on its
-    hash instead, which is what `HttpRequestVerifier` has always used.
+    hash instead, which is what `HttpRequestVerifier` has always used. A handler is given its token on
+    `Context::token()`.
   * `ObtainCreditCard` is unchanged: it stays with the framework integration for 2.0.
 
 ## 1.5.0

@@ -13,8 +13,9 @@ use function is_array;
 /**
  * Answers the 1.x GetHttpRequest from the PSR-7 request the container holds.
  *
- * The flat arrays are kept only here, so that a gateway written against 1.x needs no change. PSR-7 is
- * the 2.0 contract: a handler reads $context->httpRequest() instead.
+ * This is what keeps an unported gateway working, not somewhere to write new code: PSR-7 is the 2.0
+ * contract, and a handler reads {@see \Payum\Core\Handler\Context::httpRequest()}. The flat arrays are
+ * reassembled here and nowhere else.
  */
 class GetHttpRequestAction implements ActionInterface
 {

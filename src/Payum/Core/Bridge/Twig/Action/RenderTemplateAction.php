@@ -8,10 +8,12 @@ use Payum\Core\Request\RenderTemplate;
 use Twig\Environment;
 use function trigger_deprecation;
 
-trigger_deprecation('payum/core', '2.0.0', 'The %s\RenderTemplateAction class is deprecated and will be removed in 3.0. Use %s instead, which renders through the renderer the application registered.', __NAMESPACE__, \Payum\Core\Action\RenderTemplateAction::class);
+trigger_deprecation('payum/core', '2.0.0', 'The %s\RenderTemplateAction class is deprecated and will be removed in 3.0. Stop registering it: core answers RenderTemplate on its own. Port the action dispatching it to a handler, which names its template by returning a %s result.', __NAMESPACE__, \Payum\Core\Result\NextAction\RenderTemplate::class);
 
 /**
- * @deprecated since 2.0, removed in 3.0. Use {@see \Payum\Core\Action\RenderTemplateAction} instead.
+ * @deprecated since 2.0, removed in 3.0. Core answers `RenderTemplate` on its own, so remove this
+ *             action. Port the action dispatching it to a handler and return a
+ *             {@see \Payum\Core\Result\NextAction\RenderTemplate} result.
  */
 class RenderTemplateAction implements ActionInterface
 {

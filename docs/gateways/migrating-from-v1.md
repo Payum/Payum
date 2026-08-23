@@ -275,15 +275,17 @@ Declaring any action brings core's own actions and extensions along, since an ac
 
 ### What core answers for an action you have not ported
 
-An unported action asks core for what it needs by dispatching a sub-request. It still gets an answer, but from the services 2.0 injects rather than from where 1.x found them. You register nothing for this.
+An unported action asks core for what it needs by dispatching a sub-request. It still gets an answer, but from the services 2.0 injects rather than from where 1.x found them. You register nothing for this, and you do not need to swap in a different action — core answers these itself.
 
-| The action dispatches | Answered from |
-| :--- | :--- |
-| `GetHttpRequest` | the container's `Psr\Http\Message\ServerRequestInterface`, flattened back into the arrays the 1.x request carries |
-| `RenderTemplate` | `Payum\Core\Template\RendererInterface` — the same renderer a handler's `RenderTemplate` result goes through |
-| `GetToken` | the token storage |
-| `GetCurrency` | ISO 4217 |
-| `ObtainCreditCard` | your framework integration, as before. Core ships no answer for it |
+This is here so you can port one operation at a time, not so you can stay. A handler dispatches none of these: it is handed the same information, which is most of why porting is worth doing.
+
+| The action dispatches | Answered from, until it is ported | What the handler does instead |
+| :--- | :--- | :--- |
+| `GetHttpRequest` | the container's `Psr\Http\Message\ServerRequestInterface`, flattened back into the arrays the 1.x request carries | reads `$context->httpRequest()`, the PSR-7 request itself |
+| `RenderTemplate` | `Payum\Core\Template\RendererInterface` | returns a `Payum\Core\Result\NextAction\RenderTemplate` result, resolved by the same renderer |
+| `GetToken` | the token storage | reads `$context->token()` |
+| `GetCurrency` | ISO 4217 | calls `Payum\Core\ISO4217\Currency::createFromIso4217Alpha3()` — there is nothing to dispatch for a lookup |
+| `ObtainCreditCard` | your framework integration, as before. Core ships no answer for it | — |
 
 Two consequences worth knowing:
 
