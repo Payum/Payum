@@ -11,11 +11,11 @@ use Http\Message\StreamFactory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Action\PayoutPayoutAction;
-use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
+use Payum\Core\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
@@ -31,6 +31,7 @@ use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Result\Result;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -225,8 +226,6 @@ final class CoreGatewayFactoryTest extends TestCase
     {
         $factory = new CoreGatewayFactory();
 
-        $container = $this->getContainer();
-
         $twig = new Environment(new ChainLoader());
 
         $config = $factory->createConfig([
@@ -239,11 +238,15 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $this->assertInstanceOf(Closure::class, $config['payum.action.render_template']);
 
-        $action = call_user_func($config['payum.action.render_template'], $container);
-        $this->assertInstanceOf(RenderTemplateAction::class, $action);
+        $container = $this->getContainer([
+            'twig.env' => $twig,
+        ]);
 
-        $this->assertSame($twig, $config['twig.env']);
-        $this->assertEquals($twig, $container->get('twig.env'));
+        $action = call_user_func($config['payum.action.render_template'], $container);
+
+        $this->assertInstanceOf(RenderTemplateAction::class, $action);
+        $this->assertSame($container->get(RendererInterface::class), $this->readAttribute($action, 'renderer'));
+        $this->assertSame($twig, $this->readAttribute($container->get(RendererInterface::class), 'twig'));
     }
 
     public function testShouldConfigureGetTokenActionIfTokenStorageSet(): void

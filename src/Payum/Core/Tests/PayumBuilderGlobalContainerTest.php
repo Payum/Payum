@@ -8,7 +8,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use InvalidArgumentException;
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;

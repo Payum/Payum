@@ -273,6 +273,23 @@ final class AcmeGateway implements GatewayInterface, DeclaresActions
 
 Declaring any action brings core's own actions and extensions along, since an action dispatching `GetHttpRequest` or `RenderTemplate` still expects an answer. A gateway that declares none gets a clean gateway with no 1.x machinery on it at all.
 
+### What core answers for an action you have not ported
+
+An unported action asks core for what it needs by dispatching a sub-request. It still gets an answer, but from the services 2.0 injects rather than from where 1.x found them. You register nothing for this.
+
+| The action dispatches | Answered from |
+| :--- | :--- |
+| `GetHttpRequest` | the container's `Psr\Http\Message\ServerRequestInterface`, flattened back into the arrays the 1.x request carries |
+| `RenderTemplate` | `Payum\Core\Template\RendererInterface` — the same renderer a handler's `RenderTemplate` result goes through |
+| `GetToken` | the token storage |
+| `GetCurrency` | ISO 4217 |
+| `ObtainCreditCard` | your framework integration, as before. Core ships no answer for it |
+
+Two consequences worth knowing:
+
+- Whatever request the application registered is what the action sees. Register your framework's request once with `PayumBuilder::addGlobalService(ServerRequestInterface::class, $request)` and both an unported action and a handler reading `$context->httpRequest()` read the same thing — the action no longer reads `$_GET` and `$_REQUEST` behind your back.
+- `GetHttpRequest::$request` is the query merged with the parsed body, the way `$_REQUEST` was. Read `$query` when you mean the query string only.
+
 Two ordering rules worth knowing:
 
 - **Handlers are asked before actions.** They have to be: a token is a `DetailsAggregateInterface`, so core's `ExecuteSameRequestWithModelDetailsAction` claims `Capture($token)`. Asking actions first would swallow almost every request before a handler saw it.

@@ -6,7 +6,13 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
 use Twig\Environment;
+use function trigger_deprecation;
 
+trigger_deprecation('payum/core', '2.0.0', 'The %s\RenderTemplateAction class is deprecated and will be removed in 3.0. Use %s instead, which renders through the renderer the application registered.', __NAMESPACE__, \Payum\Core\Action\RenderTemplateAction::class);
+
+/**
+ * @deprecated since 2.0, removed in 3.0. Use {@see \Payum\Core\Action\RenderTemplateAction} instead.
+ */
 class RenderTemplateAction implements ActionInterface
 {
     /**

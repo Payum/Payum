@@ -15,13 +15,14 @@ use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
 use Payum\Core\Action\GetCurrencyAction;
+use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Action\GetTokenAction;
 use Payum\Core\Action\PayoutPayoutAction;
 use Payum\Core\Action\PrependActionInterface;
+use Payum\Core\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Httplug\HttplugClient;
-use Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\Action\RenderTemplateAction;
+use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Extension\Context;
@@ -32,6 +33,7 @@ use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryConfigInterface;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -103,6 +105,8 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             'payum.action.render_template',
             'payum.action.get_token',
             'payum.extension.endless_cycle_detector',
+            RendererInterface::class,
+            GetHttpRequestAction::class,
             RenderTemplateAction::class,
             GetTokenAction::class,
         ] as $expectedId) {
@@ -236,15 +240,35 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertInstanceOf(EndlessCycleDetectorExtension::class, $container->get('payum.extension.endless_cycle_detector'));
     }
 
-    public function testShouldResolveRenderTemplateActionWithTwigEnvironmentAndLayout(): void
+    public function testShouldResolveRenderTemplateActionWithTheContainersRenderer(): void
     {
         $container = $this->buildContainer();
 
         $action = $container->get(RenderTemplateAction::class);
 
         $this->assertInstanceOf(RenderTemplateAction::class, $action);
-        $this->assertSame($container->get('twig.env'), $this->readAttribute($action, 'twig'));
-        $this->assertSame('@PayumCore/layout.html.twig', $this->readAttribute($action, 'layout'));
+        $this->assertSame($container->get(RendererInterface::class), $this->readAttribute($action, 'renderer'));
+    }
+
+    public function testShouldResolveTheDefaultRendererToTwigOnTheContainersEnvironment(): void
+    {
+        $container = $this->buildContainer();
+
+        $renderer = $container->get(RendererInterface::class);
+
+        $this->assertInstanceOf(TwigRenderer::class, $renderer);
+        $this->assertSame($container->get('twig.env'), $this->readAttribute($renderer, 'twig'));
+        $this->assertSame('@PayumCore/layout.html.twig', $this->readAttribute($renderer, 'layout'));
+    }
+
+    public function testShouldResolveGetHttpRequestActionWithTheContainersServerRequest(): void
+    {
+        $container = $this->buildContainer();
+
+        $action = $container->get(GetHttpRequestAction::class);
+
+        $this->assertInstanceOf(GetHttpRequestAction::class, $action);
+        $this->assertSame($container->get(ServerRequestInterface::class), $this->readAttribute($action, 'httpRequest'));
     }
 
     public function testShouldResolveDeprecatedGetTokenActionEntryToNullWhenTokenStorageIsMissing(): void

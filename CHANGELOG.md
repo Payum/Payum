@@ -2,6 +2,10 @@
 
 ## 2.0.0 (TBD)
 
+* The 1.x information requests are answered from the services 2.0 injects, so a gateway still dispatching them keeps working with nothing registered by hand. `GetHttpRequest` is filled from the PSR-7 `Psr\Http\Message\ServerRequestInterface` the container holds, `RenderTemplate` renders through `Payum\Core\Template\RendererInterface`, `GetToken` reads the token storage and `GetCurrency` reads ISO 4217. `ObtainCreditCard` stays with the framework integration
+* Add `Payum\Core\Action\GetHttpRequestAction`, replacing `Payum\Core\Bridge\PlainPhp\Action\GetHttpRequestAction` and `Payum\Core\Bridge\Symfony\Action\GetHttpRequestAction`, which both read PHP's superglobals. The flat `$_REQUEST`-shaped arrays are preserved for 1.x actions only; PSR-7 is the 2.0 contract
+* Add `Payum\Core\Action\RenderTemplateAction`, replacing `Payum\Core\Bridge\Twig\Action\RenderTemplateAction`. A 1.x `RenderTemplate` and a handler's `RenderTemplate` result now go through the same renderer, so an application's Twig environment, layout and template overrides apply to both
+* Fix `Payum\Core\Action\GetTokenAction`, which looked a token up by an identity naming `TokenInterface` and so found nothing in any storage Payum ships. It now looks up by hash, the way `HttpRequestVerifier` does
 * Add `Payum\Core\Command\NotifyCommand` and `Payum\Core\Handler\NotifyHandlerInterface`, so a gateway built from handlers can receive what a PSP sends when a payment changes. Checking that a message is genuine and acting on it are separate methods: `verify()` returns a `Payum\Core\Handler\WebhookEvent` or throws, and `handle()` is given the event it produced, so a gateway cannot quietly skip the check
 * A gateway whose PSP signs nothing says so with `WebhookEvent::unverified()` and re-reads the state with a `SyncCommand`, which makes the absence of a signature visible rather than looking like an omission
 * `Payum\Core\Result\NotifyResult` carries a `Payum\Core\Result\Acknowledgement`, which is the answer the PSP gets. It defaults to 204 and exists for the PSPs that insist on a particular body. A message that fails verification is answered 400 with nothing in it
