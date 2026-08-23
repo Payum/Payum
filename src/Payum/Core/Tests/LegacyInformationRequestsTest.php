@@ -19,6 +19,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayFactory;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
+use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -29,6 +30,7 @@ use Payum\Core\Request\GetToken;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use PHPUnit\Framework\TestCase;
@@ -43,6 +45,18 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class LegacyInformationRequestsTest extends TestCase
 {
+    private string $storageDir;
+
+    /**
+     * @var StorageInterface<TokenInterface>
+     */
+    private StorageInterface $tokenStorage;
+
+    /**
+     * A directory of its own, not the shared temp directory the default storages use: the action below
+     * asks for a token on every run, and a token another test left behind would answer for one this test
+     * never stored.
+     */
     protected function setUp(): void
     {
         $_SERVER = [
@@ -50,6 +64,26 @@ final class LegacyInformationRequestsTest extends TestCase
         ];
 
         LegacyInformationAction::reset();
+
+        $this->storageDir = sys_get_temp_dir() . '/payum-legacy-information-' . uniqid();
+        mkdir($this->storageDir);
+
+        $this->tokenStorage = new FilesystemStorage($this->storageDir, Token::class, 'hash');
+
+        $token = $this->tokenStorage->create();
+        $token->setHash('theHash');
+        $token->setGatewayName('acme');
+
+        $this->tokenStorage->update($token);
+    }
+
+    protected function tearDown(): void
+    {
+        foreach (glob($this->storageDir . '/*') ?: [] as $file) {
+            unlink($file);
+        }
+
+        rmdir($this->storageDir);
     }
 
     public function testShouldAnswerGetHttpRequestFromThePsrRequestTheApplicationRegistered(): void
@@ -74,10 +108,7 @@ final class LegacyInformationRequestsTest extends TestCase
 
     public function testShouldAnswerGetTokenFromTheTokenStorage(): void
     {
-        $payum = $this->buildPayum();
-        $this->seedToken($payum->getTokenStorage());
-
-        $this->capture($payum);
+        $this->capture($this->buildPayum());
 
         $token = $this->token()->getToken();
 
@@ -115,6 +146,7 @@ final class LegacyInformationRequestsTest extends TestCase
     {
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
+            ->setTokenStorage($this->tokenStorage)
             ->addGlobalService(ServerRequestInterface::class, $this->buildServerRequest())
             ->addGlobalService(RendererInterface::class, new LegacyInformationRenderer())
             ->registerGateway('acme', new LegacyInformationConfig())
@@ -127,11 +159,8 @@ final class LegacyInformationRequestsTest extends TestCase
 
     public function testShouldAnswerTheSameRequestsOnTheOneXFactoryPath(): void
     {
-        $tokenStorage = $this->buildPayum()->getTokenStorage();
-        $this->seedToken($tokenStorage);
-
         $gateway = (new LegacyInformationGatewayFactory([], new CoreGatewayFactory([
-            'payum.security.token_storage' => $tokenStorage,
+            'payum.security.token_storage' => $this->tokenStorage,
             ServerRequestInterface::class => $this->buildServerRequest(),
             'payum.paths' => [
                 'PayumAcme' => __DIR__ . '/Resources/views',
@@ -200,21 +229,10 @@ final class LegacyInformationRequestsTest extends TestCase
     {
         return (new PayumBuilder())
             ->addDefaultStorages()
+            ->setTokenStorage($this->tokenStorage)
             ->addGlobalService(ServerRequestInterface::class, $this->buildServerRequest())
             ->registerGateway('acme', new LegacyInformationConfig())
             ->getPayum();
-    }
-
-    /**
-     * @param StorageInterface<TokenInterface> $tokenStorage
-     */
-    private function seedToken(StorageInterface $tokenStorage): void
-    {
-        $token = $tokenStorage->create();
-        $token->setHash('theHash');
-        $token->setGatewayName('acme');
-
-        $tokenStorage->update($token);
     }
 
     private function buildServerRequest(): ServerRequestInterface
