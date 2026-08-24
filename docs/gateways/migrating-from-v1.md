@@ -282,10 +282,31 @@ What translates:
 | `GetHumanStatus`, `GetBinaryStatus` | the status recorded on the subject |
 | `Notify` | the notify handler — see [Webhooks](webhooks.md) |
 
-Two limits worth knowing:
+And what the handler's answer becomes, since a 1.x caller is waiting to catch a reply rather than read a result:
 
-- A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown rather than guessed at.
-- A handler returning `RenderTemplate`, `Challenge` or `Poll` has no 1.x reply to become, so those throw rather than report the payment finished when it is not. A gateway using them needs a caller that acts on a `Result`.
+| Next action | 1.x reply |
+| :--- | :--- |
+| `Redirect` | `HttpRedirect` |
+| `PostRedirect` | `HttpPostRedirect` |
+| `RenderTemplate` | `HttpResponse` carrying the rendered page |
+| `Challenge` | `HttpPostRedirect` at the issuer, or `HttpRedirect` when the step-up needs no parameters |
+| `Poll` | nothing thrown |
+| nothing | nothing thrown |
+
+Two of those lose detail, because 1.x has no reply for them:
+
+- **`Challenge`** becomes a form posted at the issuer's page, the way a 1.x gateway ran 3-D Secure. The protocol version is dropped.
+- **`Poll`** throws nothing, so the caller goes to the after url and reads the status there, where the payment is pending. `retryAfterSeconds` is dropped.
+
+If your gateway needs either detail, the application has to act on the `Result` instead of catching replies.
+
+A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown.
+
+### Replies your gateway defines for itself
+
+A reply class of your own, or any reply core does not ship, passes through untouched. A 1.x caller catches the same object your action threw, and a caller acting on a `Result` finds it in a `LegacyReply`, the same way as a rendered `HttpResponse` above.
+
+On the webhook path, an `HttpResponse` your 1.x notify action throws becomes the `Acknowledgement` on the `NotifyResult`, and is sent back to the PSP as the same response.
 
 ### Moving one operation at a time
 

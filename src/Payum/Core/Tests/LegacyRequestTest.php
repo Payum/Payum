@@ -23,6 +23,7 @@ use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Cancel;
 use Payum\Core\Request\Capture;
@@ -30,6 +31,9 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\Notify;
 use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\NextAction;
+use Payum\Core\Result\NextAction\Challenge;
+use Payum\Core\Result\NextAction\Poll;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\TokenInterface;
@@ -86,6 +90,31 @@ final class LegacyRequestTest extends TestCase
         $reply = $gateway->execute(new Capture($this->buildPayment()), true);
 
         $this->assertInstanceOf(HttpRedirect::class, $reply);
+    }
+
+    public function testShouldSendAOneXCallerToClearAChallenge(): void
+    {
+        LegacyCaptureHandler::$next = new Challenge('https://acs.test/3ds', [
+            'creq' => 'abc',
+        ]);
+
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        $reply = $gateway->execute(new Capture($this->buildPayment()), true);
+
+        // 1.x never named a step-up, but posting a form at the issuer is the journey it ran for one.
+        $this->assertInstanceOf(HttpPostRedirect::class, $reply);
+        $this->assertSame('https://acs.test/3ds', $reply->getUrl());
+    }
+
+    public function testShouldThrowNothingForAResultThatIsWaitingOnThePsp(): void
+    {
+        LegacyCaptureHandler::$next = new Poll(30);
+
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        // Nothing to show the customer: the caller goes to the after url and reads the status there.
+        $this->assertNull($gateway->execute(new Capture($this->buildPayment()), true));
     }
 
     public function testShouldTranslateEachRequestToItsOwnCommand(): void
@@ -244,7 +273,7 @@ final class LegacyGateway implements PaymentGateway
 
 final class LegacyCaptureHandler implements CaptureHandlerInterface
 {
-    public static ?Redirect $next = null;
+    public static ?NextAction $next = null;
 
     public static bool $dispatched = false;
 
@@ -252,7 +281,7 @@ final class LegacyCaptureHandler implements CaptureHandlerInterface
     {
         self::$dispatched = true;
 
-        return self::$next instanceof Redirect
+        return self::$next instanceof NextAction
             ? CaptureResult::pending(self::$next)
             : CaptureResult::captured('txn_1');
     }
