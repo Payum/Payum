@@ -19,7 +19,6 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\Capability;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Cancel;
@@ -30,7 +29,6 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Request\Payout;
 use Payum\Core\Request\Refund;
 use Payum\Core\Request\Sync;
-use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\AuthorizeResult;
 use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
@@ -174,18 +172,6 @@ final class LegacyGatewayAdapter implements GatewayInterface
         return null !== $requestClass && $this->gateway->supportsRequest(new $requestClass(new ArrayObject()));
     }
 
-    private function acknowledgementFrom(?ReplyInterface $reply): ?Acknowledgement
-    {
-        if (! $reply instanceof HttpResponse) {
-            return null;
-        }
-
-        /** @var array<string, string> $headers */
-        $headers = $reply->getHeaders();
-
-        return new Acknowledgement($reply->getStatusCode(), $reply->getContent(), $headers);
-    }
-
     /**
      * 1.x requests carry intent and nothing else. Silently dropping an amount would refund everything
      * instead of half; silently dropping an idempotency key would let a retry charge twice.
@@ -265,7 +251,7 @@ final class LegacyGatewayAdapter implements GatewayInterface
         $status = null === $target ? null : $this->statusOf($target);
 
         if ($command instanceof NotifyCommand) {
-            return new NotifyResult($status, acknowledgement: $this->acknowledgementFrom($reply));
+            return new NotifyResult($status, acknowledgement: ReplyToNextAction::acknowledgement($reply));
         }
 
         $resultClass = self::RESULTS[$command::class];
