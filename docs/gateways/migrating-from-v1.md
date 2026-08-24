@@ -209,6 +209,46 @@ It is built from actions: dispatch the matching Payum\Core\Request instead, or p
 
 `$e->getSupportedCommands()` is empty and `$e->getGatewayClass()` is null for such a gateway, so code choosing between the two paths can branch on either.
 
+If you would rather not keep two call sites, wrap the gateway and dispatch commands at it anyway — see below.
+
+### Driving an unported gateway with commands
+
+An application that has moved to commands should not lose access to the gateways that have not. `LegacyGatewayAdapter` wraps a 1.x gateway — its factory and all its actions — and takes commands:
+
+```php
+use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Legacy\LegacyGatewayAdapter;
+
+$gateway = LegacyGatewayAdapter::wrap($payum->getGateway('paypal_express_checkout'));
+
+$result = $gateway->execute(CaptureCommand::forToken($token));
+```
+
+Each command becomes the 1.x request that means the same thing, the reply the action threw becomes `$result->next`, and the status is read back by asking the gateway's own status action. Redirect flows keep working: the token is passed through untouched, so the PSP still returns the customer to the URL that dispatched the command and the same command finishes the payment on its second run.
+
+Anything that is not a command is passed straight through, so the wrapper is safe to leave in front of a gateway you still dispatch 1.x requests at. An action dispatching a sub-request of its own is unaffected: it is running on the same gateway, so it gets the same answers as ever — see [What core answers for an action you have not ported](#what-core-answers-for-an-action-you-have-not-ported).
+
+**What a 1.x gateway cannot tell you.** There is no portable way to ask a 1.x action for a transaction id, an amount or why something was declined, so `$result->transactionId`, the per-result amounts and `$result->failure` are always null. `$result->status` and `$result->isFailed()` do answer, because the status action does. Read anything else from the gateway's own details array.
+
+A command carrying something a 1.x request has nowhere to put — an amount, a reason, an idempotency key — is refused rather than run:
+
+```php
+$gateway->execute(RefundCommand::forPayment($payment, 500));
+// LogicException: RefundCommand carries an amount, and a 1.x request has nowhere to put it.
+```
+
+That is deliberate. Dropping the amount would refund the whole payment instead of half, and dropping an idempotency key would let a retry charge twice. Port the gateway to handlers if you need them.
+
+A 1.x action that renders its own markup — a card form, a wallet button — throws an `HttpResponse`, and 2.0 names a template rather than carrying rendered HTML. There is no way back, so the reply is handed over intact in a `LegacyReply` for you to send yourself:
+
+```php
+if ($result->next instanceof LegacyReply && $result->next->reply instanceof HttpResponse) {
+    return new Response($result->next->reply->getContent(), $result->next->reply->getStatusCode());
+}
+```
+
+`$gateway->capabilities()` reports what the gateway looks able to do, worked out from which of its actions claim which requests. Treat it as a list to render in an admin screen, not as a promise: an action claiming `Refund` is not the same as refunds working.
+
 ### Things that do not carry over
 
 * Actions relying on `supports()` returning true for requests Payum no longer creates internally.
