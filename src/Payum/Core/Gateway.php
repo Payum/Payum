@@ -480,7 +480,7 @@ class Gateway implements GatewayInterface
             $result->next instanceof RenderTemplate ? $this->container->get(RendererInterface::class) : null,
         );
 
-        if (null === $reply) {
+        if (! $reply instanceof ReplyInterface) {
             return null;
         }
 
