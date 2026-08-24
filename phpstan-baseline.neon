@@ -333,7 +333,7 @@ parameters:
 		-
 			message: '#^Invalid type Payum\\Core\\Reply\\ReplyInterface to throw\.$#'
 			identifier: throw.notThrowable
-			count: 1
+			count: 2
 			path: src/Payum/Core/Gateway.php
 
 		-
