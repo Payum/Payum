@@ -244,6 +244,19 @@ class Gateway implements GatewayInterface
         return null !== $this->handlerMap?->serviceIdFor($commandClass);
     }
 
+    /**
+     * Whether any registered action claims the request, answered without executing anything.
+     *
+     * What lets {@see \Payum\Core\Legacy\LegacyGatewayAdapter} report what a gateway built from actions
+     * can do. Handlers are not consulted: {@see self::supportsCommand()} is that question.
+     *
+     * @deprecated since 2.0, removed in 3.0 along with actions.
+     */
+    public function supportsRequest(object $request): bool
+    {
+        return false !== $this->findActionSupported($request);
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;
