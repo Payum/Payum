@@ -43,6 +43,7 @@ use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Legacy\ActionToHandlerAdapter;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
@@ -72,6 +73,7 @@ use function class_exists;
 use function func_get_args;
 use function func_num_args;
 use function in_array;
+use function is_a;
 use function is_string;
 use function str_starts_with;
 use function trigger_deprecation;
@@ -368,16 +370,21 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         if ($container->has(PaymentGateway::class)) {
             $paymentGateway = $container->get(PaymentGateway::class);
 
-            $gateway->setHandlerMap(HandlerMap::fromHandlers($paymentGateway->handlers()));
+            $handlerMap = HandlerMap::fromHandlers($paymentGateway->handlers());
+
+            $gateway->setHandlerMap($handlerMap);
 
             // A gateway that has finished moving gets nothing else: no actions, no extensions, no Twig
             // environment it will never render with. One still holding actions says so, and then needs
             // core's own alongside them, since an action dispatching GetHttpRequest expects an answer.
-            if (! $paymentGateway instanceof DeclaresActions) {
+            //
+            // A handler that is an adapted action needs the same, and says so by being one, which is why
+            // this asks the handler list as well as the interface.
+            if (! $paymentGateway instanceof DeclaresActions && ! self::adaptsActions($handlerMap)) {
                 return $gateway;
             }
 
-            $declaredActions = $paymentGateway->actions();
+            $declaredActions = $paymentGateway instanceof DeclaresActions ? $paymentGateway->actions() : [];
         }
 
         if ($container->has('twig.env')) {
@@ -512,6 +519,20 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 $gateway->addExtension($value, $prepend);
             }
         }
+    }
+
+    /**
+     * Whether any of this gateway's handlers is a 1.x action in a handler's clothing.
+     */
+    private static function adaptsActions(HandlerMap $handlerMap): bool
+    {
+        foreach ($handlerMap->bindings() as $handlerClass) {
+            if (is_a($handlerClass, ActionToHandlerAdapter::class, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

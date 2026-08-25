@@ -47,9 +47,9 @@ final class Context
     public function __construct(
         private readonly Executor $executor,
         private readonly CommandInterface $command,
-        private readonly GatewayInterface $gateway,
+        private readonly ?GatewayInterface $gateway,
         private readonly ServerRequestInterface $httpRequest,
-        private readonly GenericTokenFactoryInterface $tokenFactory,
+        private readonly ?GenericTokenFactoryInterface $tokenFactory,
         private readonly ?SubjectInterface $subject = null,
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
@@ -83,9 +83,13 @@ final class Context
     }
 
     /**
-     * The gateway currently executing
+     * The gateway currently executing.
+     *
+     * Null only when there is no gateway class to describe it, which happens when a
+     * {@see \Payum\Core\Legacy\HandlerToActionAdapter} runs this handler inside a gateway a 1.x factory
+     * assembled.
      */
-    public function gateway(): GatewayInterface
+    public function gateway(): ?GatewayInterface
     {
         return $this->gateway;
     }
@@ -203,10 +207,14 @@ final class Context
      * Mints tokens, for gateways that need a notify URL or a second hop.
      *
      * Replaces v1's GenericTokenFactoryAwareInterface / GenericTokenFactoryExtension pair.
+     *
+     * @throws LogicException when the gateway was assembled without one, which only a 1.x factory does
      */
     public function tokens(): GenericTokenFactoryInterface
     {
-        return $this->tokenFactory;
+        return $this->tokenFactory ?? throw new LogicException(
+            'This gateway has no token factory on it, so there is nothing to mint a token with. It was assembled by a 1.x factory: register a Payum\Core\Extension\GenericTokenFactoryExtension on it, or build it with PayumBuilder.'
+        );
     }
 
     /**
