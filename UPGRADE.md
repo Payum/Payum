@@ -42,9 +42,11 @@
     than once per dispatch. Dispatching one at a gateway that has moved to handlers still works: it is
     translated, run through the handler, and answered the way 1.x expects.
   * The sub-requests a 1.x action dispatches at its own gateway (`GetHttpRequest`, `RenderTemplate`,
-    `GetCurrency`, `GetToken`, `GetHumanStatus`, `GetBinaryStatus`), the replies it throws, core's own
-    actions and the extension mechanism carry a `@deprecated` naming their replacement, but emit
-    nothing at runtime: an application cannot act on a notice about a dependency's internals.
+    `GetCurrency`, `GetToken`, `GetHumanStatus`, `GetBinaryStatus`), the replies it throws, the
+    `Payum\Core\Action` classes and the extension mechanism carry a `@deprecated` naming their
+    replacement, but emit nothing at runtime: an application cannot act on a notice about a
+    dependency's internals. The classes an application registers itself — the bridge actions below
+    among them — do emit.
   * `Payum\Core\Request\Generic`, `Payum\Core\Action\ActionInterface` and `Payum\Core\Request\Convert`
     are **not** deprecated. Every third-party gateway extends the first two, and the third has no
     replacement — a handler builds its own payload.
