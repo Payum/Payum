@@ -7,6 +7,11 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler returns a Payum\Core\Result\Result
+ *             carrying a Payum\Core\Result\NextAction instead of throwing a reply; the model it used to
+ *             carry is Payum\Core\Handler\Context::subject().
+ */
 abstract class BaseModelAware extends LogicException implements ReplyInterface, ModelAwareInterface, ModelAggregateInterface
 {
     /**

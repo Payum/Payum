@@ -89,8 +89,6 @@ use function in_array;
 use function is_string;
 use function str_starts_with;
 use function trigger_deprecation;
-use function trigger_error;
-use const E_USER_DEPRECATED;
 
 class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfiguration, CreatesGateway, GatewayFactoryConfigInterface
 {
@@ -129,7 +127,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function create(array $config = []): Gateway
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
 
         if (($config['payum.http_client'] ?? null) instanceof HttpClientInterface && ! $config['payum.http_client'] instanceof ClientInterface) {
             $config['payum.http_client'] = new Psr18HttpClient($config['payum.http_client']);
@@ -196,7 +194,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function createConfig(array $config = []): array
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
 
         $containerConfig = $this->configureContainer();
 
@@ -248,7 +246,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     return Psr17FactoryDiscovery::findStreamFactory();
                 },
                 'httplug.client' => static function (ArrayObject $config) {
-                    @trigger_error('Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0', E_USER_DEPRECATED);
+                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.client" config key is deprecated and will be removed in 3.0. Use "payum.http_client", a %s, instead.', ClientInterface::class);
 
                     if (class_exists(HttpClientDiscovery::class)) {
                         try {
@@ -489,11 +487,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @deprecated since 2.0. Implement the ContainerConfiguration interface instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Implement
+     *             Payum\Core\DI\ContainerConfiguration instead.
      */
     protected function buildClosures(ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
 
         // Helper to check if closure expects ArrayObject
         $canInvokeWithArrayObject = static function ($value): bool {
@@ -530,11 +529,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @deprecated since 2.0. Implement the ContainerConfiguration interface instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Implement
+     *             Payum\Core\DI\ContainerConfiguration instead.
      */
     protected function buildActions(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.action') && null !== $value) {
                 $prepend = in_array($name, $config['payum.prepend_actions'], true) || $value instanceof PrependActionInterface;
@@ -545,14 +545,15 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @deprecated since 2.0. Implement the ContainerConfiguration interface instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Implement
+     *             Payum\Core\DI\ContainerConfiguration instead.
      */
     protected function buildApis(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.api')) {
-                @trigger_error('The payum.api.* config is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.', E_USER_DEPRECATED);
+                trigger_deprecation('payum/core', '2.0.0', 'The payum.api.* config is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.');
                 $prepend = in_array($name, $config['payum.prepend_apis'], true);
 
                 $gateway->addApi($value, $prepend);
@@ -561,11 +562,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     }
 
     /**
-     * @deprecated since 2.0. Implement the ContainerConfiguration interface instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Implement
+     *             Payum\Core\DI\ContainerConfiguration instead.
      */
     protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.extension')) {
                 $prepend = in_array($name, $config['payum.prepend_extensions'], true) || $value instanceof PrependExtensionInterface;

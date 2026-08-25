@@ -15,14 +15,16 @@ interface GatewayConfigInterface
     public function setGatewayName($gatewayName);
 
     /**
-     * @deprecated since 1.3.3 will be removed in 2.0. set factory option inside the config
+     * @deprecated since 2.0.0, will be removed in 3.0. Set the 'factory' option inside the config
+     *             array instead, which setConfig() takes.
      *
      * @return string
      */
     public function getFactoryName();
 
     /**
-     * @deprecated since 1.3.3 will be removed in 2.0. set factory option inside the config
+     * @deprecated since 2.0.0, will be removed in 3.0. Set the 'factory' option inside the config
+     *             array instead, which setConfig() takes.
      *
      * @param string $name
      */

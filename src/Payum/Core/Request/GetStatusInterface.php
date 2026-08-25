@@ -5,6 +5,11 @@ namespace Payum\Core\Request;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler declares the status on its result —
+ *             Payum\Core\Result\CaptureResult::captured() and friends — and it is read back as a
+ *             Payum\Core\Result\PaymentStatus.
+ */
 interface GetStatusInterface extends ModelAwareInterface, ModelAggregateInterface
 {
     /**

@@ -4,6 +4,10 @@ namespace Payum\Core\Reply;
 
 use InvalidArgumentException;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler returns
+ *             Payum\Core\Result\NextAction\Redirect on its result instead.
+ */
 class HttpRedirect extends HttpResponse
 {
     /**

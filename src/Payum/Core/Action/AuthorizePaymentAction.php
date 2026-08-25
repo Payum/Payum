@@ -11,6 +11,11 @@ use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHumanStatus;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A gateway built from handlers implements
+ *             Payum\Core\Handler\AuthorizeHandlerInterface, and the details this action unwrapped are
+ *             Payum\Core\Handler\Context::state().
+ */
 class AuthorizePaymentAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;

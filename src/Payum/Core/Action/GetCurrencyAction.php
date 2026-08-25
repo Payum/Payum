@@ -11,6 +11,10 @@ use Payum\Core\ISO4217\Currency;
 use Payum\Core\Request\GetCurrency;
 use function is_numeric;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler takes a Money\Currencies as a constructor
+ *             argument and asks it for the currency's subunit instead.
+ */
 class GetCurrencyAction implements ActionInterface
 {
     /**

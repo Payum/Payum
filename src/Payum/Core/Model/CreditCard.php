@@ -27,7 +27,9 @@ class CreditCard implements CreditCardInterface
     /**
      * @var SensitiveValue
      *
-     * @deprecated
+     * @deprecated since 2.0.0, will be removed in 3.0, when this and the plain property beside it
+     *             collapse into one. A subclass reads and writes through the accessors, which wrap
+     *             what they are given in a Payum\Core\Security\SensitiveValue.
      */
     protected $securedHolder;
 
@@ -44,7 +46,9 @@ class CreditCard implements CreditCardInterface
     /**
      * @var SensitiveValue
      *
-     * @deprecated
+     * @deprecated since 2.0.0, will be removed in 3.0, when this and the plain property beside it
+     *             collapse into one. A subclass reads and writes through the accessors, which wrap
+     *             what they are given in a Payum\Core\Security\SensitiveValue.
      */
     protected $securedNumber;
 
@@ -61,7 +65,9 @@ class CreditCard implements CreditCardInterface
     /**
      * @var SensitiveValue
      *
-     * @deprecated
+     * @deprecated since 2.0.0, will be removed in 3.0, when this and the plain property beside it
+     *             collapse into one. A subclass reads and writes through the accessors, which wrap
+     *             what they are given in a Payum\Core\Security\SensitiveValue.
      */
     protected $securedSecurityCode;
 
@@ -73,7 +79,9 @@ class CreditCard implements CreditCardInterface
     /**
      * @var SensitiveValue
      *
-     * @deprecated
+     * @deprecated since 2.0.0, will be removed in 3.0, when this and the plain property beside it
+     *             collapse into one. A subclass reads and writes through the accessors, which wrap
+     *             what they are given in a Payum\Core\Security\SensitiveValue.
      */
     protected $securedExpireAt;
 
