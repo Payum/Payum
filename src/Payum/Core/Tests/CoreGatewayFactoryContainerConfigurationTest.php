@@ -327,7 +327,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $this->assertInstanceOf(MessageFactory::class, $messageFactory);
         $this->assertContains(
-            'Using "httplug.message_factory" is deprecated, use "payum.http_message_factory" instead, which will return a PSR-17 RequestFactoryInterface since payum/core 2.0.0',
+            'The "httplug.message_factory" config is deprecated since payum/core 2.0.0 and will be removed in 3.0. Use "payum.http_message_factory", which returns a Psr\Http\Message\RequestFactoryInterface.',
             $deprecations
         );
     }
@@ -342,7 +342,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $this->assertInstanceOf(StreamFactory::class, $streamFactory);
         $this->assertContains(
-            'Using "httplug.stream_factory" is deprecated, use "payum.http_stream_factory" instead which will return a PSR-17 StreamFactoryInterface since payum/core 2.0.0',
+            'The "httplug.stream_factory" config is deprecated since payum/core 2.0.0 and will be removed in 3.0. Use "payum.http_stream_factory", which returns a Psr\Http\Message\StreamFactoryInterface.',
             $deprecations
         );
     }
@@ -357,7 +357,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $this->assertInstanceOf(ClientInterface::class, $client);
         $this->assertContains(
-            'Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0',
+            'The "httplug.client" config is deprecated since payum/core 2.0.0 and will be removed in 3.0. Use "payum.http_client", which returns a Psr\Http\Client\ClientInterface.',
             $deprecations
         );
     }
@@ -587,7 +587,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         });
 
         $this->assertContains(
-            'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::create is deprecated. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
+            'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::create is deprecated and will be removed in 3.0. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
             $deprecations
         );
     }
@@ -603,7 +603,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         foreach (['buildClosures', 'buildActions', 'buildApis', 'buildExtensions'] as $method) {
             $this->assertContains(
                 sprintf(
-                    'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::%s is deprecated. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
+                    'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::%s is deprecated and will be removed in 3.0. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
                     $method
                 ),
                 $deprecations
@@ -620,7 +620,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         });
 
         $this->assertContains(
-            'The payum.api.* config is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.',
+            'The payum.api.* config is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.',
             $deprecations
         );
     }
@@ -786,7 +786,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         });
 
         $this->assertContains(
-            'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::createConfig is deprecated. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
+            'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::createConfig is deprecated and will be removed in 3.0. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
             $deprecations
         );
     }

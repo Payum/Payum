@@ -30,7 +30,8 @@ class DynamicRegistry implements RegistryInterface
     private GatewayFactoryRegistryInterface | RegistryInterface $gatewayFactoryRegistry;
 
     /**
-     * @deprecated since 1.3.3 will be removed in 2.0
+     * @deprecated since 2.0.0, will be removed in 3.0. Wrap this registry in a
+     *             Payum\Core\Registry\FallbackRegistry to reach another registry's gateway factories.
      */
     private bool $backwardCompatibility = true;
 
@@ -45,7 +46,7 @@ class DynamicRegistry implements RegistryInterface
 
     public function getGatewayFactory(string $name): GatewayFactoryInterface
     {
-        // @deprecated It will throw invalid argument exception in 2.x
+        // @deprecated In 3.0 this throws instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactory($name);
         }
@@ -55,7 +56,7 @@ class DynamicRegistry implements RegistryInterface
 
     public function getGatewayFactories(): array
     {
-        // @deprecated It will return empty array here
+        // @deprecated In 3.0 this returns an empty array instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGatewayFactories();
         }
@@ -78,7 +79,7 @@ class DynamicRegistry implements RegistryInterface
             return $gateway;
         }
 
-        // @deprecated It will throw invalid argument exception in 2.x
+        // @deprecated In 3.0 this throws instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGateway($name);
         }
@@ -91,7 +92,7 @@ class DynamicRegistry implements RegistryInterface
      */
     public function getGateways(): array
     {
-        // @deprecated It will return empty array here
+        // @deprecated In 3.0 this returns an empty array instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getGateways();
         }
@@ -112,7 +113,7 @@ class DynamicRegistry implements RegistryInterface
      */
     public function getStorage($class): StorageInterface
     {
-        // @deprecated It will throw invalid argument exception in 2.x
+        // @deprecated In 3.0 this throws instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getStorage($class);
         }
@@ -128,7 +129,7 @@ class DynamicRegistry implements RegistryInterface
      */
     public function getStorages(): array
     {
-        // @deprecated It will return empty array here
+        // @deprecated In 3.0 this returns an empty array instead of delegating.
         if ($this->backwardCompatibility && $this->gatewayFactoryRegistry instanceof RegistryInterface) {
             return $this->gatewayFactoryRegistry->getStorages();
         }
@@ -137,7 +138,8 @@ class DynamicRegistry implements RegistryInterface
     }
 
     /**
-     * @deprecated since 1.3.3 will be removed in 2.0
+     * @deprecated since 2.0.0, will be removed in 3.0. Wrap this registry in a
+     *             Payum\Core\Registry\FallbackRegistry to reach another registry's gateway factories.
      *
      * @param bool $backwardCompatibility
      */

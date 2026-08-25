@@ -8,10 +8,10 @@ use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-@trigger_error('The ' . __NAMESPACE__ . '\EventDispatcherExtension class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\EventDispatcherExtension class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Extension\EventDispatcherExtension from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Extension\EventDispatcherExtension from payum/payum-bundle instead.
  */
 class EventDispatcherExtension implements ExtensionInterface
 {

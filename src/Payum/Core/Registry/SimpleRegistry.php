@@ -18,12 +18,16 @@ class SimpleRegistry extends AbstractRegistry
     protected array $initializedStorageExtensions;
 
     /**
-     * @deprecated since 1.3.3 and ill be removed in 2.x. It is here for BC
+     * @deprecated since 2.0.0, will be removed in 3.0 together with
+     *             Payum\Core\Extension\StorageExtension, which a gateway built from handlers does not
+     *             get — it persists through Payum\Core\Middleware\PersistStateMiddleware instead.
      */
     protected bool $addStorageExtensions = true;
 
     /**
-     * @deprecated since 1.3.3 and will be removed in 2.x. It is here for BC
+     * @deprecated since 2.0.0, will be removed in 3.0 together with
+     *             Payum\Core\Extension\StorageExtension, which a gateway built from handlers does not
+     *             get — it persists through Payum\Core\Middleware\PersistStateMiddleware instead.
      *
      * @param bool $bool
      */
@@ -49,7 +53,9 @@ class SimpleRegistry extends AbstractRegistry
     }
 
     /**
-     * @deprecated since 1.3.3 and will be removed in 2.x.
+     * @deprecated since 2.0.0, will be removed in 3.0 together with
+     *             Payum\Core\Extension\StorageExtension, which a gateway built from handlers does not
+     *             get — it persists through Payum\Core\Middleware\PersistStateMiddleware instead.
      */
     protected function addStorageToGateway(string $name, GatewayInterface $gateway): void
     {
