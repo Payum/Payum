@@ -4,6 +4,13 @@ namespace Payum\Core\Request;
 
 use Payum\Core\Security\TokenInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler builds the PSP's payload from
+ *             Payum\Core\Handler\Context::payment() itself. An application that registered its own
+ *             Convert action to add fields such as an invoice number or a description writes them onto
+ *             the payment's details before dispatching instead; the handler reads them from
+ *             Payum\Core\Handler\Context::state().
+ */
 class Convert
 {
     /**

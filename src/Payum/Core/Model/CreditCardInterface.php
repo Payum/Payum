@@ -88,7 +88,8 @@ interface CreditCardInterface
     public function setExpireAt($date = null);
 
     /**
-     * @deprecated the method will be removed in v2
+     * @deprecated since 2.0.0, will be removed in 3.0. Nothing has to call this: every setter already
+     *             wraps what it is given in a Payum\Core\Security\SensitiveValue.
      *
      * Wraps all sensitive values by SensitiveValue objects. Prevent accidental storing of them while serialization and so on.
      */

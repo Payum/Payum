@@ -2,10 +2,11 @@
 
 namespace Payum\Core\Bridge\Symfony;
 
-@trigger_error('The ' . __NAMESPACE__ . '\PayumEvents class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\PayumEvents class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\PayumEvents from payum/payum-bundle, or listen for the Payum\Core\Event\Event subclasses through a PSR-14 dispatcher, instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\PayumEvents from payum/payum-bundle, or
+ *             listen for the Payum\Core\Event\Event subclasses through a PSR-14 dispatcher, instead.
  */
 final class PayumEvents
 {

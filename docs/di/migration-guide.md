@@ -340,6 +340,36 @@ migrate at your own pace.
 | `'httplug.stream_factory'` | `Psr\Http\Message\StreamFactoryInterface` |
 | `'httplug.message_factory'` | `Psr\Http\Message\RequestFactoryInterface` |
 | `Payum\Core\Bridge\Spl\ArrayObject` as a service | `Psr\Container\ContainerInterface` |
+| `Payum\Core\PayumBuilder::addGateway()` | `registerGateway()`, given a `Payum\Core\Config\GatewayConfig` |
+| `Payum\Core\Request\Capture` and the six other operation requests | `Payum\Core\Command\CaptureCommand` and its siblings |
+| `Payum\Core\Request\GetHttpRequest` | `Payum\Core\Handler\Context::httpRequest()` |
+| `Payum\Core\Request\GetToken` | `Payum\Core\Handler\Context::token()` |
+| `Payum\Core\Request\RenderTemplate` | `Payum\Core\Result\NextAction\RenderTemplate` |
+| `Payum\Core\Request\GetCurrency` | a `Money\Currencies` service, injected into the handler |
+| `Payum\Core\Request\Convert` | none: the handler builds its payload from `Context::payment()` |
+| `Payum\Core\Request\GetHumanStatus`, `GetBinaryStatus` | `Payum\Core\Result\PaymentStatus`, declared on the result |
+| `Payum\Core\Reply\HttpRedirect` | `Payum\Core\Result\NextAction\Redirect` |
+| `Payum\Core\Reply\HttpPostRedirect` | `Payum\Core\Result\NextAction\PostRedirect` |
+| `Payum\Core\Reply\HttpResponse` | `Payum\Core\Result\Acknowledgement` on a `NotifyResult` |
+| `Payum\Core\Action\GatewayAwareAction` | `GatewayAwareInterface` + `GatewayAwareTrait`, or `Context::execute()` |
+| `Payum\Core\Extension\PrependExtensionInterface` | `Payum\Core\Middleware\HasPriority` on a middleware |
+| `Payum\Core\Extension\EndlessCycleDetectorExtension` | `Payum\Core\Middleware\EndlessCycleDetectorMiddleware` |
+| `Payum\Core\Security\GenericTokenFactoryInterface` | `Payum\Core\Security\TokenIssuerInterface` |
+| `Payum\Core\Security\GenericTokenFactoryAwareInterface` / `Trait` | `Payum\Core\Handler\Context::tokens()` |
+
+Only the entry points an application names itself emit a deprecation at runtime, and each does so once
+per class rather than once per call. The ones a gateway's own actions name — the sub-requests, the
+replies, core's actions, the extensions a middleware replaces — carry a `@deprecated` and nothing else:
+an application running an unported gateway cannot act on a notice about that gateway's internals, and
+its author reads the docblock.
+
+If you registered your own `Convert` action to add fields such as an invoice number or a description,
+write those fields onto the payment's details before dispatching instead. The handler reads them from
+`Context::state()`.
+
+`Payum\Core\Request\Generic`, `Payum\Core\Action\ActionInterface` and the extension mechanism
+(`ExtensionInterface`, `ExtensionCollection`, `Extension\Context`) are not on the list. Every third-party
+gateway extends the first two, and your own extensions keep running, for commands as well as requests.
 
 ## Testing Your Migration
 

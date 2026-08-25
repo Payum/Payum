@@ -9,10 +9,10 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-@trigger_error('The ' . __NAMESPACE__ . '\CreditCardExpirationDateType class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\CreditCardExpirationDateType class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\CreditCardExpirationDateType from payum/payum-bundle instead.
  */
 class CreditCardExpirationDateType extends AbstractType
 {

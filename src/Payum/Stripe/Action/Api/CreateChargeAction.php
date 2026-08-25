@@ -26,7 +26,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
     use GatewayAwareTrait;
 
     /**
-     * @deprecated BC will be removed in 2.x. Use $this->api
+     * @deprecated since 2.0.0, will be removed in 3.0. Use $this->api
      *
      * @var Keys
      */
@@ -41,7 +41,7 @@ class CreateChargeAction implements ActionInterface, ApiAwareInterface
     {
         $this->_setApi($api);
 
-        // BC. will be removed in 2.x
+        // BC. will be removed in 3.0
         $this->keys = $this->api;
     }
 

@@ -6,10 +6,10 @@ use Payum\Core\Bridge\Symfony\ContainerAwareCoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-@trigger_error('The ' . __NAMESPACE__ . '\CoreGatewayFactoryBuilder class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\CoreGatewayFactoryBuilder class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\CoreGatewayFactoryBuilder from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\CoreGatewayFactoryBuilder from payum/payum-bundle instead.
  */
 class CoreGatewayFactoryBuilder
 {

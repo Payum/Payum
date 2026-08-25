@@ -18,10 +18,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ObtainCreditCardAction class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\ObtainCreditCardAction class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction from payum/payum-bundle instead.
  */
 class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
 {
@@ -57,7 +57,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated since 2.0.0, will be removed in 3.0. Use setRequestStack() instead.
      */
     public function setRequest(?Request $request = null): void
     {
