@@ -6,17 +6,21 @@ namespace Payum\Core\Tests;
 
 use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use function class_exists;
 use function dirname;
 use function enum_exists;
+use function in_array;
 use function interface_exists;
+use function ksort;
 use function preg_match_all;
 use function preg_replace;
 use function sprintf;
-use function str_starts_with;
+use function strlen;
+use function substr;
 use function trait_exists;
 use function trim;
 
@@ -71,20 +75,31 @@ final class DeprecationMessagesTest extends TestCase
     }
 
     /**
-     * Every `@deprecated` docblock in the Payum\Core sources, as "file:line" and the text after the tag.
+     * Every `@deprecated` docblock in the Payum\Core sources, keyed by the path it sits at relative to
+     * Core and the line it starts on.
+     *
+     * The key has to be the whole relative path, not the file name: Core has several same-named classes
+     * across its bridges, and two of them carrying a deprecation on the same line is enough for PHPUnit
+     * to reject the whole data set as ambiguous.
      *
      * Scoped to Core because the replacements a gateway package names live in that package, and several
      * of those are `$this->api` rather than a class — nothing this test can resolve.
      *
-     * @return iterable<string, array{string, string}>
+     * @return array<string, array{string, string}>
      */
-    public static function provideDeprecations(): iterable
+    public static function provideDeprecations(): array
     {
         $root = dirname(__DIR__);
 
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+                static fn (SplFileInfo $file): bool => ! $file->isDir()
+                    || ! in_array($file->getFilename(), ['Tests', 'Resources'], true)
+            )
         );
+
+        $found = [];
 
         foreach ($files as $file) {
             /** @var SplFileInfo $file */
@@ -93,18 +108,19 @@ final class DeprecationMessagesTest extends TestCase
             }
 
             $path = $file->getPathname();
-
-            if (str_starts_with($path, $root . '/Tests/') || str_starts_with($path, $root . '/Resources/')) {
-                continue;
-            }
+            $relative = substr($path, strlen($root) + 1);
 
             foreach (self::readDeprecations((string) file_get_contents($path)) as $line => $message) {
-                yield sprintf('%s:%d', $file->getFilename(), $line) => [
+                $found[sprintf('%s:%d', $relative, $line)] = [
                     sprintf('%s:%d', $path, $line),
                     $message,
                 ];
             }
         }
+
+        ksort($found);
+
+        return $found;
     }
 
     /**
