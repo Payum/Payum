@@ -5,12 +5,19 @@ namespace Payum\Sofort\Action;
 use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Sofort\Api;
+use Psr\Clock\ClockInterface;
 
 class StatusAction implements ActionInterface
 {
+    public function __construct(
+        private readonly ClockInterface $clock = new SystemClock()
+    ) {
+    }
+
     /**
      * @param GetStatusInterface $request
      */
@@ -23,7 +30,7 @@ class StatusAction implements ActionInterface
         if (! isset($details['status'])
            && isset($details['transaction_id'])
            && isset($details['expires'])
-           && $details['expires'] < time()) {
+           && $details['expires'] < $this->clock->now()->getTimestamp()) {
             $request->markExpired();
 
             return;

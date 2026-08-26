@@ -18,6 +18,7 @@ use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
 use Payum\Core\Bridge\Twig\TwigRenderer;
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
@@ -65,6 +66,7 @@ use Payum\Paypal\Rest\PaypalRestGatewayFactory;
 use Payum\Sofort\SofortGatewayFactory;
 use Payum\Stripe\StripeCheckoutGatewayFactory;
 use Payum\Stripe\StripeJsGatewayFactory;
+use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -628,6 +630,10 @@ class PayumBuilder
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
 
+            // Shared, so that freezing time with addGlobalService() freezes it for every gateway at
+            // once rather than for whichever one happened to be asked.
+            ClockInterface::class => static fn (): ClockInterface => new SystemClock(),
+
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
                 $this->layout,
@@ -693,6 +699,7 @@ class PayumBuilder
             ClientInterface::class,
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
+            ClockInterface::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {

@@ -23,6 +23,7 @@ use Payum\Core\Action\RenderTemplateAction;
 use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\TwigRenderer;
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Extension\Context;
@@ -34,6 +35,8 @@ use Payum\Core\GatewayFactoryConfigInterface;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
+use Payum\Core\Tests\Mocks\Clock\FrozenClock;
+use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -82,6 +85,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
             ResponseFactoryInterface::class,
+            ClockInterface::class,
             'payum.http_client',
             'payum.http_stream_factory',
             'payum.http_message_factory',
@@ -173,6 +177,26 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertInstanceOf(ClientInterface::class, $container->get(ClientInterface::class));
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+    }
+
+    public function testShouldResolveASystemClockFromContainer(): void
+    {
+        $container = $this->buildContainer();
+
+        $this->assertInstanceOf(SystemClock::class, $container->get(ClockInterface::class));
+    }
+
+    public function testShouldLetTheGivenConfigReplaceTheClock(): void
+    {
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions((new CoreGatewayFactory())->configureContainer());
+        $builder->addDefinitions([
+            ClockInterface::class => $clock,
+        ]);
+
+        $this->assertSame($clock, $builder->build()->get(ClockInterface::class));
     }
 
     public function testShouldBuildARequestWhoseBodyCanBeRead(): void

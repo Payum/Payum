@@ -440,6 +440,17 @@ use Psr\Http\Client\ClientInterface;
 ->addGlobalService(ClientInterface::class, $frameworkHttpClient)
 ```
 
+### 6. Clock Sharing
+
+Every time Payum reads goes through the PSR-20 clock in the global container. Register the application's
+own clock, so that a test which freezes time freezes it for Payum too:
+
+```php
+use Psr\Clock\ClockInterface;
+
+->addGlobalService(ClockInterface::class, $frameworkClock)
+```
+
 ## Troubleshooting
 
 ### Service Not Found

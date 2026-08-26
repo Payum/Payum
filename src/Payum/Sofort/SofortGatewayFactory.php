@@ -14,6 +14,8 @@ use Payum\Sofort\Action\NotifyAction;
 use Payum\Sofort\Action\RefundAction;
 use Payum\Sofort\Action\StatusAction;
 use Payum\Sofort\Action\SyncAction;
+use Psr\Clock\ClockInterface;
+use Psr\Container\ContainerInterface;
 use Sofort\SofortLib\Sofortueberweisung;
 
 class SofortGatewayFactory extends GatewayFactory
@@ -28,7 +30,7 @@ class SofortGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'sofort',
             'payum.factory_title' => 'Sofort',
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.status' => new StatusAction(),
+            'payum.action.status' => static fn (ContainerInterface $c): StatusAction => new StatusAction($c->get(ClockInterface::class)),
             'payum.action.notify' => new NotifyAction(),
             'payum.action.sync' => new SyncAction(),
             'payum.action.refund' => new RefundAction(),

@@ -25,6 +25,7 @@
   ],
   "require": {
     "payum/core": "2.0.x-dev",
+    "psr/clock": "^1.0",
     "sofort/sofortlib-php": "^3.0"
   },
   "require-dev": {
