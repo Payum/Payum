@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Payum\Core\Result;
 
+use Money\Money;
+use Payum\Core\Money\Amount;
+
 /**
  * The outcome of a {@see \Payum\Core\Command\CaptureCommand}.
  *
@@ -14,8 +17,20 @@ namespace Payum\Core\Result;
 final class CaptureResult extends Result
 {
     /**
+     * In minor units. The lossy view of {@see self::$capturedMoney}, and null whenever that is.
+     */
+    public readonly ?int $capturedAmount;
+
+    /**
+     * Set only when the handler reported a Money. Null says nothing about what was taken — read
+     * {@see self::$capturedAmount} against the payment's currency.
+     */
+    public readonly ?Money $capturedMoney;
+
+    /**
      * @param array<string, mixed> $raw
-     * @param int|null $capturedAmount in minor units; null means the payment's full amount
+     * @param int|Money|null $capturedAmount null means the payment's full amount. An int is read as minor
+     *                                       units of the payment's currency
      */
     public function __construct(
         ?PaymentStatus $status,
@@ -23,9 +38,12 @@ final class CaptureResult extends Result
         ?string $transactionId = null,
         ?Failure $failure = null,
         array $raw = [],
-        public readonly ?int $capturedAmount = null,
+        int|Money|null $capturedAmount = null,
     ) {
         parent::__construct($status, $next, $transactionId, $failure, $raw);
+
+        $this->capturedMoney = $capturedAmount instanceof Money ? $capturedAmount : null;
+        $this->capturedAmount = $capturedAmount instanceof Money ? Amount::toMinorUnits($capturedAmount) : $capturedAmount;
     }
 
     /**
@@ -39,7 +57,7 @@ final class CaptureResult extends Result
     /**
      * @param array<string, mixed> $raw
      */
-    public static function captured(?string $transactionId = null, ?int $capturedAmount = null, array $raw = []): self
+    public static function captured(?string $transactionId = null, int|Money|null $capturedAmount = null, array $raw = []): self
     {
         return new self(PaymentStatus::Captured, transactionId: $transactionId, raw: $raw, capturedAmount: $capturedAmount);
     }

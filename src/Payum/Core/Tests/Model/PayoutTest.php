@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Model;
 
+use Money\Money;
+use Payum\Core\Model\MoneyAwareInterface;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
 use PHPUnit\Framework\TestCase;
@@ -69,5 +71,31 @@ final class PayoutTest extends TestCase
         $this->assertSame([
             'foo' => 'fooVal',
         ], $payout->getDetails());
+    }
+
+    public function testShouldImplementsMoneyAwareInterface(): void
+    {
+        $rc = new ReflectionClass(Payout::class);
+
+        $this->assertTrue($rc->implementsInterface(MoneyAwareInterface::class));
+    }
+
+    public function testShouldAllowGetMoneyBuiltFromTheAmountAndCurrencyPreviouslySet(): void
+    {
+        $payout = new Payout();
+        $payout->setTotalAmount(4500);
+        $payout->setCurrencyCode('EUR');
+
+        $this->assertTrue(Money::EUR(4500)->equals($payout->getMoney()));
+    }
+
+    public function testShouldWriteAMoneyThroughToTheAmountAndCurrency(): void
+    {
+        $payout = new Payout();
+
+        $payout->setMoney(Money::JPY(500));
+
+        $this->assertSame(500, $payout->getTotalAmount());
+        $this->assertSame('JPY', $payout->getCurrencyCode());
     }
 }

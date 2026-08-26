@@ -20,6 +20,7 @@ Every command needs a subject — either the token it arrived on, or the payment
 
 ```php
 <?php
+use Money\Money;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 
@@ -29,7 +30,8 @@ CaptureCommand::forToken($token);
 // Headless. No token was ever minted.
 CaptureCommand::forPayment($payment);
 
-// Partial capture. The amount is in minor units, as on PaymentInterface.
+// Partial capture. A Money says which currency it is in; an int is minor units of the payment's.
+CaptureCommand::forToken($token, amount: Money::USD(500));
 CaptureCommand::forToken($token, amount: 500);
 
 // An idempotency key, for PSPs that accept one, so a retry cannot double-charge.
@@ -153,10 +155,11 @@ public function handle(CaptureCommand $command, Context $context): CaptureResult
 $command->token();          // ?TokenInterface
 $command->payment();        // ?PaymentInterface
 $command->amount;           // ?int, minor units. Null means the payment's full amount
+$command->money();          // ?Money, when the command carries enough to say which currency
 $command->idempotencyKey;   // ?string
 CaptureCommand::capability(); // Capability::Capture
 ```
 
-Amounts are integers in minor units, matching `PaymentInterface::getTotalAmount()`. A null amount means "the whole payment", which is not the same as zero.
+A null amount means "the whole payment", which is not the same as zero — so a handler reading `$command->amount` charges nothing on a full capture. Read [`$context->amount()`](handlers.md) instead, which resolves the command against the payment and hands you a `Money` either way. See [Money](../money.md).
 
 Next: [Handlers](handlers.md).

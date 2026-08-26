@@ -16,11 +16,11 @@ $result->requiresInteraction();  // $next !== null
 
 | Result | Adds |
 | :--- | :--- |
-| `CaptureResult` | `capturedAmount` |
-| `AuthorizeResult` | `authorizedAmount`, `expiresAt` |
-| `RefundResult` | `refundedAmount` |
+| `CaptureResult` | `capturedAmount`, `capturedMoney` |
+| `AuthorizeResult` | `authorizedAmount`, `authorizedMoney`, `expiresAt` |
+| `RefundResult` | `refundedAmount`, `refundedMoney` |
 | `CancelResult` | — |
-| `PayoutResult` | `paidOutAmount` |
+| `PayoutResult` | `paidOutAmount`, `paidOutMoney` |
 | `SyncResult` | — |
 | `NotifyResult` | `acknowledgement` |
 
@@ -29,7 +29,7 @@ $result->requiresInteraction();  // $next !== null
 Use the named constructors; they set a coherent status for you.
 
 ```php
-CaptureResult::captured($transactionId, $capturedAmount);
+CaptureResult::captured($transactionId, Money::USD(500));   // or minor units, as an int
 CaptureResult::pending(new Redirect($url));
 CaptureResult::pending();                       // waiting on the PSP, nothing for the customer to do
 CaptureResult::canceled();
@@ -39,6 +39,15 @@ AuthorizeResult::authorized($transactionId, $amount, $expiresAt);
 RefundResult::refunded($transactionId, $amount);
 RefundResult::partiallyRefunded($transactionId, $amount);
 ```
+
+Report a `Money` and both views are filled in, so an application reading integers is unaffected:
+
+```php
+$result->capturedMoney;    // ?Money, set when the handler reported one
+$result->capturedAmount;   // ?int, minor units
+```
+
+See [Money](../money.md).
 
 ### `NotifyResult`
 

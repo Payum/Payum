@@ -10,6 +10,11 @@ use Http\Client\HttpClient;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use LogicException;
+use Money\Currencies;
+use Money\Currencies\CurrencyList;
+use Money\Currency;
+use Money\MoneyFormatter;
+use Money\MoneyParser;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
@@ -32,6 +37,7 @@ use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryConfigInterface;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Request\GetCurrency;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerInterface;
@@ -108,7 +114,11 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             RendererInterface::class,
             GetHttpRequestAction::class,
             RenderTemplateAction::class,
+            GetCurrencyAction::class,
             GetTokenAction::class,
+            Currencies::class,
+            MoneyFormatter::class,
+            MoneyParser::class,
         ] as $expectedId) {
             $this->assertArrayHasKey($expectedId, $definitions);
         }
@@ -315,6 +325,43 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $this->assertInstanceOf(GetTokenAction::class, $action);
         $this->assertSame($tokenStorage, $this->readAttribute($action, 'tokenStorage'));
+    }
+
+    public function testShouldKnowIso4217AndCryptoCurrenciesOutOfTheBox(): void
+    {
+        $currencies = $this->buildContainer()->get(Currencies::class);
+
+        $this->assertSame(2, $currencies->subunitFor(new Currency('USD')));
+        $this->assertSame(0, $currencies->subunitFor(new Currency('JPY')));
+        $this->assertSame(3, $currencies->subunitFor(new Currency('KWD')));
+        $this->assertSame(8, $currencies->subunitFor(new Currency('BTC')));
+    }
+
+    public function testShouldFormatAndParseAgainstTheRegisteredCurrencies(): void
+    {
+        $container = $this->buildContainer([
+            Currencies::class => new CurrencyList([
+                'ETH' => 18,
+            ]),
+        ]);
+
+        $money = $container->get(MoneyParser::class)->parse('1.5', new Currency('ETH'));
+
+        $this->assertSame('1500000000000000000', $money->getAmount());
+        $this->assertSame('1.500000000000000000', $container->get(MoneyFormatter::class)->format($money));
+    }
+
+    public function testShouldAnswerGetCurrencyForACurrencyIso4217DoesNotList(): void
+    {
+        $container = $this->buildContainer([
+            Currencies::class => new CurrencyList([
+                'ETH' => 18,
+            ]),
+        ]);
+
+        $container->get(GetCurrencyAction::class)->execute($request = new GetCurrency('ETH'));
+
+        $this->assertSame(18, $request->exp);
     }
 
     public function testShouldResolveDeprecatedHttplugMessageFactory(): void

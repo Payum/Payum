@@ -2,12 +2,14 @@
 
 namespace Payum\Core\Model;
 
+use Money\Money;
+use Payum\Core\Money\Amount;
 use Traversable;
 
 /**
  * Experimental. Anything could be changed in this model at any moment
  */
-class Payout implements PayoutInterface
+class Payout implements PayoutInterface, MoneyAwareInterface
 {
     /**
      * @var string
@@ -105,6 +107,21 @@ class Payout implements PayoutInterface
     public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
+    }
+
+    public function getMoney(): ?Money
+    {
+        return Amount::fromMinorUnits($this->totalAmount, $this->currencyCode);
+    }
+
+    /**
+     * Writes through to totalAmount and currencyCode, so the two views can never disagree and a mapping
+     * that already stores them keeps working untouched.
+     */
+    public function setMoney(?Money $money): void
+    {
+        $this->totalAmount = $money instanceof Money ? Amount::toMinorUnits($money) : null;
+        $this->currencyCode = $money?->getCurrency()->getCode();
     }
 
     /**

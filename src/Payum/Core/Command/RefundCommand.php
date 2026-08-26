@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Core\Command;
 
+use Money\Currency;
+use Money\Money;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway\Capability;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Money\Amount;
 use Payum\Core\Result\RefundResult;
 use Payum\Core\Security\TokenInterface;
 
@@ -20,17 +23,26 @@ use Payum\Core\Security\TokenInterface;
  *
  * @implements CommandInterface<RefundResult>
  */
-final class RefundCommand implements CommandInterface
+final class RefundCommand implements CommandInterface, HasAmount
 {
     /**
-     * @param int|null $amount in minor units. Null refunds everything captured; a smaller value is a
-     *                         partial refund, which requires Capability::PartialRefund
+     * In minor units. The lossy view of {@see self::money()}, kept because that is what
+     * PaymentInterface::getTotalAmount() gives you.
+     */
+    public readonly ?int $amount;
+
+    private readonly ?Money $money;
+
+    /**
+     * @param int|Money|null $amount null refunds everything captured; a smaller value is a partial refund,
+     *                               which requires Capability::PartialRefund. An int is read as minor
+     *                               units of the payment's currency
      * @param string|null $reason some PSPs record a reason code and surface it in their dashboard
      */
     public function __construct(
         private readonly ?TokenInterface $token = null,
         private readonly ?PaymentInterface $payment = null,
-        public readonly ?int $amount = null,
+        int|Money|null $amount = null,
         public readonly ?string $reason = null,
         public readonly ?string $idempotencyKey = null,
     ) {
@@ -40,6 +52,9 @@ final class RefundCommand implements CommandInterface
                 self::class,
             ));
         }
+
+        $this->money = $amount instanceof Money ? $amount : null;
+        $this->amount = $amount instanceof Money ? Amount::toMinorUnits($amount) : $amount;
     }
 
     public static function capability(): Capability
@@ -47,14 +62,19 @@ final class RefundCommand implements CommandInterface
         return Capability::Refund;
     }
 
-    public static function forPayment(PaymentInterface $payment, ?int $amount = null, ?string $reason = null): self
+    public static function forPayment(PaymentInterface $payment, int|Money|null $amount = null, ?string $reason = null): self
     {
         return new self(payment: $payment, amount: $amount, reason: $reason);
     }
 
-    public static function forToken(TokenInterface $token, ?int $amount = null, ?string $reason = null): self
+    public static function forToken(TokenInterface $token, int|Money|null $amount = null, ?string $reason = null): self
     {
         return new self(token: $token, amount: $amount, reason: $reason);
+    }
+
+    public function money(?Currency $currency = null): ?Money
+    {
+        return $this->money ?? Amount::fromMinorUnits($this->amount, $currency?->getCode() ?? $this->payment?->getCurrencyCode());
     }
 
     public function payment(): ?PaymentInterface

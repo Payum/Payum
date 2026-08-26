@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Handler;
 
+use Money\Money;
+use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
@@ -84,6 +89,39 @@ final class ContextTest extends TestCase
         $context->notifyUrl();
     }
 
+    public function testShouldAnswerTheSubjectsFullAmountWhenTheCommandAskedForNothing(): void
+    {
+        $context = $this->buildContextFor(CaptureCommand::forToken($this->createMock(TokenInterface::class)));
+
+        $this->assertTrue(Money::USD(1000)->equals($context->amount()));
+    }
+
+    public function testShouldAnswerWhatAPartialCommandAskedFor(): void
+    {
+        $context = $this->buildContextFor(CaptureCommand::forToken($this->createMock(TokenInterface::class), 400));
+
+        $this->assertTrue(Money::USD(400)->equals($context->amount()));
+    }
+
+    public function testShouldReadAPartialAmountInTheResolvedSubjectsCurrency(): void
+    {
+        // The command carries only a token, so the currency can come from nowhere but the subject core
+        // resolved.
+        $context = $this->buildContextFor(RefundCommand::forToken($this->createMock(TokenInterface::class), 400));
+
+        $this->assertSame('USD', $context->amount()?->getCurrency()->getCode());
+    }
+
+    public function testShouldAnswerNothingForACommandThatCarriesNoAmountAndASubjectWithout(): void
+    {
+        $context = $this->buildContextFor(
+            CancelCommand::forPayment(new Payment()),
+            new Payment(),
+        );
+
+        $this->assertNull($context->amount());
+    }
+
     private function buildContext(
         GenericTokenFactoryInterface $tokens,
         ?PaymentInterface $subject,
@@ -99,6 +137,27 @@ final class ContextTest extends TestCase
             null,
             [],
             $gatewayName,
+        );
+    }
+
+    /**
+     * @param CommandInterface<Result> $command
+     */
+    private function buildContextFor(CommandInterface $command, ?PaymentInterface $subject = null): Context
+    {
+        if (! $subject instanceof PaymentInterface) {
+            $subject = new Payment();
+            $subject->setTotalAmount(1000);
+            $subject->setCurrencyCode('USD');
+        }
+
+        return new Context(
+            $this->createMock(Executor::class),
+            $command,
+            $this->createMock(PaymentGateway::class),
+            $this->createMock(ServerRequestInterface::class),
+            $this->createMock(GenericTokenFactoryInterface::class),
+            $subject,
         );
     }
 }

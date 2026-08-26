@@ -9,6 +9,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Money\Amount;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 
@@ -27,11 +28,10 @@ class ConvertPayoutAction implements ActionInterface, GatewayAwareInterface
         $payout = $request->getSource();
 
         $this->gateway->execute($currency = new GetCurrency($payout->getCurrencyCode()));
-        $divisor = 10 ** $currency->exp;
 
         $details = ArrayObject::ensureArrayObject($payout->getDetails());
         $details['CURRENCYCODE'] = $payout->getCurrencyCode();
-        $details['L_AMT0'] = $payout->getTotalAmount() / $divisor;
+        $details['L_AMT0'] = Amount::toDecimalString($payout->getTotalAmount(), $payout->getCurrencyCode(), $currency->exp);
         $details['L_NOTE0'] = $payout->getDescription();
 
         if ($payout->getRecipientEmail()) {

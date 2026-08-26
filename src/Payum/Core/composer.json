@@ -33,6 +33,7 @@
     "require": {
         "php": "^8.1",
         "alcohol/iso4217": "^4.0",
+        "moneyphp/money": "^4.5",
         "php-http/message": "^1.0",
         "php-http/client-implementation": "^1.0",
         "php-http/discovery": "^1.19",

@@ -23,12 +23,12 @@ interface PayoutInterface extends SubjectInterface
     public function getDescription();
 
     /**
-     * @return int
+     * @return int|null minor units
      */
     public function getTotalAmount();
 
     /**
-     * @return string
+     * @return string|null ISO 4217 alpha-3, or a code registered on the gateway's Money\Currencies
      */
     public function getCurrencyCode();
 }

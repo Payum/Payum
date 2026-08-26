@@ -62,7 +62,7 @@ final class RefundHandler implements RefundHandlerInterface
 
     public function handle(RefundCommand $command, Context $context): RefundResult
     {
-        $refund = $this->api->refund($context->state()['charge_id'], $command->amount);
+        $refund = $this->api->refund($context->state()['charge_id'], $context->amount()?->getAmount());
 
         return RefundResult::refunded($refund['id'], $refund['amount']);
     }

@@ -7,6 +7,13 @@ namespace Payum\Core\Tests;
 use DI\Container;
 use DI\ContainerBuilder;
 use InvalidArgumentException;
+use Money\Currencies;
+use Money\Currencies\AggregateCurrencies;
+use Money\Currencies\CurrencyList;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Money;
+use Money\MoneyFormatter;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
@@ -667,6 +674,33 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertTrue($factory->container->has('acme.service'));
         $this->assertSame($service, $factory->container->get('acme.service'));
         $this->assertSame($model, $factory->container->get(GlobalContainerTestModel::class));
+    }
+
+    public function testShouldLetAnApplicationRegisterACurrencyIso4217DoesNotList(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub((new CoreGatewayFactory())->configureContainer());
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(Currencies::class, new AggregateCurrencies([
+                new ISOCurrencies(),
+                new CurrencyList([
+                    'ACME' => 6,
+                ]),
+            ]))
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        // The formatter is defined against whatever Currencies resolves to, so replacing the one service
+        // is enough.
+        $this->assertSame(
+            '1.500000',
+            $factory->container->get(MoneyFormatter::class)->format(new Money(1500000, new Currency('ACME')))
+        );
     }
 
     public function testShouldShareTheServicesAddedWithAddGlobalServiceBetweenGateways(): void

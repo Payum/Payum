@@ -73,7 +73,7 @@ final class ConvertPayoutActionTest extends GenericActionTest
 
         $this->assertSame([
             'CURRENCYCODE' => 'USD',
-            'L_AMT0' => 1.23,
+            'L_AMT0' => '1.23',
             'L_NOTE0' => 'the description',
             'RECEIVERTYPE' => 'UserID',
             'L_RECEIVERID0' => 'theRecipientId',
@@ -117,7 +117,7 @@ final class ConvertPayoutActionTest extends GenericActionTest
         $this->assertSame([
             'foo' => 'fooVal',
             'CURRENCYCODE' => 'USD',
-            'L_AMT0' => 1.23,
+            'L_AMT0' => '1.23',
             'L_NOTE0' => 'the description',
             'RECEIVERTYPE' => 'EmailAddress',
             'L_EMAIL0' => 'theRecipientEmail',

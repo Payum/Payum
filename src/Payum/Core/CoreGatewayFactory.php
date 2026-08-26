@@ -23,6 +23,14 @@ use Http\Message\MessageFactory\DiactorosMessageFactory;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
 use LogicException;
+use Money\Currencies;
+use Money\Currencies\AggregateCurrencies;
+use Money\Currencies\CryptoCurrencies;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\MoneyFormatter;
+use Money\MoneyParser;
+use Money\Parser\DecimalMoneyParser;
 use Nyholm\Psr7\Factory\HttplugFactory;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
@@ -301,6 +309,14 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     self::composeTemplatePaths($c),
                 ),
 
+                // What every money in this gateway is measured against. ISO 4217 first, so a code that
+                // means one thing there cannot be shadowed; crypto after it, which is what makes an
+                // eight- or eighteen-decimal amount come out right. Register your own to add a currency
+                // neither lists.
+                Currencies::class => static fn (): Currencies => new AggregateCurrencies([new ISOCurrencies(), new CryptoCurrencies()]),
+                MoneyFormatter::class => static fn (ContainerInterface $c): MoneyFormatter => new DecimalMoneyFormatter($c->get(Currencies::class)),
+                MoneyParser::class => static fn (ContainerInterface $c): MoneyParser => new DecimalMoneyParser($c->get(Currencies::class)),
+
                 'payum.default_options' => [],
                 'payum.required_options' => [],
 
@@ -327,7 +343,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 'payum.action.authorize_payment' => static fn () => new AuthorizePaymentAction(),
                 'payum.action.payout_payout' => static fn () => new PayoutPayoutAction(),
                 'payum.action.execute_same_request_with_model_details' => static fn () => new ExecuteSameRequestWithModelDetailsAction(),
-                'payum.action.get_currency' => static fn () => new GetCurrencyAction(),
+                'payum.action.get_currency' => static fn (ContainerInterface $c) => $c->get(GetCurrencyAction::class),
                 'payum.action.render_template' => static fn (ContainerInterface $c) => $c->get(RenderTemplateAction::class),
                 'payum.action.get_token' => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
                     ? new GetTokenAction($c->get('payum.security.token_storage'))
@@ -340,6 +356,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // dispatching GetHttpRequest or RenderTemplate needs nothing registered by hand.
                 GetHttpRequestAction::class => static fn (ContainerInterface $c) => new GetHttpRequestAction($c->get(ServerRequestInterface::class)),
                 RenderTemplateAction::class => static fn (ContainerInterface $c) => new RenderTemplateAction($c->get(RendererInterface::class)),
+                GetCurrencyAction::class => static fn (ContainerInterface $c) => new GetCurrencyAction($c->get(Currencies::class)),
 
                 // GetTokenAction is conditionally added in createGateway() if token storage is available
                 GetTokenAction::class => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')

@@ -103,7 +103,7 @@ final class CaptureHandler implements CaptureHandlerInterface
 
         $checkout = $this->api->createCheckout([
             'return_url' => $context->token()?->getTargetUrl(),
-            'amount' => $command->amount ?? $context->payment()?->getTotalAmount(),
+            'amount' => $context->amount()?->getAmount(),
             'currency' => $context->payment()?->getCurrencyCode(),
         ]);
 
