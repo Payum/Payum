@@ -3,6 +3,7 @@
 * [Payum docs](README.md)
 * [Get started](get-it-started.md)
 * [Instant payment notification](instant-payment-notification.md)
+* [Money](money.md)
 * [ISO4217 or Currency Details](iso4217-or-currency-details.md)
 * [The Architecture](the-architecture.md)
 * [Gateways](gateways/README.md)

@@ -4,15 +4,29 @@ declare(strict_types=1);
 
 namespace Payum\Core\Result;
 
+use Money\Money;
+use Payum\Core\Money\Amount;
+
 /**
  * The outcome of a {@see \Payum\Core\Command\PayoutCommand}.
  */
 final class PayoutResult extends Result
 {
     /**
+     * In minor units. The lossy view of {@see self::$paidOutMoney}, and null whenever that is.
+     */
+    public readonly ?int $paidOutAmount;
+
+    /**
+     * Set only when the handler reported a Money. Null says nothing about what went out — read
+     * {@see self::$paidOutAmount} against the payout's currency.
+     */
+    public readonly ?Money $paidOutMoney;
+
+    /**
      * @param array<string, mixed> $raw
-     * @param int|null $paidOutAmount in minor units. Lower than asked for when a PSP fulfils a batch in
-     *                                part
+     * @param int|Money|null $paidOutAmount lower than asked for when a PSP fulfils a batch in part. An int
+     *                                      is read as minor units of the payout's currency
      */
     public function __construct(
         ?PaymentStatus $status,
@@ -20,9 +34,12 @@ final class PayoutResult extends Result
         ?string $transactionId = null,
         ?Failure $failure = null,
         array $raw = [],
-        public readonly ?int $paidOutAmount = null,
+        int|Money|null $paidOutAmount = null,
     ) {
         parent::__construct($status, $next, $transactionId, $failure, $raw);
+
+        $this->paidOutMoney = $paidOutAmount instanceof Money ? $paidOutAmount : null;
+        $this->paidOutAmount = $paidOutAmount instanceof Money ? Amount::toMinorUnits($paidOutAmount) : $paidOutAmount;
     }
 
     /**
@@ -41,7 +58,7 @@ final class PayoutResult extends Result
     /**
      * @param array<string, mixed> $raw
      */
-    public static function paidOut(?string $transactionId = null, ?int $paidOutAmount = null, array $raw = []): self
+    public static function paidOut(?string $transactionId = null, int|Money|null $paidOutAmount = null, array $raw = []): self
     {
         return new self(PaymentStatus::PaidOut, transactionId: $transactionId, raw: $raw, paidOutAmount: $paidOutAmount);
     }

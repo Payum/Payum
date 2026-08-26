@@ -75,7 +75,7 @@ final class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($result);
 
         $this->assertArrayHasKey('amount', $result);
-        $this->assertEqualsWithDelta(1.23, $result['amount'], PHP_FLOAT_EPSILON);
+        $this->assertSame('1.23', $result['amount']);
 
         $this->assertArrayHasKey('invoice_num', $result);
         $this->assertSame('theNumber', $result['invoice_num']);

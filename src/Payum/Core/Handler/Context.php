@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Payum\Core\Handler;
 
+use Money\Money;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\HasAmount;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Money\Amount;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
@@ -55,6 +58,27 @@ final class Context
         private readonly array $previous = [],
         private readonly ?string $gatewayName = null,
     ) {
+    }
+
+    /**
+     * How much this execution is for: what the command asked for, or the subject's full amount when it
+     * asked for nothing.
+     *
+     * This is the one a handler wants. Reading $command->amount instead gets a partial capture right and
+     * a full one wrong, because a full one carries no amount at all.
+     *
+     * Null when the subject names no currency, which for a command that gave no amount either means there
+     * is nothing to work out.
+     */
+    public function amount(): ?Money
+    {
+        $subject = Amount::of($this->subject);
+
+        if (! $this->command instanceof HasAmount) {
+            return $subject;
+        }
+
+        return $this->command->money($subject?->getCurrency()) ?? $subject;
     }
 
     /**

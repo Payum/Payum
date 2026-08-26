@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Tests\Action;
 
 use Iterator;
+use Money\Currencies\CurrencyList;
 use Payum\Core\Action\GetCurrencyAction;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetCurrency;
@@ -57,5 +58,26 @@ final class GetCurrencyActionTest extends GenericActionTest
         $action = new GetCurrencyAction();
 
         $action->execute($getCurrency = new GetCurrency('000'));
+    }
+
+    public function testShouldAnswerForACurrencyIso4217DoesNotList(): void
+    {
+        $action = new GetCurrencyAction(new CurrencyList([
+            'ETH' => 18,
+        ]));
+
+        $action->execute($getCurrency = new GetCurrency('ETH'));
+
+        $this->assertSame('ETH', $getCurrency->alpha3);
+        $this->assertSame(18, $getCurrency->exp);
+    }
+
+    public function testShouldStillThrowForACurrencyNothingKnows(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        (new GetCurrencyAction(new CurrencyList([
+            'ETH' => 18,
+        ])))->execute(new GetCurrency('XYZ'));
     }
 }

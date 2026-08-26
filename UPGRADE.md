@@ -4,7 +4,32 @@
 
 * Dropped support for PHP 7.x
 * Twig 1.x is no longer supported
-* `Payum\Core\Action\GetCurrencyAction` does not accept any constructor arguments anymore and uses alcohol/iso4217 by default
+* `Payum\Core\Action\GetCurrencyAction` uses alcohol/iso4217 by default. Its one constructor argument is now
+  an optional `Money\Currencies`, which it falls back to for a code ISO 4217 does not list.
+* Monetary values are expressed as [`moneyphp/money`](https://moneyphp.org) objects. See
+  [docs/money.md](docs/money.md). Nothing is removed, so an application using integers keeps working:
+  * `CaptureCommand`, `AuthorizeCommand` and `RefundCommand` take a `Money\Money` as well as an int, and
+    answer `money()` alongside the `$amount` they already had.
+  * `CaptureResult`, `AuthorizeResult`, `RefundResult` and `PayoutResult` take a `Money` as well as an int
+    and expose `capturedMoney`, `authorizedMoney`, `refundedMoney` and `paidOutMoney` alongside their
+    integer counterparts. Reporting a `Money` fills in both.
+  * A handler should read `Payum\Core\Handler\Context::amount()` rather than `$command->amount`. A full
+    capture carries no amount on the command at all, so the command alone is not enough to charge from.
+  * `Payum\Core\Model\Payment` and `Payout` implement `Payum\Core\Model\MoneyAwareInterface`, mapping
+    `getMoney()`/`setMoney()` over the `totalAmount` and `currencyCode` they already store. **No database
+    or Doctrine mapping changes.** Your own entity opts in by implementing the same interface;
+    `Payum\Core\Money\Amount` reads and writes an amount on a model either way.
+  * `PaymentInterface::getTotalAmount()` and `getCurrencyCode()` are documented as nullable, which they
+    always were in practice. This is a docblock change; static analysis may report new possible nulls.
+* A `Money\Currencies` service decides how many decimal places a currency has, with `Money\MoneyFormatter`
+  and `Money\MoneyParser` defined against it. It covers ISO 4217 and moneyphp's crypto list; register your
+  own with `PayumBuilder::addGlobalService(Currencies::class, ...)` to add a currency neither lists.
+  `Payum\Core\Request\GetCurrency` reads from it too, so an unported 1.x gateway benefits.
+* The convert actions of PayPal Express Checkout, Pro Checkout and Masspay, Sofort and Authorize.Net AIM
+  put an exact decimal **string** in the details array where they used to put a float divided by
+  `10 ** exp`. The value sent to the PSP is unchanged for a two-decimal currency, correct for the others,
+  and always carries the currency's full number of decimal places. Code reading those details and doing
+  arithmetic on them should cast, or read the payment instead.
 * Support for Propel storage has been removed
 * The `Payum\Core\Bridge\Guzzle\HttpClient` and `Payum\Core\Bridge\Guzzle\HttpClientFactory` classes have been removed
 * The signatures in `src/Payum/Core/Registry/GatewayRegistryInterface.php` has been changed to add strict types.

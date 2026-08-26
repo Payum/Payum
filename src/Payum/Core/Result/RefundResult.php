@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Payum\Core\Result;
 
+use Money\Money;
+use Payum\Core\Money\Amount;
+
 /**
  * The outcome of a {@see \Payum\Core\Command\RefundCommand}.
  *
@@ -13,8 +16,19 @@ namespace Payum\Core\Result;
 final class RefundResult extends Result
 {
     /**
+     * In minor units. The lossy view of {@see self::$refundedMoney}, and null whenever that is.
+     */
+    public readonly ?int $refundedAmount;
+
+    /**
+     * Set only when the handler reported a Money. Null says nothing about what went back — read
+     * {@see self::$refundedAmount} against the payment's currency.
+     */
+    public readonly ?Money $refundedMoney;
+
+    /**
      * @param array<string, mixed> $raw
-     * @param int|null $refundedAmount in minor units
+     * @param int|Money|null $refundedAmount an int is read as minor units of the payment's currency
      */
     public function __construct(
         ?PaymentStatus $status,
@@ -22,9 +36,12 @@ final class RefundResult extends Result
         ?string $transactionId = null,
         ?Failure $failure = null,
         array $raw = [],
-        public readonly ?int $refundedAmount = null,
+        int|Money|null $refundedAmount = null,
     ) {
         parent::__construct($status, $next, $transactionId, $failure, $raw);
+
+        $this->refundedMoney = $refundedAmount instanceof Money ? $refundedAmount : null;
+        $this->refundedAmount = $refundedAmount instanceof Money ? Amount::toMinorUnits($refundedAmount) : $refundedAmount;
     }
 
     /**
@@ -53,7 +70,7 @@ final class RefundResult extends Result
     /**
      * @param array<string, mixed> $raw
      */
-    public static function refunded(?string $transactionId = null, ?int $refundedAmount = null, array $raw = []): self
+    public static function refunded(?string $transactionId = null, int|Money|null $refundedAmount = null, array $raw = []): self
     {
         return new self(PaymentStatus::Refunded, transactionId: $transactionId, raw: $raw, refundedAmount: $refundedAmount);
     }
@@ -61,7 +78,7 @@ final class RefundResult extends Result
     /**
      * @param array<string, mixed> $raw
      */
-    public static function partiallyRefunded(?string $transactionId = null, ?int $refundedAmount = null, array $raw = []): self
+    public static function partiallyRefunded(?string $transactionId = null, int|Money|null $refundedAmount = null, array $raw = []): self
     {
         return new self(PaymentStatus::PartiallyRefunded, transactionId: $transactionId, raw: $raw, refundedAmount: $refundedAmount);
     }

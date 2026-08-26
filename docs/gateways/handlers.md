@@ -20,6 +20,7 @@ use Acme\Payum\Api\AcmeApi;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\RefundHandlerInterface;
+use Payum\Core\Money\Amount;
 use Payum\Core\Result\RefundResult;
 
 final class RefundHandler implements RefundHandlerInterface
@@ -30,14 +31,13 @@ final class RefundHandler implements RefundHandlerInterface
 
     public function handle(RefundCommand $command, Context $context): RefundResult
     {
-        $refund = $this->api->refund(
-            $context->state()['charge_id'],
-            $command->amount,
-        );
+        $amount = $context->amount();
 
-        return null === $command->amount
-            ? RefundResult::refunded($refund['id'], $refund['amount'])
-            : RefundResult::partiallyRefunded($refund['id'], $refund['amount']);
+        $refund = $this->api->refund($context->state()['charge_id'], $amount->getAmount());
+
+        return $amount->equals(Amount::of($context->payment()))
+            ? RefundResult::refunded($refund['id'], $amount)
+            : RefundResult::partiallyRefunded($refund['id'], $amount);
     }
 }
 ```
@@ -70,6 +70,7 @@ Do not take the payment, the token or the HTTP request. Those belong to a single
 | Method | What it gives you |
 | :--- | :--- |
 | `state()` | The PSP state carried across requests, as an `ArrayObject` |
+| `amount()` | How much this execution is for, as a `Money` |
 | `subject()` | What the command operates on, resolved from the command or loaded from its token |
 | `payment()` | The subject when it is a payment, else null |
 | `payout()` | The subject when it is a payout, else null |
@@ -83,6 +84,10 @@ Do not take the payment, the token or the HTTP request. Those belong to a single
 | `gatewayName()` | The name this gateway is registered under |
 | `notifyUrl()` | A URL the PSP can post notifications about this payment to |
 | `notifyToken()` | The token behind that URL |
+
+Read `amount()` rather than `$command->amount`. A **full** capture carries no amount on the command at
+all, so a handler reading the command charges nothing; `amount()` falls back to the subject and hands you
+a `Money` either way. See [Money](../money.md).
 
 `NotifyHandlerInterface` is the one handler whose `handle()` takes three parameters — the verified event
 arrives between the command and the context, and it has a `verify()` alongside. See
@@ -123,8 +128,8 @@ final class CaptureHandler implements CaptureHandlerInterface
         $checkout = $this->api->createCheckout([
             'return_url' => $context->token()?->getTargetUrl(),
             'cancel_url' => $context->token()?->getTargetUrl() . '?cancelled=1',
-            'amount' => $command->amount ?? $context->payment()?->getTotalAmount(),
-            'currency' => $context->payment()?->getCurrencyCode(),
+            'amount' => $context->amount()?->getAmount(),
+            'currency' => $context->amount()?->getCurrency()->getCode(),
         ]);
 
         $state['checkout_id'] = $checkout['id'];
