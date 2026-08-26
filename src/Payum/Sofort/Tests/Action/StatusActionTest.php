@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Sofort\Tests\Action;
 
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Tests\GenericActionTest;
+use Payum\Core\Tests\Mocks\Clock\FrozenClock;
 use Payum\Sofort\Action\StatusAction;
 use Payum\Sofort\Api;
+use Psr\Clock\ClockInterface;
 
 final class StatusActionTest extends GenericActionTest
 {
@@ -19,13 +22,27 @@ final class StatusActionTest extends GenericActionTest
 
     public function testShouldMarkExpiredIfPaymentExpirationTimePassed(): void
     {
-        $expires = time();
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
         $request = $this->executeRequestWithDetails([
             'transaction_id' => self::TRANSACTION_ID,
-            'expires' => --$expires,
-        ]);
+            'expires' => $clock->now()->getTimestamp() - 1,
+        ], $clock);
 
         $this->assertTrue($request->isExpired());
+    }
+
+    public function testShouldNotMarkExpiredWhileTheExpirationTimeIsStillAhead(): void
+    {
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
+        $request = $this->executeRequestWithDetails([
+            'transaction_id' => self::TRANSACTION_ID,
+            'expires' => $clock->now()->getTimestamp() + 1,
+        ], $clock);
+
+        $this->assertFalse($request->isExpired());
+        $this->assertTrue($request->isNew());
     }
 
     public function testShouldMarkNewIfPaymentWithoutTransactionId(): void
@@ -147,9 +164,9 @@ final class StatusActionTest extends GenericActionTest
      * @param array $details
      * @return GetHumanStatus
      */
-    private function executeRequestWithDetails($details)
+    private function executeRequestWithDetails($details, ClockInterface $clock = new SystemClock())
     {
-        $action = new StatusAction();
+        $action = new StatusAction($clock);
         $request = new GetHumanStatus($details);
         $action->execute($request);
 

@@ -37,6 +37,7 @@ use Payum\Core\Bridge\Httplug\HttplugClient;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Bridge\Twig\TwigUtil;
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
@@ -52,6 +53,7 @@ use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Template\RendererInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -260,6 +262,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
                 RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
                 ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
+
+                // Every time read goes through this, so that expiry and staleness can be tested at a
+                // fixed instant. The application registers its own through PayumBuilder, which wins
+                // over this one.
+                ClockInterface::class => static fn (): ClockInterface => new SystemClock(),
 
                 // Middleware wrapping command execution. The collection is what decides the order;
                 // PayumBuilder replaces it with the defaults plus whatever the application and the

@@ -26,6 +26,7 @@ Payum v2.0 uses a **hybrid container architecture**:
 │  - Storage Extensions                       │
 │  - PSR-18 HTTP Client (shared)              │
 │  - PSR-17 Factories                         │
+│  - PSR-20 Clock                             │
 │  - Anything from addGlobalService()         │
 └──────────────┬──────────────────────────────┘
                │ delegated to
@@ -123,6 +124,33 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
+### Controlling the Clock
+
+Everything in Payum that depends on the current time reads it from the PSR-20 clock in the global
+container rather than calling `time()`. That clock is a `Payum\Core\Clock\SystemClock` unless you replace
+it.
+
+Replace it and time stands still, which is what makes expiry testable:
+
+```php
+<?php
+
+use Psr\Clock\ClockInterface;
+use Symfony\Component\Clock\MockClock;
+
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+
+    ->addGlobalService(ClockInterface::class, new MockClock('2026-01-01 12:00:00'))
+
+    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
+    ->getPayum();
+```
+
+Any PSR-20 implementation will do -- `symfony/clock`, `lcobucci/clock`, or one of your own. Applications
+that already have a clock service should register that one, so that Payum and the rest of the application
+agree on what "now" is.
+
 ## Understanding the Container System
 
 ### Global Services
@@ -136,6 +164,7 @@ These services are instantiated once and shared across all gateways:
 - `ClientInterface` (PSR-18) - HTTP client
 - `StreamFactoryInterface` (PSR-17) - HTTP stream factory
 - `RequestFactoryInterface` (PSR-17) - HTTP request factory
+- `ClockInterface` (PSR-20) - the current time
 - Storage extensions for all registered models
 - Every service registered with `addGlobalService()`
 

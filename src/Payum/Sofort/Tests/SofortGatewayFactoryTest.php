@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Payum\Sofort\Tests;
 
+use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Tests\AbstractGatewayFactoryTest;
+use Payum\Core\Tests\Mocks\Clock\FrozenClock;
+use Payum\Sofort\Action\StatusAction;
 use Payum\Sofort\SofortGatewayFactory;
+use Psr\Clock\ClockInterface;
+use ReflectionProperty;
 
 final class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
 {
@@ -65,6 +71,21 @@ final class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         $factory->create();
     }
 
+    public function testShouldInjectTheContainersClockIntoTheStatusAction(): void
+    {
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
+        $factory = new SofortGatewayFactory([], new CoreGatewayFactory([
+            ClockInterface::class => $clock,
+        ]));
+
+        $action = $this->findStatusAction($factory->create($this->getRequiredOptions()));
+
+        $ref = new ReflectionProperty($action, 'clock');
+
+        $this->assertSame($clock, $ref->getValue($action));
+    }
+
     protected function getGatewayFactoryClass(): string
     {
         return SofortGatewayFactory::class;
@@ -75,5 +96,16 @@ final class SofortGatewayFactoryTest extends AbstractGatewayFactoryTest
         return [
             'config_key' => 'foo:bar:baz',
         ];
+    }
+
+    private function findStatusAction(GatewayInterface $gateway): StatusAction
+    {
+        foreach ($this->getPropertyValue($gateway, 'actions') as $action) {
+            if ($action instanceof StatusAction) {
+                return $action;
+            }
+        }
+
+        $this->fail('The gateway has no status action.');
     }
 }

@@ -67,6 +67,12 @@
     hash instead, which is what `HttpRequestVerifier` has always used. A handler is given its token on
     `Context::token()`.
   * `ObtainCreditCard` is unchanged: it stays with the framework integration for 2.0.
+* The current time is read through a PSR-20 clock. `Psr\Clock\ClockInterface` is registered in the global
+  container as a `Payum\Core\Clock\SystemClock`; register any other implementation with
+  `PayumBuilder::addGlobalService(ClockInterface::class, $clock)` — or from your own global container — and
+  every time read follows it, which is what lets a test freeze expiry at a fixed instant.
+  * `Payum\Sofort\Action\StatusAction` takes the clock as its first constructor argument. It defaults to a
+    system clock, so `new StatusAction()` keeps working.
 
 ## 1.5.0
 

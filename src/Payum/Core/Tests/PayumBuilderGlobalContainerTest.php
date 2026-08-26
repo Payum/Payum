@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
+use Payum\Core\Clock\SystemClock;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
@@ -27,6 +28,8 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Tests\Mocks\Clock\FrozenClock;
+use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -142,6 +145,30 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($container->get(ClientInterface::class), $container->get(ClientInterface::class));
         $this->assertSame($container->get(StreamFactoryInterface::class), $container->get(StreamFactoryInterface::class));
         $this->assertSame($container->get(RequestFactoryInterface::class), $container->get(RequestFactoryInterface::class));
+    }
+
+    public function testBuildGlobalContainerShouldProvideASystemClockByDefault(): void
+    {
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertInstanceOf(SystemClock::class, $container->get(ClockInterface::class));
+        $this->assertSame($container->get(ClockInterface::class), $container->get(ClockInterface::class));
+    }
+
+    public function testBuildGlobalContainerShouldLetTheApplicationReplaceTheClock(): void
+    {
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ClockInterface::class, $clock)
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertSame($clock, $container->get(ClockInterface::class));
     }
 
     public function testBuildGlobalContainerShouldAddDefaultStoragesWhenNoTokenStorageIsSet(): void
@@ -544,6 +571,26 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(TokenFactoryInterface::class, $container->get(TokenFactoryInterface::class));
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+        $this->assertInstanceOf(ClockInterface::class, $container->get(ClockInterface::class));
+    }
+
+    public function testShouldPassTheApplicationsClockToTheGatewayContainer(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        $clock = new FrozenClock('2026-01-01 12:00:00');
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ClockInterface::class, $clock)
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($clock, $factory->container->get(ClockInterface::class));
     }
 
     public function testShouldShareTheGlobalServicesBetweenAllGatewayContainers(): void
@@ -574,6 +621,7 @@ final class PayumBuilderGlobalContainerTest extends TestCase
             ClientInterface::class,
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
+            ClockInterface::class,
         ] as $serviceId) {
             $this->assertSame(
                 $firstFactory->container->get($serviceId),
