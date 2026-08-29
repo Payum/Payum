@@ -194,10 +194,6 @@ final class CaptureHandler implements CaptureHandlerInterface
 +return CaptureResult::captured($details['charge_id']);
 ```
 
-### Moving one operation at a time
-
-You do not have to port everything at once. A gateway can keep its factory and actions while a single handler moves across — `execute()` routes by argument type, so the two coexist in the same package.
-
 ### Dispatching a command at a gateway you have not ported
 
 You get a `CommandNotSupportedException` saying so, rather than one that reads like a missing handler:
@@ -336,6 +332,71 @@ Two ordering rules worth knowing:
 
 - **Handlers are asked before actions.** They have to be: a token is a `DetailsAggregateInterface`, so core's `ExecuteSameRequestWithModelDetailsAction` claims `Capture($token)`. Asking actions first would swallow almost every request before a handler saw it.
 - **Except for status requests**, where an action wins. A gateway still holding a status action reads the details of whatever has not moved, which is more than the recorded status knows.
+
+### Driving an action you have not rewritten yet
+
+`DeclaresActions` covers a whole operation: an unported action keeps answering the 1.x request it always answered. What it does not cover is an application that has adopted commands — a `CaptureCommand` sent at your gateway finds no handler and fails, even though your capture action is sitting right there.
+
+Wrap the action instead. There is one adapter per operation in `Payum\Core\Legacy\Handler` — `CaptureActionHandler`, `AuthorizeActionHandler`, `RefundActionHandler`, `CancelActionHandler`, `SyncActionHandler`, `PayoutActionHandler`, `NotifyActionHandler`:
+
+```php
+use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\Legacy\Handler\CaptureActionHandler;
+use Psr\Container\ContainerInterface;
+
+final class AcmeGateway implements GatewayInterface, ContainerConfiguration
+{
+    public function handlers(): array
+    {
+        return [CaptureActionHandler::class];
+    }
+
+    public function configureContainer(): array
+    {
+        return [
+            CaptureActionHandler::class => fn (ContainerInterface $c) => new CaptureActionHandler(
+                new CaptureAction($c->get(AcmeApi::class)),
+            ),
+        ];
+    }
+}
+```
+
+The action itself does not change. It gets the details array as its model, the token the command arrived on, the gateway to dispatch sub-requests at, and the token factory if it asks for one. `HttpRedirect` and `HttpPostRedirect` come back out as `Redirect` and `PostRedirect` on the result.
+
+Four things to know before relying on it:
+
+- **Status is still read the 1.x way.** Once the action returns, the adapter dispatches `GetHumanStatus` and puts the answer on the result. Keep your status action until the operation is properly ported, or the result reports no status at all.
+- **The 1.x machinery comes with it.** Core's own actions and extensions stay on a gateway whose handler list contains an adapter, the same as one implementing `DeclaresActions` — an action dispatching `GetHttpRequest` still expects an answer.
+- **A rendered `HttpResponse` is rethrown.** No next action means "here is a page". A 1.x caller catches it exactly as before; a caller working with results sees it escape, which is honest rather than reporting a payment finished when it is not.
+- **A notify action goes on verifying itself.** 2.0 splits deciding a message is genuine from acting on it and 1.x does both inside `execute()`, so `NotifyActionHandler::verify()` reports `WebhookEvent::unverified()` and leaves the check where it is. The response the action throws becomes the result's `Acknowledgement`.
+
+### Reaching a handler from a gateway your factory still assembles
+
+The other direction, for a gateway that has not moved off `GatewayFactory` yet. Register a `HandlerToActionAdapter` where the action used to be, and the handler behind it answers everything that already talks to your gateway:
+
+```php
+use Payum\Core\Legacy\HandlerToActionAdapter;
+
+protected function populateConfig(ArrayObject $config): void
+{
+    $config->defaults([
+        'payum.action.capture' => fn (ArrayObject $config) => new HandlerToActionAdapter(
+            new CaptureHandler($config['payum.api']),
+        ),
+        'payum.action.refund' => new RefundAction(),   // not yet
+    ]);
+}
+```
+
+Which request it answers is read off the handler, so there is nothing to keep in step. `Capture` reaches the handler; everything else goes on reaching the actions it always did.
+
+The handler gets a real `Context` — state, token, HTTP request, token factory — and the middleware that persists what it writes and records the status it declares. What it returns is turned back into a reply and thrown, so callers catch what they always caught.
+
+Two limits:
+
+- `$context->gateway()` is null. There is no gateway class describing a gateway a factory assembled.
+- `$context->execute()` cannot dispatch a sub-command, because the gateway has no handlers registered on it. A handler that needs one is past what this adapter is for — port the gateway.
 
 ### Moving your own code across
 

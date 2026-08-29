@@ -396,6 +396,12 @@ class Gateway implements GatewayInterface
             throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
         }
 
+        // Only a handler wrapping a 1.x action asks for this: the action it holds still dispatches
+        // GetHttpRequest and RenderTemplate at the gateway, and something has to be there to dispatch on.
+        if ($handler instanceof GatewayAwareInterface) {
+            $handler->setGateway($this);
+        }
+
         if ($handler instanceof NotifyHandlerInterface) {
             if (! $command instanceof NotifyCommand) {
                 throw new LogicException(sprintf(

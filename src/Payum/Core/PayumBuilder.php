@@ -78,6 +78,7 @@ use Twig\Loader\ChainLoader;
 use function array_merge;
 use function array_replace;
 use function DI\autowire;
+use function DI\get;
 use function in_array;
 use function is_a;
 use function is_dir;
@@ -436,16 +437,25 @@ class PayumBuilder
 
             $containerBuilder = new ContainerBuilder();
 
-            // Core defaults first, then the services shared by every gateway, then what the gateway
-            // declares for itself. Last wins.
+            // Core defaults first, then the services shared by every gateway, then the handler bindings,
+            // then what the gateway declares for itself. Last wins.
             $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
             $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
+
+            $handlerDefinitions = [];
+
+            foreach (HandlerMap::fromHandlers($gateway->handlers())->bindings() as $interface => $handlerClass) {
+                // The interface resolves to the entry, not to a fresh autowired instance, so that a gateway
+                // declaring the handler itself -- decorated, or wrapping a 1.x action -- is what gets used.
+                $handlerDefinitions[$handlerClass] = autowire($handlerClass);
+                $handlerDefinitions[$interface] = get($handlerClass);
+            }
+
+            $containerBuilder->addDefinitions($handlerDefinitions);
 
             if (null !== $gatewayDefinitions) {
                 $containerBuilder->addDefinitions($gatewayDefinitions);
             }
-
-            $handlerDefinitions = array_map(autowire(...), HandlerMap::fromHandlers($gateway->handlers())->bindings());
 
             // Core defaults first, then what the application registered, then the gateway's own, so a
             // gateway's middleware runs innermost on equal priority.
@@ -457,7 +467,6 @@ class PayumBuilder
                 }
             }
 
-            $containerBuilder->addDefinitions($handlerDefinitions);
             $containerBuilder->addDefinitions([
                 MiddlewareCollection::class => $middleware,
             ]);
