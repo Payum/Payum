@@ -14,10 +14,10 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-@trigger_error('The ' . __NAMESPACE__ . '\GatewayConfigType class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\GatewayConfigType class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\GatewayConfigType from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\GatewayConfigType from payum/payum-bundle instead.
  */
 class GatewayConfigType extends AbstractType
 {

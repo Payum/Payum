@@ -42,6 +42,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use ReflectionProperty;
 use Throwable;
 use function func_num_args;
+use function get_debug_type;
 use function trigger_deprecation;
 
 class Gateway implements GatewayInterface
@@ -53,7 +54,8 @@ class Gateway implements GatewayInterface
 
     /**
      * @var mixed[]
-     * @deprecated since 2.0. BC will be removed in 3.x. Use dependency-injection to inject the api into the action instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Take the api as a constructor argument on the
+     *             action instead, and let the container inject it.
      */
     protected $apis = [];
 
@@ -83,6 +85,15 @@ class Gateway implements GatewayInterface
      */
     protected array $commandStack = [];
 
+    /**
+     * What has already been reported as 1.x, keyed by request class or by argument name. A gateway
+     * dispatches the same request on every payment, so reporting per call would bury the notice in
+     * repetitions of itself; the thing to change is the request, and there is one of those per class.
+     *
+     * @var array<string, true>
+     */
+    private static array $reportedLegacyUse = [];
+
     public function __construct()
     {
         $this->extensions = new ExtensionCollection();
@@ -94,12 +105,11 @@ class Gateway implements GatewayInterface
      */
     public function addApi($api, $forcePrepend = false): void
     {
-        @trigger_error(
-            sprintf(
-                'The %s method is deprecated and will be removed in 3.0. Use dependency-injection to inject the api into the action instead.',
-                __METHOD__
-            ),
-            E_USER_DEPRECATED
+        trigger_deprecation(
+            'payum/core',
+            '2.0.0',
+            'The %s method is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.',
+            __METHOD__
         );
 
         $forcePrepend ?
@@ -113,6 +123,17 @@ class Gateway implements GatewayInterface
      */
     public function addAction(ActionInterface $action, $forcePrepend = false): void
     {
+        // Registration happens once per action, and handing the api over happens on every execute().
+        if ($action instanceof ApiAwareInterface) {
+            trigger_deprecation(
+                'payum/core',
+                '2.0.0',
+                'Implementing %s in %s is deprecated and will be removed in 3.0. Take the api as a constructor argument instead, and let the container inject it.',
+                ApiAwareInterface::class,
+                $action::class,
+            );
+        }
+
         $forcePrepend ?
             array_unshift($this->actions, $action) :
             array_push($this->actions, $action)
@@ -134,13 +155,16 @@ class Gateway implements GatewayInterface
 
     public function execute(/* CommandInterface */ $request, $catchReply = false)
     {
-        if (func_num_args() > 1) {
+        if (func_num_args() > 1 && ! isset(self::$reportedLegacyUse['$catchReply'])) {
+            self::$reportedLegacyUse['$catchReply'] = true;
+
             trigger_deprecation(
                 'payum/core',
-                '2.0',
-                'Passing the $catchReply argument to %s is deprecated and will be removed in 3.0. Use %s::execute($request) instead.',
+                '2.0.0',
+                'Passing the $catchReply argument to %s is deprecated and will be removed in 3.0. Dispatch a %s and act on the %s it returns instead.',
                 __METHOD__,
-                self::class
+                CommandInterface::class,
+                Result::class,
             );
         }
 
@@ -148,14 +172,20 @@ class Gateway implements GatewayInterface
             return $this->dispatch($request);
         }
 
-        trigger_deprecation(
-            'payum/core',
-            '2.0',
-            'Not passing a %s instance to %s is deprecated and will not be supported in 3.0. Use %s::execute(CommandInterface $request) instead.',
-            CommandInterface::class,
-            __METHOD__,
-            self::class
-        );
+        $requestType = get_debug_type($request);
+
+        if (! isset(self::$reportedLegacyUse[$requestType])) {
+            self::$reportedLegacyUse[$requestType] = true;
+
+            trigger_deprecation(
+                'payum/core',
+                '2.0.0',
+                'Passing a %s to %s is deprecated and will not be supported in 3.0. Dispatch the %s that means the same thing instead.',
+                $requestType,
+                __METHOD__,
+                CommandInterface::class,
+            );
+        }
 
         // A 1.x request is answered by the handler that means the same thing, when the gateway has one.
         //
@@ -317,15 +347,6 @@ class Gateway implements GatewayInterface
             }
 
             if ($action instanceof ApiAwareInterface) {
-                @trigger_error(
-                    sprintf(
-                        'Implementing the %s interface in %s is deprecated and will be removed in 2.0. Use dependency-injection to inject the api into the action instead.',
-                        ApiAwareInterface::class,
-                        $action::class,
-                    ),
-                    E_USER_DEPRECATED
-                );
-
                 $apiSet = false;
                 $unsupportedException = null;
                 foreach ($this->apis as $api) {

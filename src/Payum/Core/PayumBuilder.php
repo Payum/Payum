@@ -201,19 +201,21 @@ class PayumBuilder
     }
 
     /**
-     * @deprecated addGateway is deprecated and will be removed in 2.0. Use registerGateway() instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Core\PayumBuilder::registerGateway()
+     *             instead, passing the gateway's own Payum\Core\Config\GatewayConfig.
      *
      * @param GatewayInterface|array<string, mixed> $gateway
      */
-    #[Deprecated('addGateway is deprecated and will be removed in 2.0. Use registerGateway() instead.', '2.0.0')]
+    #[Deprecated('addGateway is deprecated and will be removed in 3.0. Use Payum\Core\PayumBuilder::registerGateway() instead.', '2.0.0')]
     public function addGateway(string $name, GatewayInterface | array $gateway): static
     {
         trigger_deprecation(
             'payum/core',
             '2.0.0',
-            '%s is deprecated and will be removed in 2.0. Use %s instead.',
+            '%s is deprecated and will be removed in 3.0. Use %s::registerGateway() instead, passing the gateway\'s own %s.',
             __METHOD__,
-            'registerGateway'
+            self::class,
+            GatewayConfig::class,
         );
         if ($gateway instanceof GatewayInterface) {
             $this->gateways[$name] = $gateway;
@@ -869,7 +871,9 @@ class PayumBuilder
     }
 
     /**
-     * @deprecated since 1.5 will be removed in 2.0
+     * @deprecated since 2.0.0, will be removed in 3.0 along with the Omnipay v2 bridge. Install
+     *             payum/omnipay-v3-bridge, whose factories are registered by
+     *             {@see self::buildOmnipayV3GatewayFactories()}.
      *
      * @return array<string, object>
      */

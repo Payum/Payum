@@ -7,6 +7,11 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\ReplyInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A middleware is given
+ *             Payum\Core\Handler\Context, which describes the execution rather than the action and
+ *             reply this one is typed to.
+ */
 class Context
 {
     /**

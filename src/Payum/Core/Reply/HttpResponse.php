@@ -2,6 +2,11 @@
 
 namespace Payum\Core\Reply;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A notify handler answers the PSP with a
+ *             Payum\Core\Result\Acknowledgement on its Payum\Core\Result\NotifyResult; a handler with a
+ *             page to show returns Payum\Core\Result\NextAction\RenderTemplate.
+ */
 class HttpResponse extends Base
 {
     /**

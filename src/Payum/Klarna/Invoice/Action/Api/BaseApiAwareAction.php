@@ -19,7 +19,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     }
 
     /**
-     * @deprecated BC. will be removed in 2.x. Use $this->api
+     * @deprecated since 2.0.0, will be removed in 3.0. Use $this->api
      *
      * @var Config
      */
@@ -43,7 +43,7 @@ abstract class BaseApiAwareAction implements ApiAwareInterface, ActionInterface
     {
         $this->_setApi($api);
 
-        // BC. will be removed in 2.x. Use $this->api
+        // BC. will be removed in 3.0. Use $this->api
         $this->config = $this->api;
     }
 
