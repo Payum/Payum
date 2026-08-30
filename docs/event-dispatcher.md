@@ -1,4 +1,12 @@
-# Event Dispatcher
+# Event Dispatcher (1.x)
+
+{% hint style="warning" %}
+This page covers gateways built from 1.x actions. `EventDispatcherExtension`, `ExecuteEvent` and
+`PayumEvents` are deprecated in 2.0 and removed in 3.0.
+
+A gateway built from handlers announces the payment lifecycle over PSR-14 with no extension to register —
+see [Events](events.md).
+{% endhint %}
 
 The EventDispatcherExtensions provides a Bridge to the [Symfony EventDispatcher Component](http://symfony.com/doc/current/components/event\_dispatcher/index.html). The EventDispatcherComponent allows you to add behaviour without changing Payum.
 

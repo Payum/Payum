@@ -48,6 +48,7 @@ use Payum\Core\Bridge\Twig\TwigUtil;
 use Payum\Core\Clock\SystemClock;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
+use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
@@ -65,6 +66,7 @@ use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -276,13 +278,20 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // over this one.
                 ClockInterface::class => static fn (): ClockInterface => new SystemClock(),
 
+                // Where the payment lifecycle is announced. A no-op by default, so core dispatches
+                // unconditionally; the application registers its own -- Symfony's, Laravel's, anything
+                // PSR-14 -- and starts hearing about it.
+                EventDispatcherInterface::class => static fn (): EventDispatcherInterface => new NullEventDispatcher(),
+
                 // Middleware wrapping command execution. The collection is what decides the order;
                 // PayumBuilder replaces it with the defaults plus whatever the application and the
                 // gateway registered.
                 MiddlewareCollection::class => self::defaultMiddleware(...),
                 EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
                 LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
-                RecordPaymentStatusMiddleware::class => static fn (): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(),
+                RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
+                    $c->get(EventDispatcherInterface::class),
+                ),
                 PersistStateMiddleware::class => static fn (ContainerInterface $c): PersistStateMiddleware => new PersistStateMiddleware(
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),

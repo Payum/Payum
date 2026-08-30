@@ -33,6 +33,8 @@ final class LoggingMiddleware implements MiddlewareInterface
 
 Call `$next` to continue. Return without calling it and the handler never runs, which is how a guard or a cache would work. Wrap it in `try`/`finally` for anything that has to happen even when the handler throws.
 
+If you only want to watch — audit trails, receipts, analytics, your own outbound webhooks — listen to an [event](../events.md) instead. Middleware is for the concerns that need to change what happens.
+
 `$next` takes a command and a context, so middleware can pass different ones on — a command is immutable, so this is how you would amend one.
 
 ### Registering it

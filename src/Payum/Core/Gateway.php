@@ -6,6 +6,13 @@ use Exception;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\NotifyCommand;
+use Payum\Core\Event\CommandDispatched;
+use Payum\Core\Event\CommandFailed;
+use Payum\Core\Event\FailureRaised;
+use Payum\Core\Event\HandlerResolved;
+use Payum\Core\Event\NullEventDispatcher;
+use Payum\Core\Event\ResultReturned;
+use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -31,6 +38,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetStatusInterface;
+use Payum\Core\Result\Failure;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
@@ -38,6 +46,7 @@ use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionProperty;
 use Throwable;
@@ -72,6 +81,8 @@ class Gateway implements GatewayInterface
     protected ?HandlerMap $handlerMap = null;
 
     protected ?Pipeline $pipeline = null;
+
+    protected ?EventDispatcherInterface $events = null;
 
     /**
      * The name this gateway is registered under. Set by the builder; null when built by hand.
@@ -371,17 +382,33 @@ class Gateway implements GatewayInterface
         }
 
         $context = $this->buildContext($command);
+        $events = $this->events();
+
+        $events->dispatch(new CommandDispatched($command, $context));
+
         $this->commandStack[] = $context;
 
         try {
-            return $this->pipeline()->process(
+            $result = $this->pipeline()->process(
                 $command,
                 $context,
                 fn (CommandInterface $c, HandlerContext $ctx): Result => $this->handle($serviceId, $c, $ctx),
             );
+        } catch (Throwable $exception) {
+            $events->dispatch(new CommandFailed($command, $context, $exception));
+
+            throw $exception;
         } finally {
             array_pop($this->commandStack);
         }
+
+        $events->dispatch(new ResultReturned($command, $context, $result));
+
+        if ($result->failure instanceof Failure) {
+            $events->dispatch(new FailureRaised($command, $context, $result->failure, $result));
+        }
+
+        return $result;
     }
 
     /**
@@ -396,6 +423,8 @@ class Gateway implements GatewayInterface
             throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
         }
 
+        $this->events()->dispatch(new HandlerResolved($command, $context, $handler));
+
         if ($handler instanceof NotifyHandlerInterface) {
             if (! $command instanceof NotifyCommand) {
                 throw new LogicException(sprintf(
@@ -408,7 +437,11 @@ class Gateway implements GatewayInterface
 
             // Verification runs here rather than during dispatch so that middleware wraps it: a message
             // that fails the check is something an application will want to see.
-            $result = $handler->handle($command, $handler->verify($context->httpRequest()), $context);
+            $webhook = $handler->verify($context->httpRequest());
+
+            $this->events()->dispatch(new WebhookReceived($command, $context, $webhook));
+
+            $result = $handler->handle($command, $webhook, $context);
         } else {
             $result = $handler->handle($command, $context);
         }
@@ -418,6 +451,23 @@ class Gateway implements GatewayInterface
         }
 
         return $result;
+    }
+
+    /**
+     * The application's PSR-14 dispatcher, or one that throws events away.
+     *
+     * Resolved rather than injected because a gateway built by hand has no container to resolve from, and
+     * a no-op is what keeps every call site free of a null check.
+     */
+    private function events(): EventDispatcherInterface
+    {
+        if ($this->events instanceof EventDispatcherInterface) {
+            return $this->events;
+        }
+
+        return $this->events = $this->container->has(EventDispatcherInterface::class)
+            ? $this->container->get(EventDispatcherInterface::class)
+            : new NullEventDispatcher();
     }
 
     /**

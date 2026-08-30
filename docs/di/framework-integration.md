@@ -451,6 +451,20 @@ use Psr\Clock\ClockInterface;
 ->addGlobalService(ClockInterface::class, $frameworkClock)
 ```
 
+### 7. Event Dispatcher Sharing
+
+Payum announces the payment lifecycle to the PSR-14 dispatcher in the global container. Register the
+application's own, so that its listeners hear about payments alongside everything else:
+
+```php
+use Psr\EventDispatcher\EventDispatcherInterface;
+
+->addGlobalService(EventDispatcherInterface::class, $frameworkEventDispatcher)
+```
+
+Symfony's `event_dispatcher` is PSR-14 already. A framework whose dispatcher is not needs a small adapter
+-- see [Events](../events.md).
+
 ## Troubleshooting
 
 ### Service Not Found

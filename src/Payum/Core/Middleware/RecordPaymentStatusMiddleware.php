@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Event\NullEventDispatcher;
+use Payum\Core\Event\StatusChanged;
 use Payum\Core\Handler\Context;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Commits the status a handler declared onto the payment.
@@ -20,6 +23,11 @@ use Payum\Core\Result\Result;
  */
 final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPriority
 {
+    public function __construct(
+        private readonly EventDispatcherInterface $events = new NullEventDispatcher()
+    ) {
+    }
+
     /**
      * Inside PersistStateMiddleware, so the status is set before the payment is written away. Recording it
      * further out would persist it one command late.
@@ -39,8 +47,16 @@ final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPri
 
         // A null status means the operation concluded nothing about the payment — a declined refund
         // leaves a captured payment captured.
-        if ($subject instanceof SubjectInterface && $result->status instanceof PaymentStatus) {
-            PaymentStatuses::set($subject, $result->status);
+        if (! $subject instanceof SubjectInterface || ! $result->status instanceof PaymentStatus) {
+            return $result;
+        }
+
+        $from = PaymentStatuses::of($subject);
+
+        // Nothing moved, so there is nothing to announce: a webhook redelivered after a capture would
+        // otherwise fulfil the order twice.
+        if (PaymentStatuses::set($subject, $result->status) && $from !== $result->status) {
+            $this->events->dispatch(new StatusChanged($command, $context, $subject, $from, $result->status));
         }
 
         return $result;

@@ -24,6 +24,7 @@ use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\FallbackContainer;
 use Payum\Core\DI\ListableContainerInterface;
+use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException as PayumLogicException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
@@ -70,6 +71,7 @@ use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -634,6 +636,10 @@ class PayumBuilder
             // once rather than for whichever one happened to be asked.
             ClockInterface::class => static fn (): ClockInterface => new SystemClock(),
 
+            // Shared for the same reason: one listener registered once hears about every gateway. A
+            // no-op until the application registers its own.
+            EventDispatcherInterface::class => static fn (): EventDispatcherInterface => new NullEventDispatcher(),
+
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
                 $this->layout,
@@ -700,6 +706,7 @@ class PayumBuilder
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
             ClockInterface::class,
+            EventDispatcherInterface::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {
