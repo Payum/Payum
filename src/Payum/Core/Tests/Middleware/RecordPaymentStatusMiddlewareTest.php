@@ -6,6 +6,8 @@ namespace Payum\Core\Tests\Middleware;
 
 use DI\Container;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Event\NullEventDispatcher;
+use Payum\Core\Event\StatusChanged;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -26,7 +28,9 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
@@ -90,6 +94,44 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $result->status);
     }
 
+    public function testShouldAnnounceTheTransitionItRecorded(): void
+    {
+        $payment = new TrackedPayment();
+        $payment->setStatus(PaymentStatus::Pending);
+
+        $events = new RecordingEventDispatcher();
+
+        $this->dispatch($payment, static fn (): CaptureResult => CaptureResult::captured('txn_1'), $events);
+
+        $changed = $events->ofType(StatusChanged::class);
+
+        $this->assertCount(1, $changed);
+        $this->assertSame($payment, $changed[0]->subject);
+        $this->assertSame(PaymentStatus::Pending, $changed[0]->from);
+        $this->assertSame(PaymentStatus::Captured, $changed[0]->to);
+    }
+
+    public function testShouldAnnounceNothingWhenTheStatusWasAlreadyWhatTheHandlerDeclared(): void
+    {
+        $payment = new TrackedPayment();
+        $payment->setStatus(PaymentStatus::Captured);
+
+        $events = new RecordingEventDispatcher();
+
+        $this->dispatch($payment, static fn (): CaptureResult => CaptureResult::captured('txn_1'), $events);
+
+        $this->assertSame([], $events->dispatched);
+    }
+
+    public function testShouldAnnounceNothingForAPaymentThatDoesNotTrackAStatus(): void
+    {
+        $events = new RecordingEventDispatcher();
+
+        $this->dispatch(new Payment(), static fn (): CaptureResult => CaptureResult::captured('txn_1'), $events);
+
+        $this->assertSame([], $events->dispatched);
+    }
+
     public function testShouldSetTheStatusBeforeThePaymentIsPersisted(): void
     {
         $payment = new TrackedPayment();
@@ -114,9 +156,9 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $storage->statusWhenUpdated);
     }
 
-    private function dispatch(Payment $payment, callable $handler): mixed
+    private function dispatch(Payment $payment, callable $handler, ?EventDispatcherInterface $events = null): mixed
     {
-        return (new Pipeline([new RecordPaymentStatusMiddleware()]))->process(
+        return (new Pipeline([new RecordPaymentStatusMiddleware($events ?? new NullEventDispatcher())]))->process(
             CaptureCommand::forPayment($payment),
             $this->context($payment),
             $handler,

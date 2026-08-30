@@ -98,6 +98,20 @@
   every time read follows it, which is what lets a test freeze expiry at a fixed instant.
   * `Payum\Sofort\Action\StatusAction` takes the clock as its first constructor argument. It defaults to a
     system clock, so `new StatusAction()` keeps working.
+* The payment lifecycle is announced as PSR-14 events — `Payum\Core\Event\CommandDispatched`,
+  `HandlerResolved`, `WebhookReceived`, `StatusChanged`, `ResultReturned`, `FailureRaised` and
+  `CommandFailed`, all extending `Payum\Core\Event\Event`. See [docs/events.md](docs/events.md).
+  * `Psr\EventDispatcher\EventDispatcherInterface` is registered in the global container as a
+    `Payum\Core\Event\NullEventDispatcher`, so nothing is dispatched anywhere until you register your own
+    with `PayumBuilder::addGlobalService(EventDispatcherInterface::class, $dispatcher)`. Symfony's
+    `event_dispatcher` satisfies PSR-14 as it stands.
+  * Events are dispatched for commands only. A gateway still built from 1.x actions announces nothing;
+    `Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension` remains what covers that, deprecated
+    along with the rest of the action mechanism.
+  * `Payum\Core\Middleware\RecordPaymentStatusMiddleware` takes an optional
+    `Psr\EventDispatcher\EventDispatcherInterface` as its one constructor argument, which is what
+    dispatches `StatusChanged`. It defaults to the no-op dispatcher, so `new RecordPaymentStatusMiddleware()`
+    keeps working.
 
 ## 1.5.0
 

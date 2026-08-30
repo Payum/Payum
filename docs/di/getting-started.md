@@ -27,6 +27,7 @@ Payum v2.0 uses a **hybrid container architecture**:
 │  - PSR-18 HTTP Client (shared)              │
 │  - PSR-17 Factories                         │
 │  - PSR-20 Clock                             │
+│  - PSR-14 Event Dispatcher                  │
 │  - Anything from addGlobalService()         │
 └──────────────┬──────────────────────────────┘
                │ delegated to
@@ -151,6 +152,29 @@ Any PSR-20 implementation will do -- `symfony/clock`, `lcobucci/clock`, or one o
 that already have a clock service should register that one, so that Payum and the rest of the application
 agree on what "now" is.
 
+### Hearing About Payments
+
+Payum announces what happens to a payment -- a command dispatched, a status changed, a webhook received,
+a decline -- to the PSR-14 dispatcher in the global container. That dispatcher throws everything away
+until you register a real one:
+
+```php
+<?php
+
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+
+    ->addGlobalService(EventDispatcherInterface::class, new EventDispatcher())
+
+    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
+    ->getPayum();
+```
+
+Registered once, it hears about every gateway. See [Events](../events.md) for what is dispatched.
+
 ## Understanding the Container System
 
 ### Global Services
@@ -165,6 +189,7 @@ These services are instantiated once and shared across all gateways:
 - `StreamFactoryInterface` (PSR-17) - HTTP stream factory
 - `RequestFactoryInterface` (PSR-17) - HTTP request factory
 - `ClockInterface` (PSR-20) - the current time
+- `EventDispatcherInterface` (PSR-14) - where the payment lifecycle is announced
 - Storage extensions for all registered models
 - Every service registered with `addGlobalService()`
 

@@ -22,6 +22,7 @@ use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\DI\CreatesGateway;
 use Payum\Core\DI\ListableContainerInterface;
+use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
@@ -36,9 +37,11 @@ use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Clock\FrozenClock;
+use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
 use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -176,6 +179,29 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         ;
 
         $this->assertSame($clock, $container->get(ClockInterface::class));
+    }
+
+    public function testBuildGlobalContainerShouldProvideANoOpEventDispatcherByDefault(): void
+    {
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertInstanceOf(NullEventDispatcher::class, $container->get(EventDispatcherInterface::class));
+    }
+
+    public function testBuildGlobalContainerShouldLetTheApplicationReplaceTheEventDispatcher(): void
+    {
+        $events = new RecordingEventDispatcher();
+
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertSame($events, $container->get(EventDispatcherInterface::class));
     }
 
     public function testBuildGlobalContainerShouldAddDefaultStoragesWhenNoTokenStorageIsSet(): void
@@ -579,6 +605,7 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
         $this->assertInstanceOf(ClockInterface::class, $container->get(ClockInterface::class));
+        $this->assertInstanceOf(EventDispatcherInterface::class, $container->get(EventDispatcherInterface::class));
     }
 
     public function testShouldPassTheApplicationsClockToTheGatewayContainer(): void
@@ -598,6 +625,25 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         ;
 
         $this->assertSame($clock, $factory->container->get(ClockInterface::class));
+    }
+
+    public function testShouldPassTheApplicationsEventDispatcherToTheGatewayContainer(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        $events = new RecordingEventDispatcher();
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($events, $factory->container->get(EventDispatcherInterface::class));
     }
 
     public function testShouldShareTheGlobalServicesBetweenAllGatewayContainers(): void
@@ -629,6 +675,7 @@ final class PayumBuilderGlobalContainerTest extends TestCase
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
             ClockInterface::class,
+            EventDispatcherInterface::class,
         ] as $serviceId) {
             $this->assertSame(
                 $firstFactory->container->get($serviceId),

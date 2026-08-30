@@ -31,6 +31,7 @@ use Payum\Core\Bridge\Twig\TwigRenderer;
 use Payum\Core\Clock\SystemClock;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
+use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\EndlessCycleDetectorExtension;
 use Payum\Core\Extension\ExtensionInterface;
@@ -42,8 +43,10 @@ use Payum\Core\Request\GetCurrency;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use Payum\Core\Tests\Mocks\Clock\FrozenClock;
+use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
 use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -92,6 +95,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             RequestFactoryInterface::class,
             ResponseFactoryInterface::class,
             ClockInterface::class,
+            EventDispatcherInterface::class,
             'payum.http_client',
             'payum.http_stream_factory',
             'payum.http_message_factory',
@@ -194,6 +198,26 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $container = $this->buildContainer();
 
         $this->assertInstanceOf(SystemClock::class, $container->get(ClockInterface::class));
+    }
+
+    public function testShouldResolveANoOpEventDispatcherFromContainer(): void
+    {
+        $container = $this->buildContainer();
+
+        $this->assertInstanceOf(NullEventDispatcher::class, $container->get(EventDispatcherInterface::class));
+    }
+
+    public function testShouldLetTheGivenConfigReplaceTheEventDispatcher(): void
+    {
+        $events = new RecordingEventDispatcher();
+
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions((new CoreGatewayFactory())->configureContainer());
+        $builder->addDefinitions([
+            EventDispatcherInterface::class => $events,
+        ]);
+
+        $this->assertSame($events, $builder->build()->get(EventDispatcherInterface::class));
     }
 
     public function testShouldLetTheGivenConfigReplaceTheClock(): void
