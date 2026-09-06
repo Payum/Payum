@@ -80,9 +80,7 @@ class ArrayObject extends \ArrayObject
         }
 
         foreach ($input as $index => $value) {
-            if (null === $this[$index]) {
-                $this[$index] = $value;
-            }
+            $this[$index] ??= $value;
         }
     }
 
