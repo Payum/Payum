@@ -54,6 +54,7 @@ use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
@@ -80,6 +81,8 @@ use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use function array_combine;
+use function array_diff;
+use function array_filter;
 use function array_map;
 use function array_merge;
 use function class_exists;
@@ -94,6 +97,21 @@ use const E_USER_DEPRECATED;
 
 class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfiguration, CreatesGateway, GatewayFactoryConfigInterface
 {
+    private const ACTIONS = [
+        GetHttpRequestAction::class,
+        CapturePaymentAction::class,
+        AuthorizePaymentAction::class,
+        PayoutPayoutAction::class,
+        ExecuteSameRequestWithModelDetailsAction::class,
+        RenderTemplateAction::class,
+        GetCurrencyAction::class,
+        GetTokenAction::class,
+    ];
+
+    private const EXTENSIONS = [
+        EndlessCycleDetectorExtension::class,
+    ];
+
     /**
      * @var array<string, mixed>
      */
@@ -116,9 +134,18 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     {
         trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
 
+        if (($config['payum.http_client'] ?? null) instanceof HttpClientInterface && ! $config['payum.http_client'] instanceof ClientInterface) {
+            $config['payum.http_client'] = new Psr18HttpClient($config['payum.http_client']);
+        }
+
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions($config);
         $containerBuilder->addDefinitions($this->configureContainer());
+
+        // What the caller set wins over core's defaults, as it did in 1.x: a gateway's payum.paths or
+        // payum.template.layout reaches the renderer. Closures are left to buildClosures(), since a 1.x
+        // closure takes the config array, which the container cannot pass.
+        $containerBuilder->addDefinitions(array_filter($config, static fn ($value): bool => ! $value instanceof Closure));
         $containerBuilder->addDefinitions([
             ArrayObject::class => static function (ContainerInterface $container) {
                 trigger_deprecation('payum/core', '2.0.0', 'The %s service is deprecated and will be removed in 3.0. Use the %s service instead.', ArrayObject::class, ContainerInterface::class);
@@ -176,7 +203,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
         $containerConfig = $this->configureContainer();
 
-        $result = array_merge($containerConfig, $config);
+        // The caller's entries come first as well as winning: actions and extensions register in key
+        // order, and the first action that supports a request is the one that runs.
+        $result = $config + $containerConfig;
 
         if (isset($config['payum.paths'])) {
             $result['payum.paths'] = array_merge(
@@ -190,7 +219,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
     public function configureContainer(): array
     {
-        return array_merge(
+        // The builder's entries, such as the token and storage extensions, register ahead of core's own.
+        return $this->defaultConfig + array_merge(
             [
                 'httplug.message_factory' => static function (): MessageFactory {
                     @trigger_error('Using "httplug.message_factory" is deprecated, use "payum.http_message_factory" instead, which will return a PSR-17 RequestFactoryInterface since payum/core 2.0.0', E_USER_DEPRECATED);
@@ -359,8 +389,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 'payum.action.authorize_payment' => static fn () => new AuthorizePaymentAction(),
                 'payum.action.payout_payout' => static fn () => new PayoutPayoutAction(),
                 'payum.action.execute_same_request_with_model_details' => static fn () => new ExecuteSameRequestWithModelDetailsAction(),
-                'payum.action.get_currency' => static fn (ContainerInterface $c) => $c->get(GetCurrencyAction::class),
                 'payum.action.render_template' => static fn (ContainerInterface $c) => $c->get(RenderTemplateAction::class),
+                'payum.action.get_currency' => static fn (ContainerInterface $c) => $c->get(GetCurrencyAction::class),
                 'payum.action.get_token' => static fn (ContainerInterface $c) => $c->has('payum.security.token_storage')
                     ? new GetTokenAction($c->get('payum.security.token_storage'))
                     : null,
@@ -402,11 +432,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
     public function createGateway(ContainerInterface $container): Gateway
     {
-        if (2 === func_num_args() && func_get_args()[1] instanceof Gateway) {
-            $gateway = func_get_args()[1];
-        } else {
-            $gateway = new Gateway();
-        }
+        // create() hands over a gateway it has already given core's own actions and extensions, from
+        // their payum.action.* and payum.extension.* entries. Only what a subclass adds is still missing.
+        $built = 2 === func_num_args() && func_get_args()[1] instanceof Gateway;
+        $gateway = $built ? func_get_args()[1] : new Gateway();
+        $actions = $built ? array_diff($this->getActions(), self::ACTIONS) : $this->getActions();
+        $extensions = $built ? array_diff($this->getExtensions(), self::EXTENSIONS) : $this->getExtensions();
 
         $gateway->setContainer($container);
 
@@ -431,7 +462,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             TwigUtil::registerPaths($container->get('twig.env'), self::composeTemplatePaths($container));
         }
 
-        foreach ([...$this->getActions(), ...$declaredActions] as $action) {
+        foreach ([...$actions, ...$declaredActions] as $action) {
             // Skip GetTokenAction if token storage is not configured
             if (GetTokenAction::class === $action && ! $container->has('payum.security.token_storage')) {
                 continue;
@@ -442,7 +473,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             $gateway->addAction($action, $action instanceof PrependActionInterface);
         }
 
-        foreach ($this->getExtensions() as $extension) {
+        foreach ($extensions as $extension) {
             if (is_string($extension)) {
                 $extension = $container->get($extension);
             }
@@ -455,23 +486,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
 
     public function getActions(): array
     {
-        return [
-            GetHttpRequestAction::class,
-            CapturePaymentAction::class,
-            AuthorizePaymentAction::class,
-            PayoutPayoutAction::class,
-            ExecuteSameRequestWithModelDetailsAction::class,
-            RenderTemplateAction::class,
-            GetCurrencyAction::class,
-            GetTokenAction::class,
-        ];
+        return self::ACTIONS;
     }
 
     public function getExtensions(): array
     {
-        return [
-            EndlessCycleDetectorExtension::class,
-        ];
+        return self::EXTENSIONS;
     }
 
     /**

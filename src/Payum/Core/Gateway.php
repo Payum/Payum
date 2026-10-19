@@ -42,6 +42,7 @@ use Payum\Core\Result\Failure;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -179,8 +180,11 @@ class Gateway implements GatewayInterface
             if ($request instanceof GetStatusInterface) {
                 // A gateway still holding a status action reads the details of whatever has not moved,
                 // which is more than the recorded status knows. Only answer from the record when nothing
-                // else claims it.
-                if (! $this->findActionSupported($request)) {
+                // else claims it. An identity is not unclaimed yet: StorageExtension loads it on the
+                // action path, and the request comes back here carrying the model.
+                $unloaded = $request->getModel() instanceof IdentityInterface && [] !== $this->actions;
+
+                if (! $unloaded && ! $this->findActionSupported($request)) {
                     $this->answerStatus($request);
 
                     return null;
@@ -189,7 +193,11 @@ class Gateway implements GatewayInterface
                 $command = RequestToCommand::translate($request, $this->resolveSubjectOf($request));
 
                 if ($command instanceof CommandInterface && $this->supportsCommand($command::class)) {
-                    return $this->replyFor($this->dispatch($command), $catchReply);
+                    try {
+                        return $this->replyFor($this->dispatch($command), $catchReply);
+                    } finally {
+                        $this->persistForLegacyCaller($command);
+                    }
                 }
             }
         }
@@ -560,6 +568,27 @@ class Gateway implements GatewayInterface
         }
 
         StatusMarker::mark($request, $subject instanceof SubjectInterface ? PaymentStatuses::of($subject) : null);
+    }
+
+    /**
+     * A 1.x caller that handed over a stored payment expects it written back, as StorageExtension did.
+     * Arriving on a token, PersistStateMiddleware has already written it.
+     *
+     * @param CommandInterface<Result> $command
+     */
+    private function persistForLegacyCaller(CommandInterface $command): void
+    {
+        $subject = $command->subject();
+
+        if (null !== $command->token() || ! $subject instanceof SubjectInterface || ! $this->container->has(StorageRegistryInterface::class)) {
+            return;
+        }
+
+        foreach ($this->container->get(StorageRegistryInterface::class)->getStorages() as $storage) {
+            if ($storage->support($subject)) {
+                $storage->update($subject);
+            }
+        }
     }
 
     /**

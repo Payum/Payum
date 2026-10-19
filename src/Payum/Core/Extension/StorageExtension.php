@@ -72,7 +72,7 @@ class StorageExtension implements ExtensionInterface
      */
     protected function scheduleForUpdateIfSupported($model): void
     {
-        if ($this->storage->support($model)) {
+        if (is_object($model) && $this->storage->support($model)) {
             $modelHash = spl_object_hash($model);
             if (array_key_exists($modelHash, $this->scheduledForUpdateModels)) {
                 return;

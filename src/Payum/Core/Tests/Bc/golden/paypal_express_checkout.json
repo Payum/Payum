@@ -1,0 +1,321 @@
+{
+    "recorded_with": "payum 1.7.7, PHP 8.5",
+    "scenarios": {
+        "paypal_express_checkout_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\CaptureAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\CancelAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\AuthorizeAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\ConvertPaymentAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\NotifyAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\PaymentDetailsStatusAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\PaymentDetailsSyncAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\RecurringPaymentDetailsStatusAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\RecurringPaymentDetailsSyncAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\SetExpressCheckoutAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\GetExpressCheckoutDetailsAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\GetTransactionDetailsAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\DoExpressCheckoutPaymentAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\CreateRecurringPaymentProfileAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\UpdateRecurringPaymentProfileAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\GetRecurringPaymentsProfileDetailsAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\CancelRecurringPaymentsProfileAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\ManageRecurringPaymentsProfileStatusAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\CreateBillingAgreementAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\DoReferenceTransactionAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\DoCaptureAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\AuthorizeTokenAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\DoVoidAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\RefundTransactionAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\ConfirmOrderAction",
+                    "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\TransactionSearchAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\AuthorizeAction",
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\CancelAction",
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\PaymentDetailsSyncAction",
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\NotifyAction",
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\PaymentDetailsStatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\PaymentDetailsStatusAction",
+                    "Convert(payment, array)": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null,
+                    "SetExpressCheckout": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\SetExpressCheckoutAction",
+                    "GetExpressCheckoutDetails": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\GetExpressCheckoutDetailsAction",
+                    "DoExpressCheckoutPayment": "Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\DoExpressCheckoutPaymentAction"
+                }
+            }
+        ],
+        "paypal_express_checkout_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "L_ERRORCODE0": "10486"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "L_ERRORCODE0": "10001"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CANCELLED": true
+                },
+                "human": "canceled",
+                "binary": 32
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionNotInitiated"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionNotInitiated",
+                    "PAYERID": "P1"
+                },
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionInProgress"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionFailed"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Completed"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Pending",
+                    "PAYMENTINFO_0_PENDINGREASON": "authorization"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Pending"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Refunded"
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Voided",
+                    "PAYMENTINFO_0_PENDINGREASON": "authorization"
+                },
+                "human": "canceled",
+                "binary": 32
+            },
+            {
+                "op": "status",
+                "details": {
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Failed"
+                },
+                "human": "failed",
+                "binary": 1048576
+            }
+        ],
+        "paypal_express_checkout_capture": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpRedirect",
+                    "statusCode": 302,
+                    "url": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-BC1&useraction=commit",
+                    "headers": {
+                        "Location": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-BC1&useraction=commit"
+                    },
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"1;url=https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&amp;token=EC-BC1&amp;useraction=commit\" />\n\n        <title>Redirecting to https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&amp;token=EC-BC1&amp;useraction=commit</title>\n    </head>\n    <body>\n        Redirecting to https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&amp;token=EC-BC1&amp;useraction=commit.\n    </body>\n</html>"
+                },
+                "writes": 1,
+                "http": [
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "INVNUM=bc-paypal_express_checkout_capture&PAYMENTREQUEST_0_CURRENCYCODE=EUR&PAYMENTREQUEST_0_AMT=12.34&PAYMENTREQUEST_0_DESC=BC+scenario+paypal_express_checkout_capture&PAYMENTREQUEST_0_PAYMENTACTION=Sale&AUTHORIZE_TOKEN_USERACTION=commit&RETURNURL=http%3A%2F%2Fshop.test%2Fcapture.php%3Fpayum_token%3Dbc-token-2&CANCELURL=http%3A%2F%2Fshop.test%2Fcapture.php%3Fpayum_token%3Dbc-token-2%26cancelled%3D1&PAYMENTREQUEST_0_NOTIFYURL=http%3A%2F%2Fshop.test%2Fnotify.php%3Fpayum_token%3Dbc-token-3&METHOD=SetExpressCheckout&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    },
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "TOKEN=EC-BC1&METHOD=GetExpressCheckoutDetails&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    }
+                ],
+                "stripe": [],
+                "details": {
+                    "INVNUM": "bc-paypal_express_checkout_capture",
+                    "PAYMENTREQUEST_0_CURRENCYCODE": "EUR",
+                    "PAYMENTREQUEST_0_AMT": 12.34,
+                    "PAYMENTREQUEST_0_DESC": "BC scenario paypal_express_checkout_capture",
+                    "PAYMENTREQUEST_0_PAYMENTACTION": "Sale",
+                    "AUTHORIZE_TOKEN_USERACTION": "commit",
+                    "RETURNURL": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "CANCELURL": "http://shop.test/capture.php?payum_token=bc-token-2&cancelled=1",
+                    "PAYMENTREQUEST_0_NOTIFYURL": "http://shop.test/notify.php?payum_token=bc-token-3",
+                    "ACK": "Success",
+                    "TOKEN": "EC-BC1",
+                    "CHECKOUTSTATUS": "PaymentActionNotInitiated"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "TOKEN=EC-BC1&METHOD=GetExpressCheckoutDetails&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    },
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "INVNUM=bc-paypal_express_checkout_capture&PAYMENTREQUEST_0_CURRENCYCODE=EUR&PAYMENTREQUEST_0_AMT=12.34&PAYMENTREQUEST_0_DESC=BC+scenario+paypal_express_checkout_capture&PAYMENTREQUEST_0_PAYMENTACTION=Sale&AUTHORIZE_TOKEN_USERACTION=commit&RETURNURL=http%3A%2F%2Fshop.test%2Fcapture.php%3Fpayum_token%3Dbc-token-2&CANCELURL=http%3A%2F%2Fshop.test%2Fcapture.php%3Fpayum_token%3Dbc-token-2%26cancelled%3D1&PAYMENTREQUEST_0_NOTIFYURL=http%3A%2F%2Fshop.test%2Fnotify.php%3Fpayum_token%3Dbc-token-3&ACK=Success&TOKEN=EC-BC1&CHECKOUTSTATUS=PaymentActionNotInitiated&PAYERID=PAYER1&METHOD=DoExpressCheckoutPayment&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    },
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "TOKEN=EC-BC1&METHOD=GetExpressCheckoutDetails&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    },
+                    {
+                        "method": "POST",
+                        "uri": "https://api-3t.sandbox.paypal.com/nvp",
+                        "body": "TRANSACTIONID=TX1&METHOD=GetTransactionDetails&VERSION=65.1&PWD=bc_pass&USER=bc_user&SIGNATURE=bc_sig"
+                    }
+                ],
+                "stripe": [],
+                "details": {
+                    "INVNUM": "bc-paypal_express_checkout_capture",
+                    "PAYMENTREQUEST_0_CURRENCYCODE": "EUR",
+                    "PAYMENTREQUEST_0_AMT": "12.34",
+                    "PAYMENTREQUEST_0_DESC": "BC scenario paypal_express_checkout_capture",
+                    "PAYMENTREQUEST_0_PAYMENTACTION": "Sale",
+                    "AUTHORIZE_TOKEN_USERACTION": "commit",
+                    "RETURNURL": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "CANCELURL": "http://shop.test/capture.php?payum_token=bc-token-2&cancelled=1",
+                    "PAYMENTREQUEST_0_NOTIFYURL": "http://shop.test/notify.php?payum_token=bc-token-3",
+                    "ACK": "Success",
+                    "TOKEN": "EC-BC1",
+                    "CHECKOUTSTATUS": "PaymentActionCompleted",
+                    "PAYERID": "PAYER1",
+                    "PAYMENTINFO_0_TRANSACTIONID": "TX1",
+                    "PAYMENTINFO_0_PAYMENTSTATUS": "Completed",
+                    "PAYMENTREQUEST_0_TRANSACTIONID": "TX1",
+                    "PAYMENTREQUEST_0_PAYMENTSTATUS": "Completed"
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "paypal_express_checkout_cancelled_by_buyer": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "INVNUM": "bc-paypal_express_checkout_cancelled_by_buyer",
+                    "PAYMENTREQUEST_0_CURRENCYCODE": "EUR",
+                    "PAYMENTREQUEST_0_AMT": 12.34,
+                    "PAYMENTREQUEST_0_DESC": "BC scenario paypal_express_checkout_cancelled_by_buyer",
+                    "PAYMENTREQUEST_0_PAYMENTACTION": "Sale",
+                    "AUTHORIZE_TOKEN_USERACTION": "commit",
+                    "CANCELLED": true
+                },
+                "human": "canceled",
+                "binary": 32
+            }
+        ]
+    }
+}

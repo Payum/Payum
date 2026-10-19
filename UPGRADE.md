@@ -46,6 +46,7 @@
   * The `Payum\Core\Bridge\Httplug\HttplugClient` is deprecated and will be removed in 3.0. Use PSR-18 HTTP Client instead
   * The `payum.http_client` config option will return an instance of `Psr\Http\Client\ClientInterface` in a future version.
     * Change all type-hints from `Payum\Core\HttpClientInterface` or `Payum\Core\Bridge\Httplug\HttplugClient` to `Psr\Http\Client\ClientInterface`
+  * A `Payum\Core\HttpClientInterface` you set as `payum.http_client` on a 1.x-style gateway config keeps working: it is wrapped in `Payum\Core\Legacy\Psr18HttpClient`, which the shipped gateways accept as a PSR-18 client. That wrapper is deprecated and removed in 3.0; set a `Psr\Http\Client\ClientInterface` instead
 * Gateways are now built with a dependency injection container (php-di). See [docs/di](docs/di/README.md).
   * A gateway factory should implement `Payum\Core\DI\ContainerConfiguration` and define its services in
     `configureContainer()`, its actions in `getActions()` and its extensions in `getExtensions()`.

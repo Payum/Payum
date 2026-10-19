@@ -1,0 +1,366 @@
+{
+    "recorded_with": "payum 1.7.7, PHP 8.5",
+    "scenarios": {
+        "awkward_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardCaptureAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardRedirectAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardAuthorizeAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardRefundAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardSyncAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardNotifyAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardStatusAction",
+                    "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardConvertPaymentAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardCaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardAuthorizeAction",
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardRefundAction",
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardSyncAction",
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardNotifyAction",
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardStatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardStatusAction",
+                    "Convert(payment, array)": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null,
+                    "AwkwardRedirect": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardRedirectAction"
+                }
+            }
+        ],
+        "awkward_redirect_and_return": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpRedirect",
+                    "statusCode": 302,
+                    "url": "https://psp.test/pay/psp-1",
+                    "headers": {
+                        "Location": "https://psp.test/pay/psp-1"
+                    },
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"1;url=https://psp.test/pay/psp-1\" />\n\n        <title>Redirecting to https://psp.test/pay/psp-1</title>\n    </head>\n    <body>\n        Redirecting to https://psp.test/pay/psp-1.\n    </body>\n</html>"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_redirect_and_return",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": {
+                            "utm": "x"
+                        },
+                        "request": {
+                            "utm": "x"
+                        },
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "token_target": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "pending",
+                    "left_for_psp": true
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_redirect_and_return",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": {
+                            "psp_ref": "psp-1"
+                        },
+                        "request": {
+                            "psp_ref": "psp-1"
+                        },
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "token_target": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "captured",
+                    "left_for_psp": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "sync",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_redirect_and_return",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": {
+                            "psp_ref": "psp-1"
+                        },
+                        "request": {
+                            "psp_ref": "psp-1"
+                        },
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "token_target": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "captured",
+                    "left_for_psp": true,
+                    "synced": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "notify",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpResponse",
+                    "statusCode": 200,
+                    "headers": {
+                        "X-Awkward": "yes"
+                    },
+                    "content": "[accepted]"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_redirect_and_return",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": {
+                            "psp_ref": "psp-1"
+                        },
+                        "request": {
+                            "psp_ref": "psp-1"
+                        },
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "token_target": "http://shop.test/capture.php?payum_token=bc-token-2",
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "captured",
+                    "left_for_psp": true,
+                    "synced": true,
+                    "notified": true
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "awkward_payment_without_token": [
+            {
+                "op": "capture",
+                "on": "payment",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpRedirect",
+                    "statusCode": 302,
+                    "url": "https://psp.test/pay/psp-1",
+                    "headers": {
+                        "Location": "https://psp.test/pay/psp-1"
+                    },
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"1;url=https://psp.test/pay/psp-1\" />\n\n        <title>Redirecting to https://psp.test/pay/psp-1</title>\n    </head>\n    <body>\n        Redirecting to https://psp.test/pay/psp-1.\n    </body>\n</html>"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_payment_without_token",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": [],
+                        "request": [],
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "pending",
+                    "left_for_psp": true
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "sync",
+                "on": "payment",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_payment_without_token",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": [],
+                        "request": [],
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "captured",
+                    "left_for_psp": true,
+                    "synced": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "refund",
+                "on": "payment",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardReply",
+                    "payload": {
+                        "refunded": 1234
+                    }
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_payment_without_token",
+                    "http": {
+                        "method": "GET",
+                        "uri": "/",
+                        "query": [],
+                        "request": [],
+                        "client_ip": ""
+                    },
+                    "currency_numeric": "978",
+                    "currency_exp": 2,
+                    "form": "<form action=\"https://psp.test/pay\" method=\"post\"><input name=\"amount\" value=\"1234\"></form>\n",
+                    "psp_ref": "psp-1",
+                    "status": "refunded",
+                    "left_for_psp": true,
+                    "synced": true
+                },
+                "human": "refunded",
+                "binary": 16
+            }
+        ],
+        "awkward_authorize_asks_for_a_card": [
+            {
+                "op": "authorize",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_authorize_asks_for_a_card",
+                    "card": "nobody answered ObtainCreditCard",
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "refund",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Tests\\Bc\\Fixture\\AwkwardReply",
+                    "payload": {
+                        "refunded": 1234
+                    }
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-awkward_authorize_asks_for_a_card",
+                    "card": "nobody answered ObtainCreditCard",
+                    "status": "refunded"
+                },
+                "human": "refunded",
+                "binary": 16
+            }
+        ]
+    }
+}
