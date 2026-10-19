@@ -2,6 +2,15 @@
 
 ## 2.0.0 (TBD)
 
+* Add a BC conformance suite (`src/Payum/Core/Tests/Bc`, the `bc` PHPUnit testsuite and CI job). Every shipped gateway factory and three fixture gateways replay scripted operations on 2.x, once with 1.x requests and once with 2.x commands through `LegacyGatewayAdapter`, and are compared with what Payum 1.7.7 did. The expectations are recorded from a 1.x install, so the suite catches drift from 1.x rather than confirming 2.x against itself
+* Fix a 1.x gateway factory registering core's actions and `EndlessCycleDetectorExtension` twice, and registering core's entries ahead of the caller's. Actions run in registration order, so an application's own `payum.action.*` lost to core's for any request both claimed
+* Fix a 1.x gateway's own `payum.paths`, `payum.template.layout` and other plain config values being overridden by core's defaults in its container, which left the gateway's templates unreachable
+* Fix `StorageExtension` failing with a `TypeError` on a request that carries no model, such as `ObtainCreditCard`
+* Fix a gateway implementing `DeclaresActions` getting no `StorageExtension` or `GenericTokenFactoryExtension`, so its unported actions could neither load the payment a token points at nor have their changes persisted
+* Fix a 1.x request answered by a handler not writing back a stored payment it was handed directly, which `StorageExtension` did in 1.x
+* Fix `GetHumanStatus` on a token reading as unknown on a gateway that still has a status action, because it was answered from the recorded status before `StorageExtension` had loaded the payment
+* Fix the shipped PayPal and Be2Bill gateways failing with a `TypeError` when the application sets a 1.x `Payum\Core\HttpClientInterface` as `payum.http_client`
+
 * Monetary values are expressed as `moneyphp/money` objects. Commands take a `Money` where they took minor units, results report one, `Payum\Core\Handler\Context::amount()` resolves "how much is this execution for" against the subject, and `Payum\Core\Model\Payment` and `Payout` answer `getMoney()`. Every integer accessor keeps working and keeps its meaning, so nothing has to change at once
 * `Payum\Core\Model\MoneyAwareInterface` is how an application's own entity opts in, and `Payum\Core\Money\Amount` reads and writes an amount on a model whether or not it has. Both map over `totalAmount` and `currencyCode`, so **no storage or Doctrine mapping changes**: those two columns already hold everything a `Money` is made of
 * Add a `Money\Currencies` service, with `Money\MoneyFormatter` and `Money\MoneyParser` defined against it. It knows ISO 4217 and moneyphp's crypto currencies out of the box, and an application registers its own through `PayumBuilder::addGlobalService()` — which is what makes a currency with 8 or 18 decimal places work rather than being rounded to 2 (#837, #1062)

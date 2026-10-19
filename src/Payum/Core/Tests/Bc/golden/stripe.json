@@ -1,0 +1,556 @@
+{
+    "recorded_with": "payum 1.7.7, PHP 8.5",
+    "scenarios": {
+        "stripe_checkout_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Stripe\\Action\\CaptureAction",
+                    "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "Payum\\Stripe\\Action\\StatusAction",
+                    "Payum\\Stripe\\Action\\GetCreditCardTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\ObtainTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateChargeAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateCustomerAction",
+                    "Payum\\Stripe\\Action\\Api\\CreatePlanAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateSubscriptionAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension",
+                    "Payum\\Stripe\\Extension\\CreateCustomerExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Stripe\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null,
+                    "ObtainToken": "Payum\\Stripe\\Action\\Api\\ObtainTokenAction",
+                    "CreateCharge": "Payum\\Stripe\\Action\\Api\\CreateChargeAction"
+                }
+            }
+        ],
+        "stripe_checkout_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "card": "tok_1"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "error": {
+                        "message": "declined"
+                    }
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "failed"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "paid",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": false
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "refunded": true
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "something else"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "stripe_js_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Stripe\\Action\\CaptureAction",
+                    "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "Payum\\Stripe\\Action\\StatusAction",
+                    "Payum\\Stripe\\Action\\GetCreditCardTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\ObtainTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateChargeAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateCustomerAction",
+                    "Payum\\Stripe\\Action\\Api\\CreatePlanAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateSubscriptionAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension",
+                    "Payum\\Stripe\\Extension\\CreateCustomerExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Stripe\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null,
+                    "ObtainToken": "Payum\\Stripe\\Action\\Api\\ObtainTokenAction",
+                    "CreateCharge": "Payum\\Stripe\\Action\\Api\\CreateChargeAction"
+                }
+            }
+        ],
+        "stripe_js_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "card": "tok_1"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "error": {
+                        "message": "declined"
+                    }
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "failed"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "paid",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": false
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "refunded": true
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "something else"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "stripe_direct_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\ObtainTokenForCreditCardAction",
+                    "Payum\\Stripe\\Action\\CaptureAction",
+                    "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "Payum\\Stripe\\Action\\StatusAction",
+                    "Payum\\Stripe\\Action\\GetCreditCardTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateChargeAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateCustomerAction",
+                    "Payum\\Stripe\\Action\\Api\\CreatePlanAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateTokenAction",
+                    "Payum\\Stripe\\Action\\Api\\CreateSubscriptionAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension",
+                    "Payum\\Stripe\\Extension\\CreateCustomerExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Stripe\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Stripe\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Stripe\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null,
+                    "ObtainToken": "Payum\\Stripe\\Action\\Api\\ObtainTokenForCreditCardAction",
+                    "CreateCharge": "Payum\\Stripe\\Action\\Api\\CreateChargeAction"
+                }
+            }
+        ],
+        "stripe_direct_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "card": "tok_1"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "error": {
+                        "message": "declined"
+                    }
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "failed"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "paid",
+                    "captured": true,
+                    "paid": true
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "captured": false
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "succeeded",
+                    "refunded": true
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "something else"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "stripe_checkout_capture": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpResponse",
+                    "statusCode": 200,
+                    "headers": [],
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n            </head>\n    <body>\n            \n\n    <form action=\"http://shop.test/capture.php?payum_token=bc-token-2\" method=\"POST\">\n        <script\n            src=\"https://checkout.stripe.com/checkout.js\" class=\"stripe-button\"\n            data-key=\"pk_test_bc\"\n            data-image=\"\"\n            data-name=\"\"\n            data-description=\"BC scenario stripe_checkout_capture\"\n            data-amount=\"1234\"\n            data-currency=\"EUR\"\n            data-allowRememberMe=\"false\"\n            data-email=\"\"\n            data-locale=\"auto\">\n        </script>\n    </form>\n                    \n\n    <script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js\"></script>\n\n    <script type=\"text/javascript\">\n        $(function() {$('form .stripe-button-el').click();});\n    </script>\n\n    </body>\n</html>\n"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "description": "BC scenario stripe_checkout_capture"
+                },
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [
+                    {
+                        "method": "post",
+                        "url": "https://api.stripe.com/v1/charges",
+                        "params": {
+                            "amount": 1234,
+                            "currency": "EUR",
+                            "description": "BC scenario stripe_checkout_capture",
+                            "card": "tok_1"
+                        }
+                    }
+                ],
+                "details": {
+                    "amount": 1234,
+                    "currency": "eur",
+                    "description": "BC scenario stripe_checkout_capture",
+                    "card": "tok_1",
+                    "id": "ch_1",
+                    "object": "charge",
+                    "status": "succeeded",
+                    "captured": true,
+                    "paid": true,
+                    "refunded": false
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "stripe_js_capture": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpResponse",
+                    "statusCode": 200,
+                    "headers": [],
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n            </head>\n    <body>\n            \n\n    <form action=\"http://shop.test/capture.php?payum_token=bc-token-2\" method=\"POST\" id=\"payment-form\">\n        <span class=\"payment-errors\"></span>\n\n        <div class=\"form-row\">\n            <label>\n                <span>Card Number</span>\n                <input type=\"text\" size=\"20\" data-stripe=\"number\"/>\n            </label>\n        </div>\n\n        <div class=\"form-row\">\n            <label>\n                <span>CVC</span>\n                <input type=\"text\" size=\"4\" data-stripe=\"cvc\"/>\n            </label>\n        </div>\n\n        <div class=\"form-row\">\n            <label>\n                <span>Expiration (MM/YYYY)</span>\n                <input type=\"text\" size=\"2\" data-stripe=\"exp-month\"/>\n            </label>\n            <span> / </span>\n            <input type=\"text\" size=\"4\" data-stripe=\"exp-year\"/>\n        </div>\n\n        <button type=\"submit\">Submit Payment</button>\n    </form>\n            \n\n    <!-- The required Stripe lib -->\n    <script type=\"text/javascript\" src=\"https://js.stripe.com/v2/\"></script>\n\n    <!-- jQuery is used only for this example; it isn't required to use Stripe -->\n    <script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js\"></script>\n            \n\n    <script type=\"text/javascript\">\n        jQuery(function($) {\n            $('#payment-form').submit(function(e) {\n                var $form = $(this);\n\n                // Disable the submit button to prevent repeated clicks\n                $form.find('button').prop('disabled', true);\n\n                // This identifies your website in the createToken call below\n                Stripe.setPublishableKey(\"pk_test_bc\");\n\n                Stripe.card.createToken($form, stripeResponseHandler);\n\n                // Prevent the form from submitting with the default action\n                return false;\n            });\n\n            var stripeResponseHandler = function(status, response) {\n                var $form = $('#payment-form');\n\n                if (response.error) {\n                    // Show the errors on the form\n                    $form.find('.payment-errors').text(response.error.message);\n                    $form.find('button').prop('disabled', false);\n                } else {\n                    // token contains id, last4, and card type\n                    var token = response.id;\n                    // Insert the token into the form so it gets submitted to the server\n                    $form.append($('<input type=\"hidden\" name=\"stripeToken\" />').val(token));\n                    // and re-submit\n                    $form.get(0).submit();\n                }\n            };\n        });\n    </script>\n\n    </body>\n</html>\n"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "description": "BC scenario stripe_js_capture"
+                },
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [
+                    {
+                        "method": "post",
+                        "url": "https://api.stripe.com/v1/charges",
+                        "params": {
+                            "amount": 1234,
+                            "currency": "EUR",
+                            "description": "BC scenario stripe_js_capture",
+                            "card": "tok_1"
+                        }
+                    }
+                ],
+                "details": {
+                    "amount": 1234,
+                    "currency": "eur",
+                    "description": "BC scenario stripe_js_capture",
+                    "card": "tok_1",
+                    "id": "ch_1",
+                    "object": "charge",
+                    "status": "succeeded",
+                    "captured": true,
+                    "paid": true,
+                    "refunded": false
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "stripe_direct_capture_asks_for_a_card": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\ObtainCreditCard"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "description": "BC scenario stripe_direct_capture_asks_for_a_card"
+                },
+                "human": "new",
+                "binary": 2
+            }
+        ]
+    }
+}

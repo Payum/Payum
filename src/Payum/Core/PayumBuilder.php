@@ -29,6 +29,7 @@ use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException as PayumLogicException;
 use Payum\Core\Extension\GenericTokenFactoryExtension;
 use Payum\Core\Extension\StorageExtension;
+use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\DeclaresMiddleware;
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -79,6 +80,7 @@ use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use function array_merge;
 use function array_replace;
+use function array_reverse;
 use function DI\autowire;
 use function in_array;
 use function is_a;
@@ -473,6 +475,10 @@ class PayumBuilder
             $gateways[$name] = $coreGatewayFactory->createGateway(
                 new FallbackContainer($containerBuilder->build(), $globalContainer)
             );
+
+            if ($gateway instanceof DeclaresActions) {
+                $this->addLegacyExtensions($gateways[$name], $genericTokenFactory);
+            }
 
             unset($this->gateways[$name]);
         }
@@ -966,6 +972,19 @@ class PayumBuilder
         }
 
         return $coreGatewayFactory ?: new CoreGatewayFactory($config);
+    }
+
+    /**
+     * What a 1.x action expects to find on its gateway: its payment loaded from the token and written back
+     * afterwards, and the token factory. Ahead of core's own, in the order a 1.x factory registers them.
+     */
+    private function addLegacyExtensions(Gateway $gateway, GenericTokenFactoryInterface $genericTokenFactory): void
+    {
+        foreach (array_reverse($this->storages) as $storage) {
+            $gateway->addExtension(new StorageExtension($storage), true);
+        }
+
+        $gateway->addExtension(new GenericTokenFactoryExtension($genericTokenFactory), true);
     }
 
     /**

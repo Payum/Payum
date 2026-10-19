@@ -1,0 +1,845 @@
+{
+    "recorded_with": "payum 1.7.7, PHP 8.5",
+    "scenarios": {
+        "be2bill_direct_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Be2Bill\\Action\\CaptureAction",
+                    "Payum\\Be2Bill\\Action\\StatusAction",
+                    "Payum\\Be2Bill\\Action\\ConvertPaymentAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Be2Bill\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Be2Bill\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Be2Bill\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Be2Bill\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "be2bill_direct_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "EXECCODE": "0000"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "EXECCODE": "5004"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            },
+            {
+                "op": "status",
+                "details": {
+                    "EXECCODE": "4001"
+                },
+                "human": "failed",
+                "binary": 1048576
+            }
+        ],
+        "be2bill_direct_capture_asks_for_a_card": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\LogicException"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "DESCRIPTION": "BC scenario be2bill_direct_capture_asks_for_a_card",
+                    "AMOUNT": 1234,
+                    "CLIENTIDENT": "buyer-1",
+                    "CLIENTEMAIL": "buyer@example.test",
+                    "ORDERID": "bc-be2bill_direct_capture_asks_for_a_card",
+                    "CLIENTUSERAGENT": "",
+                    "CLIENTIP": ""
+                },
+                "human": "new",
+                "binary": 2
+            }
+        ],
+        "be2bill_offsite_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Be2Bill\\Action\\CaptureOffsiteAction",
+                    "Payum\\Be2Bill\\Action\\CaptureOffsiteNullAction",
+                    "Payum\\Be2Bill\\Action\\NotifyNullAction",
+                    "Payum\\Be2Bill\\Action\\NotifyAction",
+                    "Payum\\Be2Bill\\Action\\StatusAction",
+                    "Payum\\Be2Bill\\Action\\ConvertPaymentAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Be2Bill\\Action\\CaptureOffsiteAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": "Payum\\Be2Bill\\Action\\NotifyAction",
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Be2Bill\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Be2Bill\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Be2Bill\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "be2bill_offsite_capture": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "reply",
+                    "class": "Payum\\Core\\Reply\\HttpPostRedirect",
+                    "statusCode": 200,
+                    "url": "https://secure-test.be2bill.com/front/form/process.php",
+                    "fields": {
+                        "CLIENTIDENT": "buyer-1",
+                        "DESCRIPTION": "BC scenario be2bill_offsite_capture",
+                        "ORDERID": "bc-be2bill_offsite_capture",
+                        "AMOUNT": 1234,
+                        "CLIENTEMAIL": "buyer@example.test",
+                        "EXTRADATA": "{\"capture_token\":\"bc-token-2\",\"notify_token\":\"bc-token-3\"}",
+                        "OPERATIONTYPE": "payment",
+                        "VERSION": "2.0",
+                        "IDENTIFIER": "bc_identifier",
+                        "HASH": "b20705f2eea36966822ee2cdf6e5431fe2991f0319d1e3743c0ec9b35d560f51"
+                    },
+                    "headers": [],
+                    "content": "<!DOCTYPE html>\n<html>\n    <head>\n        <title>Redirecting...</title>\n    </head>\n    <body onload=\"document.forms[0].submit();\">\n        <form action=\"https://secure-test.be2bill.com/front/form/process.php\" method=\"post\">\n            <p>Redirecting to payment page...</p>\n            <p><input type=\"hidden\" name=\"CLIENTIDENT\" value=\"buyer-1\" />\n<input type=\"hidden\" name=\"DESCRIPTION\" value=\"BC scenario be2bill_offsite_capture\" />\n<input type=\"hidden\" name=\"ORDERID\" value=\"bc-be2bill_offsite_capture\" />\n<input type=\"hidden\" name=\"AMOUNT\" value=\"1234\" />\n<input type=\"hidden\" name=\"CLIENTEMAIL\" value=\"buyer@example.test\" />\n<input type=\"hidden\" name=\"EXTRADATA\" value=\"{&quot;capture_token&quot;:&quot;bc-token-2&quot;,&quot;notify_token&quot;:&quot;bc-token-3&quot;}\" />\n<input type=\"hidden\" name=\"OPERATIONTYPE\" value=\"payment\" />\n<input type=\"hidden\" name=\"VERSION\" value=\"2.0\" />\n<input type=\"hidden\" name=\"IDENTIFIER\" value=\"bc_identifier\" />\n<input type=\"hidden\" name=\"HASH\" value=\"b20705f2eea36966822ee2cdf6e5431fe2991f0319d1e3743c0ec9b35d560f51\" />\n</p>\n        </form>\n    </body>\n</html>"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "DESCRIPTION": "BC scenario be2bill_offsite_capture",
+                    "AMOUNT": 1234,
+                    "CLIENTIDENT": "buyer-1",
+                    "CLIENTEMAIL": "buyer@example.test",
+                    "ORDERID": "bc-be2bill_offsite_capture",
+                    "EXTRADATA": "{\"capture_token\":\"bc-token-2\",\"notify_token\":\"bc-token-3\"}"
+                },
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "DESCRIPTION": "BC scenario be2bill_offsite_capture",
+                    "AMOUNT": 1234,
+                    "CLIENTIDENT": "buyer-1",
+                    "CLIENTEMAIL": "buyer@example.test",
+                    "ORDERID": "bc-be2bill_offsite_capture",
+                    "EXTRADATA": "{\"capture_token\":\"bc-token-2\",\"notify_token\":\"bc-token-3\"}",
+                    "EXECCODE": "0000",
+                    "TRANSACTIONID": "T1"
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "authorize_net_aim_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\AuthorizeNet\\Aim\\Action\\CaptureAction",
+                    "Payum\\AuthorizeNet\\Aim\\Action\\StatusAction",
+                    "Payum\\AuthorizeNet\\Aim\\Action\\ConvertPaymentAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\AuthorizeNet\\Aim\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\AuthorizeNet\\Aim\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\AuthorizeNet\\Aim\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\AuthorizeNet\\Aim\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "authorize_net_aim_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "response_code": 1
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "response_code": 2
+                },
+                "human": "canceled",
+                "binary": 32
+            },
+            {
+                "op": "status",
+                "details": {
+                    "response_code": 3
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "response_code": 4
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "response_code": 9
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "authorize_net_aim_capture_asks_for_a_card": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\LogicException"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 12.34,
+                    "invoice_num": "bc-authorize_net_aim_capture_asks_for_a_card",
+                    "description": "BC scenario authorize_net_aim_capture_asks_for_a_card",
+                    "email": "buyer@example.test",
+                    "cust_id": "buyer-1"
+                },
+                "human": "new",
+                "binary": 2
+            }
+        ],
+        "klarna_checkout_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Klarna\\Checkout\\Action\\AuthorizeRecurringAction",
+                    "Payum\\Klarna\\Checkout\\Action\\AuthorizeAction",
+                    "Payum\\Klarna\\Checkout\\Action\\NotifyAction",
+                    "Payum\\Klarna\\Checkout\\Action\\StatusAction",
+                    "Payum\\Klarna\\Checkout\\Action\\SyncAction",
+                    "Payum\\Klarna\\Checkout\\Action\\ConvertPaymentAction",
+                    "Payum\\Klarna\\Checkout\\Action\\Api\\CreateOrderAction",
+                    "Payum\\Klarna\\Checkout\\Action\\Api\\UpdateOrderAction",
+                    "Payum\\Klarna\\Checkout\\Action\\Api\\FetchOrderAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": null,
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": "Payum\\Klarna\\Checkout\\Action\\AuthorizeAction",
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": "Payum\\Klarna\\Checkout\\Action\\SyncAction",
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": "Payum\\Klarna\\Checkout\\Action\\NotifyAction",
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Klarna\\Checkout\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Klarna\\Checkout\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Klarna\\Checkout\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "klarna_checkout_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "error_code": "E1"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "invoice_number": "I1"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "reservation": "R1"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "checkout_incomplete"
+                },
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "checkout_complete"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "created"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "klarna_invoice_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Klarna\\Invoice\\Action\\CaptureAction",
+                    "Payum\\Klarna\\Invoice\\Action\\AuthorizeAction",
+                    "Payum\\Klarna\\Invoice\\Action\\StatusAction",
+                    "Payum\\Klarna\\Invoice\\Action\\SyncAction",
+                    "Payum\\Klarna\\Invoice\\Action\\RefundAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\ActivateAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\ActivateReservationAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\CancelReservationAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\CheckOrderStatusAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\GetAddressesAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\PopulateKlarnaFromDetailsAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\CreditInvoiceAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\CreditPartAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\ReserveAmountAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\ReturnAmountAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\EmailInvoiceAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\SendInvoiceAction",
+                    "Payum\\Klarna\\Invoice\\Action\\Api\\UpdateAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Klarna\\Invoice\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": "Payum\\Klarna\\Invoice\\Action\\AuthorizeAction",
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": "Payum\\Klarna\\Invoice\\Action\\RefundAction",
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": "Payum\\Klarna\\Invoice\\Action\\SyncAction",
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Klarna\\Invoice\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Klarna\\Invoice\\Action\\StatusAction",
+                    "Convert(payment, array)": null,
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "klarna_invoice_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "error_code": "E1"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "canceled": true
+                },
+                "human": "canceled",
+                "binary": 32
+            },
+            {
+                "op": "status",
+                "details": {
+                    "refund_invoice_number": "R1"
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "invoice_number": "I1"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": 1
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": 2
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": 3
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": 99
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "payex_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Payex\\Action\\PaymentDetailsCaptureAction",
+                    "Payum\\Payex\\Action\\PaymentDetailsStatusAction",
+                    "Payum\\Payex\\Action\\PaymentDetailsSyncAction",
+                    "Payum\\Payex\\Action\\AutoPayPaymentDetailsCaptureAction",
+                    "Payum\\Payex\\Action\\AutoPayPaymentDetailsStatusAction",
+                    "Payum\\Payex\\Action\\ConvertPaymentAction",
+                    "Payum\\Payex\\Action\\AgreementDetailsStatusAction",
+                    "Payum\\Payex\\Action\\AgreementDetailsSyncAction",
+                    "Payum\\Payex\\Action\\Api\\CreateAgreementAction",
+                    "Payum\\Payex\\Action\\Api\\DeleteAgreementAction",
+                    "Payum\\Payex\\Action\\Api\\CheckAgreementAction",
+                    "Payum\\Payex\\Action\\Api\\AutoPayAgreementAction",
+                    "Payum\\Payex\\Action\\Api\\StartRecurringPaymentAction",
+                    "Payum\\Payex\\Action\\Api\\StopRecurringPaymentAction",
+                    "Payum\\Payex\\Action\\Api\\CheckRecurringPaymentAction",
+                    "Payum\\Payex\\Action\\Api\\InitializeOrderAction",
+                    "Payum\\Payex\\Action\\Api\\CompleteOrderAction",
+                    "Payum\\Payex\\Action\\Api\\CheckOrderAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Payex\\Action\\PaymentDetailsCaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": null,
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Payex\\Action\\PaymentDetailsStatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Payex\\Action\\PaymentDetailsStatusAction",
+                    "Convert(payment, array)": "Payum\\Payex\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "payex_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "orderId": "O1",
+                    "transactionStatus": "0",
+                    "errorCode": "OK"
+                },
+                "human": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetHumanStatus"
+                },
+                "binary": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetBinaryStatus"
+                }
+            },
+            {
+                "op": "status",
+                "details": {
+                    "orderId": "O1",
+                    "transactionStatus": "3",
+                    "errorCode": "OK"
+                },
+                "human": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetHumanStatus"
+                },
+                "binary": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetBinaryStatus"
+                }
+            },
+            {
+                "op": "status",
+                "details": {
+                    "orderId": "O1",
+                    "errorCode": "Failed"
+                },
+                "human": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetHumanStatus"
+                },
+                "binary": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\GetBinaryStatus"
+                }
+            },
+            {
+                "op": "status",
+                "details": {
+                    "agreementRef": "A1",
+                    "agreementStatus": 1
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ],
+        "sofort_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Sofort\\Action\\CaptureAction",
+                    "Payum\\Sofort\\Action\\StatusAction",
+                    "Payum\\Sofort\\Action\\NotifyAction",
+                    "Payum\\Sofort\\Action\\SyncAction",
+                    "Payum\\Sofort\\Action\\RefundAction",
+                    "Payum\\Sofort\\Action\\ConvertPaymentAction",
+                    "Payum\\Sofort\\Action\\Api\\CreateTransactionAction",
+                    "Payum\\Sofort\\Action\\Api\\GetTransactionDataAction",
+                    "Payum\\Sofort\\Action\\Api\\RefundTransactionAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Sofort\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": null,
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": "Payum\\Sofort\\Action\\RefundAction",
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": "Payum\\Sofort\\Action\\SyncAction",
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": "Payum\\Sofort\\Action\\NotifyAction",
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": null,
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Sofort\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Sofort\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Sofort\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "sofort_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "expires": 1
+                },
+                "human": "expired",
+                "binary": 262144
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "loss"
+                },
+                "human": "failed",
+                "binary": 1048576
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "pending"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "received",
+                    "statusReason": "credited"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "received",
+                    "statusReason": "partially_credited"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "refunded",
+                    "statusReason": "refunded"
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "transaction_id": "T1",
+                    "status": "untraceable"
+                },
+                "human": "captured",
+                "binary": 4
+            }
+        ]
+    }
+}

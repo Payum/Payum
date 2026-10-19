@@ -1,0 +1,287 @@
+{
+    "recorded_with": "payum 1.7.7, PHP 8.5",
+    "scenarios": {
+        "offline_select": [
+            {
+                "op": "select",
+                "actions": [
+                    "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "Payum\\Core\\Action\\CapturePaymentAction",
+                    "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "Payum\\Core\\Action\\PayoutPayoutAction",
+                    "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "Payum\\Core\\Action\\GetCurrencyAction",
+                    "Payum\\Core\\Action\\GetTokenAction",
+                    "Payum\\Offline\\Action\\CaptureAction",
+                    "Payum\\Offline\\Action\\AuthorizeAction",
+                    "Payum\\Offline\\Action\\PayoutAction",
+                    "Payum\\Offline\\Action\\RefundAction",
+                    "Payum\\Offline\\Action\\StatusAction",
+                    "Payum\\Offline\\Action\\ConvertPaymentAction",
+                    "Payum\\Offline\\Action\\ConvertPayoutAction"
+                ],
+                "extensions": [
+                    "Payum\\Core\\Extension\\GenericTokenFactoryExtension",
+                    "Payum\\Core\\Extension\\StorageExtension",
+                    "Payum\\Core\\Extension\\EndlessCycleDetectorExtension"
+                ],
+                "selected": {
+                    "capture(details)": "Payum\\Offline\\Action\\CaptureAction",
+                    "capture(payment)": "Payum\\Core\\Action\\CapturePaymentAction",
+                    "authorize(details)": "Payum\\Offline\\Action\\AuthorizeAction",
+                    "authorize(payment)": "Payum\\Core\\Action\\AuthorizePaymentAction",
+                    "refund(details)": "Payum\\Offline\\Action\\RefundAction",
+                    "refund(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "cancel(details)": null,
+                    "cancel(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "sync(details)": null,
+                    "sync(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "notify(details)": null,
+                    "notify(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "payout(details)": "Payum\\Offline\\Action\\PayoutAction",
+                    "payout(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetHumanStatus(details)": "Payum\\Offline\\Action\\StatusAction",
+                    "GetHumanStatus(payment)": "Payum\\Core\\Action\\ExecuteSameRequestWithModelDetailsAction",
+                    "GetBinaryStatus(details)": "Payum\\Offline\\Action\\StatusAction",
+                    "Convert(payment, array)": "Payum\\Offline\\Action\\ConvertPaymentAction",
+                    "GetHttpRequest": "Payum\\Core\\Bridge\\PlainPhp\\Action\\GetHttpRequestAction",
+                    "GetCurrency": "Payum\\Core\\Action\\GetCurrencyAction",
+                    "GetToken": "Payum\\Core\\Action\\GetTokenAction",
+                    "RenderTemplate": "Payum\\Core\\Bridge\\Twig\\Action\\RenderTemplateAction",
+                    "ObtainCreditCard": null
+                }
+            }
+        ],
+        "offline_status": [
+            {
+                "op": "status",
+                "details": [],
+                "human": "new",
+                "binary": 2
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "pending"
+                },
+                "human": "pending",
+                "binary": 1024
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "captured"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "payedout"
+                },
+                "human": "payedout",
+                "binary": 4194304
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "refunded"
+                },
+                "human": "refunded",
+                "binary": 16
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "canceled"
+                },
+                "human": "canceled",
+                "binary": 32
+            },
+            {
+                "op": "status",
+                "details": {
+                    "status": "something else"
+                },
+                "human": "unknown",
+                "binary": 2097152
+            }
+        ],
+        "offline_capture_then_refund_by_token": [
+            {
+                "op": "capture",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_capture_then_refund_by_token",
+                    "description": "BC scenario offline_capture_then_refund_by_token",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "captured"
+                },
+                "human": "captured",
+                "binary": 4
+            },
+            {
+                "op": "refund",
+                "on": "token",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_capture_then_refund_by_token",
+                    "description": "BC scenario offline_capture_then_refund_by_token",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "refunded"
+                },
+                "human": "refunded",
+                "binary": 16
+            }
+        ],
+        "offline_capture_unpaid": [
+            {
+                "op": "capture",
+                "on": "payment",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "paid": false,
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_capture_unpaid",
+                    "description": "BC scenario offline_capture_unpaid",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "status": "pending"
+                },
+                "human": "pending",
+                "binary": 1024
+            }
+        ],
+        "offline_authorize_then_cancel": [
+            {
+                "op": "authorize",
+                "on": "payment",
+                "outcome": {
+                    "type": "none"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_authorize_then_cancel",
+                    "description": "BC scenario offline_authorize_then_cancel",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "cancel",
+                "on": "payment",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\Cancel"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_authorize_then_cancel",
+                    "description": "BC scenario offline_authorize_then_cancel",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "sync",
+                "on": "payment",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\Sync"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_authorize_then_cancel",
+                    "description": "BC scenario offline_authorize_then_cancel",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            },
+            {
+                "op": "notify",
+                "on": "token",
+                "outcome": {
+                    "type": "exception",
+                    "class": "Payum\\Core\\Exception\\RequestNotSupportedException",
+                    "request": "Payum\\Core\\Request\\Notify"
+                },
+                "writes": 1,
+                "http": [],
+                "stripe": [],
+                "details": {
+                    "amount": 1234,
+                    "currency": "EUR",
+                    "number": "bc-offline_authorize_then_cancel",
+                    "description": "BC scenario offline_authorize_then_cancel",
+                    "client_email": "buyer@example.test",
+                    "client_id": "buyer-1",
+                    "paid": true,
+                    "status": "authorized"
+                },
+                "human": "authorized",
+                "binary": 8
+            }
+        ]
+    }
+}
