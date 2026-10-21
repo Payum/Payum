@@ -100,10 +100,13 @@ jobs:
           extensions: intl, opcache, mysql, pdo_mysql, mongodb-${{ matrix.driver }}
           coverage: none
 
+      # mongod 8.0 refuses to start on Linux 6.19 to 7.0.13 kernels, which some runners have
+      # (SERVER-121912). Handing rseq back to glibc keeps it out of the way.
       - name: Start MongoDB
-        uses: "supercharge/mongodb-github-action@315db7fe45ac2880b7758f1933e6e5d59afd5e94" # v1.12.1
+        uses: "supercharge/mongodb-github-action@89d1ecb837145f486898e235478a7e267f68c44e" # main, for mongodb-extra-env
         with:
           mongodb-version: ${{ matrix.mongodb }}
+          mongodb-extra-env: GLIBC_TUNABLES=glibc.pthread.rseq=1
 
       - name: Install dependencies
         uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
