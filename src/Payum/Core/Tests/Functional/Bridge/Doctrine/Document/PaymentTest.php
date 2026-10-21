@@ -70,17 +70,11 @@ final class PaymentTest extends MongoTest
 
         $this->dm->refresh($order);
 
-        if (PHP_VERSION_ID >= 70400) {
-            $this->assertEquals([
-                'cardNumber' => new SensitiveValue(null),
-            ], $order->getDetails());
-            $this->assertNotEquals([
-                'cardNumber' => new SensitiveValue('theCardNumber'),
-            ], $order->getDetails());
-        } else {
-            $this->assertEquals([
-                'cardNumber' => null,
-            ], $order->getDetails());
-        }
+        $this->assertEquals([
+            'cardNumber' => new SensitiveValue(null),
+        ], $order->getDetails());
+        $this->assertNotEquals([
+            'cardNumber' => new SensitiveValue('theCardNumber'),
+        ], $order->getDetails());
     }
 }

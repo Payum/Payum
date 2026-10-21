@@ -68,11 +68,7 @@ final class ArrayObjectTest extends MongoTest
 
         $this->dm->refresh($model);
 
-        if (PHP_VERSION_ID >= 70400) {
-            $this->assertEquals(new SensitiveValue(null), $model['cardNumber']);
-            $this->assertNotEquals(new SensitiveValue('theCardNumber'), $model['cardNumber']);
-        } else {
-            $this->assertEquals(null, $model['cardNumber']);
-        }
+        $this->assertEquals(new SensitiveValue(null), $model['cardNumber']);
+        $this->assertNotEquals(new SensitiveValue('theCardNumber'), $model['cardNumber']);
     }
 }

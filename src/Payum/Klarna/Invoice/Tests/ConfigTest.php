@@ -21,7 +21,6 @@ final class ConfigTest extends TestCase
         $this->assertSame(KlarnaLanguage::SV, $config->language);
         $this->assertSame(KlarnaCurrency::SEK, $config->currency);
         $this->assertSame(Klarna::BETA, $config->mode);
-        $this->assertSame(Klarna::BETA, $config->mode);
         $this->assertSame('json', $config->pClassStorage);
         $this->assertSame('./pclasses.json', $config->pClassStoragePath);
     }

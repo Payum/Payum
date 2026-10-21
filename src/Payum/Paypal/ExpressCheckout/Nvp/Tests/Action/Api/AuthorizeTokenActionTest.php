@@ -82,9 +82,6 @@ final class AuthorizeTokenActionTest extends TestCase
         $action = new AuthorizeTokenAction();
         $action->setApi($apiMock);
 
-        $model = new ArrayObject();
-        $model['TOKEN'] = $expectedRedirectUrl;
-
         $request = new AuthorizeToken([
             'TOKEN' => $expectedToken,
         ]);

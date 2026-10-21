@@ -260,8 +260,9 @@ final class DynamicRegistryTest extends TestCase
 
         $registry = new DynamicRegistry($storageMock, $gatewayFactoryRegistry);
 
-        $this->assertSame($gateway, $registry->getGateway($gatewayName));
-        $this->assertSame($gateway, $registry->getGateway($gatewayName));
+        foreach ([1, 2] as $ignored) {
+            $this->assertSame($gateway, $registry->getGateway($gatewayName));
+        }
     }
 
     /**
