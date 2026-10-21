@@ -1183,12 +1183,6 @@ parameters:
 			path: src/Payum/Core/Tests/Bridge/Psr/Log/LoggerExtensionTest.php
 
 		-
-			message: '#^ArrayObject\<\*NEVER\*, \*NEVER\*\> does not accept string\.$#'
-			identifier: offsetAssign.valueType
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Spl/ArrayObjectTest.php
-
-		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertIsArray\(\) with array will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
 			count: 1
@@ -1379,18 +1373,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
-
-		-
-			message: '#^Comparison operation "\>\=" between int\<80100, 80599\> and 70400 is always true\.$#'
-			identifier: greaterOrEqual.alwaysTrue
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/ArrayObjectTest.php
-
-		-
-			message: '#^Comparison operation "\>\=" between int\<80100, 80599\> and 70400 is always true\.$#'
-			identifier: greaterOrEqual.alwaysTrue
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/Document/PaymentTest.php
 
 		-
 			message: '#^Parameter \#1 \$details of method Payum\\Core\\Model\\Payment\:\:setDetails\(\) expects array\|Traversable, string given\.$#'
@@ -1835,12 +1817,6 @@ parameters:
 			identifier: method.impossibleType
 			count: 1
 			path: src/Payum/Core/Tests/Security/AbstractTokenFactoryTest.php
-
-		-
-			message: '#^Comparison operation "\>\=" between int\<80100, 80599\> and 70400 is always true\.$#'
-			identifier: greaterOrEqual.alwaysTrue
-			count: 1
-			path: src/Payum/Core/Tests/Security/SensitiveValueTest.php
 
 		-
 			message: '#^Expression "clone \$sensitiveValue" on a separate line does not do anything\.$#'
@@ -2837,12 +2813,6 @@ parameters:
 			identifier: notIdentical.alwaysTrue
 			count: 1
 			path: src/Payum/Paypal/ExpressCheckout/Nvp/Action/RecurringPaymentDetailsSyncAction.php
-
-		-
-			message: '#^ArrayObject\<\*NEVER\*, \*NEVER\*\> does not accept string\.$#'
-			identifier: offsetAssign.valueType
-			count: 1
-			path: src/Payum/Paypal/ExpressCheckout/Nvp/Tests/Action/Api/AuthorizeTokenActionTest.php
 
 		-
 			message: '#^Class Payum\\Paypal\\ExpressCheckout\\Nvp\\Action\\Api\\AuthorizeTokenAction constructor invoked with 1 parameter, 0 required\.$#'

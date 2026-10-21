@@ -65,8 +65,9 @@ final class ArrayObjectTest extends TestCase
 
     public function testShouldAllowGetValueSetInInternalArrayObject(): void
     {
-        $internalArray = new \ArrayObject();
-        $internalArray['foo'] = 'bar';
+        $internalArray = new \ArrayObject([
+            'foo' => 'bar',
+        ]);
 
         $array = new ArrayObject($internalArray);
 

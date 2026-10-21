@@ -114,9 +114,9 @@ final class SimpleRegistryTest extends TestCase
             ]
         );
 
-        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
-        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
-        $this->assertSame($gatewayMock, $registry->getGateway('foo'));
+        foreach ([1, 2, 3] as $ignored) {
+            $this->assertSame($gatewayMock, $registry->getGateway('foo'));
+        }
     }
 
     public function testShouldNotInitializeStorageExtensionsIfAnyStoragesAssociatedWithGateway(): void

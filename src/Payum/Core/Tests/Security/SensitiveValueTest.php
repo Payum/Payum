@@ -42,8 +42,9 @@ final class SensitiveValueTest extends TestCase
 
         $sensitiveValue = new SensitiveValue($expectedValue);
 
-        $this->assertSame($expectedValue, $sensitiveValue->peek());
-        $this->assertSame($expectedValue, $sensitiveValue->peek());
+        foreach ([1, 2] as $ignored) {
+            $this->assertSame($expectedValue, $sensitiveValue->peek());
+        }
     }
 
     public function testShouldAllowEraseValue(): void
@@ -65,14 +66,9 @@ final class SensitiveValueTest extends TestCase
 
         $serializedValue = serialize($sensitiveValue);
 
-        if (PHP_VERSION_ID >= 70400) {
-            // the object will be unserialized anyway, make sure it's empty
-            $this->assertSame('O:34:"Payum\Core\Security\SensitiveValue":0:{}', $serializedValue);
-            $this->assertNull(unserialize($serializedValue)->peek());
-        } else {
-            $this->assertSame('N;', $serializedValue);
-            $this->assertNull(unserialize($serializedValue));
-        }
+        // the object will be unserialized anyway, make sure it's empty
+        $this->assertSame('O:34:"Payum\Core\Security\SensitiveValue":0:{}', $serializedValue);
+        $this->assertNull(unserialize($serializedValue)->peek());
     }
 
     public function testShouldReturnEmptyStringOnToString(): void
