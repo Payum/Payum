@@ -6,6 +6,9 @@ on:
       - 2.x
   pull_request: ~
 
+permissions:
+  contents: read
+
 env:
   SYMFONY_DEPRECATIONS_HELPER: weak
 
