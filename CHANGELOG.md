@@ -10,6 +10,7 @@
 * Fix a 1.x request answered by a handler not writing back a stored payment it was handed directly, which `StorageExtension` did in 1.x
 * Fix `GetHumanStatus` on a token reading as unknown on a gateway that still has a status action, because it was answered from the recorded status before `StorageExtension` had loaded the payment
 * Fix the shipped PayPal and Be2Bill gateways failing with a `TypeError` when the application sets a 1.x `Payum\Core\HttpClientInterface` as `payum.http_client`
+* Require `stripe/stripe-php` 7.3 or newer. Earlier 7.x releases fail with a `TypeError` on PHP 8 as soon as a charge comes back, in `StripeObject::toArray()`
 
 * Monetary values are expressed as `moneyphp/money` objects. Commands take a `Money` where they took minor units, results report one, `Payum\Core\Handler\Context::amount()` resolves "how much is this execution for" against the subject, and `Payum\Core\Model\Payment` and `Payout` answer `getMoney()`. Every integer accessor keeps working and keeps its meaning, so nothing has to change at once
 * `Payum\Core\Model\MoneyAwareInterface` is how an application's own entity opts in, and `Payum\Core\Money\Amount` reads and writes an amount on a model whether or not it has. Both map over `totalAmount` and `currencyCode`, so **no storage or Doctrine mapping changes**: those two columns already hold everything a `Money` is made of

@@ -21,7 +21,7 @@
     ],
     "require": {
         "payum/core": "2.0.x-dev",
-        "stripe/stripe-php": "^7.0"
+        "stripe/stripe-php": "^7.3"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^6.0",
