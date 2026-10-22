@@ -6,6 +6,10 @@ use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. Use
+ *             Payum\Core\Middleware\PersistStateMiddleware instead.
+ */
 class StorageExtension implements ExtensionInterface
 {
     /**

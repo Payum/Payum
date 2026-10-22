@@ -8,7 +8,8 @@ use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Sofort\Api;
 
 /**
- * @deprecated since 1.4.1 will be removed in 2.x
+ * @deprecated since 1.4.1, will be removed in 3.0. Take the Payum\Sofort\Api as a constructor
+ *             argument instead, and let the container inject it.
  */
 abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {

@@ -2,6 +2,10 @@
 
 namespace Payum\Core\Extension;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. Use
+ *             Payum\Core\Middleware\MiddlewareCollection instead.
+ */
 class ExtensionCollection implements ExtensionInterface
 {
     /**

@@ -7,10 +7,10 @@ use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ObtainCreditCardActionBuilder class is deprecated since version 2.0 and will be removed in 3.0. Use the same class from Payum/PayumBundle instead.', E_USER_DEPRECATED);
+@trigger_error('The ' . __NAMESPACE__ . '\ObtainCreditCardActionBuilder class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\ObtainCreditCardActionBuilder from payum/payum-bundle instead.', E_USER_DEPRECATED);
 
 /**
- * @deprecated since 2.0. Use the same class from Payum/PayumBundle instead.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\ObtainCreditCardActionBuilder from payum/payum-bundle instead.
  */
 class ObtainCreditCardActionBuilder
 {

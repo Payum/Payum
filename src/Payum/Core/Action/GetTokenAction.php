@@ -8,6 +8,11 @@ use Payum\Core\Request\GetToken;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler reads the token this execution came in on
+ *             from Payum\Core\Handler\Context::token(); one that needs a different token looks it up in
+ *             the token storage, Payum\Core\Payum::getTokenStorage().
+ */
 class GetTokenAction implements ActionInterface
 {
     /**

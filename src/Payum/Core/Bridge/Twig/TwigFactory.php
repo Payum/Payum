@@ -11,7 +11,8 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 /**
- * @deprecated since 1.0.0-BETA4
+ * @deprecated since 2.0.0, will be removed in 3.0. Register a gateway's template paths on the
+ *             application's own Twig environment with Payum\Core\Bridge\Twig\TwigUtil::registerPaths().
  */
 class TwigFactory
 {

@@ -340,6 +340,31 @@ migrate at your own pace.
 | `'httplug.stream_factory'` | `Psr\Http\Message\StreamFactoryInterface` |
 | `'httplug.message_factory'` | `Psr\Http\Message\RequestFactoryInterface` |
 | `Payum\Core\Bridge\Spl\ArrayObject` as a service | `Psr\Container\ContainerInterface` |
+| `Payum\Core\PayumBuilder::addGateway()` | `registerGateway()`, given a `Payum\Core\Config\GatewayConfig` |
+| `Payum\Core\Request\Capture` and the six other operation requests | `Payum\Core\Command\CaptureCommand` and its siblings |
+| `Payum\Core\Request\GetHttpRequest` | `Payum\Core\Handler\Context::httpRequest()` |
+| `Payum\Core\Request\GetToken` | `Payum\Core\Handler\Context::token()` |
+| `Payum\Core\Request\RenderTemplate` | `Payum\Core\Result\NextAction\RenderTemplate` |
+| `Payum\Core\Request\GetCurrency` | `Payum\Core\ISO4217\Currency` |
+| `Payum\Core\Request\GetHumanStatus`, `GetBinaryStatus` | `Payum\Core\Result\PaymentStatus`, declared on the result |
+| `Payum\Core\Reply\HttpRedirect` | `Payum\Core\Result\NextAction\Redirect` |
+| `Payum\Core\Reply\HttpPostRedirect` | `Payum\Core\Result\NextAction\PostRedirect` |
+| `Payum\Core\Reply\HttpResponse` | `Payum\Core\Result\Acknowledgement` on a `NotifyResult` |
+| `Payum\Core\Action\GatewayAwareAction` | `GatewayAwareInterface` + `GatewayAwareTrait`, or `Context::execute()` |
+| `Payum\Core\Extension\ExtensionInterface` | `Payum\Core\Middleware\MiddlewareInterface` |
+| `Payum\Core\Extension\StorageExtension` | `Payum\Core\Middleware\PersistStateMiddleware` |
+| `Payum\Core\Extension\EndlessCycleDetectorExtension` | `Payum\Core\Middleware\EndlessCycleDetectorMiddleware` |
+| `Payum\Core\Security\GenericTokenFactoryAwareInterface` / `Trait` | `Payum\Core\Handler\Context::tokens()` |
+
+Only the entry points an application names itself emit a deprecation at runtime, and each does so once
+per class rather than once per call. The ones a gateway's own actions name — the sub-requests, the
+replies, core's actions, the extension mechanism — carry a `@deprecated` and nothing else: an
+application running an unported gateway cannot act on a notice about that gateway's internals, and its
+author reads the docblock.
+
+`Payum\Core\Request\Generic`, `Payum\Core\Action\ActionInterface` and `Payum\Core\Request\Convert` are
+not on the list. The first two are what every third-party gateway extends and are not going anywhere in
+2.x; the third has no replacement, because a handler builds its own payload.
 
 ## Testing Your Migration
 

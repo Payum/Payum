@@ -4,6 +4,10 @@ namespace Payum\Core\Extension;
 
 use Payum\Core\Exception\LogicException;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. Use
+ *             Payum\Core\Middleware\EndlessCycleDetectorMiddleware instead.
+ */
 class EndlessCycleDetectorExtension implements ExtensionInterface
 {
     /**

@@ -11,6 +11,11 @@ use Payum\Core\ISO4217\Currency;
 use Payum\Core\Request\GetCurrency;
 use function is_numeric;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler calls
+ *             Payum\Core\ISO4217\Currency::createFromIso4217Alpha3() or ::createFromIso4217Numeric()
+ *             directly instead.
+ */
 class GetCurrencyAction implements ActionInterface
 {
     /**

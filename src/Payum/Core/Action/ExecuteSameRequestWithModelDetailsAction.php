@@ -11,6 +11,10 @@ use Payum\Core\Model\DetailsAwareInterface;
 use Payum\Core\Model\ModelAggregateInterface;
 use Payum\Core\Model\ModelAwareInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler is given the details this action unwrapped
+ *             as Payum\Core\Handler\Context::state(), so nothing has to re-dispatch to reach them.
+ */
 class ExecuteSameRequestWithModelDetailsAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;

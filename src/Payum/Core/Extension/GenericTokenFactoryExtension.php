@@ -5,6 +5,10 @@ namespace Payum\Core\Extension;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler is given the token factory as
+ *             Payum\Core\Handler\Context::tokens(), so nothing has to be injected into it.
+ */
 class GenericTokenFactoryExtension implements ExtensionInterface
 {
     /**

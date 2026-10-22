@@ -56,7 +56,25 @@
   * An application can hand its own PSR-11 container to `Payum\Core\PayumBuilder::setGlobalContainer()`, or register
     single services with `Payum\Core\PayumBuilder::addGlobalService()`. Implement
     `Payum\Core\DI\ListableContainerInterface` on your container to have its services autowired into gateway actions.
-* The whole `Payum\Core\Bridge\Symfony` namespace is deprecated. Use the same classes from `payum/payum-bundle` instead.
+* The whole `Payum\Core\Bridge\Symfony` namespace is deprecated. Every message now names the class in
+  `payum/payum-bundle` that replaces it — the same relative path under `Payum\Bundle\PayumBundle`.
+* The 1.x request, reply, action and extension surface is deprecated in favour of commands, handlers,
+  results and middleware. Everything still works in 2.0 and goes in 3.0; see
+  [Migrating a gateway from 1.x](docs/gateways/migrating-from-v1.md) for the whole map, and
+  [Deprecated APIs](docs/di/migration-guide.md#deprecated-apis) for the table.
+  * The seven operation requests — `Capture`, `Authorize`, `Refund`, `Cancel`, `Sync`, `Payout` and
+    `Notify` — emit a deprecation naming the command that means the same thing, once per class rather
+    than once per dispatch. Dispatching one at a gateway that has moved to handlers still works: it is
+    translated, run through the handler, and answered the way 1.x expects.
+  * The sub-requests a 1.x action dispatches at its own gateway (`GetHttpRequest`, `RenderTemplate`,
+    `GetCurrency`, `GetToken`, `GetHumanStatus`, `GetBinaryStatus`), the replies it throws, the
+    `Payum\Core\Action` classes and the extension mechanism carry a `@deprecated` naming their
+    replacement, but emit nothing at runtime: an application cannot act on a notice about a
+    dependency's internals. The classes an application registers itself — the bridge actions below
+    among them — do emit.
+  * `Payum\Core\Request\Generic`, `Payum\Core\Action\ActionInterface` and `Payum\Core\Request\Convert`
+    are **not** deprecated. Every third-party gateway extends the first two, and the third has no
+    replacement — a handler builds its own payload.
 * Webhooks are handled by a command. `Payum::notify()` dispatches `Payum\Core\Command\NotifyCommand`
   against a gateway built from handlers, and falls back to `Payum\Core\Request\Notify` for one that
   still ships actions, so nothing needs changing to keep working.

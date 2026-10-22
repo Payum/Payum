@@ -4,6 +4,10 @@ namespace Payum\Core\Request;
 
 use InvalidArgumentException;
 
+/**
+ * @deprecated since 2.0.0, will be removed in 3.0. A handler returns
+ *             Payum\Core\Result\NextAction\RenderTemplate on its result instead.
+ */
 class RenderTemplate
 {
     /**

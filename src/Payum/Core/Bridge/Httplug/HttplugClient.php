@@ -6,15 +6,16 @@ use Payum\Core\HttpClientInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use function trigger_error;
+use function trigger_deprecation;
 
-trigger_error('The ' . __NAMESPACE__ . '\HttplugClient is deprecated since 2.0.0 and will be removed in 3.0. Use Psr18ClientDiscovery::find() instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Use a %s — the one Http\Discovery\Psr18ClientDiscovery::find() returns, or your own — instead.', HttplugClient::class, ClientInterface::class);
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking
- * backward compatibility. At 2.0 we will be using Http\Client\HttpClient.
+ * backward compatibility.
  *
- * @deprecated This will be removed in 2.0. Consider using Http\Client\HttpClient.
+ * @deprecated since 2.0.0, will be removed in 3.0. Use a Psr\Http\Client\ClientInterface — the one
+ *             Http\Discovery\Psr18ClientDiscovery::find() returns, or your own — instead.
  */
 class HttplugClient implements HttpClientInterface, ClientInterface
 {
@@ -26,11 +27,13 @@ class HttplugClient implements HttpClientInterface, ClientInterface
     }
 
     /**
-     * @deprecated since 2.0.0, will be removed in 3.0. Use sendRequest() instead.
+     * @deprecated since 2.0.0, will be removed in 3.0. Use
+     *             Psr\Http\Client\ClientInterface::sendRequest() instead.
      */
     public function send(RequestInterface $request): ResponseInterface
     {
-        trigger_error('The ' . self::class . '::send() is deprecated since 2.0.0 and will be removed in 3.0. Use sendRequest() instead.', E_USER_DEPRECATED);
+        trigger_deprecation('payum/core', '2.0.0', 'The %s::send() is deprecated and will be removed in 3.0. Use %s::sendRequest() instead.', self::class, ClientInterface::class);
+
         return $this->sendRequest($request);
     }
 
