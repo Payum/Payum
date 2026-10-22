@@ -196,7 +196,7 @@ final class CaptureHandler implements CaptureHandlerInterface
 
 ### Moving one operation at a time
 
-You do not have to port everything at once. A gateway can keep its factory and actions while a single handler moves across — `execute()` routes by argument type, so the two coexist in the same package.
+You do not have to port everything at once. See [Moving one operation at a time](#moving-one-operation-at-a-time-1) below.
 
 ### Dispatching a command at a gateway you have not ported
 
@@ -310,6 +310,56 @@ final class AcmeGateway implements GatewayInterface, DeclaresActions
 ```
 
 `Capture` goes to the handler. `Refund` falls through to the action. When the last action becomes a handler, drop the interface.
+
+#### Taking commands for an action you have not ported
+
+A command reaches handlers only, so in the gateway above a `RefundCommand` is not supported even though `RefundAction` answers `Refund`. To take the command before the action is ported, list the handler that hands it to your actions:
+
+```php
+use Payum\Core\Legacy\Handler\RefundActionHandler;
+
+public function handlers(): array
+{
+    return [CaptureHandler::class, RefundActionHandler::class];
+}
+
+public function actions(): array
+{
+    return [RefundAction::class];        // still answers, now for RefundCommand too
+}
+```
+
+`RefundCommand` becomes the `Refund` request, runs through your actions as it did in 1.x, and the reply the action threw comes back as `$result->next`. There is one such handler per command in `Payum\Core\Legacy\Handler`: `CaptureActionHandler`, `AuthorizeActionHandler`, `RefundActionHandler`, `CancelActionHandler`, `SyncActionHandler`, `PayoutActionHandler` and `NotifyActionHandler`. Keep the action in `actions()`, or nothing answers the request.
+
+The result carries what [`LegacyGatewayAdapter`](#driving-an-unported-gateway-with-commands) can tell you and no more: a status, a next action, no transaction id. A command carrying an amount, a reason or an idempotency key is refused for the same reason. Replace the handler with the real one when you port the action.
+
+#### Adding a handler to a gateway factory
+
+The other way round: your gateway is still a 1.x factory, and you want to write one operation as a handler before the rest. Register it as an action:
+
+```php
+use Payum\Core\Legacy\HandlerToActionAdapter;
+
+class AcmeGatewayFactory extends GatewayFactory
+{
+    protected function populateConfig(ArrayObject $config): void
+    {
+        $config->defaults([
+            'payum.factory_name' => 'acme',
+            'payum.factory_title' => 'Acme',
+            'payum.action.capture' => new CaptureAction(),
+            'payum.action.refund' => new HandlerToActionAdapter(new RefundHandler()),
+        ]);
+    }
+}
+```
+
+A `Refund` request about a payment now runs `RefundHandler`, and a 1.x caller catches the reply it decided, exactly as it did from the action. The handler gets a full `$context`: the payment, the token, the HTTP request and `$context->state()` written back onto the payment. Two things it does not have on a factory-built gateway:
+
+- `$context->gateway()` knows only the gateway's name; its logo, website and config class throw. Write the gateway class first if a handler needs them.
+- A `Refund` carrying only a details array, with no payment behind it, is left to the actions. A handler always works on a payment.
+
+When every action is a handler, replace the factory with a gateway class and drop the adapter.
 
 Declaring any action brings core's own actions and extensions along, since an action dispatching `GetHttpRequest` or `RenderTemplate` still expects an answer. A gateway that declares none gets a clean gateway with no 1.x machinery on it at all.
 

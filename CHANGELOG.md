@@ -2,6 +2,10 @@
 
 ## 2.0.0 (TBD)
 
+* Add `Payum\Core\Legacy\ActionToHandlerAdapter` and one handler per command under `Payum\Core\Legacy\Handler` (`CaptureActionHandler`, `RefundActionHandler`, …). A gateway part-way through porting lists one in `handlers()` and the command is answered by the 1.x action it still declares, so it takes commands for an operation before that operation is rewritten
+* Add `Payum\Core\Legacy\HandlerToActionAdapter`, which registers a handler as an action on a gateway a 1.x factory still builds. The handler runs through the same middleware as on a gateway built from handlers, so an author can write one operation the 2.0 way without first replacing the factory
+* Fix `StorageExtension` writing a payment twice when a command ran inside a 1.x action, or a 1.x request inside a command. The two paths kept separate stacks, so each believed it was the outermost call; 1.x writes once
+* Fix a reply a 1.x action threw, carried in a `LegacyReply`, failing to reach a 1.x caller with a `LogicException` instead of being thrown again unchanged
 * Fix a gateway's own definition of a handler in `configureContainer()` being ignored. The builder bound every handler interface to a freshly autowired handler after the gateway's definitions, so the documented way to decorate a handler did nothing, and a handler with a constructor argument the container could not autowire failed to build
 * Add a BC conformance suite (`src/Payum/Core/Tests/Bc`, the `bc` PHPUnit testsuite and CI job). Every shipped gateway factory and three fixture gateways replay scripted operations on 2.x, once with 1.x requests and once with 2.x commands through `LegacyGatewayAdapter`, and are compared with what Payum 1.7.7 did. The expectations are recorded from a 1.x install, so the suite catches drift from 1.x rather than confirming 2.x against itself
 * Fix a 1.x gateway factory registering core's actions and `EndlessCycleDetectorExtension` twice, and registering core's entries ahead of the caller's. Actions run in registration order, so an application's own `payum.action.*` lost to core's for any request both claimed

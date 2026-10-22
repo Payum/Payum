@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Payum\Core\Legacy;
 
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\PostRedirect;
@@ -28,7 +28,7 @@ final class ResultToReply
      * Null when the operation is finished and there is nothing for the caller to act on, which is the
      * same as a 1.x action returning without throwing.
      */
-    public static function translate(Result $result): ?Base
+    public static function translate(Result $result): ?ReplyInterface
     {
         if ($result instanceof NotifyResult && $result->acknowledgement instanceof Acknowledgement) {
             return new HttpResponse(
@@ -42,6 +42,7 @@ final class ResultToReply
 
         return match (true) {
             ! $next instanceof NextAction => null,
+            $next instanceof LegacyReply => $next->reply,
             $next instanceof Redirect => new HttpRedirect($next->url, $next->statusCode, $next->headers),
             $next instanceof PostRedirect => new HttpPostRedirect($next->url, $next->fields),
             default => throw new LogicException(sprintf(

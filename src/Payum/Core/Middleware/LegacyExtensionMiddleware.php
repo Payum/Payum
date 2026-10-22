@@ -6,13 +6,11 @@ namespace Payum\Core\Middleware;
 
 use Exception;
 use Payum\Core\Command\CommandInterface;
-use Payum\Core\Extension\Context as ExtensionContext;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Result\Result;
-use function array_pop;
 
 /**
  * Runs the gateway's registered extensions around a command.
@@ -28,14 +26,6 @@ use function array_pop;
 final class LegacyExtensionMiddleware implements MiddlewareInterface, GatewayAwareInterface, HasPriority
 {
     private ?Gateway $gateway = null;
-
-    /**
-     * Mirrors the nesting an extension would see on the action path. Held here because these contexts are
-     * this middleware's own, not the executor's.
-     *
-     * @var list<ExtensionContext>
-     */
-    private array $stack = [];
 
     public static function priority(): int
     {
@@ -54,8 +44,7 @@ final class LegacyExtensionMiddleware implements MiddlewareInterface, GatewayAwa
         }
 
         $extensions = $this->gateway->getExtensions();
-        $legacyContext = new ExtensionContext($this->gateway, $command, $this->stack);
-        $this->stack[] = $legacyContext;
+        $legacyContext = $this->gateway->openExtensionContext($command);
 
         try {
             $extensions->onPreExecute($legacyContext);
@@ -72,7 +61,7 @@ final class LegacyExtensionMiddleware implements MiddlewareInterface, GatewayAwa
 
             throw $exception;
         } finally {
-            array_pop($this->stack);
+            $this->gateway->closeExtensionContext();
         }
     }
 }
