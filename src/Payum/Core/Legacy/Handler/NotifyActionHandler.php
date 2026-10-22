@@ -11,6 +11,7 @@ use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Legacy\ActionToHandlerAdapter;
 use Payum\Core\Result\NotifyResult;
 use Psr\Http\Message\ServerRequestInterface;
+use function is_array;
 
 /**
  * @deprecated since 2.0, removed in 3.0 along with actions.
@@ -22,7 +23,9 @@ final class NotifyActionHandler extends ActionToHandlerAdapter implements Notify
      */
     public function verify(ServerRequestInterface $request): WebhookEvent
     {
-        return WebhookEvent::unverified([]);
+        $body = $request->getParsedBody();
+
+        return WebhookEvent::unverified(is_array($body) ? $body : []);
     }
 
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
