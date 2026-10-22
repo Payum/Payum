@@ -407,6 +407,7 @@ class PayumBuilder
         /** @var CoreGatewayFactory $coreGatewayFactory */
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
+            GenericTokenFactoryInterface::class => $genericTokenFactory,
             'payum.security.token_storage' => $tokenStorage,
         ], $this->coreGatewayFactoryConfig));
 

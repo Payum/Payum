@@ -25,15 +25,16 @@ use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Handler\NotifyHandlerInterface;
+use Payum\Core\Legacy\ActionToHandlerAdapter;
 use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
+use Payum\Core\Legacy\UndescribedGateway;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
-use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
@@ -192,7 +193,9 @@ class Gateway implements GatewayInterface
             } elseif (RequestToCommand::supports($request)) {
                 $command = RequestToCommand::translate($request, $this->resolveSubjectOf($request));
 
-                if ($command instanceof CommandInterface && $this->supportsCommand($command::class)) {
+                // A handler asking for the 1.x request of the command it is answering wants the actions:
+                // that is how an action answers a command through ActionToHandlerAdapter.
+                if ($command instanceof CommandInterface && $this->supportsCommand($command::class) && ! $this->isDispatching($command)) {
                     try {
                         return $this->replyFor($this->dispatch($command), $catchReply);
                     } finally {
@@ -274,6 +277,41 @@ class Gateway implements GatewayInterface
     public function supportsRequest(object $request): bool
     {
         return false !== $this->findActionSupported($request);
+    }
+
+    /**
+     * Runs a handler this gateway does not list for a 1.x request, and throws the reply the 1.x caller is
+     * waiting to catch. What lets a gateway built by a 1.x factory carry a handler.
+     *
+     * @param CommandInterface<Result> $command
+     *
+     * @internal for {@see \Payum\Core\Legacy\HandlerToActionAdapter}
+     *
+     * @deprecated since 2.0, removed in 3.0 along with actions.
+     */
+    public function executeHandler(HandlerInterface $handler, CommandInterface $command, ?SubjectInterface $subject = null): void
+    {
+        $this->replyFor($this->dispatch($command, $handler, $subject), false);
+    }
+
+    /**
+     * Opens a 1.x extension context for a command on the stack the action path uses, so an extension sees
+     * the same nesting whichever path a request took. StorageExtension relies on it to write once, when the
+     * outermost call returns.
+     *
+     * @internal for {@see \Payum\Core\Middleware\LegacyExtensionMiddleware}
+     */
+    public function openExtensionContext(object $request): Context
+    {
+        return $this->stack[] = new Context($this, $request, $this->stack);
+    }
+
+    /**
+     * @internal for {@see \Payum\Core\Middleware\LegacyExtensionMiddleware}
+     */
+    public function closeExtensionContext(): void
+    {
+        array_pop($this->stack);
     }
 
     public function setName(string $name): self
@@ -372,13 +410,15 @@ class Gateway implements GatewayInterface
 
     /**
      * @param CommandInterface<Result> $command
+     * @param HandlerInterface|null $handler one the handler map does not name, run in its place
+     * @param SubjectInterface|null $subject what the command is about, when the caller has already loaded it
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function dispatch(CommandInterface $command): Result
+    private function dispatch(CommandInterface $command, ?HandlerInterface $handler = null, ?SubjectInterface $subject = null): Result
     {
-        $serviceId = $this->handlerMap?->serviceIdFor($command::class);
+        $serviceId = $handler ?? $this->handlerMap?->serviceIdFor($command::class);
 
         if (null === $serviceId) {
             throw CommandNotSupportedException::create(
@@ -389,7 +429,7 @@ class Gateway implements GatewayInterface
             );
         }
 
-        $context = $this->buildContext($command);
+        $context = $this->buildContext($command, $subject);
         $events = $this->events();
 
         $events->dispatch(new CommandDispatched($command, $context));
@@ -420,15 +460,19 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * @param class-string<HandlerInterface> $serviceId
+     * @param class-string<HandlerInterface>|HandlerInterface $serviceId
      * @param CommandInterface<Result> $command
      */
-    private function handle(string $serviceId, CommandInterface $command, HandlerContext $context): Result
+    private function handle(string|HandlerInterface $serviceId, CommandInterface $command, HandlerContext $context): Result
     {
-        $handler = $this->container->get($serviceId);
+        $handler = $serviceId instanceof HandlerInterface ? $serviceId : $this->container->get($serviceId);
 
         if (! $handler instanceof HandlerInterface || ! method_exists($handler, 'handle')) {
-            throw new LogicException(sprintf('%s must be a handler declaring handle().', $serviceId));
+            throw new LogicException(sprintf('%s must be a handler declaring handle().', get_debug_type($handler)));
+        }
+
+        if ($handler instanceof GatewayAwareInterface) {
+            $handler->setGateway($this);
         }
 
         $this->events()->dispatch(new HandlerResolved($command, $context, $handler));
@@ -509,15 +553,17 @@ class Gateway implements GatewayInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function buildContext(CommandInterface $command): HandlerContext
+    private function buildContext(CommandInterface $command, ?SubjectInterface $subject = null): HandlerContext
     {
         return new HandlerContext(
             $this,
             $command,
-            $this->container->get(PaymentGateway::class),
+            $this->container->has(PaymentGateway::class)
+                ? $this->container->get(PaymentGateway::class)
+                : new UndescribedGateway($this->name),
             $this->container->get(ServerRequestInterface::class),
             $this->container->get(GenericTokenFactoryInterface::class),
-            $this->resolveSubject($command),
+            $subject ?? $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,
             $this->name,
@@ -532,7 +578,7 @@ class Gateway implements GatewayInterface
      * returning without throwing. A RenderTemplate is rendered here, since ResultToReply has no renderer
      * to resolve it with.
      */
-    private function replyFor(Result $result, bool $catchReply): ?Base
+    private function replyFor(Result $result, bool $catchReply): ?ReplyInterface
     {
         $next = $result->next;
 
@@ -540,7 +586,8 @@ class Gateway implements GatewayInterface
             ? new HttpResponse($this->container->get(RendererInterface::class)->render($next->template, $next->context))
             : ResultToReply::translate($result);
 
-        if (! $reply instanceof Base) {
+        // Every reply is an exception; the interface just cannot say so.
+        if (! $reply instanceof ReplyInterface || ! $reply instanceof Throwable) {
             return null;
         }
 
@@ -549,6 +596,24 @@ class Gateway implements GatewayInterface
         }
 
         throw $reply;
+    }
+
+    /**
+     * Whether a command meaning the same thing, about the same subject, is already being answered.
+     *
+     * @param CommandInterface<Result> $command
+     */
+    private function isDispatching(CommandInterface $command): bool
+    {
+        foreach ($this->commandStack as $context) {
+            $running = $context->command();
+
+            if ($running::class === $command::class && $running->token() === $command->token() && $running->subject() === $command->subject()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -581,6 +646,11 @@ class Gateway implements GatewayInterface
         $subject = $command->subject();
 
         if (null !== $command->token() || ! $subject instanceof SubjectInterface || ! $this->container->has(StorageRegistryInterface::class)) {
+            return;
+        }
+
+        // Answered by actions, so StorageExtension has written it back already, as it did on 1.x.
+        if (is_a($this->handlerMap?->bindings()[$this->handlerMap->serviceIdFor($command::class)] ?? '', ActionToHandlerAdapter::class, true)) {
             return;
         }
 

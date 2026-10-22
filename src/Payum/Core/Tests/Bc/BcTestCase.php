@@ -91,7 +91,7 @@ abstract class BcTestCase extends TestCase
             $expected[] = $step;
         }
 
-        $actual = (new Recorder(static::register(), self::dispatch(...)))->record($scenario);
+        $actual = (new Recorder(static::register(), static::dispatch(...)))->record($scenario);
 
         foreach ($actual as $i => $step) {
             unset($actual[$i]['writes']);
@@ -132,12 +132,22 @@ abstract class BcTestCase extends TestCase
         $command = self::commandFor($op, $target);
 
         try {
-            $result = LegacyGatewayAdapter::wrap($gateway)->execute($command);
+            $result = static::executeCommand($gateway, $command);
         } catch (Throwable $exception) {
             return Recorder::exception($exception);
         }
 
         return self::describe($result);
+    }
+
+    /**
+     * How the strong reading dispatches a command.
+     *
+     * @param CommandInterface<Result> $command
+     */
+    protected static function executeCommand(GatewayInterface $gateway, CommandInterface $command): Result
+    {
+        return LegacyGatewayAdapter::wrap($gateway)->execute($command);
     }
 
     /**

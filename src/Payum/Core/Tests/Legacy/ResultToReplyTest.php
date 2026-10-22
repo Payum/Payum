@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Legacy;
 
+use Payum\Core\Legacy\LegacyReply;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Result\Acknowledgement;
@@ -39,5 +40,12 @@ final class ResultToReplyTest extends TestCase
     public function testShouldProduceNoReplyForAFinishedOperation(): void
     {
         $this->assertNull(ResultToReply::translate(CaptureResult::captured('txn_1')));
+    }
+
+    public function testShouldHandBackTheReplyAOneXActionThrew(): void
+    {
+        $thrown = new HttpResponse('<form></form>');
+
+        $this->assertSame($thrown, ResultToReply::translate(CaptureResult::pending(new LegacyReply($thrown))));
     }
 }
