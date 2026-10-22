@@ -282,10 +282,39 @@ What translates:
 | `GetHumanStatus`, `GetBinaryStatus` | the status recorded on the subject |
 | `Notify` | the notify handler — see [Webhooks](webhooks.md) |
 
-Two limits worth knowing:
+And what the handler's answer becomes, since a 1.x caller is waiting to catch a reply rather than read a result:
 
-- A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown rather than guessed at.
-- A handler returning `RenderTemplate`, `Challenge` or `Poll` has no 1.x reply to become, so those throw rather than report the payment finished when it is not. A gateway using them needs a caller that acts on a `Result`.
+| Next action | 1.x reply |
+| :--- | :--- |
+| `Redirect` | `HttpRedirect` |
+| `PostRedirect` | `HttpPostRedirect` |
+| `RenderTemplate` | `HttpResponse` carrying the rendered page |
+| `Challenge` | `HttpPostRedirect` at the issuer, or `HttpRedirect` when the step-up needs no parameters |
+| `Poll` | nothing thrown |
+| nothing | nothing thrown |
+
+The last two rows are the honest limits. 1.x had no name for a step-up, so a `Challenge` becomes the journey it did have — post the parameters at the issuer's page, which is how a 1.x gateway ran 3-D Secure — and the protocol version has nowhere to go. It had no name for waiting either: nothing is thrown for a `Poll`, so the caller goes to the after url and reads the status there, where the payment says pending. `retryAfterSeconds` is lost. A gateway that needs either detail wants a caller that acts on the `Result`.
+
+A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown rather than guessed at.
+
+### Replies your gateway defines for itself
+
+Core knows the replies it ships. Anything else — a reply your gateway declares, or one from a package core has never heard of — is carried across untouched rather than guessed at, in the same `LegacyReply` an already-rendered `HttpResponse` travels in, and comes back the object it was:
+
+```php
+use Payum\Core\Legacy\ReplyToNextAction;
+use Payum\Core\Legacy\ResultToReply;
+use Payum\Core\Result\CaptureResult;
+
+$next = ReplyToNextAction::translate($reply);   // Payum\Core\Legacy\LegacyReply
+$next->reply === $reply;                        // true
+
+ResultToReply::translate(CaptureResult::pending($next)) === $reply;   // true
+```
+
+The one reply with somewhere better to go is the answer a 1.x notify action throws at the PSP: `ReplyToNextAction::acknowledgement()` turns that into the `Acknowledgement` a notify result carries.
+
+Both translators are deprecated in 2.0 and go in 3.0 with the replies they translate. They exist so that neither API loses what the other said while both are live.
 
 ### Moving one operation at a time
 
