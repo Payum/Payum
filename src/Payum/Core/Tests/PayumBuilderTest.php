@@ -12,6 +12,7 @@ use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
+use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\DI\ContainerConfiguration;
@@ -23,6 +24,8 @@ use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\Handler\CaptureHandlerInterface;
+use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\ArrayObject;
@@ -33,6 +36,7 @@ use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\CaptureResult;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
@@ -63,6 +67,7 @@ use Twig\Error\SyntaxError;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+use function DI\autowire;
 
 final class PayumBuilderTest extends TestCase
 {
@@ -861,6 +866,33 @@ final class PayumBuilderTest extends TestCase
         }
     }
 
+    public function testShouldUseAHandlerDecoratorTheGatewayBindsToTheInterface(): void
+    {
+        $result = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderDecoratedHandlerConfig())
+            ->getPayum()
+            ->getGateway('acme')
+            ->execute(CaptureCommand::forPayment($this->buildPayment()))
+        ;
+
+        $this->assertSame('decorated:txn_1', $result->transactionId);
+    }
+
+    public function testShouldUseAHandlerTheGatewayBuildsItself(): void
+    {
+        $result = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderSelfBuiltHandlerConfig())
+            ->getPayum()
+            ->getGateway('acme')
+            ->execute(CaptureCommand::forPayment($this->buildPayment()))
+        ;
+
+        // The handler takes a string, which nothing could autowire.
+        $this->assertSame('txn_from_config', $result->transactionId);
+    }
+
     public function testShouldRegisterANamespaceAGatewayDeclares(): void
     {
         $payum = (new PayumBuilder())
@@ -1171,6 +1203,16 @@ final class PayumBuilderTest extends TestCase
             ->getPayum()
         ;
     }
+
+    private function buildPayment(): Payment
+    {
+        $payment = new Payment();
+        $payment->setNumber(uniqid());
+        $payment->setTotalAmount(123);
+        $payment->setCurrencyCode('EUR');
+
+        return $payment;
+    }
 }
 
 class TestModel
@@ -1475,5 +1517,126 @@ final class BuilderAppTwigGateway implements PaymentGateway, DeclaresTemplates
     public function websiteUrl(): Uri
     {
         return Uri::new('https://apptwig.test');
+    }
+}
+
+final class BuilderDecoratedHandlerConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderDecoratedHandlerGateway::class;
+    }
+}
+
+final class BuilderDecoratedHandlerGateway implements PaymentGateway, ContainerConfiguration
+{
+    public function configClass(): string
+    {
+        return BuilderDecoratedHandlerConfig::class;
+    }
+
+    public function configureContainer(): array
+    {
+        return [
+            BuilderCaptureHandler::class => autowire(),
+            CaptureHandlerInterface::class => static fn (ContainerInterface $c): CaptureHandlerInterface => new BuilderDecoratingCaptureHandler($c->get(BuilderCaptureHandler::class)),
+        ];
+    }
+
+    public function handlers(): array
+    {
+        return [BuilderCaptureHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+}
+
+final class BuilderCaptureHandler implements CaptureHandlerInterface
+{
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        return CaptureResult::captured('txn_1');
+    }
+}
+
+final class BuilderDecoratingCaptureHandler implements CaptureHandlerInterface
+{
+    public function __construct(
+        private readonly CaptureHandlerInterface $inner,
+    ) {
+    }
+
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        return CaptureResult::captured('decorated:' . $this->inner->handle($command, $context)->transactionId);
+    }
+}
+
+final class BuilderSelfBuiltHandlerConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return BuilderSelfBuiltHandlerGateway::class;
+    }
+}
+
+final class BuilderSelfBuiltHandlerGateway implements PaymentGateway, ContainerConfiguration
+{
+    public function configClass(): string
+    {
+        return BuilderSelfBuiltHandlerConfig::class;
+    }
+
+    public function configureContainer(): array
+    {
+        return [
+            BuilderConfiguredCaptureHandler::class => static fn (): BuilderConfiguredCaptureHandler => new BuilderConfiguredCaptureHandler('txn_from_config'),
+        ];
+    }
+
+    public function handlers(): array
+    {
+        return [BuilderConfiguredCaptureHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+}
+
+final class BuilderConfiguredCaptureHandler implements CaptureHandlerInterface
+{
+    public function __construct(
+        private readonly string $transactionId,
+    ) {
+    }
+
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        return CaptureResult::captured($this->transactionId);
     }
 }
