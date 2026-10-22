@@ -82,6 +82,7 @@ use function array_merge;
 use function array_replace;
 use function array_reverse;
 use function DI\autowire;
+use function DI\get;
 use function in_array;
 use function is_a;
 use function is_dir;
@@ -440,16 +441,25 @@ class PayumBuilder
 
             $containerBuilder = new ContainerBuilder();
 
-            // Core defaults first, then the services shared by every gateway, then what the gateway
-            // declares for itself. Last wins.
+            // Core defaults first, then the services shared by every gateway, then the handlers, then what
+            // the gateway declares for itself. Last wins.
             $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
             $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
+
+            $handlerDefinitions = [];
+
+            // The interface resolves to the handler's own entry, so a gateway that builds or decorates a
+            // handler in configureContainer() is what runs.
+            foreach (HandlerMap::fromHandlers($gateway->handlers())->bindings() as $interface => $handlerClass) {
+                $handlerDefinitions[$handlerClass] = autowire($handlerClass);
+                $handlerDefinitions[$interface] = get($handlerClass);
+            }
+
+            $containerBuilder->addDefinitions($handlerDefinitions);
 
             if (null !== $gatewayDefinitions) {
                 $containerBuilder->addDefinitions($gatewayDefinitions);
             }
-
-            $handlerDefinitions = array_map(autowire(...), HandlerMap::fromHandlers($gateway->handlers())->bindings());
 
             // Core defaults first, then what the application registered, then the gateway's own, so a
             // gateway's middleware runs innermost on equal priority.
@@ -461,7 +471,6 @@ class PayumBuilder
                 }
             }
 
-            $containerBuilder->addDefinitions($handlerDefinitions);
             $containerBuilder->addDefinitions([
                 MiddlewareCollection::class => $middleware,
             ]);

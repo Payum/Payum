@@ -2,6 +2,7 @@
 
 ## 2.0.0 (TBD)
 
+* Fix a gateway's own definition of a handler in `configureContainer()` being ignored. The builder bound every handler interface to a freshly autowired handler after the gateway's definitions, so the documented way to decorate a handler did nothing, and a handler with a constructor argument the container could not autowire failed to build
 * Add a BC conformance suite (`src/Payum/Core/Tests/Bc`, the `bc` PHPUnit testsuite and CI job). Every shipped gateway factory and three fixture gateways replay scripted operations on 2.x, once with 1.x requests and once with 2.x commands through `LegacyGatewayAdapter`, and are compared with what Payum 1.7.7 did. The expectations are recorded from a 1.x install, so the suite catches drift from 1.x rather than confirming 2.x against itself
 * Fix a 1.x gateway factory registering core's actions and `EndlessCycleDetectorExtension` twice, and registering core's entries ahead of the caller's. Actions run in registration order, so an application's own `payum.action.*` lost to core's for any request both claimed
 * Fix a 1.x gateway's own `payum.paths`, `payum.template.layout` and other plain config values being overridden by core's defaults in its container, which left the gateway's templates unreachable
