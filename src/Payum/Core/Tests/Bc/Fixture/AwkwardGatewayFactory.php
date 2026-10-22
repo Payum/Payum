@@ -13,7 +13,7 @@ use Payum\Core\GatewayFactory;
  *
  * Loaded by record.php against 1.x as well, so it uses nothing 2.x added.
  */
-final class AwkwardGatewayFactory extends GatewayFactory
+class AwkwardGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config): void
     {
