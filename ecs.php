@@ -51,7 +51,7 @@ return ECSConfig::configure()
         'elements' => ['const', 'property'],
     ])
     ->withConfiguredRule(ClassDefinitionFixer::class, [
-        'single_line' => \true,
+        'single_line' => true,
     ])
     ->withConfiguredRule(GeneralPhpdocAnnotationRemoveFixer::class, [
         'annotations' => [],
