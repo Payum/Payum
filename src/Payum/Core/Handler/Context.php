@@ -16,8 +16,9 @@ use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Money\Amount;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -52,7 +53,7 @@ final class Context
         private readonly CommandInterface $command,
         private readonly GatewayInterface $gateway,
         private readonly ServerRequestInterface $httpRequest,
-        private readonly GenericTokenFactoryInterface $tokenFactory,
+        private readonly TokenIssuerInterface $tokens,
         private readonly ?SubjectInterface $subject = null,
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
@@ -228,9 +229,9 @@ final class Context
      *
      * Replaces v1's GenericTokenFactoryAwareInterface / GenericTokenFactoryExtension pair.
      */
-    public function tokens(): GenericTokenFactoryInterface
+    public function tokens(): TokenIssuerInterface
     {
-        return $this->tokenFactory;
+        return $this->tokens;
     }
 
     /**
@@ -258,7 +259,7 @@ final class Context
             );
         }
 
-        return $this->mintedNotifyToken ??= $this->tokenFactory->createNotifyToken($this->gatewayName, $this->subject);
+        return $this->mintedNotifyToken ??= $this->tokens->create(TokenPurpose::Notify, $this->gatewayName, $this->subject);
     }
 
     /**

@@ -260,6 +260,7 @@ return [
 namespace App\Http\Controllers;
 
 use Payum\Core\Payum;
+use Payum\Core\Security\TokenPurpose;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -279,7 +280,8 @@ class PaymentController extends Controller
 
         $this->payum->getStorage('App\Models\Payment')->update($payment);
 
-        $token = $this->payum->getTokenFactory()->createCaptureToken(
+        $token = $this->payum->getTokenIssuer()->create(
+            TokenPurpose::Capture,
             'stripe',
             $payment,
             route('payment.done')
@@ -371,7 +373,8 @@ $payum = (new PayumBuilder())
 
 `$yourContainer` only needs the services you want to provide yourself; Payum falls back to its own for
 everything else. Declare `payum.security.token_storage`, `TokenFactoryInterface`,
-`GenericTokenFactoryInterface` or `HttpRequestVerifierInterface` there to take over any of them.
+`TokenIssuerInterface`, `GenericTokenFactoryInterface` or `HttpRequestVerifierInterface` there to take over
+any of them.
 
 To have one of your own services injected into a gateway's actions, register it with `addGlobalService()`
 as well — Payum cannot discover the ids of a container that does not list its entries.

@@ -2,6 +2,9 @@
 
 ## 2.0.0 (TBD)
 
+* Add `Payum\Core\Security\TokenIssuerInterface` and `TokenPurpose`, one `create()` for every kind of token in place of a method per purpose. `Handler\Context::tokens()` returns it, so 2.0's handler API no longer hands out a deprecated type, and `Payum::getTokenIssuer()` gives applications the same. `GenericTokenFactory` implements it, so the paths an application configured keep working, and a generic factory of its own is adapted
+* Deprecate `GenericTokenFactoryInterface`, its aware interface and trait, `GenericTokenFactoryExtension` and `Payum::getTokenFactory()` for removal in 3.0. They were marked "removed in 2.0", which 2.0 cannot do while 1.x gateways depend on them
+* Add `Payum\Core\Security\PaymentGrantInterface`, which `TokenInterface` now extends: what a token grants without the URLs a browser follows. Nothing stored changes
 * Add `PaymentStatus::PartiallyCaptured`, `Disputed` and `ChargedBack`, and `CaptureResult::partiallyCaptured()`. A gateway can now say that only part of an authorization was taken, that a cardholder disputed a payment, or that the dispute was lost, instead of folding them into `Captured` or `Refunded` — a chargeback is not a refund the merchant chose. A 1.x `GetHumanStatus` reads the first as captured and the other two as unknown
 * Add `Payum\Core\Legacy\ActionToHandlerAdapter` and one handler per command under `Payum\Core\Legacy\Handler` (`CaptureActionHandler`, `RefundActionHandler`, …). A gateway part-way through porting lists one in `handlers()` and the command is answered by the 1.x action it still declares, so it takes commands for an operation before that operation is rewritten
 * Add `Payum\Core\Legacy\HandlerToActionAdapter`, which registers a handler as an action on a gateway a 1.x factory still builds. The handler runs through the same middleware as on a gateway built from handlers, so an author can write one operation the 2.0 way without first replacing the factory

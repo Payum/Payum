@@ -17,8 +17,8 @@ use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -144,7 +144,7 @@ final class TemplateRendererMiddlewareTest extends TestCase
             $command,
             $gateway,
             $this->createStub(ServerRequestInterface::class),
-            $this->createStub(GenericTokenFactoryInterface::class),
+            $this->createStub(TokenIssuerInterface::class),
             $payment,
             $token,
         );

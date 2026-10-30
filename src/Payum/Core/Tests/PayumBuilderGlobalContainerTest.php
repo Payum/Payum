@@ -35,6 +35,9 @@ use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Clock\FrozenClock;
 use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
@@ -455,6 +458,77 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertSame($httpRequestVerifier, $payum->getHttpRequestVerifier());
     }
 
+    public function testBuildGlobalContainerShouldIssueTokensThroughTheDefaultGenericTokenFactory(): void
+    {
+        $container = (new ExposedGlobalContainerPayumBuilder())
+            ->addDefaultStorages()
+            ->buildGlobalContainer()
+        ;
+
+        $this->assertSame($container->get(GenericTokenFactoryInterface::class), $container->get(TokenIssuerInterface::class));
+    }
+
+    public function testGetPayumShouldIssueTokensThroughAGenericTokenFactoryAddedAsAGlobalService(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+
+        $genericTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
+        $genericTokenFactory->expects($this->once())
+            ->method('createCaptureToken')
+            ->with('aGateway', null, 'done.php', [])
+            ->willReturn($token);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(GenericTokenFactoryInterface::class, $genericTokenFactory)
+            ->getPayum()
+        ;
+
+        $this->assertSame($token, $payum->getTokenIssuer()->create(TokenPurpose::Capture, 'aGateway', null, 'done.php'));
+    }
+
+    public function testGetPayumShouldIssueTokensThroughTheGenericTokenFactoryOfThePresetGlobalContainer(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+
+        $genericTokenFactory = $this->createMock(GenericTokenFactoryInterface::class);
+        $genericTokenFactory->expects($this->once())
+            ->method('createNotifyToken')
+            ->with('aGateway', null)
+            ->willReturn($token);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions([
+            GenericTokenFactoryInterface::class => $genericTokenFactory,
+        ]);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($containerBuilder->build())
+            ->getPayum()
+        ;
+
+        $this->assertSame($token, $payum->getTokenIssuer()->create(TokenPurpose::Notify, 'aGateway'));
+    }
+
+    public function testGetPayumShouldUseTheTokenIssuerOfThePresetGlobalContainer(): void
+    {
+        $issuer = $this->createMock(TokenIssuerInterface::class);
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions([
+            TokenIssuerInterface::class => $issuer,
+        ]);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->setGlobalContainer($containerBuilder->build())
+            ->getPayum()
+        ;
+
+        $this->assertSame($issuer, $payum->getTokenIssuer());
+    }
+
     public function testGetPayumShouldUseThePresetGlobalContainer(): void
     {
         $tokenStorage = $this->createMock(StorageInterface::class);
@@ -670,6 +744,7 @@ final class PayumBuilderGlobalContainerTest extends TestCase
             'payum.security.token_storage',
             HttpRequestVerifierInterface::class,
             GenericTokenFactoryInterface::class,
+            TokenIssuerInterface::class,
             TokenFactoryInterface::class,
             ClientInterface::class,
             StreamFactoryInterface::class,

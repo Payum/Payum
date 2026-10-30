@@ -125,7 +125,7 @@ $payum = (new \Payum\Core\PayumBuilder())
 
 {% hint style="info" %}
 _**Note**: doing this by hand still works. `prepare()` is shorthand for `getStorage()`, `update()`
-and_ [_`getTokenFactory()->createCaptureToken()`_](examples/capture-script.md)_, which you can call
+and_ [_`getTokenIssuer()->create(TokenPurpose::Capture, ...)`_](examples/capture-script.md)_, which you can call
 yourself when you need more control._
 {% endhint %}
 

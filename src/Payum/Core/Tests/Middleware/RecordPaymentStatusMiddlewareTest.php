@@ -25,8 +25,8 @@ use Payum\Core\Result\FailureReason;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\RefundResult;
 use Payum\Core\Result\SyncResult;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
@@ -203,7 +203,7 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
             CaptureCommand::forPayment($payment),
             $this->createMock(PaymentGateway::class),
             $this->createMock(ServerRequestInterface::class),
-            $this->createMock(GenericTokenFactoryInterface::class),
+            $this->createMock(TokenIssuerInterface::class),
             $payment,
             $token,
         );

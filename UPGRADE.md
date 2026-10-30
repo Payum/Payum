@@ -117,6 +117,25 @@
   `PartiallyCaptured`, `PartiallyRefunded`, `Disputed` and `ChargedBack`. A 1.x `GetHumanStatus` answered
   from a recorded status reads the partial ones as captured and refunded, and `Disputed` and `ChargedBack`
   as unknown. Write any `match` over `PaymentStatus` with a `default` arm, because the set can grow.
+* Tokens are minted for a purpose: `Payum\Core\Security\TokenIssuerInterface::create(TokenPurpose $purpose,
+  string $gatewayName, ?object $subject = null, ?string $afterPath = null, array $afterParameters = [])`,
+  with `Payum\Core\Security\TokenPurpose` naming `Authorize`, `Capture`, `Refund`, `Payout` or `Notify`.
+  Stored tokens, `TokenInterface` and your Doctrine mappings are unchanged.
+  * Replace `$payum->getTokenFactory()->createCaptureToken($gateway, $payment, 'done.php')` with
+    `$payum->getTokenIssuer()->create(TokenPurpose::Capture, $gateway, $payment, 'done.php')`, and the same
+    for the other `create*Token()` methods. `Payum::getTokenFactory()` is deprecated and removed in 3.0.
+  * `Payum\Core\Security\GenericTokenFactoryInterface`, `GenericTokenFactoryAwareInterface`,
+    `GenericTokenFactoryAwareTrait` and `Payum\Core\Extension\GenericTokenFactoryExtension` are deprecated
+    and removed in 3.0. A handler mints tokens with `Payum\Core\Handler\Context::tokens()`. 1.x actions
+    using them keep working through 2.x.
+  * `GenericTokenFactory` implements both interfaces, so `setGenericTokenFactory()` and
+    `setGenericTokenFactoryPaths()` keep configuring the tokens both APIs mint. A generic token factory of
+    your own that does not implement `TokenIssuerInterface` keeps working too: `create()` is answered by its
+    `create*Token()` methods. To take over 2.0 token creation on its own, register a `TokenIssuerInterface` in the
+    global container. 1.x actions keep using the generic token factory.
+  * `TokenInterface` now extends `Payum\Core\Security\PaymentGrantInterface`: the hash, gateway name and
+    details, without the URLs. Type-hint the grant where a URL is of no use, such as in a client with no
+    browser.
 
 ## 1.5.0
 

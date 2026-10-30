@@ -8,6 +8,7 @@ use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\WebhookNotVerifiedException;
+use Payum\Core\Legacy\GenericTokenFactoryIssuer;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
@@ -27,11 +28,14 @@ use Payum\Core\Result\Result;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function trigger_deprecation;
 
 /**
  * @template StorageType of object
@@ -55,6 +59,8 @@ class Payum implements RegistryInterface
 
     protected ?RendererInterface $renderer;
 
+    protected TokenIssuerInterface $tokenIssuer;
+
     /**
      * @param RegistryInterface<StorageType> $registry
      * @param StorageInterface<TokenInterface> $tokenStorage
@@ -65,13 +71,15 @@ class Payum implements RegistryInterface
         HttpRequestVerifierInterface $httpRequestVerifier,
         GenericTokenFactoryInterface $tokenFactory,
         StorageInterface $tokenStorage,
-        ?RendererInterface $renderer = null
+        ?RendererInterface $renderer = null,
+        ?TokenIssuerInterface $tokenIssuer = null,
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
         $this->tokenFactory = $tokenFactory;
         $this->tokenStorage = $tokenStorage;
         $this->renderer = $renderer;
+        $this->tokenIssuer = $tokenIssuer ?? GenericTokenFactoryIssuer::wrap($tokenFactory);
     }
 
     /**
@@ -139,9 +147,26 @@ class Payum implements RegistryInterface
         return $this->httpRequestVerifier;
     }
 
+    /**
+     * @deprecated since 2.0, removed in 3.0. Use {@see getTokenIssuer()} instead.
+     */
     public function getTokenFactory(): GenericTokenFactoryInterface
     {
+        trigger_deprecation(
+            'payum/core',
+            '2.0.0',
+            '%s() is deprecated and will be removed in 3.0. Use %s::getTokenIssuer(), which returns a %s, instead.',
+            __METHOD__,
+            self::class,
+            TokenIssuerInterface::class,
+        );
+
         return $this->tokenFactory;
+    }
+
+    public function getTokenIssuer(): TokenIssuerInterface
+    {
+        return $this->tokenIssuer;
     }
 
     /**
@@ -171,12 +196,7 @@ class Payum implements RegistryInterface
     ): TokenInterface {
         $this->getStorage($model::class)->update($model);
 
-        return $this->tokenFactory->createCaptureToken(
-            $gatewayName,
-            $model,
-            $afterPath,
-            $afterParameters
-        );
+        return $this->tokenIssuer->create(TokenPurpose::Capture, $gatewayName, $model, $afterPath, $afterParameters);
     }
 
     /**

@@ -16,8 +16,9 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -29,10 +30,10 @@ final class ContextTest extends TestCase
         $token = $this->createMock(TokenInterface::class);
         $token->method('getTargetUrl')->willReturn('https://payum.dev/notify.php?payum_token=abc');
 
-        $tokens = $this->createMock(GenericTokenFactoryInterface::class);
+        $tokens = $this->createMock(TokenIssuerInterface::class);
         $tokens->expects($this->once())
-            ->method('createNotifyToken')
-            ->with('acme', $this->identicalTo($payment))
+            ->method('create')
+            ->with(TokenPurpose::Notify, 'acme', $this->identicalTo($payment))
             ->willReturn($token);
 
         $context = $this->buildContext($tokens, $payment, 'acme');
@@ -47,10 +48,10 @@ final class ContextTest extends TestCase
         $token = $this->createMock(TokenInterface::class);
         $token->method('getTargetUrl')->willReturn('https://payum.dev/notify.php');
 
-        $tokens = $this->createMock(GenericTokenFactoryInterface::class);
+        $tokens = $this->createMock(TokenIssuerInterface::class);
         // Calling it twice must not leave two token rows behind.
         $tokens->expects($this->once())
-            ->method('createNotifyToken')
+            ->method('create')
             ->willReturn($token);
 
         $context = $this->buildContext($tokens, $payment, 'acme');
@@ -63,25 +64,32 @@ final class ContextTest extends TestCase
     {
         $token = $this->createMock(TokenInterface::class);
 
-        $tokens = $this->createMock(GenericTokenFactoryInterface::class);
+        $tokens = $this->createMock(TokenIssuerInterface::class);
         $tokens->expects($this->once())
-            ->method('createNotifyToken')
-            ->with('acme', null)
+            ->method('create')
+            ->with(TokenPurpose::Notify, 'acme', null)
             ->willReturn($token);
 
         $this->buildContext($tokens, null, 'acme')->notifyToken();
     }
 
+    public function testShouldHandOutTheIssuerItWasGiven(): void
+    {
+        $tokens = $this->createMock(TokenIssuerInterface::class);
+
+        $this->assertSame($tokens, $this->buildContext($tokens, null, 'acme')->tokens());
+    }
+
     public function testShouldExposeTheRegisteredGatewayName(): void
     {
-        $context = $this->buildContext($this->createMock(GenericTokenFactoryInterface::class), null, 'acme');
+        $context = $this->buildContext($this->createMock(TokenIssuerInterface::class), null, 'acme');
 
         $this->assertSame('acme', $context->gatewayName());
     }
 
     public function testShouldRefuseToMintForAGatewayRegisteredUnderNoName(): void
     {
-        $context = $this->buildContext($this->createMock(GenericTokenFactoryInterface::class), null, null);
+        $context = $this->buildContext($this->createMock(TokenIssuerInterface::class), null, null);
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('is not registered under a name');
@@ -123,7 +131,7 @@ final class ContextTest extends TestCase
     }
 
     private function buildContext(
-        GenericTokenFactoryInterface $tokens,
+        TokenIssuerInterface $tokens,
         ?PaymentInterface $subject,
         ?string $gatewayName
     ): Context {
@@ -156,7 +164,7 @@ final class ContextTest extends TestCase
             $command,
             $this->createMock(PaymentGateway::class),
             $this->createMock(ServerRequestInterface::class),
-            $this->createMock(GenericTokenFactoryInterface::class),
+            $this->createMock(TokenIssuerInterface::class),
             $subject,
         );
     }

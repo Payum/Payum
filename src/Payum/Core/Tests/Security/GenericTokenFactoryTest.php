@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Security;
 
+use ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Token;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenFactoryInterface;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -688,11 +692,127 @@ final class GenericTokenFactoryTest extends TestCase
         $this->assertSame($payoutToken, $actualToken);
     }
 
+    public function testShouldImplementTokenIssuerInterface(): void
+    {
+        $rc = new ReflectionClass(GenericTokenFactory::class);
+
+        $this->assertTrue($rc->implementsInterface(TokenIssuerInterface::class));
+    }
+
+    /**
+     * @return iterable<string, array{TokenPurpose, callable(GenericTokenFactory, object): TokenInterface}>
+     */
+    public static function providePurposes(): iterable
+    {
+        yield 'authorize' => [
+            TokenPurpose::Authorize,
+            fn (GenericTokenFactory $factory, object $model) => $factory->createAuthorizeToken('aGateway', $model, 'after.php', [
+                'a' => 'b',
+            ]),
+        ];
+        yield 'capture' => [
+            TokenPurpose::Capture,
+            fn (GenericTokenFactory $factory, object $model) => $factory->createCaptureToken('aGateway', $model, 'after.php', [
+                'a' => 'b',
+            ]),
+        ];
+        yield 'refund' => [
+            TokenPurpose::Refund,
+            fn (GenericTokenFactory $factory, object $model) => $factory->createRefundToken('aGateway', $model, 'after.php', [
+                'a' => 'b',
+            ]),
+        ];
+        yield 'payout' => [
+            TokenPurpose::Payout,
+            fn (GenericTokenFactory $factory, object $model) => $factory->createPayoutToken('aGateway', $model, 'after.php', [
+                'a' => 'b',
+            ]),
+        ];
+        yield 'notify' => [
+            TokenPurpose::Notify,
+            fn (GenericTokenFactory $factory, object $model) => $factory->createNotifyToken('aGateway', $model),
+        ];
+    }
+
+    /**
+     * @dataProvider providePurposes
+     *
+     * @param callable(GenericTokenFactory, object): TokenInterface $legacy
+     */
+    public function testShouldCreateForAPurposeTheSameTokenTheOldMethodDid(TokenPurpose $purpose, callable $legacy): void
+    {
+        $model = new stdClass();
+
+        [$oldFactory, $oldCalls] = $this->createRecordingFactory();
+        [$newFactory, $newCalls] = $this->createRecordingFactory();
+
+        $old = $legacy($oldFactory, $model);
+        $new = $newFactory->create($purpose, 'aGateway', $model, 'after.php', [
+            'a' => 'b',
+        ]);
+
+        $this->assertSame($oldCalls->getArrayCopy(), $newCalls->getArrayCopy());
+        $this->assertNotEmpty($newCalls->getArrayCopy());
+        $this->assertSame($old->getTargetUrl(), $new->getTargetUrl());
+        $this->assertSame($old->getAfterUrl(), $new->getAfterUrl());
+    }
+
+    public function testShouldIgnoreAnAfterPathForANotifyToken(): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $factory->create(TokenPurpose::Notify, 'aGateway', null, 'after.php');
+
+        $this->assertSame([['aGateway', null, 'notify.php', [], null, []]], $calls->getArrayCopy());
+    }
+
+    public function testShouldFallBackToTheDonePathForACaptureWithNoAfterPath(): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $factory->create(TokenPurpose::Capture, 'aGateway', null);
+
+        $this->assertSame('done.php', $calls->getArrayCopy()[0][2]);
+    }
+
     /**
      * @return MockObject|TokenFactoryInterface
      */
     protected function createTokenFactoryMock()
     {
         return $this->createMock(TokenFactoryInterface::class);
+    }
+
+    /**
+     * @return array{GenericTokenFactory, ArrayObject<int, list<mixed>>}
+     */
+    private function createRecordingFactory(): array
+    {
+        /** @var ArrayObject<int, list<mixed>> $calls */
+        $calls = new ArrayObject();
+
+        $tokenFactory = $this->createMock(TokenFactoryInterface::class);
+        $tokenFactory
+            ->method('createToken')
+            ->willReturnCallback(static function (...$args) use ($calls): TokenInterface {
+                $calls[] = array_values($args);
+
+                $token = new Token();
+                $token->setTargetUrl($args[2] . '?n=' . count($calls));
+                $token->setAfterUrl($args[4] ?? null);
+
+                return $token;
+            });
+
+        $factory = new GenericTokenFactory($tokenFactory, [
+            'authorize' => 'authorize.php',
+            'capture' => 'capture.php',
+            'refund' => 'refund.php',
+            'payout' => 'payout.php',
+            'notify' => 'notify.php',
+            'done' => 'done.php',
+        ]);
+
+        return [$factory, $calls];
     }
 }

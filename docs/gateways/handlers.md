@@ -76,7 +76,7 @@ Do not take the payment, the token or the HTTP request. Those belong to a single
 | `payout()` | The subject when it is a payout, else null |
 | `token()` | The token this execution arrived on, if any |
 | `httpRequest()` | The inbound request as PSR-7 |
-| `tokens()` | The token factory, for minting a notify or second-hop URL |
+| `tokens()` | The token issuer, for minting a notify or second-hop URL: `create(TokenPurpose::Capture, $gatewayName, $subject, $afterPath)` |
 | `gateway()` | The gateway currently executing — its name, logo, config class |
 | `execute()` | Dispatch a sub-command |
 | `previous()` | The enclosing executions, when a handler dispatched into another |
