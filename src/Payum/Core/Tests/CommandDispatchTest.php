@@ -25,7 +25,9 @@ use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
+use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -190,6 +192,29 @@ final class CommandDispatchTest extends TestCase
         $this->assertSame('sk_test', AcmeCaptureHandler::$seenSecret);
     }
 
+    public function testShouldGiveTheHandlerTheDefaultTokenIssuer(): void
+    {
+        $this->buildPayum()->getGateway('acme')->execute(CaptureCommand::forPayment($this->buildPayment()));
+
+        $this->assertInstanceOf(GenericTokenFactory::class, AcmeCaptureHandler::$seenTokens);
+    }
+
+    public function testShouldGiveTheHandlerTheTokenIssuerTheApplicationRegistered(): void
+    {
+        $issuer = $this->createMock(TokenIssuerInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(TokenIssuerInterface::class, $issuer)
+            ->registerGateway('acme', new AcmeConfig('sk_test'))
+            ->getPayum();
+
+        $payum->getGateway('acme')->execute(CaptureCommand::forPayment($this->buildPayment()));
+
+        $this->assertSame($issuer, AcmeCaptureHandler::$seenTokens);
+        $this->assertSame($issuer, $payum->getTokenIssuer());
+    }
+
     private function buildPayment(): Payment
     {
         $payment = new Payment();
@@ -207,6 +232,7 @@ final class CommandDispatchTest extends TestCase
     {
         AcmeCaptureHandler::$seenGatewayName = null;
         AcmeCaptureHandler::$seenSecret = null;
+        AcmeCaptureHandler::$seenTokens = null;
 
         return (new PayumBuilder())
             ->addDefaultStorages()
@@ -287,6 +313,8 @@ final class AcmeCaptureHandler implements CaptureHandlerInterface
 
     public static ?string $seenSecret = null;
 
+    public static ?TokenIssuerInterface $seenTokens = null;
+
     public function __construct(
         private readonly AcmeApi $api
     ) {
@@ -296,6 +324,7 @@ final class AcmeCaptureHandler implements CaptureHandlerInterface
     {
         self::$seenGatewayName = $context->gateway()->name();
         self::$seenSecret = $this->api->secret();
+        self::$seenTokens = $context->tokens();
 
         $state = $context->state();
 

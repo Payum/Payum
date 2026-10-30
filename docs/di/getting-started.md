@@ -20,7 +20,7 @@ Payum v2.0 uses a **hybrid container architecture**:
 ┌─────────────────────────────────────────────┐
 │     Global Container (Payum-wide)           │
 │  - HttpRequestVerifier                      │
-│  - GenericTokenFactory                      │
+│  - TokenIssuer (GenericTokenFactory)        │
 │  - TokenFactory                             │
 │  - TokenStorage                             │
 │  - Storage Extensions                       │
@@ -183,7 +183,8 @@ These services are instantiated once and shared across all gateways:
 
 - `payum.security.token_storage` - Token storage
 - `HttpRequestVerifierInterface` - Verifies security tokens
-- `GenericTokenFactoryInterface` - Creates payment tokens
+- `TokenIssuerInterface` - Creates payment tokens for a purpose (capture, notify, ...)
+- `GenericTokenFactoryInterface` - Deprecated; the same tokens through one method per purpose
 - `TokenFactoryInterface` - Low-level token factory
 - `ClientInterface` (PSR-18) - HTTP client
 - `StreamFactoryInterface` (PSR-17) - HTTP stream factory

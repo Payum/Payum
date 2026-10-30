@@ -194,7 +194,7 @@ $payum = (new PayumBuilder())
 
 Here the gateways use your Guzzle client, while the token storage, token factories and request verifier are
 still the ones Payum builds. Override any of them by adding a definition for
-`payum.security.token_storage`, `TokenFactoryInterface`, `GenericTokenFactoryInterface` or
+`payum.security.token_storage`, `TokenFactoryInterface`, `TokenIssuerInterface`, `GenericTokenFactoryInterface` or
 `HttpRequestVerifierInterface` to your container — Payum picks them up and builds the rest on top of them.
 Define the token storage there and the default storages are not created at all.
 

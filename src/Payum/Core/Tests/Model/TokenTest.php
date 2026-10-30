@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Model;
 
+use Payum\Core\Model\DetailsAggregateInterface;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
+use Payum\Core\Security\PaymentGrantInterface;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -18,6 +20,14 @@ final class TokenTest extends TestCase
         $rc = new ReflectionClass(Token::class);
 
         $this->assertTrue($rc->implementsInterface(TokenInterface::class));
+    }
+
+    public function testShouldBeAPaymentGrantThatStillAggregatesDetails(): void
+    {
+        $rc = new ReflectionClass(Token::class);
+
+        $this->assertTrue($rc->implementsInterface(PaymentGrantInterface::class));
+        $this->assertTrue($rc->implementsInterface(DetailsAggregateInterface::class));
     }
 
     public function testShouldAllowGetHashGeneratedInConstructor(): void

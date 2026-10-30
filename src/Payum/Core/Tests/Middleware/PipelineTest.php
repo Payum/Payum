@@ -14,7 +14,7 @@ use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\Payment;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
@@ -118,7 +118,7 @@ final class PipelineTest extends TestCase
             $this->command(),
             $this->createMock(PaymentGateway::class),
             $this->createMock(ServerRequestInterface::class),
-            $this->createMock(GenericTokenFactoryInterface::class),
+            $this->createMock(TokenIssuerInterface::class),
         );
     }
 }

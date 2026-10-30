@@ -3,7 +3,7 @@
 namespace Payum\Core\Security;
 
 /**
- * @deprecated since 1.3.7 and will be removed in 2.0
+ * @deprecated since 2.0, removed in 3.0. Use {@see \Payum\Core\Security\TokenIssuerInterface} instead.
  */
 interface GenericTokenFactoryInterface extends TokenFactoryInterface
 {

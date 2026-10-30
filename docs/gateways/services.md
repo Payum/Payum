@@ -32,7 +32,8 @@ For a typical gateway, **nothing needs declaring**. These are registered for you
 | `RequestFactoryInterface::class`, `StreamFactoryInterface::class` | PSR-17 factories |
 | `ServerRequestInterface::class` | The inbound request, PSR-7 |
 | `RendererInterface::class` | Renders a `RenderTemplate` next action. Registered once by the application and shared by every gateway — see [Templates](templates.md) |
-| `GenericTokenFactoryInterface::class`, `TokenFactoryInterface::class` | Token factories |
+| `TokenIssuerInterface::class` | Mints a token for a purpose — what `Context::tokens()` returns |
+| `GenericTokenFactoryInterface::class`, `TokenFactoryInterface::class` | Token factories. The first is deprecated; use `TokenIssuerInterface` |
 | `HttpRequestVerifierInterface::class` | Token verification |
 | `StorageRegistryInterface::class` | Storages, for loading a payment from a token |
 

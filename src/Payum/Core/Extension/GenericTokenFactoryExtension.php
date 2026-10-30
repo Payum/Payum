@@ -5,6 +5,10 @@ namespace Payum\Core\Extension;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 
+/**
+ * @deprecated since 2.0, removed in 3.0. A handler mints tokens with {@see \Payum\Core\Handler\Context::tokens()},
+ *             which returns a {@see \Payum\Core\Security\TokenIssuerInterface}.
+ */
 class GenericTokenFactoryExtension implements ExtensionInterface
 {
     /**

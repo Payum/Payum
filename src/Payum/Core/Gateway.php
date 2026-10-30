@@ -42,7 +42,7 @@ use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\GenericTokenFactoryInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Template\RendererInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -562,7 +562,7 @@ class Gateway implements GatewayInterface
                 ? $this->container->get(PaymentGateway::class)
                 : new UndescribedGateway($this->name),
             $this->container->get(ServerRequestInterface::class),
-            $this->container->get(GenericTokenFactoryInterface::class),
+            $this->container->get(TokenIssuerInterface::class),
             $subject ?? $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,

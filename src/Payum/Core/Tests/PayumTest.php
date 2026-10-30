@@ -30,6 +30,8 @@ use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Security\TokenPurpose;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -121,7 +123,80 @@ final class PayumTest extends TestCase
             $this->storageMock
         );
 
-        $this->assertSame($this->tokenFactoryMock, $payum->getTokenFactory());
+        $deprecations = [];
+        set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+            $deprecations[] = $message;
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $this->assertSame($this->tokenFactoryMock, $payum->getTokenFactory());
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame([
+            'Since payum/core 2.0.0: Payum\\Core\\Payum::getTokenFactory() is deprecated and will be removed in 3.0. Use Payum\\Core\\Payum::getTokenIssuer(), which returns a Payum\\Core\\Security\\TokenIssuerInterface, instead.',
+        ], $deprecations);
+    }
+
+    public function testShouldIssueTokensThroughTheIssuerItWasBuiltWith(): void
+    {
+        $issuer = $this->createMock(TokenIssuerInterface::class);
+
+        $payum = new Payum(
+            $this->registryMock,
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+            null,
+            $issuer,
+        );
+
+        $this->assertSame($issuer, $payum->getTokenIssuer());
+    }
+
+    public function testShouldIssueTokensThroughTheGenericTokenFactoryWhenBuiltWithNoIssuer(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+
+        $this->tokenFactoryMock
+            ->expects($this->once())
+            ->method('createRefundToken')
+            ->with('aGateway', null, 'done.php', [])
+            ->willReturn($token);
+
+        $payum = new Payum(
+            $this->registryMock,
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+        );
+
+        $this->assertSame($token, $payum->getTokenIssuer()->create(TokenPurpose::Refund, 'aGateway', null, 'done.php'));
+    }
+
+    public function testPrepareCreatesTheCaptureTokenThroughTheIssuer(): void
+    {
+        $payment = new Payment();
+        $token = $this->createMock(TokenInterface::class);
+
+        $issuer = $this->createMock(TokenIssuerInterface::class);
+        $issuer->expects($this->once())
+            ->method('create')
+            ->with(TokenPurpose::Capture, 'aGateway', $this->identicalTo($payment), 'done.php', [])
+            ->willReturn($token);
+
+        $this->tokenFactoryMock->expects($this->never())->method('createCaptureToken');
+
+        $registry = new SimpleRegistry([], [
+            Payment::class => $this->storageMock,
+        ]);
+
+        $payum = new Payum($registry, $this->httpRequestVerifierMock, $this->tokenFactoryMock, $this->storageMock, null, $issuer);
+
+        $this->assertSame($token, $payum->prepare('aGateway', $payment, 'done.php'));
     }
 
     public function testShouldAllowGetTokenStorageSetInConstructor(): void

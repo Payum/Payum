@@ -34,6 +34,7 @@ use Payum\Core\Gateway\DeclaresMiddleware;
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Legacy\GenericTokenFactoryIssuer;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\ArrayObject;
@@ -51,6 +52,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
@@ -408,6 +410,7 @@ class PayumBuilder
         $coreGatewayFactory = $this->buildCoreGatewayFactory(array_replace_recursive([
             'payum.extension.token_factory' => new GenericTokenFactoryExtension($genericTokenFactory),
             GenericTokenFactoryInterface::class => $genericTokenFactory,
+            TokenIssuerInterface::class => $globalContainer->get(TokenIssuerInterface::class),
             'payum.security.token_storage' => $tokenStorage,
         ], $this->coreGatewayFactoryConfig));
 
@@ -559,6 +562,7 @@ class PayumBuilder
             $genericTokenFactory,
             $tokenStorage,
             $globalContainer->get(RendererInterface::class),
+            $globalContainer->get(TokenIssuerInterface::class),
         );
     }
 
@@ -639,6 +643,13 @@ class PayumBuilder
                 return $this->buildTokenFactory($tokenStorage, $storageRegistry);
             },
             GenericTokenFactoryInterface::class => fn (ContainerInterface $c): GenericTokenFactoryInterface => $this->buildGenericTokenFactory($c->get(TokenFactoryInterface::class), $paths),
+            // The generic factory is looked up through the application's container first, the same way the
+            // token factory is, so a generic factory provided there backs the issuer too.
+            TokenIssuerInterface::class => static fn (ContainerInterface $c): TokenIssuerInterface => GenericTokenFactoryIssuer::wrap(
+                $presetContainer?->has(GenericTokenFactoryInterface::class)
+                    ? $presetContainer->get(GenericTokenFactoryInterface::class)
+                    : $c->get(GenericTokenFactoryInterface::class)
+            ),
             HttpRequestVerifierInterface::class => fn (): HttpRequestVerifierInterface => $this->buildHttpRequestVerifier($tokenStorage),
 
             // Storages only. A command carrying just a token needs this to load the payment its token
@@ -716,6 +727,7 @@ class PayumBuilder
             'payum.security.token_storage',
             HttpRequestVerifierInterface::class,
             GenericTokenFactoryInterface::class,
+            TokenIssuerInterface::class,
             TokenFactoryInterface::class,
             StorageRegistryInterface::class,
             ClientInterface::class,

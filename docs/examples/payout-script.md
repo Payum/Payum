@@ -50,12 +50,13 @@ This is how you can create a payout url.
 <?php
 
 use Payum\Core\Payum;
+use Payum\Core\Security\TokenPurpose;
 
 include __DIR__.'/config.php';
 
 /** @var Payum $payum */
 
-$token = $payum->getTokenFactory()->createPayoutToken($gatewayName, $details, 'afterPayoutUrl');
+$token = $payum->getTokenIssuer()->create(TokenPurpose::Payout, $gatewayName, $details, 'afterPayoutUrl');
 
 header("Location: ".$token->getTargetUrl());
 ```
