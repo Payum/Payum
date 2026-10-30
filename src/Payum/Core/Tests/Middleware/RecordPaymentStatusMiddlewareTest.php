@@ -24,6 +24,7 @@ use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\RefundResult;
+use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\IdentityInterface;
@@ -109,6 +110,36 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         $this->assertSame($payment, $changed[0]->subject);
         $this->assertSame(PaymentStatus::Pending, $changed[0]->from);
         $this->assertSame(PaymentStatus::Captured, $changed[0]->to);
+    }
+
+    /**
+     * @return iterable<string, array{PaymentStatus}>
+     */
+    public static function provideStatusesAPspReportsAfterTheFact(): iterable
+    {
+        yield 'partially captured' => [PaymentStatus::PartiallyCaptured];
+        yield 'disputed' => [PaymentStatus::Disputed];
+        yield 'charged back' => [PaymentStatus::ChargedBack];
+    }
+
+    /**
+     * @dataProvider provideStatusesAPspReportsAfterTheFact
+     */
+    public function testShouldRecordAndAnnounceTheStatusUntouched(PaymentStatus $status): void
+    {
+        $payment = new TrackedPayment();
+        $payment->setStatus(PaymentStatus::Captured);
+
+        $events = new RecordingEventDispatcher();
+
+        $this->dispatch($payment, static fn (): SyncResult => SyncResult::synced($status), $events);
+
+        $changed = $events->ofType(StatusChanged::class);
+
+        $this->assertSame($status, $payment->getStatus());
+        $this->assertCount(1, $changed);
+        $this->assertSame(PaymentStatus::Captured, $changed[0]->from);
+        $this->assertSame($status, $changed[0]->to);
     }
 
     public function testShouldAnnounceNothingWhenTheStatusWasAlreadyWhatTheHandlerDeclared(): void

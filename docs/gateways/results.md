@@ -36,6 +36,8 @@ CaptureResult::canceled();
 CaptureResult::failed(new Failure(FailureReason::Declined, 'card_declined'));
 
 AuthorizeResult::authorized($transactionId, $amount, $expiresAt);
+CaptureResult::partiallyCaptured($transactionId, Money::USD(300));
+
 RefundResult::refunded($transactionId, $amount);
 RefundResult::partiallyRefunded($transactionId, $amount);
 ```
@@ -106,9 +108,33 @@ match (true) {
 
 `$result->status` is the payment's state after this operation:
 
-`New`, `Pending`, `Authorized`, `Captured`, `Refunded`, `PartiallyRefunded`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
+`New`, `Pending`, `Authorized`, `Captured`, `PartiallyCaptured`, `Refunded`, `PartiallyRefunded`, `Disputed`, `ChargedBack`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
 
 It is string-backed, so it can be persisted or sent as JSON. One backing value does not match its case name — `PaidOut` is backed by `'payedout'` — so compare the case rather than the spelling.
+
+Three of them usually arrive after the fact, through a webhook or a `SyncCommand`:
+
+| Status | Means |
+| :--- | :--- |
+| `PartiallyCaptured` | Part of the authorized amount was taken. `capturedAmount` says how much |
+| `Disputed` | The cardholder opened a dispute. The money is still yours, but at risk |
+| `ChargedBack` | The dispute was lost and the money is gone. Not the same as `Refunded`, which you chose |
+
+`isSuccessful()` is true for `PartiallyCaptured`, and false for `Disputed` and `ChargedBack`. Handle those two explicitly — hold the order, notify someone — rather than treating them as a failed payment: the customer did pay.
+
+A 1.x application asking `GetHumanStatus` sees `PartiallyCaptured` as captured and `PartiallyRefunded` as refunded. It sees `Disputed` and `ChargedBack` as unknown, because 1.x has no word for either.
+
+#### The list is closed
+
+A gateway maps what its PSP reports onto these cases. It never invents its own, and it never puts a PSP's status string in `$result->status`: an application has to be able to reason about a payment without knowing which gateway took it.
+
+When a PSP reports something none of the cases describes, put the PSP's own value in `$result->raw` and report the nearest case — or `Unknown` when there is none. If the gap is real, [open an issue](https://github.com/Payum/Payum/issues) proposing the case. Say:
+
+* what the payment's money is doing in that state, and why no existing case describes it,
+* which PSPs report it, with a link to their documentation,
+* what a 1.x `GetHumanStatus` should say about it.
+
+The list can grow, so write any `match` over `PaymentStatus` with a `default` arm.
 
 **It is null when the operation concluded nothing about the payment.** A refund that was declined leaves a captured payment captured; a capture that was declined leaves the payment where it was, so the customer can try another card. Say otherwise only when the failure really is terminal:
 
