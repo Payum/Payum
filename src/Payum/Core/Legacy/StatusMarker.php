@@ -18,8 +18,9 @@ final class StatusMarker
      * A null status means the subject does not track one, so nobody knows -- which is what markUnknown
      * means, and is honest rather than guessing at New.
      *
-     * PartiallyRefunded has no 1.x equivalent and becomes refunded, which is what 1.x would have said
-     * about the same payment.
+     * PartiallyCaptured and PartiallyRefunded have no 1.x equivalent and become captured and refunded,
+     * which is what 1.x would have said about the same payment. Disputed and ChargedBack become unknown,
+     * because no 1.x mark is true of them.
      */
     public static function mark(GetStatusInterface $request, ?PaymentStatus $status): void
     {
@@ -27,7 +28,7 @@ final class StatusMarker
             PaymentStatus::New => $request->markNew(),
             PaymentStatus::Pending => $request->markPending(),
             PaymentStatus::Authorized => $request->markAuthorized(),
-            PaymentStatus::Captured => $request->markCaptured(),
+            PaymentStatus::Captured, PaymentStatus::PartiallyCaptured => $request->markCaptured(),
             PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded => $request->markRefunded(),
             PaymentStatus::PaidOut => $request->markPayedout(),
             PaymentStatus::Canceled => $request->markCanceled(),

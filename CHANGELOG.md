@@ -2,6 +2,7 @@
 
 ## 2.0.0 (TBD)
 
+* Add `PaymentStatus::PartiallyCaptured`, `Disputed` and `ChargedBack`, and `CaptureResult::partiallyCaptured()`. A gateway can now say that only part of an authorization was taken, that a cardholder disputed a payment, or that the dispute was lost, instead of folding them into `Captured` or `Refunded` — a chargeback is not a refund the merchant chose. A 1.x `GetHumanStatus` reads the first as captured and the other two as unknown
 * Add `Payum\Core\Legacy\ActionToHandlerAdapter` and one handler per command under `Payum\Core\Legacy\Handler` (`CaptureActionHandler`, `RefundActionHandler`, …). A gateway part-way through porting lists one in `handlers()` and the command is answered by the 1.x action it still declares, so it takes commands for an operation before that operation is rewritten
 * Add `Payum\Core\Legacy\HandlerToActionAdapter`, which registers a handler as an action on a gateway a 1.x factory still builds. The handler runs through the same middleware as on a gateway built from handlers, so an author can write one operation the 2.0 way without first replacing the factory
 * Fix `StorageExtension` writing a payment twice when a command ran inside a 1.x action, or a 1.x request inside a command. The two paths kept separate stacks, so each believed it was the outermost call; 1.x writes once

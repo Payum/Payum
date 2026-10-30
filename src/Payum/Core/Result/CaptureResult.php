@@ -63,6 +63,14 @@ final class CaptureResult extends Result
     }
 
     /**
+     * @param array<string, mixed> $raw
+     */
+    public static function partiallyCaptured(?string $transactionId, int|Money $capturedAmount, array $raw = []): self
+    {
+        return new self(PaymentStatus::PartiallyCaptured, transactionId: $transactionId, raw: $raw, capturedAmount: $capturedAmount);
+    }
+
+    /**
      * The operation did not succeed. By default this says nothing about the payment's status: a declined
      * capture leaves it where it was, which is what lets a customer try again.
      *

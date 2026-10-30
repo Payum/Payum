@@ -113,6 +113,10 @@
     `Psr\EventDispatcher\EventDispatcherInterface` as its one constructor argument, which is what
     dispatches `StatusChanged`. It defaults to the no-op dispatcher, so `new RecordPaymentStatusMiddleware()`
     keeps working.
+* `Payum\Core\Result\PaymentStatus` is the 2.0 status. Besides the 1.x statuses it has
+  `PartiallyCaptured`, `PartiallyRefunded`, `Disputed` and `ChargedBack`. A 1.x `GetHumanStatus` answered
+  from a recorded status reads the partial ones as captured and refunded, and `Disputed` and `ChargedBack`
+  as unknown. Write any `match` over `PaymentStatus` with a `default` arm, because the set can grow.
 
 ## 1.5.0
 

@@ -40,7 +40,14 @@ abstract class Result
     {
         return ! $this->failure instanceof Failure && in_array(
             $this->status,
-            [PaymentStatus::Authorized, PaymentStatus::Captured, PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded, PaymentStatus::PaidOut],
+            [
+                PaymentStatus::Authorized,
+                PaymentStatus::Captured,
+                PaymentStatus::PartiallyCaptured,
+                PaymentStatus::Refunded,
+                PaymentStatus::PartiallyRefunded,
+                PaymentStatus::PaidOut,
+            ],
             true,
         );
     }
