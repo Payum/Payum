@@ -376,6 +376,10 @@ everything else. Declare `payum.security.token_storage`, `TokenFactoryInterface`
 `TokenIssuerInterface`, `GenericTokenFactoryInterface` or `HttpRequestVerifierInterface` there to take over
 any of them.
 
+A verifier of your own must accept a PSR-7 `ServerRequestInterface` and check the token against that
+request's URI, never against `$_SERVER`: a worker serving many requests (RoadRunner, Swoole, FrankenPHP)
+has no single ambient request. `Payum\Core\Security\HttpRequestVerifier` does this and is the one to extend.
+
 To have one of your own services injected into a gateway's actions, register it with `addGlobalService()`
 as well — Payum cannot discover the ids of a container that does not list its entries.
 

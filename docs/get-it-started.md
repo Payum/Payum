@@ -34,6 +34,10 @@ _**Note**: Use **payum/payum** if you want to install all gateways at once._
 _**Note**: Use **php-http/guzzle7-adapter** is just an example. You can use any of_ [_these adapters_](https://packagist.org/providers/php-http/client-implementation)_._
 {% endhint %}
 
+{% hint style="info" %}
+_**Note**: The scripts below hand the token verifier a PSR-7 request built with `GuzzleHttp\Psr7\ServerRequest::fromGlobals()`, which the Guzzle adapter installs. Any PSR-7 server request works. Do not pass `$_REQUEST`: that is deprecated and removed in 3.0._
+{% endhint %}
+
 Before we configure payum, let's look at the flow diagram. This flow is same for all gateways so once you familiar with it any other gateways could be added easily.
 
 ![How payum works](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=cGFydGljaXBhbnQgcGF5cGFsLmNvbQoACwxVc2VyAAQNcHJlcGFyZS5waHAAHA1jYXB0dQAFE2RvbgAnBgpVc2VyLT4ANQs6AEUIIGEgcGF5bWVudAoAVAstLT4rAEsLOgBbCCB0b2tlbgoKAGcLLS0-AIE2CjogcmVxdWVzdCBhdXRoZW50aWNhdGlvbgoAgVkKLS0-AE0NZ2l2ZSBjb250cm9sIGJhY2sATg8tAIE-CDoAgUsFAHsHAIFTCC0-VXNlcjogc2hvdwCBQQggcmVzdWx0Cg\&s=default)
@@ -139,6 +143,7 @@ When the preparation is done a user is redirect to `capture.php`. Here's an exam
 <?php
 //capture.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpPostRedirect;
@@ -146,7 +151,7 @@ use Payum\Core\Reply\HttpPostRedirect;
 include __DIR__.'/config.php';
 
 /** @var \Payum\Core\Payum $payum */
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 $gateway = $payum->getGateway($token->getGatewayName());
 
 /** @var \Payum\Core\GatewayInterface $gateway */
@@ -178,12 +183,13 @@ After the capture did its job you will be redirected to [done.php](examples/done
 <?php
 // done.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\GetHumanStatus;
 
 include __DIR__.'/config.php';
 
 /** @var \Payum\Core\Payum $payum */
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 $gateway = $payum->getGateway($token->getGatewayName());
 
 // you can invalidate the token. The url could not be requested any more.

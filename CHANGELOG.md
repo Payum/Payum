@@ -2,6 +2,7 @@
 
 ## 2.0.0 (TBD)
 
+* Add `Payum\Core\Security\HttpRequestVerifier`, which verifies a token from a PSR-7 `ServerRequestInterface` and checks it against that request's URI. Reading `$_SERVER` cannot be tested without polluting globals and has no meaning in a worker serving many requests (RoadRunner, Swoole, FrankenPHP) or a queue consumer replaying a webhook. The PlainPhp verifier, still the default, takes a PSR-7 request too and checks an HttpFoundation request against its own URI; passing it `$_REQUEST` is deprecated for removal in 3.0
 * Add `Payum\Core\Security\TokenIssuerInterface` and `TokenPurpose`, one `create()` for every kind of token in place of a method per purpose. `Handler\Context::tokens()` returns it, so 2.0's handler API no longer hands out a deprecated type, and `Payum::getTokenIssuer()` gives applications the same. `GenericTokenFactory` implements it, so the paths an application configured keep working, and a generic factory of its own is adapted
 * Deprecate `GenericTokenFactoryInterface`, its aware interface and trait, `GenericTokenFactoryExtension` and `Payum::getTokenFactory()` for removal in 3.0. They were marked "removed in 2.0", which 2.0 cannot do while 1.x gateways depend on them
 * Add `Payum\Core\Security\PaymentGrantInterface`, which `TokenInterface` now extends: what a token grants without the URLs a browser follows. Nothing stored changes

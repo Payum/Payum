@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
+use Nyholm\Psr7\ServerRequest;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Model\Token;
@@ -12,6 +13,7 @@ use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 final class HttpRequestVerifierTest extends TestCase
 {
@@ -31,6 +33,9 @@ final class HttpRequestVerifierTest extends TestCase
         $verifier->verify('not array');
     }
 
+    /**
+     * @group legacy
+     */
     public function testThrowIfRequestNotContainTokenParameterOnVerify(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -40,6 +45,9 @@ final class HttpRequestVerifierTest extends TestCase
         $verifier->verify([]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testThrowIfStorageCouldNotFindTokenByGivenHashOnVerify(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -61,6 +69,9 @@ final class HttpRequestVerifierTest extends TestCase
         ]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testThrowIfTargetUrlPathNotMatchServerRequestUriPathOnVerify(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -86,6 +97,9 @@ final class HttpRequestVerifierTest extends TestCase
         ]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldReturnExpectedTokenIfAllCheckPassedOnVerify(): void
     {
         $_SERVER['REQUEST_URI'] = 'https://target.com/foo';
@@ -111,6 +125,9 @@ final class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldReturnExpectedTokenIfAllEncodedCheckPassedOnVerify(): void
     {
         $_SERVER['REQUEST_URI'] = 'https://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw';
@@ -136,6 +153,9 @@ final class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldReturnTokenObjectSetToRequestGlobalArrayWithoutChecks(): void
     {
         $expectedToken = new Token();
@@ -149,6 +169,9 @@ final class HttpRequestVerifierTest extends TestCase
         $this->assertSame($expectedToken, $actualToken);
     }
 
+    /**
+     * @group legacy
+     */
     public function testShouldAllowCustomizeTokenParameterInConstructor(): void
     {
         $expectedToken = new Token();
@@ -160,6 +183,63 @@ final class HttpRequestVerifierTest extends TestCase
         ]);
 
         $this->assertSame($expectedToken, $actualToken);
+    }
+
+    public function testShouldVerifyAServerRequestWithoutReadingGlobals(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/somewhere-else';
+
+        $token = new Token();
+        $token->setHash('theHash');
+        $token->setTargetUrl('https://target.com/foo');
+
+        $storageMock = $this->createStorageMock();
+        $storageMock->expects($this->once())->method('find')->with('theHash')->willReturn($token);
+
+        $verifier = new HttpRequestVerifier($storageMock);
+
+        $deprecations = $this->collectDeprecations(fn () => $this->assertSame($token, $verifier->verify(
+            (new ServerRequest('GET', 'https://target.com/foo'))->withQueryParams([
+                'payum_token' => 'theHash',
+            ])
+        )));
+
+        $this->assertSame([], $deprecations);
+    }
+
+    public function testShouldCheckAnHttpFoundationRequestAgainstItsOwnUri(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/somewhere-else';
+
+        $token = new Token();
+        $token->setHash('theHash');
+        $token->setTargetUrl('https://target.com/foo');
+
+        $storageMock = $this->createStorageMock();
+        $storageMock->expects($this->once())->method('find')->with('theHash')->willReturn($token);
+
+        $verifier = new HttpRequestVerifier($storageMock);
+
+        $deprecations = $this->collectDeprecations(fn () => $this->assertSame($token, $verifier->verify(
+            Request::create('https://target.com/foo', 'GET', [
+                'payum_token' => 'theHash',
+            ])
+        )));
+
+        $this->assertSame([], $deprecations);
+    }
+
+    public function testShouldDeprecateVerifyingAnArray(): void
+    {
+        $verifier = new HttpRequestVerifier($this->createStorageMock());
+
+        $deprecations = $this->collectDeprecations(fn () => $verifier->verify([
+            'payum_token' => new Token(),
+        ]));
+
+        $this->assertSame([
+            'Since payum/core 2.0.0: Passing an array to Payum\\Core\\Bridge\\PlainPhp\\Security\\HttpRequestVerifier::verify() is deprecated and removed in 3.0, because it reads the URL from $_SERVER. Pass a Psr\\Http\\Message\\ServerRequestInterface instead.',
+        ], $deprecations);
     }
 
     public function testShouldCallStorageDeleteModelMethodOnInvalidate(): void
@@ -184,5 +264,26 @@ final class HttpRequestVerifierTest extends TestCase
     protected function createStorageMock(): StorageInterface | MockObject
     {
         return $this->createMock(StorageInterface::class);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function collectDeprecations(callable $call): array
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+            $deprecations[] = $message;
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $call();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 }
