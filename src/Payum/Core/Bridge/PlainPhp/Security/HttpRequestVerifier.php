@@ -3,63 +3,36 @@
 namespace Payum\Core\Bridge\PlainPhp\Security;
 
 use Payum\Core\Exception\InvalidArgumentException;
-use Payum\Core\Security\HttpRequestVerifierInterface;
+use Payum\Core\Security\HttpRequestVerifier as ServerRequestVerifier;
 use Payum\Core\Security\TokenInterface;
-use Payum\Core\Security\Util\RequestTokenVerifier;
-use Payum\Core\Storage\StorageInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use function array_merge;
 
-class HttpRequestVerifier implements HttpRequestVerifierInterface
+/**
+ * Also takes an HttpFoundation request, or the $_REQUEST array (deprecated).
+ */
+class HttpRequestVerifier extends ServerRequestVerifier
 {
-    /**
-     * @var StorageInterface<TokenInterface>
-     */
-    protected StorageInterface $tokenStorage;
-
-    protected string $tokenParameter;
-
-    /**
-     * @param StorageInterface<TokenInterface> $tokenStorage
-     */
-    public function __construct(StorageInterface $tokenStorage, string $tokenParameter = 'payum_token')
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->tokenParameter = $tokenParameter;
-    }
-
     public function verify($httpRequest): TokenInterface
     {
+        if ($httpRequest instanceof ServerRequestInterface) {
+            return parent::verify($httpRequest);
+        }
+
         if ($httpRequest instanceof Request) {
-            $httpRequest = array_merge($httpRequest->request->all(), $httpRequest->query->all());
+            return $this->verifyToken(
+                array_merge($httpRequest->request->all(), $httpRequest->query->all())[$this->tokenParameter] ?? null,
+                $httpRequest->getUri()
+            );
         }
 
         if (! is_array($httpRequest)) {
             throw new InvalidArgumentException('Invalid request given. In most cases you have to pass $_REQUEST array.');
         }
 
-        if (! isset($httpRequest[$this->tokenParameter])) {
-            throw new InvalidArgumentException(sprintf('Token parameter `%s` was not found in in the http request.', $this->tokenParameter));
-        }
+        trigger_deprecation('payum/core', '2.0.0', 'Passing an array to %s::verify() is deprecated and removed in 3.0, because it reads the URL from $_SERVER. Pass a %s instead.', self::class, ServerRequestInterface::class);
 
-        if ($httpRequest[$this->tokenParameter] instanceof TokenInterface) {
-            return $httpRequest[$this->tokenParameter];
-        }
-
-        if (! $token = $this->tokenStorage->find($httpRequest[$this->tokenParameter])) {
-            throw new InvalidArgumentException(sprintf('A token with hash `%s` could not be found.', $httpRequest[$this->tokenParameter]));
-        }
-
-        /** @var TokenInterface $token */
-        if (! RequestTokenVerifier::isValid($_SERVER['REQUEST_URI'], $token->getTargetUrl())) {
-            throw new InvalidArgumentException(sprintf('The current url %s not match target url %s set in the token.', $_SERVER['REQUEST_URI'], $token->getTargetUrl()));
-        }
-
-        return $token;
-    }
-
-    public function invalidate(TokenInterface $token): void
-    {
-        $this->tokenStorage->delete($token);
+        return $this->verifyToken($httpRequest[$this->tokenParameter] ?? null, $_SERVER['REQUEST_URI'] ?? '');
     }
 }

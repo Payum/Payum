@@ -4,6 +4,7 @@
 <?php
 //refund.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\Refund;
 use Payum\Core\Payum;
 use Payum\Core\Reply\HttpResponse;
@@ -13,7 +14,7 @@ include __DIR__.'/config.php';
 
 /** @var Payum $payum */
 
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 $gateway = $payum->getGateway($token->getGatewayName());
 
 try {

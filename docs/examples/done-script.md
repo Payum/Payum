@@ -12,6 +12,7 @@ First one, Let Payum fetch the model for you while executing a request with a to
 <?php
 // done.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Payum;
 
@@ -19,7 +20,7 @@ include __DIR__.'/config.php';
 
 /** @var Payum $payum */
 
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 
 $gateway = $payum->getGateway($token->getGatewayName());
 $gateway->execute($status = new GetHumanStatus($token));
@@ -33,6 +34,7 @@ Second one, Get the model from the storage directly.
 <?php
 // done.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Payum;
 
@@ -40,7 +42,7 @@ include __DIR__.'/config.php';
 
 /** @var Payum $payum */
 
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 
 /** @var \Payum\Core\Storage\IdentityInterface $identity **/
 $identity = $token->getDetails();

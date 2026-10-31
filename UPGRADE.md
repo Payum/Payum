@@ -136,6 +136,17 @@
   * `TokenInterface` now extends `Payum\Core\Security\PaymentGrantInterface`: the hash, gateway name and
     details, without the URLs. Type-hint the grant where a URL is of no use, such as in a client with no
     browser.
+* Tokens are verified from a PSR-7 request. `Payum\Core\Security\HttpRequestVerifierInterface::verify()`
+  takes a `Psr\Http\Message\ServerRequestInterface` and checks the token against that request's URI.
+  `Payum\Core\Security\HttpRequestVerifier` implements it without reading any PHP global.
+  * Replace `$payum->getHttpRequestVerifier()->verify($_REQUEST)` with
+    `$payum->getHttpRequestVerifier()->verify($serverRequest)`, for instance
+    `GuzzleHttp\Psr7\ServerRequest::fromGlobals()`. Passing an array to
+    `Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier::verify()` is deprecated and removed in 3.0.
+  * That class, still the default, now checks an HttpFoundation request against the request's own URI
+    instead of `$_SERVER['REQUEST_URI']`.
+  * A verifier of your own must accept a `ServerRequestInterface`. Extending
+    `Payum\Core\Security\HttpRequestVerifier` gives you that.
 
 ## 1.5.0
 

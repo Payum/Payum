@@ -88,6 +88,7 @@ After capture has done it's job and the agreement has been created we are redire
 <?php
 // create_recurring_payment.php
 
+use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Request\Sync;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Request\Api\CreateRecurringPaymentProfile;
@@ -98,7 +99,7 @@ include __DIR__.'/config.php';
 /** @var \ArrayObject $recurringPaymentClass */
 
 /** @var \Payum\Core\Payum $payum */
-$token = $payum->getHttpRequestVerifier()->verify($_REQUEST);
+$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
 $payum->getHttpRequestVerifier()->invalidate($token);
 
 $gateway = $payum->getGateway($token->getGatewayName());
