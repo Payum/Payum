@@ -220,12 +220,17 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         return $this->defaultConfig + array_merge(
             [
                 // A 1.x gateway that type-hints an HTTPlug factory gets one as long as it installs
-                // php-http/message-factory itself; core no longer depends on it.
+                // php-http/message-factory and an implementation itself; core no longer depends on
+                // either. Without an implementation these fall back to PSR-17, because buildClosures()
+                // resolves them for every gateway, including the ones that never read them.
                 'httplug.message_factory' => static function (): object {
                     trigger_deprecation('payum/core', '2.0.0', 'The "httplug.message_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_message_factory", a %s, instead.', RequestFactoryInterface::class);
 
                     if (interface_exists(MessageFactory::class)) {
-                        return MessageFactoryDiscovery::find();
+                        try {
+                            return MessageFactoryDiscovery::find();
+                        } catch (NotFoundException) {
+                        }
                     }
 
                     return Psr17FactoryDiscovery::findRequestFactory();
@@ -234,7 +239,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     trigger_deprecation('payum/core', '2.0.0', 'The "httplug.stream_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_stream_factory", a %s, instead.', StreamFactoryInterface::class);
 
                     if (interface_exists(StreamFactory::class)) {
-                        return StreamFactoryDiscovery::find();
+                        try {
+                            return StreamFactoryDiscovery::find();
+                        } catch (NotFoundException) {
+                        }
                     }
 
                     return Psr17FactoryDiscovery::findStreamFactory();
