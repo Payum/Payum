@@ -4,6 +4,15 @@
 
 * Dropped support for PHP 7.x
 * Twig 1.x is no longer supported
+* Symfony 4.4 and 5.x are no longer supported. The Symfony components Payum works with are tested on
+  `^6.4 || ^7.0 || ^8.0`.
+  * `ContainerAwareCoreGatewayFactory`, `ContainerAwareRegistry` and `CoreGatewayFactoryBuilder` in
+    `Payum\Core\Bridge\Symfony` no longer implement Symfony's `ContainerAwareInterface`, which Symfony 7
+    removed. They keep their `setContainer()` method, so call it yourself (or with a `calls` entry) if you
+    relied on the interface to have the container set.
+  * The `Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate` constraint takes `min`,
+    `minMessage` and `invalidMessage` as named arguments too: `new CreditCardDate(min: 'today')`. An
+    options array still works.
 * `Payum\Core\Action\GetCurrencyAction` uses alcohol/iso4217 by default. Its one constructor argument is now
   an optional `Money\Currencies`, which it falls back to for a code ISO 4217 does not list.
 * Monetary values are expressed as [`moneyphp/money`](https://moneyphp.org) objects. See

@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 final class ContainerAwareCoreGatewayFactoryTest extends TestCase
 {
@@ -21,13 +20,6 @@ final class ContainerAwareCoreGatewayFactoryTest extends TestCase
         $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
 
         $this->assertTrue($rc->isSubclassOf(CoreGatewayFactory::class));
-    }
-
-    public function testShouldImplementContainerAwareInterface(): void
-    {
-        $rc = new ReflectionClass(ContainerAwareCoreGatewayFactory::class);
-
-        $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
     /**
