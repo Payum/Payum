@@ -412,34 +412,59 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertSame(18, $request->exp);
     }
 
-    public function testShouldResolveDeprecatedHttplugMessageFactory(): void
+    public function testShouldResolveDeprecatedHttplugMessageFactoryToAPsr17Factory(): void
     {
+        if (interface_exists(MessageFactory::class)) {
+            $this->markTestSkipped('php-http/message-factory is installed');
+        }
+
         $definitions = (new CoreGatewayFactory())->configureContainer();
 
         $deprecations = $this->collectDeprecations(function () use ($definitions, &$messageFactory): void {
             $messageFactory = $definitions['httplug.message_factory']();
         });
 
-        $this->assertInstanceOf(MessageFactory::class, $messageFactory);
+        $this->assertInstanceOf(RequestFactoryInterface::class, $messageFactory);
         $this->assertContains(
-            'Using "httplug.message_factory" is deprecated, use "payum.http_message_factory" instead, which will return a PSR-17 RequestFactoryInterface since payum/core 2.0.0',
+            'Since payum/core 2.0.0: The "httplug.message_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_message_factory", a Psr\Http\Message\RequestFactoryInterface, instead.',
             $deprecations
         );
     }
 
-    public function testShouldResolveDeprecatedHttplugStreamFactory(): void
+    public function testShouldResolveDeprecatedHttplugStreamFactoryToAPsr17Factory(): void
     {
+        if (interface_exists(StreamFactory::class)) {
+            $this->markTestSkipped('php-http/message-factory is installed');
+        }
+
         $definitions = (new CoreGatewayFactory())->configureContainer();
 
         $deprecations = $this->collectDeprecations(function () use ($definitions, &$streamFactory): void {
             $streamFactory = $definitions['httplug.stream_factory']();
         });
 
-        $this->assertInstanceOf(StreamFactory::class, $streamFactory);
+        $this->assertInstanceOf(StreamFactoryInterface::class, $streamFactory);
         $this->assertContains(
-            'Using "httplug.stream_factory" is deprecated, use "payum.http_stream_factory" instead which will return a PSR-17 StreamFactoryInterface since payum/core 2.0.0',
+            'Since payum/core 2.0.0: The "httplug.stream_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_stream_factory", a Psr\Http\Message\StreamFactoryInterface, instead.',
             $deprecations
         );
+    }
+
+    public function testShouldResolveDeprecatedHttplugFactoriesToHttplugOnesWhenTheApplicationInstallsThem(): void
+    {
+        if (! interface_exists(MessageFactory::class) || ! interface_exists(StreamFactory::class)) {
+            $this->markTestSkipped('php-http/message-factory is not installed');
+        }
+
+        $definitions = (new CoreGatewayFactory())->configureContainer();
+
+        $this->collectDeprecations(function () use ($definitions, &$messageFactory, &$streamFactory): void {
+            $messageFactory = $definitions['httplug.message_factory']();
+            $streamFactory = $definitions['httplug.stream_factory']();
+        });
+
+        $this->assertInstanceOf(MessageFactory::class, $messageFactory);
+        $this->assertInstanceOf(StreamFactory::class, $streamFactory);
     }
 
     public function testShouldResolveDeprecatedHttplugClient(): void

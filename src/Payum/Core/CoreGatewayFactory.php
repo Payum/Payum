@@ -5,7 +5,6 @@ namespace Payum\Core;
 use Closure;
 use DI\ContainerBuilder;
 use Exception;
-use GuzzleHttp\Psr7\Request;
 use Http\Adapter\Buzz\Client as HttpBuzzClient;
 use Http\Adapter\Guzzle5\Client as HttpGuzzle5Client;
 use Http\Adapter\Guzzle6\Client as HttpGuzzle6Client;
@@ -20,9 +19,7 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\DiactorosMessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Http\Message\StreamFactory\GuzzleStreamFactory;
+use Http\Message\StreamFactory;
 use LogicException;
 use Money\Currencies;
 use Money\Currencies\AggregateCurrencies;
@@ -32,7 +29,6 @@ use Money\Formatter\DecimalMoneyFormatter;
 use Money\MoneyFormatter;
 use Money\MoneyParser;
 use Money\Parser\DecimalMoneyParser;
-use Nyholm\Psr7\Factory\HttplugFactory;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
 use Payum\Core\Action\ExecuteSameRequestWithModelDetailsAction;
@@ -223,42 +219,25 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         // The builder's entries, such as the token and storage extensions, register ahead of core's own.
         return $this->defaultConfig + array_merge(
             [
-                'httplug.message_factory' => static function (): MessageFactory {
-                    @trigger_error('Using "httplug.message_factory" is deprecated, use "payum.http_message_factory" instead, which will return a PSR-17 RequestFactoryInterface since payum/core 2.0.0', E_USER_DEPRECATED);
+                // A 1.x gateway that type-hints an HTTPlug factory gets one as long as it installs
+                // php-http/message-factory itself; core no longer depends on it.
+                'httplug.message_factory' => static function (): object {
+                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.message_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_message_factory", a %s, instead.', RequestFactoryInterface::class);
 
-                    if (class_exists(MessageFactoryDiscovery::class)) {
+                    if (interface_exists(MessageFactory::class)) {
                         return MessageFactoryDiscovery::find();
                     }
 
-                    if (class_exists(Request::class)) {
-                        return new GuzzleMessageFactory();
-                    }
-
-                    if (class_exists(\Laminas\Diactoros\Request::class)) {
-                        return new DiactorosMessageFactory();
-                    }
-
-                    if (class_exists(\Nyholm\Psr7\Request::class)) {
-                        return new HttplugFactory();
-                    }
-
-                    throw new LogicException('The httplug.message_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
+                    return Psr17FactoryDiscovery::findRequestFactory();
                 },
-                'httplug.stream_factory' => static function () {
-                    @trigger_error('Using "httplug.stream_factory" is deprecated, use "payum.http_stream_factory" instead which will return a PSR-17 StreamFactoryInterface since payum/core 2.0.0', E_USER_DEPRECATED);
-                    if (class_exists(StreamFactoryDiscovery::class)) {
+                'httplug.stream_factory' => static function (): object {
+                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.stream_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_stream_factory", a %s, instead.', StreamFactoryInterface::class);
+
+                    if (interface_exists(StreamFactory::class)) {
                         return StreamFactoryDiscovery::find();
                     }
 
-                    if (class_exists(Request::class)) {
-                        return new GuzzleStreamFactory();
-                    }
-
-                    if (class_exists(\Nyholm\Psr7\Request::class)) {
-                        return new HttplugFactory();
-                    }
-
-                    throw new LogicException('The httplug.stream_factory could not be guessed. Install one of the following packages: php-http/guzzle7-adapter. You can also overwrite the config option with your implementation.');
+                    return Psr17FactoryDiscovery::findStreamFactory();
                 },
                 'httplug.client' => static function (ArrayObject $config) {
                     @trigger_error('Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0', E_USER_DEPRECATED);
@@ -294,7 +273,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     }
 
                     if (class_exists(HttpCurlClient::class)) {
-                        return new HttpCurlClient($config['httplug.message_factory'], $config['httplug.stream_factory']);
+                        return new HttpCurlClient();
                     }
 
                     if (class_exists(HttpBuzzClient::class)) {
