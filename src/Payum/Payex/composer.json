@@ -27,7 +27,7 @@
         "ext-curl": "*",
         "ext-pdo_sqlite": "*",
         "phpunit/phpunit": "^9.5",
-        "symfony/phpunit-bridge": "^6.0",
+        "symfony/phpunit-bridge": "^8.1",
         "php-http/guzzle7-adapter": "^1.0"
     },
     "config": {

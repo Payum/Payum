@@ -7,6 +7,7 @@
 namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 
 use DateTime;
+use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 
@@ -23,17 +24,32 @@ class CreditCardDate extends Constraint
 
     public $min;
 
-    public function __construct($options = null)
-    {
-        parent::__construct($options);
+    /**
+     * @param array<string, mixed>|null $options
+     * @param string[]|null             $groups
+     */
+    #[HasNamedArguments]
+    public function __construct(
+        ?array $options = null,
+        ?string $min = null,
+        ?string $minMessage = null,
+        ?string $invalidMessage = null,
+        ?array $groups = null,
+        mixed $payload = null
+    ) {
+        // Symfony 8 no longer reads an options array in Constraint::__construct(), so it is unpacked here.
+        $options ??= [];
+        parent::__construct(null, $groups ?? $options['groups'] ?? null, $payload ?? $options['payload'] ?? null);
 
-        if (null === $this->min) {
+        $this->minMessage = $minMessage ?? $options['minMessage'] ?? $this->minMessage;
+        $this->invalidMessage = $invalidMessage ?? $options['invalidMessage'] ?? $this->invalidMessage;
+        $min ??= $options['min'] ?? null;
+
+        if (null === $min) {
             throw new MissingOptionsException('Either option "min" must be given for constraint ' . self::class, ['min']);
         }
 
-        if (null !== $this->min) {
-            $this->min = new DateTime($this->min);
-            $this->min->modify('last day of this month');
-        }
+        $this->min = new DateTime($min);
+        $this->min->modify('last day of this month');
     }
 }

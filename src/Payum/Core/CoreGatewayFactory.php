@@ -13,6 +13,7 @@ use Http\Adapter\Guzzle7\Client as HttpGuzzle7Client;
 use Http\Client\Curl\Client as HttpCurlClient;
 use Http\Client\HttpClient;
 use Http\Client\Socket\Client as HttpSocketClient;
+use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -263,7 +264,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     @trigger_error('Using "httplug.client" is deprecated, use "payum.http_client" instead which will return a PSR-18 ClientInterface since payum/core 2.0.0', E_USER_DEPRECATED);
 
                     if (class_exists(HttpClientDiscovery::class)) {
-                        return HttpClientDiscovery::find();
+                        try {
+                            return HttpClientDiscovery::find();
+                        } catch (NotFoundException) {
+                            // symfony/http-client 7+ claims php-http/client-implementation but its HttplugClient
+                            // implements PSR-18 only, which HTTPlug discovery does not accept.
+                            return Psr18ClientDiscovery::find();
+                        }
                     }
 
                     if (class_exists(HttpGuzzle7Client::class)) {

@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 final class ContainerAwareRegistryTest extends TestCase
 {
@@ -22,13 +21,6 @@ final class ContainerAwareRegistryTest extends TestCase
         $rc = new ReflectionClass(ContainerAwareRegistry::class);
 
         $this->assertTrue($rc->isSubclassOf(AbstractRegistry::class));
-    }
-
-    public function testShouldImplementContainerAwareInterface(): void
-    {
-        $rc = new ReflectionClass(ContainerAwareRegistry::class);
-
-        $this->assertTrue($rc->implementsInterface(ContainerAwareInterface::class));
     }
 
     public function testShouldReturnGatewaySetToContainer(): void

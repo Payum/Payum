@@ -24,7 +24,7 @@
         "stripe/stripe-php": "^7.3"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^6.0",
+        "symfony/phpunit-bridge": "^8.1",
         "php-http/guzzle7-adapter": "^1.0"
     },
     "config": {

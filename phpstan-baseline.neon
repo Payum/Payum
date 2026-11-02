@@ -127,22 +127,10 @@ parameters:
 			path: src/Payum/Core/Bridge/Spl/ArrayObject.php
 
 		-
-			message: '#^Call to function method_exists\(\) with Symfony\\Component\\HttpFoundation\\RequestStack and ''getMainRequest'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
-
-		-
 			message: '#^Instanceof between Symfony\\Component\\HttpFoundation\\Request and Symfony\\Component\\HttpFoundation\\Request will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/Payum/Core/Bridge/Symfony/Action/GetHttpRequestAction.php
-
-		-
-			message: '#^Call to function method_exists\(\) with Symfony\\Component\\HttpFoundation\\RequestStack and ''getMainRequest'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Payum/Core/Bridge/Symfony/Action/ObtainCreditCardAction.php
 
 		-
 			message: '#^Method Payum\\Core\\Bridge\\Symfony\\Action\\RenderTemplateAction\:\:__construct\(\) has parameter \$layout with no type specified\.$#'
@@ -1277,12 +1265,6 @@ parameters:
 			identifier: missingType.return
 			count: 1
 			path: src/Payum/Core/Tests/Bridge/Symfony/Extension/EventDispatcherExtensionTest.php
-
-		-
-			message: '#^Parameter \#2 \$value of method Symfony\\Component\\HttpFoundation\\InputBag\:\:set\(\) expects array\|bool\|float\|int\|string\|null, Payum\\Core\\Model\\Token given\.$#'
-			identifier: argument.type
-			count: 3
-			path: src/Payum/Core/Tests/Bridge/Symfony/Security/HttpRequestVerifierTest.php
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with Payum\\Core\\Model\\Identity will always evaluate to false\.$#'

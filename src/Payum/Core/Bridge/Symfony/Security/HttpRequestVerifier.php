@@ -41,7 +41,7 @@ class HttpRequestVerifier implements HttpRequestVerifierInterface
             ));
         }
 
-        if (! $hash = $httpRequest->attributes->get('payum_token', $httpRequest->get('payum_token', false))) {
+        if (! $hash = $httpRequest->attributes->get('payum_token') ?? $httpRequest->query->get('payum_token') ?? $httpRequest->request->get('payum_token')) {
             throw new NotFoundHttpException('Token parameter not set in request');
         }
 

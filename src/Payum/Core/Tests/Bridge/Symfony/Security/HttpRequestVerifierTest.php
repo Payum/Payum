@@ -154,7 +154,7 @@ final class HttpRequestVerifierTest extends TestCase
         ;
 
         $request = Request::create('https://target.com/foo');
-        $request->query->set('payum_token', $expectedToken);
+        $request->attributes->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
 
@@ -179,7 +179,7 @@ final class HttpRequestVerifierTest extends TestCase
         ;
 
         $request = Request::create('https://target.com/%5FSsYp0j9YWCZfC0qpxCK58s0kaSBXVTYVDecuCqo6%5Fw');
-        $request->query->set('payum_token', $expectedToken);
+        $request->attributes->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
 
@@ -204,7 +204,7 @@ final class HttpRequestVerifierTest extends TestCase
         ;
 
         $request = Request::create('https://target.com/foo');
-        $request->query->set('payum_token', $expectedToken);
+        $request->attributes->set('payum_token', $expectedToken);
 
         $verifier = new HttpRequestVerifier($storageMock);
 
