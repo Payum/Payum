@@ -50,6 +50,11 @@
 * The HttpClient has been replaced with a PSR-18 HTTP Client
   * The `httplug.message_factory` config option is deprecated. Use `payum.http_message_factory` instead
   * The `httplug.stream_factory` config option is deprecated. Use `payum.http_stream_factory` instead
+  * `payum/core` no longer requires the abandoned `php-http/message-factory`, nor `php-http/message`. The two
+    `httplug.*` factory keys above now return the PSR-17 `RequestFactoryInterface` and `StreamFactoryInterface`,
+    unless `php-http/message-factory` is installed, in which case they return HTTPlug factories as before.
+    A 1.x gateway whose `Api` type-hints `Http\Message\MessageFactory` or `Http\Message\StreamFactory`
+    needs them: run `composer require php-http/message-factory php-http/message`
   * The `httplug.client` is deprecated. Use `payum.http_client` instead
   * The `Payum\Core\Bridge\Httplug\HttplugClient::send` method is deprecated and will be removed in 3.0. Use `Payum\Core\Bridge\Httplug\HttplugClient::sendRequest` instead
   * The `Payum\Core\Bridge\Httplug\HttplugClient` is deprecated and will be removed in 3.0. Use PSR-18 HTTP Client instead

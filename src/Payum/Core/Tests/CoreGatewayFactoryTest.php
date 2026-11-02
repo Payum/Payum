@@ -6,7 +6,7 @@ namespace Payum\Core\Tests;
 
 use Closure;
 use DI\Container;
-use Http\Message\RequestFactory;
+use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\CapturePaymentAction;
@@ -81,7 +81,7 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.message_factory', $config);
-        $this->assertInstanceOf(RequestFactory::class, $config['httplug.message_factory']());
+        $this->assertInstanceOf(interface_exists(MessageFactory::class) ? MessageFactory::class : RequestFactoryInterface::class, $config['httplug.message_factory']());
     }
 
     /**
@@ -93,7 +93,7 @@ final class CoreGatewayFactoryTest extends TestCase
 
         $config = $factory->createConfig([]);
         $this->assertArrayHasKey('httplug.stream_factory', $config);
-        $this->assertInstanceOf(StreamFactory::class, $config['httplug.stream_factory']());
+        $this->assertInstanceOf(interface_exists(StreamFactory::class) ? StreamFactory::class : StreamFactoryInterface::class, $config['httplug.stream_factory']());
     }
 
     public function testShouldCreateDefaultHttMessageFactory(): void
