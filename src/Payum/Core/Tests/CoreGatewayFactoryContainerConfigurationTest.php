@@ -7,6 +7,8 @@ namespace Payum\Core\Tests;
 use DI\Container;
 use DI\ContainerBuilder;
 use Http\Client\HttpClient;
+use Http\Discovery\ClassDiscovery;
+use Http\Discovery\Strategy\DiscoveryStrategy;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use LogicException;
@@ -15,6 +17,7 @@ use Money\Currencies\CurrencyList;
 use Money\Currency;
 use Money\MoneyFormatter;
 use Money\MoneyParser;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\AuthorizePaymentAction;
 use Payum\Core\Action\CapturePaymentAction;
@@ -465,6 +468,29 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
 
         $this->assertInstanceOf(MessageFactory::class, $messageFactory);
         $this->assertInstanceOf(StreamFactory::class, $streamFactory);
+    }
+
+    public function testShouldFallBackToPsr17WhenHttplugFactoriesAreInstalledWithoutAnImplementation(): void
+    {
+        if (! interface_exists(MessageFactory::class) || ! interface_exists(StreamFactory::class)) {
+            $this->markTestSkipped('php-http/message-factory is not installed');
+        }
+
+        $definitions = (new CoreGatewayFactory())->configureContainer();
+        $strategies = ClassDiscovery::getStrategies();
+        ClassDiscovery::setStrategies([Psr17OnlyDiscoveryStrategy::class]);
+
+        try {
+            $this->collectDeprecations(function () use ($definitions, &$messageFactory, &$streamFactory): void {
+                $messageFactory = $definitions['httplug.message_factory']();
+                $streamFactory = $definitions['httplug.stream_factory']();
+            });
+        } finally {
+            ClassDiscovery::setStrategies($strategies);
+        }
+
+        $this->assertInstanceOf(RequestFactoryInterface::class, $messageFactory);
+        $this->assertInstanceOf(StreamFactoryInterface::class, $streamFactory);
     }
 
     public function testShouldResolveDeprecatedHttplugClient(): void
@@ -994,6 +1020,24 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         }
 
         return $deprecations;
+    }
+}
+
+class Psr17OnlyDiscoveryStrategy implements DiscoveryStrategy
+{
+    /**
+     * @return list<array{class: class-string, condition: class-string}>
+     */
+    public static function getCandidates($type): array
+    {
+        if (RequestFactoryInterface::class !== $type && StreamFactoryInterface::class !== $type) {
+            return [];
+        }
+
+        return [[
+            'class' => Psr17Factory::class,
+            'condition' => Psr17Factory::class,
+        ]];
     }
 }
 
