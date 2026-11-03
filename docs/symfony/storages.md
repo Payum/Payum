@@ -61,6 +61,19 @@ doctrine:
             object: Payum\Core\Bridge\Doctrine\Types\DbalObjectType
 ```
 
+To store token details as JSON instead of serialized PHP, add the migration described in
+[Storing token details as JSON](../storages.md#storing-token-details-as-json) and register the listener, in the
+same deploy:
+
+```yml
+# config/services.yaml
+
+services:
+    Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson:
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }
+```
+
 #### Doctrine MongoODM.
 
 Token use custom mongo type called `ObjectType`, so you have to add it to the kernel boot method:

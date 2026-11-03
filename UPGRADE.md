@@ -19,6 +19,10 @@
     manager, or with DoctrineBundle add `object: Payum\Core\Bridge\Doctrine\Types\DbalObjectType` under
     `doctrine.dbal.types`. It reads and writes the same serialized format, so **no database migration** is
     needed. Nothing changes on DBAL 3.
+  * Optionally, token details can be stored as JSON instead of serialized PHP: extend
+    `Payum\Core\Bridge\Doctrine\Migrations\AbstractTokenDetailsToJsonMigration` and register
+    `Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson`. See
+    [docs/storages.md](docs/storages.md#storing-token-details-as-json).
   * ORM 3 has no annotation mapping. Map your own entities that extend Payum's models with attributes or
     XML; Payum's shipped mappings are XML and work on both majors.
 * `Payum\Core\Action\GetCurrencyAction` uses alcohol/iso4217 by default. Its one constructor argument is now
