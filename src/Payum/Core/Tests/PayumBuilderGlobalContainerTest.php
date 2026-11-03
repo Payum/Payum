@@ -1240,9 +1240,10 @@ final class PayumBuilderGlobalContainerTest extends TestCase
             ])
         ;
 
-        $deprecations = $this->collectDeprecations(static function () use ($builder): void {
+        // Only Payum's own: on PHP 8.4 a dependency's #[\Deprecated] methods report through the same handler.
+        $deprecations = array_values(preg_grep('#^Since payum/#', $this->collectDeprecations(static function () use ($builder): void {
             $builder->getPayum();
-        });
+        })));
 
         $this->assertSame([
             sprintf(
