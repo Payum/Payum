@@ -1333,30 +1333,6 @@ parameters:
 			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseMongoTest.php
 
 		-
-			message: '#^Call to function method_exists\(\) with Doctrine\\ORM\\Configuration and ''setQueryCache'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
-
-		-
-			message: '#^Instantiated class Doctrine\\Common\\Cache\\ArrayCache not found\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
-
-		-
-			message: '#^Parameter \#1 \$cacheImpl of method Doctrine\\ORM\\Configuration\:\:setMetadataCacheImpl\(\) expects Doctrine\\Common\\Cache\\Cache, Doctrine\\Common\\Cache\\ArrayCache given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
-
-		-
-			message: '#^Parameter \#1 \$cacheImpl of method Doctrine\\ORM\\Configuration\:\:setQueryCacheImpl\(\) expects Doctrine\\Common\\Cache\\Cache, Doctrine\\Common\\Cache\\ArrayCache given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Payum/Core/Tests/Functional/Bridge/Doctrine/BaseOrmTest.php
-
-		-
 			message: '#^Parameter \#1 \$details of method Payum\\Core\\Model\\Payment\:\:setDetails\(\) expects array\|Traversable, string given\.$#'
 			identifier: argument.type
 			count: 1

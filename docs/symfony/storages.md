@@ -11,10 +11,8 @@ namespace Acme\PaymentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Token;
 
-/**
- * @ORM\Table
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table]
 class PaymentToken extends Token
 {
 }
@@ -27,19 +25,13 @@ namespace Acme\PaymentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\ArrayObject;
 
-/**
- * @ORM\Table
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table]
 class PaymentDetails extends ArrayObject
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     * @var integer $id
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 }
 ```
@@ -56,6 +48,17 @@ payum:
 
     storages:
         Acme\PaymentBundle\Entity\PaymentDetails: { doctrine: orm }
+```
+
+On DBAL 4, register the `object` type the token mapping uses. DBAL 4 no longer ships it:
+
+```yml
+# app/config/config.yml
+
+doctrine:
+    dbal:
+        types:
+            object: Payum\Core\Bridge\Doctrine\Types\DbalObjectType
 ```
 
 #### Doctrine MongoODM.
