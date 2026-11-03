@@ -15,6 +15,7 @@ use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
@@ -465,6 +466,38 @@ final class PayumTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame('https://example.com/done', $response->getTargetUrl());
+    }
+
+    public function testCaptureMethodNamesTheTokenWhenItHasNoAfterUrlToRedirectTo(): void
+    {
+        $token = new Token();
+        $token->setHash('theTokenHash');
+        $token->setGatewayName('aGateway');
+
+        $this->httpRequestVerifierMock
+            ->method('verify')
+            ->willReturn($token);
+
+        $gateway = $this->createMock(GatewayInterface::class);
+        $gateway
+            ->expects($this->once())
+            ->method('execute')
+            ->with(new Capture($token))
+            ->willReturn(null);
+
+        $payum = new Payum(
+            new SimpleRegistry([
+                'aGateway' => $gateway,
+            ]),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock
+        );
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The token "theTokenHash" has no after URL');
+
+        $payum->capture(Request::create('/capture'));
     }
 
     public function testCaptureMethodRepliesHttpRedirect(): void

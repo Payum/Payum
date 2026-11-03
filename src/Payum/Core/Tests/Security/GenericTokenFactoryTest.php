@@ -766,6 +766,82 @@ final class GenericTokenFactoryTest extends TestCase
         $this->assertSame([['aGateway', null, 'notify.php', [], null, []]], $calls->getArrayCopy());
     }
 
+    /**
+     * @return iterable<string, array{TokenPurpose}>
+     */
+    public static function providePurposesWithAnAfterToken(): iterable
+    {
+        yield 'authorize' => [TokenPurpose::Authorize];
+        yield 'capture' => [TokenPurpose::Capture];
+        yield 'refund' => [TokenPurpose::Refund];
+        yield 'payout' => [TokenPurpose::Payout];
+    }
+
+    /**
+     * @dataProvider providePurposesWithAnAfterToken
+     */
+    public function testShouldSendTheAfterTokenToTheFinalPath(TokenPurpose $purpose): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $token = $factory->create($purpose, 'aGateway', new stdClass(), 'capture.php', [], 'done.php', [
+            'c' => 'd',
+        ]);
+
+        $this->assertSame(['capture.php', [], 'done.php', [
+            'c' => 'd',
+        ]], array_slice($calls->getArrayCopy()[0], 2));
+        $this->assertSame('capture.php?n=1', $token->getAfterUrl());
+    }
+
+    /**
+     * @dataProvider providePurposes
+     *
+     * @param callable(GenericTokenFactory, object): TokenInterface $legacy
+     */
+    public function testShouldLeaveTheAfterTokenWithoutAnAfterUrlWhenNoFinalPathIsGiven(TokenPurpose $purpose, callable $legacy): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $legacy($factory, new stdClass());
+
+        $this->assertNull($calls->getArrayCopy()[0][4]);
+    }
+
+    public function testShouldAcceptAFinalPathOnTheDeprecatedMethodsWithoutDeclaringIt(): void
+    {
+        $model = new stdClass();
+
+        foreach ([
+            'createAuthorizeToken' => TokenPurpose::Authorize,
+            'createCaptureToken' => TokenPurpose::Capture,
+            'createRefundToken' => TokenPurpose::Refund,
+            'createPayoutToken' => TokenPurpose::Payout,
+        ] as $method => $purpose) {
+            [$oldFactory, $oldCalls] = $this->createRecordingFactory();
+            [$newFactory, $newCalls] = $this->createRecordingFactory();
+
+            $oldFactory->{$method}('aGateway', $model, 'capture.php', [], 'done.php', [
+                'c' => 'd',
+            ]);
+            $newFactory->create($purpose, 'aGateway', $model, 'capture.php', [], 'done.php', [
+                'c' => 'd',
+            ]);
+
+            $this->assertSame($newCalls->getArrayCopy(), $oldCalls->getArrayCopy(), $method);
+            $this->assertSame('done.php', $oldCalls->getArrayCopy()[0][4], $method);
+        }
+    }
+
+    public function testShouldSendTheCancelAfterTokenToTheFinalPath(): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $factory->createCancelToken('aGateway', new stdClass(), 'capture.php', [], 'done.php');
+
+        $this->assertSame('done.php', $calls->getArrayCopy()[0][4]);
+    }
+
     public function testShouldFallBackToTheDonePathForACaptureWithNoAfterPath(): void
     {
         [$factory, $calls] = $this->createRecordingFactory();
@@ -810,6 +886,7 @@ final class GenericTokenFactoryTest extends TestCase
             'refund' => 'refund.php',
             'payout' => 'payout.php',
             'notify' => 'notify.php',
+            'cancel' => 'cancel.php',
             'done' => 'done.php',
         ]);
 

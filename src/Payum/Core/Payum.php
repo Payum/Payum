@@ -224,7 +224,7 @@ class Payum implements RegistryInterface
             return new Response($reply->getContent(), $reply->getStatusCode(), $reply->getHeaders());
         }
 
-        return new RedirectResponse($token->getAfterUrl());
+        return $this->redirectToAfterUrl($token);
     }
 
     /**
@@ -286,7 +286,7 @@ class Payum implements RegistryInterface
         $next = $result->next;
 
         if (! $next instanceof NextAction) {
-            return new RedirectResponse($token->getAfterUrl());
+            return $this->redirectToAfterUrl($token);
         }
 
         if ($next instanceof Redirect) {
@@ -333,5 +333,19 @@ class Payum implements RegistryInterface
             : Acknowledgement::noContent();
 
         return new Response($acknowledgement->body, $acknowledgement->status, $acknowledgement->headers);
+    }
+
+    private function redirectToAfterUrl(TokenInterface $token): RedirectResponse
+    {
+        $afterUrl = $token->getAfterUrl();
+
+        if (! $afterUrl) {
+            throw new LogicException(sprintf(
+                'The token "%s" has no after URL to send the customer to. When a token\'s after path is itself a Payum operation, such as a capture that follows an authorize, pass a final path when creating it.',
+                $token->getHash(),
+            ));
+        }
+
+        return new RedirectResponse($afterUrl);
     }
 }

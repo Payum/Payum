@@ -47,6 +47,27 @@ class PaymentController extends Controller
 }
 ```
 
+### Authorize, then capture
+
+If the route after authorizing is another Payum operation, such as `payum_capture_do`, tell Payum where that
+operation sends the customer when it is done. Otherwise it has nowhere to go, and the capture fails with an
+error naming its token.
+
+```php
+use Payum\Core\Security\TokenPurpose;
+
+$token = $this->get('payum')->getTokenIssuer()->create(
+    TokenPurpose::Authorize,
+    $gatewayName,
+    $payment,
+    'payum_capture_do', // runs after authorizing
+    [],
+    'done' // where the capture sends the customer
+);
+
+return $this->redirect($token->getTargetUrl());
+```
+
 ***
 
 ### Supporting Payum

@@ -14,7 +14,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = []);
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */);
 
     /**
      * @param string $gatewayName
@@ -23,7 +23,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = []);
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */);
 
     /**
      * @param string $gatewayName
@@ -32,7 +32,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = []);
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */);
 
     /**
      * @param string $gatewayName
@@ -41,7 +41,7 @@ interface GenericTokenFactoryInterface extends TokenFactoryInterface
      *
      * @return TokenInterface
      */
-    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = []);
+    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */);
 
     /**
      * @param string      $gatewayName
