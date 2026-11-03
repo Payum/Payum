@@ -6,8 +6,9 @@ use Payum\Core\Bridge\Symfony\Security\HttpRequestVerifier;
 use Payum\Core\Security\HttpRequestVerifierInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\HttpRequestVerifierBuilder class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\HttpRequestVerifierBuilder from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\HttpRequestVerifierBuilder from payum/payum-bundle instead.', HttpRequestVerifierBuilder::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Builder\HttpRequestVerifierBuilder from payum/payum-bundle instead.

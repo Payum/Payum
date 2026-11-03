@@ -5,8 +5,9 @@ namespace Payum\Core\Bridge\Symfony;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\CoreGatewayFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ContainerAwareCoreGatewayFactory class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\ContainerAwareCoreGatewayFactory from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\ContainerAwareCoreGatewayFactory from payum/payum-bundle instead.', ContainerAwareCoreGatewayFactory::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\ContainerAwareCoreGatewayFactory from payum/payum-bundle instead.

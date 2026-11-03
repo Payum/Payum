@@ -10,8 +10,9 @@ use DateTime;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\CreditCardDate class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDate from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDate from payum/payum-bundle instead.', CreditCardDate::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDate from payum/payum-bundle instead.

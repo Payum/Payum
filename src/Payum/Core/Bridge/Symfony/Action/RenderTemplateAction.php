@@ -6,8 +6,9 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Templating\EngineInterface;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\RenderTemplateAction class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\RenderTemplateAction from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\RenderTemplateAction from payum/payum-bundle instead.', RenderTemplateAction::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\RenderTemplateAction from payum/payum-bundle instead.

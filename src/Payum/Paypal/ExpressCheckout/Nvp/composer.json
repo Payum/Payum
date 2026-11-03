@@ -20,7 +20,8 @@
         }
     ],
     "require": {
-        "payum/core": "2.0.x-dev"
+        "payum/core": "2.0.x-dev",
+        "symfony/deprecation-contracts": "^2.5 || ^3.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^8.1",

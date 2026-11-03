@@ -7,8 +7,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\CreditCardType class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\CreditCardType from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\CreditCardType from payum/payum-bundle instead.', CreditCardType::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\CreditCardType from payum/payum-bundle instead.

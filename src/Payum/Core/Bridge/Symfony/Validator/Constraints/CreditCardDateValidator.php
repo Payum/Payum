@@ -9,8 +9,9 @@ namespace Payum\Core\Bridge\Symfony\Validator\Constraints;
 use DateTime;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\CreditCardDateValidator class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDateValidator from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDateValidator from payum/payum-bundle instead.', CreditCardDateValidator::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Validator\Constraints\CreditCardDateValidator from payum/payum-bundle instead.

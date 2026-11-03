@@ -5,8 +5,9 @@ namespace Payum\Core\Bridge\Symfony\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\GatewayChoiceType class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\GatewayChoiceType from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\GatewayChoiceType from payum/payum-bundle instead.', GatewayChoiceType::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Form\Type\GatewayChoiceType from payum/payum-bundle instead.
