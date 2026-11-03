@@ -25,6 +25,7 @@ use Payum\Core\DI\ListableContainerInterface;
 use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Extension\StorageExtension;
 use Payum\Core\Gateway;
+use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Payment;
@@ -1221,12 +1222,35 @@ final class PayumBuilderGlobalContainerTest extends TestCase
 
         $this->assertContains(
             sprintf(
-                'Since payum/core 2.0.0: Not implementing %s for gateway factory %s is deprecated.',
-                ContainerConfiguration::class,
-                LegacyGatewayFactoryStub::class
+                'Since payum/core 2.0.0: %s is a 1.x gateway factory, which is deprecated and will not be supported in 3.0. It needs to implement %s.',
+                LegacyGatewayFactoryStub::class,
+                ContainerConfiguration::class
             ),
             $deprecations
         );
+    }
+
+    public function testShouldReportOnlyWhatTheApplicationAndTheGatewayFactoryCanChangeWhenBuildingA1xGateway(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGatewayFactory('legacy_factory', static fn (array $config): GatewayFactory => new GatewayFactory($config))
+            ->addGateway('legacy', [
+                'factory' => 'legacy_factory',
+            ])
+        ;
+
+        $deprecations = $this->collectDeprecations(static function () use ($builder): void {
+            $builder->getPayum();
+        });
+
+        $this->assertSame([
+            sprintf(
+                'Since payum/core 2.0.0: %s is a 1.x gateway factory, which is deprecated and will not be supported in 3.0. It needs to implement %s.',
+                GatewayFactory::class,
+                ContainerConfiguration::class
+            ),
+        ], $deprecations);
     }
 
     public function testShouldNotTriggerTheLegacyGatewayFactoryDeprecationForAContainerConfigurationFactory(): void
@@ -1245,9 +1269,9 @@ final class PayumBuilderGlobalContainerTest extends TestCase
 
         $this->assertNotContains(
             sprintf(
-                'Since payum/core 2.0.0: Not implementing %s for gateway factory %s is deprecated.',
-                ContainerConfiguration::class,
-                ContainerConfigurationGatewayFactoryStub::class
+                'Since payum/core 2.0.0: %s is a 1.x gateway factory, which is deprecated and will not be supported in 3.0. It needs to implement %s.',
+                ContainerConfigurationGatewayFactoryStub::class,
+                ContainerConfiguration::class
             ),
             $deprecations
         );

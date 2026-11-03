@@ -51,6 +51,7 @@ use Payum\Core\Extension\PrependExtensionInterface;
 use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
@@ -72,6 +73,7 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionFunction;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionType;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
@@ -108,9 +110,22 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
     ];
 
     /**
+     * Core's own api entry, which every 1.x gateway gets: the http client an ApiAwareInterface action with
+     * that api class was handed in 1.x.
+     */
+    private const CORE_API = 'payum.api.http_client';
+
+    private const BUILD_METHODS = ['buildClosures', 'buildActions', 'buildApis', 'buildExtensions'];
+
+    /**
      * @var array<string, mixed>
      */
     protected array $defaultConfig = [];
+
+    /**
+     * @var array<string, true>
+     */
+    private static array $reportedOverrides = [];
 
     /**
      * @param array<string, mixed> $defaultConfig
@@ -127,64 +142,13 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function create(array $config = []): Gateway
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
-
-        if (($config['payum.http_client'] ?? null) instanceof HttpClientInterface && ! $config['payum.http_client'] instanceof ClientInterface) {
-            $config['payum.http_client'] = new Psr18HttpClient($config['payum.http_client']);
+        if (! LegacyFactoryScope::isActive()) {
+            trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         }
 
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions($config);
-        $containerBuilder->addDefinitions($this->configureContainer());
+        $this->reportOverriddenBuildMethods();
 
-        // What the caller set wins over core's defaults, as it did in 1.x: a gateway's payum.paths or
-        // payum.template.layout reaches the renderer. Closures are left to buildClosures(), since a 1.x
-        // closure takes the config array, which the container cannot pass.
-        $containerBuilder->addDefinitions(array_filter($config, static fn ($value): bool => ! $value instanceof Closure));
-        $containerBuilder->addDefinitions([
-            ArrayObject::class => static function (ContainerInterface $container) {
-                trigger_deprecation('payum/core', '2.0.0', 'The %s service is deprecated and will be removed in 3.0. Use the %s service instead.', ArrayObject::class, ContainerInterface::class);
-                return new class($container) extends ArrayObject {
-                    private ContainerInterface $container;
-
-                    public function __construct(ContainerInterface $container)
-                    {
-                        parent::__construct();
-
-                        $this->container = $container;
-                    }
-
-                    public function offsetGet($key): mixed
-                    {
-                        return $this->container->get($key);
-                    }
-
-                    public function offsetExists($key): bool
-                    {
-                        return $this->container->has($key);
-                    }
-                };
-            },
-        ]);
-
-        $container = $containerBuilder->build();
-
-        $entries = $container->getKnownEntryNames();
-
-        $configArray = ArrayObject::ensureArrayObject($config);
-        $configArray->defaults(array_combine(
-            $entries,
-            array_map(static fn (string $name) => static fn () => $container->get($name), $entries)
-        ));
-
-        $gateway = new Gateway();
-
-        $this->buildClosures($configArray);
-        $this->buildActions($gateway, $configArray);
-        $this->buildApis($gateway, $configArray);
-        $this->buildExtensions($gateway, $configArray);
-
-        return $this->createGateway($container, $gateway);
+        return LegacyFactoryScope::run(fn (): Gateway => $this->build($config));
     }
 
     /**
@@ -194,7 +158,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     public function createConfig(array $config = []): array
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        if (! LegacyFactoryScope::isActive()) {
+            trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
+        }
 
         $containerConfig = $this->configureContainer();
 
@@ -222,7 +188,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 // either. Without an implementation these fall back to PSR-17, because buildClosures()
                 // resolves them for every gateway, including the ones that never read them.
                 'httplug.message_factory' => static function (): object {
-                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.message_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_message_factory", a %s, instead.', RequestFactoryInterface::class);
+                    if (! LegacyFactoryScope::isActive()) {
+                        trigger_deprecation('payum/core', '2.0.0', 'The "httplug.message_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_message_factory", a %s, instead.', RequestFactoryInterface::class);
+                    }
 
                     if (interface_exists(MessageFactory::class)) {
                         try {
@@ -234,7 +202,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     return Psr17FactoryDiscovery::findRequestFactory();
                 },
                 'httplug.stream_factory' => static function (): object {
-                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.stream_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_stream_factory", a %s, instead.', StreamFactoryInterface::class);
+                    if (! LegacyFactoryScope::isActive()) {
+                        trigger_deprecation('payum/core', '2.0.0', 'The "httplug.stream_factory" config key is deprecated and will be removed in 3.0. Use "payum.http_stream_factory", a %s, instead.', StreamFactoryInterface::class);
+                    }
 
                     if (interface_exists(StreamFactory::class)) {
                         try {
@@ -246,7 +216,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     return Psr17FactoryDiscovery::findStreamFactory();
                 },
                 'httplug.client' => static function (ArrayObject $config) {
-                    trigger_deprecation('payum/core', '2.0.0', 'The "httplug.client" config key is deprecated and will be removed in 3.0. Use "payum.http_client", a %s, instead.', ClientInterface::class);
+                    if (! LegacyFactoryScope::isActive()) {
+                        trigger_deprecation('payum/core', '2.0.0', 'The "httplug.client" config key is deprecated and will be removed in 3.0. Use "payum.http_client", a %s, instead.', ClientInterface::class);
+                    }
 
                     if (class_exists(HttpClientDiscovery::class)) {
                         try {
@@ -492,8 +464,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     protected function buildClosures(ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
-
         // Helper to check if closure expects ArrayObject
         $canInvokeWithArrayObject = static function ($value): bool {
             if (! $value instanceof Closure) {
@@ -534,7 +504,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     protected function buildActions(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.action') && null !== $value) {
                 $prepend = in_array($name, $config['payum.prepend_actions'], true) || $value instanceof PrependActionInterface;
@@ -550,10 +519,12 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     protected function buildApis(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.api')) {
-                trigger_deprecation('payum/core', '2.0.0', 'The payum.api.* config is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.');
+                if (self::CORE_API !== $name) {
+                    trigger_deprecation('payum/core', '2.0.0', 'The "%s" config key is deprecated and will be removed in 3.0, along with every payum.api.* key. Take the api as a constructor argument on the action instead, and let the container inject it.', $name);
+                }
+
                 $prepend = in_array($name, $config['payum.prepend_apis'], true);
 
                 $gateway->addApi($value, $prepend);
@@ -567,13 +538,98 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
      */
     protected function buildExtensions(Gateway $gateway, ArrayObject $config): void
     {
-        trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', __METHOD__, ContainerConfiguration::class);
         foreach ($config as $name => $value) {
             if (str_starts_with($name, 'payum.extension')) {
                 $prepend = in_array($name, $config['payum.prepend_extensions'], true) || $value instanceof PrependExtensionInterface;
 
                 $gateway->addExtension($value, $prepend);
             }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function build(array $config): Gateway
+    {
+        if (($config['payum.http_client'] ?? null) instanceof HttpClientInterface && ! $config['payum.http_client'] instanceof ClientInterface) {
+            $config['payum.http_client'] = new Psr18HttpClient($config['payum.http_client']);
+        }
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->addDefinitions($config);
+        $containerBuilder->addDefinitions($this->configureContainer());
+
+        // What the caller set wins over core's defaults, as it did in 1.x: a gateway's payum.paths or
+        // payum.template.layout reaches the renderer. Closures are left to buildClosures(), since a 1.x
+        // closure takes the config array, which the container cannot pass.
+        $containerBuilder->addDefinitions(array_filter($config, static fn ($value): bool => ! $value instanceof Closure));
+        $containerBuilder->addDefinitions([
+            ArrayObject::class => static function (ContainerInterface $container) {
+                if (! LegacyFactoryScope::isActive()) {
+                    trigger_deprecation('payum/core', '2.0.0', 'The %s service is deprecated and will be removed in 3.0. Use the %s service instead.', ArrayObject::class, ContainerInterface::class);
+                }
+
+                return new class($container) extends ArrayObject {
+                    private ContainerInterface $container;
+
+                    public function __construct(ContainerInterface $container)
+                    {
+                        parent::__construct();
+
+                        $this->container = $container;
+                    }
+
+                    public function offsetGet($key): mixed
+                    {
+                        return $this->container->get($key);
+                    }
+
+                    public function offsetExists($key): bool
+                    {
+                        return $this->container->has($key);
+                    }
+                };
+            },
+        ]);
+
+        $container = $containerBuilder->build();
+
+        $entries = $container->getKnownEntryNames();
+
+        $configArray = ArrayObject::ensureArrayObject($config);
+        $configArray->defaults(array_combine(
+            $entries,
+            array_map(static fn (string $name) => static fn () => $container->get($name), $entries)
+        ));
+
+        $gateway = new Gateway();
+
+        $this->buildClosures($configArray);
+        $this->buildActions($gateway, $configArray);
+        $this->buildApis($gateway, $configArray);
+        $this->buildExtensions($gateway, $configArray);
+
+        return $this->createGateway($container, $gateway);
+    }
+
+    /**
+     * The build methods are deprecated for whoever overrides them. Core calling its own is not something
+     * a caller can change, so a subclass is reported for each one it overrides, once.
+     */
+    private function reportOverriddenBuildMethods(): void
+    {
+        foreach (self::BUILD_METHODS as $method) {
+            $declaringClass = (new ReflectionMethod($this, $method))->getDeclaringClass()->getName();
+            $key = $declaringClass . '::' . $method;
+
+            if (self::class === $declaringClass || isset(self::$reportedOverrides[$key])) {
+                continue;
+            }
+
+            self::$reportedOverrides[$key] = true;
+
+            trigger_deprecation('payum/core', '2.0.0', 'Overriding %s::%s() in %s is deprecated and will be removed in 3.0. Implement the %s interface instead.', self::class, $method, $declaringClass, ContainerConfiguration::class);
         }
     }
 

@@ -27,6 +27,7 @@ use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Legacy\ActionToHandlerAdapter;
 use Payum\Core\Legacy\HandlerToActionAdapter;
+use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
@@ -124,12 +125,15 @@ class Gateway implements GatewayInterface
      */
     public function addApi($api, $forcePrepend = false): void
     {
-        trigger_deprecation(
-            'payum/core',
-            '2.0.0',
-            'The %s method is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.',
-            __METHOD__
-        );
+        // A 1.x factory's payum.api.* keys are reported by key while core registers them.
+        if (! LegacyFactoryScope::isActive()) {
+            trigger_deprecation(
+                'payum/core',
+                '2.0.0',
+                'The %s method is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.',
+                __METHOD__
+            );
+        }
 
         $forcePrepend ?
             array_unshift($this->apis, $api) :
