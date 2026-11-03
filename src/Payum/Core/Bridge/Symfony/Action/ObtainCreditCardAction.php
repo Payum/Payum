@@ -17,8 +17,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ObtainCreditCardAction class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction from payum/payum-bundle instead.', ObtainCreditCardAction::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Action\ObtainCreditCardAction from payum/payum-bundle instead.

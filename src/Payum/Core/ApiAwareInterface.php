@@ -3,9 +3,9 @@
 namespace Payum\Core;
 
 use Payum\Core\Exception\UnsupportedApiException;
-use function trigger_error;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ApiAwareInterface is deprecated since 2.0.0 and will be removed in 3.0. Take the api as a constructor argument instead, and let the container inject it.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Take the api as a constructor argument instead, and let the container inject it.', ApiAwareInterface::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Take the api as a constructor argument instead, and

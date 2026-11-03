@@ -6,8 +6,9 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Paypal\ExpressCheckout\Nvp\Action\CancelRecurringPaymentsProfileAction as NewCancelAction;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use function trigger_deprecation;
 
-@trigger_error('The ' . CancelRecurringPaymentsProfileAction::class . ' class is deprecated since version 1.4 and will be removed in 3.0. Use ' . NewCancelAction::class . ' class instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/paypal-express-checkout-nvp', '1.4', 'The %s class is deprecated and will be removed in 3.0. Use %s instead.', CancelRecurringPaymentsProfileAction::class, NewCancelAction::class);
 
 /**
  * Class CancelRecurringPaymentsProfileAction.

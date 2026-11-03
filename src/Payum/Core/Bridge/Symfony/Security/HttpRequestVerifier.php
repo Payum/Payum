@@ -10,8 +10,9 @@ use Payum\Core\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\HttpRequestVerifier class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Security\HttpRequestVerifier from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\Security\HttpRequestVerifier from payum/payum-bundle instead.', HttpRequestVerifier::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\Security\HttpRequestVerifier from payum/payum-bundle instead.

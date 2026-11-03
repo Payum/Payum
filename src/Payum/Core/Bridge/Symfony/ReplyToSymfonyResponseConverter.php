@@ -8,9 +8,9 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Reply\ReplyInterface;
 use ReflectionObject;
 use Symfony\Component\HttpFoundation\Response;
-use function trigger_error;
+use function trigger_deprecation;
 
-@trigger_error('The ' . __NAMESPACE__ . '\ReplyToSymfonyResponseConverter class is deprecated since version 2.0 and will be removed in 3.0. Use Payum\Bundle\PayumBundle\ReplyToSymfonyResponseConverter from payum/payum-bundle instead.', E_USER_DEPRECATED);
+trigger_deprecation('payum/core', '2.0.0', 'The %s class is deprecated and will be removed in 3.0. Use Payum\Bundle\PayumBundle\ReplyToSymfonyResponseConverter from payum/payum-bundle instead.', ReplyToSymfonyResponseConverter::class);
 
 /**
  * @deprecated since 2.0.0, will be removed in 3.0. Use Payum\Bundle\PayumBundle\ReplyToSymfonyResponseConverter from payum/payum-bundle instead.
