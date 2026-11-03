@@ -60,4 +60,22 @@ final class GenericTokenFactoryIssuerTest extends TestCase
             'a' => 'b',
         ]));
     }
+
+    public function testShouldPassAFinalPathOnToTheFactory(): void
+    {
+        $model = new stdClass();
+        $token = $this->createMock(TokenInterface::class);
+
+        $factory = $this->createMock(GenericTokenFactoryInterface::class);
+        $factory->expects($this->once())
+            ->method('createAuthorizeToken')
+            ->with('aGateway', $model, 'capture.php', [], 'done.php', [
+                'c' => 'd',
+            ])
+            ->willReturn($token);
+
+        $this->assertSame($token, GenericTokenFactoryIssuer::wrap($factory)->create(TokenPurpose::Authorize, 'aGateway', $model, 'capture.php', [], 'done.php', [
+            'c' => 'd',
+        ]));
+    }
 }

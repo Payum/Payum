@@ -39,6 +39,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
 
     /**
      * @param array<string, mixed> $afterParameters
+     * @param array<string, mixed> $finalParameters
      */
     public function create(
         TokenPurpose $purpose,
@@ -46,14 +47,18 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
         ?object $subject = null,
         ?string $afterPath = null,
         array $afterParameters = [],
+        ?string $finalPath = null,
+        array $finalParameters = [],
     ): TokenInterface {
         // Resolved first, so a purpose with no configured path fails before an after token is stored.
         $targetPath = $this->getPath($purpose->value);
 
+        $after = fn (?string $path): string => $this->createToken($gatewayName, $subject, $path, $afterParameters, $finalPath, $finalParameters)->getTargetUrl();
+
         $afterUrl = match ($purpose) {
-            TokenPurpose::Capture => $this->createToken($gatewayName, $subject, $afterPath ?? $this->getPath('done'), $afterParameters)->getTargetUrl(),
-            TokenPurpose::Authorize, TokenPurpose::Payout => $this->createToken($gatewayName, $subject, $afterPath, $afterParameters)->getTargetUrl(),
-            TokenPurpose::Refund => $afterPath ? $this->createToken($gatewayName, $subject, $afterPath, $afterParameters)->getTargetUrl() : null,
+            TokenPurpose::Capture => $after($afterPath ?? $this->getPath('done')),
+            TokenPurpose::Authorize, TokenPurpose::Payout => $after($afterPath),
+            TokenPurpose::Refund => $afterPath ? $after($afterPath) : null,
             TokenPurpose::Notify => null,
         };
 
@@ -70,9 +75,9 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
      *
      * @return TokenInterface
      */
-    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createCaptureToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */)
     {
-        return $this->create(TokenPurpose::Capture, $gatewayName, $model, $afterPath, $afterParameters);
+        return $this->create(TokenPurpose::Capture, $gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4));
     }
 
     /**
@@ -85,9 +90,9 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
      *
      * @return TokenInterface
      */
-    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createAuthorizeToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */)
     {
-        return $this->create(TokenPurpose::Authorize, $gatewayName, $model, $afterPath, $afterParameters);
+        return $this->create(TokenPurpose::Authorize, $gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4));
     }
 
     /**
@@ -100,9 +105,9 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
      *
      * @return TokenInterface
      */
-    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createRefundToken($gatewayName, $model, $afterPath = null, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */)
     {
-        return $this->create(TokenPurpose::Refund, $gatewayName, $model, $afterPath, $afterParameters);
+        return $this->create(TokenPurpose::Refund, $gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4));
     }
 
     /**
@@ -113,13 +118,13 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
      *
      * @return TokenInterface
      */
-    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = [])
+    public function createCancelToken($gatewayName, $model, $afterPath = null, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */)
     {
         $cancelPath = $this->getPath('cancel');
 
         $afterUrl = null;
         if ($afterPath) {
-            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters)->getTargetUrl();
+            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4))->getTargetUrl();
         }
 
         return $this->createToken($gatewayName, $model, $cancelPath, [], $afterUrl);
@@ -135,9 +140,9 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
      *
      * @return TokenInterface
      */
-    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [])
+    public function createPayoutToken($gatewayName, $model, $afterPath, array $afterParameters = [] /* , ?string $finalPath = null, array $finalParameters = [] */)
     {
-        return $this->create(TokenPurpose::Payout, $gatewayName, $model, $afterPath, $afterParameters);
+        return $this->create(TokenPurpose::Payout, $gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4));
     }
 
     /**

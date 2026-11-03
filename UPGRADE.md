@@ -165,9 +165,15 @@
   from a recorded status reads the partial ones as captured and refunded, and `Disputed` and `ChargedBack`
   as unknown. Write any `match` over `PaymentStatus` with a `default` arm, because the set can grow.
 * Tokens are minted for a purpose: `Payum\Core\Security\TokenIssuerInterface::create(TokenPurpose $purpose,
-  string $gatewayName, ?object $subject = null, ?string $afterPath = null, array $afterParameters = [])`,
-  with `Payum\Core\Security\TokenPurpose` naming `Authorize`, `Capture`, `Refund`, `Payout` or `Notify`.
-  Stored tokens, `TokenInterface` and your Doctrine mappings are unchanged.
+  string $gatewayName, ?object $subject = null, ?string $afterPath = null, array $afterParameters = [],
+  ?string $finalPath = null, array $finalParameters = [])`, with `Payum\Core\Security\TokenPurpose` naming
+  `Authorize`, `Capture`, `Refund`, `Payout` or `Notify`. Stored tokens, `TokenInterface` and your Doctrine
+  mappings are unchanged.
+  * When the after path is itself a Payum operation, such as authorizing and then capturing, pass a
+    `$finalPath` for where that operation sends the customer. Without it, the operation has nowhere to
+    redirect and `Payum::capture()` throws a `LogicException` naming the token. The deprecated
+    `create*Token()` methods accept the same two trailing arguments without declaring them, so a 1.x
+    subclass or implementation of `GenericTokenFactoryInterface` keeps working unchanged.
   * Replace `$payum->getTokenFactory()->createCaptureToken($gateway, $payment, 'done.php')` with
     `$payum->getTokenIssuer()->create(TokenPurpose::Capture, $gateway, $payment, 'done.php')`, and the same
     for the other `create*Token()` methods. `Payum::getTokenFactory()` is deprecated and removed in 3.0.

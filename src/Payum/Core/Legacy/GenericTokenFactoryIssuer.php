@@ -29,6 +29,7 @@ final class GenericTokenFactoryIssuer implements TokenIssuerInterface
 
     /**
      * @param array<string, mixed> $afterParameters
+     * @param array<string, mixed> $finalParameters
      */
     public function create(
         TokenPurpose $purpose,
@@ -36,12 +37,21 @@ final class GenericTokenFactoryIssuer implements TokenIssuerInterface
         ?object $subject = null,
         ?string $afterPath = null,
         array $afterParameters = [],
+        ?string $finalPath = null,
+        array $finalParameters = [],
     ): TokenInterface {
+        // A 1.x factory declares four arguments, so the final path is only passed when there is one.
+        $arguments = [$gatewayName, $subject, $afterPath, $afterParameters];
+        if (null !== $finalPath) {
+            $arguments[] = $finalPath;
+            $arguments[] = $finalParameters;
+        }
+
         return match ($purpose) {
-            TokenPurpose::Authorize => $this->factory->createAuthorizeToken($gatewayName, $subject, $afterPath, $afterParameters),
-            TokenPurpose::Capture => $this->factory->createCaptureToken($gatewayName, $subject, $afterPath, $afterParameters),
-            TokenPurpose::Refund => $this->factory->createRefundToken($gatewayName, $subject, $afterPath, $afterParameters),
-            TokenPurpose::Payout => $this->factory->createPayoutToken($gatewayName, $subject, $afterPath, $afterParameters),
+            TokenPurpose::Authorize => $this->factory->createAuthorizeToken(...$arguments),
+            TokenPurpose::Capture => $this->factory->createCaptureToken(...$arguments),
+            TokenPurpose::Refund => $this->factory->createRefundToken(...$arguments),
+            TokenPurpose::Payout => $this->factory->createPayoutToken(...$arguments),
             TokenPurpose::Notify => $this->factory->createNotifyToken($gatewayName, $subject),
         };
     }
