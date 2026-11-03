@@ -3,9 +3,9 @@
 namespace Payum\Core\Request;
 
 /**
- * @deprecated since 2.0.0, will be removed in 3.0. A handler declares the status on its result —
- *             Payum\Core\Result\CaptureResult::captured() and friends — and it is read back as a
- *             Payum\Core\Result\PaymentStatus.
+ * @deprecated since 2.0.0, will be removed in 3.0. Read the Payum\Core\Result\PaymentStatus
+ *             from the status property of the Payum\Core\Result\Result a command returns. A handler
+ *             declares it with Payum\Core\Result\CaptureResult::captured() and friends.
  */
 class GetHumanStatus extends BaseGetStatus
 {

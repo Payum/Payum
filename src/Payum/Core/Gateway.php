@@ -26,6 +26,7 @@ use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Legacy\ActionToHandlerAdapter;
+use Payum\Core\Legacy\HandlerToActionAdapter;
 use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
@@ -39,6 +40,7 @@ use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Result\Failure;
+use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\RenderTemplate;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -49,10 +51,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
 use ReflectionProperty;
 use Throwable;
 use function func_num_args;
 use function get_debug_type;
+use function is_object;
+use function preg_match;
+use function preg_replace;
+use function sprintf;
 use function trigger_deprecation;
 
 class Gateway implements GatewayInterface
@@ -192,10 +199,11 @@ class Gateway implements GatewayInterface
             trigger_deprecation(
                 'payum/core',
                 '2.0.0',
-                'Passing a %s to %s is deprecated and will not be supported in 3.0. Dispatch the %s that means the same thing instead.',
+                'Passing a %s to %s is deprecated and will not be supported in 3.0. %s',
                 $requestType,
                 __METHOD__,
-                CommandInterface::class,
+                (is_object($request) ? self::replacementFor($request::class) : null)
+                    ?? sprintf('Port the action that dispatches it to a %s.', HandlerInterface::class),
             );
         }
 
@@ -257,6 +265,8 @@ class Gateway implements GatewayInterface
 
             array_pop($this->stack);
         } catch (ReplyInterface $reply) {
+            $this->reportLegacyReply($reply, $context->getAction());
+
             $context->setReply($reply);
 
             $this->extensions->onPostExecute($context);
@@ -426,6 +436,49 @@ class Gateway implements GatewayInterface
         }
 
         return false;
+    }
+
+    /**
+     * Reported where an action throws the reply rather than where it is loaded: core builds replies of its
+     * own for a 1.x caller, and an application cannot act on a notice about those.
+     */
+    private function reportLegacyReply(ReplyInterface $reply, ?ActionInterface $action): void
+    {
+        $key = 'reply:' . $reply::class;
+
+        if ($action instanceof HandlerToActionAdapter || isset(self::$reportedLegacyUse[$key])) {
+            return;
+        }
+
+        self::$reportedLegacyUse[$key] = true;
+
+        trigger_deprecation(
+            'payum/core',
+            '2.0.0',
+            'Throwing a %s from %s is deprecated and will not be supported in 3.0. %s',
+            $reply::class,
+            null === $action ? 'an extension' : $action::class,
+            self::replacementFor($reply::class)
+                ?? sprintf('A handler returns a %s carrying a %s instead.', Result::class, NextAction::class),
+        );
+    }
+
+    /**
+     * What the `@deprecated` on the class, or on the nearest parent that has one, says to use instead. The
+     * docblock is the one place each replacement is written down, and DeprecationMessagesTest keeps it
+     * pointing at classes that exist.
+     *
+     * @param class-string $class
+     */
+    private static function replacementFor(string $class): ?string
+    {
+        for ($reflection = new ReflectionClass($class); false !== $reflection; $reflection = $reflection->getParentClass()) {
+            if (preg_match('#@deprecated\s+since\s.*?\bin 3\.0\.\s+(.+?)\s*(?:\*/|\n\s*\*\s*(?:@|\n))#s', (string) $reflection->getDocComment(), $matches)) {
+                return (string) preg_replace('#\s*\n\s*\*\s*#', ' ', $matches[1]);
+            }
+        }
+
+        return null;
     }
 
     /**

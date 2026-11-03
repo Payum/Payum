@@ -17,10 +17,16 @@ use Payum\Core\Gateway;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Reply\Base;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\ReplyInterface;
+use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Result\PaymentStatus;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
+use ReflectionProperty;
 use stdClass;
 
 final class GatewayTest extends TestCase
@@ -794,6 +800,63 @@ final class GatewayTest extends TestCase
         $gateway->execute($firstRequest);
     }
 
+    public function testShouldNameTheReplacementTheRequestDeclaresWhenGivenA1xRequest(): void
+    {
+        $request = new GetHumanStatus(new stdClass());
+        $gateway = $this->gatewayWithActionFor($request);
+
+        $deprecations = $this->collectDeprecations(static fn () => $gateway->execute($request));
+
+        $this->assertCount(1, $deprecations);
+        $this->assertStringContainsString('Passing a ' . GetHumanStatus::class . ' to ' . Gateway::class . '::execute is deprecated and will not be supported in 3.0.', $deprecations[0]);
+        $this->assertStringContainsString(PaymentStatus::class, $deprecations[0]);
+    }
+
+    public function testShouldReportEachRequestClassOnlyOnce(): void
+    {
+        $request = new GetHumanStatus(new stdClass());
+        $gateway = $this->gatewayWithActionFor($request);
+
+        $deprecations = $this->collectDeprecations(static function () use ($gateway, $request): void {
+            $gateway->execute($request);
+            $gateway->execute($request);
+        });
+
+        $this->assertCount(1, $deprecations);
+    }
+
+    public function testShouldTellARequestThatDeclaresNoReplacementToPortTheActionDispatchingIt(): void
+    {
+        $request = new stdClass();
+        $gateway = $this->gatewayWithActionFor($request);
+
+        $deprecations = $this->collectDeprecations(static fn () => $gateway->execute($request));
+
+        $this->assertSame([
+            'Since payum/core 2.0.0: Passing a stdClass to ' . Gateway::class . '::execute is deprecated and will not be supported in 3.0. Port the action that dispatches it to a ' . HandlerInterface::class . '.',
+        ], $deprecations);
+    }
+
+    public function testShouldReportAReplyWhereTheActionThrowsIt(): void
+    {
+        $request = new stdClass();
+        $action = new ThrowReplyAction();
+        $action->setSupportedRequest($request);
+        $action->setReply(new HttpRedirect('https://psp.test'));
+
+        $gateway = new Gateway();
+        $gateway->addAction($action);
+
+        $deprecations = $this->collectDeprecations(static function () use ($gateway, $request): void {
+            $gateway->execute($request, true);
+            $gateway->execute($request, true);
+        });
+
+        $this->assertSame([
+            'Since payum/core 2.0.0: Throwing a ' . HttpRedirect::class . ' from ' . ThrowReplyAction::class . ' is deprecated and will not be supported in 3.0. A handler returns ' . Redirect::class . ' on its result instead.',
+        ], array_values(array_filter($deprecations, static fn (string $message): bool => str_contains($message, 'Throwing'))));
+    }
+
     /**
      * @return MockObject|ReplyInterface
      */
@@ -816,6 +879,44 @@ final class GatewayTest extends TestCase
     protected function createActionMock()
     {
         return $this->createMock(ActionInterface::class);
+    }
+
+    private function gatewayWithActionFor(object $request): Gateway
+    {
+        $action = $this->createMock(ActionInterface::class);
+        $action->method('supports')->willReturnCallback(static fn ($candidate): bool => $candidate === $request);
+
+        $gateway = new Gateway();
+        $gateway->addAction($action);
+
+        return $gateway;
+    }
+
+    /**
+     * Each 1.x use is reported once per process, so the record of what has been reported is cleared for
+     * every collection.
+     *
+     * @return list<string>
+     */
+    private function collectDeprecations(callable $callback): array
+    {
+        (new ReflectionProperty(Gateway::class, 'reportedLegacyUse'))->setValue(null, []);
+
+        $deprecations = [];
+
+        set_error_handler(static function (int $errno, string $errstr) use (&$deprecations): bool {
+            $deprecations[] = $errstr;
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $callback();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 }
 

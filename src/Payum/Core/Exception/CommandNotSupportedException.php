@@ -102,7 +102,7 @@ class CommandNotSupportedException extends InvalidArgumentException
 
         if ([] === $supportedCommands) {
             return sprintf(
-                '%s handles no commands, so it cannot handle %s. It is built from actions: dispatch the matching Payum\Core\Request instead, or port it to handlers.',
+                '%s handles no commands, so it cannot handle %s. It is built from actions: wrap it with Payum\Core\Legacy\LegacyGatewayAdapter::wrap() to dispatch commands at it, or port it to handlers.',
                 $subject,
                 $command::class,
             );
