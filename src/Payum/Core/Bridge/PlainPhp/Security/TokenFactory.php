@@ -4,7 +4,7 @@ namespace Payum\Core\Bridge\PlainPhp\Security;
 
 use League\Uri\Components\HierarchicalPath;
 use League\Uri\Http as HttpUri;
-use League\Uri\UriModifier;
+use Payum\Core\Bridge\League\LeagueUri;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\AbstractTokenFactory;
 use Payum\Core\Security\TokenInterface;
@@ -21,20 +21,20 @@ class TokenFactory extends AbstractTokenFactory
     {
         parent::__construct($tokenStorage, $storageRegistry);
 
-        $this->baseUrl = $baseUrl ? HttpUri::createFromString($baseUrl) : HttpUri::createFromServer($_SERVER);
+        $this->baseUrl = $baseUrl ? LeagueUri::http($baseUrl) : LeagueUri::httpFromServer($_SERVER);
     }
 
     protected function generateUrl(string $path, array $parameters = []): string
     {
-        $hierarchicalPath = HierarchicalPath::createFromUri($this->baseUrl);
+        $hierarchicalPath = LeagueUri::factory(HierarchicalPath::class, 'fromUri', 'createFromUri')($this->baseUrl);
         if ('php' === pathinfo($hierarchicalPath->getBasename(), PATHINFO_EXTENSION)) {
             // Passed as a plain string rather than a Path component: league/uri 7 made
             // Path::__construct private, and replaceBasename accepts either.
             $basename = preg_replace('#^/#', '', $path);
 
-            $newPath = UriModifier::replaceBasename($this->baseUrl, $basename)->getPath();
+            $newPath = LeagueUri::replaceBasename($this->baseUrl, $basename)->getPath();
         } else {
-            $newPath = UriModifier::appendSegment($this->baseUrl, $path)->getPath();
+            $newPath = LeagueUri::appendSegment($this->baseUrl, $path)->getPath();
         }
 
         $uri = $this->baseUrl->withPath($newPath);

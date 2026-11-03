@@ -3,9 +3,8 @@
 namespace Payum\Paypal\ProHosted\Nvp\Action;
 
 use ArrayAccess;
-use League\Uri\Http as HttpUri;
-use League\Uri\UriModifier;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\League\LeagueUri;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
@@ -53,8 +52,8 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface
             $model->replace($response);
         } else {
             if ($model['cancel_return']) {
-                $cancelUri = HttpUri::createFromString($model['cancel_return']);
-                $cancelUri = UriModifier::mergeQuery($cancelUri, 'cancelled=1');
+                $cancelUri = LeagueUri::http($model['cancel_return']);
+                $cancelUri = LeagueUri::mergeQuery($cancelUri, 'cancelled=1');
 
                 $model['cancel_return'] = (string) $cancelUri;
             }
