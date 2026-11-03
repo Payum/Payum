@@ -738,7 +738,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         );
     }
 
-    public function testCreateShouldTriggerDeprecationForEveryDeprecatedBuildMethod(): void
+    public function testCreateShouldReportNothingCoreCallsOnItsOwnBehalf(): void
     {
         $factory = new CoreGatewayFactory();
 
@@ -746,29 +746,43 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             $factory->create();
         });
 
-        foreach (['buildClosures', 'buildActions', 'buildApis', 'buildExtensions'] as $method) {
-            $this->assertContains(
-                sprintf(
-                    'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::%s is deprecated and will be removed in 3.0. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
-                    $method
-                ),
-                $deprecations
-            );
-        }
+        $this->assertSame([
+            'Since payum/core 2.0.0: The Payum\Core\CoreGatewayFactory::create is deprecated and will be removed in 3.0. Implement the Payum\Core\DI\ContainerConfiguration interface instead.',
+        ], $deprecations);
     }
 
-    public function testCreateShouldTriggerDeprecationForApiConfig(): void
+    public function testCreateShouldReportABuildMethodASubclassOverridesOnce(): void
+    {
+        $factory = new CoreGatewayFactoryOverridingBuildActions();
+
+        $deprecations = $this->collectDeprecations(static function () use ($factory): void {
+            $factory->create();
+            $factory->create();
+        });
+
+        $this->assertCount(1, array_keys($deprecations, sprintf(
+            'Since payum/core 2.0.0: Overriding %s::buildActions() in %s is deprecated and will be removed in 3.0. Implement the %s interface instead.',
+            CoreGatewayFactory::class,
+            CoreGatewayFactoryOverridingBuildActions::class,
+            ContainerConfiguration::class,
+        ), true));
+    }
+
+    public function testCreateShouldReportAnApiConfigKeyTheCallerSets(): void
     {
         $factory = new CoreGatewayFactory();
 
         $deprecations = $this->collectDeprecations(static function () use ($factory): void {
-            $factory->create();
+            $factory->create([
+                'payum.api.acme' => new stdClass(),
+            ]);
         });
 
         $this->assertContains(
-            'Since payum/core 2.0.0: The payum.api.* config is deprecated and will be removed in 3.0. Take the api as a constructor argument on the action instead, and let the container inject it.',
+            'Since payum/core 2.0.0: The "payum.api.acme" config key is deprecated and will be removed in 3.0, along with every payum.api.* key. Take the api as a constructor argument on the action instead, and let the container inject it.',
             $deprecations
         );
+        $this->assertSame([], preg_grep('#payum\.api\.http_client|Gateway::addApi#', $deprecations));
     }
 
     public function testCreateShouldRegisterBackwardCompatibleArrayObjectServiceDelegatingToTheContainer(): void
@@ -1116,5 +1130,13 @@ class CoreGatewayFactoryTestPrependExtension implements ExtensionInterface, Prep
 
     public function onPostExecute(Context $context): void
     {
+    }
+}
+
+class CoreGatewayFactoryOverridingBuildActions extends CoreGatewayFactory
+{
+    protected function buildActions(Gateway $gateway, ArrayObject $config): void
+    {
+        parent::buildActions($gateway, $config);
     }
 }

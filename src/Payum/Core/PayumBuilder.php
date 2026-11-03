@@ -2,7 +2,6 @@
 
 namespace Payum\Core;
 
-use Deprecated;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\FactoryInterface;
@@ -35,6 +34,7 @@ use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Legacy\GenericTokenFactoryIssuer;
+use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\ArrayObject;
@@ -213,7 +213,6 @@ class PayumBuilder
      *
      * @param GatewayInterface|array<string, mixed> $gateway
      */
-    #[Deprecated('addGateway is deprecated and will be removed in 3.0. Use Payum\Core\PayumBuilder::registerGateway() instead.', '2.0.0')]
     public function addGateway(string $name, GatewayInterface | array $gateway): static
     {
         trigger_deprecation(
@@ -537,12 +536,12 @@ class PayumBuilder
                     trigger_deprecation(
                         'payum/core',
                         '2.0.0',
-                        'Not implementing %s for gateway factory %s is deprecated.',
-                        ContainerConfiguration::class,
+                        '%s is a 1.x gateway factory, which is deprecated and will not be supported in 3.0. It needs to implement %s.',
                         $gatewayFactory::class,
+                        ContainerConfiguration::class,
                     );
 
-                    $gateways[$name] = $gatewayFactory->create($gatewayConfig);
+                    $gateways[$name] = LegacyFactoryScope::run(static fn () => $gatewayFactory->create($gatewayConfig));
                 }
             }
 

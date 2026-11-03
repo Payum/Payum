@@ -66,7 +66,12 @@
     `configureContainer()`, its actions in `getActions()` and its extensions in `getExtensions()`.
   * `Payum\Core\GatewayFactoryInterface::create()` and `createConfig()`, `Payum\Core\GatewayFactory::populateConfig()`
     and the `payum.action.*` / `payum.extension.*` config options are deprecated. A gateway factory which does not
-    implement `Payum\Core\DI\ContainerConfiguration` still works, but triggers a deprecation.
+    implement `Payum\Core\DI\ContainerConfiguration` still works, but triggers a deprecation naming the factory.
+  * Building a gateway from such a factory reports the factory and nothing core does on its behalf: the
+    `httplug.*` keys, `HttplugClient` and the `ArrayObject` service it resolves, its own
+    `payum.api.http_client`, and its own `build*()` methods stay quiet. What the factory does itself still
+    reports: each `payum.api.*` key it sets, by name, each `build*()` method it overrides, and each
+    `ApiAwareInterface` action it registers.
   * `Payum\Core\Bridge\Spl\ArrayObject` as a service is deprecated. Type-hint `Psr\Container\ContainerInterface` instead.
   * An application can hand its own PSR-11 container to `Payum\Core\PayumBuilder::setGlobalContainer()`, or register
     single services with `Payum\Core\PayumBuilder::addGlobalService()`. Implement

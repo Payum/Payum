@@ -3,12 +3,16 @@
 namespace Payum\Core\Bridge\Httplug;
 
 use Payum\Core\HttpClientInterface;
+use Payum\Core\Legacy\LegacyFactoryScope;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function trigger_deprecation;
 
-trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Use a %s — the one Http\Discovery\Psr18ClientDiscovery::find() returns, or your own — instead.', HttplugClient::class, ClientInterface::class);
+// Core's default payum.http_client for a 1.x factory loads this; only a load from outside that is reported.
+if (! LegacyFactoryScope::isActive()) {
+    trigger_deprecation('payum/core', '2.0.0', 'The %s is deprecated and will be removed in 3.0. Use a %s — the one Http\Discovery\Psr18ClientDiscovery::find() returns, or your own — instead.', HttplugClient::class, ClientInterface::class);
+}
 
 /**
  * This is a HttpClient that support Httplug. This is an adapter class that make sure we can use Httplug without breaking
