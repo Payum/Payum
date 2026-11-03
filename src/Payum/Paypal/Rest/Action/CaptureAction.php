@@ -3,8 +3,6 @@
 namespace Payum\Paypal\Rest\Action;
 
 use ArrayAccess;
-use League\Uri\Http as HttpUri;
-use League\Uri\UriModifier;
 use PayPal\Api\Amount;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment as PaypalPayment;
@@ -15,6 +13,7 @@ use PayPal\Rest\ApiContext;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
+use Payum\Core\Bridge\League\LeagueUri;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
@@ -139,9 +138,9 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, ApiAwareI
             $request->getToken()->getAfterUrl()
         )->getTargetUrl();
 
-        $cancelUri = HttpUri::createFromString($returnUrl);
+        $cancelUri = LeagueUri::http($returnUrl);
         $redirectUrls->setReturnUrl($returnUrl)
-            ->setCancelUrl((string) UriModifier::mergeQuery($cancelUri, 'cancelled=1'));
+            ->setCancelUrl((string) LeagueUri::mergeQuery($cancelUri, 'cancelled=1'));
 
         $payment = new PaypalPayment();
         $payment->setIntent('sale')
