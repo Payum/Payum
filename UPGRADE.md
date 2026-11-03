@@ -77,16 +77,22 @@
   middleware. Everything still works in 2.0 and goes in 3.0; see
   [Migrating a gateway from 1.x](docs/gateways/migrating-from-v1.md) for the whole map, and
   [Deprecated APIs](docs/di/migration-guide.md#deprecated-apis) for the table.
+  * Every 1.x request passed to `Gateway::execute()` emits a deprecation the first time its class is
+    seen, carrying the replacement its own `@deprecated` names. That covers the requests an application
+    dispatches (`Capture`, `GetHumanStatus`, …) and the ones a gateway's actions dispatch at their own
+    gateway (`GetHttpRequest`, `Convert`, its own API requests, …). A request with no replacement of its
+    own is answered with "port the action that dispatches it to a handler".
   * The seven operation requests — `Capture`, `Authorize`, `Refund`, `Cancel`, `Sync`, `Payout` and
-    `Notify` — emit a deprecation naming the command that means the same thing, once per class rather
-    than once per dispatch. Dispatching one at a gateway that has moved to handlers still works: it is
-    translated, run through the handler, and answered the way 1.x expects.
-  * The sub-requests a 1.x action dispatches at its own gateway (`GetHttpRequest`, `RenderTemplate`,
-    `GetCurrency`, `GetToken`, `GetHumanStatus`, `GetBinaryStatus`, `Convert`), the replies it throws,
-    the `Payum\Core\Action` classes and the extensions a middleware replaces carry a `@deprecated` naming
-    their replacement, but emit nothing at runtime: an application cannot act on a notice about a
-    dependency's internals. The classes an application registers itself — the bridge actions below
-    among them — do emit.
+    `Notify` — name the command that means the same thing. A gateway still built from actions takes
+    commands once wrapped with `Payum\Core\Legacy\LegacyGatewayAdapter::wrap()`. Dispatching a request at
+    a gateway that has moved to handlers still works: it is translated, run through the handler, and
+    answered the way 1.x expects.
+  * A reply emits a deprecation the first time an action throws one of its class, naming the action and
+    the `NextAction` that replaces it.
+  * The `Payum\Core\Action` classes, the extensions a middleware replaces and the generic token factory
+    interfaces carry a `@deprecated` only. Core wires them into every gateway itself, so a notice would
+    reach applications that use none of them. A class of yours that extends or implements one is reported
+    by static analysis and by Symfony's `DebugClassLoader`.
   * `Convert` has no replacement. A handler builds the PSP's payload from the payment itself. If you
     registered your own `Convert` action to add fields such as an invoice number, write them onto the
     payment's details before dispatching instead.

@@ -357,11 +357,17 @@ migrate at your own pace.
 | `Payum\Core\Security\GenericTokenFactoryInterface` | `Payum\Core\Security\TokenIssuerInterface` |
 | `Payum\Core\Security\GenericTokenFactoryAwareInterface` / `Trait` | `Payum\Core\Handler\Context::tokens()` |
 
-Only the entry points an application names itself emit a deprecation at runtime, and each does so once
-per class rather than once per call. The ones a gateway's own actions name — the sub-requests, the
-replies, core's actions, the extensions a middleware replaces — carry a `@deprecated` and nothing else:
-an application running an unported gateway cannot act on a notice about that gateway's internals, and
-its author reads the docblock.
+Each deprecation is reported at runtime once per class, not once per call, so it shows up in your
+deprecation log without flooding it:
+
+* a 1.x request, the first time one of its class reaches `Gateway::execute()`, with the replacement its
+  `@deprecated` names;
+* a reply, the first time an action throws one of its class, naming the action;
+* the configuration keys, builder methods and factory methods above, when they are used.
+
+Core's own actions, the extensions a middleware replaces and the generic token factory interfaces carry a
+`@deprecated` only, because core wires them into every gateway. A class of yours that extends or
+implements one is reported by PHPStan, your IDE, and Symfony's `DebugClassLoader`.
 
 If you registered your own `Convert` action to add fields such as an invoice number or a description,
 write those fields onto the payment's details before dispatching instead. The handler reads them from

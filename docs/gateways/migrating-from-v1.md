@@ -204,7 +204,7 @@ You get a `CommandNotSupportedException` saying so, rather than one that reads l
 
 ```
 Gateway "legacy" handles no commands, so it cannot handle Payum\Core\Command\CaptureCommand.
-It is built from actions: dispatch the matching Payum\Core\Request instead, or port it to handlers.
+It is built from actions: wrap it with Payum\Core\Legacy\LegacyGatewayAdapter::wrap() to dispatch commands at it, or port it to handlers.
 ```
 
 `$e->getSupportedCommands()` is empty and `$e->getGatewayClass()` is null for such a gateway, so code choosing between the two paths can branch on either.
