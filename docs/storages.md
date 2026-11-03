@@ -146,6 +146,59 @@ $tokenStorage = new DoctrineStorage($entityManager, 'Acme\Entity\PaymentToken');
 Call `DbalObjectType::register()` before the first entity manager is created. It does nothing on DBAL 3,
 which still has the `object` type, so it is safe to call on either version.
 
+#### Storing token details as JSON
+
+By default a token's details are stored as serialized PHP, and reading a token unserializes that column. You
+can store them as JSON instead (`{"class": "Acme\\Entity\\Payment", "id": 42}`). The column is then readable
+in any database tool, and no PHP is unserialized when a token is read. It takes one migration, which
+converts the rows already stored. Tokens issued before the migration keep working.
+
+1. Install Doctrine Migrations, if your application does not use it already:
+
+   ```
+   php composer.phar require "doctrine/migrations"
+   ```
+
+2. Add a migration that extends Payum's and lists the table of every entity that extends
+   `Payum\Core\Model\Token`:
+
+   ```php
+   <?php
+   namespace DoctrineMigrations;
+
+   use Payum\Core\Bridge\Doctrine\Migrations\AbstractTokenDetailsToJsonMigration;
+
+   final class Version20261103120000 extends AbstractTokenDetailsToJsonMigration
+   {
+       protected function tokenTables(): array
+       {
+           return ['payment_token'];
+       }
+   }
+   ```
+
+3. Register the `StoreTokenDetailsAsJson` listener on the entity manager:
+
+   ```php
+   <?php
+   use Doctrine\Common\EventManager;
+   use Doctrine\ORM\EntityManager;
+   use Doctrine\ORM\Events;
+   use Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson;
+
+   $eventManager = new EventManager();
+   $eventManager->addEventListener(Events::loadClassMetadata, new StoreTokenDetailsAsJson());
+
+   $entityManager = new EntityManager($connection, $config, $eventManager);
+   ```
+
+4. Deploy both together and run the migration. **Do not run one without the other:** with the listener but not
+   the migration, reading a token fails on the serialized data; with the migration but not the listener, it
+   fails on the JSON.
+
+The migration works on MySQL, MariaDB, PostgreSQL and SQLite, and can be rolled back. A token whose id is an
+object, such as a `Uuid`, stores the id as a string; Doctrine converts it back when the payment is loaded.
+
 #### Doctrine MongoODM.
 
 ```

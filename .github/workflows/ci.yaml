@@ -89,6 +89,72 @@ jobs:
       - name: Run unit tests
         run: vendor/bin/phpunit
 
+  doctrine-migrations:
+    name: Doctrine migrations ( ${{ matrix.database }} + ${{ matrix.dependencies }} )
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        database: ['postgres', 'mysql', 'mariadb']
+        dependencies: ['highest', 'lowest']
+        include:
+          - database: postgres
+            image: 'postgres:17'
+            port: 5432
+            url: 'pdo_pgsql://payum:payum@127.0.0.1:5432/payum'
+            health: 'pg_isready -U payum'
+          - database: mysql
+            image: 'mysql:8.4'
+            port: 3306
+            url: 'pdo_mysql://root:payum@127.0.0.1:3306/payum'
+            health: 'mysqladmin ping -ppayum'
+          - database: mariadb
+            image: 'mariadb:11'
+            port: 3306
+            url: 'pdo_mysql://root:payum@127.0.0.1:3306/payum'
+            health: 'healthcheck.sh --connect --innodb_initialized'
+
+    services:
+      database:
+        image: ${{ matrix.image }}
+        env:
+          POSTGRES_USER: payum
+          POSTGRES_PASSWORD: payum
+          POSTGRES_DB: payum
+          MYSQL_ROOT_PASSWORD: payum
+          MYSQL_DATABASE: payum
+          MARIADB_ROOT_PASSWORD: payum
+          MARIADB_DATABASE: payum
+        ports:
+          - ${{ matrix.port }}:${{ matrix.port }}
+        options: >-
+          --health-cmd "${{ matrix.health }}"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    steps:
+      - name: Checkout
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+
+      - name: Setup PHP
+        uses: "shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962" # v2.40.0
+        with:
+          php-version: '8.4'
+          extensions: intl, pdo_mysql, pdo_pgsql
+          coverage: none
+
+      - name: Install dependencies
+        uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      - name: Run the migration tests
+        run: vendor/bin/phpunit src/Payum/Core/Tests/Functional/Bridge/Doctrine/Migrations
+        env:
+          PAYUM_DOCTRINE_TEST_URL: ${{ matrix.url }}
+
   mongodb:
     name: Unit ( PHP ${{ matrix.php }} + MongoDB ${{ matrix.mongodb }} + ext-mongodb ${{ matrix.driver }}.x )
     runs-on: ubuntu-latest
