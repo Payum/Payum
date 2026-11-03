@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 
 use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -32,11 +33,7 @@ abstract class OrmTest extends BaseOrmTest
         $driver->addDriver($xmlDriver, 'Payum\Core\Model');
 
         $rc = new ReflectionClass(TestModel::class);
-        $annotationDriver = $config->newDefaultAnnotationDriver([
-            dirname($rc->getFileName()),
-        ], false);
-
-        $driver->addDriver($annotationDriver, 'Payum\Core\Tests\Mocks\Entity');
+        $driver->addDriver(new AttributeDriver([dirname($rc->getFileName())], true), 'Payum\Core\Tests\Mocks\Entity');
 
         return $driver;
     }

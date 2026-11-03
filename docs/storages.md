@@ -58,11 +58,13 @@ echo get_class($capture->getModel());
 
 ### Doctrine ORM
 
+Payum works with Doctrine ORM 2.14 or later and 3.x, on DBAL 3 or 4.
+
 ```
-php composer.phar install "doctrine/orm"
+php composer.phar require "doctrine/orm"
 ```
 
-Add token and order classes:
+Add token and payment classes:
 
 ```php
 <?php
@@ -71,10 +73,8 @@ namespace Acme\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Token;
 
-/**
- * @ORM\Table
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table]
 class PaymentToken extends Token
 {
 }
@@ -87,68 +87,64 @@ namespace Acme\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Payment as BasePayment;
 
-/**
- * @ORM\Table
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table]
 class Payment extends BasePayment
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     * @var integer $id
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 }
 ```
 
-next, you have to create an entity manager and Payum's storage:
+Next, create an entity manager and Payum's storages:
 
 ```php
 <?php
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Bridge\Doctrine\Types\DbalObjectType;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-$config = new Configuration();
-$driver = new MappingDriverChain;
+DbalObjectType::register();
+
+$driver = new MappingDriverChain();
 
 // payum's basic models
 $driver->addDriver(
-    new SimplifiedXmlDriver(array('path/to/Payum/Core/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model')), 
+    new SimplifiedXmlDriver(['path/to/Payum/Core/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model']),
     'Payum\Core\Model'
 );
 
 // your models
-$driver->addDriver(
-    $config->newDefaultAnnotationDriver(array('path/to/Acme/Entity'), false), 
-    'Acme\Entity'
-);
+$driver->addDriver(new AttributeDriver(['path/to/Acme/Entity'], true), 'Acme\Entity');
 
+$config = new Configuration();
 $config->setAutoGenerateProxyClasses(true);
 $config->setProxyDir(\sys_get_temp_dir());
 $config->setProxyNamespace('Proxies');
 $config->setMetadataDriverImpl($driver);
-$config->setQueryCacheImpl(new ArrayCache());
-$config->setMetadataCacheImpl(new ArrayCache());
+if (\PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
+    $config->enableNativeLazyObjects(true);
+}
+$config->setQueryCache(new ArrayAdapter());
+$config->setMetadataCache(new ArrayAdapter());
 
-$connection = array('driver' => 'pdo_sqlite', 'path' => ':memory:');
+$connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $config);
+$entityManager = new EntityManager($connection, $config);
 
-$orderStorage = new DoctrineStorage(
-   EntityManager::create($connection, $config),
-   'Payum\Entity\Payment'
-);
-
-$tokenStorage = new DoctrineStorage(
-   EntityManager::create($connection, $config),
-   'Payum\Entity\PaymentToken'
-);
+$paymentStorage = new DoctrineStorage($entityManager, 'Acme\Entity\Payment');
+$tokenStorage = new DoctrineStorage($entityManager, 'Acme\Entity\PaymentToken');
 ```
+
+Call `DbalObjectType::register()` before the first entity manager is created. It does nothing on DBAL 3,
+which still has the `object` type, so it is safe to call on either version.
 
 #### Doctrine MongoODM.
 

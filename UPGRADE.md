@@ -13,6 +13,14 @@
   * The `Payum\Core\Bridge\Symfony\Validator\Constraints\CreditCardDate` constraint takes `min`,
     `minMessage` and `invalidMessage` as named arguments too: `new CreditCardDate(min: 'today')`. An
     options array still works.
+* Doctrine ORM `^2.14 || ^3.0` and DBAL `^3.0 || ^4.0` are supported. DBAL 2 and ORM before 2.14 are not.
+  * The token mapping (`Token.orm.xml`) stores `details` in an `object` column, a type DBAL 4 removed. On
+    DBAL 4, call `Payum\Core\Bridge\Doctrine\Types\DbalObjectType::register()` before creating the entity
+    manager, or with DoctrineBundle add `object: Payum\Core\Bridge\Doctrine\Types\DbalObjectType` under
+    `doctrine.dbal.types`. It reads and writes the same serialized format, so **no database migration** is
+    needed. Nothing changes on DBAL 3.
+  * ORM 3 has no annotation mapping. Map your own entities that extend Payum's models with attributes or
+    XML; Payum's shipped mappings are XML and work on both majors.
 * `Payum\Core\Action\GetCurrencyAction` uses alcohol/iso4217 by default. Its one constructor argument is now
   an optional `Money\Currencies`, which it falls back to for a code ISO 4217 does not list.
 * Monetary values are expressed as [`moneyphp/money`](https://moneyphp.org) objects. See

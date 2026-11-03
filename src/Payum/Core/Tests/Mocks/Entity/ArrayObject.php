@@ -6,18 +6,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\ArrayObject as BaseArrayObject;
 
 /**
- * @ORM\Entity
  * @extends BaseArrayObject<string, mixed>
  */
+#[ORM\Entity]
 class ArrayObject extends BaseArrayObject
 {
     /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
