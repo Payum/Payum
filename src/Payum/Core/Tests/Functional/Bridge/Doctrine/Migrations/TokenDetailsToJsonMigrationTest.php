@@ -98,6 +98,18 @@ final class TokenDetailsToJsonMigrationTest extends TestCase
         $this->assertSame([], $this->schemaChanges($entityManager), 'The reverted column must match the object mapping.');
     }
 
+    public function testShouldLeaveTheDataAloneOnADryRunBack(): void
+    {
+        $hash = $this->persistToken(new Identity(123, Payment::class));
+        $this->migrate(Direction::UP);
+        $json = $this->rawDetails($hash);
+
+        $this->migrate(Direction::DOWN, true);
+
+        $this->assertSame($json, $this->rawDetails($hash));
+        $this->assertEquals(new Identity(123, Payment::class), $this->entityManager(true)->find(Token::class, $hash)->getDetails());
+    }
+
     public function testShouldWriteNewTokensAsJsonOnceMigrated(): void
     {
         $this->migrate(Direction::UP);
@@ -133,7 +145,7 @@ final class TokenDetailsToJsonMigrationTest extends TestCase
         return $token->getHash();
     }
 
-    private function migrate(string $direction): void
+    private function migrate(string $direction, bool $dryRun = false): void
     {
         $configuration = new MigrationsConfiguration();
         $configuration->addMigrationsDirectory('Payum\Core\Tests\Functional\Bridge\Doctrine\Migrations\Fixtures', __DIR__ . '/Fixtures');
@@ -143,7 +155,7 @@ final class TokenDetailsToJsonMigrationTest extends TestCase
         $dependencyFactory->getMetadataStorage()->ensureInitialized();
 
         $plan = $dependencyFactory->getMigrationPlanCalculator()->getPlanForVersions([new Version(Version20261103000000::class)], $direction);
-        $dependencyFactory->getMigrator()->migrate($plan, new MigratorConfiguration());
+        $dependencyFactory->getMigrator()->migrate($plan, (new MigratorConfiguration())->setDryRun($dryRun));
     }
 
     private function rawDetails(string $hash): string

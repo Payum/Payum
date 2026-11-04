@@ -44,19 +44,20 @@ abstract class AbstractTokenDetailsToJsonMigration extends AbstractMigration
         IdentityType::register();
 
         foreach ($this->tokenTables() as $table) {
-            foreach ($this->fetchDetails($table) as $hash => $details) {
+            $quotedTable = $schema->getTable($table)->getQuotedName($this->platform);
+
+            foreach ($this->fetchDetails($quotedTable) as $hash => $details) {
                 $identity = $this->unserialize($table, $hash, $details);
-                $this->addSql($this->updateDetailsSql($table), [$identity ? IdentityType::toJson($identity) : null, $hash]);
+                $this->addSql($this->updateDetailsSql($quotedTable), [$identity ? IdentityType::toJson($identity) : null, $hash]);
             }
 
             // The data is now valid JSON, but PostgreSQL still refuses to cast text to json without USING.
-            $platform = $this->connection->getDatabasePlatform();
-            if ($platform instanceof PostgreSQLPlatform) {
+            if ($this->platform instanceof PostgreSQLPlatform) {
                 $this->addSql(sprintf(
                     'ALTER TABLE %s ALTER COLUMN %2$s TYPE %3$s USING %2$s::%3$s',
-                    $table,
+                    $quotedTable,
                     self::DETAILS_COLUMN,
-                    $platform->getJsonTypeDeclarationSQL([]),
+                    $this->platform->getJsonTypeDeclarationSQL([]),
                 ));
             }
 
@@ -64,12 +65,17 @@ abstract class AbstractTokenDetailsToJsonMigration extends AbstractMigration
         }
     }
 
+    /**
+     * Serialized PHP is not valid JSON, so the column type is changed before the rows are rewritten. Both are
+     * queued here because the migrator runs the schema changes made to $schema after every queued statement.
+     */
     public function down(Schema $schema): void
     {
         DbalObjectType::register();
 
+        $toSchema = clone $schema;
         foreach ($this->tokenTables() as $table) {
-            $column = $schema->getTable($table)->getColumn(self::DETAILS_COLUMN);
+            $column = $toSchema->getTable($table)->getColumn(self::DETAILS_COLUMN);
             $column->setType(Type::getType(DbalObjectType::NAME));
 
             // MariaDB gives a JSON column a binary collation, which would otherwise be carried over to the text column.
@@ -78,16 +84,16 @@ abstract class AbstractTokenDetailsToJsonMigration extends AbstractMigration
                 'collation' => true,
             ]));
         }
-    }
 
-    /**
-     * Serialized PHP is not valid JSON, so going back the column type changes first and the data after.
-     */
-    public function postDown(Schema $schema): void
-    {
+        foreach ($this->platform->getAlterSchemaSQL($this->sm->createComparator()->compareSchemas($schema, $toSchema)) as $sql) {
+            $this->addSql($sql);
+        }
+
         foreach ($this->tokenTables() as $table) {
-            foreach ($this->fetchDetails($table) as $hash => $details) {
-                $this->connection->executeStatement($this->updateDetailsSql($table), [serialize(IdentityType::fromJson($details)), $hash]);
+            $quotedTable = $schema->getTable($table)->getQuotedName($this->platform);
+
+            foreach ($this->fetchDetails($quotedTable) as $hash => $details) {
+                $this->addSql($this->updateDetailsSql($quotedTable), [serialize(IdentityType::fromJson($details)), $hash]);
             }
         }
     }
@@ -102,14 +108,14 @@ abstract class AbstractTokenDetailsToJsonMigration extends AbstractMigration
     /**
      * @return array<string, string>
      */
-    private function fetchDetails(string $table): array
+    private function fetchDetails(string $quotedTable): array
     {
         $details = [];
         $rows = $this->connection->fetchAllNumeric(sprintf(
             'SELECT %s, %s FROM %s WHERE %2$s IS NOT NULL',
             self::ID_COLUMN,
             self::DETAILS_COLUMN,
-            $table,
+            $quotedTable,
         ));
 
         foreach ($rows as [$hash, $value]) {
@@ -119,11 +125,11 @@ abstract class AbstractTokenDetailsToJsonMigration extends AbstractMigration
         return $details;
     }
 
-    private function updateDetailsSql(string $table): string
+    private function updateDetailsSql(string $quotedTable): string
     {
         return sprintf(
             'UPDATE %s SET %s = ? WHERE %s = ?',
-            $table,
+            $quotedTable,
             self::DETAILS_COLUMN,
             self::ID_COLUMN,
         );

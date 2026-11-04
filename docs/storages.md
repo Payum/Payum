@@ -177,7 +177,9 @@ converts the rows already stored. Tokens issued before the migration keep workin
    }
    ```
 
-3. Register the `StoreTokenDetailsAsJson` listener on the entity manager:
+3. Register the `payum_identity` type and the `StoreTokenDetailsAsJson` listener before the entity manager is
+   created. Register the type even though the listener does it too: with a metadata cache, Doctrine skips the
+   listener once the mapping is cached, and reading a token then fails on the unknown type.
 
    ```php
    <?php
@@ -185,6 +187,9 @@ converts the rows already stored. Tokens issued before the migration keep workin
    use Doctrine\ORM\EntityManager;
    use Doctrine\ORM\Events;
    use Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson;
+   use Payum\Core\Bridge\Doctrine\Types\IdentityType;
+
+   IdentityType::register();
 
    $eventManager = new EventManager();
    $eventManager->addEventListener(Events::loadClassMetadata, new StoreTokenDetailsAsJson());
