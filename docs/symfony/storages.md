@@ -63,7 +63,17 @@ doctrine:
 
 To store token details as JSON instead of serialized PHP, add the migration described in
 [Storing token details as JSON](../storages.md#storing-token-details-as-json) and register the listener, in the
-same deploy:
+same deploy. Register the `payum_identity` type as well, so tokens still load once the mapping is cached:
+
+```yml
+# config/packages/doctrine.yaml
+
+doctrine:
+    dbal:
+        types:
+            object: Payum\Core\Bridge\Doctrine\Types\DbalObjectType
+            payum_identity: Payum\Core\Bridge\Doctrine\Types\IdentityType
+```
 
 ```yml
 # config/services.yaml
