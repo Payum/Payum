@@ -1,60 +1,115 @@
 # Services
 
-Payum builds a [PHP-DI](https://php-di.org/) container per gateway, layered over one global container holding what every gateway shares.
+Payum builds a [PHP-DI](https://php-di.org/) container for each registered gateway and autowires your
+API class and handlers from it. Most gateways declare no services at all: a constructor that asks for
+classes and interfaces Payum already knows is enough.
+
+## How the containers fit
+
+Each gateway's container sits in front of one global container that holds what every gateway shares:
 
 ```
-global container          token storage, token factories, request verifier,
-      ▲                   PSR-18 client, PSR-17 factories, storage registry
-      │  fallback
-gateway container         the config, the gateway, one binding per handler,
-                          plus whatever the gateway declares
+global container      token storage, token issuer, request verifier, storages,
+      ▲               PSR-18 client, PSR-17 factories, clock, event dispatcher
+      │ fallback
+gateway container     the config, the gateway, one entry per handler,
+                      plus whatever the gateway declares
 ```
 
-Anything the gateway container cannot resolve is looked up globally, so a gateway sees the shared services without redeclaring them, and two gateways get the same HTTP client but their own api objects.
+Anything the gateway container cannot resolve is looked up in the global one. So two gateways get the
+same HTTP client but their own API objects, each built with its own config.
 
-Definitions are layered last-wins:
+The gateway container is built in this order, and a later definition replaces an earlier one with the
+same id:
 
-1. Payum's own defaults
-2. the services shared by every gateway
-3. whatever the gateway declares in `configureContainer()`
-4. the config, the gateway instance, and one binding per handler
+1. Payum's own defaults.
+2. The services shared by every gateway, including anything the application registered with
+   `PayumBuilder::addGlobalService()`.
+3. One entry per handler, autowired.
+4. What the gateway declares in `configureContainer()`.
+5. The config and the gateway instance.
 
-### What you get for free
+## What you can take in a constructor
 
-For a typical gateway, **nothing needs declaring**. These are registered for you:
+These are registered for you:
 
-| Entry | What it is |
+| Id | What it is |
 | :--- | :--- |
-| `AcmeConfig::class` and `GatewayConfig::class` | The config you registered |
-| `AcmeGateway::class` and `Gateway\GatewayInterface::class` | The gateway |
-| `CaptureHandlerInterface::class` → `CaptureHandler` | One per handler, autowired |
-| `ClientInterface::class` | PSR-18 client |
-| `RequestFactoryInterface::class`, `StreamFactoryInterface::class` | PSR-17 factories |
-| `ServerRequestInterface::class` | The inbound request, PSR-7 |
-| `RendererInterface::class` | Renders a `RenderTemplate` next action. Registered once by the application and shared by every gateway — see [Templates](templates.md) |
-| `TokenIssuerInterface::class` | Mints a token for a purpose — what `Context::tokens()` returns |
-| `GenericTokenFactoryInterface::class`, `TokenFactoryInterface::class` | Token factories. The first is deprecated; use `TokenIssuerInterface` |
-| `HttpRequestVerifierInterface::class` | Token verification |
-| `StorageRegistryInterface::class` | Storages, for loading a payment from a token |
+| `AcmeConfig::class`, `Payum\Core\Config\GatewayConfig` | The config the application registered |
+| `AcmeGateway::class`, `Payum\Core\Gateway\GatewayInterface` | The gateway instance |
+| `CaptureHandlerInterface::class` and the other handler interfaces | The handler you listed, autowired |
+| `Psr\Http\Client\ClientInterface` | The PSR-18 HTTP client, shared |
+| `Psr\Http\Message\RequestFactoryInterface`, `StreamFactoryInterface` | PSR-17 factories, shared |
+| `Psr\Http\Message\ServerRequestInterface` | The inbound HTTP request. In a handler, use `$context->httpRequest()` |
+| `Psr\Clock\ClockInterface` | The current time, shared |
+| `Psr\EventDispatcher\EventDispatcherInterface` | The application's PSR-14 dispatcher, or one that does nothing |
+| `Money\Currencies`, `Money\MoneyFormatter`, `Money\MoneyParser` | Currency data and decimal conversion. See [Money and currencies](../money.md) |
+| `Payum\Core\Security\TokenIssuerInterface` | Creates tokens. In a handler, use `$context->tokens()` |
+| `Payum\Core\Registry\StorageRegistryInterface` | The application's storages |
+| `Payum\Core\Template\RendererInterface` | Renders templates. Owned by the application, see [Templates](templates.md) |
 
-An api whose constructor takes only container entries is autowired with no definition:
+The API class from [Build a gateway](../develop-gateway-with-payum.md) asks only for entries in this
+table, so it needs no definition:
 
 ```php
 final class AcmeApi
 {
     public function __construct(
-        private readonly AcmeConfig $config,          // registered by Payum
-        private readonly ClientInterface $httpClient, // shared globally
-    ) {}
+        private readonly AcmeConfig $config,
+        private readonly ClientInterface $httpClient,
+        private readonly RequestFactoryInterface $requestFactory,
+        private readonly StreamFactoryInterface $streamFactory,
+    ) {
+    }
 }
 ```
 
-### Declaring a service
+## Read the time from the clock
 
-When autowiring cannot reach something, implement `ContainerConfiguration` on the gateway:
+Take `Psr\Clock\ClockInterface` for anything that compares against the current time, such as an
+authorization's expiry or a webhook's age, instead of calling `time()` or `new DateTimeImmutable()`:
+
+```php
+use Psr\Clock\ClockInterface;
+
+final class SyncHandler implements SyncHandlerInterface
+{
+    public function __construct(
+        private readonly AcmeApi $api,
+        private readonly ClockInterface $clock,
+    ) {
+    }
+
+    public function handle(SyncCommand $command, Context $context): SyncResult
+    {
+        $checkout = $this->api->retrieveCheckout($context->state()['checkout_id']);
+
+        if ('open' === $checkout['status'] && new DateTimeImmutable($checkout['expires_at']) < $this->clock->now()) {
+            return SyncResult::synced(PaymentStatus::Expired, raw: $checkout);
+        }
+
+        // ...
+    }
+}
+```
+
+Every gateway shares one clock, so a test can fix the time for all of them with
+`PayumBuilder::addGlobalService(ClockInterface::class, $clock)`.
+
+## Declare a service
+
+When autowiring cannot build a service, implement `Payum\Core\DI\ContainerConfiguration` on the
+gateway and return PHP-DI definitions. Suppose Acme publishes an SDK whose client takes the API key as a
+string. A string has no type to autowire, so define the client yourself:
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+namespace Acme\Payum;
+
+use Acme\Sdk\AcmeClient;
 use Payum\Core\DI\ContainerConfiguration;
 use Payum\Core\Gateway\GatewayInterface;
 use Psr\Container\ContainerInterface;
@@ -64,73 +119,93 @@ final class AcmeGateway implements GatewayInterface, ContainerConfiguration
     public function configureContainer(): array
     {
         return [
-            // An api taking an array cannot be autowired: an array has no type to resolve.
-            AcmeApi::class => static fn (ContainerInterface $c): AcmeApi => new AcmeApi(
-                $c->get(AcmeConfig::class)->toArray(),
-                $c->get(ClientInterface::class),
+            AcmeClient::class => static fn (ContainerInterface $c): AcmeClient => new AcmeClient(
+                $c->get(AcmeConfig::class)->apiKey,
+                sandbox: $c->get(AcmeConfig::class)->sandbox,
             ),
         ];
     }
+
+    // name(), logo(), websiteUrl(), configClass() and handlers() as before
 }
 ```
 
-Reach for it when a service needs an array or a scalar, when the gateway ships two api versions, or when a definition depends on a runtime condition. Needing it for the api itself usually means the api should take the config object instead.
+A class that takes `AcmeClient` in its constructor is then autowired as usual. Use
+`configureContainer()` for a constructor argument that is a string, an int or an array, or an interface
+with more than one implementation. If you need it for your own API class, make that class take the
+config object instead.
 
-### Overriding a service
+## Replace a service for one gateway
 
-Definitions from `configureContainer()` win over Payum's defaults, so overriding is a matter of declaring the same id:
+Your definitions come after Payum's and the shared ones, so defining the same id replaces it for this
+gateway only:
 
 ```php
 public function configureContainer(): array
 {
     return [
-        // A client with this gateway's own timeout, only for this gateway.
-        ClientInterface::class => static fn (): ClientInterface => new AcmeHttpClient(timeout: 5),
+        ClientInterface::class => static fn (): ClientInterface => new AcmeRetryingClient(),
     ];
 }
 ```
 
-### Decorating a handler
+Other gateways keep the shared client.
 
-Bind the handler interface to something that wraps the real one:
+## Decorate a handler
+
+To wrap a handler, define the handler interface as a decorator around the handler class:
 
 ```php
-use function DI\autowire;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 public function configureContainer(): array
 {
     return [
-        CaptureHandler::class => autowire(),
-        CaptureHandlerInterface::class => static fn (ContainerInterface $c): CaptureHandlerInterface
-            => new LoggingCaptureHandler($c->get(CaptureHandler::class), $c->get(LoggerInterface::class)),
+        CaptureHandlerInterface::class => static fn (ContainerInterface $c): CaptureHandlerInterface => new LoggingCaptureHandler(
+            $c->get(CaptureHandler::class),
+            $c->get(LoggerInterface::class),
+        ),
     ];
 }
 ```
 
-The decorator implements the same handler interface, so nothing else changes.
+The decorator implements the same interface, so Payum calls it in place of the handler, and
+`CaptureHandler` is still autowired. The same works for building a handler yourself: define
+`CaptureHandler::class` and Payum uses your definition.
 
-### Two api versions
+`LoggerInterface` is not one of Payum's defaults, so this assumes the application registered a logger
+with `addGlobalService()`. To log every command on every gateway, write a [middleware](middleware.md)
+instead.
 
-Two classes, two entries. Each handler asks for the one it wants:
+## Two API versions
+
+Give each version its own class. Each handler asks for the one it uses:
 
 ```php
 final class CaptureHandler implements CaptureHandlerInterface
 {
-    public function __construct(private readonly AcmeApiV2 $api) {}
+    public function __construct(
+        private readonly AcmeApiV2 $api,
+    ) {
+    }
 }
 ```
 
-### Overriding from the application
+## Services for every gateway
 
-Whole-application defaults go on the builder rather than the gateway, and reach every gateway at once:
+Services the application wants every gateway to use are registered on the builder, not in a gateway:
 
 ```php
 $payum = (new PayumBuilder())
-    ->addGlobalService(ClientInterface::class, new MyInstrumentedHttpClient())
-    ->registerGateway('acme', new AcmeConfig(…))
+    ->addGlobalService(ClientInterface::class, $instrumentedClient)
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 ```
 
-`setGlobalContainer()` puts an application's own container in front of Payum's defaults, so a framework declares only what it wants to override. See [Framework integration](../di/framework-integration.md).
+See [Replace and add services](../di/customization.md) for the application's side.
 
-Next: [Middleware](middleware.md).
+## Events
+
+Payum dispatches PSR-14 events for every command, such as `StatusChanged` when a result moves a
+payment's status. A gateway does not dispatch them itself. See [Events](../events.md).

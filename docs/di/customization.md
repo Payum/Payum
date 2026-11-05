@@ -1,461 +1,262 @@
-# Dependency Injection - Customization Guide
+# Replace and add services
 
-## Overview
+Payum comes with a default for every service it needs: an HTTP client, a clock, an event dispatcher, token
+storage and so on. You replace a default, or add a service of your own, by registering it on
+`PayumBuilder` before you call `getPayum()`. [Configure Payum](getting-started.md) lists the services and
+their defaults.
 
-Payum v2.0's DI system is designed for maximum flexibility. You can customize virtually any service, add your own global services, or integrate with external containers.
+## Register a service
 
-## Adding Global Services
-
-Global services are available to all gateways and are instantiated only once. Every id you register with
-`addGlobalService()` is wired into each gateway's container, so gateway factories and actions can ask for
-it by that id.
-
-### Adding a Logger
+Pass a service id and the service to `addGlobalService()`:
 
 ```php
 <?php
+// config.php
 
-use Psr\Log\LoggerInterface;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
-$logger = new Logger('payum');
-$logger->pushHandler(new StreamHandler('/var/log/payum.log'));
+use Acme\Payum\AcmeConfig;
+use Payum\Core\PayumBuilder;
+use Psr\Http\Client\ClientInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
 
 $payum = (new PayumBuilder())
-    ->addGlobalService(LoggerInterface::class, $logger)
-    ->addGlobalService('my.custom.logger', $logger) // Alternative ID
-    ->addDefaultStorages()
-    // ... add gateways
+    ->addGlobalService(ClientInterface::class, new Psr18Client(HttpClient::create(['timeout' => 30])))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 ```
 
-### Adding a Cache Service
+Use the id Payum looks the service up by, which is the interface name for every PSR service. A service
+registered this way replaces Payum's default in every gateway, and every gateway gets the same instance.
 
-```php
-<?php
-
-use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use Symfony\Component\Cache\Psr16Cache;
-
-$redisClient = new \Redis();
-$redisClient->connect('127.0.0.1', 6379);
-
-$cache = new Psr16Cache(new RedisAdapter($redisClient));
-
-$payum = (new PayumBuilder())
-    ->addGlobalService(CacheInterface::class, $cache)
-    ->addDefaultStorages()
-    // ... add gateways
-    ->getPayum();
-```
-
-## Overriding Default Services
-
-### Custom HTTP Client
-
-Replace the default PSR-18 HTTP client with your own:
+The service can also be a closure. Payum calls it the first time something needs the service, and only
+once:
 
 ```php
 <?php
 
 use Psr\Http\Client\ClientInterface;
-use GuzzleHttp\Client;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
 
-$customClient = new Client([
-    'timeout' => 30,
-    'verify' => true,
-    'headers' => [
-        'User-Agent' => 'MyApp/1.0',
-    ],
-]);
-
-$payum = (new PayumBuilder())
-    ->addGlobalService(ClientInterface::class, $customClient)
-    ->addDefaultStorages()
-    // ... add gateways
-    ->getPayum();
+$builder->addGlobalService(
+    ClientInterface::class,
+    static fn (): ClientInterface => new Psr18Client(HttpClient::create(['timeout' => 30])),
+);
 ```
 
-### Custom HTTP Factory (PSR-17)
+Use a closure for a service that is expensive to create, so a request that never calls a PSP does not
+pay for it.
+
+## The HTTP client and factories
+
+Gateways call their PSP through a PSR-18 client and build requests with PSR-17 factories. By default Payum
+finds an installed implementation with `php-http/discovery`. Register your own to set timeouts, a proxy or
+logging on every call:
 
 ```php
 <?php
 
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
 
 $factory = new Psr17Factory();
 
-$payum = (new PayumBuilder())
+$builder
+    ->addGlobalService(ClientInterface::class, new Psr18Client(HttpClient::create(['timeout' => 30])))
     ->addGlobalService(RequestFactoryInterface::class, $factory)
-    ->addGlobalService(StreamFactoryInterface::class, $factory)
-    ->addDefaultStorages()
-    // ... add gateways
-    ->getPayum();
+    ->addGlobalService(StreamFactoryInterface::class, $factory);
 ```
 
-### Custom Token Storage
+## The incoming request
+
+Payum builds a PSR-7 `ServerRequestInterface` from PHP's globals and `php://input`. When your framework
+already has the current request as PSR-7, register that one instead:
 
 ```php
 <?php
 
-use Payum\Core\Storage\StorageInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Psr\Http\Message\ServerRequestInterface;
 
-$tokenStorage = new DoctrineStorage(
-    $entityManager,
-    'App\Entity\PaymentToken'
-);
+/** @var ServerRequestInterface $request */
 
-$payum = (new PayumBuilder())
-    ->setTokenStorage($tokenStorage)
-    // ... add gateways
-    ->getPayum();
+$builder->addGlobalService(ServerRequestInterface::class, $request);
 ```
 
-## Using Service Factories
+A gateway reads this request when the customer comes back from the PSP and when the PSP sends a webhook,
+for example to check a signature over the raw body. Register the request Payum should read, or a gateway
+checks the wrong one.
 
-For services that need lazy initialization or configuration:
+## A logger
+
+Payum itself does not log. A gateway that asks for a PSR-3 logger in a constructor gets the one you
+register:
 
 ```php
 <?php
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
-$payum = (new PayumBuilder())
-    ->addGlobalService(LoggerInterface::class, function () {
-        // This closure is called only when the service is first requested
-        $logger = new \Monolog\Logger('payum');
-        $logger->pushHandler(new \Monolog\Handler\StreamHandler('/var/log/payum.log'));
-        return $logger;
-    })
-    ->addDefaultStorages()
-    // ... add gateways
-    ->getPayum();
+$logger = new Logger('payum');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/var/log/payum.log'));
+
+$builder->addGlobalService(LoggerInterface::class, $logger);
 ```
 
-## Gateway-Specific Configuration
+[Logging](../logger.md) shows what you can log and how.
 
-You can add services specific to a single gateway:
+## The clock
+
+Everything in Payum that depends on the current time reads it from the PSR-20 clock, which is a
+`Payum\Core\Clock\SystemClock` by default. Register your application's own clock so Payum and your
+application agree on the time. In a test, register a frozen clock to test expiry:
 
 ```php
 <?php
 
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
+use Psr\Clock\ClockInterface;
+use Symfony\Component\Clock\MockClock;
 
-    ->addGateway('stripe', [
-        'factory' => 'stripe_checkout',
-        'publishable_key' => 'pk_test_...',
-        'secret_key' => 'sk_test_...',
-
-        // Gateway-specific service (not shared)
-        'stripe.custom_option' => 'custom_value',
-    ])
-
-    ->getPayum();
+$builder->addGlobalService(ClockInterface::class, new MockClock('2026-01-01 12:00:00'));
 ```
 
-## Advanced: Using Your Own Container
+`MockClock` comes from `symfony/clock`. Any PSR-20 implementation works.
 
-For framework integration you can hand your application's container to `setGlobalContainer()`. It is placed
-**in front of** Payum's global container: a service is looked up in your container first, and whatever it
-does not have comes from Payum's defaults.
+## The event dispatcher
 
-That means you only declare the services you actually want to provide yourself. There is no need to
-re-create the token factory, the request verifier or the HTTP client just to get a container accepted.
+Payum announces what happens to a payment, such as a status change or a webhook, to a PSR-14 event
+dispatcher. The default drops every event. Register your application's dispatcher to listen:
 
 ```php
 <?php
 
-use DI\ContainerBuilder;
-use Psr\Http\Client\ClientInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-// Only what you want to control yourself
-$builder = new ContainerBuilder();
-$builder->addDefinitions([
-    ClientInterface::class => function () {
-        return new \GuzzleHttp\Client(['timeout' => 60]);
-    },
-    'my.custom.service' => function () {
-        return new MyCustomService();
-    },
-]);
-
-$payum = (new PayumBuilder())
-    ->setGlobalContainer($builder->build())
-    // ... add gateways
-    ->getPayum();
+$builder->addGlobalService(EventDispatcherInterface::class, new EventDispatcher());
 ```
 
-Here the gateways use your Guzzle client, while the token storage, token factories and request verifier are
-still the ones Payum builds. Override any of them by adding a definition for
-`payum.security.token_storage`, `TokenFactoryInterface`, `TokenIssuerInterface`, `GenericTokenFactoryInterface` or
-`HttpRequestVerifierInterface` to your container — Payum picks them up and builds the rest on top of them.
-Define the token storage there and the default storages are not created at all.
+One dispatcher hears every gateway. [Events](../events.md) lists the events and what each one carries.
 
-`addGlobalService()` keeps working alongside a container of your own; those services are layered under it.
+## Currencies
 
-### Reaching Your Services From a Gateway
-
-Pass a PHP-DI container and everything in it — including `'my.custom.service'` — can be injected into your
-gateway's actions.
-
-Most framework containers cannot list what they hold, so Payum has no way to know which ids to make
-injectable. There are two ways around that.
-
-Register the ones you need with `addGlobalService()`, which works alongside your container:
+Payum knows the ISO 4217 currencies and moneyphp's crypto currencies. To add a currency neither lists,
+register your own `Money\Currencies`:
 
 ```php
 <?php
 
-$payum = (new PayumBuilder())
-    ->setGlobalContainer($frameworkContainer)
+use Money\Currencies;
+use Money\Currencies\AggregateCurrencies;
+use Money\Currencies\CryptoCurrencies;
+use Money\Currencies\CurrencyList;
+use Money\Currencies\ISOCurrencies;
 
-    // Makes the logger injectable into gateway actions
-    ->addGlobalService(LoggerInterface::class, fn () => $frameworkContainer->get('logger'))
-
-    // ... add gateways
-    ->getPayum();
+$builder->addGlobalService(Currencies::class, new AggregateCurrencies([
+    new ISOCurrencies(),
+    new CryptoCurrencies(),
+    new CurrencyList(['PTS' => 0]),
+]));
 ```
 
-Or, when your container is able to report its entries, let it say so by implementing
-`Payum\Core\DI\ListableContainerInterface`. Payum then makes every one of them injectable, without
-you having to list them one by one:
+`CurrencyList` maps a currency code to its number of decimal places, here loyalty points with none. Payum
+uses the first list that knows a code, so keep `ISOCurrencies` first. A code you add then cannot change the
+meaning of an ISO code. [Money and currencies](../money.md) covers amounts and
+currencies in full.
+
+## The Twig environment
+
+Payum renders payment pages with Twig. When you register your application's Twig environment as `twig.env`
+or `Twig\Environment`, Payum renders with it, so payment pages can use your functions, filters and globals:
 
 ```php
 <?php
 
-use Payum\Core\DI\ListableContainerInterface;
+use Twig\Environment;
 
-class MyContainer implements ListableContainerInterface
-{
-    public function get(string $id): mixed { /* ... */ }
+/** @var Environment $twig */
 
-    public function has(string $id): bool { /* ... */ }
-
-    public function getKnownEntryNames(): array
-    {
-        return ['logger', 'my.custom.service'];
-    }
-}
-
-$payum = (new PayumBuilder())
-    ->setGlobalContainer(new MyContainer())
-
-    // ... add gateways
-    ->getPayum();
+$builder->addGlobalService(Environment::class, $twig);
 ```
 
-A container which implements neither stays fully usable - its services are still resolved through the
-gateway containers - they just cannot be autowired.
+[Customize payment pages](../payment-pages.md) shows how to use your own layout and override a gateway's
+templates.
 
-## Accessing Services
+## Token storage and token services
 
-### From Gateway Context
+Set the token storage with `setTokenStorage()`, and the token URLs with `setTokenFactory()` and
+`setGenericTokenFactoryPaths()`, as shown in [Configure Payum](getting-started.md#configure-payment-urls).
 
-If you've added a global service, you can access it from within actions:
+To issue tokens your own way, register your own `Payum\Core\Security\TokenIssuerInterface`. Gateways and
+`Payum::getTokenIssuer()` then use it:
 
 ```php
 <?php
 
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\Capture;
-use Psr\Log\LoggerInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 
-class MyAction implements ActionInterface
-{
-    public function __construct(
-        private readonly LoggerInterface $logger
-    ) {}
+/** @var TokenIssuerInterface $issuer */
 
-    public function execute($request): void
-    {
-        $this->logger->info('Processing payment request');
-        // ... action logic
-    }
-
-    public function supports($request): bool
-    {
-        return $request instanceof Capture;
-    }
-}
+$builder->addGlobalService(TokenIssuerInterface::class, $issuer);
 ```
 
-### Registering Actions with Dependencies
-
-When creating gateway factories, inject dependencies via constructor:
+To find the token in an incoming request your own way, pass your verifier to `setHttpRequestVerifier()`. A
+callable receives the token storage:
 
 ```php
 <?php
 
-use Payum\Core\CoreGatewayFactory;
-use Psr\Log\LoggerInterface;
-use function DI\autowire;
-use function DI\get;
+use App\Payment\TokenVerifier;
 
-class MyGatewayFactory extends CoreGatewayFactory
-{
-    public function configureContainer(): array
-    {
-        return array_merge(parent::configureContainer(), [
-            MyAction::class => autowire()
-                ->constructor(logger: get(LoggerInterface::class)),
-        ]);
-    }
-
-    public function getActions(): array
-    {
-        return array_merge(parent::getActions(), [
-            MyAction::class,
-        ]);
-    }
-}
+$builder->setHttpRequestVerifier(static fn ($tokenStorage) => new TokenVerifier($tokenStorage));
 ```
 
-`get(LoggerInterface::class)` resolves here because the logger was registered with
-`addGlobalService(LoggerInterface::class, $logger)` — shared services are wired into every gateway
-container.
+`App\Payment\TokenVerifier` stands for your class that implements
+`Payum\Core\Security\HttpRequestVerifierInterface`. [Tokens and payment URLs](../tokens.md) explains what a
+verifier has to check.
 
-## Service Lifecycle
+## Reach your own services from a gateway
 
-### Global Services (Singleton)
-
-Services in the global container are instantiated once and reused:
+Payum builds a gateway's handlers and API classes by autowiring. It reads their constructor types and
+passes the matching services. Every id you register with `addGlobalService()` is available this way, so a
+gateway that needs a service your application provides gets it by type:
 
 ```php
 <?php
 
-$payum = (new PayumBuilder())
-    ->addGlobalService(ClientInterface::class, $httpClient)
-    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
-    ->addGateway('paypal', ['factory' => 'paypal_rest', /* ... */])
-    ->getPayum();
+use App\Fraud\FraudChecker;
 
-// Both gateways will use the SAME $httpClient instance
-$stripe = $payum->getGateway('stripe');
-$paypal = $payum->getGateway('paypal');
+$builder->addGlobalService(FraudChecker::class, static fn () => new FraudChecker());
 ```
 
-### Per-Gateway Services (Per-Gateway Instance)
+A gateway class whose constructor takes a `FraudChecker` now receives this instance. Register the service
+under the type the gateway asks for.
 
-Services defined in gateway-specific config are instantiated per gateway:
+When you pass your own container with `setGlobalContainer()`, its services reach gateways the same way only
+if Payum can list them. That is the case for a PHP-DI container and for a container that implements
+`Payum\Core\DI\ListableContainerInterface`. For any other container, register the services a gateway needs
+with `addGlobalService()` as well. [Integrate with a framework](framework-integration.md) shows both.
 
-```php
-<?php
+## Advanced: which definition wins
 
-$payum = (new PayumBuilder())
-    ->addGateway('stripe1', [
-        'factory' => 'stripe_checkout',
-        'secret_key' => 'sk_test_account1',
-        // Each gateway has its own API client
-    ])
-    ->addGateway('stripe2', [
-        'factory' => 'stripe_checkout',
-        'secret_key' => 'sk_test_account2',
-        // Separate API client instance
-    ])
-    ->getPayum();
-```
+Payum builds a container for each gateway in layers, and a later layer replaces an earlier one:
 
-## Best Practices
+1. Payum's own defaults.
+2. The shared services, including everything you registered with `addGlobalService()` or provide through
+   `setGlobalContainer()`.
+3. The gateway's handlers.
+4. The services the gateway declares for itself.
+5. The gateway's config object.
 
-### 1. Use Type Hints
+So a service you register replaces Payum's default everywhere, but not a service a gateway declares for
+itself. A gateway cannot declare `Payum\Core\Template\RendererInterface`, because one renderer serves every
+gateway: `getPayum()` throws a `LogicException` if one tries.
 
-Always use class names or interface names as service IDs:
-
-```php
-// ✅ Good
-->addGlobalService(LoggerInterface::class, $logger)
-
-// ❌ Avoid
-->addGlobalService('logger', $logger)
-```
-
-### 2. Prefer Interfaces Over Concrete Classes
-
-Use PSR interfaces when available:
-
-```php
-// ✅ Good - uses PSR-18
-->addGlobalService(ClientInterface::class, $client)
-
-// ❌ Avoid - couples to Guzzle
-->addGlobalService(GuzzleClient::class, $client)
-```
-
-### 3. Use Lazy Loading for Expensive Services
-
-Use closures for services that are expensive to create:
-
-```php
-// ✅ Good - lazy loaded
-->addGlobalService(ClientInterface::class, function () {
-    return new ExpensiveHttpClient();
-})
-
-// ❌ Avoid - created immediately even if never used
-->addGlobalService(ClientInterface::class, new ExpensiveHttpClient())
-```
-
-### 4. Document Custom Services
-
-When adding custom services, document them for your team:
-
-```php
-<?php
-
-// Custom services:
-// - AppLoggerInterface: Application logger with custom formatters
-// - AppCacheInterface: Redis-backed cache for API responses
-$payum = (new PayumBuilder())
-    ->addGlobalService(AppLoggerInterface::class, $logger)
-    ->addGlobalService(AppCacheInterface::class, $cache)
-    // ...
-```
-
-## Troubleshooting
-
-### Service Not Found
-
-If you get a "service not found" error:
-
-1. Check the service ID matches exactly (including namespace)
-2. Ensure you added the service before calling `getPayum()`
-3. Verify you're using the global container for shared services
-
-### Service Not Shared
-
-If services aren't being shared across gateways:
-
-1. Use `addGlobalService()` not gateway-specific config
-2. Check you're using the same service ID in both places
-
-### Circular Dependencies
-
-If you encounter circular dependency errors:
-
-1. Use `get()` references instead of direct instantiation
-2. Consider using setter injection for optional dependencies
-3. Refactor to break the circular dependency
-
-## See Also
-
-- [Dependency Injection overview](README.md)
-- [Getting Started](getting-started.md)
-- [Migration Guide](migration-guide.md)
-- [Framework Integration](framework-integration.md)
-- [Storages](../storages.md)
-- [The Architecture](../the-architecture.md)
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+Between `addGlobalService()` and `setGlobalContainer()`, your container wins. Payum asks it first for every
+id, and uses a service from `addGlobalService()` or its own default only when your container does not have
+that id.

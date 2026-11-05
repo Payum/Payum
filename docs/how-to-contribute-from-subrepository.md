@@ -1,39 +1,47 @@
-# How to contribute from sub repository
+# Contribute from a sub repository
 
-Some time you do not need the whole payum stuff and decided to install only a single gateway. Let's say it was a `payum/stripe`. Later on you found a bug fixed it and want to contribute it back to payum main repository. The patch could not be accepted on payum/stripe repository. It is readonly subtree split repository. Here I show you how to move your fixes to payum/payum repository and push them.
+Each Payum package, such as `payum/stripe` or `payum/core`, is published from the
+[Payum repository](https://github.com/Payum/Payum) as a read-only copy. Those copies are generated
+and overwritten on every push, so pull requests opened against them cannot be merged. If you fixed
+a bug in a package you installed on its own, move the fix to the Payum repository and open the pull
+request there. This page shows how, using `payum/stripe` as the example.
 
-1. Fork [payum/payum](https://github.com/Payum/Payum) repository on GitHub.
-2. Clone forked repository locally.
+## Fork and clone Payum
 
-```bash
-$ git clone git@github.com:Foo/Payum.git Payum
-$ cd Payum
-$ git checkout -b patch1
-```
-
-3. Add your fork of `payum/stripe` repository as remote and fetch changes
+Fork [Payum/Payum](https://github.com/Payum/Payum) on GitHub, clone your fork, and create a branch
+from the branch you are fixing (`2.x` for Payum 2):
 
 ```bash
-$ git remote add foo git@github.com:foo/Stripe.git
-$ git fetch foo
+git clone git@github.com:your-name/Payum.git
+cd Payum
+git checkout -b fix-stripe-refund origin/2.x
 ```
 
-4. Merge changes from sub repository
+## Move your commits
+
+In your clone of the package repository, export the commits you made as patches. Replace
+`origin/2.x` with the commit your changes start from:
 
 ```bash
-$ git subtree pull --prefix=src/Payum/Stripe/ foo patch1
+cd ../Stripe
+git format-patch origin/2.x --stdout > ../stripe-fix.patch
 ```
 
-5. Push changes to GitHub and open a Pull Request as usual.
+Back in the Payum clone, apply them under the package's directory:
 
 ```bash
-$ git push origin patch1
+cd ../Payum
+git am --directory=src/Payum/Stripe ../stripe-fix.patch
 ```
 
-***
+`--directory` prefixes every path in the patch, so a change to `Action/CaptureAction.php` lands in
+`src/Payum/Stripe/Action/CaptureAction.php`. The packages and their directories are listed in
+`scripts/subsplits` at the root of the repository.
 
-### Supporting Payum
+## Open the pull request
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+Push the branch to your fork and open a pull request against the same branch of Payum/Payum:
 
-* [Become a sponsor](https://github.com/sponsors/payum)
+```bash
+git push origin fix-stripe-refund
+```

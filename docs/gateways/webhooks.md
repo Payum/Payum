@@ -1,19 +1,23 @@
 # Webhooks
 
-A PSP sends a message when something happens to a payment — it settled, it was disputed, a customer's
-bank finally answered. A gateway receives those by shipping a notify handler.
+A webhook is a message a PSP sends to your application when something happens to a payment after the
+customer has left: it settled, it was disputed, the customer's bank finally answered. A gateway
+receives these by shipping a notify handler. This page covers the gateway's side. The application's
+side, the notify script, is in [Payment notifications](../instant-payment-notification.md).
 
-### The handler
+## Write the notify handler
 
-Two methods. Checking that a message is genuine and acting on what it says are separate jobs, and Payum
-keeps them apart: verification is cheap, security-critical and has to answer immediately, while handling
-is the slow part.
+Implement `Payum\Core\Handler\NotifyHandlerInterface`. It has two methods: `verify()` checks that the
+message really came from the PSP, and `handle()` acts on it.
 
 ```php
 <?php
+
+declare(strict_types=1);
+
 namespace Acme\Payum\Handler;
 
-use Acme\Payum\Api\AcmeApi;
+use Acme\Payum\AcmeApi;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Handler\Context;
@@ -25,8 +29,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class NotifyHandler implements NotifyHandlerInterface
 {
-    public function __construct(private readonly AcmeApi $api)
-    {
+    public function __construct(
+        private readonly AcmeApi $api,
+    ) {
     }
 
     public function verify(ServerRequestInterface $request): WebhookEvent
@@ -34,7 +39,7 @@ final class NotifyHandler implements NotifyHandlerInterface
         $payload = (string) $request->getBody();
 
         if (! hash_equals($this->api->sign($payload), $request->getHeaderLine('Acme-Signature'))) {
-            throw new WebhookNotVerifiedException('The signature does not match.');
+            throw new WebhookNotVerifiedException('The Acme-Signature header does not match the body.');
         }
 
         $event = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
@@ -44,58 +49,84 @@ final class NotifyHandler implements NotifyHandlerInterface
 
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
-        if ('payment.captured' !== $event->type) {
+        if ('checkout.paid' !== $event->type || null === $context->payment()) {
             return NotifyResult::ignored();
         }
 
         if ($context->state()['checkout_id'] !== $event->payload['checkout_id']) {
-            // Genuine, but about a different payment -- do not act on it.
             return NotifyResult::ignored();
         }
 
-        return NotifyResult::handled(PaymentStatus::Captured, transactionId: $event->payload['transaction']);
+        return NotifyResult::handled(PaymentStatus::Captured, transactionId: $event->payload['charge_id']);
     }
 }
 ```
 
-List it in `handlers()` like any other handler. That is what gives the gateway `Capability::Webhooks`.
-
-### Verifying
-
-Use `hash_equals()` rather than `===` to compare a signature, and read the signed bytes with
-`(string) $request->getBody()` — most PSPs sign the raw body, and a JSON payload never reaches
-`getParsedBody()`.
-
-Do not reach for the payment in `verify()`. Verification that depends on stored state is handling in
-disguise, and this is the method that has to stay fast.
-
-Throw `WebhookNotVerifiedException` when the message is not genuine. Payum answers the caller 400 with
-an empty body and leaves the payment untouched. The exception's message is for your log — telling
-whoever sent the message which check failed only helps them get it right next time.
-
-Verifying proves the message came from the PSP. It does not prove the message is about *this* payment.
-Core applies the result's status to the subject resolved from the notify token, never from the event —
-so a genuine, correctly signed event replayed against a different payment's notify URL would mark that
-payment captured too. Compare the PSP's own reference in the event against the one you stored when you
-created the checkout, as the handler above does, and decline the event on a mismatch.
-
-### The request body
-
-`Payum::notify($request)` uses the request you pass it only to verify the token in the URL. The PSR-7
-request a handler's `verify()` sees comes from the container instead, and by default that reads
-`php://input`. Under RoadRunner or FrankenPHP, where nothing lands in `php://input`, or once a framework
-has already consumed the body, that read comes back empty — every signature check then fails, and every
-message gets a silent 400 that is hard to debug.
-
-Register your own request and Payum uses that instead:
+Acme signs each message with an HMAC of the body, so the API class gets one more method:
 
 ```php
-$payumBuilder->addGlobalService(ServerRequestInterface::class, $request);
+public function sign(string $payload): string
+{
+    return hash_hmac('sha256', $payload, $this->config->apiKey);
+}
 ```
 
-### When the PSP signs nothing
+List the handler in the gateway's `handlers()` like any other. That gives the gateway
+`Capability::Webhooks`.
 
-Some do not. Say so, rather than leaving the check out:
+## Verify the message
+
+Read the signed bytes with `(string) $request->getBody()`. Most PSPs sign the raw body, and a JSON body
+never appears in `getParsedBody()`. Compare signatures with `hash_equals()`, which takes the same time
+whether or not they match, so an attacker cannot guess a signature one byte at a time.
+
+When the message is not genuine, throw `Payum\Core\Exception\WebhookNotVerifiedException`.
+`Payum::notify()` then answers 400 with an empty body and leaves the payment alone. The exception's
+message is for the application's log: telling the sender which check failed only helps an attacker.
+
+Keep `verify()` to the request. Do not load the payment there: it has to answer fast, and anything that
+depends on stored data is handling.
+
+{% hint style="warning" %}
+A valid signature proves the PSP sent the message, not that it is about this payment. Payum applies
+the status to the payment the notify token points at, so a genuine message replayed against another
+payment's notify URL would mark that payment too. Compare the PSP's reference in the message with the
+one you stored, as the handler above does with `checkout_id`.
+{% endhint %}
+
+## Reject old messages
+
+A PSP that puts a timestamp in its messages lets you refuse one that is replayed hours later. Take
+`Psr\Clock\ClockInterface` in the constructor and compare in `verify()`:
+
+```php
+use Psr\Clock\ClockInterface;
+
+public function __construct(
+    private readonly AcmeApi $api,
+    private readonly ClockInterface $clock,
+) {
+}
+
+public function verify(ServerRequestInterface $request): WebhookEvent
+{
+    // ... check the signature and decode $event as above
+
+    if ($event['created'] < $this->clock->now()->getTimestamp() - 300) {
+        throw new WebhookNotVerifiedException('The message is more than five minutes old.');
+    }
+
+    return WebhookEvent::verified($event, $event['id'], $event['type']);
+}
+```
+
+Payum shares one clock with every gateway, so a test can fix the time with
+`PayumBuilder::addGlobalService(ClockInterface::class, $clock)`.
+
+## When the PSP signs nothing
+
+Some PSPs do not sign their messages. Say so with `WebhookEvent::unverified()`, rather than leaving the
+check out:
 
 ```php
 public function verify(ServerRequestInterface $request): WebhookEvent
@@ -104,14 +135,15 @@ public function verify(ServerRequestInterface $request): WebhookEvent
 }
 ```
 
-Then do not act on what the message says — treat it as a nudge and re-read the real state from the PSP:
+Then do not act on what the message says. Treat it as a hint and ask the PSP for the real state with a
+`SyncCommand`:
 
 ```php
 public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
 {
     $payment = $context->payment();
 
-    if (! $payment instanceof PaymentInterface) {
+    if (null === $payment) {
         return NotifyResult::ignored();
     }
 
@@ -121,53 +153,53 @@ public function handle(NotifyCommand $command, WebhookEvent $event, Context $con
 }
 ```
 
-It costs a request per message, and it is safe. `$event->isVerified()` tells the two apart if one
-handler covers both.
+That costs one request to the PSP per message, and needs a sync handler. If one handler covers both
+kinds of message, `$event->isVerified()` tells them apart.
 
-### Answering the PSP
+## Answer the PSP
 
-A PSP retries anything it does not consider a success, so what you answer matters.
+A PSP sends a message again until it gets an answer it counts as success, so the answer matters:
 
-| You return | The PSP gets |
+| The handler | The PSP gets |
 | :--- | :--- |
-| `NotifyResult::handled(...)` | 204 No Content |
-| `NotifyResult::ignored()` | 204 No Content |
-| `NotifyResult::handled($status, Acknowledgement::ok('[accepted]'))` | 200, body `[accepted]` |
-| `throw new WebhookNotVerifiedException(...)` | 400, empty body |
+| returns `NotifyResult::handled(...)` | 204 No Content |
+| returns `NotifyResult::ignored()` | 204 No Content |
+| returns `NotifyResult::handled($status, Acknowledgement::ok('[accepted]'))` | 200 with the body `[accepted]` |
+| throws `WebhookNotVerifiedException` | 400 with an empty body |
 
-Most PSPs accept any 2xx, so leave the acknowledgement out unless yours is particular — Adyen accepts
-only the body `[accepted]`:
+Most PSPs accept any 2xx. Set an acknowledgement only when yours wants a particular answer:
 
 ```php
 use Payum\Core\Result\Acknowledgement;
 
-Acknowledgement::noContent();               // 204
-Acknowledgement::ok('[accepted]');          // 200 with a body
+Acknowledgement::noContent();       // 204
+Acknowledgement::ok('[accepted]');  // 200 with a body
 new Acknowledgement(200, '{"ok":true}', ['Content-Type' => 'application/json']);
 ```
 
-Return `NotifyResult::ignored()` for an event type your gateway has no interest in. Rejecting a message
-because you did not recognise it makes the PSP redeliver it on a backoff schedule for as long as it
-keeps failing.
+Return `NotifyResult::ignored()` for an event type your gateway does not use. Rejecting a message the
+gateway does not recognise makes the PSP send it again and again.
 
-### The notify URL
+## Give the PSP a notify URL
 
-Gateways that take a notification address per payment ask for it when the payment is created. Ask the
-context:
+PSPs that take a notification address per payment ask for it when the checkout is created. Get it from
+the context:
 
 ```php
 $checkout = $this->api->createCheckout([
-    'return_url' => $context->token()?->getTargetUrl(),
+    'amount' => (int) $amount->getAmount(),
+    'currency' => $amount->getCurrency()->getCode(),
+    'return_url' => $context->token()->getTargetUrl(),
     'notify_url' => $context->notifyUrl(),
-    'amount' => $context->payment()?->getTotalAmount(),
 ]);
 ```
 
-`notifyUrl()` mints a long-lived token pointed at this payment and returns its URL. `notifyToken()`
-gives you the token itself if you want its hash.
+`notifyUrl()` creates a long-lived notify token that points at this payment and returns its URL.
+`notifyToken()` returns the token itself. Both throw a `LogicException` for a gateway that was not
+registered with `PayumBuilder::registerGateway()`, because a token needs the gateway's name.
 
-It mints once per execution, not once per payment. A customer who abandons a checkout and starts again
-gets a second URL unless you keep the first:
+It creates a new token on every execution. Keep the first one in the state, so a customer who starts
+the checkout again does not get a second token:
 
 ```php
 $state = $context->state();
@@ -175,34 +207,60 @@ $state = $context->state();
 $state['notify_url'] ??= $context->notifyUrl();
 ```
 
-Gateways with a single endpoint configured in the PSP's dashboard can skip minting one of these per
-payment — point that one endpoint at your notify script and Payum still works out which gateway a
-message belongs to from the token in the URL. But a token minted for the gateway alone carries no
-payment: `$context->payment()` is null and `$context->state()` throws, so there is nothing for Payum to
-record a status onto. That handler has to find the payment itself from the event payload.
+For a PSP with one webhook endpoint set in its dashboard, the application routes that endpoint itself
+and dispatches `NotifyCommand::forGateway()`. The command then points at no payment:
+`$context->payment()` is null and `$context->state()` throws, so the handler has to find the payment
+from the message itself.
 
-### Testing one
+## The request the handler reads
 
-A notify handler is two plain methods, so most of it needs no gateway at all:
+`verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`. By
+default Payum builds it from PHP's globals and reads the body from `php://input`. In a worker server
+such as RoadRunner or FrankenPHP, or after a framework has already read the body, that read is empty:
+every signature check fails and every message gets a 400.
+
+An application in that situation registers the real request, and Payum uses it instead:
 
 ```php
-$handler = new NotifyHandler(new AcmeApi('secret'));
+$builder->addGlobalService(ServerRequestInterface::class, $request);
+```
+
+Mention this in your gateway's documentation if it reads the body.
+
+## Test the handler
+
+`verify()` needs only a request, so you can test it without Payum. Build the handler and a request with
+PSR-17 factories:
+
+```php
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+
+$handler = new NotifyHandler(new AcmeApi(
+    new AcmeConfig(apiKey: 'sk_test_123', sandbox: true),
+    Psr18ClientDiscovery::find(),
+    Psr17FactoryDiscovery::findRequestFactory(),
+    Psr17FactoryDiscovery::findStreamFactory(),
+));
+
+$request = Psr17FactoryDiscovery::findServerRequestFactory()
+    ->createServerRequest('POST', '/notify.php')
+    ->withHeader('Acme-Signature', 'not-the-signature')
+    ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream('{"id":"evt_1"}'));
 
 $this->expectException(WebhookNotVerifiedException::class);
 
-$handler->verify($requestWithABadSignature);
+$handler->verify($request);
 ```
 
-For the whole path, register your own request so the body is one you control:
+For the whole path, register the request with `addGlobalService()` and dispatch the command:
 
 ```php
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGlobalService(ServerRequestInterface::class, $request)
-    ->registerGateway('acme', new AcmeConfig())
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 
 $result = $payum->getGateway('acme')->execute(NotifyCommand::forPayment($payment));
 ```
-
-Next: [Migrating a gateway from 1.x](migrating-from-v1.md).

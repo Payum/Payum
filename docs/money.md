@@ -1,33 +1,41 @@
-# Money
+# Money and currencies
 
-Payum expresses amounts as [`moneyphp/money`](https://moneyphp.org) objects. A `Money\Money` is an exact
-integer amount plus a currency, so it adds, subtracts and splits without ever turning into a float — which
-is what you need to say "refund half of this" and get the last cent right.
+An amount on its own is not money. `1000` is ten euros, ten yen or one Kuwaiti dinar depending on the
+currency, and code that divides by 100 to display it is wrong for two of those three. Payum stores
+amounts as integers in the currency's smallest unit, together with an ISO 4217 currency code, and lets
+you work with them as [`moneyphp/money`](https://moneyphp.org) objects. A `Money\Money` is an exact
+integer amount plus its currency, so it adds, subtracts and splits without rounding errors.
 
-Nothing forces you to use it. A model that carries an integer and a currency code keeps working exactly as
-it did, and so does every gateway. Adding it to your own code is opt-in, one place at a time.
+You do not have to use `Money`. Every place that takes one also takes an integer in minor units, and
+every gateway keeps reading `getTotalAmount()` and `getCurrencyCode()`.
 
-### The problem it solves
+## Amounts are in minor units
 
-An integer on its own is not an amount. `1000` is ten dollars, ten yen, or one dinar, depending on a
-currency code stored somewhere else — and code that divides by 100 to display it is wrong for both of the
-other two:
-
-```php
-$payment->getTotalAmount() / 100;   // 10.00 for USD. Wrong for JPY, wrong for KWD, wrong for ETH.
-```
-
-A `Money` carries the currency, and Payum knows how many decimal places that currency has, so there is
-nothing left to get wrong.
-
-## Reading an amount
-
-Every model Payum ships answers `getMoney()`:
+Set an amount in the currency's smallest unit:
 
 ```php
 <?php
+
 use Payum\Core\Model\Payment;
+
+$payment = new Payment();
+$payment->setTotalAmount(1000);     // 10.00 EUR
+$payment->setCurrencyCode('EUR');
+```
+
+A minor unit is the cent for euros and dollars. Some currencies have none: `1000` JPY is a thousand yen.
+Others have three decimal places: `1000` KWD is one dinar. Never assume two decimal places. The next
+sections show how to convert safely.
+
+## Read and set an amount as a `Money`
+
+`Payum\Core\Model\Payment` and `Payum\Core\Model\Payout` read and write their amount as a `Money`:
+
+```php
+<?php
+
 use Money\Money;
+use Payum\Core\Model\Payment;
 
 $payment = new Payment();
 $payment->setMoney(Money::USD(1000));
@@ -37,21 +45,25 @@ $payment->getTotalAmount();    // 1000
 $payment->getCurrencyCode();   // 'USD'
 ```
 
-`setMoney()` writes through to `totalAmount` and `currencyCode`, and `getMoney()` reads back from them, so
-the two views can never disagree and **no mapping or database column changes**. A `Money` needs no storage
-of its own: your `total_amount` and `currency_code` columns already hold everything it is made of.
+`setMoney()` writes to the same `totalAmount` and `currencyCode` fields that `setTotalAmount()` and
+`setCurrencyCode()` use, so the two views always agree. A `Money` needs no database column of its own;
+the two columns you already have hold all of it.
 
-Your own entity opts in by implementing `Payum\Core\Model\MoneyAwareInterface` alongside
-`PaymentInterface`:
+### Your own payment class
+
+Implement `Payum\Core\Model\MoneyAwareInterface` next to `PaymentInterface`, and map it over the same two
+fields:
 
 ```php
 <?php
+
+namespace App\Entity;
+
 use Money\Money;
 use Payum\Core\Model\MoneyAwareInterface;
-use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Money\Amount;
 
-class Order implements PaymentInterface, MoneyAwareInterface
+class Order implements MoneyAwareInterface
 {
     private ?int $totalAmount = null;
 
@@ -64,195 +76,145 @@ class Order implements PaymentInterface, MoneyAwareInterface
 
     public function setMoney(?Money $money): void
     {
-        $this->totalAmount = $money === null ? null : Amount::toMinorUnits($money);
+        $this->totalAmount = null === $money ? null : Amount::toMinorUnits($money);
         $this->currencyCode = $money?->getCurrency()->getCode();
     }
-
-    // getTotalAmount(), getCurrencyCode() and the rest of PaymentInterface as before
 }
 ```
 
-Do not implement `MoneyAwareInterface` and store a `Money` field instead of the two columns. Every
-gateway Payum ships reads `getTotalAmount()` and `getCurrencyCode()`, so those have to keep answering.
+The sample shows only the money part. A payment class also implements `PaymentInterface`, as
+[Use your own payment model](your-order-integration.md) shows. Keep `getTotalAmount()` and
+`getCurrencyCode()` answering from those fields. Gateways read them, so do not replace the two columns
+with a single `Money` field.
 
-### When you do not control the model
+### When you do not know the class
 
-`Payum\Core\Money\Amount` reads either shape, which is what to use in code that is handed a model it did
-not define:
+`Payum\Core\Money\Amount` reads and writes an amount through whichever accessors a model has:
 
 ```php
 <?php
+
 use Payum\Core\Money\Amount;
 
 Amount::of($payment);              // ?Money, from getMoney() or from the two accessors
-Amount::assign($payment, $money);  // writes through whichever the model has
+Amount::assign($payment, $money);  // writes through setMoney() or the two setters
 ```
 
-`Amount::of()` returns null when the model names no currency or holds no amount — an amount without a
+`Amount::of()` returns `null` when the model has no amount or no currency, because an amount without a
 currency is not money.
 
-## Amounts on a command
+## Amounts on commands and results
 
-A partial capture or refund takes either minor units or a `Money`:
+Capture, authorize and refund commands take an amount as a `Money` or as minor units of the payment's
+currency. Leave it out for the payment's full amount:
 
 ```php
 <?php
+
 use Money\Money;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Money\Amount;
 
-CaptureCommand::forToken($token, Money::USD(500));   // exact, currency included
-CaptureCommand::forToken($token, 500);               // minor units of the payment's currency
-CaptureCommand::forToken($token);                    // the payment's full amount
+CaptureCommand::forPayment($payment, Money::EUR(500));   // exact, currency included
+CaptureCommand::forPayment($payment, 500);               // minor units of the payment's currency
+CaptureCommand::forPayment($payment);                    // the payment's full amount
 
 RefundCommand::forPayment($payment, Amount::of($payment)->divide(2), 'partially_damaged');
 ```
 
-Both forms are readable afterwards:
+A command keeps both forms: `$command->amount` is the integer and `$command->money()` the `Money`.
+
+A result says how much actually moved, which can be less than you asked for:
 
 ```php
-$command->amount;    // ?int, minor units
-$command->money();   // ?Money, when the command carries enough to say
-```
-
-## Amounts in a handler
-
-Read `$context->amount()`, not `$command->amount`:
-
-```php
-public function handle(CaptureCommand $command, Context $context): CaptureResult
-{
-    $amount = $context->amount();   // Money — the partial amount, or the payment's full amount
-}
-```
-
-The distinction matters: a **full** capture carries no amount on the command at all, so a handler reading
-`$command->amount` charges nothing. `$context->amount()` resolves the two, and works out the currency for
-a command that arrived on a token alone and so has no payment of its own to read one from.
-
-### Sending it to the PSP
-
-Most PSPs want either minor units or a decimal string. Both come out of the `Money`, and a handler gets a
-`Money\MoneyFormatter` by asking for one in its constructor:
-
-```php
-<?php
-use Money\MoneyFormatter;
-use Payum\Core\Command\CaptureCommand;
-use Payum\Core\Handler\CaptureHandlerInterface;
-use Payum\Core\Handler\Context;
-use Payum\Core\Result\CaptureResult;
-
-final class CaptureHandler implements CaptureHandlerInterface
-{
-    public function __construct(
-        private readonly AcmeApi $api,
-        private readonly MoneyFormatter $formatter,
-    ) {
-    }
-
-    public function handle(CaptureCommand $command, Context $context): CaptureResult
-    {
-        $amount = $context->amount();
-
-        $charge = $this->api->charge([
-            'amount' => $amount->getAmount(),                 // '1000', minor units, as a string
-            'decimal' => $this->formatter->format($amount),   // '10.00', or '1000' for JPY
-            'currency' => $amount->getCurrency()->getCode(),  // 'USD'
-        ]);
-
-        return CaptureResult::captured($charge['id'], $amount);
-    }
-}
-```
-
-## Amounts on a result
-
-Report what actually moved, as a `Money`:
-
-```php
-CaptureResult::captured($transactionId, Money::USD(500));
-RefundResult::partiallyRefunded($transactionId, $refunded);
-PayoutResult::paidOut($transactionId, $sent);
-```
-
-Each result exposes both views, so an application reading integers is unaffected:
-
-```php
-$result->capturedMoney;    // ?Money, set when the handler reported one
+$result->capturedMoney;    // ?Money, set when the gateway reported one
 $result->capturedAmount;   // ?int, minor units
 ```
 
-The same pair exists as `authorizedMoney`/`authorizedAmount`, `refundedMoney`/`refundedAmount` and
-`paidOutMoney`/`paidOutAmount`.
+The same pair is `authorizedMoney` and `authorizedAmount` on an `AuthorizeResult`, `refundedMoney` and
+`refundedAmount` on a `RefundResult`, and `paidOutMoney` and `paidOutAmount` on a `PayoutResult`.
+[Payment operations](payment-operations.md) shows each command in use.
 
-## Currencies
+## Display an amount
 
-Payum resolves how many decimal places a currency has through a `Money\Currencies` service. Out of the box
-it knows every ISO 4217 currency and the crypto currencies moneyphp lists, ISO first:
-
-```php
-$currencies->subunitFor(new Currency('USD'));   // 2
-$currencies->subunitFor(new Currency('JPY'));   // 0
-$currencies->subunitFor(new Currency('KWD'));   // 3
-$currencies->subunitFor(new Currency('BTC'));   // 8
-```
-
-Register your own to add a currency neither lists — a token, a loyalty point, a chain moneyphp has not
-caught up with:
+Turn minor units into a decimal string with `Amount::toDecimalString()`:
 
 ```php
 <?php
+
+use Payum\Core\Money\Amount;
+
+Amount::toDecimalString(1000, 'EUR');   // '10.00'
+Amount::toDecimalString(1000, 'JPY');   // '1000'
+Amount::toDecimalString(1000, 'KWD');   // '1.000'
+```
+
+It looks the number of decimal places up in ISO 4217, so the result is right for every currency and
+never goes through a float. For a currency ISO 4217 does not list, pass the number of decimal places as
+the third argument: `Amount::toDecimalString(1, 'ACME', 6)` gives `'0.000001'`.
+
+For anything beyond that, such as a currency symbol or a locale's separators, use a moneyphp formatter
+on the payment's `Money`.
+
+## Currency details
+
+`Payum\Core\ISO4217\Currency` gives the ISO 4217 data for a currency:
+
+```php
+<?php
+
+use Payum\Core\ISO4217\Currency;
+
+$currency = Currency::createFromIso4217Alpha3('USD');
+
+$currency->getName();      // 'US Dollar'
+$currency->getAlpha3();    // 'USD'
+$currency->getNumeric();   // '840'
+$currency->getExp();       // 2, the number of decimal places
+$currency->getCountry();   // the ISO 3166 codes of the countries that use it
+
+Currency::createFromIso4217Numeric('978')->getAlpha3();   // 'EUR'
+```
+
+It knows only ISO 4217 currencies and throws for any other code, such as `BTC`.
+
+## Currencies ISO 4217 does not list
+
+Gateways look up how many decimal places a currency has through a `Money\Currencies` service. By
+default it knows every ISO 4217 currency and the crypto currencies moneyphp lists, such as `BTC` with 8.
+To add another, such as a token or loyalty points, register your own list as a global service:
+
+```php
+<?php
+
+use Acme\Payum\AcmeConfig;
 use Money\Currencies;
 use Money\Currencies\AggregateCurrencies;
+use Money\Currencies\CryptoCurrencies;
 use Money\Currencies\CurrencyList;
 use Money\Currencies\ISOCurrencies;
 use Payum\Core\PayumBuilder;
 
 $payum = (new PayumBuilder())
+    ->addDefaultStorages()
     ->addGlobalService(Currencies::class, new AggregateCurrencies([
         new ISOCurrencies(),
+        new CryptoCurrencies(),
         new CurrencyList(['ACME' => 6]),
     ]))
-    ->getPayum()
-;
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
 ```
 
-Order matters: the first list containing a code answers for it, so keep `ISOCurrencies` first unless you
-mean to override a real currency.
+`CurrencyList` maps each code to its number of decimal places. The first list that contains a code
+answers for it, so keep `ISOCurrencies` first unless you mean to override a real currency. Your list
+replaces the default one, which is why the sample lists `CryptoCurrencies` again.
 
-`Money\MoneyFormatter` and `Money\MoneyParser` are registered against whatever `Currencies` resolves to,
-so replacing it is enough — nothing else needs redeclaring.
+## Advanced: amounts in a gateway handler
 
-## Currency details in a 1.x gateway
-
-A gateway that has not been ported still asks for currency details with a `GetCurrency` request, and that
-keeps working. It now also answers for a currency ISO 4217 does not list, taking the exponent from the
-`Currencies` service — so registering a currency there is what makes an unported gateway handle it too:
-
-```php
-$gateway->execute($currency = new GetCurrency('BTC'));
-
-$currency->exp;   // 8
-```
-
-A currency outside ISO 4217 has no numeric code or country, and its name comes back as the code itself —
-`exp` and `alpha3` are the useful part.
-
-New code should not reach for `GetCurrency` or `Payum\Core\ISO4217\Currency`. A handler takes a
-`Money\Currencies` or a `Money\MoneyFormatter` in its constructor and asks it directly.
-
-### Next
-
-* [Commands](gateways/commands.md)
-* [Handlers](gateways/handlers.md)
-* [Results](gateways/results.md)
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+If you write a gateway, read the amount of the current operation with `$context->amount()`, not
+`$command->amount`. A command for the full amount carries no amount at all, so a handler that reads
+`$command->amount` charges nothing; `$context->amount()` falls back to the payment's total and works out
+the currency. A handler gets a `Money\MoneyFormatter` or `Money\Currencies` by asking for one in its
+constructor, and both follow the `Currencies` service you registered. See [Handlers](gateways/handlers.md).

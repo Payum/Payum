@@ -1,165 +1,188 @@
 # Commands
 
-A command is what the caller wants done. It is immutable, carries no services, and names the capability it exercises.
+A command is what the caller wants a gateway to do, such as capture a payment or refund it. It is an
+immutable object with no services on it. A gateway supports a command by shipping the handler for it.
 
-### Available commands
+## The commands
 
-| Command | Capability | Result | Extra |
+| Command | Capability | Handler returns | Also carries |
 | :--- | :--- | :--- | :--- |
 | `Payum\Core\Command\CaptureCommand` | `Capture` | `CaptureResult` | `amount`, `idempotencyKey` |
 | `Payum\Core\Command\AuthorizeCommand` | `Authorize` | `AuthorizeResult` | `amount`, `idempotencyKey` |
 | `Payum\Core\Command\RefundCommand` | `Refund` | `RefundResult` | `amount`, `reason`, `idempotencyKey` |
 | `Payum\Core\Command\CancelCommand` | `Cancel` | `CancelResult` | `reason`, `idempotencyKey` |
 | `Payum\Core\Command\PayoutCommand` | `Payout` | `PayoutResult` | `idempotencyKey` |
-| `Payum\Core\Command\SyncCommand` | `Sync` | `SyncResult` | — |
-| `Payum\Core\Command\NotifyCommand` | `Webhooks` | `NotifyResult` | — |
+| `Payum\Core\Command\SyncCommand` | `Sync` | `SyncResult` | |
+| `Payum\Core\Command\NotifyCommand` | `Webhooks` | `NotifyResult` | |
 
-### Building one
+Capture takes the money. Authorize holds it on the customer's card without taking it, and a later
+capture takes what was held. Refund gives back money already taken. Cancel calls a payment or payout off
+before the money moves, such as voiding an authorization, so it carries no amount. Payout sends money
+to a recipient. Sync asks the PSP for the current state. Notify carries a message the PSP sent.
 
-Every command needs a subject — either the token it arrived on, or the payment directly:
+## How a command is built
+
+Every command needs to know what it acts on. It gets that from a token (when it arrives over HTTP) or
+from the model itself (when the application calls it directly):
 
 ```php
 <?php
+
 use Money\Money;
+use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 
-// Came in over HTTP, on a capture token.
+// Arrived over HTTP, on a capture token.
 CaptureCommand::forToken($token);
 
-// Headless. No token was ever minted.
+// Called from the application. No token was ever created.
 CaptureCommand::forPayment($payment);
 
-// Partial capture. A Money says which currency it is in; an int is minor units of the payment's.
-CaptureCommand::forToken($token, amount: Money::USD(500));
+// A partial capture. An int is in minor units of the payment's currency.
+CaptureCommand::forToken($token, amount: Money::EUR(500));
 CaptureCommand::forToken($token, amount: 500);
 
-// An idempotency key, for PSPs that accept one, so a retry cannot double-charge.
-CaptureCommand::forToken($token, idempotencyKey: $order->getUuid());
+// A key the PSP can use to recognise a retry, so the customer is not charged twice.
+CaptureCommand::forPayment($payment, idempotencyKey: 'order-1001-capture');
 
-// Partial refund with a reason the PSP will record.
+// A partial refund, with a reason some PSPs record.
 RefundCommand::forPayment($payment, amount: 500, reason: 'damaged_on_arrival');
 
-// Void an authorization the merchant has decided not to settle.
 CancelCommand::forPayment($payment, reason: 'out_of_stock');
 ```
 
-Cancel calls it off before the money moves — voiding an authorization, abandoning a payment the customer never completed, or stopping a payout that has not gone out. It is not a refund, which gives back money already taken, and it carries no amount because it is all or nothing.
+A command given neither a token nor a model throws a `Payum\Core\Exception\LogicException`. The one
+exception is `NotifyCommand`, covered below.
 
-### Refreshing from the PSP
+Your handler does not build these. The application does, and the handler reads them. The application
+side is covered in [Payment operations](../payment-operations.md).
 
-`SyncCommand` asks the PSP what it currently thinks and records the answer, which is how a stored status catches up after a webhook that never arrived:
+## What a command acts on
 
-```php
-$result = $gateway->execute(SyncCommand::forPayment($payment));
-
-$result->status;   // whatever the PSP says
-```
-
-It is for callers — an admin screen with a refresh button, a reconciliation job. A handler that needs fresh data mid-flow calls its api directly instead; dispatching a command to fetch something it uses two lines later is indirection for its own sake.
-
-It reads rather than mutates, so it takes no idempotency key. Not every PSP offers a way to re-read, which is why `Capability::Sync` is a capability like any other rather than something assumed.
-
-### Receiving what a PSP sends
-
-`NotifyCommand` carries a message a PSP sent. It is the one command that may point at nothing:
+Most commands act on a payment. `PayoutCommand` acts on a payout, and `CancelCommand` and `SyncCommand`
+act on either. Both implement `Payum\Core\Model\SubjectInterface`, which is all Payum needs:
 
 ```php
-NotifyCommand::forToken($token);      // arrived on a notify token, which is the usual case
-NotifyCommand::forPayment($payment);  // you already know which payment it is about
-NotifyCommand::forGateway();          // your application routed the endpoint itself
-```
-
-Which payment an event belongs to is something verification works out, so there is nothing to point at
-until the message has been read. It takes no idempotency key either — it sends nothing to the PSP.
-
-See [Webhooks](webhooks.md) for the handler.
-
-### What a command operates on
-
-Every command acts on a **subject**: a payment for most of them, a payout for `PayoutCommand`. Both implement `Payum\Core\Model\SubjectInterface`, which is all core needs — details it can read and write, and a class to look a storage up by.
-
-```php
-// a payout is not a payment
 PayoutCommand::forPayout($payout);
 
-// cancelling does not care which it is
 CancelCommand::forPayment($payment);
 CancelCommand::forPayout($payout);
+
+SyncCommand::forPayment($payment);
+SyncCommand::forPayout($payout);
 ```
 
-The subject on the command is **what the caller supplied**, which is null whenever the command carries only a token — the usual case for anything arriving over HTTP. Core resolves the real one from the token's identity, so a handler reads it from the context instead:
+A command that arrived on a token carries no model, only the token. Payum loads the model the token
+points at before your handler runs, so read it from the context rather than from the command:
 
 ```php
-$context->subject();   // whatever it is
-$context->payment();   // null when it is not a payment
-$context->payout();    // null when it is not a payout
+$context->subject();   // the payment or payout, whichever it is
+$context->payment();   // null when the subject is not a payment
+$context->payout();    // null when the subject is not a payout
 ```
 
-Give it neither a token nor a payment and the constructor throws — it has to know what it is operating on.
+## Read the amount from the context
 
-### Dispatching
+`CaptureCommand`, `AuthorizeCommand` and `RefundCommand` take an optional amount. Null means the full
+amount, so a full capture carries no amount at all.
+
+Read the amount with `$context->amount()`. It returns what the caller asked for, or the subject's full
+amount when they asked for nothing, as a `Money` in the subject's currency:
 
 ```php
-<?php
-$gateway = $payum->getGateway('acme');
+$amount = $context->amount();       // Money, or null when the subject has no currency
 
-$result = $gateway->execute(CaptureCommand::forToken($token));
+$amount->getAmount();               // '1000', minor units as a string
+$amount->getCurrency()->getCode();  // 'EUR'
 ```
 
-If the gateway declares no handler for that command you get a `Payum\Core\Exception\CommandNotSupportedException`:
+{% hint style="warning" %}
+Do not read `$command->amount` to decide how much to charge. It is null on a full capture, so a handler
+that sends it to the PSP charges nothing.
+{% endhint %}
 
-```
-Gateway "acme_eu" (Acme Payments) does not handle Payum\Core\Command\RefundCommand.
-It handles Payum\Core\Command\CaptureCommand. Add a handler for
-Payum\Core\Command\RefundCommand to Acme\Payum\AcmeGateway::handlers().
-```
+See [Money and currencies](../money.md) for converting a `Money` to the format a PSP expects.
 
-It names the gateway by the name it is registered under, which is what you need when the gateway is picked at runtime, and the same details are readable off the exception:
+## Read the rest of a command
+
+The other values are public properties or methods:
 
 ```php
-use Payum\Core\Exception\CommandNotSupportedException;
-
-try {
-    $gateway->execute(RefundCommand::forToken($token));
-} catch (CommandNotSupportedException $e) {
-    $e->getGatewayName();       // 'acme_eu'
-    $e->getGatewayClass();      // Acme\Payum\AcmeGateway
-    $e->getSupportedCommands(); // the commands it does handle
-    $e->getCommand();           // the one you dispatched
-}
-```
-
-To branch without catching, ask first:
-
-```php
-if ($gateway->supportsCommand(RefundCommand::class)) {
-    $gateway->execute(RefundCommand::forToken($token));
-}
-```
-
-### From a handler
-
-A handler dispatches a sub-command through the context rather than holding the gateway:
-
-```php
-public function handle(CaptureCommand $command, Context $context): CaptureResult
-{
-    $result = $context->execute(RefundCommand::forPayment($context->payment()));
-}
-```
-
-### Reading a command
-
-```php
-$command->token();          // ?TokenInterface
-$command->payment();        // ?PaymentInterface
-$command->amount;           // ?int, minor units. Null means the payment's full amount
-$command->money();          // ?Money, when the command carries enough to say which currency
-$command->idempotencyKey;   // ?string
+$command->token();            // ?TokenInterface, set when the command came in over HTTP
+$command->idempotencyKey;     // ?string, on every command except Sync and Notify
+$command->reason;             // ?string, on Refund and Cancel
 CaptureCommand::capability(); // Capability::Capture
 ```
 
-A null amount means "the whole payment", which is not the same as zero — so a handler reading `$command->amount` charges nothing on a full capture. Read [`$context->amount()`](handlers.md) instead, which resolves the command against the payment and hands you a `Money` either way. See [Money](../money.md).
+Pass `idempotencyKey` to the PSP when it accepts one. Pass `reason` when the PSP records one.
 
-Next: [Handlers](handlers.md).
+## Sync
+
+`SyncCommand` asks the PSP what state a payment or payout is in and records the answer. Applications
+use it for a "refresh" button or a reconciliation job, or to catch up after a webhook that never
+arrived. It changes nothing at the PSP, so it carries no idempotency key.
+
+Not every PSP can report a payment's state, which is why `Capability::Sync` is a capability like any
+other. Ship a sync handler only when yours can.
+
+Inside your own handlers, call the API class directly when you need fresh data. Dispatching a
+`SyncCommand` to fetch something you use on the next line adds a round trip through the middleware for
+nothing.
+
+## Notify
+
+`NotifyCommand` carries a message the PSP sent to say something happened. It is the one command that
+can point at nothing, because which payment a message is about is only known once it has been read:
+
+```php
+NotifyCommand::forToken($token);      // arrived on a notify token, the usual case
+NotifyCommand::forPayment($payment);  // the application already knows the payment
+NotifyCommand::forGateway();          // the application routed the endpoint itself
+```
+
+It sends nothing to the PSP, so it carries no idempotency key. See [Webhooks](webhooks.md) for its
+handler.
+
+## Dispatch a command from a handler
+
+A handler can dispatch another command on the same gateway through the context. This notify handler
+asks the PSP for the real state instead of trusting an unsigned message:
+
+```php
+public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+{
+    $payment = $context->payment();
+
+    if (null === $payment) {
+        return NotifyResult::ignored();
+    }
+
+    $synced = $context->execute(SyncCommand::forPayment($payment));
+
+    return NotifyResult::handled($synced->status);
+}
+```
+
+`execute()` returns the base `Payum\Core\Result\Result` type. A command dispatched from a handler runs
+through the same middleware as the outer one, and Payum stops a chain of dispatches that is 100 levels
+deep with a `LogicException`, which catches a handler that dispatches itself in a loop.
+
+## A command the gateway does not handle
+
+When a gateway has no handler for a command, `execute()` throws a
+`Payum\Core\Exception\CommandNotSupportedException`. Its message names the gateway and says what to add:
+
+```
+Gateway "acme" (Acme Payments) does not handle Payum\Core\Command\RefundCommand. It handles
+Payum\Core\Command\CaptureCommand. Add a handler for Payum\Core\Command\RefundCommand to
+Acme\Payum\AcmeGateway::handlers().
+```
+
+An application that wants to check first calls `supportsCommand()`:
+
+```php
+if ($gateway->supportsCommand(RefundCommand::class)) {
+    $gateway->execute(RefundCommand::forPayment($payment));
+}
+```

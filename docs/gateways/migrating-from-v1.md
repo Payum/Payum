@@ -1,39 +1,67 @@
-# Migrating a gateway from 1.x
+# Migrate a gateway from 1.x
 
-Gateways written for 1.x keep working on 2.0 and are still supported. `Gateway::execute()` decides by what it is given: a command goes to a handler, anything else takes the action path. Nothing forces a migration, and you can move one operation at a time.
+A gateway package written for Payum 1.x keeps working on 2.x: its factory, its actions and the replies
+they throw are deprecated, and removed in 3.0. This page is for gateway authors. It shows how to port a
+1.x gateway to the 2.x model of a gateway class, a config class and handlers, either in one go or one
+operation at a time.
 
-### What maps to what
+Read [Gateways](README.md) and [Build a gateway](../develop-gateway-with-payum.md) first for the target
+model. This page covers only how to get there from 1.x. If you are upgrading an application rather than a
+gateway, read [Upgrade from 1.x](../upgrading.md).
 
-| 1.x | 2.0 |
+## What maps to what
+
+| 1.x | 2.x |
 | :--- | :--- |
-| `Payum\Core\Request\Capture` | `Payum\Core\Command\CaptureCommand` |
-| `ActionInterface::execute($request)` | `CaptureHandlerInterface::handle($command, $context)` |
-| `supports()` | Gone. The handler interface is the mapping |
-| `throw new HttpRedirect($url)` | `return CaptureResult::pending(new Redirect($url))` |
-| `$request->markCaptured()` | `return CaptureResult::captured($id)` |
+| `GatewayFactory::populateConfig()` | a gateway class implementing `Payum\Core\Gateway\GatewayInterface`, see [Defining a gateway](defining-a-gateway.md) |
+| `payum.default_options`, `payum.required_options` | constructor arguments of a config class implementing `Payum\Core\Config\GatewayConfig`, see [Configuration](configuration.md) |
+| `payum.factory_title` | `GatewayInterface::name()` |
+| `payum.action.*` keys | `GatewayInterface::handlers()` |
+| `ActionInterface::execute($request)` and `supports()` | one handler per command, such as `CaptureHandlerInterface::handle($command, $context)`, see [Handlers](handlers.md) |
+| `Payum\Core\Request\Capture` and the other operation requests | `Payum\Core\Command\CaptureCommand` and the other commands, see [Commands](commands.md) |
 | `ArrayObject::ensureArrayObject($request->getModel())` | `$context->state()` |
-| `$this->gateway->execute(new GetHttpRequest())` | `$context->httpRequest()` |
-| `$this->gateway->execute(new SomeApiRequest($details))` | `$this->api->someCall($details)` |
-| `GatewayAwareTrait` + `$this->gateway->execute()` | `$context->execute()` |
-| `GenericTokenFactoryAwareTrait` | `$context->tokens()` |
-| `ApiAwareInterface` / `addApi()` | The api on the constructor |
-| `GatewayFactory::populateConfig()` | A gateway class and a config object |
-| `payum.action.*` container keys | `handlers()` on the gateway |
-| `NotifyAction` | `NotifyHandlerInterface` — the signature check moves into `verify()`, and the `HttpResponse` the action threw becomes an `Acknowledgement` on the result |
+| `throw new HttpRedirect($url)` | `return CaptureResult::pending(new Redirect($url))`, see [Results](results.md) |
+| `throw new HttpPostRedirect($url, $fields)` | `return CaptureResult::pending(new PostRedirect($url, $fields))` |
+| `throw new HttpResponse($html)` for a page | `return CaptureResult::pending(new RenderTemplate($template))`, see [Templates](templates.md) |
+| a status action answering `GetHumanStatus` | the status set by the result, as in `CaptureResult::captured($transactionId)` |
+| a `Convert` action | read `$context->payment()` and `$context->amount()` in the handler |
+| `$this->gateway->execute(new GetHttpRequest())` | `$context->httpRequest()`, a PSR-7 request |
+| `$this->gateway->execute(new GetToken($hash))` | `$context->token()` |
+| `$this->gateway->execute(new GetCurrency($code))` | a `Money\Currencies` taken as a constructor argument |
+| `GenericTokenFactoryAwareTrait` | `$context->tokens()`, or `$context->notifyUrl()` for a notify URL |
+| `$this->gateway->execute(new SomeApiRequest($details))` | a method on your API class |
+| `GatewayAwareTrait` with `$this->gateway->execute()` for an operation | `$context->execute($command)` |
+| `ApiAwareInterface`, `payum.api` | the API as a constructor argument, autowired, see [Services](services.md) |
+| `payum.paths` | `Payum\Core\Gateway\DeclaresTemplates::templateNamespaces()` |
+| `payum.extension.*` keys | middleware, declared with `Payum\Core\Gateway\DeclaresMiddleware`, see [Middleware](middleware.md) |
+| a notify action | `Payum\Core\Handler\NotifyHandlerInterface`, see [Webhooks](webhooks.md) |
 
-Mirror the directory layout so the map stays obvious:
+A layout that mirrors the 1.x one keeps the map easy to follow:
 
+```text
+AcmeGatewayFactory.php     ->  AcmeGateway.php and AcmeConfig.php
+Action/CaptureAction.php   ->  Handler/CaptureHandler.php
+Action/Api/*Action.php     ->  methods on AcmeApi.php
+Action/StatusAction.php    ->  nothing, the results set the status
 ```
-Action/CaptureAction.php   →  Handler/CaptureHandler.php
-Action/Api/*.php           →  Api/AcmeApi.php  (methods, not actions)
-AcmeGatewayFactory.php     →  AcmeGateway.php + Config/AcmeConfig.php
-```
 
-### 1. The config
+## The 1.x gateway
 
-Replace the option array in `populateConfig()` with a value object. Before:
+The steps below port this 1.x gateway. Its factory registers a capture action, a refund action, a status
+action and a convert action, and builds the API from the options:
 
 ```php
+<?php
+
+namespace Acme\Payum;
+
+use Acme\Payum\Action\CaptureAction;
+use Acme\Payum\Action\ConvertPaymentAction;
+use Acme\Payum\Action\RefundAction;
+use Acme\Payum\Action\StatusAction;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayFactory;
+
 class AcmeGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config): void
@@ -42,31 +70,111 @@ class AcmeGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'acme',
             'payum.factory_title' => 'Acme',
             'payum.action.capture' => new CaptureAction(),
+            'payum.action.refund' => new RefundAction(),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
 
-        $config['payum.default_options'] = ['secret_key' => '', 'sandbox' => false];
-        $config['payum.required_options'] = ['secret_key'];
+        if (false == $config['payum.api']) {
+            $config['payum.default_options'] = ['api_key' => '', 'sandbox' => true];
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = ['api_key'];
 
-        $config['payum.api'] = function (ArrayObject $config) {
-            $config->validateNotEmpty($config['payum.required_options']);
+            $config['payum.api'] = static function (ArrayObject $config) {
+                $config->validateNotEmpty($config['payum.required_options']);
 
-            return new AcmeApi((array) $config);
-        };
+                return new AcmeApi((array) $config);
+            };
+        }
     }
 }
 ```
 
-After:
+Its capture action reads the HTTP request through a sub-request, creates a checkout at the provider and
+redirects the customer there. When the customer comes back, it reads the checkout:
 
 ```php
+<?php
+
+namespace Acme\Payum\Action;
+
+use Acme\Payum\AcmeApi;
+use ArrayAccess;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Request\Capture;
+use Payum\Core\Request\GetHttpRequest;
+
+class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
+{
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = AcmeApi::class;
+    }
+
+    public function execute($request): void
+    {
+        RequestNotSupportedException::assertSupports($this, $request);
+
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+        if (isset($httpRequest->query['cancelled'])) {
+            $details['status'] = 'canceled';
+
+            return;
+        }
+
+        if (! $details['checkout_id']) {
+            $details['return_url'] = $request->getToken()->getTargetUrl();
+            $details->replace($this->api->createCheckout($details->toUnsafeArray()));
+
+            throw new HttpRedirect($details['checkout_url']);
+        }
+
+        $details->replace($this->api->getCheckout($details['checkout_id']));
+    }
+
+    public function supports($request): bool
+    {
+        return $request instanceof Capture && $request->getModel() instanceof ArrayAccess;
+    }
+}
+```
+
+## Port the whole gateway
+
+Work through these steps in order. Each one replaces one part of the factory.
+
+### Replace the options with a config class
+
+Each required option becomes a constructor argument, and each default becomes the argument's default:
+
+```php
+<?php
+
+namespace Acme\Payum;
+
+use InvalidArgumentException;
+use Payum\Core\Config\GatewayConfig;
+
 final class AcmeConfig implements GatewayConfig
 {
     public function __construct(
-        public readonly string $secretKey,
-        public readonly bool $sandbox = false,
+        public readonly string $apiKey,
+        public readonly bool $sandbox = true,
     ) {
-        if ('' === $secretKey) {
-            throw new LogicException('Acme needs a secret key.');
+        if ('' === $apiKey) {
+            throw new InvalidArgumentException('Acme needs an API key.');
         }
     }
 
@@ -77,78 +185,98 @@ final class AcmeConfig implements GatewayConfig
 }
 ```
 
-Required options become constructor arguments; validation moves into the constructor and now fails at boot.
+Validation that `validateNotEmpty()` did when the API was first built now runs when the application
+creates the config, at boot. See [Configuration](configuration.md).
 
-### 2. The gateway
+### Write the gateway class
+
+The gateway class replaces the factory. It describes the gateway and lists its handlers:
 
 ```php
+<?php
+
+namespace Acme\Payum;
+
+use Acme\Payum\Handler\CaptureHandler;
+use Acme\Payum\Handler\RefundHandler;
+use League\Uri\Uri;
+use Payum\Core\Gateway\GatewayInterface;
+use Payum\Core\Metadata\Logo;
+
 final class AcmeGateway implements GatewayInterface
 {
-    public function name(): string        { return 'Acme'; }
-    public function logo(): Logo          { return Logo\Path::create(__DIR__ . '/Resources/logo.svg'); }
-    public function websiteUrl(): Uri     { return Uri::new('https://developer.acme.test'); }
-    public function configClass(): string { return AcmeConfig::class; }
-
-    public function handlers(): array     { return [CaptureHandler::class]; }
-}
-```
-
-`payum.factory_title` becomes `name()`. The `payum.action.*` keys become `handlers()`.
-
-### 3. The api
-
-If your api already takes a PSR-18 client and its options, change it to take the config object and it will be autowired with no definition:
-
-```php
--public function __construct(array $options, ClientInterface $client, RequestFactoryInterface $requestFactory)
-+public function __construct(AcmeConfig $config, ClientInterface $client, RequestFactoryInterface $requestFactory)
-```
-
-Until then, declare it — an array has no type for the container to resolve. See [Services](services.md).
-
-Every `Action/Api/*Action.php` becomes a method here. `SetExpressCheckoutAction` becomes `$api->setExpressCheckout()`.
-
-### 4. The action becomes a handler
-
-Most of the body survives untouched, which is why `$context->state()` is an `ArrayObject` and not a plain array. Before:
-
-```php
-class CaptureAction implements ActionInterface, GatewayAwareInterface
-{
-    use GatewayAwareTrait;
-
-    public function execute($request): void
+    public function name(): string
     {
-        RequestNotSupportedException::assertSupports($this, $request);
-
-        $details = ArrayObject::ensureArrayObject($request->getModel());
-
-        $this->gateway->execute($httpRequest = new GetHttpRequest());
-        if (isset($httpRequest->query['cancelled'])) {
-            $details['CANCELLED'] = true;
-
-            return;
-        }
-
-        if (! $details['checkout_id']) {
-            $this->gateway->execute(new CreateCheckout($details));
-
-            throw new HttpRedirect($details['checkout_url']);
-        }
-
-        $this->gateway->execute(new SyncCheckout($details));
+        return 'Acme';
     }
 
-    public function supports($request)
+    public function logo(): Logo
     {
-        return $request instanceof Capture && $request->getModel() instanceof ArrayAccess;
+        return Logo\Url::create('https://acme.test/logo.svg');
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+
+    public function configClass(): string
+    {
+        return AcmeConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [CaptureHandler::class, RefundHandler::class];
     }
 }
 ```
 
-After:
+`payum.factory_title` becomes `name()`, and the `payum.action.*` keys become `handlers()`. There is no
+factory name: the application picks the name it registers the gateway under. See
+[Defining a gateway](defining-a-gateway.md) for the metadata and for declaring capabilities.
+
+### Give the API the config
+
+Change the API's constructor to take the config object instead of the options array:
 
 ```php
+public function __construct(
+    private readonly AcmeConfig $config,
+    private readonly ClientInterface $httpClient,
+    private readonly RequestFactoryInterface $requestFactory,
+) {
+}
+```
+
+Every argument is now a type the gateway's container knows, so the API is autowired and you declare
+nothing. An API that still takes an array cannot be autowired: declare it in
+`configureContainer()`, as [Services](services.md) shows.
+
+Each `Action/Api/*Action.php` becomes a method on the API. A `CreateCheckoutAction` dispatched with
+`new CreateCheckout($details)` becomes `$api->createCheckout($details)`.
+
+Type-hint the PSR-18 `Psr\Http\Client\ClientInterface` and the PSR-17 factories, not
+`Payum\Core\HttpClientInterface` or `Http\Message\MessageFactory`. Payum no longer installs
+`php-http/message-factory`, so an API that needs it makes every application install it.
+
+### Turn each action into a handler
+
+A handler implements the interface for one command, takes its services through the constructor and
+returns a result instead of throwing a reply. The capture action above becomes:
+
+```php
+<?php
+
+namespace Acme\Payum\Handler;
+
+use Acme\Payum\AcmeApi;
+use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Handler\CaptureHandlerInterface;
+use Payum\Core\Handler\Context;
+use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\NextAction\Redirect;
+
 final class CaptureHandler implements CaptureHandlerInterface
 {
     public function __construct(private readonly AcmeApi $api)
@@ -160,108 +288,89 @@ final class CaptureHandler implements CaptureHandlerInterface
         $state = $context->state();
 
         if (isset($context->httpRequest()->getQueryParams()['cancelled'])) {
+            $state['status'] = 'canceled';
+
             return CaptureResult::canceled();
         }
 
         if (! $state['checkout_id']) {
-            $state->replace($this->api->createCheckout($state->toUnsafeArray()));
+            $amount = $context->amount();
+
+            $state->replace($this->api->createCheckout([
+                'amount' => $amount?->getAmount(),
+                'currency' => $amount?->getCurrency()->getCode(),
+                'reference' => $context->payment()?->getNumber(),
+                'return_url' => $context->token()?->getTargetUrl(),
+            ]));
 
             return CaptureResult::pending(new Redirect($state['checkout_url']));
         }
 
-        $state->replace($this->api->syncCheckout($state->toUnsafeArray()));
+        $state->replace($this->api->getCheckout($state['checkout_id']));
 
-        return CaptureResult::captured($state['charge_id']);
+        return 'paid' === $state['status']
+            ? CaptureResult::captured($state['charge_id'])
+            : CaptureResult::pending();
     }
 }
 ```
 
-`supports()` and `assertSupports()` are gone — dispatch is by type. The reply is returned instead of thrown. The sub-requests became api calls.
+Most of the body carries over. `$context->state()` is the same `ArrayObject` the action unwrapped, and
+Payum writes it back onto the payment. What changes:
 
-### 5. Registering it
+- `supports()` and `assertSupports()` go. The handler interface decides which command reaches it.
+- The `GetHttpRequest` sub-request becomes `$context->httpRequest()`.
+- The `Convert` action goes. The handler reads the amount from `$context->amount()`, which works for a
+  partial capture too, and anything else from `$context->payment()`.
+- The reply is returned as a next action, and the status comes with the result, so the status action
+  goes too.
 
-```php
--    ->addGateway('acme', ['factory' => 'acme', 'secret_key' => 'sk_…'])
-+    ->registerGateway('acme', new AcmeConfig('sk_…'))
-```
+Port the refund action to a `RefundHandler` the same way, returning a `RefundResult`. Capture still runs
+twice for a redirect: once to send the customer away and once when the provider sends
+them back to the token's URL. [Handlers](handlers.md) explains that flow and what `Context` offers.
 
-### 6. The status action
+### Port the notify action
 
-`GetHumanStatus` handling disappears. Status is on the result, and the named constructors set it:
+A notify action becomes a handler implementing `NotifyHandlerInterface`. Its signature check moves into
+`verify()`, which returns a `WebhookEvent`, and the rest moves into `handle()`. The `HttpResponse` the
+action threw to answer the provider becomes an `Acknowledgement` on the `NotifyResult`. See
+[Webhooks](webhooks.md).
 
-```php
--if ($details['status'] === 'paid') { $request->markCaptured(); }
-+return CaptureResult::captured($details['charge_id']);
-```
+### Move templates and extensions
 
-### Moving one operation at a time
+- Templates: replace `payum.paths` with `DeclaresTemplates::templateNamespaces()`. An action that
+  threw an `HttpResponse` with a rendered form returns a `RenderTemplate` next action naming the template.
+  Never use `PayumCore` as your namespace: core reserves it. See [Templates](templates.md).
+- Extensions: rewrite a `payum.extension.*` extension as a middleware, and list it in
+  `DeclaresMiddleware::middleware()`. See [Middleware](middleware.md).
 
-You do not have to port everything at once. See [Moving one operation at a time](#moving-one-operation-at-a-time-1) below.
+### Register it
 
-### Dispatching a command at a gateway you have not ported
-
-You get a `CommandNotSupportedException` saying so, rather than one that reads like a missing handler:
-
-```
-Gateway "legacy" handles no commands, so it cannot handle Payum\Core\Command\CaptureCommand.
-It is built from actions: wrap it with Payum\Core\Legacy\LegacyGatewayAdapter::wrap() to dispatch commands at it, or port it to handlers.
-```
-
-`$e->getSupportedCommands()` is empty and `$e->getGatewayClass()` is null for such a gateway, so code choosing between the two paths can branch on either.
-
-If you would rather not keep two call sites, wrap the gateway and dispatch commands at it anyway — see below.
-
-### Driving an unported gateway with commands
-
-An application that has moved to commands should not lose access to the gateways that have not. `LegacyGatewayAdapter` wraps a 1.x gateway — its factory and all its actions — and takes commands:
+The application registers the config object instead of an options array:
 
 ```php
-use Payum\Core\Command\CaptureCommand;
-use Payum\Core\Legacy\LegacyGatewayAdapter;
+<?php
 
-$gateway = LegacyGatewayAdapter::wrap($payum->getGateway('paypal_express_checkout'));
+use Acme\Payum\AcmeConfig;
+use Payum\Core\PayumBuilder;
 
-$result = $gateway->execute(CaptureCommand::forToken($token));
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
 ```
 
-Each command becomes the 1.x request that means the same thing, the reply the action threw becomes `$result->next`, and the status is read back by asking the gateway's own status action. Redirect flows keep working: the token is passed through untouched, so the PSP still returns the customer to the URL that dispatched the command and the same command finishes the payment on its second run.
+Applications that still execute 1.x requests keep working against the ported gateway. The next section
+shows what they get.
 
-Anything that is not a command is passed straight through, so the wrapper is safe to leave in front of a gateway you still dispatch 1.x requests at. An action dispatching a sub-request of its own is unaffected: it is running on the same gateway, so it gets the same answers as ever — see [What core answers for an action you have not ported](#what-core-answers-for-an-action-you-have-not-ported).
+## What applications keep after you port
 
-**What a 1.x gateway cannot tell you.** There is no portable way to ask a 1.x action for a transaction id, an amount or why something was declined, so `$result->transactionId`, the per-result amounts and `$result->failure` are always null. `$result->status` and `$result->isFailed()` do answer, because the status action does. Read anything else from the gateway's own details array.
-
-A command carrying something a 1.x request has nowhere to put — an amount, a reason, an idempotency key — is refused rather than run:
-
-```php
-$gateway->execute(RefundCommand::forPayment($payment, 500));
-// LogicException: RefundCommand carries an amount, and a 1.x request has nowhere to put it.
-```
-
-That is deliberate. Dropping the amount would refund the whole payment instead of half, and dropping an idempotency key would let a retry charge twice. Port the gateway to handlers if you need them.
-
-A 1.x action that renders its own markup — a card form, a wallet button — throws an `HttpResponse`, and 2.0 names a template rather than carrying rendered HTML. There is no way back, so the reply is handed over intact in a `LegacyReply` for you to send yourself:
+A gateway package releases on its own schedule, so an application can still execute 1.x requests at your
+gateway after you port it:
 
 ```php
-if ($result->next instanceof LegacyReply && $result->next->reply instanceof HttpResponse) {
-    return new Response($result->next->reply->getContent(), $result->next->reply->getStatusCode());
-}
-```
-
-`$gateway->capabilities()` reports what the gateway looks able to do, worked out from which of its actions claim which requests. Treat it as a list to render in an admin screen, not as a promise: an action claiming `Refund` is not the same as refunds working.
-
-### Things that do not carry over
-
-* Actions relying on `supports()` returning true for requests Payum no longer creates internally.
-* Anything depending on the order in which Payum's own actions ran.
-* Extensions, on the command path. Cross-cutting concerns move to middleware.
-
-### Applications do not have to change at all
-
-A gateway package releases on its own schedule, so an application should not break because one of its dependencies moved to handlers. It does not: a 1.x request sent to a ported gateway is translated to the command that means the same thing, run through the handler, and answered the way 1.x expects.
-
-```php
-// unchanged, still works after the gateway ports
-$gateway = $payum->getGateway($token->getGatewayName());
+use Payum\Core\Reply\HttpRedirect;
+use Payum\Core\Request\Capture;
 
 try {
     $gateway->execute(new Capture($token));
@@ -270,71 +379,120 @@ try {
 }
 ```
 
-`Payum::capture()`, `Payum::done()`, the token factory and the token flow are all unchanged.
-
-What translates:
+Payum translates the request to the matching command, runs your handler and throws the reply a 1.x
+caller expects:
 
 | 1.x request | Answered by |
 | :--- | :--- |
 | `Capture`, `Authorize`, `Refund` | the matching handler |
 | `Cancel`, `Sync` | the matching handler, for a payment or a payout |
 | `Payout` | the payout handler |
-| `GetHumanStatus`, `GetBinaryStatus` | the status recorded on the subject |
-| `Notify` | the notify handler — see [Webhooks](webhooks.md) |
+| `Notify` | the notify handler |
+| `GetHumanStatus`, `GetBinaryStatus` | the status Payum recorded on the payment |
 
-And what the handler's answer becomes, since a 1.x caller is waiting to catch a reply rather than read a result:
-
-| Next action | 1.x reply |
+| Next action | Reply thrown |
 | :--- | :--- |
 | `Redirect` | `HttpRedirect` |
 | `PostRedirect` | `HttpPostRedirect` |
-| `RenderTemplate` | `HttpResponse` carrying the rendered page |
-| `Challenge` | `HttpPostRedirect` at the issuer, or `HttpRedirect` when the step-up needs no parameters |
-| `Poll` | nothing thrown |
-| nothing | nothing thrown |
+| `RenderTemplate` | `HttpResponse` with the rendered page |
+| `Challenge` | `HttpPostRedirect` to the issuer, or `HttpRedirect` when it has no parameters |
+| `Poll` | nothing |
+| none | nothing |
 
-Two of those lose detail, because 1.x has no reply for them:
+Two of these lose detail, because 1.x has no reply for them. A `Challenge` loses its 3-D Secure protocol
+version. A `Poll` loses `retryAfterSeconds`, and the caller goes to the after URL and reads a pending
+status there. If your gateway needs either detail, its users have to act on the result of a command.
 
-- **`Challenge`** becomes a form posted at the issuer's page, the way a 1.x gateway ran 3-D Secure. The protocol version is dropped.
-- **`Poll`** throws nothing, so the caller goes to the after url and reads the status there, where the payment is pending. `retryAfterSeconds` is dropped.
+A status request is answered from the status Payum records, so the payment model has to implement
+`Payum\Core\Model\StatusAwareInterface`. A payment that does not is marked unknown.
 
-If your gateway needs either detail, the application has to act on the `Result` instead of catching replies.
+## Move one operation at a time
 
-A status request is answered from the status Payum records, so it needs the subject to implement `Payum\Core\Model\StatusAwareInterface`. One that tracks nothing is marked unknown.
+You do not have to port every action at once. A gateway can run handlers for the operations you have
+ported and 1.x actions for the rest.
 
-### Replies your gateway defines for itself
+### Keep the unported actions beside the handlers
 
-A reply class of your own, or any reply core does not ship, passes through untouched. A 1.x caller catches the same object your action threw, and a caller acting on a `Result` finds it in a `LegacyReply`, the same way as a rendered `HttpResponse` above.
-
-On the webhook path, an `HttpResponse` your 1.x notify action throws becomes the `Acknowledgement` on the `NotifyResult`, and is sent back to the PSP as the same response.
-
-### Moving one operation at a time
-
-A gateway does not have to port everything at once. List the actions you have not moved yet and they keep working beside the handlers you have:
+Implement `Payum\Core\Gateway\DeclaresActions` and list the actions you have not ported:
 
 ```php
+<?php
+
+namespace Acme\Payum;
+
+use Acme\Payum\Action\RefundAction;
+use Acme\Payum\Action\StatusAction;
+use Acme\Payum\Handler\CaptureHandler;
+use League\Uri\Uri;
 use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface;
+use Payum\Core\Metadata\Logo;
 
 final class AcmeGateway implements GatewayInterface, DeclaresActions
 {
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function logo(): Logo
+    {
+        return Logo\Url::create('https://acme.test/logo.svg');
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+
+    public function configClass(): string
+    {
+        return AcmeConfig::class;
+    }
+
     public function handlers(): array
     {
-        return [CaptureHandler::class];      // ported
+        return [CaptureHandler::class];
     }
 
     public function actions(): array
     {
-        return [RefundAction::class];        // not yet
+        return [RefundAction::class, StatusAction::class];
     }
 }
 ```
 
-`Capture` goes to the handler. `Refund` falls through to the action. When the last action becomes a handler, drop the interface.
+`CaptureCommand` and the 1.x `Capture` request go to the handler. The 1.x `Refund` request falls through
+to the action. When the last action becomes a handler, remove the interface.
 
-#### Taking commands for an action you have not ported
+`actions()` returns class names, which Payum builds from the gateway's container. Give each listed
+action its API through the constructor before you list it:
 
-A command reaches handlers only, so in the gateway above a `RefundCommand` is not supported even though `RefundAction` answers `Refund`. To take the command before the action is ported, list the handler that hands it to your actions:
+```php
+public function __construct(private readonly AcmeApi $api)
+{
+}
+```
+
+An action that still implements `ApiAwareInterface` gets no API here, and every request that reaches the
+actions then fails with "Cannot find right api for the action".
+
+Two ordering rules decide who answers a request:
+
+- Handlers are asked before actions. Core's own actions claim almost every request that carries a token,
+  so asking them first would hide the handlers.
+- Status requests are the exception: a status action wins. It reads the details of the operations that
+  have not moved yet, which the recorded status does not know about.
+
+Listing any action brings core's own actions and extensions along, because an action that executes
+`GetHttpRequest` or `RenderTemplate` still expects an answer. A gateway that lists none gets no 1.x
+machinery at all.
+
+### Take commands for an unported action
+
+A command only reaches handlers. In the gateway above, a `RefundCommand` is not supported, even though
+`RefundAction` answers the `Refund` request. To take the command before you port the action, list the
+matching handler from `Payum\Core\Legacy\Handler`, and keep the action:
 
 ```php
 use Payum\Core\Legacy\Handler\RefundActionHandler;
@@ -346,19 +504,37 @@ public function handlers(): array
 
 public function actions(): array
 {
-    return [RefundAction::class];        // still answers, now for RefundCommand too
+    return [RefundAction::class, StatusAction::class];
 }
 ```
 
-`RefundCommand` becomes the `Refund` request, runs through your actions as it did in 1.x, and the reply the action threw comes back as `$result->next`. There is one such handler per command in `Payum\Core\Legacy\Handler`: `CaptureActionHandler`, `AuthorizeActionHandler`, `RefundActionHandler`, `CancelActionHandler`, `SyncActionHandler`, `PayoutActionHandler` and `NotifyActionHandler`. Keep the action in `actions()`, or nothing answers the request.
+`RefundCommand` now becomes the `Refund` request and runs through your actions. The reply the action
+throws comes back as `$result->next`, and the status comes from your status action. There is one such
+handler per command: `CaptureActionHandler`, `AuthorizeActionHandler`, `RefundActionHandler`,
+`CancelActionHandler`, `SyncActionHandler`, `PayoutActionHandler` and `NotifyActionHandler`. Keep the
+action in `actions()`, or nothing answers the request.
 
-The result carries what [`LegacyGatewayAdapter`](#driving-an-unported-gateway-with-commands) can tell you and no more: a status, a next action, no transaction id. A command carrying an amount, a reason or an idempotency key is refused for the same reason. Replace the handler with the real one when you port the action.
+The result holds only a status and a next action, with no transaction ID, no amount and no failure. A
+command that carries an amount, a reason or an idempotency key is refused with a `LogicException`,
+because the 1.x request has nowhere to put it. Replace the handler with a real one when you port the
+action.
 
-#### Adding a handler to a gateway factory
+### Add a handler to a 1.x factory
 
-The other way round: your gateway is still a 1.x factory, and you want to write one operation as a handler before the rest. Register it as an action:
+The other way round: your gateway is still a 1.x factory, and you want to write one operation as a
+handler first. Register the handler as an action with `HandlerToActionAdapter`:
 
 ```php
+<?php
+
+namespace Acme\Payum;
+
+use Acme\Payum\Action\CaptureAction;
+use Acme\Payum\Action\ConvertPaymentAction;
+use Acme\Payum\Action\StatusAction;
+use Acme\Payum\Handler\RefundHandler;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\GatewayFactory;
 use Payum\Core\Legacy\HandlerToActionAdapter;
 
 class AcmeGatewayFactory extends GatewayFactory
@@ -369,52 +545,74 @@ class AcmeGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'acme',
             'payum.factory_title' => 'Acme',
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.refund' => new HandlerToActionAdapter(new RefundHandler()),
+            'payum.action.refund' => static fn (ArrayObject $config) => new HandlerToActionAdapter(
+                new RefundHandler(new AcmeApi((array) $config)),
+            ),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
+
+        // payum.api as before
     }
 }
 ```
 
-A `Refund` request about a payment now runs `RefundHandler`, and a 1.x caller catches the reply it decided, exactly as it did from the action. The handler gets a full `$context`: the payment, the token, the HTTP request and `$context->state()` written back onto the payment. Two things it does not have on a factory-built gateway:
+A `Refund` request for a payment now runs `RefundHandler`, through the same middleware as on a gateway
+built from handlers, and a 1.x caller catches the reply it decided. The closure builds the handler once
+the options are known. The handler gets a full `Context`, with two limits on a gateway a factory builds:
 
-- `$context->gateway()` knows only the gateway's name; its logo, website and config class throw. Write the gateway class first if a handler needs them.
-- A `Refund` carrying only a details array, with no payment behind it, is left to the actions. A handler always works on a payment.
+- `$context->gateway()` knows only the gateway's name. Its logo, website and config class throw. Write
+  the gateway class first if a handler needs them.
+- A `Refund` request that carries only a details array, with no payment, is left to the actions. A
+  handler always works on a payment.
 
 When every action is a handler, replace the factory with a gateway class and drop the adapter.
 
-Declaring any action brings core's own actions and extensions along, since an action dispatching `GetHttpRequest` or `RenderTemplate` still expects an answer. A gateway that declares none gets a clean gateway with no 1.x machinery on it at all.
+### What core answers for an unported action
 
-### What core answers for an action you have not ported
+An unported action asks core for what it needs by executing a sub-request. Core still answers each one,
+from the services the gateway's container holds, so you register nothing for them. A handler executes
+none of these: it gets the same information directly.
 
-An unported action asks core for what it needs by dispatching a sub-request. It still gets an answer, but from the services 2.0 injects rather than from where 1.x found them. You register nothing for this, and you do not need to swap in a different action — core answers these itself.
-
-This is here so you can port one operation at a time, not so you can stay. A handler dispatches none of these: it is handed the same information, which is most of why porting is worth doing.
-
-| The action dispatches | Answered from, until it is ported | What the handler does instead |
+| The action executes | Core answers it from | A handler uses instead |
 | :--- | :--- | :--- |
-| `GetHttpRequest` | the container's `Psr\Http\Message\ServerRequestInterface`, flattened back into the arrays the 1.x request carries | reads `$context->httpRequest()`, the PSR-7 request itself |
-| `RenderTemplate` | `Payum\Core\Template\RendererInterface` | returns a `Payum\Core\Result\NextAction\RenderTemplate` result, resolved by the same renderer |
-| `GetToken` | the token storage | reads `$context->token()` |
-| `GetCurrency` | ISO 4217 | calls `Payum\Core\ISO4217\Currency::createFromIso4217Alpha3()` — there is nothing to dispatch for a lookup |
-| `ObtainCreditCard` | your framework integration, as before. Core ships no answer for it | — |
+| `GetHttpRequest` | the container's PSR-7 `ServerRequestInterface`, flattened into the 1.x arrays | `$context->httpRequest()` |
+| `RenderTemplate` | `Payum\Core\Template\RendererInterface` | a `RenderTemplate` next action |
+| `GetToken` | the token storage, by hash | `$context->token()` |
+| `GetCurrency` | ISO 4217, then the `Money\Currencies` service | a `Money\Currencies` constructor argument |
+| `ObtainCreditCard` | the framework integration, as in 1.x. Core does not answer it | |
 
-Two consequences worth knowing:
+`GetHttpRequest::$request` holds the query parameters merged with the parsed body, as `$_REQUEST` did.
+Read `$query` when you mean the query string only.
 
-- Whatever request the application registered is what the action sees. Register your framework's request once with `PayumBuilder::addGlobalService(ServerRequestInterface::class, $request)` and both an unported action and a handler reading `$context->httpRequest()` read the same thing — the action no longer reads `$_GET` and `$_REQUEST` behind your back.
-- `GetHttpRequest::$request` is the query merged with the parsed body, the way `$_REQUEST` was. Read `$query` when you mean the query string only.
+## Replies your gateway defines for itself
 
-Two ordering rules worth knowing:
+A reply class of your own, or any reply core does not know, passes through unchanged. A 1.x caller
+catches the object your action threw, and a caller acting on a result finds it in a
+`Payum\Core\Legacy\LegacyReply` next action, as `$result->next->reply`. On the notify path, an
+`HttpResponse` that a 1.x notify action throws becomes the `Acknowledgement` on the `NotifyResult` and
+reaches the provider as the same response.
 
-- **Handlers are asked before actions.** They have to be: a token is a `DetailsAggregateInterface`, so core's `ExecuteSameRequestWithModelDetailsAction` claims `Capture($token)`. Asking actions first would swallow almost every request before a handler saw it.
-- **Except for status requests**, where an action wins. A gateway still holding a status action reads the details of whatever has not moved, which is more than the recorded status knows.
+## What does not carry over
 
-### Moving your own code across
+- An action whose `supports()` relied on a request Payum no longer creates for itself.
+- Code that relied on the order in which core's own actions ran.
+- Extensions on commands are one-way. An extension sees the command and can stop it by throwing, but it
+  cannot replace the result, and `getAction()` on its context is always `null`, because a handler
+  answered.
+  Move code that changes the outcome into a middleware.
+- Method overrides without types. Payum 2.x adds `: void` to `Generic::setModel()`,
+  `GatewayAwareTrait::setGateway()` and `ApiAwareTrait::setApi()`, among others. A class that overrides
+  one of them has to declare the same return type.
 
-When you are ready, the call site becomes:
+## Checklist
 
-```php
--$reply = $gateway->execute(new Capture($token), true);
--if ($reply instanceof HttpRedirect) { header('Location: ' . $reply->getUrl()); }
-+$result = $gateway->execute(CaptureCommand::forToken($token));
-+if ($result->next instanceof Redirect) { header('Location: ' . $result->next->url); }
-```
+1. Write a config class for the options, with validation in the constructor.
+2. Write the gateway class, listing your handlers.
+3. Change the API's constructor to take the config, a PSR-18 client and PSR-17 factories.
+4. Port each action to a handler, starting with capture. Use `DeclaresActions` and the
+   `Legacy\Handler` classes for the ones you have not ported yet.
+5. Port the notify action to `NotifyHandlerInterface`.
+6. Replace `payum.paths` with `DeclaresTemplates` and extensions with middleware.
+7. Remove the status action, the convert action, the API request actions and the factory.
+8. Tell your users to switch to `registerGateway()` with your config class.

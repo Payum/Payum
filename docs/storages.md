@@ -1,70 +1,72 @@
 # Storages
 
-Storage allow you save,fetch payment related information. They could be used explicitly, it means you have to call save or fetch methods when it is required. Or you can integrate a storage to a gateway using `StorageExtension`. In this case every time gateway finish to execute a request it stores the information. `StorageExtension` could also load a model by it is `Identificator` so you do not have to care about that.
+Payum stores two kinds of things: your payments, and the tokens behind the payment URLs it sends a customer
+to. A storage is the class that saves and loads one model class, such as your `Payment` entity. Payum ships
+storages for Doctrine ORM, Doctrine MongoDB ODM and Laminas DB, plus one that writes files, and you can
+write your own.
 
-Explicitly used example:
+## Register a storage
 
-```php
-<?php
-use Payum\Core\Storage\FilesystemStorage;
-
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
-
-$order = $storage->create();
-$order->setTotalAmount(123);
-$order->setCurrency('EUR');
-
-$storage->update($order);
-
-$foundOrder = $storage->find($order->getNumber());
-```
-
-Implicitly used example:
+Give `PayumBuilder` a storage for your tokens and one for each model class you take payments with:
 
 ```php
 <?php
-use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Gateway;
-use Payum\Core\Storage\FilesystemStorage;
+// config.php
 
-$gateway->addExtension(new StorageExtension(
-   new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number')
-));
+use Acme\Entity\Payment;
+use Acme\Entity\PaymentToken;
+use Acme\Payum\AcmeConfig;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\PayumBuilder;
+
+/** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
+
+$payum = (new PayumBuilder())
+    ->setTokenStorage(new DoctrineStorage($entityManager, PaymentToken::class))
+    ->addStorage(Payment::class, new DoctrineStorage($entityManager, Payment::class))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
 ```
 
-Usage of a model identity with the extension:
+With storages registered, you do not save payments by hand while a payment runs:
 
-```php
-<?php
-use Payum\Core\Extension\StorageExtension;
-use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Request\Capture;
+- `Payum::prepare()` saves the payment and issues the token that starts the payment.
+- When a command arrives with a token, Payum loads the payment the token points at from its storage.
+- After the command, Payum writes the PSP's state back to that payment and saves it.
 
-$storage = new FilesystemStorage('/path/to/storage', 'Payum\Core\Model\Payment', 'number');
+Payum only saves a payment it loaded from a token. A payment you pass to a command yourself is yours to
+save.
 
-$order = $storage->create();
-$storage->update($order);
+Payum finds a storage by the exact class of the model, so register it under your own class
+(`Acme\Entity\Payment`), not under a class it extends. Read a storage back with `$payum->getStorage(Payment::class)`
+and the token storage with `$payum->getTokenStorage()`.
 
-/** @var \Payum\Core\Gateway $gateway */
-$gateway->addExtension(new StorageExtension($storage));
+{% hint style="warning" %}
+Always set a token storage. Without one, Payum calls `addDefaultStorages()`, which registers file storages
+for tokens and for `Payum\Core\Model\Payment`, `Payout` and `ArrayObject`, and replaces any storage you
+registered for one of those three classes.
+{% endhint %}
 
-$gateway->execute($capture = new Capture(
-    $storage->identify($order)
-));
+## Storages Payum ships
 
-echo get_class($capture->getModel());
-// -> Payum\Core\Model\Payment
+| Storage | Package you need | Use it for |
+| --- | --- | --- |
+| `Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage` | `doctrine/orm` or `doctrine/mongodb-odm` | Production, with an entity manager or a document manager. |
+| `Payum\Core\Bridge\Laminas\Storage\TableGatewayStorage` | `laminas/laminas-db` | Laminas DB table gateways, with the limits listed below. |
+| `Payum\Core\Storage\FilesystemStorage` | None | Tests and trying Payum out. Not for production. |
+| `Payum\Core\Storage\CryptoStorageDecorator` | A cypher, such as `defuse/php-encryption` | Wraps another storage and encrypts what it saves. |
+
+## Doctrine ORM
+
+Payum works with Doctrine ORM 2.14 or later and 3.x, on DBAL 3 or 4:
+
+```bash
+composer require doctrine/orm symfony/cache
 ```
 
-### Doctrine ORM
+### Create the entities
 
-Payum works with Doctrine ORM 2.14 or later and 3.x, on DBAL 3 or 4.
-
-```
-php composer.phar require "doctrine/orm"
-```
-
-Add token and payment classes:
+Extend Payum's token and payment models:
 
 ```php
 <?php
@@ -74,7 +76,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Token;
 
 #[ORM\Entity]
-#[ORM\Table]
+#[ORM\Table(name: 'payment_token')]
 class PaymentToken extends Token
 {
 }
@@ -88,7 +90,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Payment as BasePayment;
 
 #[ORM\Entity]
-#[ORM\Table]
+#[ORM\Table(name: 'payment')]
 class Payment extends BasePayment
 {
     #[ORM\Id]
@@ -98,7 +100,13 @@ class Payment extends BasePayment
 }
 ```
 
-Next, create an entity manager and Payum's storages:
+Your entities add only the ID. The other columns come from Payum's XML mapping for the classes they extend,
+which you register next. Payum's mappings are XML because ORM 3 has no annotation mapping; map your own
+entities with attributes or XML.
+
+### Create the entity manager
+
+Register Payum's mapping for `Payum\Core\Model` next to the mapping for your own entities:
 
 ```php
 <?php
@@ -108,118 +116,123 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Bridge\Doctrine\Types\DbalObjectType;
+use Payum\Core\Payum;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 DbalObjectType::register();
 
+$payumMapping = dirname((new ReflectionClass(Payum::class))->getFileName()) . '/Bridge/Doctrine/Resources/mapping';
+
 $driver = new MappingDriverChain();
-
-// payum's basic models
-$driver->addDriver(
-    new SimplifiedXmlDriver(['path/to/Payum/Core/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model']),
-    'Payum\Core\Model'
-);
-
-// your models
-$driver->addDriver(new AttributeDriver(['path/to/Acme/Entity'], true), 'Acme\Entity');
+$driver->addDriver(new SimplifiedXmlDriver([$payumMapping => 'Payum\Core\Model']), 'Payum\Core\Model');
+$driver->addDriver(new AttributeDriver([__DIR__ . '/src/Entity']), 'Acme\Entity');
 
 $config = new Configuration();
-$config->setAutoGenerateProxyClasses(true);
-$config->setProxyDir(\sys_get_temp_dir());
+$config->setProxyDir(sys_get_temp_dir());
 $config->setProxyNamespace('Proxies');
+$config->setAutoGenerateProxyClasses(true);
 $config->setMetadataDriverImpl($driver);
-if (\PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
+$config->setMetadataCache(new ArrayAdapter());
+$config->setQueryCache(new ArrayAdapter());
+if (PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
     $config->enableNativeLazyObjects(true);
 }
-$config->setQueryCache(new ArrayAdapter());
-$config->setMetadataCache(new ArrayAdapter());
 
 $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $config);
 $entityManager = new EntityManager($connection, $config);
-
-$paymentStorage = new DoctrineStorage($entityManager, 'Acme\Entity\Payment');
-$tokenStorage = new DoctrineStorage($entityManager, 'Acme\Entity\PaymentToken');
 ```
 
-Call `DbalObjectType::register()` before the first entity manager is created. It does nothing on DBAL 3,
-which still has the `object` type, so it is safe to call on either version.
+Replace the in-memory SQLite connection with your own database. `$payumMapping` finds the mapping directory inside the installed `payum/core` package, wherever Composer put
+it. If you leave the Payum mapping out, Doctrine creates tables with only an `id` column.
 
-#### Storing token details as JSON
+Call `DbalObjectType::register()` before you create the entity manager. The token mapping stores a token's
+details in an `object` column, a type DBAL 4 removed. `DbalObjectType` brings it back with the same format,
+so tokens stored on DBAL 3 read back unchanged. On DBAL 3 the call does nothing, so it is safe on either
+version.
 
-By default a token's details are stored as serialized PHP, and reading a token unserializes that column. You
-can store them as JSON instead (`{"class": "Acme\\Entity\\Payment", "id": 42}`). The column is then readable
-in any database tool, and no PHP is unserialized when a token is read. It takes one migration, which
-converts the rows already stored. Tokens issued before the migration keep working.
+### Store token details as JSON
 
-1. Install Doctrine Migrations, if your application does not use it already:
+By default a token's details are stored as serialized PHP, and reading a token unserializes that column.
+You can store them as JSON instead (`{"class": "Acme\\Entity\\Payment", "id": 42}`). The column is then
+readable in any database tool, and no PHP is unserialized when a token is read. It takes one migration,
+which converts the tokens already stored.
 
-   ```
-   php composer.phar require "doctrine/migrations"
-   ```
+Install Doctrine Migrations, if your application does not use it already:
 
-2. Add a migration that extends Payum's and lists the table of every entity that extends
-   `Payum\Core\Model\Token`:
-
-   ```php
-   <?php
-   namespace DoctrineMigrations;
-
-   use Payum\Core\Bridge\Doctrine\Migrations\AbstractTokenDetailsToJsonMigration;
-
-   final class Version20261103120000 extends AbstractTokenDetailsToJsonMigration
-   {
-       protected function tokenTables(): array
-       {
-           return ['payment_token'];
-       }
-   }
-   ```
-
-3. Register the `payum_identity` type and the `StoreTokenDetailsAsJson` listener before the entity manager is
-   created. Register the type even though the listener does it too: with a metadata cache, Doctrine skips the
-   listener once the mapping is cached, and reading a token then fails on the unknown type.
-
-   ```php
-   <?php
-   use Doctrine\Common\EventManager;
-   use Doctrine\ORM\EntityManager;
-   use Doctrine\ORM\Events;
-   use Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson;
-   use Payum\Core\Bridge\Doctrine\Types\IdentityType;
-
-   IdentityType::register();
-
-   $eventManager = new EventManager();
-   $eventManager->addEventListener(Events::loadClassMetadata, new StoreTokenDetailsAsJson());
-
-   $entityManager = new EntityManager($connection, $config, $eventManager);
-   ```
-
-4. Deploy both together and run the migration. **Do not run one without the other:** with the listener but not
-   the migration, reading a token fails on the serialized data; with the migration but not the listener, it
-   fails on the JSON.
-
-The migration works on MySQL, MariaDB, PostgreSQL and SQLite, and can be rolled back. A token whose id is an
-object, such as a `Uuid`, stores the id as a string; Doctrine converts it back when the payment is loaded.
-
-#### Doctrine MongoODM.
-
+```bash
+composer require doctrine/migrations
 ```
-php composer.phar require "doctrine/mongodb-odm:^2.1"
+
+Add a migration that extends Payum's and lists the table of every entity that extends
+`Payum\Core\Model\Token`:
+
+```php
+<?php
+namespace DoctrineMigrations;
+
+use Payum\Core\Bridge\Doctrine\Migrations\AbstractTokenDetailsToJsonMigration;
+
+final class Version20261103120000 extends AbstractTokenDetailsToJsonMigration
+{
+    protected function tokenTables(): array
+    {
+        return ['payment_token'];
+    }
+}
 ```
+
+Register the `payum_identity` type and the `StoreTokenDetailsAsJson` listener before you create the entity
+manager:
+
+```php
+<?php
+use Doctrine\Common\EventManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Events;
+use Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson;
+use Payum\Core\Bridge\Doctrine\Types\IdentityType;
+
+IdentityType::register();
+
+$eventManager = new EventManager();
+$eventManager->addEventListener(Events::loadClassMetadata, new StoreTokenDetailsAsJson());
+
+$entityManager = new EntityManager($connection, $config, $eventManager);
+```
+
+Register the type even though the listener registers it too. With a metadata cache, Doctrine skips the
+listener once the mapping is cached, and reading a token then fails on the unknown type.
+
+Then deploy the listener and the migration together, and run the migration.
+
+{% hint style="warning" %}
+Do not deploy one without the other. With the listener but not the migration, reading a token fails on the
+serialized data. With the migration but not the listener, it fails on the JSON.
+{% endhint %}
+
+The migration works on MySQL, MariaDB, PostgreSQL and SQLite, and you can roll it back. A token whose
+payment has an object ID, such as a `Uuid`, stores the ID as a string. Doctrine converts it back when it
+loads the payment.
+
+## Doctrine MongoDB ODM
+
+Install the ODM:
+
+```bash
+composer require doctrine/mongodb-odm symfony/cache
+```
+
+Extend Payum's models as documents:
 
 ```php
 <?php
 namespace Acme\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Payum\Core\Model\Token;
 
-/**
- * @Mongo\Document
- */
+#[ODM\Document]
 class PaymentToken extends Token
 {
 }
@@ -229,112 +242,230 @@ class PaymentToken extends Token
 <?php
 namespace Acme\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as Mongo;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Payum\Core\Model\Payment as BasePayment;
 
-/**
- * @Mongo\Document
- */
+#[ODM\Document]
 class Payment extends BasePayment
 {
-    /**
-     * @Mongo\Id
-     *
-     * @var integer $id
-     */
+    #[ODM\Id]
     protected $id;
 }
 ```
 
-next, you have to create an entity manager and Payum's storage:
+Then register Payum's `object` type and mappings, and create the document manager and the storages:
 
 ```php
 <?php
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\ODM\MongoDB\Configuration;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver;
+use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
+use Doctrine\ODM\MongoDB\Types\Type;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
-use Doctrine\ODM\MongoDB\Types\Type;
-use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
-use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\Configuration;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Bridge\Doctrine\Types\ObjectType;
+use Payum\Core\Payum;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-Type::addType('object', 'Payum\Core\Bridge\Doctrine\Types\ObjectType');
+Type::addType('object', ObjectType::class);
 
-$driver = new MappingDriverChain;
+$payumMapping = dirname((new ReflectionClass(Payum::class))->getFileName()) . '/Bridge/Doctrine/Resources/mapping';
 
-// payum's basic models
+$driver = new MappingDriverChain();
 $driver->addDriver(
-    new XmlDriver(
-       new SymfonyFileLocator(array(
-            '/path/to/Payum/Core/Bridge/Doctrine/Resources/mapping' => 'Payum\Core\Model'
-        ), '.mongodb.xml'),
-        '.mongodb.xml'
-    ), 
+    new XmlDriver(new SymfonyFileLocator([$payumMapping => 'Payum\Core\Model'], '.mongodb.xml'), '.mongodb.xml'),
     'Payum\Core\Model'
 );
-
-// your models
-$driver->addDriver(
-    new AnnotationDriver(new AnnotationReader(), array(
-        'path/to/Acme/Document',
-    )), 
-    'Acme\Document'
-);
+$driver->addDriver(new AttributeDriver([__DIR__ . '/src/Document']), 'Acme\Document');
 
 $config = new Configuration();
-$config->setProxyDir(\sys_get_temp_dir());
+$config->setProxyDir(sys_get_temp_dir());
 $config->setProxyNamespace('Proxies');
-$config->setHydratorDir(\sys_get_temp_dir());
+$config->setHydratorDir(sys_get_temp_dir());
 $config->setHydratorNamespace('Hydrators');
 $config->setMetadataDriverImpl($driver);
-$config->setMetadataCacheImpl(new ArrayCache());
-$config->setDefaultDB('payum_tests');
+$config->setMetadataCache(new ArrayAdapter());
+$config->setDefaultDB('payum');
 
 $documentManager = DocumentManager::create(null, $config);
 
-$orderStorage = new DoctrineStorage($documentManager, 'Acme\Document\Payment');
-$tokenStorage = new DoctrineStorage($documentManager, 'Acme\Document\SecurityToken');
+$paymentStorage = new DoctrineStorage($documentManager, Acme\Document\Payment::class);
+$tokenStorage = new DoctrineStorage($documentManager, Acme\Document\PaymentToken::class);
 ```
 
-### Filesystem.
+`DocumentManager::create(null, $config)` connects to MongoDB on `localhost`. Pass a `MongoDB\Client` as the
+first argument to connect elsewhere.
+
+## Laminas DB
+
+`TableGatewayStorage` saves models through a Laminas `TableGateway` whose result set prototype is a
+`HydratingResultSet`. The hydrator turns a model into a row and back:
 
 ```php
 <?php
+use Acme\Entity\Payment;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\ResultSet\HydratingResultSet;
+use Laminas\Db\TableGateway\TableGateway;
+use Laminas\Hydrator\ReflectionHydrator;
+use Payum\Core\Bridge\Laminas\Storage\TableGatewayStorage;
+
+/** @var Adapter $adapter */
+
+$tableGateway = new TableGateway(
+    'payment',
+    $adapter,
+    null,
+    new HydratingResultSet(new ReflectionHydrator(), new Payment())
+);
+
+$paymentStorage = new TableGatewayStorage($tableGateway, Payment::class, 'id');
+```
+
+The third argument is the name of the ID property and column, `id` by default. `ReflectionHydrator` comes
+from `laminas/laminas-hydrator`.
+
+{% hint style="warning" %}
+`TableGatewayStorage` does not support `findBy()`. Its `find()` returns the Laminas result set instead of the
+model, so Payum cannot load a payment from a token through it. Use Doctrine, or write your own storage,
+until this is fixed.
+{% endhint %}
+
+## Filesystem
+
+`FilesystemStorage` serializes each model into a file in a directory:
+
+```php
+<?php
+use Payum\Core\Model\Payment;
 use Payum\Core\Storage\FilesystemStorage;
 
-$storage = new FilesystemStorage(
-    '/path/to/storage', 
-    'Payum\Core\Model\Payment', 
-    'number'
-);
+$paymentStorage = new FilesystemStorage(__DIR__ . '/var/payum', Payment::class, 'number');
 ```
 
-### Custom.
+The third argument is the property that holds the ID. When it is empty, the storage generates one. This is
+the storage `addDefaultStorages()` registers, in the system temp directory.
 
-You can create your own custom storage. To do so just implement `StorageInterface`.
+{% hint style="warning" %}
+Do not use `FilesystemStorage` in production. It does no locking, so two requests can overwrite each other's
+changes, and it does not support `findBy()`.
+{% endhint %}
+
+## Encrypt what you store
+
+`CryptoStorageDecorator` wraps another storage. It encrypts a model when it saves it and decrypts it when it
+loads it, for models that implement `Payum\Core\Security\CryptedInterface`. Payum uses it for gateway
+credentials. See [Encrypt stored gateway configs](encrypt-gateway-configs-stored-in-database.md).
+
+## Write your own storage
+
+Extend `Payum\Core\Storage\AbstractStorage` and implement five methods. This storage keeps
+`Payum\Core\Model\Payment` in a table through PDO, and uses the payment number as its ID:
 
 ```php
 <?php
-use Payum\Core\Storage\StorageInterface;
 
-class CustomStorage implements StorageInterface
+namespace App\Payment;
+
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Model\Identity;
+use Payum\Core\Model\Payment;
+use Payum\Core\Storage\AbstractStorage;
+use Payum\Core\Storage\IdentityInterface;
+use PDO;
+
+/**
+ * @extends AbstractStorage<Payment>
+ */
+final class PdoPaymentStorage extends AbstractStorage
 {
-    // implement all declared methods
+    public function __construct(private readonly PDO $pdo)
+    {
+        parent::__construct(Payment::class);
+    }
+
+    public function findBy(array $criteria): array
+    {
+        if (array_keys($criteria) !== ['number']) {
+            throw new LogicException('Payments can only be found by number.');
+        }
+
+        $payment = $this->doFind($criteria['number']);
+
+        return null === $payment ? [] : [$payment];
+    }
+
+    protected function doFind(mixed $id): ?object
+    {
+        $statement = $this->pdo->prepare('SELECT * FROM payment WHERE number = ?');
+        $statement->execute([$id]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return false === $row ? null : $this->hydrate($row);
+    }
+
+    protected function doUpdateModel(object $model): object
+    {
+        $this->pdo->prepare('REPLACE INTO payment (number, total_amount, currency_code, details) VALUES (?, ?, ?, ?)')
+            ->execute([
+                $model->getNumber(),
+                $model->getTotalAmount(),
+                $model->getCurrencyCode(),
+                json_encode($model->getDetails(), JSON_THROW_ON_ERROR),
+            ]);
+
+        return $model;
+    }
+
+    protected function doDeleteModel(object $model): void
+    {
+        $this->pdo->prepare('DELETE FROM payment WHERE number = ?')->execute([$model->getNumber()]);
+    }
+
+    protected function doGetIdentity(object $model): IdentityInterface
+    {
+        return new Identity($model->getNumber(), $model);
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     */
+    private function hydrate(array $row): Payment
+    {
+        $payment = new Payment();
+        $payment->setNumber($row['number']);
+        $payment->setTotalAmount((int) $row['total_amount']);
+        $payment->setCurrencyCode($row['currency_code']);
+        $payment->setDetails(json_decode($row['details'], true, 512, JSON_THROW_ON_ERROR));
+
+        return $payment;
+    }
 }
 ```
 
-### TODO
+What each method must do:
 
-* [Pdo](http://php.net/manual/en/book.pdo.php) Storage - https://github.com/Payum/Payum/issues/205
-* [Yii ActiveRecord](http://www.yiiframework.com/doc/guide/1.1/en/database.ar) Storage - https://github.com/Payum/PayumYiiExtension/pull/4
+| Method | Must |
+| --- | --- |
+| `doUpdateModel()` | Save the model, giving it an ID if it has none, and return it. |
+| `doFind()` | Return the model with that ID, or `null`. |
+| `doGetIdentity()` | Return a `Payum\Core\Model\Identity` with the model's ID. Payum stores it in the token and passes the ID back to `doFind()`. |
+| `doDeleteModel()` | Delete the model. |
+| `findBy()` | Return the models that match the criteria, as an array. Throw a `Payum\Core\Exception\LogicException` for criteria you do not support. |
 
-***
+`AbstractStorage` checks that each model is an instance of the class you pass to its constructor, and
+handles `create()`, `support()` and `find()` for you. The `REPLACE INTO` statement works on SQLite and
+MySQL. Use your database's upsert syntax on another one.
 
-### Supporting Payum
+Register it like any other storage:
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+```php
+<?php
 
-* [Become a sponsor](https://github.com/sponsors/payum)
+use App\Payment\PdoPaymentStorage;
+use Payum\Core\Model\Payment;
+
+$builder->addStorage(Payment::class, new PdoPaymentStorage($pdo));
+```

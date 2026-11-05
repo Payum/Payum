@@ -1,15 +1,20 @@
 # Events
 
 Payum announces what happens to a payment as [PSR-14](https://www.php-fig.org/psr/psr-14/) events. Listen
-to them to send a receipt, write an audit trail, fan out your own webhooks, or update a dashboard —
-without touching a gateway.
+to them to send a receipt when a payment is captured, keep an audit trail, alert someone when a payment
+provider is down, or send webhooks of your own. You do not have to change a gateway to do any of this.
 
-By default the events go nowhere: the container holds a `Payum\Core\Event\NullEventDispatcher` until you
-register a real one.
+## Register a dispatcher
+
+Payum sends its events to the `Psr\EventDispatcher\EventDispatcherInterface` service. Until you register
+one, it uses `Payum\Core\Event\NullEventDispatcher`, which drops every event. Register your dispatcher as
+a global service:
 
 ```php
 <?php
 
+use Acme\Payum\AcmeConfig;
+use Payum\Core\PayumBuilder;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -18,16 +23,16 @@ $dispatcher = new EventDispatcher();
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addGlobalService(EventDispatcherInterface::class, $dispatcher)
-    ->registerGateway('acme', new AcmeConfig('sk_…'))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 ```
 
-Any PSR-14 implementation will do. `symfony/event-dispatcher` and `league/event` both are one already;
-for a framework whose dispatcher is not, there is a small adapter under [Frameworks](#frameworks).
+Any PSR-14 dispatcher works. `symfony/event-dispatcher` is one, as the sample shows. You register it
+once and it receives the events of every gateway.
 
-One dispatcher is registered once and hears about every gateway.
+## Listen to an event
 
-## Listening
+Add a listener for the event class you care about. This one sends a receipt when a payment is captured:
 
 ```php
 <?php
@@ -35,69 +40,76 @@ One dispatcher is registered once and hears about every gateway.
 use Payum\Core\Event\StatusChanged;
 use Payum\Core\Result\PaymentStatus;
 
-$dispatcher->addListener(StatusChanged::class, function (StatusChanged $event) use ($mailer) {
+$dispatcher->addListener(StatusChanged::class, function (StatusChanged $event) use ($mailer): void {
     if (PaymentStatus::Captured === $event->to) {
         $mailer->sendReceipt($event->subject);
     }
 });
 ```
 
-Every event carries the command that caused it and the [`Context`](gateways/handlers.md) it ran in, so
-`$event->context->subject()`, `$event->context->token()` and `$event->context->gatewayName()` are always
-available.
+Every event has two public properties: `$event->command`, the command that caused it, and
+`$event->context`, the [handler context](gateways/handlers.md) the command ran in. Read the payment,
+token and gateway name from the context with `$event->context->subject()`, `$event->context->token()`
+and `$event->context->gatewayName()`.
 
-A listener is a bystander. Whatever it returns is ignored, and it cannot change the result — that is what
-[middleware](gateways/middleware.md) is for. It *can* stop a command by throwing, but only by taking the
-whole command down with it, so keep the risky part of the work out of the listener: put a job on a queue
-and let it fail there.
+A listener can only watch. Payum ignores what it returns, and it cannot change the result. If you need
+to change what a command does, write a [middleware](gateways/middleware.md) instead. A listener that
+throws an exception stops the command and the exception reaches your code, so keep slow or fragile work
+out of the listener: put a job on a queue and let it fail there.
 
-## What is dispatched
+## The events
 
-| Event | When | Also carries |
+All events are in the `Payum\Core\Event` namespace:
+
+| Event | Dispatched when | Extra properties |
 | :--- | :--- | :--- |
 | `CommandDispatched` | A command is about to run, before any middleware | |
-| `HandlerResolved` | The container produced the handler that will answer it | `$handler` |
-| `WebhookReceived` | A PSP's message passed verification, before it is acted on | `$webhook` |
+| `HandlerResolved` | Payum has the handler that will run the command | `$handler` |
+| `WebhookReceived` | A payment provider's notification passed verification, before the gateway acts on it | `$webhook` |
 | `StatusChanged` | The payment moved from one status to another | `$subject`, `$from`, `$to` |
-| `ResultReturned` | The command finished | `$result` |
-| `FailureRaised` | The PSP said no | `$failure`, `$result` |
-| `CommandFailed` | An exception escaped the command | `$exception` |
+| `ResultReturned` | The command finished and returned a result | `$result` |
+| `FailureRaised` | The result is a failure, such as a declined card | `$failure`, `$result` |
+| `CommandFailed` | The command threw an exception | `$exception` |
 
-All of them live in `Payum\Core\Event` and extend `Payum\Core\Event\Event`, so a listener that handles
-several can type-hint the base. Registering against the base is a different question, and the answer is
-your dispatcher's: Symfony's keys listeners on the concrete class of the event it is given, so there you
-register the same callable once per event class.
+A capture that succeeds dispatches `CommandDispatched`, `HandlerResolved`, `StatusChanged` and
+`ResultReturned`, in that order.
 
-A successful capture dispatches, in order:
+Every event extends `Payum\Core\Event\Event`, so one listener can type-hint the base class to handle
+several events. You still register it once for each event class. The Symfony dispatcher, for example,
+looks up listeners by the class of the event, so a listener registered for `Event::class` never runs.
 
-```
-CommandDispatched → HandlerResolved → StatusChanged → ResultReturned
-```
+### `StatusChanged` fires only when the status changes
 
-Three of the entries above are worth a closer look.
+If a captured payment is captured again, because the provider sent the same webhook twice or the customer
+reloaded the return page, `StatusChanged` does not fire. A listener that ships an order on `StatusChanged`
+therefore ships it once.
 
-**`StatusChanged` fires only on an actual move.** A payment already `Captured` that is captured again — a
-redelivered webhook, a customer refreshing the return URL — says nothing, so a listener that fulfils an
-order cannot fulfil it twice. Nor does a payment that tracks no status fire it at all: implement
-`Payum\Core\Model\StatusAwareInterface` on your model to get these. `$from` is null when the payment had
-no status recorded yet.
+Payum only tracks a status for a payment model that implements `Payum\Core\Model\StatusAwareInterface`.
+A model that does not implement it never fires `StatusChanged`. See [Payment status](payment-status.md).
 
-**`FailureRaised` and `CommandFailed` are not the same thing**, and the split matters:
+### `FailureRaised` and `CommandFailed`
 
-* `FailureRaised` is a *decline* — an insufficient-funds card, an expired card, an authentication the
-  customer abandoned. The command succeeded in the sense that it got an answer; the answer was no. It
-  follows the `ResultReturned` carrying the same result. Show the customer something and let them retry.
-* `CommandFailed` is a *fault* — an unreachable PSP, credentials that stopped working, a webhook whose
-  signature did not check out. There is no result. The exception is rethrown right after, so your listener
-  sees it a moment before the caller does. Page someone.
+The two events cover different problems:
 
-**`WebhookReceived` only fires for a message that verified.** A forged one throws out of `verify()` and
-arrives as `CommandFailed` instead. Even so, check `$event->webhook->isVerified()`: a gateway whose PSP
-signs nothing reports `WebhookEvent::unverified()`, and what such a message *says* is not to be trusted.
+* `FailureRaised` is a decline: insufficient funds, an expired card, or a customer who abandoned 3-D
+  Secure. The provider answered, and the answer was no. It follows the `ResultReturned` for the same
+  result. Show the customer a message and let them try again.
+* `CommandFailed` is a fault: the provider could not be reached, the credentials are wrong, or a webhook
+  signature did not match. There is no result. Payum rethrows the exception right after the event, so
+  your listener sees it before your code does. This is the one to alert on.
+
+### `WebhookReceived` fires only for verified messages
+
+A notification that fails the gateway's check never reaches `WebhookReceived`. The gateway throws
+`Payum\Core\Exception\WebhookNotVerifiedException` and you get `CommandFailed` instead.
+
+Check `$event->webhook->isVerified()` all the same. Some providers do not sign their notifications, and
+the gateway then marks them as unverified. Do not trust what an unverified message says about a payment.
+See [Payment notifications](instant-payment-notification.md).
 
 ## Examples
 
-Audit every command, whatever it is:
+Write one audit line for every command, whatever the gateway:
 
 ```php
 <?php
@@ -107,8 +119,12 @@ use Payum\Core\Event\CommandFailed;
 use Payum\Core\Event\Event;
 use Payum\Core\Event\ResultReturned;
 
-$audit = function (Event $event) use ($log) {
-    $log->write($event::class, $event->context->gatewayName(), $event->command::class);
+$audit = function (Event $event) use ($logger): void {
+    $logger->info('{event} {gateway} {command}', [
+        'event' => $event::class,
+        'gateway' => $event->context->gatewayName(),
+        'command' => $event->command::class,
+    ]);
 };
 
 foreach ([CommandDispatched::class, ResultReturned::class, CommandFailed::class] as $eventClass) {
@@ -116,49 +132,53 @@ foreach ([CommandDispatched::class, ResultReturned::class, CommandFailed::class]
 }
 ```
 
-Notice a webhook you have already handled, before the handler runs again:
+Spot a webhook the provider sent twice:
 
 ```php
 <?php
 
 use Payum\Core\Event\WebhookReceived;
 
-$dispatcher->addListener(WebhookReceived::class, function (WebhookReceived $event) use ($seen, $log) {
+$dispatcher->addListener(WebhookReceived::class, function (WebhookReceived $event) use ($seen, $logger): void {
     if (null !== $event->webhook->id && $seen->has($event->webhook->id)) {
-        $log->info('Redelivery of {id}', ['id' => $event->webhook->id]);
+        $logger->info('Webhook {id} delivered again', ['id' => $event->webhook->id]);
     }
 });
 ```
 
-Alert on a fault, and only a fault:
+`$seen` stands for your own record of webhook ids you have already handled.
+
+Report faults to your error tracker, and nothing else:
 
 ```php
 <?php
 
 use Payum\Core\Event\CommandFailed;
 
-$dispatcher->addListener(CommandFailed::class, function (CommandFailed $event) use ($sentry) {
-    $sentry->captureException($event->exception, [
+$dispatcher->addListener(CommandFailed::class, function (CommandFailed $event) use ($errorTracker): void {
+    $errorTracker->captureException($event->exception, [
         'gateway' => $event->context->gatewayName(),
         'command' => $event->command::class,
     ]);
 });
 ```
 
-## Frameworks
+## Use your framework's dispatcher
 
-Register the application's own dispatcher, so that Payum's events reach the listeners you already have.
+Register the dispatcher your application already uses, so Payum's events reach your existing listeners.
 
-Symfony — its `event_dispatcher` is PSR-14 as it stands, so inject it and register it:
+In Symfony, the `event_dispatcher` service implements PSR-14. Inject it and register it as it is:
 
 ```php
 ->addGlobalService(EventDispatcherInterface::class, $eventDispatcher)
 ```
 
-Laravel — `Illuminate\Events\Dispatcher` is not, so wrap it:
+Laravel's `Illuminate\Events\Dispatcher` does not implement PSR-14, so wrap it in a small adapter:
 
 ```php
 <?php
+
+namespace App\Payments;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -178,22 +198,10 @@ final class LaravelEventDispatcher implements EventDispatcherInterface
 }
 ```
 
+Then register the adapter:
+
 ```php
 ->addGlobalService(EventDispatcherInterface::class, new LaravelEventDispatcher($app['events']))
 ```
 
-## A caveat about older gateways
-
-Events are dispatched for commands. A gateway that still ships 1.x actions rather than handlers — see
-[Migrating a gateway from 1.x](gateways/migrating-from-v1.md) — announces nothing, because there is no
-command to announce. `Payum\Core\Bridge\Symfony\Extension\EventDispatcherExtension` is what covers that
-case, and it is deprecated along with the rest of the actions.
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the
-support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+See [Integrate with a framework](di/framework-integration.md) for the rest of the framework wiring.

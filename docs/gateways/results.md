@@ -1,17 +1,21 @@
 # Results
 
-Every result carries the same core, and each command adds what only it has.
+A handler answers with a result: the payment's status after the operation, what the customer must do
+next, the PSP's transaction id, and why it failed if it did. Each command has its own result class,
+which adds what only that operation has.
+
+## What every result carries
 
 ```php
-$result->status;         // PaymentStatus
-$result->next;           // ?NextAction — what the customer must do, null when finished
-$result->transactionId;  // ?string
-$result->failure;        // ?Failure — set on a decline
-$result->raw;            // array, the PSP's own payload
+$result->status;         // ?PaymentStatus, null when the operation concluded nothing
+$result->next;           // ?NextAction, what the customer must do, null when finished
+$result->transactionId;  // ?string, the PSP's id for the operation
+$result->failure;        // ?Failure, set when the PSP declined
+$result->raw;            // array, the PSP's own response
 
-$result->isSuccessful();
-$result->isFailed();
-$result->requiresInteraction();  // $next !== null
+$result->isSuccessful();        // finished and did not fail
+$result->isFailed();            // has a failure, or the status is Failed
+$result->requiresInteraction(); // $result->next is set
 ```
 
 | Result | Adds |
@@ -19,187 +23,178 @@ $result->requiresInteraction();  // $next !== null
 | `CaptureResult` | `capturedAmount`, `capturedMoney` |
 | `AuthorizeResult` | `authorizedAmount`, `authorizedMoney`, `expiresAt` |
 | `RefundResult` | `refundedAmount`, `refundedMoney` |
-| `CancelResult` | — |
+| `CancelResult` | |
 | `PayoutResult` | `paidOutAmount`, `paidOutMoney` |
-| `SyncResult` | — |
+| `SyncResult` | |
 | `NotifyResult` | `acknowledgement` |
 
-### Building one
+All of them are in `Payum\Core\Result`.
 
-Use the named constructors; they set a coherent status for you.
+## Build a result
+
+Use the named constructors. Each one sets the status that goes with it:
 
 ```php
-CaptureResult::captured($transactionId, Money::USD(500));   // or minor units, as an int
-CaptureResult::pending(new Redirect($url));
-CaptureResult::pending();                       // waiting on the PSP, nothing for the customer to do
+use Money\Money;
+use Payum\Core\Result\AuthorizeResult;
+use Payum\Core\Result\CancelResult;
+use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\Failure;
+use Payum\Core\Result\FailureReason;
+use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Result\PayoutResult;
+use Payum\Core\Result\RefundResult;
+use Payum\Core\Result\SyncResult;
+use Payum\Core\Result\PaymentStatus;
+
+CaptureResult::captured('ch_1');                              // the full amount was taken
+CaptureResult::captured('ch_1', Money::EUR(1000));            // the same, saying how much
+CaptureResult::partiallyCaptured('ch_1', Money::EUR(600));    // only part of it was taken
+CaptureResult::pending(new Redirect('https://pay.acme.test/chk_1')); // the customer must act
+CaptureResult::pending();                                     // waiting on the PSP, nothing to show
 CaptureResult::canceled();
 CaptureResult::failed(new Failure(FailureReason::Declined, 'card_declined'));
 
-AuthorizeResult::authorized($transactionId, $amount, $expiresAt);
-CaptureResult::partiallyCaptured($transactionId, Money::USD(300));
+AuthorizeResult::authorized('auth_1', Money::EUR(1000), new DateTimeImmutable('+7 days'));
 
-RefundResult::refunded($transactionId, $amount);
-RefundResult::partiallyRefunded($transactionId, $amount);
+RefundResult::refunded('re_1', Money::EUR(1000));
+RefundResult::partiallyRefunded('re_1', Money::EUR(300));
+
+CancelResult::canceled('chk_1');
+PayoutResult::paidOut('po_1', Money::EUR(5000));
+SyncResult::synced(PaymentStatus::Captured, 'ch_1');
 ```
 
-Report a `Money` and both views are filled in, so an application reading integers is unaffected:
+Every constructor also takes the PSP's response as `raw`, for an application that needs a field your
+result does not expose.
+
+An amount can be a `Money` or an int in minor units of the payment's currency. Pass a `Money` and both
+properties are filled in, so an application that reads integers keeps working:
 
 ```php
-$result->capturedMoney;    // ?Money, set when the handler reported one
+$result->capturedMoney;    // ?Money, set when the handler passed one
 $result->capturedAmount;   // ?int, minor units
 ```
 
-See [Money](../money.md).
+`partiallyCaptured()` requires the amount, because a partial capture is meaningless without it. See
+[Money and currencies](../money.md).
 
-### `NotifyResult`
+## Next actions
 
-What a PSP's message amounted to.
+`$result->next` says what the customer must do before the operation can finish. It describes what to
+do, not an HTTP response, so the application decides how to carry it out, and a JSON API can send it
+to a mobile app as data.
 
-```php
-NotifyResult::handled(PaymentStatus::Captured, transactionId: 'txn_1');
-NotifyResult::ignored();                                          // an event type you do not care about
-NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('[accepted]'));
-```
-
-`ignored()` leaves the payment alone and still answers the PSP successfully. A null status means the
-event concluded nothing about the payment.
-
-It carries one thing no other result does: an `Acknowledgement`, which is the HTTP answer the PSP gets.
-Leave it null and the answer is 204, which nearly every PSP accepts.
-
-### Next actions
-
-`next` says what the customer must do before the operation can finish. It describes intent, never an HTTP response, so a bridge turns it into one — and a JSON API can serialise it straight to a mobile client.
-
-| Action | Carries | Means |
+| Next action | Carries | Means |
 | :--- | :--- | :--- |
 | `Redirect` | `url`, `statusCode`, `headers` | Send the customer to another URL |
-| `PostRedirect` | `url`, `fields` | Same, by POST — normally a self-submitting form |
-| `RenderTemplate` | `template` (Twig template name), `context` | Show a page the gateway owns: a card form, a wallet button |
-| `Challenge` | `url`, `parameters`, `version` | A step-up, 3-D Secure being the usual one |
-| `Poll` | `retryAfterSeconds` | Nothing to show; the PSP has not settled. Ask again later |
-| `null` | | Finished, one way or another |
+| `PostRedirect` | `url`, `fields` | Send the customer to another URL by POST, usually as a form that submits itself |
+| `RenderTemplate` | `template`, `context` | Show a page the gateway ships, such as a card form. See [Templates](templates.md) |
+| `Challenge` | `url`, `parameters`, `version` | An extra authentication step, usually 3-D Secure |
+| `Poll` | `retryAfterSeconds` | Nothing to show. The PSP has not finished, ask again later |
+| `null` | | The operation is finished, whether it succeeded or not |
 
-```php
-<?php
-use Payum\Core\Result\NextAction\PostRedirect;
-use Payum\Core\Result\NextAction\Redirect;
-use Payum\Core\Result\NextAction\RenderTemplate;
+All of them are in `Payum\Core\Result\NextAction`.
 
-$result = $gateway->execute(CaptureCommand::forToken($token));
+`Payum::capture()`, which most applications use for their capture script, turns `Redirect`,
+`PostRedirect` and `RenderTemplate` into a response, and sends the customer to the token's after URL
+when `next` is null. It throws a `LogicException` for `Challenge` and `Poll`, because neither has one
+obvious HTTP shape. If your gateway returns either, say so in its documentation: the application has
+to dispatch the command itself and act on the result. See [Payment operations](../payment-operations.md).
 
-match (true) {
-    $result->next instanceof Redirect       => header('Location: ' . $result->next->url),
-    $result->next instanceof PostRedirect   => print $twig->render('post.html.twig', [
-        'url' => $result->next->url,
-        'fields' => $result->next->fields,
-    ]),
-    $result->next instanceof RenderTemplate => print $payum->renderer()->render(
-        $result->next->template,
-        $result->next->context,
-    ),
-    default                                 => header('Location: ' . $token->getAfterUrl()),
-};
-```
+## Status
 
-`Payum::capture()` already does this for `Redirect`, `PostRedirect` and `RenderTemplate` and returns a Symfony response, so most applications never write the `match` themselves. It redirects to the token's after URL when `next` is null, and throws for `Challenge` and `Poll` rather than reporting a payment as finished when it is not — dispatch the command yourself when you need to act on those. See [Templates](templates.md) for what a gateway has to declare before `RenderTemplate` will resolve.
+`$result->status` is the payment's state after this operation. `Payum\Core\Result\PaymentStatus` has
+these cases:
 
-### Status
+`New`, `Pending`, `Authorized`, `Captured`, `PartiallyCaptured`, `Refunded`, `PartiallyRefunded`,
+`Disputed`, `ChargedBack`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
 
-`$result->status` is the payment's state after this operation:
-
-`New`, `Pending`, `Authorized`, `Captured`, `PartiallyCaptured`, `Refunded`, `PartiallyRefunded`, `Disputed`, `ChargedBack`, `Canceled`, `Failed`, `Expired`, `Suspended`, `PaidOut`, `Unknown`.
-
-It is string-backed, so it can be persisted or sent as JSON. One backing value does not match its case name — `PaidOut` is backed by `'payedout'` — so compare the case rather than the spelling.
-
-Three of them usually arrive after the fact, through a webhook or a `SyncCommand`:
+Three of them usually arrive after the customer has left, through a webhook or a sync:
 
 | Status | Means |
 | :--- | :--- |
-| `PartiallyCaptured` | Part of the authorized amount was taken. `capturedAmount` says how much |
-| `Disputed` | The cardholder opened a dispute. The money is still yours, but at risk |
-| `ChargedBack` | The dispute was lost and the money is gone. Not the same as `Refunded`, which you chose |
+| `PartiallyCaptured` | Only part of the authorized amount was taken. `capturedAmount` says how much |
+| `Disputed` | The cardholder opened a dispute. The merchant still has the money, but may lose it |
+| `ChargedBack` | The dispute was lost and the money is gone. Not the same as `Refunded`, which the merchant chose |
 
-`isSuccessful()` is true for `PartiallyCaptured`, and false for `Disputed` and `ChargedBack`. Handle those two explicitly — hold the order, notify someone — rather than treating them as a failed payment: the customer did pay.
+`isSuccessful()` is true for `Authorized`, `Captured`, `PartiallyCaptured`, `Refunded`,
+`PartiallyRefunded` and `PaidOut` when there is no failure. `Disputed` and `ChargedBack` are neither
+successful nor failed, because the customer did pay.
 
-A 1.x application asking `GetHumanStatus` sees `PartiallyCaptured` as captured and `PartiallyRefunded` as refunded. It sees `Disputed` and `ChargedBack` as unknown, because 1.x has no word for either.
+The enum is string-backed. One value does not match its case name: `PaidOut` is stored as `'payedout'`,
+so compare cases, not strings.
 
-#### The list is closed
+### Null means nothing changed
 
-A gateway maps what its PSP reports onto these cases. It never invents its own, and it never puts a PSP's status string in `$result->status`: an application has to be able to reason about a payment without knowing which gateway took it.
-
-When a PSP reports something none of the cases describes, put the PSP's own value in `$result->raw` and report the nearest case — or `Unknown` when there is none. If the gap is real, [open an issue](https://github.com/Payum/Payum/issues) proposing the case. Say:
-
-* what the payment's money is doing in that state, and why no existing case describes it,
-* which PSPs report it, with a link to their documentation,
-* what a 1.x `GetHumanStatus` should say about it.
-
-The list can grow, so write any `match` over `PaymentStatus` with a `default` arm.
-
-**It is null when the operation concluded nothing about the payment.** A refund that was declined leaves a captured payment captured; a capture that was declined leaves the payment where it was, so the customer can try another card. Say otherwise only when the failure really is terminal:
+Leave the status null when the operation concluded nothing about the payment. That is what `failed()`
+does by default: a declined refund leaves a captured payment captured, and a declined capture leaves the
+payment where it was, so the customer can try another card. Pass a status only when the failure is
+final:
 
 ```php
 RefundResult::failed($failure);                          // the payment is unchanged
 CaptureResult::failed($failure, PaymentStatus::Failed);  // this payment is finished
 ```
 
-A handler never writes to the payment. It declares the payment's new state as part of its answer, the same way it declares what the customer must do next, and Payum commits it.
+### Payum records the status
 
-### Keeping the status on the payment
+A handler never writes the status onto the payment. Payum does it after the handler returns, when the
+payment implements `Payum\Core\Model\StatusAwareInterface`, and dispatches a `StatusChanged` event when
+the status really moved. A webhook delivered twice therefore announces the change once. See
+[Payment status](../payment-status.md) for the application side and [Events](../events.md) for the
+events.
 
-Implement `Payum\Core\Model\StatusAwareInterface` on your payment — or your payout — and Payum keeps it current after every command:
+### The list is closed
 
-```php
-use Payum\Core\Model\StatusAwareInterface;
-use Payum\Core\Model\PaymentInterface;
-use Payum\Core\Result\PaymentStatus;
+Map what your PSP reports onto these cases. Never put a PSP's own status string in `$result->status`:
+an application has to be able to act on a payment without knowing which gateway took it.
 
-class Payment implements PaymentInterface, StatusAwareInterface
-{
-    #[ORM\Column(enumType: PaymentStatus::class)]
-    private PaymentStatus $status = PaymentStatus::New;
+When the PSP reports something none of the cases describes, report the nearest case, or `Unknown` when
+there is none, and keep the PSP's value in `raw`. If the gap is real,
+[open an issue](https://github.com/Payum/Payum/issues) proposing a new case. Say what the payment's
+money is doing in that state and why no existing case covers it, and link the documentation of the PSPs
+that report it.
 
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
+## Failures and exceptions
 
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
-}
-```
+Payum separates the two kinds of things that go wrong:
 
-The status is then readable without going near a gateway, and queryable in whatever the payment is stored in — "every pending payment older than an hour" becomes an ordinary query.
+* **A decline is a result.** A refused card or a customer who abandoned 3-D Secure is a normal business
+  outcome. Return it with `failed()` and a `Failure`.
+* **A fault is an exception.** An unreachable host, a rejected API key or a malformed response is not
+  something the customer can fix. Let it throw.
 
-Read it through `PaymentStatuses`, which returns null for a payment that does not track one — meaning nobody knows, which is not the same as `New`:
+A `Failure` says why, in terms every gateway shares, and keeps the PSP's own details:
 
 ```php
-use Payum\Core\Model\PaymentStatuses;
+new Failure(FailureReason::InsufficientFunds, code: '51', message: 'Insufficient funds');
 
-PaymentStatuses::of($payment);        // ?PaymentStatus
-PaymentStatuses::isTracked($payment); // bool
-```
-
-A payment that does not implement the interface has no status stored, exactly as before.
-
-### Failures and exceptions
-
-The rule:
-
-* **A decline is a result.** A refused card is an ordinary business outcome. It comes back as `$result->failure` with `PaymentStatus::Failed`.
-* **An infrastructure fault is an exception.** An unreachable host, a rejected API key, a malformed config. Let it throw.
-
-```php
-$result->failure->reason;         // FailureReason
-$result->failure->code;           // the PSP's own code, verbatim
-$result->failure->message;        // the PSP's own message — review before showing a customer
+$result->failure->reason;        // FailureReason
+$result->failure->code;          // the PSP's own code, as it sent it
+$result->failure->message;       // the PSP's own message
 $result->failure->isRetriable();
 ```
 
-`FailureReason` is the portable taxonomy every gateway maps its codes onto: `Declined`, `InsufficientFunds`, `ExpiredCard`, `Fraud`, `AuthenticationRequired`, `Configuration`, `Network`, `RateLimited`, `Unknown`.
+Map each of your PSP's decline codes onto a `FailureReason`: `Declined`, `InsufficientFunds`,
+`ExpiredCard`, `Fraud`, `AuthenticationRequired`, `Configuration`, `Network`, `RateLimited` or `Unknown`.
+Only `Network` and `RateLimited` are retriable. Retrying a declined card declines again, and some PSPs
+treat repeated attempts as card testing.
 
-Only `Network` and `RateLimited` are retriable. Retrying a declined card just declines again, and some PSPs read it as card testing.
+The PSP's message is not written for customers, so an application should review it before showing it.
 
-Next: [Templates](templates.md).
+## Notify results
+
+A notify handler returns a `NotifyResult`. It has no next action, because nobody is waiting on a page,
+and it carries the HTTP answer the PSP gets:
+
+```php
+use Payum\Core\Result\Acknowledgement;
+use Payum\Core\Result\NotifyResult;
+
+NotifyResult::handled(PaymentStatus::Captured, transactionId: 'ch_1');
+NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('[accepted]'));
+NotifyResult::ignored();
+```
+
+See [Webhooks](webhooks.md) for what each one answers.
