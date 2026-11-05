@@ -20,6 +20,7 @@
 ## Configuring Payum
 
 * [Configure Payum](di/getting-started.md)
+* [How dependency injection works](di/how-it-works.md)
 * [Replace and add services](di/customization.md)
 * [Integrate with a framework](di/framework-integration.md)
 * [Storages](storages.md)

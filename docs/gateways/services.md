@@ -2,7 +2,8 @@
 
 Payum builds a [PHP-DI](https://php-di.org/) container for each registered gateway and autowires your
 API class and handlers from it. Most gateways declare no services at all: a constructor that asks for
-classes and interfaces Payum already knows is enough.
+classes and interfaces Payum already knows is enough. This page covers the container from the gateway
+author's side; [How dependency injection works](../di/how-it-works.md) covers it for applications.
 
 ## How the containers fit
 

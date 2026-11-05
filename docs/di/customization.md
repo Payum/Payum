@@ -244,22 +244,9 @@ with `addGlobalService()` as well. [Integrate with a framework](framework-integr
 
 ## Advanced: which definition wins
 
-Payum builds a container for each gateway in layers, and a later layer replaces an earlier one:
-
-1. Payum's own defaults.
-2. The shared services, including everything you registered with `addGlobalService()` or provide through
-   `setGlobalContainer()`.
-3. The gateway's handlers.
-4. The services the gateway declares for itself.
-5. The gateway's config object.
-
-So a service you register replaces Payum's default everywhere, but not a service a gateway declares for
-itself. A gateway cannot declare `Payum\Core\Template\RendererInterface`, because one renderer serves every
-gateway: `getPayum()` throws a `LogicException` if one tries.
-
-Between `addGlobalService()` and `setGlobalContainer()`, your container wins. Payum asks it first for every
-id, and uses a service from `addGlobalService()` or its own default only when your container does not have
-that id.
+When the same id is registered in more than one place, your container wins over `addGlobalService()`, and
+both win over Payum's defaults. A service a gateway declares for itself wins over all of them. See
+[How dependency injection works](how-it-works.md#which-definition-wins) for the full order.
 
 ## Supporting Payum
 
