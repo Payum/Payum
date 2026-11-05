@@ -228,3 +228,8 @@ $payum = (new PayumBuilder())
 payment, the after path and the after parameters, and returns a stored token whose target URL leads to
 the script or route for that purpose. [Replace and add services](di/customization.md) covers global
 services in general.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

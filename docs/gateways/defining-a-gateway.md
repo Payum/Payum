@@ -177,3 +177,8 @@ A gateway implements more interfaces only when it needs what they add:
 | `Payum\Core\Gateway\DeclaresTemplates` | The gateway ships Twig templates | [Templates](templates.md) |
 | `Payum\Core\Gateway\DeclaresMiddleware` | The gateway needs middleware that applies to no other gateway | [Middleware](middleware.md) |
 | `Payum\Core\DI\ContainerConfiguration` | A service cannot be autowired, or the gateway replaces one | [Services](services.md) |
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

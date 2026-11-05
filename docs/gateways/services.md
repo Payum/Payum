@@ -175,7 +175,7 @@ The decorator implements the same interface, so Payum calls it in place of the h
 `CaptureHandler::class` and Payum uses your definition.
 
 `LoggerInterface` is not one of Payum's defaults, so this assumes the application registered a logger
-with `addGlobalService()`. To log every command on every gateway, write a [middleware](middleware.md)
+with `addGlobalService()`. To log every command on every gateway, write a [middleware](../middleware.md)
 instead.
 
 ## Two API versions
@@ -209,3 +209,8 @@ See [Replace and add services](../di/customization.md) for the application's sid
 
 Payum dispatches PSR-14 events for every command, such as `StatusChanged` when a result moves a
 payment's status. A gateway does not dispatch them itself. See [Events](../events.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

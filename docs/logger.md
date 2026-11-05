@@ -90,7 +90,7 @@ Register it on the builder by class name:
 Payum creates the middleware from the container and passes it the logger you registered. Always rethrow
 the exception after you log it. A middleware that swallows it hides a failed payment from your code.
 
-See [Middleware](gateways/middleware.md) for ordering and the other things middleware can do.
+See [Middleware](middleware.md) for ordering and the other things middleware can do.
 
 ## Log from an event listener
 
@@ -122,3 +122,8 @@ the command, the payment number and the status, as the samples above do.
 
 See [Sensitive information](working-with-sensitive-information.md) for how Payum keeps card data out of
 storage and debug output.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

@@ -143,7 +143,7 @@ can hand Payum your application's container. See [Configure Payum](di/getting-st
 Every command passes through middleware on its way to the gateway and back. Payum's own middleware
 saves the provider's data, records the status, fills in the variables of gateway templates and stops
 a gateway that executes commands in an endless loop. You can add your own, for logging or locking,
-and it runs for every gateway. See [Middleware](gateways/middleware.md).
+and it runs for every gateway. See [Middleware](middleware.md).
 
 Payum also dispatches PSR-14 events, such as `StatusChanged` when a payment's status moves. Listen
 to them to fulfil an order or send a receipt. See [Events](events.md).
@@ -187,3 +187,8 @@ holds what belongs to this one execution: the payment, the token, the HTTP reque
 The [Gateways](gateways/README.md) chapter covers each part. Start with
 [Build a gateway](develop-gateway-with-payum.md), then read [Handlers](gateways/handlers.md) and
 [Results](gateways/results.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

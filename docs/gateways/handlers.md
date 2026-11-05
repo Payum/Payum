@@ -223,3 +223,8 @@ $authorizeToken->getTargetUrl();
 The purposes are `Authorize`, `Capture`, `Refund`, `Payout` and `Notify`, and each one points at the
 script the application set up for it. `gatewayName()` is null for a gateway built without
 `PayumBuilder::registerGateway()`. See [Tokens and payment URLs](../tokens.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

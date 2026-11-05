@@ -260,3 +260,8 @@ gateway: `getPayum()` throws a `LogicException` if one tries.
 Between `addGlobalService()` and `setGlobalContainer()`, your container wins. Payum asks it first for every
 id, and uses a service from `addGlobalService()` or its own default only when your container does not have
 that id.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

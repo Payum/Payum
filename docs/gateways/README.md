@@ -52,7 +52,7 @@ Where a handler gets something from depends on how long it lives:
 * [Templates](templates.md): showing the customer a page the gateway ships.
 * [Services](services.md): what a handler can take in its constructor, and how to declare or replace
   a service.
-* [Middleware](middleware.md): code that runs around every command, for one gateway or for all.
+* [Gateway middleware](middleware.md): middleware that only runs for your gateway. Application-wide middleware is on [Middleware](../middleware.md).
 * [Webhooks](webhooks.md): receiving the messages a PSP sends when a payment changes.
 
 To port a gateway written for Payum 1.x, see [Migrate a gateway from 1.x](migrating-from-v1.md).

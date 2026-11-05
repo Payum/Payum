@@ -128,3 +128,8 @@ Xdebug has detected a possible infinite loop, and aborted your script with a sta
 
 It is the same loop. Xdebug's own limit is reached before Payum's. Turn off Xdebug, or raise
 `xdebug.max_nesting_level`, to get Payum's message, which names the command.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

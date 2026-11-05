@@ -26,3 +26,8 @@ The [Symfony](symfony/get-it-started.md), [Laravel](laravel/get-it-started.md) a
 
 [Sylius](https://sylius.com/), an e-commerce platform built on Symfony, takes payments through
 Payum.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

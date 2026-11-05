@@ -159,3 +159,8 @@ to the application. A gateway that declares `RendererInterface` in `configureCon
 
 An application that wants your page to look different overrides your template in its own Twig
 environment. See [Customize payment pages](../payment-pages.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

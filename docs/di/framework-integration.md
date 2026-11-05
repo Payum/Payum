@@ -247,3 +247,8 @@ current request in PHP's globals. Two services depend on it:
 
 Payum resolves each service once per container, so a request registered as a fixed instance stays the same
 for the life of the `Payum` object. Build Payum per request in a worker if your gateways read the request.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

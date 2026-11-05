@@ -198,3 +198,8 @@ NotifyResult::ignored();
 ```
 
 See [Webhooks](webhooks.md) for what each one answers.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

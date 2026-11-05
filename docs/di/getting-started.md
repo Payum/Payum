@@ -202,3 +202,8 @@ The gateway container builds the gateway's handlers and API classes by autowirin
 constructor types and passes the matching services. This is how a gateway's handler receives its config,
 the HTTP client, or a service of yours. [Services](../gateways/services.md) covers this from the gateway
 author's side.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

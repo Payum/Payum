@@ -95,3 +95,8 @@ Do not store or serialize a `CreditCard`. The object still holds the raw number,
 in plain properties, so `serialize()` writes them out. Store only what you need for display, such as the
 masked number and the brand.
 {% endhint %}
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

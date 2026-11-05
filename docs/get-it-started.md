@@ -235,3 +235,8 @@ it later, by calling your server. [Payment status](payment-status.md) explains e
 - Before you go live, move payments and tokens to a database with [Storages](storages.md).
 - If you use a framework, [Integrate with a framework](di/framework-integration.md) shows how to share
   your application's services with Payum.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

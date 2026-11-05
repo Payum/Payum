@@ -173,3 +173,8 @@ if ($result->next instanceof RenderTemplate) {
 The renderer is the same one `Payum::capture()` uses, with your layout and your Twig environment. One
 renderer serves every gateway. See [Payment operations](payment-operations.md) for the other next actions
 a command can return.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

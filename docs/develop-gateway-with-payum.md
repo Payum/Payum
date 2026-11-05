@@ -475,3 +475,8 @@ The gateway can take a payment. Most gateways also need these:
   refunds. See [Defining a gateway](gateways/defining-a-gateway.md).
 * **Services.** Build a service that autowiring cannot, or replace one for this gateway only. See
   [Services](gateways/services.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).
