@@ -1,44 +1,102 @@
 # Debugging
 
-I must admit the architecture of payum is hard to debug (Each action decide whether it supports request or not, an action can delegate some job to another action, etc). To solve this problem we implement `LogExecutedActionsExtension`. It logs all executed actions with some details. Just add the extension with PSR-3 logger and check the log file after.
+When a payment does not end the way you expect, you need to know which commands ran, what each one
+returned, and what the payment provider said. This page shows where Payum keeps that information and
+how to get it out.
 
-_**Council**: You can filter log by `[Payum]`. For example using `grep` tool._
+## Read the result
+
+Every command returns a result. Before you look anywhere else, look at it:
 
 ```php
 <?php
-use Payum\Core\Bridge\Psr\Log\LogExecutedActionsExtension;
-use Payum\Core\Tests\Mocks\Action\CaptureAction;
-use Payum\Core\Gateway;
-use Payum\Core\Request\Capture;
 
+use Payum\Core\Command\CaptureCommand;
+
+/** @var \Payum\Core\Payum $payum */
+/** @var \Payum\Core\Model\PaymentInterface $payment */
+
+$result = $payum->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
+
+var_dump(
+    $result->status,          // the payment's status after the command, or null
+    $result->next,            // what the customer has to do next, or null when the command is finished
+    $result->failure?->reason, // why it failed, such as FailureReason::InsufficientFunds
+    $result->failure?->code,   // the provider's own error code
+    $result->failure?->message, // the provider's own message
+    $result->raw,             // the provider's own data, when the gateway passes it on
+);
+```
+
+A declined card is not an exception. It comes back as a result with a `failure`, so a capture that
+"does nothing" has usually failed and told you why. The provider's `message` is for you, not for the
+customer. Review it before you show it to anyone. See [Payment operations](payment-operations.md) for
+what each field means.
+
+## See every command
+
+A capture often runs other commands on its way, and a gateway may call the provider more than once.
+Log each command with a middleware to see the whole sequence:
+
+```php
+->addMiddleware(LogCommandsMiddleware::class)
+```
+
+[Logging](logger.md) has the complete middleware and shows how to register your logger.
+
+## Catch the exceptions Payum does not show you
+
+Some entry points turn an exception into an HTTP response. `Payum::notify()`, for example, answers a
+notification that fails verification with an empty `400` response and does not rethrow the exception.
+Listen to `CommandFailed` to see those exceptions too:
+
+```php
+<?php
+
+use Payum\Core\Event\CommandFailed;
+
+/** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
 /** @var \Psr\Log\LoggerInterface $logger */
 
-$gateway = new Gateway;
-$gateway->addExtension(new LogExecutedActionsExtension($logger));
-$gateway->addAction(new CaptureAction);
-
-$gateway->execute(new Capture($model = new \stdClass));
+$dispatcher->addListener(CommandFailed::class, function (CommandFailed $event) use ($logger): void {
+    $logger->error('{gateway}: {command} failed: {message}', [
+        'gateway' => $event->context->gatewayName(),
+        'command' => $event->command::class,
+        'message' => $event->exception->getMessage(),
+        'exception' => $event->exception,
+    ]);
+});
 ```
 
-Here's an example of what the log may contain:
+`CommandFailed` fires for every exception that leaves a command, before Payum rethrows it or turns it
+into a response. See [Events](events.md) to register the dispatcher and for the other events.
 
+## Look at what the gateway stored
+
+A gateway keeps what it learns from the provider, such as the provider's own payment id, in the
+payment's details. Payum writes them onto the payment after every command, even one that throws, and
+saves the payment when the command ran from a token. Read them to see how far a payment got:
+
+```php
+var_dump($payment->getDetails());
 ```
-DEBUG - [Payum] 1# Payum\Core\Action\StatusDetailsAggregatedModelAction::execute(GetHumanStatus{model: Token})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsStatusAction::execute(GetHumanStatus{model: PaymentDetails})
-DEBUG - [Payum] 1# Payum\Core\Action\CaptureDetailsAggregatedModelAction::execute(Capture{model: Token})
-DEBUG - [Payum] 2# Payum\Payex\Action\PaymentDetailsCaptureAction::execute(Capture{model: PaymentDetails})
-DEBUG - [Payum] 3# Payum\Payex\Action\Api\InitializeOrderAction::execute(InitializeOrder{model: ArrayObject})
-DEBUG - [Payum] 3# InitializeOrderAction::execute(InitializeOrder{model: ArrayObject}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 2# PaymentDetailsCaptureAction::execute(Capture{model: PaymentDetails}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
-DEBUG - [Payum] 1# CaptureDetailsAggregatedModelAction::execute(Capture{model: PaymentDetails}) throws reply HttpRedirect{url: https://test-confined.payex.com/PxOrderCC.aspx?orderRef=7cbefc70ff294fd194d2411f457423d6}
+
+The details are the gateway's own, so their keys differ between gateways. The gateway's documentation
+lists them.
+
+## Advanced: see how deep a command runs
+
+A handler can run another command, and that command's handler can run a third. Inside a middleware,
+`$context->previous()` returns the contexts of the commands the current one runs inside, outermost
+first. It is empty for the command your code executed:
+
+```php
+$this->logger->debug('{command} at depth {depth}', [
+    'command' => $command::class,
+    'depth' => count($context->previous()),
+]);
 ```
 
-As you see it shows stack of executed actions. Also it shows some details about the request. For example it could show a model class related with request.
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+Payum stops a chain of commands that reaches 100 levels with a `Possible endless cycle detected`
+exception. If you see that message, a handler keeps executing a command that leads back to itself. See
+[Troubleshooting](troubleshooting.md) for this and other errors.

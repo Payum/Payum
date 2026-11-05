@@ -1,6 +1,7 @@
 # Handlers
 
-A handler answers exactly one command. There is one interface per command, so both sides of `handle()` are typed.
+A handler answers one kind of command. Each command has its own handler interface, so `handle()` is
+typed on both sides: it takes that command and returns that command's result.
 
 | Command | Handler interface |
 | :--- | :--- |
@@ -12,11 +13,19 @@ A handler answers exactly one command. There is one interface per command, so bo
 | `SyncCommand` | `Payum\Core\Handler\SyncHandlerInterface` |
 | `NotifyCommand` | `Payum\Core\Handler\NotifyHandlerInterface` |
 
+## Write a handler
+
+This refund handler asks Acme to refund the checkout the capture handler stored, and reports whether
+the refund covered the whole payment:
+
 ```php
 <?php
+
+declare(strict_types=1);
+
 namespace Acme\Payum\Handler;
 
-use Acme\Payum\Api\AcmeApi;
+use Acme\Payum\AcmeApi;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\RefundHandlerInterface;
@@ -25,15 +34,16 @@ use Payum\Core\Result\RefundResult;
 
 final class RefundHandler implements RefundHandlerInterface
 {
-    public function __construct(private readonly AcmeApi $api)
-    {
+    public function __construct(
+        private readonly AcmeApi $api,
+    ) {
     }
 
     public function handle(RefundCommand $command, Context $context): RefundResult
     {
         $amount = $context->amount();
 
-        $refund = $this->api->refund($context->state()['charge_id'], $amount->getAmount());
+        $refund = $this->api->refund($context->state()['checkout_id'], $amount);
 
         return $amount->equals(Amount::of($context->payment()))
             ? RefundResult::refunded($refund['id'], $amount)
@@ -42,151 +52,174 @@ final class RefundHandler implements RefundHandlerInterface
 }
 ```
 
-### Mapping a handler to its command
+It needs one more method on the API class:
 
-You do not. Listing the class in `handlers()` is the whole mapping:
+```php
+public function refund(string $checkoutId, Money $amount): array
+{
+    return $this->send('POST', '/checkouts/' . rawurlencode($checkoutId) . '/refunds', [
+        'amount' => (int) $amount->getAmount(),
+        'currency' => $amount->getCurrency()->getCode(),
+    ]);
+}
+```
+
+Then list the handler in the gateway's `handlers()`:
 
 ```php
 public function handlers(): array
 {
-    return [CaptureHandler::class, RefundHandler::class];
+    return [
+        CaptureHandler::class,
+        RefundHandler::class,
+    ];
 }
 ```
 
-Payum reads the handler interface you implemented, and takes the command from its `handle()` signature. A handler cannot claim a command it does not implement, and there is no attribute or array to keep in sync.
+That is the whole mapping. Payum reads which handler interface the class implements and takes the
+command from that interface's `handle()` signature. The gateway now has `Capability::Refund` too.
 
-PHP will not let one class declare `handle()` twice, so **a handler serves exactly one command**. Two handlers claiming the same command is an error at boot.
+PHP does not let one class declare `handle()` twice, so a handler serves exactly one command. Listing two
+handlers for the same command, or a class that implements no handler interface, throws a
+`Payum\Core\Exception\LogicException` when the application calls `getPayum()`.
 
-### The constructor
+## The constructor
 
-Take the api. Take anything else with the lifetime of the gateway — a storage, a renderer, a logger, a PSR-18 client. It is plain dependency injection, so the signature is yours.
+Take what lives as long as the gateway: the API class, a logger, the clock, a storage. Payum autowires
+the handler, so any class or service the gateway's container can resolve works here. See
+[Services](services.md) for the list and for declaring the ones autowiring cannot build.
 
-Do not take the config. The api already holds it, and a handler reaching for a credential usually means the api is missing a method.
+Do not take the payment, the token or the HTTP request. They belong to one execution and come on the
+context.
 
-Do not take the payment, the token or the HTTP request. Those belong to a single execution and arrive on the context.
+## The context
 
-### The context
+`Payum\Core\Handler\Context` carries everything about this one execution:
 
-| Method | What it gives you |
+| Method | Returns |
 | :--- | :--- |
-| `state()` | The PSP state carried across requests, as an `ArrayObject` |
 | `amount()` | How much this execution is for, as a `Money` |
-| `subject()` | What the command operates on, resolved from the command or loaded from its token |
-| `payment()` | The subject when it is a payment, else null |
-| `payout()` | The subject when it is a payout, else null |
+| `state()` | The gateway's saved data for this payment, as an `ArrayObject` |
+| `subject()` | What the command acts on: loaded from the token, or the model the command carries |
+| `payment()` | The subject when it is a payment, otherwise null |
+| `payout()` | The subject when it is a payout, otherwise null |
 | `token()` | The token this execution arrived on, if any |
-| `httpRequest()` | The inbound request as PSR-7 |
-| `tokens()` | The token issuer, for minting a notify or second-hop URL: `create(TokenPurpose::Capture, $gatewayName, $subject, $afterPath)` |
-| `gateway()` | The gateway currently executing — its name, logo, config class |
-| `execute()` | Dispatch a sub-command |
-| `previous()` | The enclosing executions, when a handler dispatched into another |
+| `httpRequest()` | The inbound HTTP request, as a PSR-7 `ServerRequestInterface` |
+| `notifyUrl()` | A URL the PSP can send webhooks about this payment to. See [Webhooks](webhooks.md) |
+| `notifyToken()` | The token behind `notifyUrl()` |
+| `tokens()` | The `TokenIssuerInterface`, for creating other tokens |
+| `gatewayName()` | The name the application registered the gateway under |
+| `gateway()` | The gateway class instance, for its name and logo |
 | `command()` | The command being handled |
-| `gatewayName()` | The name this gateway is registered under |
-| `notifyUrl()` | A URL the PSP can post notifications about this payment to |
-| `notifyToken()` | The token behind that URL |
+| `execute()` | Dispatches another command on this gateway. See [Commands](commands.md) |
+| `previous()` | The executions this one is nested in, when a handler dispatched it |
 
-Read `amount()` rather than `$command->amount`. A **full** capture carries no amount on the command at
-all, so a handler reading the command charges nothing; `amount()` falls back to the subject and hands you
-a `Money` either way. See [Money](../money.md).
+Read the amount from `amount()`, never from `$command->amount`. A full capture carries no amount on the
+command, so reading the command charges nothing. `amount()` falls back to the subject's total and returns
+a `Money` either way. See [Money and currencies](../money.md).
 
-`NotifyHandlerInterface` is the one handler whose `handle()` takes three parameters — the verified event
-arrives between the command and the context, and it has a `verify()` alongside. See
-[Webhooks](webhooks.md).
+`NotifyHandlerInterface` is the one interface that differs: it has a `verify()` method, and its
+`handle()` takes the verified event between the command and the context. See [Webhooks](webhooks.md).
 
-### Capture runs more than once
+## Capture runs more than once
 
-This is the part to understand before writing a redirect gateway.
+Read this before writing a gateway that redirects the customer.
 
-The PSP sends the customer back to the capture token's **own URL** — the same URL that started the capture. So Payum verifies the token again and dispatches the *identical* `CaptureCommand` a second time. The handler works out which pass it is on by reading the state it wrote during the first.
+The PSP sends the customer back to the capture token's own URL, the same URL that started the capture.
+Payum verifies the token again and dispatches the same `CaptureCommand` a second time. The handler
+tells the two runs apart by reading the state it wrote during the first:
 
 ```php
-<?php
-final class CaptureHandler implements CaptureHandlerInterface
+public function handle(CaptureCommand $command, Context $context): CaptureResult
 {
-    public function __construct(private readonly AcmeApi $api)
-    {
+    $state = $context->state();
+
+    // Second run: a checkout exists, so the customer has been to Acme and come back.
+    if ($state['checkout_id']) {
+        $checkout = $this->api->retrieveCheckout($state['checkout_id']);
+
+        return 'paid' === $checkout['status']
+            ? CaptureResult::captured($checkout['charge_id'], raw: $checkout)
+            : CaptureResult::pending(raw: $checkout);
     }
 
-    public function handle(CaptureCommand $command, Context $context): CaptureResult
-    {
-        $state = $context->state();
+    // First run: open a checkout and send the customer to it.
+    $amount = $context->amount();
 
-        if (isset($context->httpRequest()->getQueryParams()['cancelled'])) {
-            return CaptureResult::canceled();
-        }
+    $checkout = $this->api->createCheckout([
+        'amount' => (int) $amount->getAmount(),
+        'currency' => $amount->getCurrency()->getCode(),
+        'return_url' => $context->token()->getTargetUrl(),
+    ]);
 
-        // Second pass: a checkout exists, so the customer has been and come back.
-        if ($state['checkout_id']) {
-            $checkout = $this->api->retrieveCheckout($state['checkout_id']);
+    $state['checkout_id'] = $checkout['id'];
 
-            return 'paid' === $checkout['status']
-                ? CaptureResult::captured($checkout['charge_id'], $checkout['amount'])
-                : CaptureResult::pending(raw: $checkout);
-        }
-
-        // First pass: open the checkout and send the customer away.
-        $checkout = $this->api->createCheckout([
-            'return_url' => $context->token()?->getTargetUrl(),
-            'cancel_url' => $context->token()?->getTargetUrl() . '?cancelled=1',
-            'amount' => $context->amount()?->getAmount(),
-            'currency' => $context->amount()?->getCurrency()->getCode(),
-        ]);
-
-        $state['checkout_id'] = $checkout['id'];
-
-        return CaptureResult::pending(new Redirect($checkout['url']));
-    }
+    return CaptureResult::pending(new Redirect($checkout['url']));
 }
 ```
 
-Payum does not track which pass you are on, which is deliberate: some gateways need one pass, some need three, and a 3-D Secure step-up can add one at any point. The handler owns that decision.
+Payum does not track which run it is. Some PSPs need one run, some need three, and a 3-D Secure check
+can add one at any point, so the handler decides from its state. The full handler is in
+[Build a gateway](../develop-gateway-with-payum.md#take-the-payment).
 
-### State
+The same applies to authorize and payout when the PSP needs the customer or an approver to act before
+the operation finishes.
 
-`$context->state()` is the PSP state that has to survive between HTTP requests. It is an `ArrayObject` over the payment's details.
+## State
+
+`$context->state()` is the data your gateway needs to keep between HTTP requests for one payment, such
+as the PSP's checkout id. It is a `Payum\Core\Bridge\Spl\ArrayObject` over the payment's details:
 
 ```php
 $state = $context->state();
 
-$state['checkout_id'];             // null for a missing key, no isset needed
-$state['checkout_id'] = 'chk_1';   // visible to Payum, no write-back call
-$state->defaults(['currency' => 'EUR']);
+$state['checkout_id'];               // null for a missing key, no isset() needed
+$state['checkout_id'] = 'chk_1';     // Payum sees the change, there is nothing to save
+$state->defaults(['locale' => 'en']);
 $state->validateNotEmpty(['checkout_id']);
-$state->toUnsafeArray();           // unwraps SensitiveValue — use when sending to the PSP
+$state->toUnsafeArray();             // a plain array with sensitive values unwrapped
 ```
 
-Payum writes it back onto the payment after the handler returns, and persists it when it was the one that loaded the payment. A payment you handed to the command yourself stays yours to persist.
+Payum writes the state back onto the payment after the handler returns. When the command arrived on a
+token, Payum also saves the payment to its storage. A payment the application passed to the command
+itself is the application's to save.
 
-Writing happens even when the handler throws. A checkout id written just before a failure has to survive, or the retry opens a second checkout and the customer can be charged twice.
+Payum writes the state even when the handler throws. A checkout id stored before a failure has to
+survive, or the retry opens a second checkout and the customer can pay twice.
 
-Keep `SensitiveValue` wrapped in state. Only `toUnsafeArray()` unwraps it, and that is for the moment you send it to the PSP — not for storage or logs.
+`state()` throws a `LogicException` when there is no subject, which happens on a notify command that
+points at nothing.
 
-### Talking to the PSP
+{% hint style="warning" %}
+Keep card data and other secrets wrapped in `Payum\Core\Security\SensitiveValue` in the state. Call
+`toUnsafeArray()` only to build the request you send to the PSP, never to store or log the state.
+{% endhint %}
 
-Everything goes through the api. That is what makes a handler testable without a network, and what keeps retry, logging and redaction in one place instead of scattered across handlers.
+See [Sensitive information](../working-with-sensitive-information.md) for `SensitiveValue`.
+
+## Report, do not write
+
+A handler never sets the payment's status or amount. It returns a result that says what happened, and
+Payum records the status on the payment. See [Results](results.md).
+
+## Create a token
+
+`notifyUrl()` covers the usual case. For anything else, such as a second page the customer must visit,
+create a token with `tokens()`:
 
 ```php
-<?php
-namespace Acme\Payum\Api;
+use Payum\Core\Security\TokenPurpose;
 
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
+$authorizeToken = $context->tokens()->create(
+    TokenPurpose::Authorize,
+    $context->gatewayName(),
+    $context->subject(),
+    $context->token()?->getAfterUrl(),
+);
 
-final class AcmeApi
-{
-    public function __construct(
-        private readonly AcmeConfig $config,
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $requestFactory,
-    ) {
-    }
-
-    public function createCheckout(array $parameters): array { /* … */ }
-    public function retrieveCheckout(string $id): array { /* … */ }
-    public function refund(string $chargeId, ?int $amount = null): array { /* … */ }
-}
+$authorizeToken->getTargetUrl();
 ```
 
-Every argument is already a container entry, so this api needs no service definition at all.
-
-Next: [Results](results.md).
+The purposes are `Authorize`, `Capture`, `Refund`, `Payout` and `Notify`, and each one points at the
+script the application set up for it. `gatewayName()` is null for a gateway built without
+`PayumBuilder::registerGateway()`. See [Tokens and payment URLs](../tokens.md).

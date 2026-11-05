@@ -1,166 +1,206 @@
-# Framework Integration with Dependency Injection
+# Integrate with a framework
 
-## Overview
+Payum does not depend on a framework. In any application you build the `Payum` object once with
+`PayumBuilder`, register it as a service, and inject it where you take payments. Your framework's own
+services, such as its HTTP client, logger or event dispatcher, reach Payum through `addGlobalService()` or
+`setGlobalContainer()`.
 
-Payum v2.0's DI system can integrate with any PSR-11 compatible container, including Symfony, Laravel, and custom frameworks. This guide explains integration patterns.
+{% hint style="info" %}
+PayumBundle for Symfony and the Laravel package have not been ported to Payum 2.x yet. Until they are,
+wire Payum yourself as this page shows. See [Symfony](../symfony/README.md) and [Laravel](../laravel/README.md)
+for the packages themselves.
+{% endhint %}
 
-## Integration Strategy
+## Build Payum once
 
-Payum v2.0 supports two integration approaches:
-
-1. **PayumBuilder with Custom Services** (Recommended for most cases)
-   - Use PayumBuilder's built-in PHP-DI container
-   - Inject framework services as global services
-   - Simple, framework-agnostic
-
-2. **Custom Container Integration** (Advanced)
-   - Provide your framework's container to PayumBuilder
-   - Full integration with framework DI
-   - Requires more setup
-
-## Symfony Integration
-
-### Using PayumBundle (Recommended)
-
-PayumBundle provides native Symfony integration:
-
-```php
-# config/packages/payum.yaml
-payum:
-    security:
-        token_storage:
-            App\Entity\PaymentToken: { doctrine: orm }
-
-    storages:
-        App\Entity\Payment: { doctrine: orm }
-
-    gateways:
-        stripe:
-            factory: stripe_checkout
-            publishable_key: '%env(STRIPE_PUBLISHABLE_KEY)%'
-            secret_key: '%env(STRIPE_SECRET_KEY)%'
-```
-
-### Using PayumBuilder with Symfony Services
-
-If not using PayumBundle, you can inject Symfony services:
+Whatever the framework, put the builder in one factory and share its result. Building Payum creates its
+containers, so do it once per process, not once per call:
 
 ```php
 <?php
 
-namespace App\Service;
+namespace App\Payment;
 
+use Acme\Payum\AcmeConfig;
+use App\Entity\Payment;
+use App\Entity\PaymentToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
-class PayumFactory
+final class PayumFactory
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private EntityManagerInterface $em
-    ) {}
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ClientInterface $httpClient,
+        private readonly LoggerInterface $logger,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly string $acmeApiKey,
+    ) {
+    }
 
-    public function createPayum(): Payum
+    public function create(): Payum
     {
         return (new PayumBuilder())
-            // Inject Symfony services as global services
+            ->setTokenStorage(new DoctrineStorage($this->entityManager, PaymentToken::class))
+            ->addStorage(Payment::class, new DoctrineStorage($this->entityManager, Payment::class))
+            ->addGlobalService(ClientInterface::class, $this->httpClient)
             ->addGlobalService(LoggerInterface::class, $this->logger)
-            ->addGlobalService(EntityManagerInterface::class, $this->em)
-
-            // Use Doctrine storage
-            ->setTokenStorage(new DoctrineStorage(
-                $this->em,
-                'App\Entity\PaymentToken'
-            ))
-
-            // Configure gateways
-            ->addGateway('stripe', [
-                'factory' => 'stripe_checkout',
-                'publishable_key' => $_ENV['STRIPE_PUBLISHABLE_KEY'],
-                'secret_key' => $_ENV['STRIPE_SECRET_KEY'],
-            ])
-
+            ->addGlobalService(EventDispatcherInterface::class, $this->eventDispatcher)
+            ->registerGateway('acme', new AcmeConfig(apiKey: $this->acmeApiKey, sandbox: true))
             ->getPayum();
     }
 }
 ```
 
-Register as a service:
+The factory takes the framework's services as constructor arguments and hands them to Payum. Keep
+credentials out of the code and pass them in from your framework's environment configuration.
+
+## Symfony
+
+Register the factory, then register `Payum\Core\Payum` as a service it creates:
 
 ```yaml
 # config/services.yaml
 services:
-    App\Service\PayumFactory:
+    App\Payment\PayumFactory:
         arguments:
-            $logger: '@logger'
-            $em: '@doctrine.orm.entity_manager'
+            $acmeApiKey: '%env(ACME_API_KEY)%'
 
     Payum\Core\Payum:
-        factory: ['@App\Service\PayumFactory', 'createPayum']
+        factory: ['@App\Payment\PayumFactory', 'create']
 ```
 
-### Advanced: Using Symfony Container Directly
+With autowiring on, Symfony passes the entity manager, its PSR-18 client, its logger and its event
+dispatcher to the factory. Its `event_dispatcher` already implements PSR-14. The PSR-18 client needs
+`symfony/http-client`. Inject `Payum` into a controller like any other service.
 
-Symfony's container is already PSR-11, so it can be handed to `setGlobalContainer()` directly. Your
-container is consulted first and Payum's own services fill in the rest, so you only declare what you want to
-control — see [Using Your Own Container](customization.md#advanced-using-your-own-container).
+## Laravel
 
-Since Symfony service ids are strings rather than class names by default, an adapter is useful to map
-Payum's ids onto your services:
+Bind `Payum` as a singleton in a service provider:
 
 ```php
 <?php
 
-namespace App\DependencyInjection;
+namespace App\Providers;
 
-use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
+use Acme\Payum\AcmeConfig;
+use Illuminate\Support\ServiceProvider;
+use Payum\Core\Payum;
+use Payum\Core\PayumBuilder;
+use Psr\Log\LoggerInterface;
 
-class PayumContainerAdapter implements ContainerInterface
+final class PayumServiceProvider extends ServiceProvider
 {
-    public function __construct(
-        private SymfonyContainerInterface $symfonyContainer
-    ) {}
-
-    public function get(string $id)
+    public function register(): void
     {
-        return $this->symfonyContainer->get($id);
-    }
-
-    public function has(string $id): bool
-    {
-        return $this->symfonyContainer->has($id);
+        $this->app->singleton(Payum::class, static fn ($app): Payum => (new PayumBuilder())
+            ->addGlobalService(LoggerInterface::class, $app->make(LoggerInterface::class))
+            ->registerGateway('acme', new AcmeConfig(apiKey: config('services.acme.key'), sandbox: true))
+            ->getPayum());
     }
 }
+```
 
-// In your factory
+Add a token storage and a storage for your payment model too. Payum ships no Eloquent storage, so either
+use Doctrine or write your own storage, as [Storages](../storages.md#write-your-own-storage) shows.
+
+## Plain PHP
+
+Without a framework, build Payum in a file that every script includes:
+
+```php
+<?php
+// config.php
+
+use Acme\Payum\AcmeConfig;
+use Payum\Core\PayumBuilder;
+
+require __DIR__ . '/vendor/autoload.php';
+
 $payum = (new PayumBuilder())
-    ->setGlobalContainer(new PayumContainerAdapter($container))
+    ->registerGateway('acme', new AcmeConfig(apiKey: getenv('ACME_API_KEY'), sandbox: true))
     ->getPayum();
 ```
 
-Services reached this way are resolvable from a gateway, but they cannot be autowired into the
-constructor of an action: Payum only turns the entries of a container into gateway container
-definitions when the container can report them. Implement
-`Payum\Core\DI\ListableContainerInterface` on the adapter to get that. A Symfony `ServiceLocator`
-is a good fit, since it both narrows what Payum can see and lists what it holds:
+[Get started](../get-it-started.md) builds the scripts that include it.
+
+## Use your framework's container
+
+Instead of passing services one by one, you can give Payum your application's container with
+`setGlobalContainer()`. Payum asks it first for every service it needs, and uses its own default for any id
+the container does not have. So you only define the services you want to replace:
 
 ```php
 <?php
 
-namespace App\DependencyInjection;
+use Acme\Payum\AcmeConfig;
+use Payum\Core\PayumBuilder;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+
+$payum = (new PayumBuilder())
+    ->setGlobalContainer($container)
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
+```
+
+Any PSR-11 container works. Payum looks up its services by these ids, so define one of them in your
+container to replace Payum's default:
+
+| Id | Replaces |
+| --- | --- |
+| `payum.security.token_storage` | The token storage. When your container has it, Payum creates none of its default storages. |
+| `Payum\Core\Security\TokenFactoryInterface` | The factory that stores tokens and builds their URLs. |
+| `Payum\Core\Security\TokenIssuerInterface` | The service that issues tokens. |
+| `Payum\Core\Security\HttpRequestVerifierInterface` | The service that finds the token in a request. |
+| `twig.env` or `Twig\Environment` | The Twig environment payment pages render with. |
+| `Psr\Http\Client\ClientInterface` and the other shared services | See [Configure Payum](getting-started.md#services-shared-by-every-gateway). |
+
+A token storage set with `setTokenStorage()` wins over one in your container.
+
+### Let gateways use your container's services
+
+PSR-11 has no way to list what a container holds. Payum needs that list to pass your services into a
+gateway's constructors, so a service that only your container knows reaches a gateway only when Payum can
+list it. A PHP-DI container can, and so can a container that implements
+`Payum\Core\DI\ListableContainerInterface`.
+
+For a container that cannot list its services, also register the services a gateway needs with
+`addGlobalService()`:
+
+```php
+<?php
+
+use Psr\Log\LoggerInterface;
+
+$builder
+    ->setGlobalContainer($container)
+    ->addGlobalService(LoggerInterface::class, static fn () => $container->get(LoggerInterface::class));
+```
+
+In Symfony, a service locator narrows what Payum sees and can list it. Wrap one in a class that implements
+`ListableContainerInterface`:
+
+```php
+<?php
+
+namespace App\Payment;
 
 use Payum\Core\DI\ListableContainerInterface;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 
-class PayumContainerAdapter implements ListableContainerInterface
+final class PayumContainer implements ListableContainerInterface
 {
     public function __construct(
-        private ServiceProviderInterface $locator
-    ) {}
+        private readonly ServiceProviderInterface $locator,
+    ) {
+    }
 
     public function get(string $id): mixed
     {
@@ -179,348 +219,31 @@ class PayumContainerAdapter implements ListableContainerInterface
 }
 ```
 
-For most applications the `addGlobalService()` approach shown above is simpler and does not require you to
-re-declare Payum's own services.
+Then give it the services Payum should use:
 
-## Laravel Integration
-
-### Using Service Provider
-
-Create a Payum service provider:
-
-```php
-<?php
-
-namespace App\Providers;
-
-use Illuminate\Support\ServiceProvider;
-use Payum\Core\PayumBuilder;
-use Payum\Core\Payum;
-use Psr\Log\LoggerInterface;
-
-class PayumServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
-        $this->app->singleton(Payum::class, function ($app) {
-            return (new PayumBuilder())
-                // Inject Laravel services
-                ->addGlobalService(
-                    LoggerInterface::class,
-                    $app->make(LoggerInterface::class)
-                )
-
-                // Use Eloquent storage (custom implementation)
-                ->setTokenStorage(new EloquentTokenStorage())
-
-                // Configure gateways
-                ->addGateway('stripe', [
-                    'factory' => 'stripe_checkout',
-                    'publishable_key' => config('payum.gateways.stripe.publishable_key'),
-                    'secret_key' => config('payum.gateways.stripe.secret_key'),
-                ])
-
-                ->getPayum();
-        });
-    }
-}
-```
-
-Register in `config/app.php`:
-
-```php
-'providers' => [
-    // ...
-    App\Providers\PayumServiceProvider::class,
-],
-```
-
-### Configuration File
-
-Create `config/payum.php`:
-
-```php
-<?php
-
-return [
-    'gateways' => [
-        'stripe' => [
-            'publishable_key' => env('STRIPE_PUBLISHABLE_KEY'),
-            'secret_key' => env('STRIPE_SECRET_KEY'),
-        ],
-    ],
-];
-```
-
-### Using in Controllers
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use Payum\Core\Payum;
-use Payum\Core\Security\TokenPurpose;
-use Illuminate\Http\Request;
-
-class PaymentController extends Controller
-{
-    public function __construct(
-        private Payum $payum
-    ) {}
-
-    public function prepare(Request $request)
-    {
-        $gateway = $this->payum->getGateway('stripe');
-
-        $payment = new \App\Models\Payment();
-        $payment->total_amount = $request->input('amount');
-        $payment->currency_code = 'USD';
-        $payment->description = 'Order #' . $request->input('order_id');
-
-        $this->payum->getStorage('App\Models\Payment')->update($payment);
-
-        $token = $this->payum->getTokenIssuer()->create(
-            TokenPurpose::Capture,
-            'stripe',
-            $payment,
-            route('payment.done')
-        );
-
-        return redirect($token->getTargetUrl());
-    }
-}
-```
-
-## Plain PHP Integration
-
-For frameworks without native DI:
-
-```php
-<?php
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Payum\Core\PayumBuilder;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
-// Create your services
-$logger = new Logger('payum');
-$logger->pushHandler(new StreamHandler('/var/log/payum.log'));
-
-// Build Payum with custom services
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
-    // Add custom services
-    ->addGlobalService(\Psr\Log\LoggerInterface::class, $logger)
-
-    // Configure gateways
-    ->addGateway('stripe', [
-        'factory' => 'stripe_checkout',
-        'publishable_key' => getenv('STRIPE_PUBLISHABLE_KEY'),
-        'secret_key' => getenv('STRIPE_SECRET_KEY'),
-    ])
-
-    ->getPayum();
-
-// Use Payum
-$gateway = $payum->getGateway('stripe');
-```
-
-## Custom Framework Integration
-
-### Step 1: Create Container Adapter (Optional)
-
-If you want full container integration:
-
-```php
-<?php
-
-namespace App\Payum;
-
-use Psr\Container\ContainerInterface;
-
-class CustomContainerAdapter implements ContainerInterface
-{
-    public function __construct(
-        private YourFrameworkContainer $container
-    ) {}
-
-    public function get(string $id)
-    {
-        return $this->container->get($id);
-    }
-
-    public function has(string $id): bool
-    {
-        return $this->container->has($id);
-    }
-}
-```
-
-### Step 2: Configure Payum
-
-```php
-<?php
-
-$payum = (new PayumBuilder())
-    ->setGlobalContainer(new CustomContainerAdapter($yourContainer))
-    // ... configure gateways
-    ->getPayum();
-```
-
-`$yourContainer` only needs the services you want to provide yourself; Payum falls back to its own for
-everything else. Declare `payum.security.token_storage`, `TokenFactoryInterface`,
-`TokenIssuerInterface`, `GenericTokenFactoryInterface` or `HttpRequestVerifierInterface` there to take over
-any of them.
-
-A verifier of your own must accept a PSR-7 `ServerRequestInterface` and check the token against that
-request's URI, never against `$_SERVER`: a worker serving many requests (RoadRunner, Swoole, FrankenPHP)
-has no single ambient request. `Payum\Core\Security\HttpRequestVerifier` does this and is the one to extend.
-
-To have one of your own services injected into a gateway's actions, register it with `addGlobalService()`
-as well — Payum cannot discover the ids of a container that does not list its entries.
-
-## Best Practices
-
-### 1. Singleton Registration
-
-Register Payum as a singleton in your container:
-
-```php
-// Symfony
+```yaml
+# config/services.yaml
 services:
-    Payum\Core\Payum:
-        factory: ['@App\Service\PayumFactory', 'create']
-        shared: true
-
-// Laravel
-$this->app->singleton(Payum::class, function($app) { ... });
+    App\Payment\PayumContainer:
+        arguments:
+            $locator: !service_locator
+                Psr\Log\LoggerInterface: '@logger'
+                Psr\EventDispatcher\EventDispatcherInterface: '@event_dispatcher'
+                Twig\Environment: '@twig'
 ```
 
-### 2. Environment-Specific Configuration
+Pass `App\Payment\PayumContainer` to `setGlobalContainer()` in your factory. Every service in the locator
+now replaces Payum's default and is available to every gateway's constructors.
 
-Use environment variables for gateway credentials:
+## Advanced: long-running workers
 
-```php
-// .env
-STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_SECRET_KEY=sk_test_...
+In a worker that serves many requests, such as RoadRunner, Swoole or FrankenPHP, there is no single
+current request in PHP's globals. Two services depend on it:
 
-// Configuration
-->addGateway('stripe', [
-    'factory' => 'stripe_checkout',
-    'publishable_key' => getenv('STRIPE_PUBLISHABLE_KEY'),
-    'secret_key' => getenv('STRIPE_SECRET_KEY'),
-])
-```
+- The incoming PSR-7 request. Register the request being served as `Psr\Http\Message\ServerRequestInterface`,
+  as [Replace and add services](customization.md#the-incoming-request) shows.
+- The token factory reads the host from `$_SERVER` unless you give it a base URL. Set one with
+  `setTokenFactory()`, as [Configure Payum](getting-started.md#configure-payment-urls) shows.
 
-### 3. Storage Configuration
-
-Use framework-native storage:
-
-```php
-// Symfony/Doctrine
-->setTokenStorage(new DoctrineStorage($em, PaymentToken::class))
-
-// Laravel/Eloquent (custom implementation)
-->setTokenStorage(new EloquentTokenStorage())
-```
-
-### 4. Logging Integration
-
-Inject framework logger:
-
-```php
-->addGlobalService(LoggerInterface::class, $frameworkLogger)
-```
-
-### 5. HTTP Client Sharing
-
-Share framework HTTP client:
-
-```php
-use Psr\Http\Client\ClientInterface;
-
-->addGlobalService(ClientInterface::class, $frameworkHttpClient)
-```
-
-### 6. Clock Sharing
-
-Every time Payum reads goes through the PSR-20 clock in the global container. Register the application's
-own clock, so that a test which freezes time freezes it for Payum too:
-
-```php
-use Psr\Clock\ClockInterface;
-
-->addGlobalService(ClockInterface::class, $frameworkClock)
-```
-
-### 7. Event Dispatcher Sharing
-
-Payum announces the payment lifecycle to the PSR-14 dispatcher in the global container. Register the
-application's own, so that its listeners hear about payments alongside everything else:
-
-```php
-use Psr\EventDispatcher\EventDispatcherInterface;
-
-->addGlobalService(EventDispatcherInterface::class, $frameworkEventDispatcher)
-```
-
-Symfony's `event_dispatcher` is PSR-14 already. A framework whose dispatcher is not needs a small adapter
--- see [Events](../events.md).
-
-## Troubleshooting
-
-### Service Not Found
-
-**Problem:** Container can't find a service
-
-**Solution:** Ensure service is registered in global container:
-
-```php
-->addGlobalService(YourService::class, $serviceInstance)
-```
-
-### Circular Dependency
-
-**Problem:** Circular dependency detected
-
-**Solution:** Use lazy loading:
-
-```php
-->addGlobalService(YourService::class, fn() => new YourService($dep))
-```
-
-### Gateway Not Using Custom Service
-
-**Problem:** Gateway doesn't use overridden service
-
-**Solution:** Add service BEFORE configuring gateways:
-
-```php
-$payum = (new PayumBuilder())
-    ->addGlobalService(ClientInterface::class, $customClient)  // First
-    ->addGateway('stripe', [...])  // Then
-    ->getPayum();
-```
-
-## See Also
-
-- [Dependency Injection overview](README.md)
-- [Getting Started](getting-started.md)
-- [Customization Guide](customization.md)
-- [Migration Guide](migration-guide.md)
-- [Symfony PayumBundle documentation](../symfony/get-it-started.md)
-- [Laravel package documentation](../laravel/get-it-started.md)
-- [Frameworks and e-commerce integration](../frameworks-and-e-commerce-integration.md)
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+Payum resolves each service once per container, so a request registered as a fixed instance stays the same
+for the life of the `Payum` object. Build Payum per request in a worker if your gateways read the request.

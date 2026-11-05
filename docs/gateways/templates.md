@@ -1,38 +1,47 @@
 # Templates
 
-When a handler needs to show the customer a page — a card form, a wallet button, a "we are checking"
-screen — it returns a `RenderTemplate` next action naming a Twig template your gateway ships.
+Some gateways show the customer a page instead of redirecting them: a card form built with the PSP's
+JavaScript, a wallet button, a "we are checking your payment" screen. A handler asks for one by
+returning a `RenderTemplate` next action that names a Twig template the gateway ships:
 
 ```php
+use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\RenderTemplate;
 
 return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [
-    'actionUrl' => $context->token()?->getTargetUrl(),
+    'publishableKey' => $this->api->publishableKey(),
 ]));
 ```
 
-It carries the template name and the context, never rendered output, so the application's own layout
-stays in charge.
+The result carries the template's name and variables, never rendered HTML, so the application's own
+renderer and layout decide how it looks. This page covers the gateway's side. How an application sets
+the layout, uses its own Twig environment or replaces one of your templates is in
+[Customize payment pages](../payment-pages.md).
 
-Three steps get you there.
+## Ship the template files
 
-### 1. Ship the template files
-
-Put them beside the gateway:
+Put the templates in the package, beside the gateway class:
 
 ```
-src/Payum/Acme/
+src/
 ├── AcmeGateway.php
-└── Resources/views/
-    └── checkout.html.twig
+└── Resources/
+    └── views/
+        ├── checkout.html.twig
+        └── _card_fields.html.twig
 ```
 
-### 2. Declare the namespace
+## Declare the namespace
 
-Implement `DeclaresTemplates`:
+Implement `Payum\Core\Gateway\DeclaresTemplates` and map a Twig namespace to the directory:
 
 ```php
 <?php
+
+declare(strict_types=1);
+
+namespace Acme\Payum;
+
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface;
 
@@ -45,176 +54,108 @@ final class AcmeGateway implements GatewayInterface, DeclaresTemplates
         ];
     }
 
-    // …
+    // name(), logo(), websiteUrl(), configClass() and handlers() as before
 }
 ```
 
-Each entry registers a Twig namespace, so templates under that directory can `{% include %}` and
-`{% import %}` each other — a partial, a set of macros, another template shipped alongside it.
+Handlers then name templates as `@PayumAcme/checkout.html.twig`, and templates in that directory can
+`{% include %}` and `{% import %}` each other through the same namespace.
 
-**Do not name a namespace `PayumCore`.** Core registers its own views — including the layout every
-template extends — under that name, and declaring it yourself is a build-time error. So is pointing a
-namespace at a directory that does not exist.
+{% hint style="warning" %}
+Never name your namespace `PayumCore`. Payum's own views, including the layout every template extends,
+live there, and declaring it makes `getPayum()` throw. So does a namespace that points at a directory
+that does not exist.
+{% endhint %}
 
-Two gateways sharing a namespace is not an error: Twig searches a namespace's directories in the order
-they were registered. Registering the same gateway class twice under different names — a live and a
-test account, say — is not a collision either. It is one declaration, used twice.
+Name the namespace after your gateway. Two gateways that declare the same namespace do not fail:
+Twig searches the directories in the order they were registered, so the first gateway's file wins.
+Registering your gateway twice, for two accounts, declares the namespace once.
 
-### 3. Write the template
+## Write the template
 
-The layout is available to every template as `layout`:
+Extend the layout Payum passes to every template as `layout`, and put your markup in the `payum_body`
+block:
 
 ```twig
 {% extends layout %}
 
 {% block payum_body %}
-    <form action="{{ actionUrl }}" method="post">…</form>
+    <h1>Pay with {{ gateway.name }}</h1>
+
+    <form action="{{ token.targetUrl }}" method="post">
+        {% include '@PayumAcme/_card_fields.html.twig' %}
+        <button type="submit">Pay</button>
+    </form>
+{% endblock %}
+
+{% block payum_javascripts %}
+    <script src="https://js.acme.test/v1/" data-key="{{ publishableKey }}"></script>
 {% endblock %}
 ```
 
-Extend it rather than writing a whole HTML document, so your page picks up whatever the application
-has configured. It defaults to `@PayumCore/layout.html.twig`; an application changes it with
-`PayumBuilder::setLayout()` — see below.
+Extend `layout` rather than writing a whole HTML document, so your page fits whatever page the
+application wraps around it. The default layout has four blocks: `payum_stylesheets` in the head, then
+`payum_body`, `payum_vendor_javascripts` and `payum_javascripts` in the body.
 
-### What every template is given
+## What every template is given
 
-Alongside whatever your handler passes, Payum adds these on its own, in
-`TemplateRenderMiddleware` — see [Middleware](middleware.md). You do not have to thread them through the
-`RenderTemplate` yourself.
+Payum adds these variables to every `RenderTemplate`, so a handler does not pass them itself:
 
 | Variable | What it is |
 | :--- | :--- |
 | `layout` | The layout to extend |
-| `gateway` | The gateway being processed — name, logo, website |
-| `subject` | What is being paid: a payment, or a payout |
-| `token` | The token this execution belongs to, when there is one |
+| `gateway` | The gateway class instance, for `gateway.name` and `gateway.logo.value` |
+| `subject` | What is being paid: the payment, or a payout. Can be null |
+| `token` | The token this execution arrived on. Null when the command came without one |
 | `command` | The command being handled |
+| `context` | The handler's `Context` |
 
-**`gateway`** is your gateway's own metadata, so a template can label itself without hard-coding a name:
-
-```twig
-<h1>Pay with {{ gateway.name }}</h1>
-<img src="{{ gateway.logo.value }}" alt="{{ gateway.name }}">
-```
-
-**`subject`** is the payment for a payment command, which is where the amount and currency live:
+`subject` is where the amount and description live:
 
 ```twig
-<p>{{ subject.totalAmount }} {{ subject.currencyCode }}</p>
-<p>{{ subject.description }}</p>
+<p>{{ subject.description }}: {{ subject.totalAmount }} {{ subject.currencyCode }}</p>
 ```
 
-**`token`** is what you post a form back to. `targetUrl` returns the customer to this same command, which
-is how a two-step capture resumes; `afterUrl` is where the payment finishes:
+`token.targetUrl` sends the customer back to the same command, which is how a form posts to the
+capture's second run. `token.afterUrl` is where the customer goes once the payment is finished.
 
-```twig
-<form action="{{ token.targetUrl }}" method="post">
-    <button type="submit">Pay</button>
-</form>
-```
-
-`subject` and `token` can both be null — a payout has no payment, and a command dispatched without a
-token has no token. Guard them if your template runs in either case:
+Guard `subject` and `token` if the template can run without them:
 
 ```twig
 {% if token %}
-    <form action="{{ token.targetUrl }}" method="post">…</form>
+    <form action="{{ token.targetUrl }}" method="post">...</form>
 {% endif %}
 ```
 
-Anything your handler passes wins, so you can override any of these by naming them yourself:
+A variable the handler passes under the same name wins over the one Payum adds.
+
+## Read what the form posted
+
+When the customer submits the form, the capture runs again on the token's URL. Read the posted fields
+from the HTTP request on the context:
 
 ```php
-return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [
-    'subject' => $somethingElse,
-]));
-```
+public function handle(CaptureCommand $command, Context $context): CaptureResult
+{
+    $posted = (array) $context->httpRequest()->getParsedBody();
 
-### That is all a gateway has to do
+    if (isset($posted['acme_payment_method'])) {
+        $charge = $this->api->charge($posted['acme_payment_method'], $context->amount());
 
-`Payum::capture()` renders the template and returns the response, so a gateway never writes rendering
-code:
+        return CaptureResult::captured($charge['id']);
+    }
 
-```php
-$response = $payum->capture($request); // 200, carrying your rendered template
-```
-
-An application that drives commands itself asks Payum for the renderer:
-
-```php
-$result = $payum->getGateway('acme')->execute(CaptureCommand::forToken($token));
-
-if ($result->next instanceof RenderTemplate) {
-    echo $payum->renderer()->render($result->next->template, $result->next->context);
+    return CaptureResult::pending(new RenderTemplate('@PayumAcme/checkout.html.twig', [
+        'publishableKey' => $this->api->publishableKey(),
+    ]));
 }
 ```
 
-`renderer()` lives on `Payum\Core\Payum`, and renders the template the same way `Payum::capture()` does.
+## Do not replace the renderer
 
-### The renderer belongs to the application
+One renderer, `Payum\Core\Template\RendererInterface`, renders every gateway's templates, and it belongs
+to the application. A gateway that declares `RendererInterface` in `configureContainer()` makes
+`getPayum()` throw, because replacing it would break every other gateway's templates.
 
-One Twig renderer, shared by every gateway, renders every namespaced template. That is why `renderer()`
-is on `Payum` rather than on a gateway: there is one to reach, whichever gateway produced the result. A
-gateway declaring `Payum\Core\Template\RendererInterface` from `configureContainer()` is a build-time
-error: replacing the shared renderer would break every other gateway's templates, including the layout
-every one of them extends. An application overrides one template at a time instead — the sections below
-show how.
-
-Everything from here on is for an application embedding Payum, not for a gateway shipping one. Skip it
-if you are writing a gateway.
-
-### Supplying your own Twig environment
-
-By default, Payum renders with a Twig `Environment` it builds itself. An application supplies its own
-instead by registering it under `twig.env` (or `Twig\Environment::class`) with
-`PayumBuilder::addGlobalService()`:
-
-```php
-$payum = (new PayumBuilder())
-    ->addGlobalService('twig.env', $container->get('twig'))
-    ->setLayout('@App/payum.html.twig')
-    ->getPayum();
-```
-
-Gateway templates then render with the application's own functions, filters, globals and extensions —
-which is what a custom layout usually needs. Payum still registers core's and every gateway's
-namespaces onto that environment, so gateway templates keep resolving.
-
-### Overriding a template
-
-An application overrides a gateway's template by registering its own directory under the gateway's
-namespace, on its own Twig environment, before handing that environment to Payum:
-
-```php
-$twig = $container->get('twig');
-$twig->getLoader()->addPath('/app/resources/views/acme', 'PayumAcme');
-
-$payum = (new PayumBuilder())
-    ->addGlobalService('twig.env', $twig)
-    ->registerGateway('acme', new AcmeConfig(…))
-    ->getPayum();
-```
-
-A namespace's directories are searched in the order they were registered, and Payum adds the gateway's
-own directory after resolving your environment. A directory you registered first is searched first: a
-file you provide there wins, and anything you did not provide falls through to the gateway's own
-directory under the same namespace.
-
-### Choosing a layout
-
-An application embedding Payum's output in its own page, rather than serving `Payum::capture()`'s
-response as a full page, points every template at a different layout:
-
-```php
-$payum = (new PayumBuilder())
-    ->registerGateway('acme', new AcmeConfig(…))
-    ->setLayout('@PayumCore/fragment.html.twig')
-    ->getPayum();
-```
-
-`@PayumCore/fragment.html.twig` renders the same blocks with no surrounding `<html>` document, ready to
-sit inside a page of your own. Point `setLayout()` at an absolute path to your own Twig layout instead,
-to reuse your application's page around every gateway's output — it resolves the same way a gateway's
-own templates do. The default is `@PayumCore/layout.html.twig`, a complete page.
-
-Next: [Services](services.md).
+An application that wants your page to look different overrides your template in its own Twig
+environment. See [Customize payment pages](../payment-pages.md).

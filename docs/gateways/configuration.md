@@ -1,24 +1,32 @@
 # Configuration
 
-Credentials live in a value object that validates itself. A malformed secret key fails when the application boots, with a stack trace pointing at your own wiring, rather than deep inside a handler at capture time.
+A gateway's config holds what an application must supply to use it: credentials, and switches such as
+the sandbox. It is a value object that checks itself in its constructor, so a missing or malformed
+credential fails when the application starts, with a stack trace that points at the application's own
+wiring, rather than inside a handler halfway through a payment.
+
+## Write the config class
+
+Implement `Payum\Core\Config\GatewayConfig`:
 
 ```php
 <?php
-namespace Acme\Payum\Config;
+
+declare(strict_types=1);
+
+namespace Acme\Payum;
 
 use Payum\Core\Config\GatewayConfig;
-use Payum\Core\Exception\LogicException;
-use Acme\Payum\AcmeGateway;
+use Payum\Core\Exception\InvalidArgumentException;
 
 final class AcmeConfig implements GatewayConfig
 {
     public function __construct(
-        public readonly string $secretKey,
-        public readonly string $publishableKey,
+        public readonly string $apiKey,
         public readonly bool $sandbox = false,
     ) {
-        if ('' === $secretKey || '' === $publishableKey) {
-            throw new LogicException('Acme needs both a secret key and a publishable key.');
+        if ('' === $apiKey) {
+            throw new InvalidArgumentException('Acme needs an API key.');
         }
     }
 
@@ -27,78 +35,97 @@ final class AcmeConfig implements GatewayConfig
         return AcmeGateway::class;
     }
 
-    public function withSandbox(bool $sandbox): self
+    public function baseUrl(): string
     {
-        return new self($this->secretKey, $this->publishableKey, $sandbox);
+        return $this->sandbox ? 'https://sandbox.acme.test/v1' : 'https://api.acme.test/v1';
     }
 }
 ```
 
-`getGatewayClass()` is the link Payum follows from a config to the gateway it configures. `AcmeGateway::configClass()` is the same edge in the other direction, for an admin screen that has a gateway but no config yet. Keep them in agreement.
+`getGatewayClass()` is how Payum gets from a config to the gateway it configures. The gateway's
+`configClass()` points the other way, for an application that has a gateway but no config yet. The two
+must name each other.
 
-Make it immutable. `withSandbox()` returning a new instance means nothing can quietly repoint a live gateway at the sandbox halfway through a request.
+Make the properties `readonly`. A gateway's container holds one config instance for its whole lifetime,
+so nothing should be able to change a credential after it is built.
 
-### Registering a gateway
+## Register a gateway
+
+An application passes an instance to `PayumBuilder::registerGateway()`, with the name it wants to use
+for the gateway:
 
 ```php
 <?php
+
+use Acme\Payum\AcmeConfig;
 use Payum\Core\PayumBuilder;
-use Acme\Payum\Config\AcmeConfig;
 
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->registerGateway('acme', new AcmeConfig('sk_live_…', 'pk_live_…'))
-    ->getPayum();
-```
-
-That is all the wiring there is. The config names its gateway, the gateway names its handlers, and Payum builds the container from there.
-
-Passing a config to the wrong gateway is caught immediately:
-
-```php
-$payum = (new PayumBuilder())
-    ->registerGateway('acme', new StripeCheckoutConfig(…))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 
-// LogicException: Acme\Payum\AcmeGateway is configured by
-// Acme\Payum\Config\AcmeConfig, but Payum\Stripe\Config\StripeCheckoutConfig was given.
+$gateway = $payum->getGateway('acme');
 ```
 
-### Several instances of one gateway
+That is all the wiring there is. The config names its gateway, the gateway names its handlers, and
+Payum builds the gateway's container from there.
 
-Register the same gateway under different names with different configs. Each gets its own container, so each gets its own api object, while both share the HTTP client and the token storage.
+`registerGateway()` creates the gateway and compares its `configClass()` with the config it was given.
+A config that belongs to another gateway throws a `Payum\Core\Exception\LogicException` straight away,
+with a message of this form:
+
+```
+Acme\Payum\AcmeGateway is configured by Acme\Payum\AcmeConfig, but Acme\Payum\OtherConfig was given.
+```
+
+## Register one gateway several times
+
+Register the same gateway under different names with different configs, for example one account per
+region:
 
 ```php
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->registerGateway('acme_eu', new AcmeConfig('sk_eu_…', 'pk_eu_…'))
-    ->registerGateway('acme_us', new AcmeConfig('sk_us_…', 'pk_us_…'))
+    ->registerGateway('acme_eu', new AcmeConfig(apiKey: 'sk_eu_123'))
+    ->registerGateway('acme_us', new AcmeConfig(apiKey: 'sk_us_456'))
     ->getPayum();
 ```
 
-### Reading it back
+Each name gets its own container, and so its own config, API object and handlers. Services that Payum
+shares, such as the HTTP client and the token storage, are the same instance for both.
 
-The config is a container entry, so anything in the gateway's container can ask for it — by its own class, or by the interface:
+## Read the config in a service
+
+Payum registers the config in the gateway's container under its own class and under
+`Payum\Core\Config\GatewayConfig`. Any class built from that container can take it in its constructor,
+which is how the API class gets its credentials:
 
 ```php
 final class AcmeApi
 {
-    public function __construct(private readonly AcmeConfig $config) {}
+    public function __construct(
+        private readonly AcmeConfig $config,
+        private readonly ClientInterface $httpClient,
+    ) {
+    }
 }
 ```
 
-### Listing gateways before they are configured
+Handlers usually take the API class rather than the config, so credentials stay in one place.
 
-Because a gateway takes no constructor arguments, an application can describe one it has never configured. This is what an "add a payment method" screen renders from:
+## Describe a gateway before it is configured
+
+Because a gateway takes no constructor arguments, an application can describe one nobody has
+configured yet. This is what an "add a payment method" screen is built from:
 
 ```php
-<?php
 $gateway = new AcmeGateway();
 
 $gateway->name();         // 'Acme Payments'
-$gateway->logo();         // Logo\Url
-$gateway->websiteUrl();   // League\Uri\Uri
-$gateway->configClass();  // Acme\Payum\Config\AcmeConfig — the form to render
+$gateway->logo();         // a Payum\Core\Metadata\Logo
+$gateway->websiteUrl();   // a League\Uri\Uri
+$gateway->configClass();  // 'Acme\Payum\AcmeConfig', the form to render
 ```
 
-Next: [Commands](commands.md).
+The config class's constructor parameters are the fields that form needs.

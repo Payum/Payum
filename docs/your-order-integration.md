@@ -1,104 +1,240 @@
-# Your order integration
+# Use your own payment model
 
-In this chapter we would talk about purchase using Payment class. The Payment class is defined by you and have any possible methods. To simply things let's suppose it looks like this:
+Payum ships a `Payum\Core\Model\Payment` class, but your application probably has its own order or
+payment entity already. Payum works with any class that implements its payment interfaces and has a
+storage registered for it. Gateways only read the payment through those interfaces, so they work with
+your class unchanged.
 
-```php
-<?php
-namespace App\Model;
+## Extend Payum's payment
 
-class Payment
-{
-    public $details;
-
-    public $price;
-
-    public $currency;
-}
-```
-
-To allow purchase using this Payment we have to create payum's action. The action is like a driver between your domain and a gateway. As an example we created a capture action that can capture order using foo gateway.
+The quickest way is to extend `Payum\Core\Model\Payment` and add what your application needs. This
+sample adds an id for Doctrine and the status field Payum keeps current:
 
 ```php
 <?php
-namespace App\Payum\Action;
 
-use App\Model\Payment;
-use Payum\Core\Request\Capture;
-use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\GatewayAwareTrait;
-use Payum\Core\GatewayAwareInterface;
+namespace App\Entity;
 
-class CaptureOrderUsingFooAction implements ActionInterface, GatewayAwareInterface
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\Payment as BasePayment;
+use Payum\Core\Model\StatusAwareInterface;
+use Payum\Core\Result\PaymentStatus;
+
+#[ORM\Entity]
+#[ORM\Table]
+class Payment extends BasePayment implements StatusAwareInterface
 {
-    use GatewayAwareTrait
-    
-    public function execute($request)
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected $id;
+
+    #[ORM\Column(type: 'string', enumType: PaymentStatus::class)]
+    protected PaymentStatus $status = PaymentStatus::New;
+
+    public function getStatus(): PaymentStatus
     {
-        RequestNotSupportedException::assertSupports($this, $request);
-
-        $order = $request->getModel();
-
-        $request->setModel(new \ArrayObject(array(
-            'foo_price' => $order->price,
-            'foo_currency' => $order->currency
-        )));
-
-        $this->gateway->execute($request);
-
-        $order->details = $request->getModel();
-        $request->setModel($order);
+        return $this->status;
     }
 
-    public function supports($request)
+    public function setStatus(PaymentStatus $status): void
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof Payment
-        ;
+        $this->status = $status;
     }
 }
 ```
 
-Now we have to add this action to gateway object. Also you have to register a storage that able to store Payment. You have to add to `config.php` that was described in [get it started](get-it-started.md) chapter.
+The parent class brings the number, description, client fields, amount, currency and the gateway
+details, and Payum ships a Doctrine mapping for them. [Storages](storages.md) shows how to load that
+mapping next to your own.
+
+Implementing `StatusAwareInterface` is optional, but without it Payum cannot record the status, and
+`PaymentStatuses::of()` returns `null` for your payments. [Payment status](payment-status.md) explains
+what Payum records and when.
+
+## Implement the interfaces yourself
+
+When your order class cannot extend Payum's, implement the interfaces directly. A payment class needs
+`Payum\Core\Model\PaymentInterface`, and two optional interfaces add more:
+
+| Interface | Methods | Why |
+| :--- | :--- | :--- |
+| `PaymentInterface` | `getNumber()`, `getDescription()`, `getClientEmail()`, `getClientId()`, `getTotalAmount()`, `getCurrencyCode()`, `getCreditCard()`, `getDetails()`, `setDetails()` | Required. Gateways read the payment through it. |
+| `StatusAwareInterface` | `getStatus()`, `setStatus()` | Payum records the payment's status. |
+| `MoneyAwareInterface` | `getMoney()`, `setMoney()` | Your code and Payum read the amount as a `Money\Money`. |
+
+Here is an order that implements all three:
 
 ```php
 <?php
-// config.php
 
-use App\Payum\Action\CaptureOrderUsingFooAction;
+namespace App\Entity;
 
-// ...
+use Money\Money;
+use Payum\Core\Model\CreditCardInterface;
+use Payum\Core\Model\MoneyAwareInterface;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\StatusAwareInterface;
+use Payum\Core\Money\Amount;
+use Payum\Core\Result\PaymentStatus;
 
-$gateways['foo']->addAction(new CaptureOrderUsingFooAction);
+class Order implements PaymentInterface, MoneyAwareInterface, StatusAwareInterface
+{
+    private string $number;
 
-$storages['App\Model\Payment'] = new FilesystemStorage('/path/to/storage', 'App\Model\Payment');
+    private ?int $totalAmount = null;
 
-// ...
+    private ?string $currencyCode = null;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $details = [];
+
+    private PaymentStatus $status = PaymentStatus::New;
+
+    public function __construct(
+        string $number,
+        private readonly string $customerEmail,
+        private readonly string $customerId,
+    ) {
+        $this->number = $number;
+    }
+
+    public function getNumber(): string
+    {
+        return $this->number;
+    }
+
+    public function getDescription(): string
+    {
+        return 'Order '.$this->number;
+    }
+
+    public function getClientEmail(): string
+    {
+        return $this->customerEmail;
+    }
+
+    public function getClientId(): string
+    {
+        return $this->customerId;
+    }
+
+    public function getTotalAmount(): ?int
+    {
+        return $this->totalAmount;
+    }
+
+    public function getCurrencyCode(): ?string
+    {
+        return $this->currencyCode;
+    }
+
+    public function getMoney(): ?Money
+    {
+        return Amount::fromMinorUnits($this->totalAmount, $this->currencyCode);
+    }
+
+    public function setMoney(?Money $money): void
+    {
+        $this->totalAmount = null === $money ? null : Amount::toMinorUnits($money);
+        $this->currencyCode = $money?->getCurrency()->getCode();
+    }
+
+    public function getCreditCard(): ?CreditCardInterface
+    {
+        return null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getDetails(): array
+    {
+        return $this->details;
+    }
+
+    /**
+     * @param iterable<string, mixed> $details
+     */
+    public function setDetails($details): void
+    {
+        $this->details = is_array($details) ? $details : iterator_to_array($details);
+    }
+
+    public function getStatus(): PaymentStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(PaymentStatus $status): void
+    {
+        $this->status = $status;
+    }
+}
 ```
+
+Keep these points in mind when you write your own:
+
+- `getTotalAmount()` returns minor units, so `1000` with `'EUR'` is 10.00 EUR. See
+  [Money and currencies](money.md).
+- `getDetails()` and `setDetails()` hold the gateway's own data: the provider's ids and what it has
+  answered so far. Store them as they are, for example in a JSON column, and do not edit them. Payum
+  passes `setDetails()` an object that can be iterated, not a plain array, so convert it as the sample
+  does.
+- `getCreditCard()` returns `null` unless you collect card data yourself, which most applications should
+  not do. See [Sensitive information](working-with-sensitive-information.md).
+- Start the status at `PaymentStatus::New`.
+
+## Register a storage for it
+
+Payum loads and saves payments through a storage registered for their class. Register one for yours:
 
 ```php
 <?php
-// prepare.php
 
-use App\Model\Payment;
+use Acme\Payum\AcmeConfig;
+use App\Entity\Order;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\PayumBuilder;
 
-include __DIR__.'/config.php';
-
-$order = new Payment;
-$order->price = 1;
-$order->currency = 'USD';
-
-/** @var \Payum\Core\Payum $payum */
-$captureToken = $payum->prepare('foo', $order);
-
-header("Location: ".$captureToken->getTargetUrl());
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addStorage(Order::class, new DoctrineStorage($entityManager, Order::class))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
 ```
 
-***
+Map `Order` as a Doctrine entity first; the class above leaves the mapping out to stay short. Payum
+finds the storage by the payment's exact class, so register the class you actually save. A storage
+registered for a parent class does not cover its subclasses. [Storages](storages.md) lists the storages
+Payum ships.
 
-### Supporting Payum
+## Take a payment with it
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+Your class now works everywhere Payum's `Payment` does:
 
-* [Become a sponsor](https://github.com/sponsors/payum)
+```php
+<?php
+
+use App\Entity\Order;
+use Money\Money;
+
+$order = new Order('1001', 'customer@example.com', 'customer-42');
+$order->setMoney(Money::EUR(1000));
+
+$token = $payum->prepare('acme', $order);
+
+header('Location: '.$token->getTargetUrl());
+```
+
+`prepare()` saves the order in its storage and returns the capture token. From here the capture and done
+scripts in [Payment operations](payment-operations.md) work as they are.
+
+## Payouts
+
+A payout class works the same way with `Payum\Core\Model\PayoutInterface`. It has `getRecipientId()`,
+`getRecipientEmail()`, `getDescription()`, `getTotalAmount()`, `getCurrencyCode()`, `getDetails()` and
+`setDetails()`. Extend `Payum\Core\Model\Payout` or implement the interface, add `StatusAwareInterface`
+to track its status, and register a storage for the class.

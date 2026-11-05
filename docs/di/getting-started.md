@@ -1,347 +1,204 @@
-# Dependency Injection - Getting Started
+# Configure Payum
 
-## Overview
+Your application talks to Payum through one `Payum\Core\Payum` object. You build it with
+`Payum\Core\PayumBuilder`: register your gateways (the classes that talk to a payment service provider,
+or PSP), tell Payum where to store payments and tokens, and replace any service you want to provide
+yourself. This page lists every builder method and the services Payum shares between gateways.
 
-Starting with Payum v2.0, the library uses a modern dependency injection (DI) container system powered by [PHP-DI 7.0](https://php-di.org/). This replaces the old ArrayObject-based configuration with a more maintainable, type-safe approach.
+## Build Payum
 
-## Key Benefits
-
-- **Type Safety**: Services are properly typed and autowired
-- **Shared Services**: HTTP clients and other services are shared across all gateways
-- **Customization**: Easy to override default services or add your own
-- **Framework Integration**: Compatible with Symfony, Laravel, and other frameworks
-- **Performance**: Services are lazy-loaded and reused where appropriate
-
-## Architecture Overview
-
-Payum v2.0 uses a **hybrid container architecture**:
-
-```
-┌─────────────────────────────────────────────┐
-│     Global Container (Payum-wide)           │
-│  - HttpRequestVerifier                      │
-│  - TokenIssuer (GenericTokenFactory)        │
-│  - TokenFactory                             │
-│  - TokenStorage                             │
-│  - Storage Extensions                       │
-│  - PSR-18 HTTP Client (shared)              │
-│  - PSR-17 Factories                         │
-│  - PSR-20 Clock                             │
-│  - PSR-14 Event Dispatcher                  │
-│  - Anything from addGlobalService()         │
-└──────────────┬──────────────────────────────┘
-               │ delegated to
-        ┌──────┼──────┬──────┐
-        ▼      ▼      ▼      ▼
-    ┌────────┬───────┬───────┬────────┐
-    │Gateway │Gateway│Gateway│Gateway │
-    │stripe  │paypal │offline│custom  │
-    └────────┴───────┴───────┴────────┘
-```
-
-- **Global Container**: Holds services shared across all gateways (HTTP client, token storage, etc.)
-- **Per-Gateway Containers**: One container per gateway, holding the gateway's own services (API clients,
-  actions, configuration). The shared services are available here too — asking a gateway container for, say,
-  the PSR-18 client gives you the one and only instance from the global container.
-
-## Basic Usage
-
-### Using PayumBuilder (Recommended)
-
-The easiest way to use Payum with DI is through the `PayumBuilder`:
+Create the builder, register a gateway and call `getPayum()`:
 
 ```php
 <?php
+// config.php
 
+use Acme\Payum\AcmeConfig;
 use Payum\Core\PayumBuilder;
 
 $payum = (new PayumBuilder())
-    ->addDefaultStorages()
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
 
-    ->addGateway('stripe', [
-        'factory' => 'stripe_checkout',
-        'publishable_key' => 'pk_test_...',
-        'secret_key' => 'sk_test_...',
+$gateway = $payum->getGateway('acme');
+```
+
+`registerGateway()` takes the name you use to look the gateway up later, and the gateway's config object.
+The config class names its gateway, so Payum knows which gateway to build. If the config does not belong to
+that gateway, `registerGateway()` throws a `LogicException` that names both classes.
+
+This sample runs as it is, because Payum falls back to defaults for everything else. The default
+storages write to the system temp directory, which is fine for trying Payum out but not for production.
+The next section replaces them.
+
+## Store payments and tokens
+
+Payum stores two kinds of things: your payments, and the tokens behind the URLs it sends a customer to (a
+token is a random hash that points at one payment). Give it a storage for each:
+
+```php
+<?php
+// config.php
+
+use Acme\Entity\Payment;
+use Acme\Entity\PaymentToken;
+use Acme\Payum\AcmeConfig;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\PayumBuilder;
+
+/** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
+
+$payum = (new PayumBuilder())
+    ->setTokenStorage(new DoctrineStorage($entityManager, PaymentToken::class))
+    ->addStorage(Payment::class, new DoctrineStorage($entityManager, Payment::class))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
+```
+
+`addStorage()` registers a storage for one model class. Payum looks the storage up by the exact class of
+the model, so register it under your own class (`Acme\Entity\Payment`), not a parent class. Call it once
+for each model class you pay with.
+
+When you set no token storage, Payum calls `addDefaultStorages()` for you. It registers a
+`FilesystemStorage` in the system temp directory for tokens and for `Payum\Core\Model\Payment`, `Payout`
+and `ArrayObject`.
+
+{% hint style="warning" %}
+Do not run production on the default storages. The system may clear its temp directory at any time, and
+`FilesystemStorage` does no locking. Set a token storage and a storage for your payment class.
+{% endhint %}
+
+[Storages](../storages.md) lists every storage Payum ships, shows the Doctrine setup and explains how to
+write your own.
+
+## Configure payment URLs
+
+Payum sends the customer to a URL with a token in it, for example `https://shop.example.com/capture.php?payum_token=...`.
+By default it builds these URLs from the host of the current request and these script names:
+
+| Path | Default | Used for |
+| --- | --- | --- |
+| `capture` | `capture.php` | Taking a payment |
+| `authorize` | `authorize.php` | Reserving an amount without taking it |
+| `refund` | `refund.php` | Refunding a payment |
+| `payout` | `payout.php` | Sending money to someone |
+| `notify` | `notify.php` | Webhooks the PSP sends |
+| `done` | `done.php` | Where the customer lands after a capture |
+
+Change the paths with `setGenericTokenFactoryPaths()`, and set the base URL with `setTokenFactory()`:
+
+```php
+<?php
+// config.php
+
+use Acme\Payum\AcmeConfig;
+use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\PayumBuilder;
+
+$payum = (new PayumBuilder())
+    ->setTokenFactory(static fn ($tokenStorage, $storageRegistry) => new TokenFactory(
+        $tokenStorage,
+        $storageRegistry,
+        'https://shop.example.com/payment',
+    ))
+    ->setGenericTokenFactoryPaths([
+        'capture' => 'pay',
+        'done' => 'thank-you',
     ])
-
-    ->addGateway('paypal', [
-        'factory' => 'paypal_rest',
-        'client_id' => 'your-client-id',
-        'client_secret' => 'your-client-secret',
-        'sandbox' => true,
-    ])
-
-    ->getPayum();
-
-// Use the gateway
-$gateway = $payum->getGateway('stripe');
-$gateway->execute(new Capture($payment));
-```
-
-### Adding Global Services
-
-You can add services that will be available to all gateways:
-
-```php
-<?php
-
-use Psr\Log\LoggerInterface;
-use Monolog\Logger;
-
-$logger = new Logger('payum');
-
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
-    // Add a global service
-    ->addGlobalService(LoggerInterface::class, $logger)
-
-    ->addGateway('stripe', [
-        'factory' => 'stripe_checkout',
-        // ... config
-    ])
-
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 ```
 
-### Overriding Default Services
-
-You can override default services like the HTTP client:
-
-```php
-<?php
-
-use Psr\Http\Client\ClientInterface;
-
-$customHttpClient = new MyCustomHttpClient();
-
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
-    // Override the default HTTP client
-    ->addGlobalService(ClientInterface::class, $customHttpClient)
-
-    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
-    ->getPayum();
-```
-
-### Controlling the Clock
-
-Everything in Payum that depends on the current time reads it from the PSR-20 clock in the global
-container rather than calling `time()`. That clock is a `Payum\Core\Clock\SystemClock` unless you replace
-it.
-
-Replace it and time stands still, which is what makes expiry testable:
-
-```php
-<?php
-
-use Psr\Clock\ClockInterface;
-use Symfony\Component\Clock\MockClock;
-
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
-    ->addGlobalService(ClockInterface::class, new MockClock('2026-01-01 12:00:00'))
-
-    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
-    ->getPayum();
-```
-
-Any PSR-20 implementation will do -- `symfony/clock`, `lcobucci/clock`, or one of your own. Applications
-that already have a clock service should register that one, so that Payum and the rest of the application
-agree on what "now" is.
-
-### Hearing About Payments
-
-Payum announces what happens to a payment -- a command dispatched, a status changed, a webhook received,
-a decline -- to the PSR-14 dispatcher in the global container. That dispatcher throws everything away
-until you register a real one:
-
-```php
-<?php
-
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-
-    ->addGlobalService(EventDispatcherInterface::class, new EventDispatcher())
-
-    ->addGateway('stripe', ['factory' => 'stripe_checkout', /* ... */])
-    ->getPayum();
-```
-
-Registered once, it hears about every gateway. See [Events](../events.md) for what is dispatched.
-
-## Understanding the Container System
-
-### Global Services
-
-These services are instantiated once and shared across all gateways:
-
-- `payum.security.token_storage` - Token storage
-- `HttpRequestVerifierInterface` - Verifies security tokens
-- `TokenIssuerInterface` - Creates payment tokens for a purpose (capture, notify, ...)
-- `GenericTokenFactoryInterface` - Deprecated; the same tokens through one method per purpose
-- `TokenFactoryInterface` - Low-level token factory
-- `ClientInterface` (PSR-18) - HTTP client
-- `StreamFactoryInterface` (PSR-17) - HTTP stream factory
-- `RequestFactoryInterface` (PSR-17) - HTTP request factory
-- `ClockInterface` (PSR-20) - the current time
-- `EventDispatcherInterface` (PSR-14) - where the payment lifecycle is announced
-- Storage extensions for all registered models
-- Every service registered with `addGlobalService()`
-
-### Per-Gateway Services
-
-These services are specific to each gateway:
-
-- API client classes (e.g., `Stripe\Api\Keys`)
-- Action classes (e.g., `CaptureAction`, `StatusAction`)
-- Gateway-specific configuration
-
-### Service Resolution Order
-
-Each gateway container is assembled from three layers. Later layers win:
-
-1. The gateway factory's `configureContainer()` definitions (the factory's own defaults)
-2. The shared services listed above (so a global service always wins over a factory default)
-3. The config passed to `addGateway()` (so a single gateway can override anything)
-
-Anything not defined in any of those layers is looked up in the global container, and otherwise autowired
-by PHP-DI.
-
-If you gave Payum a container of your own with `setGlobalContainer()`, that container sits in front of the
-global one: your services win, and Payum's defaults fill in whatever you did not provide. See
-[Using Your Own Container](customization.md#advanced-using-your-own-container).
-
-## Writing a Gateway Factory
-
-> **This describes the 1.x gateway model, which is still supported.** From 2.0 a gateway declares itself
-> and its handlers instead of being assembled by a factory — see [Gateways](../gateways/README.md), and
-> [Migrating a gateway from 1.x](../gateways/migrating-from-v1.md) if you are porting one. A gateway
-> registered with `registerGateway()` needs no factory, and never uses `getActions()` or `getExtensions()`.
-
-A gateway factory declares the services its gateway needs and which of them are actions and extensions.
-Extend `CoreGatewayFactory` and override the methods you care about:
-
-```php
-<?php
-
-use Payum\Core\CoreGatewayFactory;
-use function DI\autowire;
-use function DI\get;
-
-class MyGatewayFactory extends CoreGatewayFactory
-{
-    public function configureContainer(): array
-    {
-        return array_merge(parent::configureContainer(), [
-            'my_gateway.client_id' => '',
-            'my_gateway.secret' => '',
-
-            Api::class => autowire()
-                ->constructor(
-                    get('my_gateway.client_id'),
-                    get('my_gateway.secret')
-                ),
-
-            CaptureAction::class => autowire(),
-            StatusAction::class => autowire(),
-        ]);
-    }
-
-    public function getActions(): array
-    {
-        return array_merge(parent::getActions(), [
-            CaptureAction::class,
-            StatusAction::class,
-        ]);
-    }
-}
-```
-
-`CoreGatewayFactory` already implements `ContainerConfiguration`, so extending it is enough — there is no
-need to add `implements ContainerConfiguration` yourself.
-
-### Extension Points
-
-| Method | Purpose |
-|---|---|
-| `configureContainer(): array` | Return the PHP-DI definitions for the gateway (config values, API classes, actions). |
-| `getActions(): array` | Return the **class names** of the actions to register on the gateway, in order. |
-| `getExtensions(): array` | Return the extensions to register on the gateway. |
-
-`createGateway()` resolves everything `getActions()` and `getExtensions()` return from the container and
-registers it on a fresh `Gateway`. Actions must be given as class strings; extensions may be either class
-strings or ready-made instances.
-
-Actions and extensions are appended in the order returned. If a service has to run *before* everything
-else, mark its class with `Payum\Core\Action\PrependActionInterface` or
-`Payum\Core\Extension\PrependExtensionInterface` and it will be prepended instead:
-
-```php
-<?php
-
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\PrependActionInterface;
-
-class MyEarlyAction implements ActionInterface, PrependActionInterface
-{
-    // ... always consulted before the actions registered ahead of it
-}
-```
-
-You only need to override `createGateway()` when you have to do something to the `Gateway` itself that
-`getActions()`/`getExtensions()` cannot express, and it must be declared by implementing
-`Payum\Core\DI\CreatesGateway`. `ContainerConfiguration` itself declares only `configureContainer()`,
-so anything contributing service definitions — including a 2.0 gateway — does not have to know how a
-`Gateway` is assembled.
-
-### Registering the Factory
-
-Register the factory under a name, then reference that name from `addGateway()`:
-
-```php
-<?php
-
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-    ->addGatewayFactory('my_gateway', new MyGatewayFactory())
-    ->addGateway('mine', [
-        'factory' => 'my_gateway',
-
-        // These override the defaults declared in configureContainer()
-        'my_gateway.client_id' => 'theClientId',
-        'my_gateway.secret' => 'theSecret',
-    ])
-    ->getPayum();
-```
-
-Coming from Payum v1.x? The [Migration Guide](migration-guide.md) shows how the old `populateConfig()`
-style maps onto this one.
-
-## Next Steps
-
-- [Customization Guide](customization.md) - Learn how to customize services
-- [Migration Guide](migration-guide.md) - Migrate your code from v1.x to v2.0
-- [Framework Integration](framework-integration.md) - Integrate with Symfony/Laravel
-- [The Architecture](../the-architecture.md) - Deep dive into Payum's architecture
-- [Develop a custom Payum gateway](../develop-gateway-with-payum.md) - Build a gateway from the skeleton
-- [Get started](../get-it-started.md) - The end-to-end payment flow
-
-## Need Help?
-
-- 📖 [Full Documentation](https://payum.gitbook.io/payum/)
-- 🐛 [Report Issues](https://github.com/Payum/Payum/issues)
-- 💬 [Community Support](https://github.com/Payum/Payum/discussions)
-
-***
-
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+With this configuration a capture URL is `https://shop.example.com/payment/pay?payum_token=...`. The paths
+you pass replace only the defaults with the same key. Set the base URL whenever Payum issues tokens outside
+a web request, such as in a console command or a queue worker. Without it, the default token factory reads
+the host from `$_SERVER` and throws when there is none.
+
+[Tokens and payment URLs](../tokens.md) explains how tokens are issued, verified and invalidated.
+
+## Builder methods
+
+Every method returns the builder, so you can chain them. Call `getPayum()` last.
+
+| Method | Default | What it changes |
+| --- | --- | --- |
+| `registerGateway(string $name, GatewayConfig $config)` | No gateways | Registers a gateway under a name, from its config object. |
+| `addStorage(string $modelClass, StorageInterface $storage)` | The default storages | Stores models of that class in that storage. |
+| `setTokenStorage(?StorageInterface $tokenStorage)` | The default storages | Stores tokens in that storage. |
+| `addDefaultStorages()` | Called when no token storage is set | Registers `FilesystemStorage` in the system temp directory for tokens, `Payment`, `Payout` and `ArrayObject`. |
+| `setGenericTokenFactoryPaths(array $paths)` | See the table above | Changes the path of each kind of payment URL. |
+| `setTokenFactory(TokenFactoryInterface\|callable\|null $tokenFactory)` | `Payum\Core\Bridge\PlainPhp\Security\TokenFactory`, with the host from `$_SERVER` | Replaces the factory that stores tokens and builds their URLs. A callable receives the token storage and the storage registry. |
+| `setHttpRequestVerifier(HttpRequestVerifierInterface\|callable\|null $verifier)` | `Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier` | Replaces the service that finds the token in an incoming request. A callable receives the token storage. |
+| `addGlobalService(string $id, mixed $service)` | Nothing | Adds or replaces a service shared by every gateway. |
+| `setGlobalContainer(ContainerInterface $container)` | None | Puts your own PSR-11 container in front of Payum's services. |
+| `addMiddleware(string\|MiddlewareInterface $middleware, ?int $priority = null)` | Payum's own middleware | Wraps every command on every gateway. |
+| `setLayout(string $layout)` | `@PayumCore/layout.html.twig` | Sets the Twig layout that every payment page extends. |
+| `setMainRegistry(?RegistryInterface $registry)` | None | Adds a registry that Payum asks for gateways and storages before its own. |
+| `getPayum()` | | Builds the `Payum` object. |
+
+`addGlobalService()` and `setGlobalContainer()` are covered in [Replace and add services](customization.md).
+`addMiddleware()` is covered in [Middleware](../gateways/middleware.md), and `setLayout()` in
+[Customize payment pages](../payment-pages.md).
+
+The builder also has methods for gateways built by 1.x gateway factories: `addGateway()` (deprecated),
+`addGatewayFactory()`, `addGatewayFactoryConfig()`, `setCoreGatewayFactory()`, `setCoreGatewayFactoryConfig()`,
+`addCoreGatewayFactoryConfig()` and `setGatewayConfigStorage()`. A gateway registered with
+`registerGateway()` does not use them. If you are upgrading an application, see
+[Upgrade from 1.x](../upgrading.md).
+
+## Services shared by every gateway
+
+Payum keeps one global container with the services every gateway uses. Each of these is created once and
+shared, so two gateways get the same instance:
+
+| Service id | Default | What it is |
+| --- | --- | --- |
+| `payum.security.token_storage` | The token storage you set | Where tokens are stored. |
+| `Payum\Core\Security\TokenIssuerInterface` | Built from the token factory and the paths | Issues a token for a purpose (capture, refund, notify, ...). |
+| `Payum\Core\Security\TokenFactoryInterface` | See `setTokenFactory()` | Stores a token and builds its URL. |
+| `Payum\Core\Security\HttpRequestVerifierInterface` | See `setHttpRequestVerifier()` | Finds and checks the token in an incoming request. |
+| `Payum\Core\Registry\StorageRegistryInterface` | Your storages | Finds the storage for a model class. |
+| `Psr\Http\Client\ClientInterface` | Found by `php-http/discovery` | The PSR-18 HTTP client gateways call their PSP with. |
+| `Psr\Http\Message\RequestFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for outgoing requests. |
+| `Psr\Http\Message\StreamFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for request bodies. |
+| `Psr\Clock\ClockInterface` | `Payum\Core\Clock\SystemClock` | The current time, for anything that expires. |
+| `Psr\EventDispatcher\EventDispatcherInterface` | `Payum\Core\Event\NullEventDispatcher`, which drops every event | Receives the payment lifecycle [events](../events.md). |
+| `Payum\Core\Template\RendererInterface` | `Payum\Core\Bridge\Twig\TwigRenderer` | Renders the payment pages a gateway asks for. |
+| Any id you pass to `addGlobalService()` | | Shared like the rest. |
+
+Each gateway also gets defaults of its own, which are not shared until you register a replacement with
+`addGlobalService()`:
+
+| Service id | Default | What it is |
+| --- | --- | --- |
+| `Psr\Http\Message\ServerRequestInterface` | Built from PHP's globals and `php://input` | The incoming request, for redirects back from the PSP and webhooks. |
+| `Money\Currencies` | ISO 4217 plus moneyphp's crypto currencies | How many decimal places each currency has. See [Money and currencies](../money.md). |
+
+[Replace and add services](customization.md) shows how to replace each of these.
+
+## How the containers fit together
+
+Payum uses [PHP-DI](https://php-di.org/) for its containers, but you only need to know this if you write
+service definitions yourself. Payum builds one global container, and one container per gateway.
+
+The global container holds the shared services above. When you call `setGlobalContainer()`, Payum puts your
+container in front of it. Payum asks your container first and uses its own service only for an id your
+container does not have.
+
+Each gateway gets its own container, built from these layers. A later layer replaces an id an earlier one
+defined:
+
+1. Payum's per-gateway defaults, such as `ServerRequestInterface` and `Money\Currencies`.
+2. The shared services from the global container.
+3. The gateway's handlers (the classes that run each payment operation).
+4. The services the gateway declares for itself.
+5. The gateway's config object, registered under its own class and under `Payum\Core\Config\GatewayConfig`.
+
+A service you register with `addGlobalService()` therefore replaces Payum's default in every gateway,
+unless a gateway declares that service for itself. When a gateway container has no entry for an id, it
+falls back to the global container. A `Payum\Core\DI\FallbackContainer` does this lookup.
+
+The gateway container builds the gateway's handlers and API classes by autowiring. It reads their
+constructor types and passes the matching services. This is how a gateway's handler receives its config,
+the HTTP client, or a service of yours. [Services](../gateways/services.md) covers this from the gateway
+author's side.

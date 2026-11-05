@@ -1,40 +1,63 @@
 # Payum vs Omnipay
 
-The short answer is Payum provides the same functionality as Omnipay plus some extra features.
+[Omnipay](https://omnipay.thephpleague.com/) and Payum are both PHP libraries for taking payments
+through many providers. Omnipay gives you a common API for sending requests to a provider. Payum
+also handles the parts of a payment around those requests: the customer's trip to the provider and
+back, the payment status, and storing payments and tokens. This page explains where they differ, so
+you can pick one.
 
-Payum works best when you combine a payment model with a convert action. The model must not be only a [Payum’s one](../src/Payum/Core/Model/Payment.php), I encourage you to use your own or one from a [ecommerce platform](https://github.com/Sylius/Sylius/blob/master/src/Sylius/Component/Payment/Model/Payment.php). The idea is simple: you send a request to Payum to capture your model. In the action you [convert the payment model to a gateway specific format](../src/Payum/Paypal/ExpressCheckout/Nvp/Action/ConvertPaymentAction.php), most probably an array. The beauty of this approach is that your code is never changed, and looks like this:
+## Your payment model, not the provider's format
 
+With Payum you pass your own payment to a command, and the gateway turns it into whatever its
+provider expects. Your checkout code stays the same when you change providers:
+
+```php
+<?php
+
+use Payum\Core\Command\CaptureCommand;
+
+$result = $payum->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
 ```
-$gateway->execute(new Capture($payment));
-```
 
-All gateway differences are hidden inside a gateway. Of course Payum supports a gateway-specific format, or a Payum’s Payment model as well. In case of Omnipay you cannot simply replace a stripe gateway to a paypal one, because they behave differently and what is more important they require different data. Stripe require a credit card to be provided where Paypal does not care about it but instead wants return and cancel urls to be set. You have to reflect these differences in your code, is this abstraction? By the way Payum generates cancel and return urls for you and they are secure ones (we talk about it later).
+Providers differ in what they need. One wants card details, another wants return and cancel URLs.
+With Omnipay your code supplies those differences. With Payum the gateway asks for what it needs,
+and Payum creates the return URLs for you. See [Use your own payment model](your-order-integration.md).
 
-Sometimes you have to get more details about the payment transaction, or a payer, or more info about an error. Payum provides you access to all data that takes part in a communication between your code and a payment gateway. The data format is a payment specific, so if you familiar with [Paypal protocol (for example)](https://developer.paypal.com/docs/classic/express-checkout/gs\_expresscheckout/) it would be easy for you to understand what is going on there. Another good example is Klarna Checkout. It returns shipping\billing addresses, gender and date of birth. With Payum you can easily get these out of payment and use for your needs.
+## Every kind of checkout
 
-Payum gives you better status handling. Omnipay provides only two statuses success and failed, but it is not enough. For example Paypal sometimes returns pending status because of [multi currency issue](http://stackoverflow.com/questions/19864511/paypal-sandbox-pending-multicurrency). In this case omnipay says the payment has failed, but in fact it has not. Or a user can cancel the payment at Paypal side, Omnipay will tell you it failed but it is not really true. If you need a status which is not provided by Payum by default, you can easily add it. Do you already have payment statuses, maybe your [ecommerce platform provide](https://github.com/Sylius/Sylius/blob/master/src/Sylius/Bundle/PayumBundle/Payum/Request/GetStatus.php#L24) them and you want to reuse, no problem Payum could be adjust to use them.
+Some providers redirect the customer, some need a form post, some need their JavaScript or an iframe
+on your page, and some need a 3-D Secure check. A Payum gateway tells your application which of these
+the customer has to do next, and `$payum->capture()` turns the common ones into a response. Omnipay
+covers redirects and card forms, and leaves the rest to you. See
+[How Payum works](the-architecture.md#next-actions).
 
-Sometimes users want to cheat on you or pay less for the stuff. As a developer you have to think about it and take care of your data. What do you expose to a user? Could it be used the wrong way? You can not rely on an amount given in the url, until you validate it. For example Paypal sends you a push notification to the notify url you previously sent to them. Payum generates for you such an url and when the notification comes back it validates it. You get unique, secured urls out of the box. The payment internally associated with that url, and once you remove\invalidate the url user not able to access the payment behind it. Omnipay does not provide anything to help you solve security issues. There is one good side effect with these secured urls. The secured urls invalidated\deleted once they not needed. This is good, for example user clicks “Back” button in a browser. He would not be able to do a second payment because the purchase url no longer exists, instead he will see a 404 error.
+## Statuses
 
-It is not good practice to store credit cards on your server, is it? There is no excuse for storing them accidentally, or just for few seconds. Payum has a [sensitive value](../src/Payum/Core/Security/SensitiveValue.php) object which ensure that nothing is saved accidentally. You still able to store it, but while doing so you are on your own.
+Omnipay tells you whether a response was successful, pending, cancelled or a redirect. Payum has one
+set of statuses for every gateway, including authorized, partially captured, refunded, disputed and
+charged back, and writes the status onto your payment after each operation. Your code reads the
+status from the payment without asking the provider. See [Payment status](payment-status.md).
 
-Omnipay supports only gateways, that do a redirect to gateway side or require a credit card. But there are bunch of other gateways, and they act differently. For example Klarna Checkout [require a snippet (iframe) to be rendered](https://developers.klarna.com/en/se+php/kco-v2/checkout/2-embed-the-checkout), Stripe.Js [requires their javascript to be executed](https://stripe.com/docs/stripe.js?) on a purchase page. Stripe Checkout [renders its own popup](https://stripe.com/docs/checkout). Payum [supports them all](supported-gateways.md), and as we talked at the beginning you can switch from one gateway to another without changes in your code. Payum does not natively support a gateway you need? I do not think reimplementing every gateway in house is a good idea. That’s why a [bridge for Omnipay gateways exists](./#omnipay-bridge-external). It allows you to use Omnipay gateways the Payum way.
+## Secure payment URLs
 
-Payum tries to [standardise the payment flow](get-it-started.md). There are three steps prepare, capture\authorise and done. The first one is called “prepare” and at this step you have to prepare the payment, calculate total prices, taxes, get user or shipping information and so on. Once you are done you can redirect user to a capture\authorise step, From here user could be redirected to a gateway side or asked for a credit card, or something else. It depends on what gateway you chose. At “done” step you have to get the payment status and act according to it. Omnipay only partly solves this task.
+You cannot trust an amount or an order id in a URL the customer can edit. Payum sends the customer
+to the provider and back with tokens: random, single-use values tied to one payment and one URL. The
+same applies to the notify URL a provider calls to confirm a payment. Omnipay leaves this to your
+application. See [Tokens and payment URLs](tokens.md).
 
-With a gateway factories you can easily overwrite\replace any parts of the gateway functionally, or add a custom actions, extensions or apis.
+## Provider data
 
-Payum has official extensions for most modern frameworks such as [Symfony](https://github.com/Payum/PayumBundle). [Laravel](https://github.com/Payum/PayumLaravelPackage), [Silex](https://github.com/Payum/PayumSilexProvider), [Yii](https://github.com/Payum/PayumYiiExtension), [Laminas](https://github.com/Payum/PayumModule).
+Payum keeps everything the provider returns on the payment's details, and each result carries the
+provider's raw response. When you need the payer's address or the provider's error code, it is
+there.
 
-At the end lets compare the corner stone interfaces from Payum and Omnipay.
+## Sensitive data
 
-* Payum [GatewayInterface](../src/Payum/Core/GatewayInterface.php) vs Omnipay [GatewayInterface](https://github.com/thephpleague/omnipay-common/blob/master/src/Common/GatewayInterface.php)
-* Payum [GatewayFactoryInterface](../src/Payum/Core/GatewayFactoryInterface.php) vs Omnipay [GatewayFactory](https://github.com/thephpleague/omnipay-common/blob/master/src/Common/GatewayFactory.php) ups there is not an interface.
+Card numbers must not end up in your database by accident. Payum wraps them in a `SensitiveValue`,
+which serializes to nothing and masks its value in debug output. See [Sensitive information](working-with-sensitive-information.md).
 
-***
+## Use both
 
-### Supporting Payum
-
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
-
-* [Become a sponsor](https://github.com/sponsors/payum)
+If Payum has no gateway for your provider but Omnipay does, the
+[Omnipay bridge](https://github.com/Payum/OmnipayV3Bridge) lets you use the Omnipay gateway through
+Payum. See [Supported gateways](supported-gateways.md#omnipay-gateways).

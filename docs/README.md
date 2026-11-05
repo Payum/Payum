@@ -17,112 +17,50 @@ layout:
     visible: true
 ---
 
-# Payum docs
+# Payum
 
-* #### General
-  * [Get started](get-it-started.md)
-  * [Architecture](the-architecture.md)
-  * [Dependency injection](di/README.md)
-  * [Storages](storages.md)
-  * [Configure gateway in backend](configure-gateway-in-backend.md)
-  * [Encrypt gateway configs stored in database](encrypt-gateway-configs-stored-in-database.md)
-  * [Working with sensitive information](working-with-sensitive-information.md)
-  * [Mask credit card number](mask-credit-card-number.md)
-  * [Instant payment notification](instant-payment-notification.md)
-  * [Develop gateway with payum](develop-gateway-with-payum.md)
-  * [Supported gateways](supported-gateways.md)
-  * [Frameworks and e-commerce integration](frameworks-and-e-commerce-integration.md)
-  * [Logger](logger.md)
-  * [Debugging](debugging.md)
-  * [ISO4217. Currency details](iso4217-or-currency-details.md)
-  * [Payum vs Omnipay](payum-vs-omnipay.md)
-  * [Symfony. The event dispatcher extension](event-dispatcher.md)
-  * [How to contribute from sub repository](how-to-contribute-from-subrepository.md)
-* #### Dependency Injection
-  * [Overview](di/README.md)
-  * [Getting started](di/getting-started.md)
-  * [Customization](di/customization.md)
-  * [Framework integration](di/framework-integration.md)
-  * [Migration guide: v1.x to v2.0](di/migration-guide.md)
-* #### Authorize.Net AIM
-  * [Get started](authorize-net/aim/get-it-started.md)
-* #### Be2Bill
-  * [Direct](be2bill/direct.md)
-  * [Offsite](be2bill/offsite.md)
-* #### Klarna Checkout
-  * [Get started](klarna/checkout/get-it-started.md)
-* #### Klarna Invoice
-  * [Get started](klarna/invoice/get-it-started.md)
-* #### Offline
-  * [Get started](offline/get-it-started.md)
-* #### Payex
-  * [Get started](payex/get-it-started.md)
-* #### Paypal Express Checkout
-  * [Get started](paypal/express-checkout/get-it-started.md)
-  * [Authorize order](paypal/express-checkout/authorize-order.md)
-  * [Confirm order step](paypal/express-checkout/confirm-order-step.md)
-  * [Recurring payments basics](paypal/express-checkout/recurring-payments-basics.md)
-  * [Cancel recurring payment](paypal/express-checkout/cancel-recurring-payment.md)
-  * [Authorize token custom query parameters](paypal/express-checkout/authorize-token-custom-query-parameters.md)
-* #### Paypal Pro Checkout
-  * [Get started](paypal/pro-checkout/get-it-started.md)
-* #### Paypal Pro Hosted
-  * [Get started](paypal/pro-hosted/get-it-started.md)
-* #### Paypal Masspay
-  * [Get started](paypal/masspay/get-it-started.md)
-* #### Paypal Rest
-  * [Get started](paypal/rest/get-it-started.md)
-  * [Credit card purchase](paypal/rest/credit-card-purchase.md)
-* #### Paypal IPN
-  * [Get started](paypal/ipn/get-it-started.md)
-* #### Sofort
-  * [Get started](sofort/get-it-started.md)
-  * [Disable notifications](sofort/disable-notifications.md)
-* #### Stripe
-  * [Stripe.js](stripe/js.md)
-  * [Checkout](stripe/checkout.md)
-  * [Direct](stripe/direct.md)
-  * [Raw capture](stripe/raw-capture.md)
-  * [Store Card and use later](stripe/store-card-and-use-later.md)
-  * [Subscription billing](stripe/subscription-billing.md)
-* #### Symfony Payum Bundle
-  * [Get started. Capture](symfony/get-it-started.md)
-  * [Authorize](symfony/authorize.md)
-  * [Refund](symfony/refund.md)
-  * [Storages](symfony/storages.md)
-  * [Done action](symfony/purchase-done-action.md)
-  * [Configure payment in backend](symfony/configure-payment-in-backend.md)
-  * [Encrypt gateway configs stored in database](symfony/encrypt-gateway-configs-stored-in-database.md)
-  * [Custom action usage](symfony/custom-action-usage.md)
-  * [Custom api usage](symfony/custom-api-usage.md)
-  * [Custom purchase examples](symfony/custom-purchase-examples.md)
-  * [Sandbox](symfony/sandbox.md)
-  * [Console commands](symfony/console-commands.md)
-  * [Debugging](symfony/debugging.md)
-  * [Configuration reference](symfony/configuration-reference.md)
-  * [Container tags](symfony/container-tags.md)
-  * [ISO4217. Currency details](symfony/iso4217-or-currency-details.md)
-* #### Laravel Payum Package
-  * [Get started](laravel/get-it-started.md)
-  * [Examples](laravel/examples.md)
-  * [Eloquent storage](laravel/eloquent-storage.md)
-  * [Payment done controller](laravel/payment-done-controller.md)
-  * [Store gateway config in database](laravel/store-gateway-config-in-database.md)
-  * [Blade templates](laravel/blade-templating.md)
-* #### Silex Payum Provider
-  * [Get started](silex/get-it-started.md)
-  * [Payment done controller](silex/payment-done-controller.md)
-* #### Symfony JMS Payment Bridge
-  * [Get started. Capture](jms-payment-bridge/get-it-started.md)
-* #### [Laminas Payum Module (External)](https://github.com/Payum/PayumModule)
-* #### [Yii Payum Extension (External)](https://github.com/Payum/PayumYiiExtension)
-* #### [Omnipay Bridge (External)](https://github.com/Payum/OmnipayBridge)
-* #### [Payum Server (External)](https://github.com/Payum/PayumServer)
+Payum is a PHP library for taking payments. It gives your application one API for every payment
+provider: you execute a command such as capture or refund on a gateway, and you get back a result
+that says what happened and what the customer has to do next. To switch providers, you register
+a different gateway and keep your checkout code.
 
-***
+Payum works in plain PHP and in any framework. It needs PHP 8.1 or later.
 
-### Supporting Payum
+## What Payum gives you
 
-Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
+- Commands for each payment operation: authorize, capture, refund, cancel, payout, sync and
+  notifications from the provider.
+- One set of payment statuses, written onto your own payment model after each operation.
+- Single-use, signed URLs (tokens) that carry the customer from your site to the provider and back.
+- Storages for Doctrine ORM, Doctrine MongoDB ODM and Laminas DB.
+- A dependency injection container per gateway, so you can share or replace services such as the
+  HTTP client or the logger.
+- Middleware and PSR-14 events around every operation.
 
-* [Become a sponsor](https://github.com/sponsors/payum)
+## Where to start
+
+**Getting started.** [Get started](get-it-started.md) takes you from `composer require` to a
+working payment in four short scripts. [How Payum works](the-architecture.md) explains gateways,
+commands, results and tokens. [Supported gateways](supported-gateways.md) lists the gateway packages.
+
+**Taking payments.** [Payment operations](payment-operations.md) shows every command from the
+application's side, and [Payment status](payment-status.md) explains the statuses. The other pages
+in this group cover [tokens](tokens.md), [notifications from the provider](instant-payment-notification.md),
+[money and currencies](money.md) and [using your own payment model](your-order-integration.md).
+
+**Configuring Payum.** [Configure Payum](di/getting-started.md) covers `PayumBuilder` and its
+container. This group also covers [storages](storages.md),
+[gateway configs stored in a database](configure-gateway-in-backend.md),
+[payment pages](payment-pages.md), [events](events.md), [logging](logger.md) and
+[troubleshooting](troubleshooting.md).
+
+**Writing a gateway.** If your provider has no gateway yet, [Build a gateway](develop-gateway-with-payum.md)
+walks you through one, and the [Gateways](gateways/README.md) chapter is the reference.
+
+**Upgrading.** Coming from Payum 1.x? Read [Upgrade from 1.x](upgrading.md), and
+[Migrate a gateway from 1.x](gateways/migrating-from-v1.md) if you maintain a gateway.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).
