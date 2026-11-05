@@ -160,7 +160,7 @@ container to replace Payum's default:
 | `Payum\Core\Security\TokenIssuerInterface` | The service that issues tokens. |
 | `Payum\Core\Security\HttpRequestVerifierInterface` | The service that finds the token in a request. |
 | `twig.env` or `Twig\Environment` | The Twig environment payment pages render with. |
-| `Psr\Http\Client\ClientInterface` and the other shared services | See [Configure Payum](getting-started.md#services-shared-by-every-gateway). |
+| `Psr\Http\Client\ClientInterface` and the other shared services | See [How dependency injection works](how-it-works.md#services-shared-by-every-gateway). |
 
 A token storage set with `setTokenStorage()` wins over one in your container.
 
