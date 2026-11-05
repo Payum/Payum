@@ -184,3 +184,8 @@ cannot read the re-encrypted configs.
 `encrypt()` and `decrypt()` methods receive a `Payum\Core\Security\CypherInterface` and decide which fields
 to change. Implement `CypherInterface` yourself to encrypt with a different library or with a key management
 service. Its `encrypt()` and `decrypt()` methods take and return strings.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

@@ -635,3 +635,8 @@ and a case for each finer point, which it declares:
 
 The gateway's own documentation lists what it supports. A gateway still written for Payum 1.x answers no
 commands at all. See [Upgrade from 1.x](upgrading.md) if you still use one.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

@@ -100,3 +100,8 @@ $this->logger->debug('{command} at depth {depth}', [
 Payum stops a chain of commands that reaches 100 levels with a `Possible endless cycle detected`
 exception. If you see that message, a handler keeps executing a command that leads back to itself. See
 [Troubleshooting](troubleshooting.md) for this and other errors.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

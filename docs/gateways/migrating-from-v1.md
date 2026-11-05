@@ -616,3 +616,8 @@ reaches the provider as the same response.
 6. Replace `payum.paths` with `DeclaresTemplates` and extensions with middleware.
 7. Remove the status action, the convert action, the API request actions and the factory.
 8. Tell your users to switch to `registerGateway()` with your config class.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

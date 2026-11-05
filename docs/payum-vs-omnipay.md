@@ -61,3 +61,8 @@ which serializes to nothing and masks its value in debug output. See [Sensitive 
 If Payum has no gateway for your provider but Omnipay does, the
 [Omnipay bridge](https://github.com/Payum/OmnipayV3Bridge) lets you use the Omnipay gateway through
 Payum. See [Supported gateways](supported-gateways.md#omnipay-gateways).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

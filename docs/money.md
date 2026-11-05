@@ -218,3 +218,8 @@ If you write a gateway, read the amount of the current operation with `$context-
 `$command->amount` charges nothing; `$context->amount()` falls back to the payment's total and works out
 the currency. A handler gets a `Money\MoneyFormatter` or `Money\Currencies` by asking for one in its
 constructor, and both follow the `Currencies` service you registered. See [Handlers](gateways/handlers.md).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

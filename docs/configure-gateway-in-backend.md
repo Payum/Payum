@@ -155,3 +155,8 @@ $gateway = $payum->getGateway('acme');
 The `config` column holds your PSP credentials as plain text, so anyone who can read the table or a backup
 of it can use them. `CryptoStorageDecorator` wraps the storage and encrypts the options when it saves them.
 See [Encrypt stored gateway configs](encrypt-gateway-configs-stored-in-database.md) to set it up.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

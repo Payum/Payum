@@ -180,3 +180,8 @@ $pending = $entityManager->getRepository(Payment::class)->findBy(['status' => Pa
 
 A reconciliation job does this. It finds the payments still `Pending` and runs a `SyncCommand` for
 each one.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

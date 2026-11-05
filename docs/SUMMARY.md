@@ -26,10 +26,10 @@
 * [Store gateway configs in a database](configure-gateway-in-backend.md)
 * [Encrypt stored gateway configs](encrypt-gateway-configs-stored-in-database.md)
 * [Customize payment pages](payment-pages.md)
+* [Middleware](middleware.md)
 * [Events](events.md)
 * [Logging](logger.md)
 * [Debugging](debugging.md)
-* [Extensions](extensions.md)
 * [Sensitive information](working-with-sensitive-information.md)
 * [Troubleshooting](troubleshooting.md)
 
@@ -44,7 +44,7 @@
   * [Results](gateways/results.md)
   * [Templates](gateways/templates.md)
   * [Services](gateways/services.md)
-  * [Middleware](gateways/middleware.md)
+  * [Gateway middleware](gateways/middleware.md)
   * [Webhooks](gateways/webhooks.md)
 
 ## Upgrading

@@ -238,3 +238,8 @@ A payout class works the same way with `Payum\Core\Model\PayoutInterface`. It ha
 `getRecipientEmail()`, `getDescription()`, `getTotalAmount()`, `getCurrencyCode()`, `getDetails()` and
 `setDetails()`. Extend `Payum\Core\Model\Payout` or implement the interface, add `StatusAwareInterface`
 to track its status, and register a storage for the class.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

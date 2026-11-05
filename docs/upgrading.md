@@ -524,9 +524,19 @@ middleware now replaces are deprecated:
 | `Payum\Core\Extension\PrependExtensionInterface` | `Payum\Core\Middleware\HasPriority` on a middleware |
 | `Payum\Core\Extension\GenericTokenFactoryExtension` | `Context::tokens()` in a handler |
 
-To run code around every command, write a middleware and register it with
-`PayumBuilder::addMiddleware()`. See [Middleware](gateways/middleware.md) and
-[Extensions](extensions.md).
+Move your own extensions to middleware as you touch them. Middleware runs around every command on every
+gateway, and unlike an extension it can change the result. An extension's methods map onto one
+`process()` method:
+
+| Extension | Middleware |
+| :--- | :--- |
+| `onPreExecute()` / `onExecute()` | Code before `$next($command, $context)` |
+| `onPostExecute()` | Code after `$next()`, with the result in hand |
+| `$context->setReply()` | Return a different result |
+| `$context->getException()` | `try`/`catch` around `$next()` |
+| `$gateway->addExtension()` or `payum.extension.*` | `PayumBuilder::addMiddleware()` |
+
+See [Middleware](middleware.md) for writing and registering one.
 
 ### Listen for PSR-14 events instead of the Symfony extension
 
@@ -654,3 +664,8 @@ These changes are not deprecations, but code that depends on the old behaviour c
 10. Move from `GetHumanStatus` to `$result->status` or `StatusAwareInterface`.
 11. Replace the `httplug.*` keys, `ApiAwareInterface` and core's deprecated extensions.
 12. Switch each gateway to `registerGateway()` once its package ships a config class.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

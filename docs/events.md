@@ -53,7 +53,7 @@ token and gateway name from the context with `$event->context->subject()`, `$eve
 and `$event->context->gatewayName()`.
 
 A listener can only watch. Payum ignores what it returns, and it cannot change the result. If you need
-to change what a command does, write a [middleware](gateways/middleware.md) instead. A listener that
+to change what a command does, write a [middleware](middleware.md) instead. A listener that
 throws an exception stops the command and the exception reaches your code, so keep slow or fragile work
 out of the listener: put a job on a queue and let it fail there.
 
@@ -205,3 +205,8 @@ Then register the adapter:
 ```
 
 See [Integrate with a framework](di/framework-integration.md) for the rest of the framework wiring.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

@@ -126,3 +126,8 @@ some have not been updated for a long time:
 
 To add your gateway to this list, open a pull request against this page in the
 [Payum repository](https://github.com/Payum/Payum).
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

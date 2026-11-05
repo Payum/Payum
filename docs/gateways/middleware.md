@@ -1,127 +1,14 @@
-# Middleware
+# Gateway middleware
 
-Middleware is code that runs around every command a gateway handles. It sees the command going in and
-the result coming out, and it can stop the command or change what is passed on. Use it for logging,
-locking, idempotency or a guard that applies to many commands.
+Middleware is code that runs around every command a gateway handles. Most middleware applies to every
+gateway, so applications register it on the builder. [Middleware](../middleware.md) covers writing one,
+registering it, ordering, and the middleware Payum registers itself. This page covers the one thing a
+gateway author adds: middleware that only runs for your gateway.
 
-## Write a middleware
+## Declare middleware on the gateway
 
-Implement `Payum\Core\Middleware\MiddlewareInterface`:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace Acme\Payum\Middleware;
-
-use Payum\Core\Command\CommandInterface;
-use Payum\Core\Handler\Context;
-use Payum\Core\Middleware\MiddlewareInterface;
-use Payum\Core\Result\Result;
-use Psr\Log\LoggerInterface;
-
-final class LoggingMiddleware implements MiddlewareInterface
-{
-    public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {
-    }
-
-    public function process(CommandInterface $command, Context $context, callable $next): Result
-    {
-        $this->logger->info('Dispatching {command}', ['command' => $command::class]);
-
-        $result = $next($command, $context);
-
-        $this->logger->info('Got {status}', ['status' => $result->status?->value ?? 'no status']);
-
-        return $result;
-    }
-}
-```
-
-Call `$next` to continue. Return without calling it and the handler never runs, which is how a guard or
-a cache works. Wrap the call in `try`/`finally` for anything that must happen even when the handler
-throws.
-
-`$next` takes a command and a context, so a middleware can pass on a different command. Commands are
-immutable, so build a new one to change it.
-
-To only watch what happens, for an audit trail or analytics, listen to an [event](../events.md)
-instead. Middleware is for code that changes what happens.
-
-## Register middleware for every gateway
-
-Most middleware has nothing to do with one gateway. Logging, locking and idempotency apply to every
-command whoever handles it, so the application registers them once on the builder and they wrap every
-gateway:
-
-```php
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-    ->addMiddleware(new LoggingMiddleware($logger))
-    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
-    ->getPayum();
-```
-
-`addMiddleware()` also takes a class name. Payum then builds the middleware from each gateway's
-container, so its constructor is autowired like a handler's:
-
-```php
-->addMiddleware(LoggingMiddleware::class)
-```
-
-A package that ships middleware publishes the class and tells applications to register it this way.
-
-## Order
-
-A higher priority runs further out: first on the way in, last on the way out. Pass the priority as the
-second argument:
-
-```php
-->addMiddleware(new OutermostMiddleware(), 1000)
-->addMiddleware(new InnermostMiddleware(), -100)
-```
-
-Middleware with no priority sits at 0, and registration order breaks ties. A middleware can carry its
-own default by implementing `Payum\Core\Middleware\HasPriority`:
-
-```php
-use Payum\Core\Middleware\HasPriority;
-
-final class LoggingMiddleware implements MiddlewareInterface, HasPriority
-{
-    public static function priority(): int
-    {
-        return 200;
-    }
-
-    // ...
-}
-```
-
-A priority passed to `addMiddleware()` wins over the one the class declares.
-
-Payum registers these on every gateway, outermost first:
-
-| Middleware | Priority | What it does |
-| :--- | :--- | :--- |
-| `TemplateRenderMiddleware` | 2000 | Adds the variables every template gets. See [Templates](templates.md) |
-| `EndlessCycleDetectorMiddleware` | 1000 | Stops a chain of nested commands 100 levels deep |
-| `LegacyExtensionMiddleware` | 500 | Runs the extensions registered on the gateway. See [Extensions](../extensions.md) |
-| `PersistStateMiddleware` | 100 | Writes the handler's state onto the payment and saves it |
-| `RecordPaymentStatusMiddleware` | 50 | Records the result's status on the payment |
-
-Middleware at the default priority of 0 runs inside all five, closest to the handler.
-
-When a handler throws, `PersistStateMiddleware` still writes the state, so a PSP id stored before the
-failure survives. `RecordPaymentStatusMiddleware` records nothing, because the status is unknown. A
-middleware of yours that runs inside both sees the payment before either has written to it.
-
-## Middleware for one gateway
-
-A gateway declares middleware of its own by implementing `Payum\Core\Gateway\DeclaresMiddleware`:
+Implement `Payum\Core\Gateway\DeclaresMiddleware` on the gateway class and return the middleware it
+needs:
 
 ```php
 <?php
@@ -147,9 +34,29 @@ final class AcmeGateway implements GatewayInterface, DeclaresMiddleware
 }
 ```
 
-The entries are class names or container ids, built from the gateway's own container. At the same
-priority they run inside the middleware the application registered.
+The entries are class names or container ids, built from the gateway's own container, so their
+constructors are autowired like a handler's: they can take the gateway's API or config. Applications
+using the gateway do not register them.
 
-Use this rarely. If the code would make sense for another gateway, it belongs on the builder. Getting an
-access token from the PSP, for example, belongs in the API class, where it can be cached, not in
-middleware: middleware would run it for commands that never call the PSP.
+## Where it runs
+
+A gateway's middleware sorts by priority together with the middleware the application registered and
+the middleware Payum registers (see the table in [Middleware](../middleware.md#middleware-payum-registers)).
+At the same priority, the gateway's middleware runs inside the application's, closer to the handler.
+
+A middleware at the default priority of 0 runs inside `PersistStateMiddleware` and
+`RecordPaymentStatusMiddleware`. It sees the result before Payum writes the handler's state and the
+status onto the payment. When a handler throws, `PersistStateMiddleware` still writes the state, so a PSP
+id the handler stored before failing survives, and `RecordPaymentStatusMiddleware` records nothing.
+
+## When to use it
+
+Use gateway middleware rarely. If the code would make sense for another gateway, it belongs in an
+application middleware or in a package applications register. Work that belongs to talking to the PSP,
+such as fetching an access token, belongs in the API class, where it can be cached: middleware would run
+it for commands that never call the PSP.
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).

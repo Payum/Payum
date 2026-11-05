@@ -45,3 +45,8 @@ Push the branch to your fork and open a pull request against the same branch of 
 ```bash
 git push origin fix-stripe-refund
 ```
+
+## Supporting Payum
+
+Payum is an MIT-licensed open source project. Its development is paid for by the community and our
+customers. If you would like to join them, [become a sponsor](https://github.com/sponsors/payum).
