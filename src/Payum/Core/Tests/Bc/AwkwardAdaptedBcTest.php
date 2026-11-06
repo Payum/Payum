@@ -28,6 +28,27 @@ final class AwkwardAdaptedBcTest extends BcTestCase
         };
     }
 
+    /**
+     * StorageExtension writes the payment while the action runs, before its status is recorded, so a step
+     * that moves the status writes it a second time to keep that status.
+     */
+    protected static function accepted(): array
+    {
+        return [
+            'awkward_redirect_and_return' => [
+                0 => [
+                    'writes' => 2,
+                ],
+                1 => [
+                    'writes' => 2,
+                ],
+                3 => [
+                    'writes' => 2,
+                ],
+            ],
+        ];
+    }
+
     protected static function executeCommand(GatewayInterface $gateway, CommandInterface $command): Result
     {
         // A payment handed to a command directly is the caller's to persist on 2.x, which 1.x did for it.
