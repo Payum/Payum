@@ -925,6 +925,23 @@ final class PayumBuilderTest extends TestCase
         $this->assertSame('txn_from_config', $result->transactionId);
     }
 
+    public function testShouldBuildAndRunACommandWithoutAHttpHost(): void
+    {
+        $_SERVER = [];
+
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderSelfBuiltHandlerConfig())
+            ->getPayum()
+        ;
+
+        $this->assertInstanceOf(GenericTokenFactory::class, $payum->getTokenFactory());
+
+        $result = $payum->getGateway('acme')->execute(CaptureCommand::forPayment($this->buildPayment()));
+
+        $this->assertSame('txn_from_config', $result->transactionId);
+    }
+
     public function testShouldRegisterANamespaceAGatewayDeclares(): void
     {
         $payum = (new PayumBuilder())
