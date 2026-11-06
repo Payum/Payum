@@ -615,7 +615,9 @@ reaches the provider as the same response.
 5. Port the notify action to `NotifyHandlerInterface`.
 6. Replace `payum.paths` with `DeclaresTemplates` and extensions with middleware.
 7. Remove the status action, the convert action, the API request actions and the factory.
-8. Tell your users to switch to `registerGateway()` with your config class.
+8. Tell your users to switch to `registerGateway()` with your config class, and to move anything their
+   own `Convert` or other `payum.action.*` entry added onto the payment's details. Your gateway ignores
+   those entries, and `getPayum()` raises a deprecation notice naming each one.
 
 ## Supporting Payum
 

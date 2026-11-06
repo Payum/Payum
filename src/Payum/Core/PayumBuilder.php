@@ -437,9 +437,28 @@ class PayumBuilder
 
         $gateways = [];
 
+        $applicationActions = array_values(array_unique(array_filter(
+            [
+                ...array_keys($this->coreGatewayFactoryConfig),
+                ...array_keys($this->globalDefinitions),
+                ...$this->getKnownEntryNames($globalContainer),
+            ],
+            static fn (string $id): bool => str_starts_with($id, 'payum.action.'),
+        )));
+
         foreach ($this->gateways as $name => $config) {
             if (! $config instanceof GatewayConfig) {
                 continue;
+            }
+
+            if ([] !== $applicationActions) {
+                trigger_deprecation(
+                    'payum/core',
+                    '2.0.0',
+                    'Gateway "%s" is built from handlers and ignores %s. A payum.action.* entry only reaches a 1.x gateway, and is removed in 3.0. Write what a Convert action added onto the payment\'s details before executing the command, or decorate the gateway\'s handler in configureContainer().',
+                    $name,
+                    implode(', ', $applicationActions),
+                );
             }
 
             $gatewayClass = $config->getGatewayClass();

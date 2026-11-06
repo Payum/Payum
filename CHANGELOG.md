@@ -85,6 +85,7 @@
 * Add support for doctrine/persistence 3.x
 * Add support for ext-mongodb 2.x, which requires doctrine/mongodb-odm 2.11 or newer
 * Fix `Payum\Core\Model\CreditCard` writing the raw card number, holder, security code and expiry date into `serialize()`, `var_export()` and a Doctrine mapping of its own fields. Its setters also filled the plain `$number`, `$holder`, `$securityCode` and `$expireAt` properties next to the `SensitiveValue`s, which nothing read. Those properties now stay `null` and are deprecated for removal in 3.0; a subclass reads the card through the getters
+* Report an application's `payum.action.*` entry that a gateway registered with `registerGateway()` ignores. Such a gateway is built from handlers and never runs a 1.x action the application added through `addCoreGatewayFactoryConfig()`, `addGlobalService()` or its own container, so a `Convert` action that added fields to the provider's payload stopped doing so without a sign. `getPayum()` now raises a deprecation notice naming the gateway and each ignored entry
 
 ## 1.5.0 (2018-01-09)
 
