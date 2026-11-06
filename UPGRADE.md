@@ -126,11 +126,8 @@
   * A `Payum\Core\Reply\HttpResponse` the action used to throw becomes a
     `Payum\Core\Result\Acknowledgement` on the returned `Payum\Core\Result\NotifyResult`. Returning none
     answers 204.
-  * `Payum\Core\Gateway\Capability::Webhooks` is now derived from shipping a notify handler. A gateway
+  * `Payum\Core\Gateway\Capability::Webhooks` is derived from shipping a notify handler. A gateway
     declaring it through `DeclaresCapabilities` still works.
-* The `Psr\Http\Message\ServerRequestInterface` Payum builds from PHP's superglobals now has its body
-  populated from `php://input`, which is what lets a gateway verify a signature over the raw payload.
-  Applications registering their own request through `PayumBuilder::addGlobalService()` are unaffected.
 * The 1.x information requests a gateway dispatches to core are answered from the services 2.0 injects.
   This buys you time rather than a destination: the way forward is still to port the action to a handler,
   where the same information arrives on `Payum\Core\Handler\Context` with nothing to dispatch. Until then
@@ -147,10 +144,7 @@
     the renderer's, so `PayumBuilder::setLayout()` and template overrides now apply to unported actions
     too. A ported action names its template by returning a
     `Payum\Core\Result\NextAction\RenderTemplate` result, which the same renderer resolves.
-  * `Payum\Core\Action\GetTokenAction` looks the token up by hash rather than by an identity naming
-    `Payum\Core\Security\TokenInterface`. A custom storage keyed on that interface should key on its
-    hash instead, which is what `HttpRequestVerifier` has always used. A handler is given its token on
-    `Context::token()`.
+  * A handler is given its token on `Context::token()` rather than dispatching `GetToken`.
   * `ObtainCreditCard` is unchanged: it stays with the framework integration for 2.0.
 * The current time is read through a PSR-20 clock. `Psr\Clock\ClockInterface` is registered in the global
   container as a `Payum\Core\Clock\SystemClock`; register any other implementation with

@@ -669,13 +669,6 @@ These changes are not deprecations, but code that depends on the old behaviour c
   Cast the value if your code does arithmetic on those details, or read the amount from the payment.
 - Core's `GetHttpRequest` fills `$headers` from the request. Its `$request` holds the query parameters
   merged with the parsed body, as `$_REQUEST` did.
-- The PSR-7 request Payum builds from the globals reads its body from `php://input`, so a gateway can
-  check a signature over the raw payload.
-- A payment that arrived on a token is saved whenever a command changes its status, even when the handler
-  wrote no PSP state. On a gateway that still answers some commands with 1.x actions, such a command can
-  save the payment twice: once from the action and once to keep the new status.
-- Core's `GetToken` action now finds tokens. It used to look them up by an identity that matched nothing
-  in the storages Payum ships.
 - A currency that ISO 4217 does not list now works with 1.x gateways too, when your `Money\Currencies`
   service knows it.
 - The current time comes from a PSR-20 clock that you can replace with
