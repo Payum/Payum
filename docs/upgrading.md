@@ -514,6 +514,10 @@ $payment->setDetails(array_replace($payment->getDetails(), [
 ]));
 ```
 
+A gateway you register with `registerGateway()` never runs a `payum.action.*` entry you add with
+`addCoreGatewayFactoryConfig()` or `addGlobalService()`. `getPayum()` raises a deprecation notice that
+names the gateway and each ignored entry, so check your deprecation log after you switch a gateway over.
+
 ### Remove core actions from your gateway config
 
 Core answers `GetHttpRequest` and `RenderTemplate` for every 1.x gateway on its own. If your config

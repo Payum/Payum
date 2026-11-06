@@ -11,6 +11,7 @@ use Omnipay\Dummy\Gateway as OmnipayGateway;
 use Payum\AuthorizeNet\Aim\AuthorizeNetAimGatewayFactory;
 use Payum\Be2Bill\Be2BillDirectGatewayFactory;
 use Payum\Be2Bill\Be2BillOffsiteGatewayFactory;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Config\GatewayConfig;
@@ -898,6 +899,43 @@ final class PayumBuilderTest extends TestCase
         }
     }
 
+    public function testShouldReportAnActionFromTheCoreConfigThatAGatewayBuiltFromHandlersIgnores(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addCoreGatewayFactoryConfig([
+                'payum.action.convert_payment' => new BuilderAppConvertAction(),
+            ])
+            ->registerGateway('acme', new BuilderTemplateConfig());
+
+        $this->assertSame([
+            'Since payum/core 2.0.0: Gateway "acme" is built from handlers and ignores payum.action.convert_payment. A payum.action.* entry only reaches a 1.x gateway, and is removed in 3.0. Write what a Convert action added onto the payment\'s details before executing the command, or decorate the gateway\'s handler in configureContainer().',
+        ], $this->actionDeprecations(static fn () => $builder->getPayum()));
+    }
+
+    public function testShouldReportAnActionFromAGlobalServiceThatAGatewayBuiltFromHandlersIgnores(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService('payum.action.convert_payment', new BuilderAppConvertAction())
+            ->addGlobalService('payum.action.status', new BuilderAppConvertAction())
+            ->registerGateway('acme', new BuilderTemplateConfig());
+
+        $deprecations = $this->actionDeprecations(static fn () => $builder->getPayum());
+
+        $this->assertCount(1, $deprecations);
+        $this->assertStringContainsString('ignores payum.action.convert_payment, payum.action.status.', $deprecations[0]);
+    }
+
+    public function testShouldNotReportActionsWhenTheApplicationRegistersNone(): void
+    {
+        $builder = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('acme', new BuilderTemplateConfig());
+
+        $this->assertSame([], $this->actionDeprecations(static fn () => $builder->getPayum()));
+    }
+
     public function testShouldUseAHandlerDecoratorTheGatewayBindsToTheInterface(): void
     {
         $result = (new PayumBuilder())
@@ -1251,6 +1289,29 @@ final class PayumBuilderTest extends TestCase
             ->setGenericTokenFactory(fn () => $tokenFactory)
             ->getPayum()
         ;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function actionDeprecations(callable $build): array
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+            if (str_contains($message, 'payum.action.')) {
+                $deprecations[] = $message;
+            }
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $build();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 
     private function buildPayment(): Payment
@@ -1687,5 +1748,17 @@ final class BuilderConfiguredCaptureHandler implements CaptureHandlerInterface
     public function handle(CaptureCommand $command, Context $context): CaptureResult
     {
         return CaptureResult::captured($this->transactionId);
+    }
+}
+
+final class BuilderAppConvertAction implements ActionInterface
+{
+    public function execute($request): void
+    {
+    }
+
+    public function supports($request): bool
+    {
+        return false;
     }
 }
