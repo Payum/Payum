@@ -100,8 +100,10 @@ appended to the URL. An after path passed to `create()` or `prepare()` follows t
 
 ### Create tokens outside a web request
 
-A cron job or a queue worker has no current URL to resolve paths against. Give the token factory a base
-URL instead:
+A cron job or a queue worker has no current URL to resolve paths against. Payum still builds there, and a
+command that needs no token, such as a refund or a sync of a stored payment, runs as usual. Creating a
+token is different: without a host, Payum throws a `LogicException` the first time it builds a URL. Give
+the token factory a base URL so it never needs the current request:
 
 ```php
 <?php

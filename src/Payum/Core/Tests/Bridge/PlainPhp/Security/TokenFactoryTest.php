@@ -6,6 +6,7 @@ namespace Payum\Core\Tests\Bridge\PlainPhp\Security;
 
 use Iterator;
 use Payum\Core\Bridge\PlainPhp\Security\TokenFactory;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Token;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -632,6 +633,56 @@ final class TokenFactoryTest extends TestCase
         yield ['https://example.com/index.php', 'capture', 'https://example.com/capture'];
         yield ['https://example.com/path/index.php', 'capture', 'https://example.com/path/capture'];
         yield ['https://example.com/path/anotherPath/index.php', 'capture', 'https://example.com/path/anotherPath/capture'];
+    }
+
+    /**
+     * @backupGlobals enabled
+     */
+    public function testShouldBeConstructableWithoutAHostWhenNoBaseUrlIsGiven(): void
+    {
+        unset($_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'], $_SERVER['SERVER_ADDR']);
+
+        $factory = new TokenFactory($this->createStorageMock(), $this->createStorageRegistryMock());
+
+        $this->assertInstanceOf(TokenFactory::class, $factory);
+    }
+
+    /**
+     * @backupGlobals enabled
+     */
+    public function testShouldResolveTheHostFromTheRequestWhenTheFirstUrlIsBuilt(): void
+    {
+        unset($_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'], $_SERVER['SERVER_ADDR']);
+
+        $tokenStorage = $this->createStorageMock();
+        $tokenStorage->method('create')->willReturn($token = new Token());
+
+        $factory = new TokenFactory($tokenStorage, $this->createStorageRegistryMock());
+
+        $_SERVER['HTTP_HOST'] = 'shop.example.com';
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $factory->createToken('theGatewayName', null, 'capture.php');
+
+        $this->assertSame('http://shop.example.com/capture.php?payum_token=' . $token->getHash(), $token->getTargetUrl());
+    }
+
+    /**
+     * @backupGlobals enabled
+     */
+    public function testThrowsAClearErrorWhenAUrlIsNeededAndNoHostIsKnown(): void
+    {
+        unset($_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'], $_SERVER['SERVER_ADDR']);
+
+        $tokenStorage = $this->createStorageMock();
+        $tokenStorage->method('create')->willReturn(new Token());
+
+        $factory = new TokenFactory($tokenStorage, $this->createStorageRegistryMock());
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('setTokenFactory()');
+
+        $factory->createToken('theGatewayName', null, 'capture.php');
     }
 
     /**
