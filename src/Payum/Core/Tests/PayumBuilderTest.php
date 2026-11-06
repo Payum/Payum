@@ -78,6 +78,38 @@ final class PayumBuilderTest extends TestCase
         ];
     }
 
+    public function testShouldKeepTheApplicationsStoragesWhenNoTokenStorageIsSet(): void
+    {
+        $payments = $this->createMock(StorageInterface::class);
+        $payouts = $this->createMock(StorageInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addStorage(Payment::class, $payments)
+            ->addStorage(Payout::class, $payouts)
+            ->getPayum()
+        ;
+
+        $this->assertSame($payments, $payum->getStorage(Payment::class));
+        $this->assertSame($payouts, $payum->getStorage(Payout::class));
+        $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
+    }
+
+    public function testShouldNotReplaceStoragesAddedBeforeTheDefaults(): void
+    {
+        $payments = $this->createMock(StorageInterface::class);
+        $tokens = $this->createMock(StorageInterface::class);
+
+        $payum = (new PayumBuilder())
+            ->addStorage(Payment::class, $payments)
+            ->setTokenStorage($tokens)
+            ->addDefaultStorages()
+            ->getPayum()
+        ;
+
+        $this->assertSame($payments, $payum->getStorage(Payment::class));
+        $this->assertSame($tokens, $payum->getTokenStorage());
+    }
+
     public function testShouldBuildDefaultPayum(): void
     {
         $payum = (new PayumBuilder())->getPayum();

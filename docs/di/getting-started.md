@@ -60,8 +60,8 @@ the model, so register it under your own class (`Acme\Entity\Payment`), not a pa
 for each model class you pay with.
 
 When you set no token storage, Payum calls `addDefaultStorages()` for you. It registers a
-`FilesystemStorage` in the system temp directory for tokens and for `Payum\Core\Model\Payment`, `Payout`
-and `ArrayObject`.
+`FilesystemStorage` in the system temp directory for tokens and for each of `Payum\Core\Model\Payment`,
+`Payout` and `ArrayObject` that you did not give a storage.
 
 {% hint style="warning" %}
 Do not run production on the default storages. The system may clear its temp directory at any time, and
@@ -125,7 +125,7 @@ Every method returns the builder, so you can chain them. Call `getPayum()` last.
 | `registerGateway(string $name, GatewayConfig $config)` | No gateways | Registers a gateway under a name, from its config object. |
 | `addStorage(string $modelClass, StorageInterface $storage)` | The default storages | Stores models of that class in that storage. |
 | `setTokenStorage(?StorageInterface $tokenStorage)` | The default storages | Stores tokens in that storage. |
-| `addDefaultStorages()` | Called when no token storage is set | Registers `FilesystemStorage` in the system temp directory for tokens, `Payment`, `Payout` and `ArrayObject`. |
+| `addDefaultStorages()` | Called when no token storage is set | Registers `FilesystemStorage` in the system temp directory for tokens, `Payment`, `Payout` and `ArrayObject`, for each of them that has no storage yet. |
 | `setGenericTokenFactoryPaths(array $paths)` | See the table above | Changes the path of each kind of payment URL. |
 | `setTokenFactory(TokenFactoryInterface\|callable\|null $tokenFactory)` | `Payum\Core\Bridge\PlainPhp\Security\TokenFactory`, with the host from `$_SERVER` | Replaces the factory that stores tokens and builds their URLs. A callable receives the token storage and the storage registry. |
 | `setHttpRequestVerifier(HttpRequestVerifierInterface\|callable\|null $verifier)` | `Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier` | Replaces the service that finds the token in an incoming request. A callable receives the token storage. |
