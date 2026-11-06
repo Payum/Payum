@@ -162,7 +162,8 @@ $dispatcher->addListener(StatusChanged::class, function (StatusChanged $event): 
 The event fires wherever the change came from: the customer's capture, a refund from your admin screen,
 or a notification nobody was waiting for. It fires only when the status really moves, so a notification
 the provider sends twice does not fulfil an order twice. A payment that does not implement
-`StatusAwareInterface` never fires it. [Events](events.md) shows how to register a dispatcher and lists
+`StatusAwareInterface` never fires it. The event fires before Payum saves the payment, so a job you queue
+from the listener should carry the new status rather than read it back from storage. [Events](events.md) shows how to register a dispatcher and lists
 the other events.
 
 ## Find payments by status

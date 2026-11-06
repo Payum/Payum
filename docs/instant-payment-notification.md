@@ -92,8 +92,8 @@ When the notification is genuine, Payum:
 
 1. records the status the gateway read from it on the payment, if the payment implements
    `StatusAwareInterface`,
-2. saves the payment,
-3. dispatches a `StatusChanged` event if the status moved,
+2. dispatches a `StatusChanged` event if the status moved,
+3. saves the payment,
 4. answers the provider.
 
 A gateway answers an event it does not care about with a success too, and leaves the payment alone.
@@ -124,7 +124,7 @@ changes that come from a capture or a sync:
 use Payum\Core\Event\StatusChanged;
 use Payum\Core\Result\PaymentStatus;
 
-$dispatcher->addListener(StatusChanged::class, function (StatusChanged $event): void {
+$dispatcher->addListener(StatusChanged::class, function (StatusChanged $event) use ($orders): void {
     match ($event->to) {
         PaymentStatus::Captured => $orders->markPaid($event->subject),
         PaymentStatus::ChargedBack => $orders->flagChargeback($event->subject),
@@ -135,6 +135,10 @@ $dispatcher->addListener(StatusChanged::class, function (StatusChanged $event): 
 
 `$orders` stands for your own code. The event fires only when the status really changes, so a provider
 that sends the same notification twice does not mark the order paid twice.
+
+The listener runs before Payum saves the payment. If it hands work to another process, such as a queued
+job, put the new status in the message: the job may load the payment before the save and still see the
+old status.
 [Payment status](payment-status.md#react-when-the-status-changes) has the details.
 
 ## Make the endpoint reachable

@@ -52,7 +52,8 @@ final class RefundHandler implements RefundHandlerInterface
 }
 ```
 
-It needs one more method on the API class:
+It needs one more method on the API class. Add `use Money\Money;` to the top of `AcmeApi.php`, then the
+method:
 
 ```php
 public function refund(string $checkoutId, Money $amount): array
