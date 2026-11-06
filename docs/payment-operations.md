@@ -18,11 +18,9 @@ that every script includes:
 // config.php
 
 use Acme\Payum\AcmeConfig;
-use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Model\Payment;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Storage\FilesystemStorage;
-use Psr\Http\Message\ServerRequestInterface;
 
 require __DIR__.'/vendor/autoload.php';
 require __DIR__.'/respond.php';
@@ -30,7 +28,6 @@ require __DIR__.'/respond.php';
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
     ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number'))
-    ->addGlobalService(ServerRequestInterface::class, ServerRequest::fromGlobals())
     ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
     ->getPayum();
 ```
@@ -39,10 +36,9 @@ $payum = (new PayumBuilder())
 or payment entity instead, see [Use your own payment model](your-order-integration.md). The file storage keeps this
 sample short; use a database storage for real payments, as [Storages](storages.md) describes.
 
-Register the current request as the `ServerRequestInterface` service. Gateways read the query string,
-headers and body of the incoming request from it, and the request Payum builds by default carries no
-headers. `ServerRequest` comes from `guzzlehttp/psr7`, and any PSR-7 implementation works.
-`respond.php` is defined [further down](#act-on-the-next-action).
+Gateways read the query string, headers and body of the incoming request. Payum builds that request
+from PHP's globals, so a plain PHP script needs nothing more. `respond.php` is defined
+[further down](#act-on-the-next-action).
 
 ## Execute a command
 

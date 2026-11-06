@@ -245,6 +245,32 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertTrue($request->getBody()->isReadable());
     }
 
+    /**
+     * @backupGlobals enabled
+     */
+    public function testShouldBuildARequestWithTheHeadersFromTheServerParams(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['REQUEST_URI'] = '/notify.php?payum_token=theHash';
+        $_SERVER['HTTP_HOST'] = 'shop.example.com';
+        $_SERVER['HTTP_STRIPE_SIGNATURE'] = 't=1,v1=abc';
+        $_SERVER['CONTENT_TYPE'] = 'application/json';
+        $_GET = [
+            'payum_token' => 'theHash',
+        ];
+
+        $request = $this->buildContainer()->get(ServerRequestInterface::class);
+
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertSame('t=1,v1=abc', $request->getHeaderLine('Stripe-Signature'));
+        $this->assertSame('application/json', $request->getHeaderLine('Content-Type'));
+        $this->assertSame('shop.example.com', $request->getHeaderLine('Host'));
+        $this->assertSame('/notify.php?payum_token=theHash', (string) $request->getUri());
+        $this->assertSame([
+            'payum_token' => 'theHash',
+        ], $request->getQueryParams());
+    }
+
     public function testShouldResolvePayumHttpClientAsHttplugClientWrappingThePsr18Client(): void
     {
         $container = $this->buildContainer();

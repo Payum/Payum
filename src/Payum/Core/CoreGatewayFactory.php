@@ -15,6 +15,7 @@ use Http\Client\Socket\Client as HttpSocketClient;
 use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17Factory;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
@@ -290,17 +291,21 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
                 TemplateRenderMiddleware::class => static fn (): TemplateRenderMiddleware => new TemplateRenderMiddleware(),
-                // The body is read from php://input rather than left empty: a PSP signs the raw bytes,
-                // and $_POST is empty for the JSON payloads most of them send. An application with a
-                // framework should register its own request instead, through
-                // PayumBuilder::addGlobalService(), which overrides this.
-                ServerRequestInterface::class => static fn (ContainerInterface $c): ServerRequestInterface => $c
-                    ->get(ServerRequestFactoryInterface::class)
-                    ->createServerRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/', $_SERVER)
-                    ->withQueryParams($_GET)
-                    ->withParsedBody($_POST)
-                    ->withCookieParams($_COOKIE)
-                    ->withBody($c->get(StreamFactoryInterface::class)->createStreamFromFile('php://input', 'r')),
+                // Built from every superglobal, with the headers and the raw php://input body: a PSP signs
+                // the raw bytes, usually in a header, and $_POST is empty for the JSON payloads most of
+                // them send. An application with a framework should register its own request instead,
+                // through PayumBuilder::addGlobalService(), which overrides this.
+                ServerRequestInterface::class => static function (ContainerInterface $c): ServerRequestInterface {
+                    $factory = new Psr17Factory(
+                        serverRequestFactory: $c->get(ServerRequestFactoryInterface::class),
+                        streamFactory: $c->get(StreamFactoryInterface::class),
+                    );
+
+                    // The URI stays REQUEST_URI alone: 1.x gateways read it from GetHttpRequest::$uri,
+                    // and the PlainPhp action they were written against gave them exactly that.
+                    return $factory->createServerRequestFromGlobals()
+                        ->withUri($factory->createUri($_SERVER['REQUEST_URI'] ?? '/'), true);
+                },
 
                 // Legacy Payum service names - delegate to PSR interfaces
                 'payum.http_client' => static fn (ContainerInterface $c): HttplugClient => new HttplugClient($c->get(ClientInterface::class)),
