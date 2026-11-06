@@ -18,45 +18,32 @@ $ composer create-project payum/skeleton
 
 2. Replace all occurrences of `payum` with your vendor name. It may be your github name, for now let's say you choose: `acme`.
 3. Replace all occurrences of `skeleton` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `paypal`.
-4. Register a gateway factory to the payum's builder and create a gateway:
+4. Add the PSP's credentials to `PaypalConfig` as `readonly` constructor arguments, and validate them in its constructor.
+5. Register the gateway with its config:
 
 ```php
 <?php
 
+use Acme\Paypal\PaypalConfig;
 use Payum\Core\PayumBuilder;
-use Payum\Core\GatewayFactoryInterface;
 
-$defaultConfig = [];
-
-$payum = (new PayumBuilder)
-    ->addGatewayFactory('paypal', function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
-        return new \Acme\Paypal\PaypalGatewayFactory($config, $coreGatewayFactory);
-    })
-
-    ->addGateway('paypal', [
-        'factory' => 'paypal',
-        'sandbox' => true,
-    ])
-
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->registerGateway('paypal', new PaypalConfig(sandbox: true))
     ->getPayum()
 ;
 ```
 
-5. While using the gateway implement all method where you get `Not implemented` exception:
+6. Implement every handler method that throws `Not implemented`. A handler takes the API through its constructor, and Payum autowires it:
 
 ```php
-<?php
-
-use Payum\Core\Request\Capture;
-
-$paypal = $payum->getGateway('paypal');
-
-$model = new \ArrayObject([
-  // ...
-]);
-
-$paypal->execute(new Capture($model));
+public function __construct(
+    private readonly PaypalApi $api,
+) {
+}
 ```
+
+Remove the handlers for operations your PSP does not support from `PaypalGateway::handlers()`.
 
 ## Resources
 
