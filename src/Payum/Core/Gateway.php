@@ -28,6 +28,7 @@ use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Legacy\ActionToHandlerAdapter;
 use Payum\Core\Legacy\HandlerToActionAdapter;
 use Payum\Core\Legacy\LegacyFactoryScope;
+use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\RequestToCommand;
 use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
@@ -639,7 +640,9 @@ class Gateway implements GatewayInterface
                 ? $this->container->get(PaymentGateway::class)
                 : new UndescribedGateway($this->name),
             $this->container->get(ServerRequestInterface::class),
-            $this->container->get(TokenIssuerInterface::class),
+            $this->container->has(TokenIssuerInterface::class)
+                ? $this->container->get(TokenIssuerInterface::class)
+                : new NoTokenIssuer(),
             $subject ?? $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,

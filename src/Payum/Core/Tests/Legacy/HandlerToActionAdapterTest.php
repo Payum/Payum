@@ -20,6 +20,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\Refund;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\Redirect;
+use Payum\Core\Security\TokenPurpose;
 use PHPUnit\Framework\TestCase;
 
 final class HandlerToActionAdapterTest extends TestCase
@@ -49,6 +50,28 @@ final class HandlerToActionAdapterTest extends TestCase
         } catch (HttpRedirect $reply) {
             $this->assertSame('https://psp.test/checkout', $reply->getUrl());
         }
+    }
+
+    public function testShouldRunTheHandlerOnAGatewayBuiltStraightFromItsFactory(): void
+    {
+        $gateway = (new HandledGatewayFactory())->create();
+
+        try {
+            $gateway->execute(new Capture($this->buildPayment()));
+            $this->fail('The handler asked for a redirect.');
+        } catch (HttpRedirect $reply) {
+            $this->assertSame('https://psp.test/checkout', $reply->getUrl());
+        }
+    }
+
+    public function testShouldSayATokenNeedsPayumBuilderOnAGatewayBuiltStraightFromItsFactory(): void
+    {
+        $gateway = (new TokenIssuingGatewayFactory())->create();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('PayumBuilder');
+
+        $gateway->execute(new Capture($this->buildPayment()));
     }
 
     public function testShouldLeaveARequestForAnotherCommandToTheActions(): void
@@ -98,6 +121,27 @@ final class HandledGatewayFactory extends GatewayFactory
             'payum.factory_title' => 'Handled',
             'payum.action.capture' => new HandlerToActionAdapter(new RedirectingCaptureHandler()),
         ]);
+    }
+}
+
+final class TokenIssuingGatewayFactory extends GatewayFactory
+{
+    protected function populateConfig(ArrayObject $config): void
+    {
+        $config->defaults([
+            'payum.factory_name' => 'token_issuing',
+            'payum.action.capture' => new HandlerToActionAdapter(new TokenIssuingCaptureHandler()),
+        ]);
+    }
+}
+
+final class TokenIssuingCaptureHandler implements CaptureHandlerInterface
+{
+    public function handle(CaptureCommand $command, Context $context): CaptureResult
+    {
+        $token = $context->tokens()->create(TokenPurpose::Authorize, 'token_issuing', $context->subject());
+
+        return CaptureResult::pending(new Redirect($token->getTargetUrl()));
     }
 }
 
