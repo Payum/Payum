@@ -112,7 +112,7 @@ $payum = (new PayumBuilder())
 With this configuration a capture URL is `https://shop.example.com/payment/pay?payum_token=...`. The paths
 you pass replace only the defaults with the same key. Set the base URL whenever Payum issues tokens outside
 a web request, such as in a console command or a queue worker. Without it, the default token factory reads
-the host from `$_SERVER` when it builds its first URL, and throws a `LogicException` when there is none.
+the host from `$_SERVER` each time it builds a URL, and throws a `LogicException` when there is none.
 Building Payum and running commands that need no token work without a host.
 
 [Tokens and payment URLs](../tokens.md) explains how tokens are issued, verified and invalidated.

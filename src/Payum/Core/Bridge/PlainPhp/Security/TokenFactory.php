@@ -30,34 +30,31 @@ class TokenFactory extends AbstractTokenFactory
 
     protected function generateUrl(string $path, array $parameters = []): string
     {
-        $this->resolveBaseUrl();
+        $baseUrl = $this->baseUrl ?? $this->baseUrlFromCurrentRequest();
 
-        $hierarchicalPath = LeagueUri::factory(HierarchicalPath::class, 'fromUri', 'createFromUri')($this->baseUrl);
+        $hierarchicalPath = LeagueUri::factory(HierarchicalPath::class, 'fromUri', 'createFromUri')($baseUrl);
         if ('php' === pathinfo($hierarchicalPath->getBasename(), PATHINFO_EXTENSION)) {
             // Passed as a plain string rather than a Path component: league/uri 7 made
             // Path::__construct private, and replaceBasename accepts either.
             $basename = preg_replace('#^/#', '', $path);
 
-            $newPath = LeagueUri::replaceBasename($this->baseUrl, $basename)->getPath();
+            $newPath = LeagueUri::replaceBasename($baseUrl, $basename)->getPath();
         } else {
-            $newPath = LeagueUri::appendSegment($this->baseUrl, $path)->getPath();
+            $newPath = LeagueUri::appendSegment($baseUrl, $path)->getPath();
         }
 
-        $uri = $this->baseUrl->withPath($newPath);
+        $uri = $baseUrl->withPath($newPath);
         $uri = $this->addQueryToUri($uri, $parameters);
 
         return (string) $uri;
     }
 
-    // Resolved on first use so that Payum can be built where there is no request (CLI, cron, workers).
-    private function resolveBaseUrl(): void
+    // Read on every call and never kept: the factory outlives a request in a worker, and a host taken from
+    // one request must not end up in the URLs issued for the next.
+    private function baseUrlFromCurrentRequest(): HttpUri
     {
-        if (isset($this->baseUrl)) {
-            return;
-        }
-
         try {
-            $this->baseUrl = LeagueUri::httpFromServer($_SERVER);
+            return LeagueUri::httpFromServer($_SERVER);
         } catch (UriException $e) {
             throw new LogicException('Cannot build a token URL: there is no current request to take the host from. Pass a base URL to the token factory with PayumBuilder::setTokenFactory(), for example new Payum\\Core\\Bridge\\PlainPhp\\Security\\TokenFactory($tokenStorage, $storageRegistry, \'https://shop.example.com\').', 0, $e);
         }
