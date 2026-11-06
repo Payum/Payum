@@ -73,8 +73,9 @@ $builder
 
 ## The incoming request
 
-Payum builds a PSR-7 `ServerRequestInterface` from PHP's globals and `php://input`. When your framework
-already has the current request as PSR-7, register that one instead:
+Payum builds a PSR-7 `ServerRequestInterface` from PHP's globals, including the request headers, and
+reads its body from `php://input`. When your framework already has the current request as PSR-7, register
+that one instead:
 
 ```php
 <?php

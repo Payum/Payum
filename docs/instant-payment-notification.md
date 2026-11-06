@@ -60,9 +60,9 @@ foreach ($acknowledgement->headers as $name => $value) {
 echo $acknowledgement->body;
 ```
 
-`config.php` is the one from [Payment operations](payment-operations.md#set-up). It must register the
-current request as the `ServerRequestInterface` service, because the gateway checks the provider's
-signature against that request's headers and body.
+`config.php` is the one from [Payment operations](payment-operations.md#set-up). The gateway checks the
+provider's signature against the headers and raw body of the current request, which Payum reads from
+PHP's globals and `php://input`.
 
 Most providers accept any 2xx answer, so a gateway that names no answer gets `204 No Content`. A gateway
 whose provider expects a particular body, such as a fixed string, sets the acknowledgement for you.
@@ -82,9 +82,8 @@ verifier's `InvalidArgumentException` through for a bad token. `Payum::notify()`
 
 Register the framework's request, converted to PSR-7, as the `ServerRequestInterface` service as well.
 `Payum::notify()` only reads the token from the request you pass it. The gateway verifies the signature
-against the `ServerRequestInterface` service, and the request Payum builds by default has no headers
-and reads its body from `php://input`, which is empty under RoadRunner or FrankenPHP and once a framework
-has read the body. See [Integrate with a framework](di/framework-integration.md).
+against the `ServerRequestInterface` service. The request Payum builds by default reads its body from
+`php://input`, which is empty under RoadRunner or FrankenPHP and once a framework has read the body. See [Integrate with a framework](di/framework-integration.md).
 
 ## What Payum does with a notification
 
