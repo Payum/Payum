@@ -84,6 +84,7 @@
 * Remove support for Propel storage
 * Add support for doctrine/persistence 3.x
 * Add support for ext-mongodb 2.x, which requires doctrine/mongodb-odm 2.11 or newer
+* Fix `Payum\Core\Model\CreditCard` writing the raw card number, holder, security code and expiry date into `serialize()`, `var_export()` and a Doctrine mapping of its own fields. Its setters also filled the plain `$number`, `$holder`, `$securityCode` and `$expireAt` properties next to the `SensitiveValue`s, which nothing read. Those properties now stay `null` and are deprecated for removal in 3.0; a subclass reads the card through the getters
 
 ## 1.5.0 (2018-01-09)
 

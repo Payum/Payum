@@ -21,6 +21,9 @@ class CreditCard implements CreditCardInterface
 
     /**
      * @var string
+     *
+     * @deprecated since 2.0.0, will be removed in 3.0. Always null: card data is held only in
+     *             the SensitiveValue beside it, which serialize() leaves empty. Use the getter.
      */
     protected $holder;
 
@@ -40,6 +43,9 @@ class CreditCard implements CreditCardInterface
 
     /**
      * @var string
+     *
+     * @deprecated since 2.0.0, will be removed in 3.0. Always null: card data is held only in
+     *             the SensitiveValue beside it, which serialize() leaves empty. Use the getter.
      */
     protected $number;
 
@@ -59,6 +65,9 @@ class CreditCard implements CreditCardInterface
 
     /**
      * @var string
+     *
+     * @deprecated since 2.0.0, will be removed in 3.0. Always null: card data is held only in
+     *             the SensitiveValue beside it, which serialize() leaves empty. Use the getter.
      */
     protected $securityCode;
 
@@ -73,6 +82,9 @@ class CreditCard implements CreditCardInterface
 
     /**
      * @var DateTime
+     *
+     * @deprecated since 2.0.0, will be removed in 3.0. Always null: card data is held only in
+     *             the SensitiveValue beside it, which serialize() leaves empty. Use the getter.
      */
     protected $expireAt;
 
@@ -117,9 +129,6 @@ class CreditCard implements CreditCardInterface
     {
         $this->securedHolder = SensitiveValue::ensureSensitive($holder);
         $this->maskedHolder = Mask::mask($this->securedHolder->peek());
-
-        // BC
-        $this->holder = $this->securedHolder->peek();
     }
 
     public function getHolder()
@@ -141,9 +150,6 @@ class CreditCard implements CreditCardInterface
     {
         $this->securedNumber = SensitiveValue::ensureSensitive($number);
         $this->maskedNumber = Mask::mask($this->securedNumber->peek());
-
-        // BC
-        $this->number = $this->securedNumber->peek();
     }
 
     public function getNumber()
@@ -164,9 +170,6 @@ class CreditCard implements CreditCardInterface
     public function setSecurityCode($securityCode): void
     {
         $this->securedSecurityCode = SensitiveValue::ensureSensitive($securityCode);
-
-        // BC
-        $this->securityCode = $this->securedSecurityCode->peek();
     }
 
     public function getSecurityCode()
@@ -188,9 +191,6 @@ class CreditCard implements CreditCardInterface
         }
 
         $this->securedExpireAt = $date;
-
-        // BC
-        $this->expireAt = $this->securedExpireAt->peek();
     }
 
     public function secure(): void

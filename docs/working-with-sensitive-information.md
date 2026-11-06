@@ -68,9 +68,9 @@ After the capture the payment's details look like this in the database:
 the payment with their bank. See [Payment operations](payment-operations.md) for acting on a result.
 
 {% hint style="warning" %}
-Detach the card with `setCreditCard(null)` before the payment goes anywhere that serializes it: a session,
-a cache, a message queue or a file. `serialize()` on a payment that still holds a `CreditCard` writes out
-the raw card number.
+Use the card in the request that received it. A serialized `CreditCard` keeps only its masked copies, its
+brand and its token, so a payment read back from a session, a cache, a message queue or a file has no card
+number, holder, security code or expiry date to send.
 {% endhint %}
 
 Never attach the card before a redirect. A card set on a payment is not saved, so it is lost when the
