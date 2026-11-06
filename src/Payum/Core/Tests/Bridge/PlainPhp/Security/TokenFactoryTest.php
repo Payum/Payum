@@ -670,6 +670,27 @@ final class TokenFactoryTest extends TestCase
     /**
      * @backupGlobals enabled
      */
+    public function testShouldNotKeepAHostTakenFromAnEarlierRequest(): void
+    {
+        $tokenStorage = $this->createStorageMock();
+        $tokenStorage->method('create')->willReturnOnConsecutiveCalls($first = new Token(), $second = new Token());
+
+        $factory = new TokenFactory($tokenStorage, $this->createStorageRegistryMock());
+
+        $_SERVER['HTTP_HOST'] = 'first.example.com';
+        $_SERVER['REQUEST_URI'] = '/';
+        $factory->createToken('theGatewayName', null, 'capture.php');
+
+        $_SERVER['HTTP_HOST'] = 'second.example.com';
+        $factory->createToken('theGatewayName', null, 'capture.php');
+
+        $this->assertStringStartsWith('http://first.example.com/', $first->getTargetUrl());
+        $this->assertStringStartsWith('http://second.example.com/', $second->getTargetUrl());
+    }
+
+    /**
+     * @backupGlobals enabled
+     */
     public function testThrowsAClearErrorWhenAUrlIsNeededAndNoHostIsKnown(): void
     {
         unset($_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'], $_SERVER['SERVER_ADDR']);
