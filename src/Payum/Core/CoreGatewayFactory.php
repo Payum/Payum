@@ -53,6 +53,7 @@ use Payum\Core\Gateway\DeclaresActions;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Legacy\LegacyFactoryScope;
+use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
@@ -61,6 +62,7 @@ use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Template\RendererInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -291,6 +293,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
                 TemplateRenderMiddleware::class => static fn (): TemplateRenderMiddleware => new TemplateRenderMiddleware(),
+                // PayumBuilder registers the real issuer over this one. A gateway built without it still
+                // runs handlers that never create a token.
+                TokenIssuerInterface::class => static fn (): TokenIssuerInterface => new NoTokenIssuer(),
                 // Built from every superglobal, with the headers and the raw php://input body: a PSP signs
                 // the raw bytes, usually in a header, and $_POST is empty for the JSON payloads most of
                 // them send. An application with a framework should register its own request instead,
