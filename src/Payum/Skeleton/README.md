@@ -16,34 +16,36 @@ The Payum extension to rapidly build new extensions.
 $ composer create-project payum/skeleton
 ```
 
-2. Replace all occurrences of `payum` with your vendor name. It may be your github name, for now let's say you choose: `acme`.
-3. Replace all occurrences of `skeleton` with a payment gateway name. For example Stripe, Paypal etc. For now let's say you choose: `paypal`.
-4. Add the PSP's credentials to `PaypalConfig` as `readonly` constructor arguments, and validate them in its constructor.
-5. Register the gateway with its config:
+2. Rename the package to your own: the `Payum\Skeleton` namespace, the `Skeleton` prefix of the class names, and
+   `payum/skeleton` in `composer.json`. Leave `Payum\Core` as it is. The steps below use the names before renaming.
+3. Add the PSP's credentials to `SkeletonConfig` as `readonly` constructor arguments, and validate them in its
+   constructor.
+4. Register the gateway with its config:
 
 ```php
 <?php
 
-use Acme\Paypal\PaypalConfig;
 use Payum\Core\PayumBuilder;
+use Payum\Skeleton\SkeletonConfig;
 
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->registerGateway('paypal', new PaypalConfig(sandbox: true))
+    ->registerGateway('skeleton', new SkeletonConfig(sandbox: true))
     ->getPayum()
 ;
 ```
 
-6. Implement every handler method that throws `Payum\Core\Exception\NotImplementedException`. A handler takes the API through its constructor, and Payum autowires it:
+5. Implement every handler method that throws `Payum\Core\Exception\NotImplementedException`. A handler takes the
+   API through its constructor, and Payum autowires it:
 
 ```php
 public function __construct(
-    private readonly PaypalApi $api,
+    private readonly SkeletonApi $api,
 ) {
 }
 ```
 
-Remove the handlers for operations your PSP does not support from `PaypalGateway::handlers()`.
+Remove the handlers for operations your PSP does not support from `SkeletonGateway::handlers()`.
 
 ## Resources
 
