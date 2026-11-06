@@ -51,7 +51,8 @@ class PaymentController extends Controller
 
 If the route after authorizing is another Payum operation, such as `payum_capture_do`, tell Payum where that
 operation sends the customer when it is done. Otherwise it has nowhere to go, and the capture fails with an
-error naming its token.
+error naming its token. Payum issues a token for that last route too, so a
+[done action](purchase-done-action.md) that verifies the token works unchanged.
 
 ```php
 use Payum\Core\Security\TokenPurpose;

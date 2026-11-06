@@ -788,10 +788,11 @@ final class GenericTokenFactoryTest extends TestCase
             'c' => 'd',
         ]);
 
-        $this->assertSame(['capture.php', [], 'done.php', [
+        $this->assertSame(['aGateway', 'done.php', [
             'c' => 'd',
-        ]], array_slice($calls->getArrayCopy()[0], 2));
-        $this->assertSame('capture.php?n=1', $token->getAfterUrl());
+        ], null, []], [$calls[0][0], ...array_slice($calls[0], 2)]);
+        $this->assertSame(['capture.php', [], 'done.php?n=1', []], array_slice($calls[1], 2));
+        $this->assertSame('capture.php?n=2', $token->getAfterUrl());
     }
 
     /**
@@ -829,8 +830,18 @@ final class GenericTokenFactoryTest extends TestCase
             ]);
 
             $this->assertSame($newCalls->getArrayCopy(), $oldCalls->getArrayCopy(), $method);
-            $this->assertSame('done.php', $oldCalls->getArrayCopy()[0][4], $method);
+            $this->assertSame('done.php?n=1', $oldCalls->getArrayCopy()[1][4], $method);
         }
+    }
+
+    public function testShouldNotStoreAFinalTokenWhenThereIsNoAfterToken(): void
+    {
+        [$factory, $calls] = $this->createRecordingFactory();
+
+        $factory->create(TokenPurpose::Refund, 'aGateway', new stdClass(), null, [], 'done.php');
+        $factory->create(TokenPurpose::Notify, 'aGateway', new stdClass(), null, [], 'done.php');
+
+        $this->assertSame(['refund.php', 'notify.php'], array_column($calls->getArrayCopy(), 2));
     }
 
     public function testShouldSendTheCancelAfterTokenToTheFinalPath(): void
@@ -839,7 +850,8 @@ final class GenericTokenFactoryTest extends TestCase
 
         $factory->createCancelToken('aGateway', new stdClass(), 'capture.php', [], 'done.php');
 
-        $this->assertSame('done.php', $calls->getArrayCopy()[0][4]);
+        $this->assertSame('done.php', $calls->getArrayCopy()[0][2]);
+        $this->assertSame('done.php?n=1', $calls->getArrayCopy()[1][4]);
     }
 
     public function testShouldFallBackToTheDonePathForACaptureWithNoAfterPath(): void
