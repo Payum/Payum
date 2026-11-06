@@ -15,8 +15,8 @@ Provide integration of PayPal REST API to payum.
 
 ## Resources
 
-* [Site](https://docs.payum.dev/)
-* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#paypal-rest)
+* [Site](https://payum.dev/)
+* [Documentation](https://payum.dev/docs/paypal/rest)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

@@ -14,8 +14,8 @@ The Payum extension. It provides [Be2Bill](http://www.be2bill.com/) payment inte
 
 ## Resources
 
-* [Site](https://docs.payum.dev/)
-* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#be2bill)
+* [Site](https://payum.dev/)
+* [Documentation](https://payum.dev/docs/be2bill)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

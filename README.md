@@ -25,14 +25,14 @@ Reduce Your Development Time with Payum integrating more than 50 payment service
 
 Payum is supported by:
 
-* [GitBook](https://www.gitbook.com/) — hosts our [documentation](https://docs.payum.dev/)
+* [GitBook](https://www.gitbook.com/) — hosts our [documentation](https://payum.dev/docs)
 
 If you'd like to see your company here, please [become a sponsor](https://github.com/sponsors/payum).
 
 ## Resources
 
-* [Documentation](https://docs.payum.dev/)
-* [Questions](http://stackoverflow.com/questions/tagged/payum)
+* [Documentation](https://payum.dev/docs)
+* [Questions](https://github.com/orgs/Payum/discussions/categories/q-a)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 
 ## License

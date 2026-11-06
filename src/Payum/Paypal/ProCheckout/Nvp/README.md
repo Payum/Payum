@@ -14,8 +14,8 @@ The Payum extension. It provides [Paypal ProCheckout](https://developer.paypal.c
 
 ## Resources
 
-* [Site](https://docs.payum.dev/)
-* [Documentation](https://github.com/Payum/Payum/blob/2.x/docs/index.md#paypal-pro-checkout)
+* [Site](https://payum.dev/)
+* [Documentation](https://payum.dev/docs/paypal/pro-checkout)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)

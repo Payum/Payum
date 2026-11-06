@@ -3,7 +3,7 @@
     "type": "project",
     "description": "The Payum extension. Rapid extension development",
     "keywords": ["payment", "paypal", "prohosted"],
-    "homepage": "https://docs.payum.dev",
+    "homepage": "https://payum.dev",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,7 @@
         },
         {
             "name":     "Payum project",
-            "homepage": "https://docs.payum.dev/"
+            "homepage": "https://payum.dev/"
         },
         {
             "name":     "Community contributions",

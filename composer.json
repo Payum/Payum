@@ -22,7 +22,7 @@
         "stripe checkout",
         "jms payment"
     ],
-    "homepage": "https://docs.payum.dev",
+    "homepage": "https://payum.dev",
     "license": "MIT",
     "authors": [
         {
