@@ -6,9 +6,13 @@ use ArrayAccess;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Legacy\StatusMarker;
 use Payum\Core\Request\GetStatusInterface;
-use Payum\Offline\Constants;
+use Payum\Offline\OfflineDetails;
 
+/**
+ * @deprecated since 2.0, removed in 3.0 with OfflineGatewayFactory. OfflineGateway runs its handlers instead.
+ */
 class StatusAction implements ActionInterface
 {
     public function execute($request): void
@@ -18,49 +22,7 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (! $model[Constants::FIELD_STATUS]) {
-            $request->markNew();
-
-            return;
-        }
-
-        if (Constants::STATUS_PENDING === $model[Constants::FIELD_STATUS]) {
-            $request->markPending();
-
-            return;
-        }
-
-        if (Constants::STATUS_AUTHORIZED === $model[Constants::FIELD_STATUS]) {
-            $request->markAuthorized();
-
-            return;
-        }
-
-        if (Constants::STATUS_CAPTURED === $model[Constants::FIELD_STATUS]) {
-            $request->markCaptured();
-
-            return;
-        }
-
-        if (Constants::STATUS_PAYEDOUT === $model[Constants::FIELD_STATUS]) {
-            $request->markPayedout();
-
-            return;
-        }
-
-        if (Constants::STATUS_REFUNDED === $model[Constants::FIELD_STATUS]) {
-            $request->markRefunded();
-
-            return;
-        }
-
-        if (Constants::STATUS_CANCELED === $model[Constants::FIELD_STATUS]) {
-            $request->markCanceled();
-
-            return;
-        }
-
-        $request->markUnknown();
+        StatusMarker::mark($request, OfflineDetails::status($model));
     }
 
     public function supports($request)

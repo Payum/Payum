@@ -9,6 +9,9 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Payout;
 use Payum\Offline\Constants;
 
+/**
+ * @deprecated since 2.0, removed in 3.0 with OfflineGatewayFactory. OfflineGateway runs its handlers instead.
+ */
 class PayoutAction implements ActionInterface
 {
     public function execute($request): void

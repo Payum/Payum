@@ -10,6 +10,9 @@ use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Capture;
 use Payum\Offline\Constants;
 
+/**
+ * @deprecated since 2.0, removed in 3.0 with OfflineGatewayFactory. OfflineGateway runs its handlers instead.
+ */
 class AuthorizeAction implements ActionInterface
 {
     public function execute($request): void
