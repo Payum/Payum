@@ -53,7 +53,13 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
         // Resolved first, so a purpose with no configured path fails before an after token is stored.
         $targetPath = $this->getPath($purpose->value);
 
-        $after = fn (?string $path): string => $this->createToken($gatewayName, $subject, $path, $afterParameters, $finalPath, $finalParameters)->getTargetUrl();
+        $after = fn (?string $path): string => $this->createToken(
+            $gatewayName,
+            $subject,
+            $path,
+            $afterParameters,
+            $this->createFinalUrl($gatewayName, $subject, $finalPath, $finalParameters),
+        )->getTargetUrl();
 
         $afterUrl = match ($purpose) {
             TokenPurpose::Capture => $after($afterPath ?? $this->getPath('done')),
@@ -124,7 +130,8 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
 
         $afterUrl = null;
         if ($afterPath) {
-            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters, ...array_slice(func_get_args(), 4))->getTargetUrl();
+            $finalUrl = $this->createFinalUrl($gatewayName, $model, ...array_slice(func_get_args(), 4));
+            $afterUrl = $this->createToken($gatewayName, $model, $afterPath, $afterParameters, $finalUrl)->getTargetUrl();
         }
 
         return $this->createToken($gatewayName, $model, $cancelPath, [], $afterUrl);
@@ -174,5 +181,14 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
         }
 
         return $this->paths[$name];
+    }
+
+    /**
+     * @param object|array<string, scalar>|null $model
+     * @param array<string, mixed> $finalParameters
+     */
+    private function createFinalUrl(string $gatewayName, $model, ?string $finalPath = null, array $finalParameters = []): ?string
+    {
+        return $finalPath ? $this->createToken($gatewayName, $model, $finalPath, $finalParameters)->getTargetUrl() : null;
     }
 }
