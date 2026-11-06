@@ -206,6 +206,9 @@
     instead of `$_SERVER['REQUEST_URI']`.
   * A verifier of your own must accept a `ServerRequestInterface`. Extending
     `Payum\Core\Security\HttpRequestVerifier` gives you that.
+* `Payum\Core\Model\CreditCard` no longer fills its protected `$number`, `$holder`, `$securityCode` and
+  `$expireAt` properties, so `serialize()` and `var_export()` leave the card out. They are always `null`
+  and are removed in 3.0. A subclass or Doctrine mapping that reads them must use the getters instead.
 
 ## 1.5.0
 

@@ -176,4 +176,45 @@ final class CreditCardTest extends TestCase
         $this->assertInstanceOf(SensitiveValue::class, $value);
         $this->assertSame($expected, $value->peek());
     }
+
+    public function testShouldLeaveCardDataOutOfSerializedForm(): void
+    {
+        $card = new CreditCard();
+        $card->setHolder('Mahatma Gandhi');
+        $card->setNumber('4111111111111111');
+        $card->setSecurityCode('737');
+        $card->setExpireAt(new DateTime('2031-07-01'));
+
+        $serialized = serialize($card);
+
+        $this->assertStringNotContainsString('Mahatma Gandhi', $serialized);
+        $this->assertStringNotContainsString('4111111111111111', $serialized);
+        $this->assertStringNotContainsString('737', $serialized);
+        $this->assertStringNotContainsString('2031-07-01', $serialized);
+    }
+
+    public function testShouldKeepNonSensitiveFieldsWhenUnserialized(): void
+    {
+        $card = new CreditCard();
+        $card->setToken('theToken');
+        $card->setBrand('visa');
+        $card->setHolder('Mahatma Gandhi');
+        $card->setNumber('4111111111111111');
+        $card->setSecurityCode('737');
+        $card->setExpireAt(new DateTime('2031-07-01'));
+
+        $restored = unserialize(serialize($card));
+
+        $this->assertInstanceOf(CreditCard::class, $restored);
+        $this->assertSame('theToken', $restored->getToken());
+        $this->assertSame('visa', $restored->getBrand());
+        $this->assertSame('MXXXXXX XXndhi', $restored->getMaskedHolder());
+        $this->assertSame('4XXXXXXXXXXX1111', $restored->getMaskedNumber());
+        foreach (['securedHolder', 'securedNumber', 'securedSecurityCode', 'securedExpireAt'] as $property) {
+            $this->assertNull($this->readAttribute($restored, $property)->peek());
+        }
+
+        $restored->setNumber('5555555555554444');
+        $this->assertSame('5555555555554444', $restored->getNumber());
+    }
 }

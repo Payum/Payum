@@ -122,6 +122,14 @@ signatures, `getStatus(): PaymentStatus` and `setStatus(PaymentStatus $status): 
 to load the class. Your own method then replaces Payum's, and your own status property and column keep
 working.
 
+### A credit card keeps its raw values to itself
+
+`Payum\Core\Model\CreditCard` holds the number, holder, security code and expiry date only in
+`SensitiveValue`, so `serialize()` and `var_export()` no longer write them out. Its protected `$number`,
+`$holder`, `$securityCode` and `$expireAt` properties are always `null` and go away in 3.0. If your
+subclass or Doctrine mapping reads them, read the card through `getNumber()`, `getHolder()`,
+`getSecurityCode()` and `getExpireAt()` instead, and never map them to a column.
+
 ### HTTP request verifiers
 
 A verifier of your own must accept a `Psr\Http\Message\ServerRequestInterface` and check the token
