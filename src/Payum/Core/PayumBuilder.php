@@ -180,18 +180,29 @@ class PayumBuilder
         $this->middleware = new MiddlewareCollection();
     }
 
+    /**
+     * Adds a FilesystemStorage for the token and for each shipped model that has no storage yet.
+     */
     public function addDefaultStorages(): static
     {
-        /** @var StorageInterface<TokenInterface> $tokenStorage */
-        $tokenStorage = new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash');
+        if (! $this->tokenStorage) {
+            /** @var StorageInterface<TokenInterface> $tokenStorage */
+            $tokenStorage = new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash');
 
-        $this
-            ->setTokenStorage($tokenStorage)
+            $this->setTokenStorage($tokenStorage);
+        }
 
-            ->addStorage(Payment::class, new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number'))
-            ->addStorage(ArrayObject::class, new FilesystemStorage(sys_get_temp_dir(), ArrayObject::class))
-            ->addStorage(Payout::class, new FilesystemStorage(sys_get_temp_dir(), Payout::class))
-        ;
+        $defaults = [
+            Payment::class => 'number',
+            ArrayObject::class => 'payum_id',
+            Payout::class => 'payum_id',
+        ];
+
+        foreach ($defaults as $modelClass => $idProperty) {
+            if (! isset($this->storages[$modelClass])) {
+                $this->addStorage($modelClass, new FilesystemStorage(sys_get_temp_dir(), $modelClass, $idProperty));
+            }
+        }
 
         return $this;
     }

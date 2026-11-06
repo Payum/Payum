@@ -42,9 +42,9 @@ Payum finds a storage by the exact class of the model, so register it under your
 and the token storage with `$payum->getTokenStorage()`.
 
 {% hint style="warning" %}
-Always set a token storage. Without one, Payum calls `addDefaultStorages()`, which registers file storages
-for tokens and for `Payum\Core\Model\Payment`, `Payout` and `ArrayObject`, and replaces any storage you
-registered for one of those three classes.
+Always set a token storage in production. Without one, Payum calls `addDefaultStorages()`, which keeps
+tokens in files in the system temp directory. It also adds a file storage for each of
+`Payum\Core\Model\Payment`, `Payout` and `ArrayObject` that you did not register a storage for.
 {% endhint %}
 
 ## Storages Payum ships
