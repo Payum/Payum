@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use Exception;
+use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Payum;
@@ -653,6 +655,39 @@ HTML
         ]);
 
         $this->assertSame($paymentMock, $result);
+    }
+
+    public function testDoneReadsThePaymentFromStorageOnAGatewayBuiltFromHandlers(): void
+    {
+        $payment = new Payment();
+        $token = $this->createMock(TokenInterface::class);
+        $gateway = $this->createMock(Gateway::class);
+        $paymentStorage = $this->createMock(StorageInterface::class);
+        $identity = new Identity('anId', Payment::class);
+
+        $token->method('getGatewayName')->willReturn('aGateway');
+        $token->method('getDetails')->willReturn($identity);
+
+        $this->httpRequestVerifierMock->method('verify')->willReturn($token);
+        $this->httpRequestVerifierMock->expects($this->once())->method('invalidate')->with($token);
+
+        $gateway->method('supportsCommand')->with(CaptureCommand::class)->willReturn(true);
+        $gateway->expects($this->never())->method('execute');
+
+        $paymentStorage->expects($this->once())->method('find')->with($identity)->willReturn($payment);
+
+        $payum = new Payum(
+            new SimpleRegistry([
+                'aGateway' => $gateway,
+            ], [
+                Payment::class => $paymentStorage,
+            ]),
+            $this->httpRequestVerifierMock,
+            $this->tokenFactoryMock,
+            $this->storageMock,
+        );
+
+        $this->assertSame($payment, $payum->done(Request::create('/done')));
     }
 
     public function testShouldAllowNotify(): void

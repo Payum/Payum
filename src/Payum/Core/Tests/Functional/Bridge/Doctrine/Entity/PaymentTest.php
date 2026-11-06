@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Functional\Bridge\Doctrine\Entity;
 
+use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\SensitiveValue;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\OrmTest;
 use Payum\Core\Tests\Mocks\Entity\Payment;
+use Payum\Core\Tests\Mocks\Entity\PaymentWithOwnStatus;
 
 final class PaymentTest extends OrmTest
 {
@@ -74,5 +76,41 @@ final class PaymentTest extends OrmTest
         $this->assertEquals([
             'cardNumber' => null,
         ], $order->getDetails());
+    }
+
+    public function testShouldStoreTheStatus(): void
+    {
+        $payment = new Payment();
+        $payment->setStatus(PaymentStatus::Captured);
+
+        $this->em->persist($payment);
+        $this->em->flush();
+        $this->em->clear();
+
+        $this->assertSame(PaymentStatus::Captured, $this->em->find(Payment::class, $payment->getId())->getStatus());
+    }
+
+    public function testShouldReadAStatusStoredBeforeItWasTrackedAsUnknown(): void
+    {
+        $payment = new Payment();
+
+        $this->em->persist($payment);
+        $this->em->flush();
+        $this->em->getConnection()->executeStatement('UPDATE orders SET payum_status = NULL');
+        $this->em->clear();
+
+        $this->assertSame(PaymentStatus::Unknown, $this->em->find(Payment::class, $payment->getId())->getStatus());
+    }
+
+    public function testShouldLetASubclassMapItsOwnStatus(): void
+    {
+        $payment = new PaymentWithOwnStatus();
+        $payment->setStatus(PaymentStatus::Refunded);
+
+        $this->em->persist($payment);
+        $this->em->flush();
+        $this->em->clear();
+
+        $this->assertSame(PaymentStatus::Refunded, $this->em->find(PaymentWithOwnStatus::class, $payment->getId())->getStatus());
     }
 }

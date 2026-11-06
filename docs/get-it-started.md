@@ -38,58 +38,20 @@ and gateway to work with. Put the four scripts in the same directory. Payum buil
 done URLs from the URL of the script that creates the token, so it expects `capture.php` and
 `done.php` next to `prepare.php`.
 
-## Create the payment model
-
-Payum records the status of a payment on the payment itself when its class implements
-`StatusAwareInterface`. Create `Payment.php` with a payment class that does:
-
-```php
-<?php
-// Payment.php
-
-namespace App;
-
-use Payum\Core\Model\Payment as BasePayment;
-use Payum\Core\Model\StatusAwareInterface;
-use Payum\Core\Result\PaymentStatus;
-
-class Payment extends BasePayment implements StatusAwareInterface
-{
-    private PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
-}
-```
-
-`Payum\Core\Model\Payment` holds the amount, currency, customer and the provider's data. It does not
-track a status, which is why you extend it. In your application this is usually your own order or
-payment entity. [Use your own payment model](your-order-integration.md) shows how, and
-[Payment status](payment-status.md) lists the statuses.
-
 ## Configure Payum
 
-Create `config.php`. It registers a storage for your payment class and the gateway, under a name of
-your choice:
+Create `config.php`. It registers a storage for payments and the gateway, under a name of your choice:
 
 ```php
 <?php
 // config.php
 
 use Acme\Payum\AcmeConfig;
-use App\Payment;
+use Payum\Core\Model\Payment;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Storage\FilesystemStorage;
 
 require __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/Payment.php';
 
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
@@ -102,8 +64,12 @@ $payum = (new PayumBuilder())
 name you use for this gateway in the other scripts. You can register several gateways, each under
 its own name.
 
+`Payum\Core\Model\Payment` is the payment model Payum ships. It holds the amount, currency, customer,
+the provider's data and the status Payum records. In your application you can use your own order or
+payment entity instead, as [Use your own payment model](your-order-integration.md) shows.
+
 `addDefaultStorages()` stores tokens as files in the system temporary directory. `addStorage()` does
-the same for your payment class, using its number as the file name. Payum needs a storage for every
+the same for payments, using the payment number as the file name. Payum needs a storage for every
 model class you pay with, and looks it up by the exact class name.
 
 {% hint style="warning" %}
@@ -126,7 +92,7 @@ URL:
 <?php
 // prepare.php
 
-use App\Payment;
+use Payum\Core\Model\Payment;
 
 require __DIR__.'/config.php';
 
@@ -223,7 +189,8 @@ the payment succeeded or failed, so this is where you decide what happens next: 
 send a receipt or show an error. Because the token is gone, reloading the page throws an exception
 instead of running that logic twice.
 
-`PaymentStatus::Pending` means the provider has not confirmed the payment yet. Some providers confirm
+`getStatus()` returns a `Payum\Core\Result\PaymentStatus`. `PaymentStatus::Pending` means the provider
+has not confirmed the payment yet. Some providers confirm
 it later, by calling your server. [Payment status](payment-status.md) explains each status.
 
 ## Next steps

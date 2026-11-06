@@ -8,6 +8,8 @@ use Money\Money;
 use Payum\Core\Model\MoneyAwareInterface;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\StatusAwareInterface;
+use Payum\Core\Result\PaymentStatus;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -97,5 +99,23 @@ final class PayoutTest extends TestCase
 
         $this->assertSame(500, $payout->getTotalAmount());
         $this->assertSame('JPY', $payout->getCurrencyCode());
+    }
+
+    public function testShouldTrackItsStatus(): void
+    {
+        $this->assertTrue((new ReflectionClass(Payout::class))->implementsInterface(StatusAwareInterface::class));
+    }
+
+    public function testShouldStartAsNew(): void
+    {
+        $this->assertSame(PaymentStatus::New, (new Payout())->getStatus());
+    }
+
+    public function testShouldAllowGetStatusPreviouslySet(): void
+    {
+        $payout = new Payout();
+        $payout->setStatus(PaymentStatus::PaidOut);
+
+        $this->assertSame(PaymentStatus::PaidOut, $payout->getStatus());
     }
 }

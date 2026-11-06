@@ -10,7 +10,7 @@ walks through a first payment; this page goes further.
 
 ## Set up
 
-The samples use a made-up gateway registered as `acme`, a payment class of your own, and a `config.php`
+The samples use a made-up gateway registered as `acme`, Payum's own payment model, and a `config.php`
 that every script includes:
 
 ```php
@@ -18,8 +18,8 @@ that every script includes:
 // config.php
 
 use Acme\Payum\AcmeConfig;
-use App\Entity\Payment;
 use GuzzleHttp\Psr7\ServerRequest;
+use Payum\Core\Model\Payment;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Storage\FilesystemStorage;
 use Psr\Http\Message\ServerRequestInterface;
@@ -35,8 +35,8 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
-`App\Entity\Payment` extends Payum's `Payment` so that Payum can record its status.
-[Use your own payment model](your-order-integration.md) shows the class. The file storage keeps this
+`Payum\Core\Model\Payment` records the status of each operation on itself. To pay with your own order
+or payment entity instead, see [Use your own payment model](your-order-integration.md). The file storage keeps this
 sample short; use a database storage for real payments, as [Storages](storages.md) describes.
 
 Register the current request as the `ServerRequestInterface` service. Gateways read the query string,
@@ -284,7 +284,7 @@ Capture means taking the customer's money. A customer-facing capture starts with
 <?php
 // prepare.php
 
-use App\Entity\Payment;
+use Payum\Core\Model\Payment;
 
 require __DIR__.'/config.php';
 
@@ -304,7 +304,32 @@ the end. Pass a path as the third argument to send this payment somewhere else i
 
 ### The capture script
 
-The capture script verifies the token, runs the capture and acts on the result:
+The capture script verifies the token, runs the capture and sends the customer where the gateway asks:
+
+```php
+<?php
+// capture.php
+
+require __DIR__.'/config.php';
+
+$payum->capture()->send();
+```
+
+`capture()` reads the token from the current request and checks that it was issued for this URL. It
+throws `Payum\Core\Exception\InvalidArgumentException` when the token is missing, unknown or already
+deleted, or was issued for another URL. It turns `Redirect`, `PostRedirect` and `RenderTemplate` into a
+Symfony `Response`, and redirects to the after URL once the capture has nothing left to ask. The same
+script works for every gateway, and it runs once per step the customer goes through.
+
+In a framework controller, pass the Symfony HttpFoundation request you already have and return the
+response: `return $payum->capture($request);`. `capture()` needs `symfony/http-foundation`, which Payum
+does not install for you.
+
+### Run the capture yourself
+
+`capture()` throws a `LogicException` for a `Challenge` or a `Poll`, and it leaves the capture token in
+storage. If your gateway uses either next action, or you want the token deleted, run the command
+yourself and hand the result to `respond()`:
 
 ```php
 <?php
@@ -322,25 +347,7 @@ $result = $payum->getGateway($token->getGatewayName())->execute(CaptureCommand::
 respond($payum, $result, $token);
 ```
 
-`verify()` reads the token from the request and checks that it was issued for this URL. It throws
-`Payum\Core\Exception\InvalidArgumentException` when the token is missing, unknown or already deleted,
-or was issued for another URL. The same script works for every gateway, and it runs once per step the
-customer goes through.
-
-### In a framework
-
-When your framework gives you a Symfony HttpFoundation request, `Payum::capture()` does the work of the
-script in one call and returns a `Symfony\Component\HttpFoundation\Response`:
-
-```php
-return $payum->capture($request);
-```
-
-It turns `Redirect`, `PostRedirect` and `RenderTemplate` into a response, and redirects to the after URL
-once the capture has nothing left to ask. It throws a `LogicException` for a `Challenge` or a `Poll`, and
-it leaves the capture token in storage. If your gateway uses either next action, or you want the token
-deleted, use the script above. `Payum::capture()` needs `symfony/http-foundation`, which Payum does not
-install for you.
+`verify()` does the same checks as `capture()`, on a PSR-7 request.
 
 ### Capture part of the amount
 
@@ -370,18 +377,12 @@ reads the status Payum recorded on the payment and decides what to show:
 <?php
 // done.php
 
-use GuzzleHttp\Psr7\ServerRequest;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Result\PaymentStatus;
 
 require __DIR__.'/config.php';
 
-$token = $payum->getHttpRequestVerifier()->verify(ServerRequest::fromGlobals());
-
-$identity = $token->getDetails();
-$payment = $payum->getStorage($identity->getClass())->find($identity);
-
-$payum->getHttpRequestVerifier()->invalidate($token);
+$payment = $payum->done();
 
 echo match (PaymentStatuses::of($payment)) {
     PaymentStatus::Captured, PaymentStatus::Authorized => 'Thank you, your payment went through.',
@@ -391,14 +392,9 @@ echo match (PaymentStatuses::of($payment)) {
 };
 ```
 
-The token's details hold the payment's identity: its class and its id. Load the payment from its storage
-with it, then delete the token so a reload cannot run your order logic twice.
-
-{% hint style="warning" %}
-`PaymentStatuses::of()` returns `null` unless your payment class implements `StatusAwareInterface`.
-Payum's own `Payum\Core\Model\Payment` does not, so extend it as
-[Use your own payment model](your-order-integration.md) shows before you rely on this script.
-{% endhint %}
+`done()` verifies the token, deletes it so a reload cannot run your order logic twice, and returns the
+payment. `PaymentStatuses::of()` returns `null` for a payment class of your own that does not implement
+`StatusAwareInterface`, which the `default` arm covers.
 
 Do not fulfil an order only from the done script. A customer can close the browser before reaching it,
 and a `Pending` payment can clear hours later. Listen for the `StatusChanged` event to act on every

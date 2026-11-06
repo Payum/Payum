@@ -229,6 +229,32 @@ final class HttpRequestVerifierTest extends TestCase
         $this->assertSame([], $deprecations);
     }
 
+    public function testShouldVerifyAScriptRequestedDirectly(): void
+    {
+        $token = new Token();
+        $token->setHash('theHash');
+        $token->setTargetUrl('http://target.com/capture.php');
+
+        $storageMock = $this->createStorageMock();
+        $storageMock->expects($this->once())->method('find')->with('theHash')->willReturn($token);
+
+        $verifier = new HttpRequestVerifier($storageMock);
+
+        // What a SAPI sets for http://target.com/capture.php?payum_token=theHash
+        $request = new Request([
+            'payum_token' => 'theHash',
+        ], [], [], [], [], [
+            'HTTP_HOST' => 'target.com',
+            'SCRIPT_NAME' => '/capture.php',
+            'SCRIPT_FILENAME' => '/var/www/capture.php',
+            'PHP_SELF' => '/capture.php',
+            'REQUEST_URI' => '/capture.php?payum_token=theHash',
+            'QUERY_STRING' => 'payum_token=theHash',
+        ]);
+
+        $this->assertSame($token, $verifier->verify($request));
+    }
+
     public function testShouldDeprecateVerifyingAnArray(): void
     {
         $verifier = new HttpRequestVerifier($this->createStorageMock());

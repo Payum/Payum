@@ -39,6 +39,7 @@ use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Tests\Mocks\Model\UntrackedPayment;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -178,7 +179,7 @@ final class LegacyRequestTest extends TestCase
     {
         $gateway = $this->buildPayum()->getGateway('acme');
 
-        $gateway->execute($status = new GetHumanStatus($this->buildPayment()));
+        $gateway->execute($status = new GetHumanStatus(new UntrackedPayment()));
 
         // Nobody knows, which is not the same as new.
         $this->assertTrue($status->isUnknown());

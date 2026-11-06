@@ -12,6 +12,8 @@ use Payum\Core\Model\DirectDebitPaymentInterface;
 use Payum\Core\Model\MoneyAwareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\StatusAwareInterface;
+use Payum\Core\Result\PaymentStatus;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -95,5 +97,23 @@ final class PaymentTest extends TestCase
 
         $this->assertNull($payment->getTotalAmount());
         $this->assertNull($payment->getCurrencyCode());
+    }
+
+    public function testShouldTrackItsStatus(): void
+    {
+        $this->assertTrue((new ReflectionClass(Payment::class))->implementsInterface(StatusAwareInterface::class));
+    }
+
+    public function testShouldStartAsNew(): void
+    {
+        $this->assertSame(PaymentStatus::New, (new Payment())->getStatus());
+    }
+
+    public function testShouldAllowGetStatusPreviouslySet(): void
+    {
+        $payment = new Payment();
+        $payment->setStatus(PaymentStatus::Captured);
+
+        $this->assertSame(PaymentStatus::Captured, $payment->getStatus());
     }
 }

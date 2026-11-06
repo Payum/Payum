@@ -39,47 +39,14 @@ throws an `UnhandledMatchError` for a case it does not list.
 
 ## Record the status on your payment
 
-Payum records a status only on a payment that has somewhere to keep it. Implement
-`Payum\Core\Model\StatusAwareInterface` on your payment class:
+Payum records a status only on a payment that has somewhere to keep it, which means its class
+implements `Payum\Core\Model\StatusAwareInterface`. Payum's own `Payum\Core\Model\Payment` and
+`Payum\Core\Model\Payout` do. A new one starts at `PaymentStatus::New`, and the Doctrine mapping Payum
+ships stores the status in a `payum_status` column.
 
-```php
-<?php
-
-namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Payment as BasePayment;
-use Payum\Core\Model\StatusAwareInterface;
-use Payum\Core\Result\PaymentStatus;
-
-#[ORM\Entity]
-#[ORM\Table]
-class Payment extends BasePayment implements StatusAwareInterface
-{
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected $id;
-
-    #[ORM\Column(type: 'string', enumType: PaymentStatus::class)]
-    protected PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
-}
-```
-
-Start the status at `PaymentStatus::New`. Payum's own `Payum\Core\Model\Payment` does not implement the
-interface, which is why the sample extends it. [Use your own payment model](your-order-integration.md)
-covers the rest of the class, and [Storages](storages.md) shows how to map it with Doctrine.
-`Payum\Core\Model\Payout` works the same way. Extend it and implement the interface.
+Your own order or payment class needs `getStatus()` and `setStatus()` to have its status recorded.
+[Use your own payment model](your-order-integration.md) shows the class, and [Storages](storages.md)
+shows how to map it with Doctrine.
 
 ## Read the status
 

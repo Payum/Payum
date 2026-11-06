@@ -239,6 +239,12 @@ class Payum implements RegistryInterface
 
         $this->httpRequestVerifier->invalidate($token);
 
+        if ($gateway instanceof Gateway && $gateway->supportsCommand(CaptureCommand::class)) {
+            $identity = $token->getDetails();
+
+            return $this->getStorage($identity->getClass())->find($identity);
+        }
+
         $gateway->execute($status = new GetHumanStatus($token));
 
         return $status->getFirstModel();

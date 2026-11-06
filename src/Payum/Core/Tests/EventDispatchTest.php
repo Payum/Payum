@@ -39,6 +39,7 @@ use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
+use Payum\Core\Tests\Mocks\Model\UntrackedPayment;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -147,7 +148,7 @@ final class EventDispatchTest extends TestCase
 
     public function testShouldSayNothingAboutTheStatusOfAPaymentThatDoesNotTrackOne(): void
     {
-        $this->buildPayum()->getGateway('acme')->execute(CaptureCommand::forPayment($this->buildPayment()));
+        $this->buildPayum()->getGateway('acme')->execute(CaptureCommand::forPayment(new UntrackedPayment()));
 
         $this->assertSame([], $this->events->ofType(StatusChanged::class));
     }
