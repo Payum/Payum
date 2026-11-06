@@ -2,11 +2,13 @@
 {
     "name": "payum/offline",
     "type": "library",
-    "description": "The Payum extension. It provides Offline payment integration.",
+    "description": "The Payum extension. Payments settled outside an online PSP: cash, bank transfer, store credit.",
     "keywords": [
         "payment",
-        "offlile",
-        "invoice"
+        "offline",
+        "invoice",
+        "cash",
+        "bank transfer"
     ],
     "homepage": "https://payum.dev",
     "license": "MIT",
@@ -25,6 +27,7 @@
         }
     ],
     "require": {
+        "php": "^8.1",
         "payum/core": "2.0.x-dev"
     },
     "require-dev": {

@@ -10,6 +10,8 @@ abstract class Constants
 
     public const FIELD_STATUS = 'status';
 
+    public const FIELD_REFUNDED_AMOUNT = 'refunded_amount';
+
     public const STATUS_CAPTURED = 'captured';
 
     public const STATUS_AUTHORIZED = 'authorized';
