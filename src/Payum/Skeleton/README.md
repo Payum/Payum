@@ -34,7 +34,7 @@ $payum = (new PayumBuilder())
 ;
 ```
 
-6. Implement every handler method that throws `Not implemented`. A handler takes the API through its constructor, and Payum autowires it:
+6. Implement every handler method that throws `Payum\Core\Exception\NotImplementedException`. A handler takes the API through its constructor, and Payum autowires it:
 
 ```php
 public function __construct(
