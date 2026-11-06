@@ -14,6 +14,8 @@
 
         <field name="currencyCode" column="currency_code" type="string" nullable="true" />
 
+        <field name="payumStatus" column="payum_status" type="string" length="32" nullable="true" />
+
         <field name="details" column="details" type="json" />
 
     </mapped-superclass>

@@ -4,9 +4,10 @@ namespace Payum\Core\Model;
 
 use Money\Money;
 use Payum\Core\Money\Amount;
+use Payum\Core\Result\PaymentStatus;
 use Traversable;
 
-class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface
+class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface, StatusAwareInterface
 {
     /**
      * @var string
@@ -52,6 +53,14 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
      * @var BankAccountInterface|null
      */
     protected $bankAccount;
+
+    /**
+     * Private, and not named $status, so a subclass that already declares and maps its own status keeps
+     * working. Null in a row stored before the column existed, which reads as unknown.
+     *
+     * @phpstan-ignore property.unusedType (Doctrine hydrates null from such a row)
+     */
+    private ?string $payumStatus = 'new';
 
     public function __construct()
     {
@@ -191,5 +200,15 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
     public function setBankAccount(?BankAccountInterface $bankAccount = null): void
     {
         $this->bankAccount = $bankAccount;
+    }
+
+    public function getStatus(): PaymentStatus
+    {
+        return PaymentStatus::tryFrom($this->payumStatus ?? '') ?? PaymentStatus::Unknown;
+    }
+
+    public function setStatus(PaymentStatus $status): void
+    {
+        $this->payumStatus = $status->value;
     }
 }

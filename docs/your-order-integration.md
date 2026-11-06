@@ -8,7 +8,7 @@ your class unchanged.
 ## Extend Payum's payment
 
 The quickest way is to extend `Payum\Core\Model\Payment` and add what your application needs. This
-sample adds an id for Doctrine and the status field Payum keeps current:
+sample adds an id for Doctrine:
 
 ```php
 <?php
@@ -17,40 +17,22 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Payment as BasePayment;
-use Payum\Core\Model\StatusAwareInterface;
-use Payum\Core\Result\PaymentStatus;
 
 #[ORM\Entity]
 #[ORM\Table]
-class Payment extends BasePayment implements StatusAwareInterface
+class Payment extends BasePayment
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
-
-    #[ORM\Column(type: 'string', enumType: PaymentStatus::class)]
-    protected PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
 }
 ```
 
-The parent class brings the number, description, client fields, amount, currency and the gateway
-details, and Payum ships a Doctrine mapping for them. [Storages](storages.md) shows how to load that
-mapping next to your own.
-
-Implementing `StatusAwareInterface` is optional, but without it Payum cannot record the status, and
-`PaymentStatuses::of()` returns `null` for your payments. [Payment status](payment-status.md) explains
-what Payum records and when.
+The parent class brings the number, description, client fields, amount, currency, the gateway details
+and the status Payum records, and Payum ships a Doctrine mapping for them. [Storages](storages.md) shows
+how to load that mapping next to your own. [Payment status](payment-status.md) explains what Payum
+records and when.
 
 ## Implement the interfaces yourself
 
@@ -236,8 +218,8 @@ scripts in [Payment operations](payment-operations.md) work as they are.
 
 A payout class works the same way with `Payum\Core\Model\PayoutInterface`. It has `getRecipientId()`,
 `getRecipientEmail()`, `getDescription()`, `getTotalAmount()`, `getCurrencyCode()`, `getDetails()` and
-`setDetails()`. Extend `Payum\Core\Model\Payout` or implement the interface, add `StatusAwareInterface`
-to track its status, and register a storage for the class.
+`setDetails()`. Extend `Payum\Core\Model\Payout`, which tracks its status already, or implement the interface
+and add `StatusAwareInterface` to track it. Then register a storage for the class.
 
 ## Supporting Payum
 

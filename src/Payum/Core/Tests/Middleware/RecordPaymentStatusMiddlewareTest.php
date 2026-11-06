@@ -17,6 +17,7 @@ use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
@@ -30,6 +31,7 @@ use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\IdentityInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
+use Payum\Core\Tests\Mocks\Model\UntrackedPayment;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -158,7 +160,7 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
     {
         $events = new RecordingEventDispatcher();
 
-        $this->dispatch(new Payment(), static fn (): CaptureResult => CaptureResult::captured('txn_1'), $events);
+        $this->dispatch(new UntrackedPayment(), static fn (): CaptureResult => CaptureResult::captured('txn_1'), $events);
 
         $this->assertSame([], $events->dispatched);
     }
@@ -187,7 +189,7 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $storage->statusWhenUpdated);
     }
 
-    private function dispatch(Payment $payment, callable $handler, ?EventDispatcherInterface $events = null): mixed
+    private function dispatch(PaymentInterface $payment, callable $handler, ?EventDispatcherInterface $events = null): mixed
     {
         return (new Pipeline([new RecordPaymentStatusMiddleware($events ?? new NullEventDispatcher())]))->process(
             CaptureCommand::forPayment($payment),
@@ -196,7 +198,7 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         );
     }
 
-    private function context(Payment $payment, ?TokenInterface $token = null): Context
+    private function context(PaymentInterface $payment, ?TokenInterface $token = null): Context
     {
         return new Context(
             $this->createMock(Gateway::class),

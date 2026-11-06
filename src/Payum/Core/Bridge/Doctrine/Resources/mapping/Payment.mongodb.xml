@@ -14,6 +14,8 @@
 
         <field name="currencyCode" type="string" />
 
+        <field name="payumStatus" type="string" nullable="true" />
+
         <field name="details" type="object" />
 
     </mapped-superclass>

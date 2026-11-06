@@ -23,7 +23,8 @@ class HttpRequestVerifier extends ServerRequestVerifier
         if ($httpRequest instanceof Request) {
             return $this->verifyToken(
                 array_merge($httpRequest->request->all(), $httpRequest->query->all())[$this->tokenParameter] ?? null,
-                $httpRequest->getUri()
+                // getUri() appends the path info, so a script requested directly reads as /capture.php/?...
+                $httpRequest->getSchemeAndHttpHost() . $httpRequest->getRequestUri()
             );
         }
 

@@ -103,6 +103,25 @@ load the class:
 
 A Doctrine entity that extends `Payum\Core\Model\Payment` and overrides no method needs no change.
 
+### Payments and payouts record their status
+
+`Payum\Core\Model\Payment` and `Payum\Core\Model\Payout` implement
+`Payum\Core\Model\StatusAwareInterface`, so Payum records each operation's status on them. Their
+Doctrine mappings gain a nullable `payum_status` column. Add it to every table you map from either
+class, with a migration or `doctrine:schema:update`:
+
+```sql
+ALTER TABLE payment ADD payum_status VARCHAR(32) DEFAULT NULL;
+```
+
+A row stored before the column existed reads as `PaymentStatus::Unknown`. With MongoDB ODM the field is
+`payumStatus` and needs no migration.
+
+If your subclass already has a `getStatus()` or `setStatus()` method, give it the interface's
+signatures, `getStatus(): PaymentStatus` and `setStatus(PaymentStatus $status): void`, or PHP refuses
+to load the class. Your own method then replaces Payum's, and your own status property and column keep
+working.
+
 ### HTTP request verifiers
 
 A verifier of your own must accept a `Psr\Http\Message\ServerRequestInterface` and check the token
@@ -394,7 +413,7 @@ if ($status->isCaptured()) {
 }
 ```
 
-After, for a payment model that implements `StatusAwareInterface`:
+After, for a payment model that implements `StatusAwareInterface`, as Payum's own `Payment` does:
 
 ```php
 <?php
