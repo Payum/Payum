@@ -8,7 +8,11 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Request\Convert;
 use Payum\Offline\Constants;
+use Payum\Offline\OfflineDetails;
 
+/**
+ * @deprecated since 2.0, removed in 3.0 with OfflineGatewayFactory. OfflineGateway runs its handlers instead.
+ */
 class ConvertPayoutAction implements ActionInterface
 {
     /**
@@ -22,11 +26,7 @@ class ConvertPayoutAction implements ActionInterface
         $payout = $request->getSource();
 
         $details = ArrayObject::ensureArrayObject($payout->getDetails());
-        $details['amount'] = $payout->getTotalAmount();
-        $details['currency'] = $payout->getCurrencyCode();
-        $details['description'] = $payout->getDescription();
-        $details['recipient_email'] = $payout->getRecipientEmail();
-        $details['recipient_id'] = $payout->getRecipientId();
+        OfflineDetails::fillFromPayout($payout, $details);
 
         $details->defaults([
             Constants::FIELD_PAYOUT => true,
