@@ -119,11 +119,13 @@ Three methods answer the usual questions:
 $result->isSuccessful();          // finished and did not fail
 $result->isFailed();              // declined, or the payment is now failed
 $result->requiresInteraction();   // the customer has to do something first, see $result->next
+$result->isAccepted();            // the provider took it on and reports the outcome later
 ```
 
 `isSuccessful()` is true for `Authorized`, `Captured`, `PartiallyCaptured`, `Refunded`,
 `PartiallyRefunded` and `PaidOut`. A `Pending` result is neither successful nor failed. A bank transfer
-waiting to clear is not finished yet. [Payment status](payment-status.md) lists every status and what it
+waiting to clear is not finished yet. An accepted result is neither as well: the provider has the
+refund, void or capture in hand and will send the outcome by notification. [Payment status](payment-status.md) lists every status and what it
 means.
 
 Some results carry more. Read the amount that actually moved from the result, because a provider can
@@ -455,6 +457,9 @@ $result = $payum->getGateway('acme')->execute(CaptureCommand::forPayment($paymen
 $payum->getStorage($payment::class)->update($payment);
 ```
 
+Some providers take the capture on and confirm it later with a notification. Then
+`$result->isAccepted()` is true and the payment stays `Authorized` until the notification arrives.
+
 An authorization does not last forever. `AuthorizeResult::$expiresAt` says when the hold lapses, if the
 provider reports it.
 
@@ -481,8 +486,9 @@ $payum->getStorage($payment::class)->update($payment);
 
 The third argument is a reason, which some providers show in their dashboard. A partial refund needs a
 gateway that declares `Capability::PartialRefund`, and the gateway reports the payment as
-`PartiallyRefunded`. Some providers settle refunds later and confirm them with a notification, in which
-case the result is `Pending`.
+`PartiallyRefunded`. Some providers settle refunds later and confirm them with a notification. Then
+`$result->isAccepted()` is true and the payment stays `Captured` until the notification says how the
+refund ended.
 
 A refund normally runs from your back office, as above. If you want a URL that runs it, for example a
 link in an admin email, create a refund token. Its after path is optional:
@@ -509,7 +515,8 @@ $result = $payum->getGateway('acme')->execute(CancelCommand::forPayment($payment
 ```
 
 The reason is optional. A cancel the provider refuses leaves the payment as it was, which is usually
-still `Authorized`. `CancelCommand::forPayout()` stops a payout that has not gone out yet.
+still `Authorized`. A provider that voids asynchronously answers with an accepted result, and the payment
+stays `Authorized` until its notification arrives. `CancelCommand::forPayout()` stops a payout that has not gone out yet.
 
 ## Pay out money
 

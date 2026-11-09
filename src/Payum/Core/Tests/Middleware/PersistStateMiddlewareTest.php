@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Payum\Core\Tests\Middleware;
 
 use DI\Container;
+use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\RefundCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -16,6 +18,8 @@ use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Model\Payment;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\PaymentStatus;
+use Payum\Core\Result\RefundResult;
+use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -56,10 +60,28 @@ final class PersistStateMiddlewareTest extends TestCase
         $this->sync($payment, $storage, static fn (): SyncResult => SyncResult::synced(PaymentStatus::Captured));
     }
 
+    public function testShouldSaveThePspRequestOfAnAcceptedOperationWithoutMovingTheStatus(): void
+    {
+        $payment = new Payment();
+        $payment->setStatus(PaymentStatus::Captured);
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $this->sync($payment, $storage, static function (RefundCommand $command, Context $context): RefundResult {
+            $context->state()['refund_id'] = 're_1';
+
+            return RefundResult::accepted('re_1');
+        }, RefundCommand::forToken($this->createMock(TokenInterface::class)));
+
+        $this->assertSame('re_1', $payment->getDetails()['refund_id']);
+        $this->assertSame(PaymentStatus::Captured, $payment->getStatus());
+    }
+
     /**
      * @param StorageInterface<object>&MockObject $storage
+     * @param CommandInterface<Result>|null $command
      */
-    private function sync(Payment $payment, StorageInterface $storage, callable $handler): void
+    private function sync(Payment $payment, StorageInterface $storage, callable $handler, ?CommandInterface $command = null): void
     {
         $registry = $this->createMock(StorageRegistryInterface::class);
         $registry->method('getStorage')->willReturn($storage);
@@ -70,13 +92,14 @@ final class PersistStateMiddlewareTest extends TestCase
             ->resolve(new Container())
         ;
 
-        $token = $this->createMock(TokenInterface::class);
+        $command ??= SyncCommand::forToken($this->createMock(TokenInterface::class));
+        $token = $command->token();
 
         (new Pipeline($middleware))->process(
-            SyncCommand::forToken($token),
+            $command,
             new Context(
                 $this->createMock(Gateway::class),
-                SyncCommand::forToken($token),
+                $command,
                 $this->createMock(PaymentGateway::class),
                 $this->createMock(ServerRequestInterface::class),
                 $this->createMock(TokenIssuerInterface::class),

@@ -66,6 +66,9 @@ final class AuthorizeResult extends Result
     }
 
     /**
+     * The payment itself is not authorized yet. Pass the NextAction when the customer has something to do,
+     * and omit it when the PSP is still deciding.
+     *
      * @param array<string, mixed> $raw
      */
     public static function pending(?NextAction $next = null, array $raw = []): self

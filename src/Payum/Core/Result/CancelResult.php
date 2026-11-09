@@ -31,6 +31,20 @@ final class CancelResult extends Result
     }
 
     /**
+     * The PSP accepted the cancellation and will report the outcome later, usually by webhook. The payment
+     * keeps its status until then, so a refused one leaves nothing to undo.
+     *
+     * @param array<string, mixed> $raw
+     */
+    public static function accepted(?string $transactionId = null, array $raw = []): self
+    {
+        $result = new self(null, transactionId: $transactionId, raw: $raw);
+        $result->accepted = true;
+
+        return $result;
+    }
+
+    /**
      * The operation did not succeed. By default this says nothing about the payment's status: a cancel the
      * PSP refused leaves the payment exactly as it was, which is usually still authorized.
      *
@@ -41,16 +55,5 @@ final class CancelResult extends Result
     public static function failed(Failure $failure, ?PaymentStatus $status = null, array $raw = []): self
     {
         return new self($status, failure: $failure, raw: $raw);
-    }
-
-    /**
-     * Not finished. Some PSPs confirm a cancellation asynchronously, and a gateway needing the customer to
-     * confirm passes a NextAction.
-     *
-     * @param array<string, mixed> $raw
-     */
-    public static function pending(?NextAction $next = null, array $raw = []): self
-    {
-        return new self(PaymentStatus::Pending, $next, raw: $raw);
     }
 }

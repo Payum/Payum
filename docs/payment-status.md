@@ -88,6 +88,9 @@ rules decide when the status changes:
 
 - A result whose status is `null` leaves the payment alone. A refund the provider refused, for example,
   leaves a captured payment `Captured`.
+- A refund, void or capture the provider accepted but has not finished also leaves the payment alone,
+  so a captured payment stays `Captured` while its refund is in progress. `$result->isAccepted()` is
+  true, and the notification that follows sets the final status.
 - A decline usually leaves the status where it was, so a customer whose card was declined can try another
   card. The gateway moves the payment to `Failed` only when it will not go through.
 - An exception leaves the status alone, because nobody learned what the payment's state is.

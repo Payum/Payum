@@ -16,6 +16,7 @@ $result->raw;            // array, the PSP's own response
 $result->isSuccessful();        // finished and did not fail
 $result->isFailed();            // has a failure, or the status is Failed
 $result->requiresInteraction(); // $result->next is set
+$result->isAccepted();          // the PSP took the operation on and reports the outcome later
 ```
 
 | Result | Adds |
@@ -52,6 +53,7 @@ CaptureResult::captured('ch_1', Money::EUR(1000));            // the same, sayin
 CaptureResult::partiallyCaptured('ch_1', Money::EUR(600));    // only part of it was taken
 CaptureResult::pending(new Redirect('https://pay.acme.test/chk_1')); // the customer must act
 CaptureResult::pending();                                     // waiting on the PSP, nothing to show
+CaptureResult::accepted('cap_1');                             // capture of an authorization, outcome later
 CaptureResult::canceled();
 CaptureResult::failed(new Failure(FailureReason::Declined, 'card_declined'));
 
@@ -59,8 +61,10 @@ AuthorizeResult::authorized('auth_1', Money::EUR(1000), new DateTimeImmutable('+
 
 RefundResult::refunded('re_1', Money::EUR(1000));
 RefundResult::partiallyRefunded('re_1', Money::EUR(300));
+RefundResult::accepted('re_1');                               // outcome later, by webhook
 
 CancelResult::canceled('chk_1');
+CancelResult::accepted('void_1');                             // outcome later, by webhook
 PayoutResult::paidOut('po_1', Money::EUR(5000));
 SyncResult::synced(PaymentStatus::Captured, 'ch_1');
 ```
@@ -137,6 +141,26 @@ final:
 RefundResult::failed($failure);                          // the payment is unchanged
 CaptureResult::failed($failure, PaymentStatus::Failed);  // this payment is finished
 ```
+
+### Accepted means the outcome comes later
+
+Many PSPs only accept a refund, a void or a capture of an authorization when you ask, and send the
+outcome later by webhook. Return `accepted()` for that, with the PSP's id for the request and its
+response:
+
+```php
+return RefundResult::accepted($response['pspReference'], $response);
+```
+
+The status is null, so the payment keeps the status it had: a captured payment stays `Captured` while
+its refund is in progress, and stays `Captured` if the PSP refuses the refund. `isAccepted()` is true,
+so the application can tell this apart from a result that concluded nothing. Your notify handler sets
+the final status when the webhook arrives. See [Webhooks](webhooks.md).
+
+Use `pending()` only when the payment itself is not finished: the customer is at a checkout page, or
+the PSP is still processing a new payment such as a bank transfer. A `pending()` result moves the
+payment to `Pending`. `RefundResult` and `CancelResult` have no `pending()`, because a refund or a void
+in progress never makes the payment pending.
 
 ### Payum records the status
 
