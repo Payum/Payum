@@ -212,6 +212,10 @@ and dispatches `NotifyCommand::forGateway()`. The command then points at no paym
 `$context->payment()` is null and `$context->state()` throws, so the handler has to find the payment
 from the message itself.
 
+An application that has already found what the message is about dispatches `NotifyCommand::forPayment()`
+or, for a payout, `NotifyCommand::forPayout()`. The handler then reads it from `$context->payment()` or
+`$context->payout()`.
+
 ## The request the handler reads
 
 `verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`. By

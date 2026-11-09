@@ -7,6 +7,7 @@ namespace Payum\Core\Tests\Command;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Gateway\Capability;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\Payout;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +36,18 @@ final class NotifyCommandTest extends TestCase
 
         $this->assertSame($payment, $command->subject());
         $this->assertSame($payment, $command->payment());
+        $this->assertNull($command->token());
+    }
+
+    public function testShouldCarryAPayoutWhenTheCallerKnowsIt(): void
+    {
+        $payout = new Payout();
+
+        $command = NotifyCommand::forPayout($payout);
+
+        $this->assertSame($payout, $command->subject());
+        $this->assertSame($payout, $command->payout());
+        $this->assertNull($command->payment());
         $this->assertNull($command->token());
     }
 

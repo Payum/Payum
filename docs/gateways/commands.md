@@ -63,8 +63,8 @@ side is covered in [Payment operations](../payment-operations.md).
 
 ## What a command acts on
 
-Most commands act on a payment. `PayoutCommand` acts on a payout, and `CancelCommand` and `SyncCommand`
-act on either. Both implement `Payum\Core\Model\SubjectInterface`, which is all Payum needs:
+Most commands act on a payment. `PayoutCommand` acts on a payout, and `CancelCommand`, `SyncCommand`
+and `NotifyCommand` act on either. Both implement `Payum\Core\Model\SubjectInterface`, which is all Payum needs:
 
 ```php
 PayoutCommand::forPayout($payout);
@@ -74,6 +74,9 @@ CancelCommand::forPayout($payout);
 
 SyncCommand::forPayment($payment);
 SyncCommand::forPayout($payout);
+
+NotifyCommand::forPayment($payment);
+NotifyCommand::forPayout($payout);
 ```
 
 A command that arrived on a token carries no model, only the token. Payum loads the model the token
@@ -141,6 +144,7 @@ can point at nothing, because which payment a message is about is only known onc
 ```php
 NotifyCommand::forToken($token);      // arrived on a notify token, the usual case
 NotifyCommand::forPayment($payment);  // the application already knows the payment
+NotifyCommand::forPayout($payout);    // the application already knows the payout
 NotifyCommand::forGateway();          // the application routed the endpoint itself
 ```
 

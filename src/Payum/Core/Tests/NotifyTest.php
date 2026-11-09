@@ -21,6 +21,7 @@ use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\Payout;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
@@ -72,6 +73,19 @@ final class NotifyTest extends TestCase
         $payum->getGateway('acme')->execute(NotifyCommand::forPayment($payment));
 
         $this->assertSame(PaymentStatus::Captured, $payment->getStatus());
+    }
+
+    public function testShouldHandleAnEventAboutAPayout(): void
+    {
+        $payout = new Payout();
+        $payout->setStatus(PaymentStatus::Pending);
+
+        $payum = $this->buildPayum($this->buildRequest('good-signature'));
+
+        $result = $payum->getGateway('acme')->execute(NotifyCommand::forPayout($payout));
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
+        $this->assertSame(PaymentStatus::Captured, $payout->getStatus());
     }
 
     public function testShouldRefuseAMessageThatIsNotGenuine(): void

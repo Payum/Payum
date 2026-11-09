@@ -6,6 +6,7 @@ namespace Payum\Core\Command;
 
 use Payum\Core\Gateway\Capability;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\NotifyResult;
 use Payum\Core\Security\TokenInterface;
@@ -48,6 +49,11 @@ final class NotifyCommand implements CommandInterface
         return new self(subject: $payment);
     }
 
+    public static function forPayout(PayoutInterface $payout): self
+    {
+        return new self(subject: $payout);
+    }
+
     public static function forToken(TokenInterface $token): self
     {
         return new self(token: $token);
@@ -56,6 +62,11 @@ final class NotifyCommand implements CommandInterface
     public function payment(): ?PaymentInterface
     {
         return $this->subject instanceof PaymentInterface ? $this->subject : null;
+    }
+
+    public function payout(): ?PayoutInterface
+    {
+        return $this->subject instanceof PayoutInterface ? $this->subject : null;
     }
 
     public function subject(): ?SubjectInterface
