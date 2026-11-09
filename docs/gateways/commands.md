@@ -49,6 +49,9 @@ CaptureCommand::forPayment($payment, idempotencyKey: 'order-1001-capture');
 // A partial refund, with a reason some PSPs record.
 RefundCommand::forPayment($payment, amount: 500, reason: 'damaged_on_arrival');
 
+// The same refund, safe to retry.
+RefundCommand::forPayment($payment, amount: 500, reason: 'damaged_on_arrival', idempotencyKey: 'refund-77');
+
 CancelCommand::forPayment($payment, reason: 'out_of_stock');
 ```
 

@@ -9,6 +9,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway\Capability;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\Payout;
 use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
@@ -43,6 +44,33 @@ final class CancelCommandTest extends TestCase
 
         $this->assertSame($token, $command->token());
         $this->assertNotInstanceOf(PaymentInterface::class, $command->payment());
+    }
+
+    public function testShouldBeBuiltFromAPayout(): void
+    {
+        $payout = new Payout();
+
+        $command = CancelCommand::forPayout($payout, 'merchant_abandoned');
+
+        $this->assertSame($payout, $command->payout());
+        $this->assertSame($payout, $command->subject());
+        $this->assertSame('merchant_abandoned', $command->reason);
+    }
+
+    public function testShouldCarryTheIdempotencyKeyFromEveryNamedConstructor(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+
+        $this->assertSame('cancel-42', CancelCommand::forPayment(new Payment(), null, 'cancel-42')->idempotencyKey);
+        $this->assertSame('cancel-42', CancelCommand::forPayout(new Payout(), null, 'cancel-42')->idempotencyKey);
+        $this->assertSame('cancel-42', CancelCommand::forToken($token, null, 'cancel-42')->idempotencyKey);
+    }
+
+    public function testShouldCarryNoIdempotencyKeyByDefault(): void
+    {
+        $this->assertNull(CancelCommand::forPayment(new Payment())->idempotencyKey);
+        $this->assertNull(CancelCommand::forPayout(new Payout())->idempotencyKey);
+        $this->assertNull(CancelCommand::forToken($this->createMock(TokenInterface::class))->idempotencyKey);
     }
 
     public function testShouldRefuseToBeBuiltWithNothingToCancel(): void

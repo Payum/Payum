@@ -562,8 +562,8 @@ An idempotency key stops a retried request from charging or paying out twice. Se
 retry of the same operation, and a provider that supports keys runs it only once. Use a value tied to the
 operation, such as your refund's id, not a random one per attempt.
 
-`CaptureCommand::forPayment()`, `AuthorizeCommand::forPayment()` and `PayoutCommand::forPayout()` take the
-key as their last argument. For a refund or a cancel, use the constructor with named arguments:
+Every named constructor of `CaptureCommand`, `AuthorizeCommand`, `RefundCommand`, `CancelCommand` and
+`PayoutCommand` takes the key as its last argument:
 
 ```php
 <?php
@@ -573,8 +573,8 @@ use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\RefundCommand;
 
 CaptureCommand::forPayment($payment, idempotencyKey: 'capture-order-1001');
-new RefundCommand(payment: $payment, amount: 250, reason: 'damaged_item', idempotencyKey: 'refund-77');
-new CancelCommand(subject: $payment, reason: 'out_of_stock', idempotencyKey: 'cancel-order-1001');
+RefundCommand::forPayment($payment, 250, 'damaged_item', 'refund-77');
+CancelCommand::forPayment($payment, 'out_of_stock', idempotencyKey: 'cancel-order-1001');
 ```
 
 Payum hands the key to the gateway, which passes it on to providers that accept one. Payum does not
