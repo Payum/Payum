@@ -106,6 +106,7 @@ context.
 | `payout()` | The subject when it is a payout, otherwise null |
 | `token()` | The token this execution arrived on, if any |
 | `httpRequest()` | The inbound HTTP request, as a PSR-7 `ServerRequestInterface` |
+| `idempotencyKey()` | The idempotency key the caller passed on the command, or null |
 | `notifyUrl()` | A URL the PSP can send webhooks about this payment to. See [Webhooks](webhooks.md) |
 | `notifyToken()` | The token behind `notifyUrl()` |
 | `tokens()` | The `TokenIssuerInterface`, for creating other tokens |
@@ -118,6 +119,10 @@ context.
 Read the amount from `amount()`, never from `$command->amount`. A full capture carries no amount on the
 command, so reading the command charges nothing. `amount()` falls back to the subject's total and returns
 a `Money` either way. See [Money and currencies](../money.md).
+
+Send `idempotencyKey()` to the PSP when its API accepts one, usually as an `Idempotency-Key` header. The PSP
+then answers a retried request with the result of the first one instead of charging again. It is null
+when the caller gave no key, and always null for a sync or a notify.
 
 `NotifyHandlerInterface` is the one interface that differs: it has a `verify()` method, and its
 `handle()` takes the verified event between the command and the context. See [Webhooks](webhooks.md).
