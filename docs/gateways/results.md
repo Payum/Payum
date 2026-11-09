@@ -94,7 +94,8 @@ to a mobile app as data.
 | `Poll` | `retryAfterSeconds` | Nothing to show. The PSP has not finished, ask again later |
 | `null` | | The operation is finished, whether it succeeded or not |
 
-All of them are in `Payum\Core\Result\NextAction`.
+All of them are in `Payum\Core\Result\NextAction`. A minor release may add more, so code that acts on
+`$result->next` needs a fallback for a type it does not know. See [Payment operations](../payment-operations.md#act-on-the-next-action).
 
 `Payum::capture()`, which most applications use for their capture script, turns `Redirect`,
 `PostRedirect` and `RenderTemplate` into a response, and sends the customer to the token's after URL

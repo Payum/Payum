@@ -301,6 +301,7 @@ After:
 // capture.php
 
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Result\NextAction\Redirect;
 use GuzzleHttp\Psr7\ServerRequest;
 
@@ -314,6 +315,10 @@ $result = $gateway->execute(CaptureCommand::forToken($token));
 if ($result->next instanceof Redirect) {
     header('Location: ' . $result->next->url);
     exit;
+}
+
+if (null !== $result->next) {
+    throw new LogicException(sprintf('capture.php does not handle %s yet.', $result->next::class));
 }
 
 $payum->getHttpRequestVerifier()->invalidate($token);
