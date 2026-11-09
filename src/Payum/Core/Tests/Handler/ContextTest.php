@@ -9,6 +9,7 @@ use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\RefundCommand;
+use Payum\Core\Command\SyncCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -128,6 +129,37 @@ final class ContextTest extends TestCase
         );
 
         $this->assertNull($context->amount());
+    }
+
+    public function testShouldLoadTheSubjectOnlyWhenFirstAskedForIt(): void
+    {
+        $loads = 0;
+        $payment = new Payment();
+
+        $context = new Context(
+            $this->createMock(Executor::class),
+            CaptureCommand::forToken($this->createMock(TokenInterface::class)),
+            $this->createMock(PaymentGateway::class),
+            $this->createMock(ServerRequestInterface::class),
+            $this->createMock(TokenIssuerInterface::class),
+            static function () use (&$loads, $payment): Payment {
+                ++$loads;
+
+                return $payment;
+            },
+        );
+
+        $this->assertSame(0, $loads);
+        $this->assertSame($payment, $context->subject());
+        $this->assertSame($payment, $context->payment());
+        $this->assertSame(1, $loads);
+    }
+
+    public function testShouldReturnTheIdempotencyKeyTheCommandCarries(): void
+    {
+        $this->assertSame('order-1', $this->buildContextFor(CaptureCommand::forPayment(new Payment(), null, 'order-1'))->idempotencyKey());
+        $this->assertNull($this->buildContextFor(CaptureCommand::forPayment(new Payment()))->idempotencyKey());
+        $this->assertNull($this->buildContextFor(SyncCommand::forPayment(new Payment()))->idempotencyKey());
     }
 
     private function buildContext(
