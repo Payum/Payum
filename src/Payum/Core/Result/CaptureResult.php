@@ -47,6 +47,20 @@ final class CaptureResult extends Result
     }
 
     /**
+     * The PSP accepted the capture of an authorization and will report the outcome later, usually by
+     * webhook. The payment keeps its status until then, so a refused one leaves nothing to undo.
+     *
+     * @param array<string, mixed> $raw
+     */
+    public static function accepted(?string $transactionId = null, array $raw = []): self
+    {
+        $result = new self(null, transactionId: $transactionId, raw: $raw);
+        $result->accepted = true;
+
+        return $result;
+    }
+
+    /**
      * @param array<string, mixed> $raw
      */
     public static function canceled(array $raw = []): self
@@ -84,8 +98,9 @@ final class CaptureResult extends Result
     }
 
     /**
-     * Not finished. Pass the NextAction when the customer has something to do, and omit it when the
-     * gateway is simply waiting on the PSP.
+     * The payment itself is not finished. Pass the NextAction when the customer has something to do, and
+     * omit it when the PSP is still processing a new payment, such as a bank transfer. A capture of an
+     * authorization the PSP has taken on is accepted() instead, which leaves the payment Authorized.
      *
      * @param array<string, mixed> $raw
      */

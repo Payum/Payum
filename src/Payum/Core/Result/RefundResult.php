@@ -58,13 +58,17 @@ final class RefundResult extends Result
     }
 
     /**
-     * Some PSPs settle a refund asynchronously and confirm by webhook.
+     * The PSP accepted the refund and will report the outcome later, usually by webhook. The payment keeps
+     * its status until then, so a refused one leaves nothing to undo.
      *
      * @param array<string, mixed> $raw
      */
-    public static function pending(?NextAction $next = null, array $raw = []): self
+    public static function accepted(?string $transactionId = null, array $raw = []): self
     {
-        return new self(PaymentStatus::Pending, $next, raw: $raw);
+        $result = new self(null, transactionId: $transactionId, raw: $raw);
+        $result->accepted = true;
+
+        return $result;
     }
 
     /**

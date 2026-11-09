@@ -54,6 +54,7 @@ final class LegacyRequestTest extends TestCase
 
         LegacyCaptureHandler::$next = null;
         LegacyCaptureHandler::$dispatched = false;
+        LegacyCancelHandler::$accept = false;
     }
 
     public function testShouldAnswerAOneXCaptureWithTheHandler(): void
@@ -123,6 +124,22 @@ final class LegacyRequestTest extends TestCase
         $gateway->execute(new Cancel($this->buildPayment()));
 
         $this->assertTrue(LegacyCancelHandler::$dispatched);
+    }
+
+    public function testShouldKeepReportingTheStatusAOneXCallerHadWhileThePspWorksOnAnAcceptedVoid(): void
+    {
+        LegacyCancelHandler::$accept = true;
+
+        $payment = new LegacyTrackedPayment();
+        $payment->setStatus(PaymentStatus::Authorized);
+
+        $gateway = $this->buildPayum()->getGateway('acme');
+
+        $this->assertNull($gateway->execute(new Cancel($payment), true));
+
+        $gateway->execute($status = new GetHumanStatus($payment));
+
+        $this->assertTrue($status->isAuthorized());
     }
 
     public function testShouldReportNotifyAsUnsupportedWhenTheGatewayShipsNoHandlerForIt(): void
@@ -290,11 +307,13 @@ final class LegacyCancelHandler implements CancelHandlerInterface
 {
     public static bool $dispatched = false;
 
+    public static bool $accept = false;
+
     public function handle(CancelCommand $command, Context $context): CancelResult
     {
         self::$dispatched = true;
 
-        return CancelResult::canceled();
+        return self::$accept ? CancelResult::accepted('void_1') : CancelResult::canceled();
     }
 }
 

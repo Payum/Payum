@@ -17,6 +17,12 @@ namespace Payum\Core\Result;
 abstract class Result
 {
     /**
+     * Set only by the accepted() constructors, so a result built by hand with a null status still reads as
+     * having concluded nothing.
+     */
+    protected bool $accepted = false;
+
+    /**
      * @param PaymentStatus|null $status the payment's state after this operation. Null when the operation
      *                                  concluded nothing about it — a refund that was declined leaves the
      *                                  payment exactly as it was
@@ -55,6 +61,15 @@ abstract class Result
     public function isFailed(): bool
     {
         return $this->failure instanceof Failure || PaymentStatus::Failed === $this->status;
+    }
+
+    /**
+     * The PSP took the operation on and will report how it ended later, usually by webhook. The payment
+     * keeps its status until then.
+     */
+    public function isAccepted(): bool
+    {
+        return $this->accepted;
     }
 
     /**

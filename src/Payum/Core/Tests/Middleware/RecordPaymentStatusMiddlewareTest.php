@@ -20,11 +20,13 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\RefundResult;
+use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -59,6 +61,43 @@ final class RecordPaymentStatusMiddlewareTest extends TestCase
         ));
 
         $this->assertSame(PaymentStatus::Captured, $payment->getStatus());
+    }
+
+    /**
+     * @return iterable<string, array{PaymentStatus, callable(): Result}>
+     */
+    public static function provideOperationsThePspAcceptedButHasNotConcluded(): iterable
+    {
+        yield 'refund of a captured payment' => [
+            PaymentStatus::Captured,
+            static fn (): Result => RefundResult::accepted('re_1'),
+        ];
+        yield 'void of an authorization' => [
+            PaymentStatus::Authorized,
+            static fn (): Result => CancelResult::accepted('void_1'),
+        ];
+        yield 'capture of an authorization' => [
+            PaymentStatus::Authorized,
+            static fn (): Result => CaptureResult::accepted('cap_1'),
+        ];
+    }
+
+    /**
+     * @dataProvider provideOperationsThePspAcceptedButHasNotConcluded
+     *
+     * @param callable(): Result $handler
+     */
+    public function testShouldKeepTheStatusWhileThePspWorksOnAnAcceptedOperation(PaymentStatus $status, callable $handler): void
+    {
+        $payment = new TrackedPayment();
+        $payment->setStatus($status);
+
+        $events = new RecordingEventDispatcher();
+
+        $this->dispatch($payment, $handler, $events);
+
+        $this->assertSame($status, $payment->getStatus());
+        $this->assertSame([], $events->ofType(StatusChanged::class));
     }
 
     public function testShouldRecordATerminalFailureWhenTheHandlerSaysSo(): void
