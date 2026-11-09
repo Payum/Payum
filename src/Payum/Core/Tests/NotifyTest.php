@@ -24,14 +24,12 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -205,7 +203,7 @@ final class NotifyTest extends TestCase
     }
 
     /**
-     * @param Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>> $payum
+     * @param Payum<object> $payum
      */
     private function mintNotifyToken(Payum $payum): TokenInterface
     {
@@ -241,7 +239,7 @@ final class NotifyTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(ServerRequestInterface $request): Payum
     {

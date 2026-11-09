@@ -19,7 +19,6 @@ use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
@@ -47,7 +46,7 @@ use function spl_object_hash;
 final class PayumTest extends TestCase
 {
     /**
-     * @var RegistryInterface<StorageRegistryInterface<StorageInterface<TokenInterface>>>|MockObject
+     * @var RegistryInterface<object>|MockObject
      */
     private RegistryInterface | MockObject $registryMock;
 

@@ -9,8 +9,8 @@ use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
 
 /**
- * @template StorageType of object
- * @implements RegistryInterface<StorageType>
+ * @template TModel of object
+ * @implements RegistryInterface<TModel>
  */
 class DynamicRegistry implements RegistryInterface
 {
@@ -25,7 +25,7 @@ class DynamicRegistry implements RegistryInterface
     private StorageInterface $gatewayConfigStore;
 
     /**
-     * @var GatewayFactoryRegistryInterface|RegistryInterface<StorageType>
+     * @var GatewayFactoryRegistryInterface|RegistryInterface<TModel>
      */
     private GatewayFactoryRegistryInterface | RegistryInterface $gatewayFactoryRegistry;
 

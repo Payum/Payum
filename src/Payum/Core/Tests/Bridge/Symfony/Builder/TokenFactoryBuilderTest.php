@@ -19,7 +19,6 @@ final class TokenFactoryBuilderTest extends TestCase
         /** @var StorageInterface<TokenInterface> $tokenStorage */
         $tokenStorage = $this->createMock(StorageInterface::class);
 
-        /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */
         $storageRegistry = $this->createMock(StorageRegistryInterface::class);
 
         /** @var UrlGeneratorInterface $urlGenerator */

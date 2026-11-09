@@ -22,7 +22,6 @@ use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetCurrency;
 use Payum\Core\Request\GetHttpRequest;
@@ -215,7 +214,7 @@ final class LegacyInformationRequestsTest extends TestCase
     }
 
     /**
-     * @param Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>> $payum
+     * @param Payum<object> $payum
      */
     private function capture(Payum $payum): void
     {
@@ -223,7 +222,7 @@ final class LegacyInformationRequestsTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {

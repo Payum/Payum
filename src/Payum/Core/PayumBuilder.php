@@ -407,7 +407,7 @@ class PayumBuilder
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws Exception
@@ -645,7 +645,6 @@ class PayumBuilder
     {
         $tokenStorage = $this->resolveTokenStorage();
 
-        /** @var StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry */
         $storageRegistry = $this->buildRegistry([], $this->storages);
 
         $paths = array_replace([
@@ -824,7 +823,7 @@ class PayumBuilder
 
     /**
      * @param StorageInterface<TokenInterface> $tokenStorage
-     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry
+     * @param StorageRegistryInterface<object> $storageRegistry
      */
     protected function buildTokenFactory(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry): TokenFactoryInterface
     {
@@ -862,7 +861,7 @@ class PayumBuilder
     /**
      * @param array<string, GatewayInterface> $gateways
      * @param array<string, StorageInterface<object>> $storages
-     * @return RegistryInterface<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return RegistryInterface<object>
      */
     protected function buildRegistry(array $gateways = [], array $storages = [], array $gatewayFactories = []): RegistryInterface
     {
@@ -880,7 +879,6 @@ class PayumBuilder
             $registry = new FallbackRegistry($this->mainRegistry, $registry);
         }
 
-        /** @var RegistryInterface<StorageRegistryInterface<StorageInterface<TokenInterface>>> $registry */
         return $registry;
     }
 

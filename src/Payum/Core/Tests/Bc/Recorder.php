@@ -11,7 +11,6 @@ use Payum\Core\Gateway;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Authorize;
 use Payum\Core\Request\Cancel;
@@ -30,7 +29,6 @@ use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Request\Sync;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Storage\StorageInterface;
 use ReflectionMethod;
 use ReflectionProperty;
 use Stripe\ApiRequestor;
@@ -412,7 +410,7 @@ final class Recorder
     }
 
     /**
-     * @param Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>> $payum
+     * @param Payum<object> $payum
      * @param array<string, string> $tokens
      */
     private function token(Payum $payum, Scenario $scenario, string $op, array &$tokens): TokenInterface
@@ -436,7 +434,7 @@ final class Recorder
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function payum(Scenario $scenario, MockHttpClient $http): Payum
     {

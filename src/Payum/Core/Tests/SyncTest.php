@@ -20,13 +20,10 @@ use Payum\Core\Model\Payout;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\SyncResult;
-use Payum\Core\Security\TokenInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 final class SyncTest extends TestCase
@@ -100,7 +97,7 @@ final class SyncTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {

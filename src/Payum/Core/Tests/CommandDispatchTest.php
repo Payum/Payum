@@ -19,16 +19,13 @@ use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CancelResult;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\GenericTokenFactory;
-use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -226,7 +223,7 @@ final class CommandDispatchTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {

@@ -19,15 +19,12 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Request\Refund;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\PaymentStatus;
-use Payum\Core\Security\TokenInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -119,7 +116,7 @@ final class HalfMigratedGatewayTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {
