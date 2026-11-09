@@ -62,14 +62,14 @@ final class RefundCommand implements CommandInterface, HasAmount
         return Capability::Refund;
     }
 
-    public static function forPayment(PaymentInterface $payment, int|Money|null $amount = null, ?string $reason = null): self
+    public static function forPayment(PaymentInterface $payment, int|Money|null $amount = null, ?string $reason = null, ?string $idempotencyKey = null): self
     {
-        return new self(payment: $payment, amount: $amount, reason: $reason);
+        return new self(payment: $payment, amount: $amount, reason: $reason, idempotencyKey: $idempotencyKey);
     }
 
-    public static function forToken(TokenInterface $token, int|Money|null $amount = null, ?string $reason = null): self
+    public static function forToken(TokenInterface $token, int|Money|null $amount = null, ?string $reason = null, ?string $idempotencyKey = null): self
     {
-        return new self(token: $token, amount: $amount, reason: $reason);
+        return new self(token: $token, amount: $amount, reason: $reason, idempotencyKey: $idempotencyKey);
     }
 
     public function money(?Currency $currency = null): ?Money

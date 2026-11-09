@@ -51,19 +51,19 @@ final class CancelCommand implements CommandInterface
         return Capability::Cancel;
     }
 
-    public static function forPayment(PaymentInterface $payment, ?string $reason = null): self
+    public static function forPayment(PaymentInterface $payment, ?string $reason = null, ?string $idempotencyKey = null): self
     {
-        return new self(subject: $payment, reason: $reason);
+        return new self(subject: $payment, reason: $reason, idempotencyKey: $idempotencyKey);
     }
 
-    public static function forPayout(PayoutInterface $payout, ?string $reason = null): self
+    public static function forPayout(PayoutInterface $payout, ?string $reason = null, ?string $idempotencyKey = null): self
     {
-        return new self(subject: $payout, reason: $reason);
+        return new self(subject: $payout, reason: $reason, idempotencyKey: $idempotencyKey);
     }
 
-    public static function forToken(TokenInterface $token, ?string $reason = null): self
+    public static function forToken(TokenInterface $token, ?string $reason = null, ?string $idempotencyKey = null): self
     {
-        return new self(token: $token, reason: $reason);
+        return new self(token: $token, reason: $reason, idempotencyKey: $idempotencyKey);
     }
 
     public function payment(): ?PaymentInterface
