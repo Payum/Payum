@@ -77,7 +77,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use function array_merge;
@@ -689,6 +691,8 @@ class PayumBuilder
             ClientInterface::class => Psr18ClientDiscovery::find(...),
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
+            ResponseFactoryInterface::class => Psr17FactoryDiscovery::findResponseFactory(...),
+            UriFactoryInterface::class => Psr17FactoryDiscovery::findUriFactory(...),
 
             // Shared, so that freezing time with addGlobalService() freezes it for every gateway at
             // once rather than for whichever one happened to be asked.
@@ -764,6 +768,8 @@ class PayumBuilder
             ClientInterface::class,
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
+            ResponseFactoryInterface::class,
+            UriFactoryInterface::class,
             ClockInterface::class,
             EventDispatcherInterface::class,
         ];

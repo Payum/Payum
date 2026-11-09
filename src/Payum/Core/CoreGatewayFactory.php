@@ -75,6 +75,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -268,6 +269,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 ClientInterface::class => Psr18ClientDiscovery::find(...),
                 StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
                 RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
+                ResponseFactoryInterface::class => Psr17FactoryDiscovery::findResponseFactory(...),
+                UriFactoryInterface::class => Psr17FactoryDiscovery::findUriFactory(...),
                 ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
 
                 // Every time read goes through this, so that expiry and staleness can be tested at a
@@ -353,7 +356,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 'payum.paths' => self::corePaths(),
 
                 // Additional aliases
-                ResponseFactoryInterface::class => static fn (ContainerInterface $c): RequestFactoryInterface => $c->get(RequestFactoryInterface::class),
                 Environment::class => static fn (ContainerInterface $c) => $c->get('twig.env'),
                 HttpClient::class => static fn (ContainerInterface $c) => $c->get('payum.http_client'),
 

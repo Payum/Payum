@@ -59,7 +59,9 @@ logging on every call:
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
@@ -68,8 +70,13 @@ $factory = new Psr17Factory();
 $builder
     ->addGlobalService(ClientInterface::class, new Psr18Client(HttpClient::create(['timeout' => 30])))
     ->addGlobalService(RequestFactoryInterface::class, $factory)
-    ->addGlobalService(StreamFactoryInterface::class, $factory);
+    ->addGlobalService(ResponseFactoryInterface::class, $factory)
+    ->addGlobalService(StreamFactoryInterface::class, $factory)
+    ->addGlobalService(UriFactoryInterface::class, $factory);
 ```
+
+Each PSR-17 interface is looked up on its own, so the factories can be separate classes, as they are in
+laminas-diactoros.
 
 ## The incoming request
 

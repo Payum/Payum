@@ -53,6 +53,8 @@ These are in the global container by default:
 | `Psr\Http\Client\ClientInterface` | Found by `php-http/discovery` | The PSR-18 HTTP client gateways call their PSP with. |
 | `Psr\Http\Message\RequestFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for outgoing requests. |
 | `Psr\Http\Message\StreamFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for request bodies. |
+| `Psr\Http\Message\ResponseFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for responses. |
+| `Psr\Http\Message\UriFactoryInterface` | Found by `php-http/discovery` | PSR-17 factory for URIs. |
 | `Psr\Clock\ClockInterface` | `Payum\Core\Clock\SystemClock` | The current time, for anything that expires. |
 | `Psr\EventDispatcher\EventDispatcherInterface` | `Payum\Core\Event\NullEventDispatcher`, which drops every event | Receives the payment lifecycle [events](../events.md). |
 | `Payum\Core\Template\RendererInterface` | `Payum\Core\Bridge\Twig\TwigRenderer` | Renders the payment pages a gateway asks for. |
