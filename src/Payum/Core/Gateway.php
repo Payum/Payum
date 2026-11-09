@@ -232,7 +232,9 @@ class Gateway implements GatewayInterface
                     return null;
                 }
             } elseif (RequestToCommand::supports($request)) {
-                $command = RequestToCommand::translate($request, $this->resolveSubjectOf($request));
+                // A request on a token becomes a command on that token, so the payment is not loaded here,
+                // ahead of the lock.
+                $command = RequestToCommand::translate($request);
 
                 // A handler asking for the 1.x request of the command it is answering wants the actions:
                 // that is how an action answers a command through ActionToHandlerAdapter.
@@ -640,7 +642,9 @@ class Gateway implements GatewayInterface
                 : new UndescribedGateway($this->name),
             $this->container->get(ServerRequestInterface::class),
             $this->container->get(TokenIssuerInterface::class),
-            $subject ?? $this->resolveSubject($command),
+            // Loaded on first use rather than here, which is before LockingMiddleware runs: a payment read
+            // before the lock is taken can be one another execution is about to change.
+            $subject ?? fn (): ?SubjectInterface => $this->resolveSubject($command),
             $command->token(),
             $this->commandStack,
             $this->name,

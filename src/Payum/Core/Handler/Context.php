@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Payum\Core\Handler;
 
+use Closure;
 use Money\Money;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Payum\Core\Command\AuthorizeCommand;
+use Payum\Core\Command\CancelCommand;
+use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\HasAmount;
+use Payum\Core\Command\PayoutCommand;
+use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
@@ -46,6 +52,8 @@ final class Context
 
     /**
      * @param CommandInterface<Result> $command
+     * @param SubjectInterface|(Closure(): ?SubjectInterface)|null $subject a closure is called once, when the subject is
+     *                                                                   first asked for
      * @param list<self> $previous the enclosing executions, when a handler dispatches a sub-command
      */
     public function __construct(
@@ -54,7 +62,7 @@ final class Context
         private readonly GatewayInterface $gateway,
         private readonly ServerRequestInterface $httpRequest,
         private readonly TokenIssuerInterface $tokens,
-        private readonly ?SubjectInterface $subject = null,
+        private SubjectInterface|Closure|null $subject = null,
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
         private readonly ?string $gatewayName = null,
@@ -73,7 +81,7 @@ final class Context
      */
     public function amount(): ?Money
     {
-        $subject = Amount::of($this->subject);
+        $subject = Amount::of($this->subject());
 
         if (! $this->command instanceof HasAmount) {
             return $subject;
@@ -127,6 +135,24 @@ final class Context
     }
 
     /**
+     * The key the caller gave so that a retry cannot repeat the operation, for a handler to send to a PSP
+     * that accepts one. Null when the caller gave none, and always null for a sync or a notify.
+     */
+    public function idempotencyKey(): ?string
+    {
+        $command = $this->command;
+
+        return match (true) {
+            $command instanceof CaptureCommand,
+            $command instanceof AuthorizeCommand,
+            $command instanceof RefundCommand,
+            $command instanceof CancelCommand,
+            $command instanceof PayoutCommand => $command->idempotencyKey,
+            default => null,
+        };
+    }
+
+    /**
      * The state to write back, or null when the handler never touched it.
      *
      * Deliberately the ArrayObject rather than toUnsafeArray(): a SensitiveValue must stay wrapped on
@@ -147,6 +173,10 @@ final class Context
      */
     public function subject(): ?SubjectInterface
     {
+        if ($this->subject instanceof Closure) {
+            $this->subject = ($this->subject)();
+        }
+
         return $this->subject;
     }
 
@@ -155,7 +185,9 @@ final class Context
      */
     public function payment(): ?PaymentInterface
     {
-        return $this->subject instanceof PaymentInterface ? $this->subject : null;
+        $subject = $this->subject();
+
+        return $subject instanceof PaymentInterface ? $subject : null;
     }
 
     /**
@@ -163,7 +195,9 @@ final class Context
      */
     public function payout(): ?PayoutInterface
     {
-        return $this->subject instanceof PayoutInterface ? $this->subject : null;
+        $subject = $this->subject();
+
+        return $subject instanceof PayoutInterface ? $subject : null;
     }
 
     /**
@@ -204,13 +238,15 @@ final class Context
      */
     public function state(): ArrayObject
     {
-        if (! $this->subject instanceof SubjectInterface) {
+        $subject = $this->subject();
+
+        if (! $subject instanceof SubjectInterface) {
             throw new LogicException('There is nothing in this context to read state from.');
         }
 
         // Cached, so every call within one execution mutates the same instance. Core writes it back onto
         // the payment after the handler returns -- inline for now, PersistStateMiddleware later.
-        return $this->state ??= ArrayObject::ensureArrayObject($this->subject->getDetails());
+        return $this->state ??= ArrayObject::ensureArrayObject($subject->getDetails());
     }
 
     /**
@@ -259,7 +295,7 @@ final class Context
             );
         }
 
-        return $this->mintedNotifyToken ??= $this->tokens->create(TokenPurpose::Notify, $this->gatewayName, $this->subject);
+        return $this->mintedNotifyToken ??= $this->tokens->create(TokenPurpose::Notify, $this->gatewayName, $this->subject());
     }
 
     /**
