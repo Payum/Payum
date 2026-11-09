@@ -14,6 +14,7 @@ use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GetHttpRequestAction;
 use Payum\Core\Bridge\PlainPhp\Security\HttpRequestVerifier;
@@ -48,7 +49,11 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ReflectionProperty;
@@ -679,6 +684,8 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         $this->assertInstanceOf(TokenFactoryInterface::class, $container->get(TokenFactoryInterface::class));
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
+        $this->assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
         $this->assertInstanceOf(ClockInterface::class, $container->get(ClockInterface::class));
         $this->assertInstanceOf(EventDispatcherInterface::class, $container->get(EventDispatcherInterface::class));
     }
@@ -700,6 +707,38 @@ final class PayumBuilderGlobalContainerTest extends TestCase
         ;
 
         $this->assertSame($clock, $factory->container->get(ClockInterface::class));
+    }
+
+    public function testShouldPassTheApplicationsSeparatePsr17FactoriesToTheGatewayContainer(): void
+    {
+        $factory = new ContainerConfigurationGatewayFactoryStub();
+
+        $responseFactory = new class() implements ResponseFactoryInterface {
+            public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+            {
+                return (new Psr17Factory())->createResponse($code, $reasonPhrase);
+            }
+        };
+        $uriFactory = new class() implements UriFactoryInterface {
+            public function createUri(string $uri = ''): UriInterface
+            {
+                return (new Psr17Factory())->createUri($uri);
+            }
+        };
+
+        (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ResponseFactoryInterface::class, $responseFactory)
+            ->addGlobalService(UriFactoryInterface::class, $uriFactory)
+            ->addGatewayFactory('acme_factory', $factory)
+            ->addGateway('acme', [
+                'factory' => 'acme_factory',
+            ])
+            ->getPayum()
+        ;
+
+        $this->assertSame($responseFactory, $factory->container->get(ResponseFactoryInterface::class));
+        $this->assertSame($uriFactory, $factory->container->get(UriFactoryInterface::class));
     }
 
     public function testShouldPassTheApplicationsEventDispatcherToTheGatewayContainer(): void
@@ -750,6 +789,8 @@ final class PayumBuilderGlobalContainerTest extends TestCase
             ClientInterface::class,
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
+            ResponseFactoryInterface::class,
+            UriFactoryInterface::class,
             ClockInterface::class,
             EventDispatcherInterface::class,
         ] as $serviceId) {

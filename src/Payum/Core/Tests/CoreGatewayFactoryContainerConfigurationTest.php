@@ -52,9 +52,13 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
+use Psr\Http\Message\UriInterface;
 use ReflectionClass;
 use stdClass;
 use Twig\Environment;
@@ -97,6 +101,7 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
             StreamFactoryInterface::class,
             RequestFactoryInterface::class,
             ResponseFactoryInterface::class,
+            UriFactoryInterface::class,
             ClockInterface::class,
             EventDispatcherInterface::class,
             'payum.http_client',
@@ -194,6 +199,54 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertInstanceOf(ClientInterface::class, $container->get(ClientInterface::class));
         $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
         $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
+        $this->assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
+    }
+
+    public function testShouldResolveEachPsr17FactoryOnItsOwnWhenTheyAreSeparateClasses(): void
+    {
+        $requestFactory = new class() implements RequestFactoryInterface {
+            public function createRequest(string $method, $uri): RequestInterface
+            {
+                return (new Psr17Factory())->createRequest($method, $uri);
+            }
+        };
+        $responseFactory = new class() implements ResponseFactoryInterface {
+            public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+            {
+                return (new Psr17Factory())->createResponse($code, $reasonPhrase);
+            }
+        };
+        $uriFactory = new class() implements UriFactoryInterface {
+            public function createUri(string $uri = ''): UriInterface
+            {
+                return (new Psr17Factory())->createUri($uri);
+            }
+        };
+
+        $container = $this->buildContainer([
+            RequestFactoryInterface::class => $requestFactory,
+            ResponseFactoryInterface::class => $responseFactory,
+            UriFactoryInterface::class => $uriFactory,
+        ]);
+
+        $this->assertSame($requestFactory, $container->get(RequestFactoryInterface::class));
+        $this->assertSame($responseFactory, $container->get(ResponseFactoryInterface::class));
+        $this->assertSame($uriFactory, $container->get(UriFactoryInterface::class));
+    }
+
+    public function testShouldNotResolveTheResponseFactoryThroughTheRequestFactory(): void
+    {
+        $container = $this->buildContainer([
+            RequestFactoryInterface::class => new class() implements RequestFactoryInterface {
+                public function createRequest(string $method, $uri): RequestInterface
+                {
+                    return (new Psr17Factory())->createRequest($method, $uri);
+                }
+            },
+        ]);
+
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
     }
 
     public function testShouldResolveASystemClockFromContainer(): void
@@ -289,13 +342,6 @@ final class CoreGatewayFactoryContainerConfigurationTest extends TestCase
         $this->assertSame($container->get(RequestFactoryInterface::class), $container->get('payum.http_message_factory'));
         $this->assertSame($container->get('payum.http_client'), $container->get('payum.api.http_client'));
         $this->assertSame($container->get('payum.http_client'), $container->get(HttpClient::class));
-    }
-
-    public function testShouldAliasResponseFactoryInterfaceToRequestFactoryInterface(): void
-    {
-        $container = $this->buildContainer();
-
-        $this->assertSame($container->get(RequestFactoryInterface::class), $container->get(ResponseFactoryInterface::class));
     }
 
     public function testShouldAliasTwigEnvironmentClassToTwigEnvService(): void

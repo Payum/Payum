@@ -40,7 +40,7 @@ These are registered for you:
 | `AcmeGateway::class`, `Payum\Core\Gateway\GatewayInterface` | The gateway instance |
 | `CaptureHandlerInterface::class` and the other handler interfaces | The handler you listed, autowired |
 | `Psr\Http\Client\ClientInterface` | The PSR-18 HTTP client, shared |
-| `Psr\Http\Message\RequestFactoryInterface`, `StreamFactoryInterface` | PSR-17 factories, shared |
+| `Psr\Http\Message\RequestFactoryInterface`, `ResponseFactoryInterface`, `StreamFactoryInterface`, `UriFactoryInterface` | PSR-17 factories, shared |
 | `Psr\Http\Message\ServerRequestInterface` | The inbound HTTP request. In a handler, use `$context->httpRequest()` |
 | `Psr\Clock\ClockInterface` | The current time, shared |
 | `Psr\EventDispatcher\EventDispatcherInterface` | The application's PSR-14 dispatcher, or one that does nothing |
