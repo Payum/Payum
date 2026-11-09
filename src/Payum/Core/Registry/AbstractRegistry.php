@@ -10,8 +10,8 @@ use Payum\Core\Storage\StorageInterface;
 use ReflectionClass;
 
 /**
- * @template StorageType of object
- * @implements RegistryInterface<StorageType>
+ * @template TModel of object
+ * @implements RegistryInterface<TModel>
  */
 abstract class AbstractRegistry implements RegistryInterface
 {
@@ -21,7 +21,7 @@ abstract class AbstractRegistry implements RegistryInterface
     protected $gateways;
 
     /**
-     * @var array<class-string<StorageType>, string|StorageInterface<StorageType>>
+     * @var array<class-string<TModel>, string|StorageInterface<TModel>>
      */
     protected array $storages;
 
@@ -31,7 +31,7 @@ abstract class AbstractRegistry implements RegistryInterface
     protected $gatewayFactories;
 
     /**
-     * @param array<class-string<StorageType>, string|StorageInterface<StorageType>> $storages
+     * @param array<class-string<TModel>, string|StorageInterface<TModel>> $storages
      */
     public function __construct(array $gateways = [], array $storages = [], array $gatewayFactories = [])
     {
@@ -71,7 +71,7 @@ abstract class AbstractRegistry implements RegistryInterface
     }
 
     /**
-     * @return array<class-string<StorageType>, string|StorageInterface<StorageType>>
+     * @return array<class-string<TModel>, string|StorageInterface<TModel>>
      */
     public function getStorages(): array
     {

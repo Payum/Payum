@@ -21,11 +21,8 @@ use Payum\Core\Model\Payout;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\PayoutResult;
-use Payum\Core\Security\TokenInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -127,7 +124,7 @@ final class PayoutTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {

@@ -31,7 +31,7 @@ class TokenFactoryBuilder
 
     /**
      * @param StorageInterface<TokenInterface> $tokenStorage
-     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry
+     * @param StorageRegistryInterface<object> $storageRegistry
      */
     public function build(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry): TokenFactoryInterface
     {

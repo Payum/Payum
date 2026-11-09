@@ -487,7 +487,7 @@ final class AbstractTokenFactoryTest extends TestCase
 
     /**
      * @param StorageInterface<TokenInterface> $tokenStorage
-     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $registry
+     * @param StorageRegistryInterface<object> $registry
      */
     protected function createTokenFactoryMock(StorageInterface $tokenStorage, StorageRegistryInterface $registry): MockObject | AbstractTokenFactory
     {
@@ -509,7 +509,7 @@ final class AbstractTokenFactoryTest extends TestCase
     }
 
     /**
-     * @return MockObject|StorageRegistryInterface<StorageInterface<TokenInterface>>
+     * @return MockObject|StorageRegistryInterface<object>
      */
     protected function createStorageRegistryMock(): MockObject | StorageRegistryInterface
     {

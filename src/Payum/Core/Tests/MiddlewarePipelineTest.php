@@ -23,11 +23,8 @@ use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\TokenInterface;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -167,7 +164,7 @@ final class MiddlewarePipelineTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {

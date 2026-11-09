@@ -673,18 +673,6 @@ parameters:
 			path: src/Payum/Core/PayumBuilder.php
 
 		-
-			message: '#^PHPDoc tag @var with type Payum\\Core\\Registry\\RegistryInterface\<Payum\\Core\\Registry\\StorageRegistryInterface\<Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Security\\TokenInterface\>\>\> is not subtype of native type Payum\\Core\\Registry\\FallbackRegistry\<object\>\|Payum\\Core\\Registry\\SimpleRegistry\<object\>\.$#'
-			identifier: varTag.nativeType
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
-			message: '#^PHPDoc tag @var with type Payum\\Core\\Registry\\StorageRegistryInterface\<Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Security\\TokenInterface\>\> is not subtype of native type Payum\\Core\\Registry\\RegistryInterface\.$#'
-			identifier: varTag.nativeType
-			count: 1
-			path: src/Payum/Core/PayumBuilder.php
-
-		-
 			message: '#^PHPDoc tag @var with type Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Security\\TokenInterface\> is not subtype of native type Payum\\Core\\Storage\\FilesystemStorage\<object\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -1225,12 +1213,6 @@ parameters:
 			path: src/Payum/Core/Tests/Bridge/Symfony/Builder/HttpRequestVerifierBuilderTest.php
 
 		-
-			message: '#^PHPDoc tag @var with type Payum\\Core\\Registry\\StorageRegistryInterface\<Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Security\\TokenInterface\>\> is not subtype of native type PHPUnit\\Framework\\MockObject\\MockObject\.$#'
-			identifier: varTag.nativeType
-			count: 1
-			path: src/Payum/Core/Tests/Bridge/Symfony/Builder/TokenFactoryBuilderTest.php
-
-		-
 			message: '#^PHPDoc tag @var with type Payum\\Core\\Registry\\StorageRegistryInterface\<Payum\\Core\\Storage\\StorageInterface\<object\>\> is not subtype of native type PHPUnit\\Framework\\MockObject\\MockObject\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -1562,12 +1544,6 @@ parameters:
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertIsArray\(\) with array\<Payum\\Core\\GatewayFactoryInterface\> will always evaluate to true\.$#'
-			identifier: method.alreadyNarrowedType
-			count: 1
-			path: src/Payum/Core/Tests/PayumBuilderTest.php
-
-		-
-			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertIsArray\(\) with array\<class\-string, Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Registry\\StorageRegistryInterface\<Payum\\Core\\Storage\\StorageInterface\<Payum\\Core\\Security\\TokenInterface\>\>\>\> will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
 			count: 1
 			path: src/Payum/Core/Tests/PayumBuilderTest.php

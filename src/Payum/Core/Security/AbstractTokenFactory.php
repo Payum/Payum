@@ -18,13 +18,13 @@ abstract class AbstractTokenFactory implements TokenFactoryInterface
     protected StorageInterface $tokenStorage;
 
     /**
-     * @var StorageRegistryInterface<StorageInterface<TokenInterface>>
+     * @var StorageRegistryInterface<object>
      */
     protected StorageRegistryInterface $storageRegistry;
 
     /**
      * @param StorageInterface<TokenInterface> $tokenStorage
-     * @param StorageRegistryInterface<StorageInterface<TokenInterface>> $storageRegistry
+     * @param StorageRegistryInterface<object> $storageRegistry
      */
     public function __construct(StorageInterface $tokenStorage, StorageRegistryInterface $storageRegistry)
     {

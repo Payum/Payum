@@ -38,13 +38,13 @@ use Symfony\Component\HttpFoundation\Response;
 use function trigger_deprecation;
 
 /**
- * @template StorageType of object
- * @implements RegistryInterface<StorageType>
+ * @template TModel of object
+ * @implements RegistryInterface<TModel>
  */
 class Payum implements RegistryInterface
 {
     /**
-     * @var RegistryInterface<StorageType>
+     * @var RegistryInterface<TModel>
      */
     protected RegistryInterface $registry;
 
@@ -62,7 +62,7 @@ class Payum implements RegistryInterface
     protected TokenIssuerInterface $tokenIssuer;
 
     /**
-     * @param RegistryInterface<StorageType> $registry
+     * @param RegistryInterface<TModel> $registry
      * @param StorageInterface<TokenInterface> $tokenStorage
      * @param RendererInterface|null $renderer optional only so hand-built instances keep working; PayumBuilder always supplies one
      */
@@ -126,8 +126,8 @@ class Payum implements RegistryInterface
     }
 
     /**
-     * @param class-string<StorageType> $class
-     * @return StorageInterface<StorageType>
+     * @param class-string<TModel> $class
+     * @return StorageInterface<TModel>
      */
     public function getStorage($class): StorageInterface
     {
@@ -135,7 +135,7 @@ class Payum implements RegistryInterface
     }
 
     /**
-     * @return array<class-string, StorageInterface<StorageType>>
+     * @return array<class-string, StorageInterface<TModel>>
      */
     public function getStorages(): array
     {

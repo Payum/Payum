@@ -122,7 +122,6 @@ final class PayumBuilderTest extends TestCase
         $this->assertIsArray($payum->getGateways());
         $this->assertCount(0, $payum->getGateways());
 
-        $this->assertIsArray($payum->getStorages());
         $this->assertCount(3, $payum->getStorages());
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
@@ -1269,7 +1268,7 @@ final class PayumBuilderTest extends TestCase
      *
      * @param array<string, string> $genericTokenFactoryPaths
      *
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayumCapturingThePrepareAfterPath(
         string $expectedAfterPath,

@@ -32,7 +32,6 @@ use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\HttpResponse;
@@ -52,9 +51,7 @@ use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\RefundResult;
-use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -340,7 +337,7 @@ final class LegacyGatewayAdapterTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(bool $capture = true, bool $cancel = true, bool $status = true, bool $convertPayment = true): Payum
     {
@@ -364,7 +361,7 @@ final class LegacyGatewayAdapterTest extends TestCase
     }
 
     /**
-     * @param Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>> $payum
+     * @param Payum<object> $payum
      */
     private function storeAPayment(Payum $payum): Payment
     {

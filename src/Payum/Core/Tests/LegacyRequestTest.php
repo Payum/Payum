@@ -22,7 +22,6 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
-use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Cancel;
@@ -38,7 +37,6 @@ use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
-use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Model\UntrackedPayment;
 use PHPUnit\Framework\TestCase;
 
@@ -220,7 +218,7 @@ final class LegacyRequestTest extends TestCase
     }
 
     /**
-     * @return Payum<StorageRegistryInterface<StorageInterface<TokenInterface>>>
+     * @return Payum<object>
      */
     private function buildPayum(): Payum
     {
