@@ -7,9 +7,11 @@ namespace Payum\Core\Result;
 /**
  * Something the customer must do before the operation can finish.
  *
- * This is what replaces v1's thrown Reply exceptions. The set is closed in practice -- core ships every
- * implementation -- and each one describes *intent* only. Converting a Redirect into an HTTP 302, or a
- * RenderTemplate into a rendered page, is a bridge's job, which is why core needs no HTTP framework.
+ * This is what replaces v1's thrown Reply exceptions. Each implementation describes *intent* only.
+ * Converting a Redirect into an HTTP 302, or a RenderTemplate into a rendered page, is a bridge's job,
+ * which is why core needs no HTTP framework.
+ *
+ * A minor release may add implementations, so code that dispatches on them needs a fallback.
  *
  * Because it is data rather than a response, a JSON API can serialise it straight to a mobile client.
  *

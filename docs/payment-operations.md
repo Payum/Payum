@@ -197,6 +197,12 @@ all in `Payum\Core\Result\NextAction`:
 | `Challenge` | The customer must pass a step-up check such as 3-D Secure at `url`, with `parameters` and the protocol `version`. The gateway's documentation says how to present it. |
 | `Poll` | Nothing to show yet: the provider has not settled. Show a "we are checking" page or wait for a [notification](instant-payment-notification.md). `retryAfterSeconds` says when to look again, if the provider says. |
 
+Payum may add next action types in a minor release, for example for a new kind of customer step. Always
+end your handling with a fallback, such as a `default` arm on a `match` or a final `throw`, so an
+unknown type fails with a clear message instead of being treated as finished. `Payum::capture()` throws a
+`Payum\Core\Exception\LogicException` for every type it cannot turn into a response, including ones it
+does not know.
+
 Gateways send the customer back to the URL that started the operation, and the same command runs
 again. The gateway keeps its progress on the payment, so it carries on from where it stopped. That is
 why a capture script runs more than once for one payment.
@@ -268,8 +274,8 @@ function respond(Payum $payum, Result $result, TokenInterface $token): void
 
 When nothing is left to do, the function deletes the token, so the URL cannot run the operation again,
 and redirects to the token's after URL. A `Poll` page refreshes the same URL, which runs the command
-again until the provider has settled. `Challenge` falls through to the exception. Add the handling your
-gateway's documentation describes.
+again until the provider has settled. `Challenge`, and any next action added in a later release, falls
+through to the exception. Add the handling your gateway's documentation describes.
 
 ## Capture a payment
 
