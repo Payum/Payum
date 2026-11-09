@@ -151,6 +151,24 @@ $builder->addGlobalService(EventDispatcherInterface::class, new EventDispatcher(
 
 One dispatcher hears every gateway. [Events](../events.md) lists the events and what each one carries.
 
+## Locks
+
+Payum locks a payment while a command works on it, so two requests cannot capture it at once. The
+default locks are files in the system's temporary directory, which only work on one server. On several
+servers, register a `LockFactory` over a shared store:
+
+```php
+<?php
+
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\RedisStore;
+
+$builder->addGlobalService(LockFactory::class, new LockFactory(new RedisStore($redis)));
+```
+
+Every gateway uses the same factory. [Concurrent requests and idempotency](../concurrency-and-idempotency.md)
+covers the stores you can use and how to change how long a command waits.
+
 ## Currencies
 
 Payum knows the ISO 4217 currencies and moneyphp's crypto currencies. To add a currency neither lists,

@@ -16,6 +16,7 @@
 * [Payment notifications](instant-payment-notification.md)
 * [Money and currencies](money.md)
 * [Use your own payment model](your-order-integration.md)
+* [Concurrent requests and idempotency](concurrency-and-idempotency.md)
 
 ## Configuring Payum
 
