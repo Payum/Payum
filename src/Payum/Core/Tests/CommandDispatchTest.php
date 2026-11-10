@@ -214,14 +214,22 @@ final class CommandDispatchTest extends TestCase
 
     public function testShouldCaptureWhenSymfonyLockIsNotInstalled(): void
     {
-        $output = shell_exec(sprintf(
-            '%s %s %s 2>&1',
-            escapeshellarg(PHP_BINARY),
-            escapeshellarg(__DIR__ . '/Fixtures/capture-without-symfony-lock.php'),
-            escapeshellarg(dirname(__DIR__, 4) . '/vendor/autoload.php'),
-        ));
+        // Notices go to stderr, so a deprecation in a dependency cannot be mistaken for the output.
+        $process = proc_open(
+            [PHP_BINARY, '-d', 'display_errors=stderr', __DIR__ . '/Fixtures/capture-without-symfony-lock.php', dirname(__DIR__, 4) . '/vendor/autoload.php'],
+            [
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w'],
+            ],
+            $pipes,
+        );
+        $this->assertIsResource($process);
 
-        $this->assertSame(CaptureResult::class, $output);
+        $output = stream_get_contents($pipes[1]);
+        $errors = stream_get_contents($pipes[2]);
+        proc_close($process);
+
+        $this->assertSame(CaptureResult::class, $output, (string) $errors);
     }
 
     private function buildPayment(): Payment

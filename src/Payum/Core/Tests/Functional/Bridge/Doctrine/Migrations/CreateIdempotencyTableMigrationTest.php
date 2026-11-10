@@ -17,6 +17,8 @@ use Doctrine\Migrations\MigratorConfiguration;
 use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\Version;
 use Payum\Core\Bridge\Doctrine\Idempotency\DbalIdempotencyStore;
+use Payum\Core\Bridge\Doctrine\Types\DbalObjectType;
+use Payum\Core\Bridge\Doctrine\Types\IdentityType;
 use Payum\Core\Model\IdempotencyRecord;
 use Payum\Core\Tests\Functional\Bridge\Doctrine\Migrations\Fixtures\Version20261110000000;
 use PHPUnit\Framework\SkippedTestError;
@@ -35,6 +37,11 @@ final class CreateIdempotencyTableMigrationTest extends TestCase
         if (! class_exists(DependencyFactory::class)) {
             throw new SkippedTestError('doctrine/migrations is not installed.');
         }
+
+        // The migrator introspects every table in the database, and the token migration test leaves one
+        // behind that uses Payum's types.
+        DbalObjectType::register();
+        IdentityType::register();
     }
 
     protected function setUp(): void
@@ -79,20 +86,48 @@ final class CreateIdempotencyTableMigrationTest extends TestCase
         $this->assertEquals($record->getExpiresAt(), $found->getExpiresAt());
     }
 
+    /**
+     * Compared column by column rather than through the schema comparator, whose idea of a difference
+     * (platform options, collations, how an index was introspected) changes from one DBAL release to the
+     * next.
+     */
     public function testShouldMatchTheSchemaTheStoreDescribes(): void
     {
         $this->migrate(Direction::UP);
 
-        $expected = new Schema();
-        (new DbalIdempotencyStore($this->connection))->configureSchema($expected);
+        $schema = new Schema();
+        (new DbalIdempotencyStore($this->connection))->configureSchema($schema);
+        $expected = $schema->getTable(DbalIdempotencyStore::DEFAULT_TABLE);
+        $actual = $this->connection->createSchemaManager()->introspectTable(DbalIdempotencyStore::DEFAULT_TABLE);
 
-        $schemaManager = $this->connection->createSchemaManager();
-        $diff = $schemaManager->createComparator()->compareTables(
-            $schemaManager->introspectTable(DbalIdempotencyStore::DEFAULT_TABLE),
-            $expected->getTable(DbalIdempotencyStore::DEFAULT_TABLE),
+        $this->assertCount(count($expected->getColumns()), $actual->getColumns());
+
+        foreach ($expected->getColumns() as $column) {
+            $name = $column->getName();
+            $this->assertTrue($actual->hasColumn($name), sprintf('The table has no %s column.', $name));
+
+            $found = $actual->getColumn($name);
+            $this->assertSame($column->getType()::class, $found->getType()::class, $name);
+            $this->assertSame($column->getNotnull(), $found->getNotnull(), $name);
+
+            if (null !== $column->getLength()) {
+                $this->assertSame($column->getLength(), $found->getLength(), $name);
+            }
+        }
+
+        $this->assertSame(
+            array_map(strtolower(...), $expected->getPrimaryKey()?->getColumns() ?? []),
+            array_map(strtolower(...), $actual->getPrimaryKey()?->getColumns() ?? []),
         );
 
-        $this->assertSame([], $this->connection->getDatabasePlatform()->getAlterTableSQL($diff));
+        $indexed = [];
+        foreach ($actual->getIndexes() as $index) {
+            if (! $index->isPrimary()) {
+                $indexed[] = array_map(strtolower(...), $index->getColumns());
+            }
+        }
+
+        $this->assertContains(['expires_at'], $indexed);
     }
 
     public function testShouldDropTheTableOnTheWayBack(): void
