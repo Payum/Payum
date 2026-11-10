@@ -2,54 +2,76 @@
 
 Two requests for the same payment often arrive at the same time. A customer double-clicks Pay, or
 returns from the PSP (the payment service provider) while the PSP's webhook about that payment reaches
-your server. If both requests run the capture, the customer can be charged twice. Payum lets only one
-command at a time work on a payment, and the second one waits for the first to finish.
+your server. If both requests run the capture, the customer can be charged twice. Payum's
+`LockingMiddleware` lets only one command at a time work on a payment, and the second one waits for the
+first to finish. It is not turned on by default: install Symfony Lock and register it.
 
-## What Payum does by default
+## Turn on locking
 
-You do not need to configure anything. Before a command loads or changes a stored payment or payout,
-Payum takes a lock on it. This applies to every capture, authorize, refund, cancel, payout and sync. It
-also applies to a notify when the notify arrived on a token or names a payment. A second command for the
-same payment waits for the lock. When the first command finishes, the second one loads the payment
-with everything the first one saved.
+Install [Symfony Lock](https://symfony.com/doc/current/components/lock.html):
+
+```bash
+composer require symfony/lock
+```
+
+Then register a lock factory and the middleware on the builder:
+
+```php
+<?php
+
+use Payum\Core\Middleware\LockingMiddleware;
+use Payum\Core\PayumBuilder;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\FlockStore;
+
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
+    ->addGlobalService(LockFactory::class, new LockFactory(new FlockStore()))
+    ->addMiddleware(LockingMiddleware::class)
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
+```
+
+`FlockStore` keeps the locks as files in the system's temporary directory. That works for every PHP
+process on one server, such as all the PHP-FPM workers behind one web server. Every gateway uses the
+same factory, so two gateways working on the same payment also wait for each other.
+
+## What gets locked
+
+Before a command loads or changes a stored payment or payout, the middleware takes a lock on it. This
+applies to every capture, authorize, refund, cancel, payout and sync. It also applies to a notify when
+the notify arrived on a token or names a payment. A second command for the same payment waits for the
+lock. When the first command finishes, the second one loads the payment with everything the first one
+saved.
 
 A command does not lock when there is nothing it could race with:
 
 - the payment was never saved, so no other request can know about it
 - the notify names no payment yet, because the gateway only finds the payment by reading the message
 
-By default the locks are files in the system's temporary directory. That works for every PHP process on
-one server, such as all the PHP-FPM workers behind one web server.
+## Run on more than one server
 
-{% hint style="warning" %}
-File locks do not reach other servers. If your application runs on more than one server, register a
-shared lock store as described below, or two servers can still capture the same payment at once.
-{% endhint %}
-
-## Use a shared lock store
-
-Payum uses [Symfony Lock](https://symfony.com/doc/current/components/lock.html) for its locks. Register
-a `LockFactory` over a store that all your servers can reach. This one uses Redis:
+File locks only work on one server. If your application runs on several servers, use a store that all of
+them reach, such as Redis or your database:
 
 ```php
 <?php
 
-use Payum\Core\PayumBuilder;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\RedisStore;
 
 $redis = new Redis();
 $redis->connect('127.0.0.1');
 
-$payum = (new PayumBuilder())
-    ->addDefaultStorages()
-    ->addGlobalService(LockFactory::class, new LockFactory(new RedisStore($redis)))
-    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
-    ->getPayum();
+$builder->addGlobalService(LockFactory::class, new LockFactory(new RedisStore($redis)));
 ```
 
-Every gateway uses this one factory, so two gateways working on the same payment also wait for each
-other. Symfony Lock also has stores for PDO, Doctrine DBAL, Memcached and others. Any of them works.
+Symfony Lock also has stores for PDO, Doctrine DBAL and Memcached. Any of them works.
+
+{% hint style="warning" %}
+Never point `FlockStore` at a directory on NFS or another network file system. File locks there are not
+reliable, and two servers can capture the same payment at once.
+{% endhint %}
 
 A store such as Redis releases a lock after five minutes even if the process holding it died, so a
 crashed request cannot hold a payment forever. A file lock is released when the process exits.
@@ -95,8 +117,8 @@ later.
 
 ## Change how long a command waits
 
-Register `Payum\Core\Middleware\LockingMiddleware` yourself to change its settings. Build it from the
-container, so it gets the lock factory and the storages Payum uses:
+To change the middleware's settings, register a closure that builds it. The closure takes the lock factory
+and the storages from the container. Then register the middleware with `addMiddleware()` as before:
 
 ```php
 <?php
@@ -111,15 +133,13 @@ $builder->addGlobalService(LockingMiddleware::class, static fn (ContainerInterfa
     $c->get(StorageRegistryInterface::class),
     timeout: 2.0,
 ));
+$builder->addMiddleware(LockingMiddleware::class);
 ```
 
 | Argument | Default | What it changes |
 | :--- | :--- | :--- |
 | `timeout` | `10.0` | Seconds a command waits for another one before it throws `ConcurrentOperationException` |
 | `ttl` | `300.0` | Seconds after which a store that expires locks, such as Redis, releases a lock whose process died. Keep it longer than your slowest PSP call |
-
-Pass the storage registry. Without it, Payum cannot tell which payment a command is about when you hand
-it the payment rather than a token, and that command is not locked.
 
 ## Load the payment through Payum
 
@@ -132,9 +152,9 @@ still stops two commands from running at once. But the second request already ho
 payment, loaded before the first request finished. Its handler then sees the payment as it was. Dispatch
 on the token wherever you have one.
 
-Event listeners have the same limit. Payum dispatches `CommandDispatched` before it takes the lock, so a
-listener that calls `$event->context->subject()` loads the payment outside the lock. Read the payment in
-a `ResultReturned` listener instead. See [Events](events.md) for the list of events.
+Event listeners have the same limit. Payum dispatches `CommandDispatched` before the middleware takes the
+lock, so a listener that calls `$event->context->subject()` loads the payment outside the lock. Read the
+payment in a `ResultReturned` listener instead. See [Events](events.md) for the list of events.
 
 ## Pass an idempotency key
 
@@ -161,8 +181,9 @@ command runs inside the lock its caller already holds, so it does not wait for i
 on the same gateway. A command about the same payment on a different gateway, dispatched from inside a
 handler, waits for the lock and then throws `ConcurrentOperationException`.
 
-A gateway built only from 1.x actions takes no lock, as on Payum 1.x. Once the gateway has a handler for
-a command, that command is locked, whether you dispatch the command or send the 1.x request. See
+A gateway built only from 1.x actions takes no lock, even with the middleware registered. Once the gateway
+has a handler for a command, that command is locked, whether you dispatch the command or send the 1.x
+request. See
 [Migrate a gateway from 1.x](gateways/migrating-from-v1.md) to move a gateway to handlers.
 
 ## Supporting Payum

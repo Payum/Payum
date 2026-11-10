@@ -52,8 +52,9 @@ Every event has two public properties: `$event->command`, the command that cause
 token and gateway name from the context with `$event->context->subject()`, `$event->context->token()`
 and `$event->context->gatewayName()`.
 
-In a `CommandDispatched` listener, do not read the payment. Payum has not locked it yet, so reading it
-loads a copy that a request running at the same time may be about to change. See
+If you use `LockingMiddleware`, do not read the payment in a `CommandDispatched` listener. The payment is
+not locked yet, so reading it loads a copy that a request running at the same time may be about to
+change. See
 [Concurrent requests and idempotency](concurrency-and-idempotency.md).
 
 A listener can only watch. Payum ignores what it returns, and it cannot change the result. If you need
@@ -67,7 +68,7 @@ All events are in the `Payum\Core\Event` namespace:
 
 | Event | Dispatched when | Extra properties |
 | :--- | :--- | :--- |
-| `CommandDispatched` | A command is about to run, before any middleware and before Payum locks the payment | |
+| `CommandDispatched` | A command is about to run, before any middleware | |
 | `HandlerResolved` | Payum has the handler that will run the command | `$handler` |
 | `WebhookReceived` | A payment provider's notification passed verification, before the gateway acts on it | `$webhook` |
 | `StatusChanged` | The payment moved from one status to another | `$subject`, `$from`, `$to` |

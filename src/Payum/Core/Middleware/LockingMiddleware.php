@@ -30,13 +30,13 @@ final class LockingMiddleware implements MiddlewareInterface, HasPriority
     private array $held = [];
 
     /**
-     * @param StorageRegistryInterface<object>|null $storages
+     * @param StorageRegistryInterface<object> $storages identifies a payment handed to a command directly
      * @param float $timeout seconds to wait for another execution to finish before giving up
      * @param float $ttl seconds after which a store that expires locks releases one whose holder died
      */
     public function __construct(
         private readonly LockFactory $locks,
-        private readonly ?StorageRegistryInterface $storages = null,
+        private readonly StorageRegistryInterface $storages,
         private readonly float $timeout = 10.0,
         private readonly float $ttl = 300.0,
     ) {
@@ -123,7 +123,7 @@ final class LockingMiddleware implements MiddlewareInterface, HasPriority
      */
     private function identify(?SubjectInterface $subject): ?IdentityInterface
     {
-        if (! $subject instanceof SubjectInterface || ! $this->storages instanceof StorageRegistryInterface) {
+        if (! $subject instanceof SubjectInterface) {
             return null;
         }
 

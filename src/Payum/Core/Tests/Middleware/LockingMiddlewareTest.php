@@ -184,7 +184,7 @@ final class LockingMiddlewareTest extends TestCase
 
     private function middleware(): LockingMiddleware
     {
-        return new LockingMiddleware($this->locks, null, 0.0);
+        return new LockingMiddleware($this->locks, $this->createMock(StorageRegistryInterface::class), 0.0);
     }
 
     private function tokenFor(Identity $identity): TokenInterface

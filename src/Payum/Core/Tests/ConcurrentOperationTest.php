@@ -17,11 +17,13 @@ use Payum\Core\Middleware\LockingMiddleware;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Lock\Key;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\PersistingStoreInterface;
@@ -104,7 +106,12 @@ final class ConcurrentOperationTest extends TestCase
         return $builder
             ->addDefaultStorages()
             ->addGlobalService(LockFactory::class, $locks)
-            ->addGlobalService(LockingMiddleware::class, new LockingMiddleware($locks, null, 0.0))
+            ->addGlobalService(LockingMiddleware::class, static fn (ContainerInterface $c): LockingMiddleware => new LockingMiddleware(
+                $c->get(LockFactory::class),
+                $c->get(StorageRegistryInterface::class),
+                timeout: 0.0,
+            ))
+            ->addMiddleware(LockingMiddleware::class)
             ->registerGateway('acme', new LockingAcmeConfig())
             ->getPayum();
     }

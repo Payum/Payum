@@ -212,6 +212,18 @@ final class CommandDispatchTest extends TestCase
         $this->assertSame($issuer, $payum->getTokenIssuer());
     }
 
+    public function testShouldCaptureWhenSymfonyLockIsNotInstalled(): void
+    {
+        $output = shell_exec(sprintf(
+            '%s %s %s 2>&1',
+            escapeshellarg(PHP_BINARY),
+            escapeshellarg(__DIR__ . '/Fixtures/capture-without-symfony-lock.php'),
+            escapeshellarg(dirname(__DIR__, 4) . '/vendor/autoload.php'),
+        ));
+
+        $this->assertSame(CaptureResult::class, $output);
+    }
+
     private function buildPayment(): Payment
     {
         $payment = new Payment();
