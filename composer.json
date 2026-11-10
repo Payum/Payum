@@ -75,6 +75,7 @@
         "laminas/laminas-db": "^2.0",
         "symfony/cache": "^6.4 || ^7.0 || ^8.0",
         "symfony/lock": "^6.4 || ^7.0 || ^8.0",
+        "psr/cache": "^1.0 || ^2.0 || ^3.0",
         "symfony/routing": "^6.4 || ^7.0 || ^8.0",
         "symfony/http-kernel": "^6.4 || ^7.0 || ^8.0",
         "symfony/http-foundation": "^6.4 || ^7.0 || ^8.0",
@@ -99,7 +100,9 @@
         "nyholm/psr7": "^1.8"
     },
     "suggest": {
-        "symfony/lock": "^6.4 || ^7.0 || ^8.0 Required by LockingMiddleware to stop two requests processing the same payment at once"
+        "symfony/lock": "^6.4 || ^7.0 || ^8.0 Required by LockingMiddleware to stop two requests processing the same payment at once",
+        "psr/cache": "^1.0 || ^2.0 || ^3.0 Required by CacheIdempotencyStore to keep idempotency records in a PSR-6 cache",
+        "doctrine/dbal": "^3.0 || ^4.0 Required by DbalIdempotencyStore to keep idempotency records in a database table"
     },
     "replace": {
         "payum/core": "^1 || ^2",

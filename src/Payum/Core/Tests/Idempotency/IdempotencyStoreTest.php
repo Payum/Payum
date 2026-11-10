@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Payum\Core\Tests\Idempotency;
 
 use DateTimeImmutable;
+use Payum\Core\Idempotency\CacheIdempotencyStore;
 use Payum\Core\Idempotency\IdempotencyStoreInterface;
 use Payum\Core\Idempotency\InMemoryIdempotencyStore;
 use Payum\Core\Idempotency\StorageIdempotencyStore;
 use Payum\Core\Model\IdempotencyRecord;
 use Payum\Core\Storage\FilesystemStorage;
+use Payum\Core\Tests\Functional\Bridge\Doctrine\Idempotency\DbalIdempotencyStoreTest;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 final class IdempotencyStoreTest extends TestCase
 {
@@ -27,6 +30,12 @@ final class IdempotencyStoreTest extends TestCase
                 new FilesystemStorage(sys_get_temp_dir(), IdempotencyRecord::class, 'scope'),
             ),
         ];
+        yield 'cache' => [
+            static fn (): IdempotencyStoreInterface => new CacheIdempotencyStore(new ArrayAdapter()),
+        ];
+        yield 'dbal' => [
+            static fn (): IdempotencyStoreInterface => DbalIdempotencyStoreTest::createStore(),
+        ];
     }
 
     /**
@@ -41,7 +50,7 @@ final class IdempotencyStoreTest extends TestCase
 
         $this->assertNull($store->find($scope));
 
-        $store->save($this->record($scope, 'fp_1', '2026-11-11 12:00:00'));
+        $store->save($this->record($scope, 'fp_1', '2099-11-11 12:00:00'));
         $found = $store->find($scope);
 
         $this->assertInstanceOf(IdempotencyRecord::class, $found);
@@ -49,7 +58,7 @@ final class IdempotencyStoreTest extends TestCase
         $this->assertSame([
             'type' => 'capture',
         ], $found->getResult());
-        $this->assertEquals(new DateTimeImmutable('2026-11-11 12:00:00'), $found->getExpiresAt());
+        $this->assertEquals(new DateTimeImmutable('2099-11-11 12:00:00'), $found->getExpiresAt());
     }
 
     /**
@@ -62,8 +71,8 @@ final class IdempotencyStoreTest extends TestCase
         $store = $store();
         $scope = hash('sha256', uniqid('', true));
 
-        $store->save($this->record($scope, 'fp_1', '2026-11-11 12:00:00'));
-        $store->save($this->record($scope, 'fp_2', '2026-11-12 12:00:00'));
+        $store->save($this->record($scope, 'fp_1', '2099-11-11 12:00:00'));
+        $store->save($this->record($scope, 'fp_2', '2099-11-12 12:00:00'));
 
         $this->assertSame('fp_2', $store->find($scope)?->getFingerprint());
     }
