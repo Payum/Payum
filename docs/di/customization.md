@@ -153,20 +153,23 @@ One dispatcher hears every gateway. [Events](../events.md) lists the events and 
 
 ## Locks
 
-Payum locks a payment while a command works on it, so two requests cannot capture it at once. The
-default locks are files in the system's temporary directory, which only work on one server. On several
-servers, register a `LockFactory` over a shared store:
+`LockingMiddleware` locks a payment while a command works on it, so two requests cannot capture it at
+once. It needs `symfony/lock` and a `LockFactory`. Register both:
 
 ```php
 <?php
 
+use Payum\Core\Middleware\LockingMiddleware;
 use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\RedisStore;
+use Symfony\Component\Lock\Store\FlockStore;
 
-$builder->addGlobalService(LockFactory::class, new LockFactory(new RedisStore($redis)));
+$builder
+    ->addGlobalService(LockFactory::class, new LockFactory(new FlockStore()))
+    ->addMiddleware(LockingMiddleware::class);
 ```
 
-Every gateway uses the same factory. [Concurrent requests and idempotency](../concurrency-and-idempotency.md)
+Every gateway uses the same factory. `FlockStore` only works on one server. On several servers, use a
+shared store such as Redis. [Concurrent requests and idempotency](../concurrency-and-idempotency.md)
 covers the stores you can use and how to change how long a command waits.
 
 ## Currencies

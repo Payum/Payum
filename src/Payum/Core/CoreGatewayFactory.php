@@ -57,7 +57,6 @@ use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
-use Payum\Core\Middleware\LockingMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
@@ -82,8 +81,6 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionType;
 use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplugClient;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\FlockStore;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use function array_combine;
@@ -292,13 +289,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 MiddlewareCollection::class => self::defaultMiddleware(...),
                 EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
                 LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
-                // Lock files in the system temporary directory hold across the processes of one server.
-                // An application on several servers registers a LockFactory over a shared store.
-                LockFactory::class => static fn (): LockFactory => new LockFactory(new FlockStore()),
-                LockingMiddleware::class => static fn (ContainerInterface $c): LockingMiddleware => new LockingMiddleware(
-                    $c->get(LockFactory::class),
-                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
-                ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),
                 ),
@@ -410,7 +400,6 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         return (new MiddlewareCollection())
             ->with(TemplateRenderMiddleware::class)
             ->with(EndlessCycleDetectorMiddleware::class)
-            ->with(LockingMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)

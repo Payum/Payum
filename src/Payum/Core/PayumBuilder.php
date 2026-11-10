@@ -80,8 +80,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\FlockStore;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 use function array_merge;
@@ -703,9 +701,6 @@ class PayumBuilder
             // no-op until the application registers its own.
             EventDispatcherInterface::class => static fn (): EventDispatcherInterface => new NullEventDispatcher(),
 
-            // Shared, so that two gateways working on the same payment wait for each other.
-            LockFactory::class => static fn (): LockFactory => new LockFactory(new FlockStore()),
-
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
                 $this->layout,
@@ -776,7 +771,6 @@ class PayumBuilder
             UriFactoryInterface::class,
             ClockInterface::class,
             EventDispatcherInterface::class,
-            LockFactory::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {
