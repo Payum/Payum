@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\IdempotencyRecord">
+
+        <id name="scope" column="scope" type="string" length="64" />
+
+        <field name="fingerprint" column="fingerprint" type="string" length="64" />
+
+        <field name="result" column="result" type="json" />
+
+        <field name="expiresAt" column="expires_at" type="datetime_immutable" />
+
+    </mapped-superclass>
+</doctrine-mapping>
