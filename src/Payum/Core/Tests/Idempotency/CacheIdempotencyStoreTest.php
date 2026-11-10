@@ -23,12 +23,15 @@ final class CacheIdempotencyStoreTest extends TestCase
 
     public function testShouldKeepOnlyPlainValuesInTheCache(): void
     {
-        $pool = new ArrayAdapter(storeSerialized: false);
+        $pool = new ArrayAdapter();
         $store = new CacheIdempotencyStore($pool);
 
         $store->save($this->record('scope_1', new DateTimeImmutable('+1 day')));
+        $value = $pool->getItem('payum_idempotency_scope_1')->get();
 
-        $this->assertIsArray($pool->getItem('payum_idempotency_scope_1')->get());
+        // Anything but arrays and scalars would not survive the trip through JSON unchanged.
+        $this->assertIsArray($value);
+        $this->assertSame($value, json_decode((string) json_encode($value), true));
     }
 
     private function record(string $scope, DateTimeImmutable $expiresAt): IdempotencyRecord
