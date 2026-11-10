@@ -128,6 +128,32 @@ final class TokenDetailsToJsonMigrationTest extends TestCase
         ], json_decode($this->rawDetails($token->getHash()), true));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public static function connectionParams(): array
+    {
+        $url = getenv('PAYUM_DOCTRINE_TEST_URL');
+        if (! $url) {
+            return [
+                'driver' => 'pdo_sqlite',
+                'memory' => true,
+            ];
+        }
+
+        // parse_url() rejects the underscore in "pdo_pgsql".
+        $parts = parse_url(str_replace('_', '-', strstr($url, '://', true)) . strstr($url, '://'));
+
+        return array_filter([
+            'driver' => isset($parts['scheme']) ? str_replace('-', '_', $parts['scheme']) : null,
+            'host' => $parts['host'] ?? null,
+            'port' => $parts['port'] ?? null,
+            'user' => isset($parts['user']) ? urldecode($parts['user']) : null,
+            'password' => isset($parts['pass']) ? urldecode($parts['pass']) : null,
+            'dbname' => isset($parts['path']) ? ltrim($parts['path'], '/') : null,
+        ]);
+    }
+
     private function persistToken(?Identity $details): string
     {
         $entityManager = $this->entityManager(false);
@@ -200,31 +226,5 @@ final class TokenDetailsToJsonMigrationTest extends TestCase
         }
 
         return new EntityManager($this->connection, $config, $eventManager);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private static function connectionParams(): array
-    {
-        $url = getenv('PAYUM_DOCTRINE_TEST_URL');
-        if (! $url) {
-            return [
-                'driver' => 'pdo_sqlite',
-                'memory' => true,
-            ];
-        }
-
-        // parse_url() rejects the underscore in "pdo_pgsql".
-        $parts = parse_url(str_replace('_', '-', strstr($url, '://', true)) . strstr($url, '://'));
-
-        return array_filter([
-            'driver' => isset($parts['scheme']) ? str_replace('-', '_', $parts['scheme']) : null,
-            'host' => $parts['host'] ?? null,
-            'port' => $parts['port'] ?? null,
-            'user' => isset($parts['user']) ? urldecode($parts['user']) : null,
-            'password' => isset($parts['pass']) ? urldecode($parts['pass']) : null,
-            'dbname' => isset($parts['path']) ? ltrim($parts['path'], '/') : null,
-        ]);
     }
 }
