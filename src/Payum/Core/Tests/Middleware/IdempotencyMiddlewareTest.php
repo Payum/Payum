@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Middleware;
 
+use Money\Money;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\RefundCommand;
@@ -18,6 +19,7 @@ use Payum\Core\Middleware\IdempotencyMiddleware;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
@@ -28,6 +30,7 @@ use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Clock\FrozenClock;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,6 +42,11 @@ final class IdempotencyMiddlewareTest extends TestCase
     private TokenInterface $token;
 
     private int $handled = 0;
+
+    /**
+     * @var StorageRegistryInterface<object>|null
+     */
+    private ?StorageRegistryInterface $storages = null;
 
     protected function setUp(): void
     {
@@ -175,13 +183,58 @@ final class IdempotencyMiddlewareTest extends TestCase
         $this->assertSame('ch_2', $result->transactionId);
     }
 
+    public function testShouldNotReplayForAPaymentThatWasNeverSaved(): void
+    {
+        $this->dispatch(CaptureCommand::forPayment($this->unsavedPayment(), 1000, 'order-1'), static fn (): Result => CaptureResult::captured('ch_1'));
+        $result = $this->dispatch(CaptureCommand::forPayment($this->unsavedPayment(), 1000, 'order-1'), static fn (): Result => CaptureResult::captured('ch_2'));
+
+        $this->assertSame(2, $this->handled);
+        $this->assertSame('ch_2', $result->transactionId);
+    }
+
+    public function testShouldRefuseAKeyReusedForADifferentCurrency(): void
+    {
+        $this->dispatch(CaptureCommand::forToken($this->token, Money::EUR(1000), 'order-1'), static fn (): Result => CaptureResult::captured('ch_1'));
+
+        $this->expectException(IdempotencyKeyReusedException::class);
+
+        $this->dispatch(CaptureCommand::forToken($this->token, Money::USD(1000), 'order-1'), static fn (): Result => CaptureResult::captured('ch_2'));
+    }
+
+    public function testShouldReplayTheSameOperationWhetherItArrivesOnTheTokenOrThePayment(): void
+    {
+        $payment = $this->unsavedPayment();
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('support')->willReturn(true);
+        $storage->method('identify')->willReturn(new Identity('p1', Payment::class));
+        $this->storages = $this->createMock(StorageRegistryInterface::class);
+        $this->storages->method('getStorages')->willReturn([
+            Payment::class => $storage,
+        ]);
+
+        $this->dispatch(CaptureCommand::forToken($this->token, 1000, 'order-1'), static fn (): Result => CaptureResult::captured('ch_1'));
+        $result = $this->dispatch(CaptureCommand::forPayment($payment, 1000, 'order-1'), static fn (): Result => CaptureResult::captured('ch_2'));
+
+        $this->assertSame(1, $this->handled);
+        $this->assertSame('ch_1', $result->transactionId);
+    }
+
+    private function unsavedPayment(): Payment
+    {
+        $payment = new Payment();
+        $payment->setTotalAmount(1000);
+        $payment->setCurrencyCode('EUR');
+
+        return $payment;
+    }
+
     /**
      * @param CommandInterface<Result> $command
      * @param callable(): Result $handler
      */
     private function dispatch(CommandInterface $command, callable $handler, ?FrozenClock $clock = null, string $gatewayName = 'acme'): Result
     {
-        $middleware = new IdempotencyMiddleware($this->store, $clock ?? new FrozenClock('2026-11-10 12:00:00'));
+        $middleware = new IdempotencyMiddleware($this->store, $clock ?? new FrozenClock('2026-11-10 12:00:00'), $this->storages);
 
         return (new Pipeline([$middleware]))->process(
             $command,

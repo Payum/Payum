@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Payum\Core\Middleware;
 
 use DateInterval;
+use Money\Currency;
 use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\HasAmount;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\IdempotencyKeyReusedException;
 use Payum\Core\Handler\Context;
@@ -54,13 +56,16 @@ final class IdempotencyMiddleware implements MiddlewareInterface, HasPriority
     public function process(CommandInterface $command, Context $context, callable $next): Result
     {
         $key = $context->idempotencyKey();
+        $subject = null === $key ? null : SubjectIdentity::of($command, $this->storages);
 
-        if (null === $key) {
+        // Without a stored subject, two different payments sharing a key would look like one operation
+        // and the second would be handed the first one's result.
+        if (null === $key || null === $subject) {
             return $next($command, $context);
         }
 
         $scope = hash('sha256', $context->gatewayName() . "\0" . $key);
-        $fingerprint = $this->fingerprintOf($command);
+        $fingerprint = $this->fingerprintOf($command, $subject);
         $now = $this->clock->now();
         $record = $this->store->find($scope);
 
@@ -94,17 +99,29 @@ final class IdempotencyMiddleware implements MiddlewareInterface, HasPriority
     /**
      * @param CommandInterface<Result> $command
      */
-    private function fingerprintOf(CommandInterface $command): string
+    private function fingerprintOf(CommandInterface $command, string $subject): string
     {
         return hash('sha256', (string) json_encode([
             $command::class,
-            SubjectIdentity::of($command, $this->storages),
+            $subject,
             match (true) {
-                $command instanceof CaptureCommand, $command instanceof AuthorizeCommand => $command->amount,
-                $command instanceof RefundCommand => [$command->amount, $command->reason],
+                $command instanceof CaptureCommand, $command instanceof AuthorizeCommand => [$command->amount, self::currencyGivenTo($command)],
+                $command instanceof RefundCommand => [$command->amount, self::currencyGivenTo($command), $command->reason],
                 $command instanceof CancelCommand => $command->reason,
                 default => null,
             },
         ]));
+    }
+
+    /**
+     * The currency the caller wrote on the command, never the one money() would borrow from the payment:
+     * a command on the token and the same command on the payment have to fingerprint alike.
+     */
+    private static function currencyGivenTo(HasAmount $command): ?string
+    {
+        // money() answers in the currency it is handed unless the caller gave a Money of their own.
+        $code = $command->money(new Currency('XTS'))?->getCurrency()->getCode();
+
+        return 'XTS' === $code ? null : $code;
     }
 }

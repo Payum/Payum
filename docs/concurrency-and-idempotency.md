@@ -212,8 +212,11 @@ Payum remembers only results that are finished:
 | Failed on the network or a rate limit, which `$result->failure->isRetriable()` reports | No, so a retry reaches the PSP |
 | Threw an exception | No |
 
-Sending a key again for a different operation is a bug in your code. If the amount, the payment, the
-reason or the kind of command differs from the first time, Payum throws
+Keys only replay for a payment or payout that is already stored. A command for a payment you have not
+saved yet runs every time, because Payum cannot tell one unsaved payment from another.
+
+Sending a key again for a different operation is a bug in your code. If the amount, the currency, the
+payment, the reason or the kind of command differs from the first time, Payum throws
 `Payum\Core\Exception\IdempotencyKeyReusedException` and sends nothing to the PSP.
 
 ## Store the records
