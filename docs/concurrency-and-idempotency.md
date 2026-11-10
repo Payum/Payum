@@ -4,7 +4,9 @@ Two requests for the same payment often arrive at the same time. A customer doub
 returns from the PSP (the payment service provider) while the PSP's webhook about that payment reaches
 your server. If both requests run the capture, the customer can be charged twice. Payum's
 `LockingMiddleware` lets only one command at a time work on a payment, and the second one waits for the
-first to finish. It is not turned on by default: install Symfony Lock and register it.
+first to finish. It is not turned on by default: install Symfony Lock and register it. An idempotency
+key on the command lets Payum recognise a repeat of the same operation and answer it with the first
+result.
 
 ## Turn on locking
 
@@ -159,20 +161,110 @@ payment in a `ResultReturned` listener instead. See [Events](events.md) for the 
 ## Pass an idempotency key
 
 A lock stops two requests from running at once. It cannot stop your own code from sending the same
-capture or refund again later, for example after a timeout. For that, give the command an idempotency
-key (a value you choose that names this one operation, such as the order number):
+capture or refund again later, for example after a timeout or when a queued job runs twice. For that,
+give the command an idempotency key (a value you choose that names this one operation, such as the order
+number):
 
 ```php
 <?php
 
 use Payum\Core\Command\RefundCommand;
 
-$gateway->execute(RefundCommand::forPayment($payment, amount: 500, idempotencyKey: 'order-1001-refund-1'));
+$result = $gateway->execute(RefundCommand::forPayment($payment, amount: 500, idempotencyKey: 'order-1001-refund-1'));
 ```
 
-A gateway whose PSP accepts idempotency keys sends it along, and the PSP answers a repeated request with
-the result of the first one. Use the same key when you retry and a new key for a new operation. Captures,
-authorizations, refunds, cancellations and payouts take a key. See [Commands](gateways/commands.md).
+Captures, authorizations, refunds, cancellations and payouts take a key. Use the same key when you
+retry an operation and a new key for each new operation. Payum does two things with it:
+
+- A gateway whose PSP accepts idempotency keys sends the key along, so the PSP itself refuses to do the
+  operation twice.
+- Payum remembers the result for 24 hours. A command that comes back with the same key gets that result
+  and never reaches the gateway, whether or not the PSP accepts keys.
+
+This works with nothing to configure, but by default Payum remembers keys only for as long as the PHP
+process runs. To recognise a key in a later request, store the records, as described in the next section.
+
+## Replay a repeated key
+
+When a command arrives with a key Payum has already seen, it returns the first result again:
+
+```php
+<?php
+
+use Payum\Core\Command\RefundCommand;
+
+$first = $gateway->execute(RefundCommand::forPayment($payment, amount: 500, idempotencyKey: 'order-1001-refund-1'));
+$again = $gateway->execute(RefundCommand::forPayment($payment, amount: 500, idempotencyKey: 'order-1001-refund-1'));
+
+// The PSP was asked once. Both results carry the same transaction id and amount.
+$again->transactionId === $first->transactionId;
+```
+
+The replayed result has the same status, transaction id, amount and failure as the first one. Its
+`$raw` is empty: Payum never stores what the PSP sent back, because it can hold card data.
+
+Payum remembers only results that are finished:
+
+| First result | Remembered |
+| :--- | :--- |
+| Succeeded, declined, or accepted for the PSP to finish later | Yes |
+| Sends the customer somewhere, such as a redirect to the PSP | No. The customer's return runs the command again, and its result is remembered |
+| Failed on the network or a rate limit, which `$result->failure->isRetriable()` reports | No, so a retry reaches the PSP |
+| Threw an exception | No |
+
+Sending a key again for a different operation is a bug in your code. If the amount, the payment, the
+reason or the kind of command differs from the first time, Payum throws
+`Payum\Core\Exception\IdempotencyKeyReusedException` and sends nothing to the PSP.
+
+## Store the records
+
+Store the records in a database so a key is recognised in every request and on every server. Extend
+Payum's `IdempotencyRecord` model as a Doctrine entity:
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\IdempotencyRecord as BaseIdempotencyRecord;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'payum_idempotency_record')]
+class IdempotencyRecord extends BaseIdempotencyRecord
+{
+}
+```
+
+The entity adds nothing. Its columns come from Payum's XML mapping, which you register the way
+[Storages](storages.md#create-the-entity-manager) shows. Then register the store:
+
+```php
+<?php
+
+use Acme\Entity\IdempotencyRecord;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Idempotency\IdempotencyStoreInterface;
+use Payum\Core\Idempotency\StorageIdempotencyStore;
+
+$builder->addGlobalService(
+    IdempotencyStoreInterface::class,
+    new StorageIdempotencyStore(new DoctrineStorage($entityManager, IdempotencyRecord::class)),
+);
+```
+
+`StorageIdempotencyStore` takes any Payum storage. Payum also ships a Doctrine MongoDB ODM mapping for the
+model, so a document that extends it works the same way. Expired records stay in the table until a newer
+record with the same key replaces them. Delete rows whose `expires_at` has passed from a scheduled job if
+the table grows too large.
+
+{% hint style="warning" %}
+Only `LockingMiddleware` makes replay safe for two requests that arrive at the same time. Without it,
+both find no record, both reach the gateway, and the PSP's own idempotency key is the only thing left to
+stop a second charge. Turn on [locking](#turn-on-locking) as well.
+{% endhint %}
+
+With locking on, a second request with the same key waits for the first. Once it gets the lock, it finds
+the first result and returns it.
 
 ## Advanced: nested commands and 1.x gateways
 

@@ -172,6 +172,29 @@ Every gateway uses the same factory. `FlockStore` only works on one server. On s
 shared store such as Redis. [Concurrent requests and idempotency](../concurrency-and-idempotency.md)
 covers the stores you can use and how to change how long a command waits.
 
+## Idempotency records
+
+Payum remembers the result of every command that carries an idempotency key, so a repeat of the key gets
+the same answer. By default it keeps them in memory, which only lasts for one PHP process. Register a
+store that keeps them in your database:
+
+```php
+<?php
+
+use Acme\Entity\IdempotencyRecord;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Idempotency\IdempotencyStoreInterface;
+use Payum\Core\Idempotency\StorageIdempotencyStore;
+
+$builder->addGlobalService(
+    IdempotencyStoreInterface::class,
+    new StorageIdempotencyStore(new DoctrineStorage($entityManager, IdempotencyRecord::class)),
+);
+```
+
+[Concurrent requests and idempotency](../concurrency-and-idempotency.md#store-the-records) shows the
+entity and when a result is replayed.
+
 ## Currencies
 
 Payum knows the ISO 4217 currencies and moneyphp's crypto currencies. To add a currency neither lists,
