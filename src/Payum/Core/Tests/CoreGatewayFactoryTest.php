@@ -24,6 +24,7 @@ use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
+use Payum\Core\Middleware\IdempotencyMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\PersistStateMiddleware;
@@ -411,6 +412,7 @@ final class CoreGatewayFactoryTest extends TestCase
         $this->assertSame([
             TemplateRenderMiddleware::class,
             EndlessCycleDetectorMiddleware::class,
+            IdempotencyMiddleware::class,
             LegacyExtensionMiddleware::class,
             PersistStateMiddleware::class,
             RecordPaymentStatusMiddleware::class,

@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Core\Middleware;
 
-use Doctrine\Persistence\Proxy;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Exception\ConcurrentOperationException;
 use Payum\Core\Handler\Context;
-use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
-use Payum\Core\Storage\IdentityInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
-use Throwable;
 
 /**
  * Lets one execution at a time work on a given payment or payout.
@@ -53,7 +49,8 @@ final class LockingMiddleware implements MiddlewareInterface, HasPriority
 
     public function process(CommandInterface $command, Context $context, callable $next): Result
     {
-        $key = $this->keyFor($command);
+        $identity = SubjectIdentity::of($command, $this->storages);
+        $key = null === $identity ? null : 'payum:' . $identity;
 
         // A handler dispatching a sub-command about the same payment already holds the lock.
         if (null === $key || isset($this->held[$key])) {
@@ -95,50 +92,5 @@ final class LockingMiddleware implements MiddlewareInterface, HasPriority
 
             usleep((int) (min($remaining, 0.05) * 1_000_000));
         }
-    }
-
-    /**
-     * @param CommandInterface<Result> $command
-     */
-    private function keyFor(CommandInterface $command): ?string
-    {
-        $identity = $command->token()?->getDetails() ?? $this->identify($command->subject());
-
-        if (! $identity instanceof IdentityInterface || null === $identity->getId() || '' === (string) $identity->getId()) {
-            return null;
-        }
-
-        $class = $identity->getClass();
-
-        if (is_a($class, Proxy::class, true)) {
-            $class = (string) get_parent_class($class);
-        }
-
-        return sprintf('payum:%s:%s', $class, $identity->getId());
-    }
-
-    /**
-     * A model that was never saved has no identity, and nothing else can be working on it. What a storage
-     * does when asked to identify one is not part of its contract: some return no id, others throw.
-     */
-    private function identify(?SubjectInterface $subject): ?IdentityInterface
-    {
-        if (! $subject instanceof SubjectInterface) {
-            return null;
-        }
-
-        foreach ($this->storages->getStorages() as $storage) {
-            if (! $storage->support($subject)) {
-                continue;
-            }
-
-            try {
-                return $storage->identify($subject);
-            } catch (Throwable) {
-                return null;
-            }
-        }
-
-        return null;
     }
 }

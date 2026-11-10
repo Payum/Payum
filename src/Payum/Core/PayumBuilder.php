@@ -33,6 +33,8 @@ use Payum\Core\Gateway\DeclaresMiddleware;
 use Payum\Core\Gateway\DeclaresTemplates;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Idempotency\IdempotencyStoreInterface;
+use Payum\Core\Idempotency\InMemoryIdempotencyStore;
 use Payum\Core\Legacy\GenericTokenFactoryIssuer;
 use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Middleware\MiddlewareCollection;
@@ -701,6 +703,11 @@ class PayumBuilder
             // no-op until the application registers its own.
             EventDispatcherInterface::class => static fn (): EventDispatcherInterface => new NullEventDispatcher(),
 
+            // Shared, so a key names one operation whichever gateway answers it.
+            IdempotencyStoreInterface::class => static fn (ContainerInterface $c): IdempotencyStoreInterface => new InMemoryIdempotencyStore(
+                $c->get(ClockInterface::class),
+            ),
+
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
                 $this->layout,
@@ -771,6 +778,7 @@ class PayumBuilder
             UriFactoryInterface::class,
             ClockInterface::class,
             EventDispatcherInterface::class,
+            IdempotencyStoreInterface::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {
