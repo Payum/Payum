@@ -182,7 +182,7 @@ retry an operation and a new key for each new operation. Payum does two things w
   and never reaches the gateway, whether or not the PSP accepts keys.
 
 This works with nothing to configure, but by default Payum remembers keys only for as long as the PHP
-process runs. To recognise a key in a later request, store the records, as described in the next section.
+process runs. To recognise a key in a later request, [store the records](#store-the-records).
 
 ## Replay a repeated key
 
@@ -221,8 +221,101 @@ payment, the reason or the kind of command differs from the first time, Payum th
 
 ## Store the records
 
-Store the records in a database so a key is recognised in every request and on every server. Extend
-Payum's `IdempotencyRecord` model as a Doctrine entity:
+Store the records where every request and every server can read them, so a key is recognised wherever
+it comes back. Payum has three stores. Register the one you choose as `IdempotencyStoreInterface`:
+
+| Store | Keeps records in | Needs |
+| :--- | :--- | :--- |
+| `Payum\Core\Bridge\Doctrine\Idempotency\DbalIdempotencyStore` | A table of its own | `doctrine/dbal` |
+| `Payum\Core\Idempotency\CacheIdempotencyStore` | A PSR-6 cache pool | `psr/cache` and a cache, such as `symfony/cache` |
+| `Payum\Core\Idempotency\StorageIdempotencyStore` | Any Payum storage, such as a Doctrine entity | The storage |
+
+### In a database table
+
+`DbalIdempotencyStore` writes to a table over a Doctrine DBAL connection. It does not need the ORM:
+
+```bash
+composer require doctrine/dbal
+```
+
+```php
+<?php
+
+use Doctrine\DBAL\DriverManager;
+use Payum\Core\Bridge\Doctrine\Idempotency\DbalIdempotencyStore;
+use Payum\Core\Idempotency\IdempotencyStoreInterface;
+
+$connection = DriverManager::getConnection([
+    'driver' => 'pdo_mysql',
+    'host' => '127.0.0.1',
+    'user' => 'payum',
+    'password' => 'secret',
+    'dbname' => 'payum',
+]);
+
+$store = new DbalIdempotencyStore($connection);
+
+$builder->addGlobalService(IdempotencyStoreInterface::class, $store);
+```
+
+The table is called `payum_idempotency_record`. Pass a second argument to use another name. Create the
+table with a Doctrine Migrations migration that extends the one Payum ships:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Payum\Core\Bridge\Doctrine\Migrations\AbstractCreateIdempotencyTableMigration;
+
+final class Version20261110120000 extends AbstractCreateIdempotencyTableMigration
+{
+}
+```
+
+If you named the table yourself, override `tableName()` in the migration to return that name. Without
+Doctrine Migrations, call `$store->configureSchema($schema)` to add the table to a DBAL `Schema`, and
+create it from there.
+
+Expired records stay in the table until the same key is used again. Delete them from a scheduled job,
+such as a daily cron:
+
+```php
+<?php
+
+$deleted = $store->deleteExpired(new DateTimeImmutable());
+```
+
+### In a cache
+
+`CacheIdempotencyStore` keeps records in any PSR-6 cache pool. This one uses Redis through
+`symfony/cache`:
+
+```bash
+composer require symfony/cache
+```
+
+```php
+<?php
+
+use Payum\Core\Idempotency\CacheIdempotencyStore;
+use Payum\Core\Idempotency\IdempotencyStoreInterface;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+
+$pool = new RedisAdapter(RedisAdapter::createConnection('redis://127.0.0.1'), 'payum');
+
+$builder->addGlobalService(IdempotencyStoreInterface::class, new CacheIdempotencyStore($pool));
+```
+
+The pool drops each record when it expires, so there is nothing to clean up. Use a pool that all your
+servers share and that a deploy or a cache clear does not empty. A key whose record was dropped early is
+no longer recognised, and the next request with it reaches the PSP.
+
+### With a Doctrine entity
+
+To keep the records in an entity of your own, extend Payum's `IdempotencyRecord` model:
 
 ```php
 <?php
@@ -256,9 +349,8 @@ $builder->addGlobalService(
 ```
 
 `StorageIdempotencyStore` takes any Payum storage. Payum also ships a Doctrine MongoDB ODM mapping for the
-model, so a document that extends it works the same way. Expired records stay in the table until a newer
-record with the same key replaces them. Delete rows whose `expires_at` has passed from a scheduled job if
-the table grows too large.
+model, so a document that extends it works the same way. Expired records stay until the same key is used
+again. Delete rows whose `expires_at` has passed from a scheduled job if the table grows too large.
 
 {% hint style="warning" %}
 Only `LockingMiddleware` makes replay safe for two requests that arrive at the same time. Without it,
