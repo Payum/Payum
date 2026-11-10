@@ -176,24 +176,19 @@ covers the stores you can use and how to change how long a command waits.
 
 Payum remembers the result of every command that carries an idempotency key, so a repeat of the key gets
 the same answer. By default it keeps them in memory, which only lasts for one PHP process. Register a
-store that keeps them in your database:
+store that every request can read, such as a database table:
 
 ```php
 <?php
 
-use Acme\Entity\IdempotencyRecord;
-use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Bridge\Doctrine\Idempotency\DbalIdempotencyStore;
 use Payum\Core\Idempotency\IdempotencyStoreInterface;
-use Payum\Core\Idempotency\StorageIdempotencyStore;
 
-$builder->addGlobalService(
-    IdempotencyStoreInterface::class,
-    new StorageIdempotencyStore(new DoctrineStorage($entityManager, IdempotencyRecord::class)),
-);
+$builder->addGlobalService(IdempotencyStoreInterface::class, new DbalIdempotencyStore($connection));
 ```
 
-[Concurrent requests and idempotency](../concurrency-and-idempotency.md#store-the-records) shows the
-entity and when a result is replayed.
+[Concurrent requests and idempotency](../concurrency-and-idempotency.md#store-the-records) covers the
+three stores Payum ships, how to create the table and when a result is replayed.
 
 ## Currencies
 
