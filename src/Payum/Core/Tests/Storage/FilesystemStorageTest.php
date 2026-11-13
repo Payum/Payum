@@ -140,6 +140,29 @@ final class FilesystemStorageTest extends TestCase
         $storage->identify($model);
     }
 
+    public function testThrowIfTryGetIdentifierOfModelWithoutIdProperty(): void
+    {
+        $storage = new FilesystemStorage(sys_get_temp_dir(), stdClass::class);
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The model must be persisted before usage of this method');
+
+        $storage->identify(new stdClass());
+    }
+
+    public function testThrowIfTryGetIdentifierOfModelWithUninitializedIdProperty(): void
+    {
+        $model = new class() {
+            public string $id;
+        };
+        $storage = new FilesystemStorage(sys_get_temp_dir(), $model::class, 'id');
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The model must be persisted before usage of this method');
+
+        $storage->identify($model);
+    }
+
     public function testShouldAllowGetModelIdentity(): void
     {
         $storage = new FilesystemStorage(

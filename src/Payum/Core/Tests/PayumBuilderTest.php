@@ -79,6 +79,24 @@ final class PayumBuilderTest extends TestCase
         ];
     }
 
+    public function testCreatingNotifyTokenForUnsavedPayoutThrowsLogicException(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGateway('offline', [
+                'factory' => 'offline',
+            ])
+            ->getPayum();
+        $payout = new Payout();
+        $payout->setTotalAmount(100);
+        $payout->setCurrencyCode('EUR');
+
+        $this->expectException(PayumLogicException::class);
+        $this->expectExceptionMessage('The model must be persisted before usage of this method');
+
+        $payum->getTokenFactory()->createNotifyToken('offline', $payout);
+    }
+
     public function testShouldKeepTheApplicationsStoragesWhenNoTokenStorageIsSet(): void
     {
         $payments = $this->createMock(StorageInterface::class);
