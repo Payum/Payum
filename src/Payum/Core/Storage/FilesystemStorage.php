@@ -78,9 +78,13 @@ class FilesystemStorage extends AbstractStorage
 
     protected function doGetIdentity(object $model): Identity
     {
+        if (! property_exists($model, $this->idProperty)) {
+            throw new LogicException('The model must be persisted before usage of this method');
+        }
+
         $rp = new ReflectionProperty($model, $this->idProperty);
 
-        if (! $id = $rp->getValue($model)) {
+        if (! $rp->isInitialized($model) || ! $id = $rp->getValue($model)) {
             throw new LogicException('The model must be persisted before usage of this method');
         }
 
