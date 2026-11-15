@@ -17,7 +17,6 @@ use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Payout;
-use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Result\Failure;
@@ -160,17 +159,6 @@ final class AcmeSyncHandler implements SyncHandlerInterface
     }
 }
 
-class TrackedSyncPayment extends Payment implements StatusAwareInterface
+class TrackedSyncPayment extends Payment
 {
-    private PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
 }

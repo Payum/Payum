@@ -106,21 +106,57 @@ A Doctrine entity that extends `Payum\Core\Model\Payment` and overrides no metho
 ### Payments and payouts record their status
 
 `Payum\Core\Model\Payment` and `Payum\Core\Model\Payout` implement
-`Payum\Core\Model\StatusAwareInterface`, so Payum records each operation's status on them. Their
-Doctrine mappings gain a nullable `payum_status` column. Add it to every table you map from either
-class, with a migration or `doctrine:schema:update`:
+`Payum\Core\Model\StatusAwareInterface`, so Payum records each operation's status on them. They gain a
+protected `$status` property, and their Doctrine mappings gain a nullable `status` column. Add it to
+every table you map from either class, with a migration or `doctrine:schema:update`:
 
 ```sql
-ALTER TABLE payment ADD payum_status VARCHAR(32) DEFAULT NULL;
+ALTER TABLE payment ADD status VARCHAR(32) DEFAULT NULL;
 ```
 
 A row stored before the column existed reads as `PaymentStatus::Unknown`. With MongoDB ODM the field is
-`payumStatus` and needs no migration.
+`status` and needs no migration.
 
 If your subclass already has a `getStatus()` or `setStatus()` method, give it the interface's
 signatures, `getStatus(): PaymentStatus` and `setStatus(PaymentStatus $status): void`, or PHP refuses
-to load the class. Your own method then replaces Payum's, and your own status property and column keep
-working.
+to load the class.
+
+#### If your subclass already has a status
+
+Remove your own `$status` property and its mapping. Doctrine refuses to map the same field twice, and
+PHP refuses a redeclared property with a different type. If your table already has a status column,
+change Payum's mapping to match it with an attribute override:
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\Payment as BasePayment;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'payment')]
+#[ORM\AttributeOverrides([
+    new ORM\AttributeOverride(
+        name: 'status',
+        column: new ORM\Column(name: 'state', type: 'string', length: 20, nullable: true),
+    ),
+])]
+class Payment extends BasePayment
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    protected $id;
+}
+```
+
+The override replaces Payum's whole column definition, so set the name, `length` and `nullable` to
+match your column. Queries keep using the `status` field. The column must hold `PaymentStatus` values
+(`new`, `captured`, `refunded` and the others). Any other value reads as `PaymentStatus::Unknown`.
+
+If your status holds other values, such as your own enum or an integer, rename your property and keep
+it, then point Payum's `status` field at a new column with the same override.
 
 ### A credit card keeps its raw values to itself
 

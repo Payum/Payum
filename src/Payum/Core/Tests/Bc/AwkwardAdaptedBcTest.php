@@ -42,9 +42,6 @@ final class AwkwardAdaptedBcTest extends BcTestCase
                 1 => [
                     'writes' => 2,
                 ],
-                3 => [
-                    'writes' => 2,
-                ],
             ],
         ];
     }

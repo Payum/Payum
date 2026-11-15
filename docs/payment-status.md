@@ -42,7 +42,7 @@ throws an `UnhandledMatchError` for a case it does not list.
 Payum records a status only on a payment that has somewhere to keep it, which means its class
 implements `Payum\Core\Model\StatusAwareInterface`. Payum's own `Payum\Core\Model\Payment` and
 `Payum\Core\Model\Payout` do. A new one starts at `PaymentStatus::New`, and the Doctrine mapping Payum
-ships stores the status in a `payum_status` column.
+ships stores the status in a `status` column.
 
 Your own order or payment class needs `getStatus()` and `setStatus()` to have its status recorded.
 [Use your own payment model](your-order-integration.md) shows the class, and [Storages](storages.md)
