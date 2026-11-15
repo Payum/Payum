@@ -16,7 +16,6 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
-use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Request\Capture;
@@ -264,17 +263,6 @@ final class HalfStatusAction implements ActionInterface
     }
 }
 
-class HalfTrackedPayment extends Payment implements StatusAwareInterface
+class HalfTrackedPayment extends Payment
 {
-    private PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
 }

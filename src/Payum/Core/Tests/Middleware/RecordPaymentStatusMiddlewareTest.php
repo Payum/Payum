@@ -285,19 +285,8 @@ final class CoreDefaults
     }
 }
 
-class TrackedPayment extends Payment implements StatusAwareInterface
+class TrackedPayment extends Payment
 {
-    private PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
 }
 
 /**

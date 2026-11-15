@@ -26,7 +26,6 @@ use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\Payment;
-use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Result\Acknowledgement;
@@ -361,17 +360,6 @@ final class EventfulNotifyHandler implements NotifyHandlerInterface
     }
 }
 
-class EventfulPayment extends Payment implements StatusAwareInterface
+class EventfulPayment extends Payment
 {
-    private PaymentStatus $status = PaymentStatus::New;
-
-    public function getStatus(): PaymentStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(PaymentStatus $status): void
-    {
-        $this->status = $status;
-    }
 }

@@ -43,12 +43,11 @@ class Payout implements PayoutInterface, MoneyAwareInterface, StatusAwareInterfa
     protected $details = [];
 
     /**
-     * Private, and not named $status, so a subclass that already declares and maps its own status keeps
-     * working. Null in a row stored before the column existed, which reads as unknown.
+     * A PaymentStatus value. Null in a row stored before the column existed, which reads as unknown.
      *
-     * @phpstan-ignore property.unusedType (Doctrine hydrates null from such a row)
+     * @var string|null
      */
-    private ?string $payumStatus = 'new';
+    protected $status = 'new';
 
     public function __construct()
     {
@@ -168,11 +167,11 @@ class Payout implements PayoutInterface, MoneyAwareInterface, StatusAwareInterfa
 
     public function getStatus(): PaymentStatus
     {
-        return PaymentStatus::tryFrom($this->payumStatus ?? '') ?? PaymentStatus::Unknown;
+        return PaymentStatus::tryFrom($this->status ?? '') ?? PaymentStatus::Unknown;
     }
 
     public function setStatus(PaymentStatus $status): void
     {
-        $this->payumStatus = $status->value;
+        $this->status = $status->value;
     }
 }
