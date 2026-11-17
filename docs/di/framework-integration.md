@@ -6,9 +6,9 @@ services, such as its HTTP client, logger or event dispatcher, reach Payum throu
 `setGlobalContainer()`.
 
 {% hint style="info" %}
-PayumBundle for Symfony and the Laravel package have not been ported to Payum 2.x yet. Until they are,
-wire Payum yourself as this page shows. See [Symfony](../symfony/README.md) and [Laravel](../laravel/README.md)
-for the packages themselves.
+In a Symfony application, use PayumBundle instead of the setup on this page. It builds Payum for you and
+connects it to Symfony's container. See [Symfony](../symfony/README.md). The Laravel package has not been
+ported to Payum 2.x yet, so wire Payum yourself there as this page shows.
 {% endhint %}
 
 ## Build Payum once
@@ -62,7 +62,8 @@ credentials out of the code and pass them in from your framework's environment c
 
 ## Symfony
 
-Register the factory, then register `Payum\Core\Payum` as a service it creates:
+Most Symfony applications should use [PayumBundle](../symfony/get-it-started.md). To wire Payum without
+it, register the factory, then register `Payum\Core\Payum` as a service it creates:
 
 ```yaml
 # config/services.yaml

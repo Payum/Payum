@@ -1,119 +1,114 @@
 # Container tags
 
-The bundle supports\reuse several Symfony container tags. You may find them useful too.
+PayumBundle reads a few Symfony container tags. Tag a service with one of them to hand it to Payum as a
+gateway, as a service gateways can use, or as an action, API or extension of a 1.x gateway.
 
-### Gateway tag
+## `payum.gateway_config`
 
-The tag `payum.gateway` could be used if you want to register your service as a gateway gateway. The service must implement `Payum\Core\GatewayInterface`.
+Registers a gateway from a service that implements `Payum\Core\Config\GatewayConfig`:
 
 ```yaml
-# app/config/config.yml
-
+# config/services.yaml
 services:
-    acme.foo_gateway:
+    app.payum.offline:
+        class: Payum\Offline\OfflineConfig
+        arguments:
+            $paid: '%env(bool:OFFLINE_PAID)%'
+        tags:
+            - { name: payum.gateway_config, gateway: offline }
+```
+
+| Attribute | Required | What it does |
+| :--- | :--- | :--- |
+| `gateway` | yes | The name the gateway is registered under. It must not be used by another gateway. |
+
+[Register gateways](gateways.md) explains when to use the tag instead of `payum.gateways` in
+`config/packages/payum.yaml`.
+
+## `payum.global_service`
+
+Shares a service with every gateway, so a handler or action can take it in its constructor:
+
+```yaml
+# config/services.yaml
+services:
+    App\Payment\ExchangeRates:
+        tags:
+            - { name: payum.global_service, id: App\Payment\ExchangeRatesInterface }
+```
+
+| Attribute | Required | What it does |
+| :--- | :--- | :--- |
+| `id` | no | The id Payum knows the service under. Defaults to the service id. |
+
+A shared service also replaces Payum's default for the same id. See
+[Use your services in Payum](services.md).
+
+## `payum.gateway`
+
+Registers a gateway object you build yourself. The service must implement `Payum\Core\GatewayInterface`:
+
+```yaml
+# config/services.yaml
+services:
+    app.payum.foo_gateway:
         class: Payum\Core\Gateway
         public: true
         tags:
             - { name: payum.gateway, gateway: foo }
 ```
 
-Attributes:
+| Attribute | Required | What it does |
+| :--- | :--- | :--- |
+| `gateway` | yes | The name the gateway is registered under. |
 
-* factory - define if you want later add actions or extensions to all gateways created by this factory.
-* gateway - define if you want later add actions or extensions to this gateway.
+## `payum.action`, `payum.api` and `payum.extension`
 
-### Action tag
-
-The tag `payum.action` could be used if you want to register your service as an action. The service must implement `Payum\Core\Action\ActionInterface`.
+These tags add an action, an API object or an extension to gateways built from a factory, the 1.x way.
+A gateway registered by its config class runs handlers and middleware instead. It still gets the
+services tagged with `all: true`, but never tag a service with the name of such a gateway under
+`gateway`. Payum then fails to build.
 
 ```yaml
-# app/config/config.yml
-
+# config/services.yaml
 services:
-    acme.foo_action:
-        class: Payum\Core\Action\ActionInterface
-        public: true
+    App\Payment\FooAction:
         tags:
-            - { name: payum.action, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
+            - { name: payum.action, gateway: paypal, prepend: false }
 ```
 
-Attributes:
+Here `paypal` is a gateway registered with `factory`. An action must implement
+`Payum\Core\Action\ActionInterface` and an extension
+`Payum\Core\Extension\ExtensionInterface`. An API can be any object. All three tags take the same
+attributes:
 
-* factory - define if you want to add the action to gateways created by the factory with given name.
-* gateway - define if you want to add the action to a gateway with given name
-* all - define if you want to add the action to all gateways
-* prepend - define if you want your action to be put at the beginning.
-* alias - you can use alias if you' like to overwrite the default action or add a good looking name
+| Attribute | What it does |
+| :--- | :--- |
+| `gateway` | Adds the service to the gateway with this name. |
+| `factory` | Adds the service to every gateway built from this factory. |
+| `all` | When `true`, adds the service to every gateway. |
+| `prepend` | When `true`, puts the service before the ones the gateway already has, so it runs first. |
+| `alias` | With Payum 1, the name of the entry, so a tagged service can replace a default one. Payum 2 ignores it. |
 
-### Api tag
+## `payum.gateway_factory`
 
-The tag `payum.api` could be used if you want to register your service as an api. The service could be any object.
-
-```yaml
-# app/config/config.yml
-
-services:
-    acme.foo_api:
-        class: Acme\Payum\FooApi
-        public: true
-        tags:
-            - { name: payum.api, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
-```
-
-Attributes:
-
-* factory - define if you want to add the extension to gateways created by the factory with given name.
-* gateway - define if you want to add the extension to a gateway with given name
-* all - define if you want to add the extension to all gateways
-* prepend - define if you want your extension to be put at the beginning.
-* alias - you can use alias if you' like to overwrite the default action or add a good looking name
-
-### Extension tag
-
-The tag `payum.extension` could be used if you want to register your service as an extension. The service must implement `Payum\Core\Extension\ExtensionInterface`.
+Registers a 1.x gateway factory, so `factory` in `payum.gateways` can name it. The service must implement
+`Payum\Core\GatewayFactoryInterface`:
 
 ```yaml
-# app/config/config.yml
-
+# config/services.yaml
 services:
-    acme.foo_extension:
-        class: Payum\Core\Extension\ExtensionInterface
-        public: true
-        tags:
-            - { name: payum.extension, factory: foo, gateway: bar, all: true, alias: foo, prepend: false }
-```
-
-Attributes:
-
-* factory - define if you want to add the extension to gateways created by the factory with given name.
-* gateway - define if you want to add the extension to a gateway with given name
-* all - define if you want to add the extension to all gateways
-* prepend - define if you want your extension to be put at the beginning.
-* alias - you can use alias if you' like to overwrite the default action or add a good looking name
-
-### Gateway factory tag
-
-The tag `payum.gateway_factory` could be used if you want to register your service as a gateway factory. The service must implement `Payum\Core\GatewayFactoryInterface`.
-
-```yaml
-# app/config/config.yml
-
-services:
-    acme.foo_gateway_factory:
-        class: Payum\Core\GatewayFactory
-        public: true
+    app.payum.foo_gateway_factory:
+        class: App\Payment\FooGatewayFactory
         tags:
             - { name: payum.gateway_factory, factory: foo }
 ```
 
-Attributes:
+| Attribute | Required | What it does |
+| :--- | :--- | :--- |
+| `factory` | yes | The factory name to use under `factory` in `payum.gateways`. |
 
-* name - The name of the factory
-* human\_name - The name shown to humans, in the backend for example.
-
-***
-
-### Supporting Payum
+## Supporting Payum
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 

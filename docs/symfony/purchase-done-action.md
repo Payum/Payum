@@ -1,59 +1,84 @@
 # Purchase done action
 
-We assume you already know how to prepare payment details and how to capture them. The last thing in this store what to do after? This chapter should cover these questions.
+The done action is the page the customer lands on at the end of a payment, whether it succeeded or not.
+It is where you read the payment status and act on it: mark the order paid, send a receipt, or show an
+error and offer to try again.
 
-Well, let's assume you created capture token this way while preparing payment.
+## Name the done route
+
+Pass the route of your done action as the third argument of `prepare()`:
 
 ```php
-<?php
-$captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
-    $gatewayName,
-    $details,
-    'acme_payment_done'
-);
+$captureToken = $payum->prepare('offline', $payment, 'app_payment_done');
 ```
 
-Pay attention to third parameter `acme_payment_done`. It is the route of url you will be redirected after capture done its job. Let's look at an example of how this action may look like:
+After the gateway has run, the bundle's capture route redirects the customer to `app_payment_done`, with
+a token in the URL. Pass route parameters as a fourth argument, for example
+`['orderId' => $order->getId()]`.
+
+## Read the payment and its status
+
+Call `done()` with the current request:
 
 ```php
 <?php
-    use Payum\Core\Request\GetHumanStatus;
+// src/Controller/PaymentController.php
 
-    public function captureDoneAction(Request $request)
+namespace App\Controller;
+
+use Payum\Core\Payum;
+use Payum\Core\Result\PaymentStatus;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+class PaymentController extends AbstractController
+{
+    #[Route('/payment/done', name: 'app_payment_done')]
+    public function done(Request $request, Payum $payum): Response
     {
-        $token = $this->get('payum')->getHttpRequestVerifier()->verify($request);
-        
-        $identity = $token->getDetails();
-        $model = $this->get('payum')->getStorage($identity->getClass())->find($identity);
+        $payment = $payum->done($request);
 
-        $gateway = $this->get('payum')->getGateway($token->getGatewayName());
-
-        // you can invalidate the token. The url could not be requested any more.
-        // $this->get('payum')->getHttpRequestVerifier()->invalidate($token);
-        
-        // Once you have token you can get the model from the storage directly. 
-        //$identity = $token->getDetails();
-        //$details = $payum->getStorage($identity->getClass())->find($identity);
-        
-        // or Payum can fetch the model for you while executing a request (Preferred).
-        $gateway->execute($status = new GetHumanStatus($token));
-        $details = $status->getFirstModel();
-        
-        // you have order and payment status 
-        // so you can do whatever you want for example you can just print status and payment details.
-        
-        return new JsonResponse(array(
-            'status' => $status->getValue(),
-            'details' => iterator_to_array($details),
-        ));
+        return match ($payment->getStatus()) {
+            PaymentStatus::Captured, PaymentStatus::Authorized => new Response('Thank you for your payment.'),
+            PaymentStatus::Pending => new Response('We are waiting for your bank to confirm the payment.'),
+            default => new Response('Your payment did not go through.'),
+        };
     }
+}
 ```
 
-In general you have to check status of the payment and do whatever you want depending on it. For example if payment success you would add a user some credits or update expiration date. If not you redirect him to homepage and show a flash message with a bad news.
+`done()` verifies the token, invalidates it and returns the payment. A second request with the same URL
+throws an exception, so your logic runs once per payment. `PaymentStatus::Pending` means the provider
+has not confirmed the payment yet. It may confirm it later through a notification, so do not treat it as
+a failure. [Payment status](../payment-status.md) explains each status.
 
-***
+## Gateways registered with `factory`
 
-### Supporting Payum
+A gateway registered with `factory` runs 1.x actions, and Payum does not record the status on its
+payments. Ask the gateway for the status instead:
+
+```php
+use Payum\Core\Request\GetHumanStatus;
+
+$token = $payum->getHttpRequestVerifier()->verify($request);
+$gateway = $payum->getGateway($token->getGatewayName());
+
+$gateway->execute($status = new GetHumanStatus($token));
+$payment = $status->getFirstModel();
+
+$payum->getHttpRequestVerifier()->invalidate($token);
+
+if ($status->isCaptured()) {
+    // ...
+}
+```
+
+`GetHumanStatus` is deprecated in Payum 2. Switch to `done()` once the gateway is registered by its
+config class. See [Register gateways](gateways.md).
+
+## Supporting Payum
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
