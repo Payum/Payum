@@ -94,11 +94,11 @@ The gateway name stays readable, so you can still find a config by name.
 
 ## Register the stored gateways
 
-Load the configs through the decorated storage and register them, with the loop from
-[Store gateway configs in a database](configure-gateway-in-backend.md#register-the-stored-gateways). The
-decorator decrypts each config as it loads it, so `getConfig()` returns the plain options. The decorator
-adds `'encrypted' => true` to them, which is why that loop removes the `encrypted` key before it builds the
-config object. An admin form that loads a config this way also shows the plain values.
+Pass the decorated storage to `setGatewayConfigStorage()`, as
+[Store gateway configs in a database](configure-gateway-in-backend.md#register-the-stored-gateways) shows.
+The decorator decrypts each config as Payum loads it, so the gateway receives the plain options. Payum
+ignores the `encrypted` flag the decorator adds. An admin form that loads a config through the decorated
+storage also shows the plain values.
 
 ## Which values you can store
 

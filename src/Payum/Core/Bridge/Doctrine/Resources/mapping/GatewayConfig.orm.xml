@@ -4,7 +4,7 @@
 
         <field name="gatewayName" column="gateway_name" type="string" />
 
-        <field name="factoryName" column="factory_name" type="string" />
+        <field name="factoryName" column="factory_name" type="string" nullable="true" />
 
         <field name="config" column="config" type="json" />
 
