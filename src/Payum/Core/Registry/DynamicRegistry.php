@@ -2,11 +2,16 @@
 
 namespace Payum\Core\Registry;
 
+use Closure;
+use Payum\Core\Config\GatewayConfig as TypedGatewayConfig;
+use Payum\Core\Exception\GatewayUnavailableException;
 use Payum\Core\Exception\InvalidArgumentException;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Storage\StorageInterface;
+use Throwable;
 
 /**
  * @template TModel of object
@@ -37,9 +42,15 @@ class DynamicRegistry implements RegistryInterface
 
     /**
      * @param StorageInterface<GatewayConfigInterface> $gatewayConfigStore
+     * @param array<string, class-string<PaymentGateway>> $gatewayTypes the gateway class a stored config's 'type' option may name
+     * @param (Closure(string, TypedGatewayConfig): GatewayInterface)|null $buildGateway builds a gateway the way PayumBuilder::registerGateway() does
      */
-    public function __construct(StorageInterface $gatewayConfigStore, GatewayFactoryRegistryInterface $gatewayFactoryRegistry)
-    {
+    public function __construct(
+        StorageInterface $gatewayConfigStore,
+        GatewayFactoryRegistryInterface $gatewayFactoryRegistry,
+        private readonly array $gatewayTypes = [],
+        private readonly ?Closure $buildGateway = null,
+    ) {
         $this->gatewayConfigStore = $gatewayConfigStore;
         $this->gatewayFactoryRegistry = $gatewayFactoryRegistry;
     }
@@ -155,6 +166,10 @@ class DynamicRegistry implements RegistryInterface
     {
         $config = $gatewayConfig->getConfig();
 
+        if (! isset($config['factory']) && ! $gatewayConfig->getFactoryName()) {
+            return $this->createTypedGateway($gatewayConfig->getGatewayName(), $config);
+        }
+
         if (isset($config['factory'])) {
             $factory = $this->gatewayFactoryRegistry->getGatewayFactory($config['factory']);
             unset($config['factory']);
@@ -165,5 +180,30 @@ class DynamicRegistry implements RegistryInterface
         }
 
         return $factory->create($config);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function createTypedGateway(string $gatewayName, array $options): GatewayInterface
+    {
+        $type = $options['type'] ?? null;
+        $gatewayClass = is_string($type) ? ($this->gatewayTypes[$type] ?? null) : null;
+
+        if (null === $gatewayClass || null === $this->buildGateway) {
+            throw GatewayUnavailableException::unknownType($gatewayName, $type);
+        }
+
+        unset($options['type'], $options['encrypted']);
+
+        $configClass = (new $gatewayClass())->configClass();
+
+        try {
+            $config = new $configClass(...$options);
+        } catch (Throwable $e) {
+            throw GatewayUnavailableException::invalidConfig($gatewayName, $configClass, $e);
+        }
+
+        return ($this->buildGateway)($gatewayName, $config);
     }
 }

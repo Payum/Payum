@@ -23,6 +23,9 @@
     `Payum\Core\Bridge\Doctrine\Migrations\AbstractTokenDetailsToJsonMigration` and register
     `Payum\Core\Bridge\Doctrine\EventListener\StoreTokenDetailsAsJson`. See
     [docs/storages.md](docs/storages.md#storing-token-details-as-json).
+  * The `factory_name` column of the gateway config mapping (`GatewayConfig.orm.xml`) is nullable, because
+    a config stored for a 2.x gateway has no factory. Generate a migration if your schema is managed by
+    Doctrine; an attribute override you added to make it nullable can be removed.
   * ORM 3 has no annotation mapping. Map your own entities that extend Payum's models with attributes or
     XML; Payum's shipped mappings are XML and work on both majors.
 * `Payum\Core\Action\GetCurrencyAction` uses alcohol/iso4217 by default. Its one constructor argument is now

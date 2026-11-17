@@ -2,6 +2,7 @@
 
 namespace Payum\Core;
 
+use Closure;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\FactoryInterface;
@@ -149,6 +150,11 @@ class PayumBuilder
     protected array $gatewayConfigs = [];
 
     /**
+     * @var array<string, class-string<PaymentGateway>>
+     */
+    protected array $gatewayTypes = [];
+
+    /**
      * @var GatewayFactoryInterface[]|callable[]
      */
     protected array $gatewayFactories = [];
@@ -178,6 +184,11 @@ class PayumBuilder
     protected array $globalDefinitions = [];
 
     protected string $layout = '@PayumCore/layout.html.twig';
+
+    /**
+     * @var (Closure(string, GatewayConfig): Gateway)|null
+     */
+    private ?Closure $storedGatewayBuilder = null;
 
     public function __construct()
     {
@@ -450,83 +461,23 @@ class PayumBuilder
             static fn (string $id): bool => str_starts_with($id, 'payum.action.'),
         )));
 
+        $buildGateway = fn (string $name, GatewayConfig $config): Gateway => $this->buildGatewayFromConfig(
+            $name,
+            $config,
+            $coreGatewayFactory,
+            $globalContainer,
+            $applicationActions,
+            $genericTokenFactory,
+        );
+
+        $this->storedGatewayBuilder = $buildGateway;
+
         foreach ($this->gateways as $name => $config) {
             if (! $config instanceof GatewayConfig) {
                 continue;
             }
 
-            if ([] !== $applicationActions) {
-                trigger_deprecation(
-                    'payum/core',
-                    '2.0.0',
-                    'Gateway "%s" is built from handlers and ignores %s. A payum.action.* entry only reaches a 1.x gateway, and is removed in 3.0. Write what a Convert action added onto the payment\'s details before executing the command, or decorate the gateway\'s handler in configureContainer().',
-                    $name,
-                    implode(', ', $applicationActions),
-                );
-            }
-
-            $gatewayClass = $config->getGatewayClass();
-            $gateway = new $gatewayClass();
-
-            $gatewayDefinitions = $gateway instanceof ContainerConfiguration ? $gateway->configureContainer() : null;
-
-            if (null !== $gatewayDefinitions && array_key_exists(RendererInterface::class, $gatewayDefinitions)) {
-                throw new PayumLogicException(sprintf(
-                    '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Register your own directory under the gateway\'s template namespace instead.',
-                    $gatewayClass,
-                    RendererInterface::class,
-                ));
-            }
-
-            $containerBuilder = new ContainerBuilder();
-
-            // Core defaults first, then the services shared by every gateway, then the handlers, then what
-            // the gateway declares for itself. Last wins.
-            $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
-            $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
-
-            $handlerDefinitions = [];
-
-            // The interface resolves to the handler's own entry, so a gateway that builds or decorates a
-            // handler in configureContainer() is what runs.
-            foreach (HandlerMap::fromHandlers($gateway->handlers())->bindings() as $interface => $handlerClass) {
-                $handlerDefinitions[$handlerClass] = autowire($handlerClass);
-                $handlerDefinitions[$interface] = get($handlerClass);
-            }
-
-            $containerBuilder->addDefinitions($handlerDefinitions);
-
-            if (null !== $gatewayDefinitions) {
-                $containerBuilder->addDefinitions($gatewayDefinitions);
-            }
-
-            // Core defaults first, then what the application registered, then the gateway's own, so a
-            // gateway's middleware runs innermost on equal priority.
-            $middleware = CoreGatewayFactory::defaultMiddleware()->merge($this->middleware);
-
-            if ($gateway instanceof DeclaresMiddleware) {
-                foreach ($gateway->middleware() as $gatewayMiddleware) {
-                    $middleware = $middleware->with($gatewayMiddleware);
-                }
-            }
-
-            $containerBuilder->addDefinitions([
-                MiddlewareCollection::class => $middleware,
-            ]);
-            $containerBuilder->addDefinitions([
-                $config::class => $config,
-                GatewayConfig::class => $config,
-                $gatewayClass => $gateway,
-                PaymentGateway::class => $gateway,
-            ]);
-
-            $gateways[$name] = $coreGatewayFactory->createGateway(
-                new FallbackContainer($containerBuilder->build(), $globalContainer)
-            );
-
-            if ($gateway instanceof DeclaresActions) {
-                $this->addLegacyExtensions($gateways[$name], $genericTokenFactory);
-            }
+            $gateways[$name] = $buildGateway($name, $config);
 
             unset($this->gateways[$name]);
         }
@@ -630,6 +581,28 @@ class PayumBuilder
         }
 
         $this->gateways[$name] = $config;
+
+        return $this;
+    }
+
+    /**
+     * Allows a gateway config stored with setGatewayConfigStorage() to be built as $gatewayClass when its
+     * 'type' option is $type. A stored config can only name a type registered here.
+     *
+     * @param class-string $gatewayClass
+     */
+    public function addGatewayType(string $type, string $gatewayClass): static
+    {
+        if (! is_a($gatewayClass, PaymentGateway::class, true)) {
+            throw new InvalidArgumentException(sprintf(
+                'Gateway type "%s" must be a class implementing %s, %s given.',
+                $type,
+                PaymentGateway::class,
+                $gatewayClass,
+            ));
+        }
+
+        $this->gatewayTypes[$type] = $gatewayClass;
 
         return $this;
     }
@@ -877,7 +850,7 @@ class PayumBuilder
         $registry->setAddStorageExtensions(false);
 
         if ($this->gatewayConfigStorage) {
-            $dynamicRegistry = new DynamicRegistry($this->gatewayConfigStorage, $registry);
+            $dynamicRegistry = new DynamicRegistry($this->gatewayConfigStorage, $registry, $this->gatewayTypes, $this->storedGatewayBuilder);
             $dynamicRegistry->setBackwardCompatibility(false);
 
             $registry = new FallbackRegistry($dynamicRegistry, $registry);
@@ -1042,6 +1015,95 @@ class PayumBuilder
     }
 
     /**
+     * @param list<string> $applicationActions
+     */
+    private function buildGatewayFromConfig(
+        string $name,
+        GatewayConfig $config,
+        CoreGatewayFactory $coreGatewayFactory,
+        ContainerInterface $globalContainer,
+        array $applicationActions,
+        GenericTokenFactoryInterface $genericTokenFactory,
+    ): Gateway {
+        if ([] !== $applicationActions) {
+            trigger_deprecation(
+                'payum/core',
+                '2.0.0',
+                'Gateway "%s" is built from handlers and ignores %s. A payum.action.* entry only reaches a 1.x gateway, and is removed in 3.0. Write what a Convert action added onto the payment\'s details before executing the command, or decorate the gateway\'s handler in configureContainer().',
+                $name,
+                implode(', ', $applicationActions),
+            );
+        }
+
+        $gatewayClass = $config->getGatewayClass();
+        $gateway = new $gatewayClass();
+
+        $gatewayDefinitions = $gateway instanceof ContainerConfiguration ? $gateway->configureContainer() : null;
+
+        if (null !== $gatewayDefinitions && array_key_exists(RendererInterface::class, $gatewayDefinitions)) {
+            throw new PayumLogicException(sprintf(
+                '%s declares %s. The renderer is registered by the application, not by a gateway: a gateway replacing it breaks every other gateway\'s templates. Register your own directory under the gateway\'s template namespace instead.',
+                $gatewayClass,
+                RendererInterface::class,
+            ));
+        }
+
+        $containerBuilder = new ContainerBuilder();
+
+        // Core defaults first, then the services shared by every gateway, then the handlers, then what
+        // the gateway declares for itself. Last wins.
+        $containerBuilder->addDefinitions($coreGatewayFactory->configureContainer());
+        $containerBuilder->addDefinitions($this->buildSharedDefinitions($globalContainer));
+
+        $handlerDefinitions = [];
+
+        // The interface resolves to the handler's own entry, so a gateway that builds or decorates a
+        // handler in configureContainer() is what runs.
+        foreach (HandlerMap::fromHandlers($gateway->handlers())->bindings() as $interface => $handlerClass) {
+            $handlerDefinitions[$handlerClass] = autowire($handlerClass);
+            $handlerDefinitions[$interface] = get($handlerClass);
+        }
+
+        $containerBuilder->addDefinitions($handlerDefinitions);
+
+        if (null !== $gatewayDefinitions) {
+            $containerBuilder->addDefinitions($gatewayDefinitions);
+        }
+
+        // Core defaults first, then what the application registered, then the gateway's own, so a
+        // gateway's middleware runs innermost on equal priority.
+        $middleware = CoreGatewayFactory::defaultMiddleware()->merge($this->middleware);
+
+        if ($gateway instanceof DeclaresMiddleware) {
+            foreach ($gateway->middleware() as $gatewayMiddleware) {
+                $middleware = $middleware->with($gatewayMiddleware);
+            }
+        }
+
+        $containerBuilder->addDefinitions([
+            MiddlewareCollection::class => $middleware,
+        ]);
+        $containerBuilder->addDefinitions([
+            $config::class => $config,
+            GatewayConfig::class => $config,
+            $gatewayClass => $gateway,
+            PaymentGateway::class => $gateway,
+        ]);
+
+        $built = $coreGatewayFactory->createGateway(
+            new FallbackContainer($containerBuilder->build(), $globalContainer)
+        );
+
+        if ($gateway instanceof DeclaresActions) {
+            $this->addLegacyExtensions($built, $genericTokenFactory);
+        }
+
+        $built->setName($name);
+
+        return $built;
+    }
+
+    /**
      * What a 1.x action expects to find on its gateway: its payment loaded from the token and written back
      * afterwards, and the token factory. Ahead of core's own, in the order a 1.x factory registers them.
      */
@@ -1061,12 +1123,14 @@ class PayumBuilder
     {
         $namespaces = [];
 
+        $gatewayClasses = $this->gatewayTypes;
         foreach ($this->gateways as $config) {
-            if (! $config instanceof GatewayConfig) {
-                continue;
+            if ($config instanceof GatewayConfig) {
+                $gatewayClasses[] = $config->getGatewayClass();
             }
+        }
 
-            $gatewayClass = $config->getGatewayClass();
+        foreach (array_unique($gatewayClasses) as $gatewayClass) {
             $gateway = new $gatewayClass();
 
             if (! $gateway instanceof DeclaresTemplates) {
