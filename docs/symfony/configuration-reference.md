@@ -1,66 +1,79 @@
-# Configuration Reference
+# Configuration reference
 
-### Payum extension:
+This page lists every key PayumBundle reads under `payum` in `config/packages/payum.yaml`.
+
+## Overview
 
 ```yaml
+# config/packages/payum.yaml
 payum:
     security:
         token_storage:
-            A\Model\TokenClass:
-                # storage specific options
+            App\Entity\PaymentToken: { doctrine: orm }
 
     storages:
-        A\Model\Class:
-            gateway:
-                all: true 
+        App\Entity\Payment:
+            doctrine: orm
+            extension:
+                all: true
+                gateways: []
                 factories: []
-                payments: []
-
-            # storage specific options
-        Another\Model\Class:
-            payment:
-                all: true 
-                factories: []
-                payments: []
-
-            # storage specific options
 
     gateways:
-        foo_gateway:
-            # options
-                
-        bar_gateway:
-            # options
+        offline:
+            config: Payum\Offline\OfflineConfig
+            arguments:
+                paid: true
 
-            payum.template.layout: "AcmeDemoBundle::layout.html.twig"
-
-            #use container parameter
-            payum.template.foo: "%aParameterName%"
-
-            # use service from container
-            payum.action.foo: "@aServiceId"
-            payum.api.foo: "@aServiceId"
-            payum.extension.foo: "@aServiceId"
+        paypal:
+            factory: paypal_express_checkout
+            username: '%env(PAYPAL_USERNAME)%'
+            password: '%env(PAYPAL_PASSWORD)%'
+            signature: '%env(PAYPAL_SIGNATURE)%'
+            sandbox: true
 ```
 
-### Doctrine storage:
+`security.token_storage` is required and takes exactly one token class and the storage for it. `storages`
+takes one entry per model class. The optional `extension` block chooses which gateways load and save that
+model for you. By default all of them do. List gateways or factories to limit it to those.
+
+## Storages
+
+Store a model with Doctrine ORM or MongoDB ODM:
 
 ```yaml
 payum:
     storages:
-        A\Model\Class: { doctrine: orm } # orm or mongodb for now
+        App\Entity\Payment: { doctrine: orm } # or mongodb
 ```
 
-### Filesystem storage:
+Store a model in files, for tests only:
 
 ```yaml
 payum:
     storages:
-        A\Model\Class:
+        App\Model\Payment:
             filesystem:
-                storage_dir: 'required'
-                id_property: 'required'
+                storage_dir: '%kernel.project_dir%/var/payments'
+                id_property: number
 ```
+
+[Storages](storages.md) also covers custom storages.
+
+## Gateways registered by their config class
+
+| Key | What it does |
+| :--- | :--- |
+| `config` | The gateway's config class. It must implement `Payum\Core\Config\GatewayConfig`. |
+| `arguments` | The arguments of the config class's constructor, by parameter name. `%env()%` works. |
+
+An entry with `config` takes no other keys. See [Register gateways](gateways.md).
+
+## Gateways registered with `factory`
+
+Gateways that have no config class yet take a `factory` name and that factory's options. The bundle
+passes the options to the factory as they are, so each gateway documents its own. The gateways in this
+repository take these:
 
 ### Paypal express checkout gateway
 

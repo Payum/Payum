@@ -1,75 +1,51 @@
 # Get started
 
-## Payum Bundle
+PayumBundle adds Payum to a Symfony application. It registers the `Payum` service, the routes that run
+a payment, and the storages and gateways you configure in `config/packages/payum.yaml`. This page takes
+you through your first payment with the Offline gateway, which marks a payment as paid without talking
+to a payment provider, so you can follow it without an account anywhere.
 
-### Install
+If you are upgrading an application that already uses the bundle, read
+[Upgrade to Payum 2](upgrading.md) instead.
 
-The preferred way to install the library is using [composer](http://getcomposer.org/). Run `composer require` to add dependencies to _composer.json_:
+## Install the bundle
+
+Install the bundle, Payum, a gateway and an HTTP client with [Composer](https://getcomposer.org/):
 
 ```bash
-php composer.phar require "payum/payum-bundle" "payum/offline" "php-http/guzzle7-adapter"
+composer require payum/payum-bundle payum/core:^2.0 payum/offline:^2.0 php-http/guzzle7-adapter
 ```
 
-{% hint style="info" %}
-_**Note**: Where **payum/offline** is a payum gateway, you can for example change it to **payum/paypal-express-checkout-nvp** or **payum/stripe**. Look at_ [_supported gateways_](../supported-gateways.md) _to find out what you can use._
-{% endhint %}
+`payum/offline` is the gateway, Payum's adapter for one payment provider. Replace it with the package
+of your provider. [Supported gateways](../supported-gateways.md) lists them. Gateways talk to their
+provider through a PSR-18 HTTP client, and `php-http/guzzle7-adapter` is one. Any
+[client implementation](https://packagist.org/providers/php-http/client-implementation) works.
 
-{% hint style="info" %}
-_**Note**: Use **payum/payum** if you want to install all gateways at once._
-{% endhint %}
-
-When using Symfony Flex, the bundle should automatically be added to the bundle config.
-
-If that did not happen, or if you are not using Symfony Flex, then enable the bundle in the config
+Symfony Flex enables the bundle for you. Without Flex, add it to `config/bundles.php`:
 
 ```php
 <?php
 // config/bundles.php
 
 return [
+    // ...
     Payum\Bundle\PayumBundle\PayumBundle::class => ['all' => true],
 ];
 ```
 
-Now let's import Payum's routes:
+Then import the bundle's routes. They are the URLs the customer passes through while a payment runs:
 
 ```yaml
-# config/routes.yml
-
+# config/routes/payum.yaml
 payum_all:
-    resource: "@PayumBundle/Resources/config/routing/all.xml"
+    resource: "@PayumBundle/Resources/config/routing/all.yaml"
 ```
 
-### Configure
+## Create the entities
 
-First we need two entities: `Token` and `Payment`.\
-The token entity is used to protect your payments, while the payment entity stores all your payment information.
-
-_**Note**: In this chapter we show how to use [Doctrine ORM](https://www.doctrine-project.org/projects/orm.html) entities. There are other supported [storages](storages.md)._
-
-```php
-<?php
-// src/Entity/PaymentToken.php
-
-namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Token;
-
-/**
- * @ORM\Entity
- * @ORM\Table
- */
-class PaymentToken extends Token
-{
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
-}
-```
+Payum stores two things for you: the payment, and the tokens that protect the payment URLs. A token is
+a random single-use value in the URL that tells Payum which payment and gateway a request is for.
+Create an entity for each:
 
 ```php
 <?php
@@ -80,26 +56,44 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\Payment as BasePayment;
 
-/**
- * @ORM\Entity
- * @ORM\Table
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'payment')]
 class Payment extends BasePayment
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    protected ?int $id = null;
 }
 ```
 
-Next, you have to add mapping information, and configure payum's storages:
+```php
+<?php
+// src/Entity/PaymentToken.php
 
-```yml
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\Token;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'payment_token')]
+class PaymentToken extends Token
+{
+}
+```
+
+The bundle maps the fields of `Payment` and `Token` for you, including the payment's `status` column, so
+each entity only adds its table and, for the payment, an id. The token uses its hash as its id. Create
+the tables with a migration or with `bin/console doctrine:schema:update --force`.
+[Storages](storages.md) shows the other storages the bundle supports.
+
+## Configure Payum
+
+Register the storages and the gateway:
+
+```yaml
 # config/packages/payum.yaml
-
 payum:
     security:
         token_storage:
@@ -107,117 +101,97 @@ payum:
 
     storages:
         App\Entity\Payment: { doctrine: orm }
-            
+
     gateways:
         offline:
-            factory: offline
+            config: Payum\Offline\OfflineConfig
 ```
 
-_**Note**: You can add other gateways to the `gateways` key too._
+`offline` is the name you use for the gateway in your code. `config` is the gateway's config class,
+which holds its settings and credentials. [Register gateways](gateways.md) shows how to pass those
+settings, including secrets from environment variables.
 
-## Create payment and redirect the user
+## Create the payment
 
-Now we can create a payment:
+Create a controller that fills in a payment and sends the customer to the gateway:
 
 ```php
 <?php
 // src/Controller/PaymentController.php
 
-namespace Acme\PaymentBundle\Controller;
+namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Payum\Core\Payum;
-use Payum\Core\Request\GetHumanStatus;
 use App\Entity\Payment;
+use Payum\Core\Payum;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PaymentController extends AbstractController
 {
-    /**
-     * @Route("/prepare-payment", name="payum_prepare_payment")
-     */
-    public function prepare(Payum $payum) 
+    #[Route('/checkout', name: 'app_checkout')]
+    public function checkout(Payum $payum): RedirectResponse
     {
-        $gatewayName = 'offline';
-        
-        $storage = $payum->getStorage(Payment::class);
-        
-        $payment = $storage->create();
+        $payment = new Payment();
         $payment->setNumber(uniqid());
         $payment->setCurrencyCode('EUR');
-        $payment->setTotalAmount(123); // 1.23 EUR
-        $payment->setDescription('A description');
-        $payment->setClientId('anId');
-        $payment->setClientEmail('foo@example.com');
-        
-        $storage->update($payment);
-        
-        $captureToken = $payum->getTokenFactory()->createCaptureToken(
-            $gatewayName, 
-            $payment, 
-            'payum_payment_done' // the route to redirect after capture
-        );
-        
-        return $this->redirect($captureToken->getTargetUrl());    
+        $payment->setTotalAmount(1000);
+        $payment->setDescription('Order 1001');
+        $payment->setClientId('customer-42');
+        $payment->setClientEmail('customer@example.com');
+
+        $captureToken = $payum->prepare('offline', $payment, 'app_payment_done');
+
+        return $this->redirect($captureToken->getTargetUrl());
     }
 }
 ```
 
-### Payment is done
+Amounts are in the currency's smallest unit, so `1000` with `'EUR'` is 10.00 EUR. `prepare()` saves the
+payment and returns a capture token. Capture means taking the customer's money. The token's URL points
+at the bundle's capture route, which runs the gateway. The third argument is the route the customer
+lands on afterwards, paid or not. Always pass it, because the bundle has no default.
 
-After setting up the payment, the user will be redirected to `doneAction()`. You can read more about it in its dedicated [chapter](purchase-done-action.md). `doneAction()` is always called, no matter if the payment was successful or not. Here we may check the payment status, update the model, dispatch events and so on.
+## Show the result
+
+Add the route you passed to `prepare()` to `PaymentController`, with `use` statements for
+`Payum\Core\Result\PaymentStatus`, `Symfony\Component\HttpFoundation\Request` and
+`Symfony\Component\HttpFoundation\Response`. It reads the payment and its status:
 
 ```php
-<?php
-// src/Acme/PaymentBundle/Controller/PaymentController.php
-namespace Acme\PaymentBundle\Controller;
-
-use Payum\Core\Request\GetHumanStatus;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-class PaymentController extends Controller 
+#[Route('/payment/done', name: 'app_payment_done')]
+public function done(Request $request, Payum $payum): Response
 {
-    /**
-     * @Route("/payment-done", name="payum_payment_done")
-     */
-    public function doneAction(Request $request, Payum $payum)
-    {
-        $token = $payum->getHttpRequestVerifier()->verify($request);
-        
-        $gateway = $payum->getGateway($token->getGatewayName());
-        
-        // You can invalidate the token, so that the URL cannot be requested any more:
-        // $payum->getHttpRequestVerifier()->invalidate($token);
-        
-        // Once you have the token, you can get the payment entity from the storage directly. 
-        // $identity = $token->getDetails();
-        // $payment = $payum->getStorage($identity->getClass())->find($identity);
-        
-        // Or Payum can fetch the entity for you while executing a request (preferred).
-        $gateway->execute($status = new GetHumanStatus($token));
-        $payment = $status->getFirstModel();
-        
-        // Now you have order and payment status
-        
-        return new JsonResponse(array(
-            'status' => $status->getValue(),
-            'payment' => array(
-                'total_amount' => $payment->getTotalAmount(),
-                'currency_code' => $payment->getCurrencyCode(),
-                'details' => $payment->getDetails(),
-            ),
-        ));
-    }
-}
+    $payment = $payum->done($request);
 
+    if (PaymentStatus::Captured === $payment->getStatus()) {
+        return new Response('Thank you, your payment of '.$payment->getTotalAmount().' '.$payment->getCurrencyCode().' went through.');
+    }
+
+    return new Response('Your payment did not go through: '.$payment->getStatus()->value);
+}
 ```
 
-***
+`done()` checks the token, deletes it and returns the payment. Because the token is gone, reloading the
+page throws an exception instead of running your logic twice. This is where you mark the order paid,
+send a receipt or show an error. `PaymentStatus::Pending` means the provider has not confirmed the
+payment yet. [Payment status](../payment-status.md) explains each status.
 
-### Supporting Payum
+Open `/checkout` in your browser. The Offline gateway captures the payment straight away, so you land on
+the done page with a captured payment.
+
+## Next steps
+
+- [Register gateways](gateways.md) covers credentials, several accounts with one provider, and gateways
+  that have not moved to Payum 2 yet.
+- To refund, cancel or authorize a payment, inject `Payum` and run a command on the gateway.
+  [Payment operations](../payment-operations.md) shows each command.
+- Providers that confirm payments from their own servers call a notify URL. The bundle's routes include
+  it. See [Payment notifications](../instant-payment-notification.md).
+- [Use your services in Payum](services.md) shows how gateways get your services and how to listen to
+  Payum's events.
+
+## Supporting Payum
 
 Payum is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
