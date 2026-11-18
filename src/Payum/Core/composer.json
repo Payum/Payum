@@ -72,7 +72,8 @@
         "symfony/validator": "^6.4 || ^7.0 || ^8.0",
         "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0",
         "symfony/phpunit-bridge": "^8.1",
-        "defuse/php-encryption": "^2"
+        "defuse/php-encryption": "^2",
+        "paragonie/halite": "^5.1"
     },
     "suggest": {
         "payum/paypal-express-checkout-nvp": "self.version If you want to use paypal express checkout, digital goods or recurring payments",
@@ -94,6 +95,7 @@
         "symfony/dependency-injection": "^6.4 || ^7.0 || ^8.0 If you want to use container aware stuff",
         "monolog/monolog": "~1.0 If you want to use PSR-3 logger",
         "defuse/php-encryption": "^2 If you want to encrypt gateways credentials in database",
+        "paragonie/halite": "^5.1 If you want to encrypt gateways credentials in database with libsodium",
         "symfony/lock": "^6.4 || ^7.0 || ^8.0 Required by LockingMiddleware to stop two requests processing the same payment at once",
         "psr/cache": "^1.0 || ^2.0 || ^3.0 Required by CacheIdempotencyStore to keep idempotency records in a PSR-6 cache",
         "doctrine/dbal": "^3.0 || ^4.0 Required by DbalIdempotencyStore to keep idempotency records in a database table"

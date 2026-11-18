@@ -97,7 +97,8 @@
         "symplify/easy-coding-standard": "^13.2",
         "phpstan/phpstan": "^2.2",
         "symfony/http-client": "^6.4 || ^7.0 || ^8.0",
-        "nyholm/psr7": "^1.8"
+        "nyholm/psr7": "^1.8",
+        "paragonie/halite": "^5.1"
     },
     "suggest": {
         "symfony/lock": "^6.4 || ^7.0 || ^8.0 Required by LockingMiddleware to stop two requests processing the same payment at once",
