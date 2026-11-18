@@ -223,6 +223,9 @@ foreach ($oldStorage->findBy([]) as $gatewayConfig) {
 }
 ```
 
+In a Symfony application, PayumBundle runs this for you with the `payum:security:reencrypt-gateway-configs`
+command. See [Encrypt gateway configs stored in database](symfony/encrypt-gateway-configs-stored-in-database.md).
+
 To change only the key, use the same cypher class on both sides. Run the script once. A second run fails,
 because the old cypher cannot read the configs the first run re-encrypted.
 
