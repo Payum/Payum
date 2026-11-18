@@ -4,7 +4,7 @@ Payum Bundle provides a set of CLI commands.
 
 In the following examples, we will show you how to [get a payment status](console-commands.md#get-payment-status), [create a notify token](console-commands.md#create-notify-token) and [create a purchase token](console-commands.md#create-purchase-token). We will use `paypal` as the payment name.
 
-### Get Payment Status
+### Get payment status
 
 ```bash
 $ php bin/console payum:status paypal --model-class=Acme\PaymentBundle\Entity\Payment --model-id=1
@@ -12,7 +12,7 @@ $ php bin/console payum:status paypal --model-class=Acme\PaymentBundle\Entity\Pa
 > Status: success
 ```
 
-### Create Notify Token
+### Create notify token
 
 Some payment gateways do not allow you to set a callback URL per model. You can set only one URL in their admin area. This command allows you to generate a secure URL. Optionally, you can associate a model with this token.
 
@@ -24,7 +24,7 @@ $ php bin/console payum:security:create-notify-token paypal --model-class=Acme\P
 > Details: Acme\PaymentBundle\Entity\Payment#1
 ```
 
-### Create Purchase Token
+### Create purchase token
 
 This could be helpful when you want to send user a purchase link (via email) manually, or when user is lost in the middle of a payment and asking for a new link.
 
@@ -38,6 +38,19 @@ $ php bin/console payum:security:create-capture-token paypal \
 > Url: http://localhost/payment/capture/oTA0w-SRaVY8U1pRr6MVshAtdjiogRENTlnJit6lYLg
 > After Url: url-or-route-to-go-after-purchase
 > Details: Acme\PaymentBundle\Entity\Payment#1
+```
+
+### Re-encrypt gateway configs
+
+When you [encrypt gateway configs stored in database](encrypt-gateway-configs-stored-in-database.md), this
+command saves every stored config again with the configured key. Use it to encrypt configs stored before you
+set the key, and to move configs to a new key or library listed under `encryption.previous`. It exists only
+when `dynamic_gateways.encryption` sets a key.
+
+```bash
+php bin/console payum:security:reencrypt-gateway-configs
+
+> Re-encrypted 3 gateway config(s).
 ```
 
 ### Debug payment
