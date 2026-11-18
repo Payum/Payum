@@ -7,56 +7,96 @@ each option when it saves a config and decrypts it when it loads one.
 
 This page builds on the Doctrine setup in [Store gateway configs in a database](configure-gateway-in-backend.md).
 
-## Install the encryption library
+## Choose an encryption library
 
-Payum encrypts with [defuse/php-encryption](https://github.com/defuse/php-encryption). Install it:
+Payum ships a cypher (the class that encrypts and decrypts each value) for two libraries:
 
-```bash
-composer require defuse/php-encryption:^2
-```
+| Library | Payum cypher | When to use it |
+| --- | --- | --- |
+| [paragonie/halite](https://github.com/paragonie/halite) | `Payum\Core\Bridge\Halite\Security\HaliteCypher` | New projects. It is maintained and uses PHP's built-in `sodium` extension. |
+| [defuse/php-encryption](https://github.com/defuse/php-encryption) | `Payum\Core\Bridge\Defuse\Security\DefuseCypher` | Projects that already encrypt with it. The library only receives maintenance fixes. |
 
-## Generate a key
+The two libraries cannot read each other's ciphertext. Pick one, and if you already store configs encrypted
+with defuse/php-encryption, follow [Switch to another library](#change-the-key-or-switch-to-another-library)
+to move them over. Halite is licensed under the MPL-2.0, defuse/php-encryption under the MIT license.
 
-Generate a key once, with the command the library installs:
+## Install the library and generate a key
 
-```bash
-vendor/bin/generate-defuse-key
-```
-
-It prints a single line that starts with `def0000`. Store it outside your code, for example in an
-environment variable that your deployment sets:
-
-```dotenv
-PAYUM_CYPHER_KEY=def00000c794ad36e544b9557c098620e19be5f96529a227d4b22874ce16c9cab2ae90a45b07f20b86349c6e1d892ed042562f86ebb50fbb8b6394b8797c63b12d232db4
-```
-
-Every request must use the same key. Do not generate the key in your application code.
+Generate the key once, outside your application, and store it outside your code, for example in an
+environment variable that your deployment sets. Every request must use the same key.
 
 {% hint style="warning" %}
 Keep a backup of the key somewhere other than the database. If you lose it, nobody can decrypt the stored
 configs, and you have to enter every gateway's credentials again.
 {% endhint %}
 
+### Halite
+
+Install the library:
+
+```bash
+composer require paragonie/halite:^5.1
+```
+
+Halite has no key command, so print a new key with a one-line PHP script:
+
+```bash
+php -r 'require "vendor/autoload.php"; echo ParagonIE\Halite\KeyFactory::export(ParagonIE\Halite\KeyFactory::generateEncryptionKey())->getString(), PHP_EOL;'
+```
+
+It prints a single line of 200 hexadecimal characters that starts with `31400501`. Put it in your
+environment:
+
+```dotenv
+PAYUM_CYPHER_KEY=3140050161205157e7b7bbfdacb4201eac4788fa...
+```
+
+### defuse/php-encryption
+
+Install the library:
+
+```bash
+composer require defuse/php-encryption:^2
+```
+
+Generate a key with the command the library installs:
+
+```bash
+vendor/bin/generate-defuse-key
+```
+
+It prints a single line that starts with `def0000`. Put it in your environment:
+
+```dotenv
+PAYUM_CYPHER_KEY=def00000c794ad36e544b9557c098620e19be5f96529a227d4b22874ce16c9cab2ae90a45b07f20b86349c6e1d892ed042562f86ebb50fbb8b6394b8797c63b12d232db4
+```
+
 ## Wrap the gateway config storage
 
-Create a `DefuseCypher` with the key, and pass it with your Doctrine storage to `CryptoStorageDecorator`:
+Create the cypher with the key, and pass it with your Doctrine storage to `CryptoStorageDecorator`. With
+Halite:
 
 ```php
 <?php
 // config.php
 
 use Acme\Entity\GatewayConfig;
-use Payum\Core\Bridge\Defuse\Security\DefuseCypher;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Bridge\Halite\Security\HaliteCypher;
 use Payum\Core\Storage\CryptoStorageDecorator;
 
 /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
 
 $gatewayConfigStorage = new CryptoStorageDecorator(
     new DoctrineStorage($entityManager, GatewayConfig::class),
-    new DefuseCypher(getenv('PAYUM_CYPHER_KEY'))
+    new HaliteCypher(getenv('PAYUM_CYPHER_KEY'))
 );
 ```
+
+With defuse/php-encryption, use `new DefuseCypher(getenv('PAYUM_CYPHER_KEY'))` from
+`Payum\Core\Bridge\Defuse\Security\DefuseCypher` instead. `HaliteCypher` also accepts a
+`ParagonIE\Halite\Symmetric\EncryptionKey`, so you can keep the key in a file and load it with
+`KeyFactory::loadEncryptionKey('/path/to/payum.key')`.
 
 Use this decorated storage everywhere the other page uses `$gatewayConfigStorage`: to save configs, to edit
 them and to register the stored gateways. `Acme\Entity\GatewayConfig` extends `Payum\Core\Model\GatewayConfig`,
@@ -84,11 +124,14 @@ $gatewayConfig->setConfig([
 $gatewayConfigStorage->update($gatewayConfig);
 ```
 
-The `config` column now holds a ciphertext for each string option, plus an `encrypted` flag:
+The `config` column now holds a ciphertext for each string option, plus an `encrypted` flag. With Halite it
+looks like this:
 
 ```json
-{"type":"def50200a3f1...","apiKey":"def502007c2e...","sandbox":true,"encrypted":true}
+{"type":"MUIFAf5ecLDl...","apiKey":"MUIFAJq3Rk0c...","sandbox":true,"encrypted":true}
 ```
+
+Halite ciphertexts start with `MUIF`, defuse/php-encryption ciphertexts with `def502`.
 
 The gateway name stays readable, so you can still find a config by name.
 
@@ -115,7 +158,8 @@ Only the decorator decrypts. If you load a config some other way, for example wi
 plain text. Inject the decorated storage wherever your code reads or edits gateway configs, such as an
 admin form.
 
-If you load a config with a different key from the one that encrypted it, the decorator throws
+If you load a config with a different key or library from the one that encrypted it, the decorator throws.
+Halite throws `ParagonIE\Halite\Alerts\InvalidMessage`, defuse/php-encryption throws
 `Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException`.
 
 ## Encrypt configs you have already stored
@@ -147,16 +191,20 @@ Do not skip the `setConfig()` call. Without it, the decorator marks a plain-text
 leaves its values as they were, and loading it afterwards fails.
 {% endhint %}
 
-## Advanced: change the key
+## Change the key or switch to another library
 
-To replace the key, load every config with a decorator that uses the old key and save it with one that uses
-the new key:
+To replace the key, or to move from defuse/php-encryption to Halite, load every config with a decorator that
+uses the old cypher and save it with one that uses the new cypher. This script moves configs from
+defuse/php-encryption to Halite:
 
 ```php
 <?php
+// reencrypt_configs.php
+
 use Acme\Entity\GatewayConfig;
 use Payum\Core\Bridge\Defuse\Security\DefuseCypher;
 use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Bridge\Halite\Security\HaliteCypher;
 use Payum\Core\Storage\CryptoStorageDecorator;
 
 /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
@@ -167,7 +215,7 @@ $oldStorage = new CryptoStorageDecorator(
 );
 $newStorage = new CryptoStorageDecorator(
     new DoctrineStorage($entityManager, GatewayConfig::class),
-    new DefuseCypher(getenv('PAYUM_CYPHER_KEY'))
+    new HaliteCypher(getenv('PAYUM_CYPHER_KEY'))
 );
 
 foreach ($oldStorage->findBy([]) as $gatewayConfig) {
@@ -175,15 +223,20 @@ foreach ($oldStorage->findBy([]) as $gatewayConfig) {
 }
 ```
 
-Deploy the new key at the same time as you run the script, because requests that still use the old key
-cannot read the re-encrypted configs.
+To change only the key, use the same cypher class on both sides. Run the script once. A second run fails,
+because the old cypher cannot read the configs the first run re-encrypted.
+
+{% hint style="warning" %}
+Deploy the new key and cypher at the same time as you run the script. Requests that still use the old ones
+cannot read the re-encrypted configs. Back up the gateway config table before you start.
+{% endhint %}
 
 ## Advanced: use your own model or cypher
 
 `CryptoStorageDecorator` works with any model that implements `Payum\Core\Security\CryptedInterface`. Its
 `encrypt()` and `decrypt()` methods receive a `Payum\Core\Security\CypherInterface` and decide which fields
-to change. Implement `CypherInterface` yourself to encrypt with a different library or with a key management
-service. Its `encrypt()` and `decrypt()` methods take and return strings.
+to change. Implement `CypherInterface` yourself to encrypt with a library Payum does not ship a cypher for,
+or with a key management service. Its `encrypt()` and `decrypt()` methods take and return strings.
 
 ## Supporting Payum
 

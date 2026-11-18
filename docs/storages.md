@@ -54,7 +54,7 @@ tokens in files in the system temp directory. It also adds a file storage for ea
 | `Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage` | `doctrine/orm` or `doctrine/mongodb-odm` | Production, with an entity manager or a document manager. |
 | `Payum\Core\Bridge\Laminas\Storage\TableGatewayStorage` | `laminas/laminas-db` | Laminas DB table gateways, with the limits listed below. |
 | `Payum\Core\Storage\FilesystemStorage` | None | Tests and trying Payum out. Not for production. |
-| `Payum\Core\Storage\CryptoStorageDecorator` | A cypher, such as `defuse/php-encryption` | Wraps another storage and encrypts what it saves. |
+| `Payum\Core\Storage\CryptoStorageDecorator` | A cypher, such as `paragonie/halite` or `defuse/php-encryption` | Wraps another storage and encrypts what it saves. |
 
 ## Doctrine ORM
 
