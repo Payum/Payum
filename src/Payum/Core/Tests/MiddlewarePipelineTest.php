@@ -85,6 +85,21 @@ final class MiddlewarePipelineTest extends TestCase
         $this->assertSame(['outer:before', 'inner:before', 'inner:after', 'outer:after'], $order);
     }
 
+    public function testShouldListTheMiddlewareTheGatewayRuns(): void
+    {
+        $gateway = $this->buildPayum()->getGateway('acme');
+        $this->assertInstanceOf(Gateway::class, $gateway);
+
+        $names = array_map(
+            static fn (MiddlewareInterface $one): string => $one instanceof RecordingMiddleware ? $one->name : $one::class,
+            $gateway->middleware(),
+        );
+
+        // the application's sits outside the gateway's own
+        $this->assertLessThan(array_search(GatewayMiddleware::class, $names, true), array_search('global', $names, true));
+        $this->assertContains(\Payum\Core\Middleware\IdempotencyMiddleware::class, $names);
+    }
+
     public function testShouldStillWriteStateOntoThePayment(): void
     {
         $payment = new Payment();
@@ -187,7 +202,7 @@ final class Recorder
 final class RecordingMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly string $name
+        public readonly string $name
     ) {
     }
 

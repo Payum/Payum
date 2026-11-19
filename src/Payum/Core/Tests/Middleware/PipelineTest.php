@@ -52,6 +52,14 @@ final class PipelineTest extends TestCase
         );
     }
 
+    public function testShouldListItsMiddlewareOutermostFirst(): void
+    {
+        $outer = new SpyMiddleware('outer', new CallLog());
+        $inner = new SpyMiddleware('inner', new CallLog());
+
+        $this->assertSame([$outer, $inner], (new Pipeline([$outer, $inner]))->middleware());
+    }
+
     public function testShouldLetMiddlewareShortCircuitTheHandler(): void
     {
         $reached = false;

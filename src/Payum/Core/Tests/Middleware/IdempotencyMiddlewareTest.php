@@ -9,6 +9,7 @@ use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Command\SyncCommand;
+use Payum\Core\Event\IdempotentResultReplayed;
 use Payum\Core\Exception\IdempotencyKeyReusedException;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -33,6 +34,7 @@ use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Tests\Mocks\Clock\FrozenClock;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class IdempotencyMiddlewareTest extends TestCase
@@ -42,6 +44,11 @@ final class IdempotencyMiddlewareTest extends TestCase
     private TokenInterface $token;
 
     private int $handled = 0;
+
+    /**
+     * @var list<object>
+     */
+    private array $dispatched = [];
 
     /**
      * @var StorageRegistryInterface<object>|null
@@ -72,6 +79,21 @@ final class IdempotencyMiddlewareTest extends TestCase
             'id' => 'ch_1',
         ], $first->raw);
         $this->assertSame([], $second->raw);
+    }
+
+    public function testShouldTellListenersWhenItAnswersARepeatFromTheStore(): void
+    {
+        $command = CaptureCommand::forToken($this->token, 1000, 'order-1');
+
+        $this->dispatch($command, static fn (): Result => CaptureResult::captured('ch_1'));
+        $second = $this->dispatch($command, static fn (): Result => CaptureResult::captured('ch_2'));
+
+        // only the repeat, not the first run
+        $this->assertCount(1, $this->dispatched);
+        $this->assertInstanceOf(IdempotentResultReplayed::class, $this->dispatched[0]);
+        $this->assertSame('order-1', $this->dispatched[0]->idempotencyKey);
+        $this->assertSame($second, $this->dispatched[0]->result);
+        $this->assertSame($command, $this->dispatched[0]->command);
     }
 
     public function testShouldRunEveryTimeWithoutAKey(): void
@@ -234,7 +256,13 @@ final class IdempotencyMiddlewareTest extends TestCase
      */
     private function dispatch(CommandInterface $command, callable $handler, ?FrozenClock $clock = null, string $gatewayName = 'acme'): Result
     {
-        $middleware = new IdempotencyMiddleware($this->store, $clock ?? new FrozenClock('2026-11-10 12:00:00'), $this->storages);
+        $events = $this->createMock(EventDispatcherInterface::class);
+        $events->method('dispatch')->willReturnCallback(function (object $event): object {
+            $this->dispatched[] = $event;
+
+            return $event;
+        });
+        $middleware = new IdempotencyMiddleware($this->store, $clock ?? new FrozenClock('2026-11-10 12:00:00'), $this->storages, events: $events);
 
         return (new Pipeline([$middleware]))->process(
             $command,
