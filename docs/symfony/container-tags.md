@@ -1,7 +1,8 @@
 # Container tags
 
 PayumBundle reads a few Symfony container tags. Tag a service with one of them to hand it to Payum as a
-gateway, as a service gateways can use, or as an action, API or extension of a 1.x gateway.
+gateway, as a service gateways can use, as a middleware, or as an action, API or extension of a 1.x
+gateway.
 
 ## `payum.gateway_config`
 
@@ -43,6 +44,27 @@ services:
 
 A shared service also replaces Payum's default for the same id. See
 [Use your services in Payum](services.md).
+
+## `payum.middleware`
+
+Runs a service around every command on every gateway. The service must implement
+`Payum\Core\Middleware\MiddlewareInterface`:
+
+```yaml
+# config/services.yaml
+services:
+    App\Payment\LogPaymentsMiddleware:
+        tags:
+            - { name: payum.middleware, priority: 150 }
+```
+
+| Attribute | Required | What it does |
+| :--- | :--- | :--- |
+| `priority` | no | Where the middleware runs. Higher runs further out. Defaults to the class's own `HasPriority`, else 0. |
+
+With autoconfiguration on, the bundle adds the tag to every service whose class implements `MiddlewareInterface`,
+and the `#[AsPayumMiddleware(priority: 150)]` attribute sets the priority. A service tagged both ways still
+runs once per command. See [Use your services in Payum](services.md#run-code-around-every-command).
 
 ## `payum.gateway`
 

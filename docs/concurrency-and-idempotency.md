@@ -34,6 +34,9 @@ $payum = (new PayumBuilder())
     ->getPayum();
 ```
 
+In Symfony, PayumBundle does this wiring from its configuration. See
+[Stop double captures](symfony/concurrency-and-idempotency.md).
+
 `FlockStore` keeps the locks as files in the system's temporary directory. That works for every PHP
 process on one server, such as all the PHP-FPM workers behind one web server. Every gateway uses the
 same factory, so two gateways working on the same payment also wait for each other.

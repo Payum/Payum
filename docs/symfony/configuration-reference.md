@@ -11,6 +11,11 @@ payum:
         token_storage:
             App\Entity\PaymentToken: { doctrine: orm }
 
+    locking: true
+
+    idempotency:
+        cache_pool: cache.app
+
     storages:
         App\Entity\Payment:
             doctrine: orm
@@ -59,6 +64,46 @@ payum:
 ```
 
 [Storages](storages.md) also covers custom storages.
+
+## Locking
+
+Lets one request at a time work on a payment, with Symfony Lock. Off by default:
+
+```yaml
+payum:
+    locking:
+        enabled: true
+        lock_factory: lock.factory
+        timeout: 10.0
+        ttl: 300.0
+```
+
+| Key | Default | What it does |
+| :--- | :--- | :--- |
+| `enabled` | `false` | Turns locking on. `locking: true` is short for it. Needs `symfony/lock`. |
+| `lock_factory` | `lock.factory` | The service that creates the locks. |
+| `timeout` | `10.0` | Seconds a request waits for another one before Payum throws `ConcurrentOperationException`. |
+| `ttl` | `300.0` | Seconds after which a store that expires locks releases a lock whose process died. |
+
+## Idempotency
+
+Where Payum keeps idempotency records, so a repeated key is recognised in a later request. Set exactly one
+of `cache_pool`, `dbal_connection` or `service`:
+
+```yaml
+payum:
+    idempotency:
+        cache_pool: cache.app
+```
+
+| Key | Default | What it does |
+| :--- | :--- | :--- |
+| `cache_pool` | | Keeps the records in the cache pool with this service id. |
+| `dbal_connection` | | Keeps the records in a table over the Doctrine DBAL connection with this service id. |
+| `table` | `payum_idempotency_record` | The table `dbal_connection` writes to. |
+| `service` | | Your own service implementing `Payum\Core\Idempotency\IdempotencyStoreInterface`. |
+
+[Stop double captures](concurrency-and-idempotency.md) explains both sections.
 
 ## Gateways registered by their config class
 
