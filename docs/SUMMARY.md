@@ -126,6 +126,7 @@
   * [Upgrade to Payum 2](symfony/upgrading.md)
   * [Register gateways](symfony/gateways.md)
   * [Use your services in Payum](symfony/services.md)
+  * [Stop double captures](symfony/concurrency-and-idempotency.md)
   * [Authorize Payment](symfony/authorize.md)
   * [Configure payment in backend](symfony/configure-payment-in-backend.md)
   * [Console commands](symfony/console-commands.md)

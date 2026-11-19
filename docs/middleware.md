@@ -77,7 +77,9 @@ you built yourself:
 ->addMiddleware(new LogPaymentsMiddleware($logger))
 ```
 
-A middleware package publishes its class and tells you to register it the same way.
+A middleware package publishes its class and tells you to register it the same way. In Symfony, PayumBundle
+registers every service that implements `MiddlewareInterface`. See
+[Use your services in Payum](symfony/services.md#run-code-around-every-command).
 
 ## Read the command and the payment
 

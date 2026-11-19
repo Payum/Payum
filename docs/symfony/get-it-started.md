@@ -19,7 +19,8 @@ composer require payum/payum-bundle payum/core:^2.0 payum/offline:^2.0 php-http/
 `payum/offline` is the gateway, Payum's adapter for one payment provider. Replace it with the package
 of your provider. [Supported gateways](../supported-gateways.md) lists them. Gateways talk to their
 provider through a PSR-18 HTTP client, and `php-http/guzzle7-adapter` is one. Any
-[client implementation](https://packagist.org/providers/php-http/client-implementation) works.
+[client implementation](https://packagist.org/providers/php-http/client-implementation) works. If your
+application has `symfony/http-client`, the bundle hands Payum Symfony's client instead.
 
 Symfony Flex enables the bundle for you. Without Flex, add it to `config/bundles.php`:
 
@@ -190,6 +191,8 @@ the done page with a captured payment.
   it. See [Payment notifications](../instant-payment-notification.md).
 - [Use your services in Payum](services.md) shows how gateways get your services and how to listen to
   Payum's events.
+- [Stop double captures](concurrency-and-idempotency.md) turns on locking, so a double click or a webhook
+  racing the customer's return cannot capture a payment twice.
 
 ## Supporting Payum
 
