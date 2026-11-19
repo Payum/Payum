@@ -26,6 +26,14 @@ final class Pipeline
     }
 
     /**
+     * @return list<MiddlewareInterface> outermost first
+     */
+    public function middleware(): array
+    {
+        return $this->middleware;
+    }
+
+    /**
      * @param CommandInterface<Result> $command
      * @param callable(CommandInterface<Result>, Context): Result $handler
      */

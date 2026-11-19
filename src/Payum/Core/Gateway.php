@@ -33,6 +33,7 @@ use Payum\Core\Legacy\ResultToReply;
 use Payum\Core\Legacy\StatusMarker;
 use Payum\Core\Legacy\UndescribedGateway;
 use Payum\Core\Middleware\MiddlewareCollection;
+use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
@@ -376,6 +377,17 @@ class Gateway implements GatewayInterface
         $this->handlerMap = $handlerMap;
 
         return $this;
+    }
+
+    /**
+     * The middleware every command on this gateway runs through, outermost first. Read-only: what the
+     * profiler and a debug command show.
+     *
+     * @return list<MiddlewareInterface>
+     */
+    public function middleware(): array
+    {
+        return $this->pipeline()->middleware();
     }
 
     protected function onPostExecuteWithException(Context $context): void

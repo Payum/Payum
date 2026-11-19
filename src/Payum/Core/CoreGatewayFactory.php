@@ -299,6 +299,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->get(IdempotencyStoreInterface::class),
                     $c->get(ClockInterface::class),
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                    events: $c->get(EventDispatcherInterface::class),
                 ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),

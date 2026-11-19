@@ -12,6 +12,8 @@ use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\HasAmount;
 use Payum\Core\Command\RefundCommand;
+use Payum\Core\Event\IdempotentResultReplayed;
+use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Exception\IdempotencyKeyReusedException;
 use Payum\Core\Handler\Context;
 use Payum\Core\Idempotency\IdempotencyStoreInterface;
@@ -21,6 +23,7 @@ use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\Result;
 use Psr\Clock\ClockInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Answers a repeat of an idempotency key with the result the key got the first time, without running
@@ -41,6 +44,7 @@ final class IdempotencyMiddleware implements MiddlewareInterface, HasPriority
         private readonly ClockInterface $clock,
         private readonly ?StorageRegistryInterface $storages = null,
         private readonly int $ttl = 86400,
+        private readonly EventDispatcherInterface $events = new NullEventDispatcher(),
     ) {
     }
 
@@ -77,7 +81,10 @@ final class IdempotencyMiddleware implements MiddlewareInterface, HasPriority
                 ));
             }
 
-            return ResultNormalizer::denormalize($record->getResult());
+            $result = ResultNormalizer::denormalize($record->getResult());
+            $this->events->dispatch(new IdempotentResultReplayed($command, $context, $key, $result));
+
+            return $result;
         }
 
         $result = $next($command, $context);
