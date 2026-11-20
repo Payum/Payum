@@ -137,7 +137,7 @@ The bundle registers one consumer, `Payum\Bundle\PayumBundle\Webhook\PayumWebhoo
 `payum` remote event consumer (`remote_event.consumer` tag, `consumer: payum`). It runs the gateway's
 notify handler with the verified message.
 
-To do something else, replace it by registering your own service with the same tag. To do something in
+To do something else, replace it by defining your own service with the id `payum.webhook.consumer`. To do something in
 addition, decorate it:
 
 ```php
