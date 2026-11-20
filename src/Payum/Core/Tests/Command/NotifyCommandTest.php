@@ -67,7 +67,9 @@ final class NotifyCommandTest extends TestCase
     {
         $token = $this->createMock(TokenInterface::class);
         $payment = new Payment();
-        $event = WebhookEvent::verified(['id' => 'evt_1']);
+        $event = WebhookEvent::verified([
+            'id' => 'evt_1',
+        ]);
 
         $withToken = NotifyCommand::forToken($token)->withEvent($event);
         $withPayment = NotifyCommand::forPayment($payment)->withEvent($event);

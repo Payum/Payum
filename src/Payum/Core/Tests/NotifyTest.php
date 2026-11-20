@@ -242,8 +242,9 @@ final class NotifyTest extends TestCase
             /**
              * @param list<object> $seen
              */
-            public function __construct(private array &$seen)
-            {
+            public function __construct(
+                private array &$seen
+            ) {
             }
 
             public function dispatch(object $event): object
@@ -370,7 +371,9 @@ final class NotifyTest extends TestCase
             ->getPayum();
         $token = $this->mintNotifyToken($payum);
 
-        $response = $payum->notify(['payum_token' => $token]);
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('[accepted]', $response->getContent());
@@ -385,7 +388,9 @@ final class NotifyTest extends TestCase
             ->getPayum();
         $token = $this->mintNotifyToken($payum);
 
-        $response = $payum->notify(['payum_token' => $token]);
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
 
         $this->assertSame('[from-handler]', $response->getContent());
     }
@@ -411,8 +416,9 @@ final class NotifyTest extends TestCase
             /**
              * @param list<object> $seen
              */
-            public function __construct(private array &$seen)
-            {
+            public function __construct(
+                private array &$seen
+            ) {
             }
 
             public function dispatch(object $event): object
@@ -437,7 +443,9 @@ final class NotifyTest extends TestCase
 
     private function buildEvent(): WebhookEvent
     {
-        return WebhookEvent::verified(['transaction' => 'txn_1'], 'evt_1', 'payment.captured');
+        return WebhookEvent::verified([
+            'transaction' => 'txn_1',
+        ], 'evt_1', 'payment.captured');
     }
 
     private function buildPayment(): Payment
@@ -852,7 +860,7 @@ final class AwareNotifyHandler implements NotifyHandlerInterface, GatewayAwareIn
 {
     private ?\Payum\Core\GatewayInterface $gateway = null;
 
-    public function setGateway(\Payum\Core\GatewayInterface $gateway)
+    public function setGateway(\Payum\Core\GatewayInterface $gateway): void
     {
         $this->gateway = $gateway;
     }

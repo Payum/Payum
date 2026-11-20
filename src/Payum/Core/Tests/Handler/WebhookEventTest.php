@@ -41,7 +41,9 @@ final class WebhookEventTest extends TestCase
 
     public function testShouldCarryTheAcknowledgementItWasGiven(): void
     {
-        $event = WebhookEvent::verified(['a' => 1], 'evt_1', 't', Acknowledgement::ok('[accepted]'));
+        $event = WebhookEvent::verified([
+            'a' => 1,
+        ], 'evt_1', 't', Acknowledgement::ok('[accepted]'));
 
         $this->assertSame('[accepted]', $event->acknowledgement->body);
     }
@@ -54,11 +56,17 @@ final class WebhookEventTest extends TestCase
 
     public function testShouldSurviveSerialization(): void
     {
-        $verified = WebhookEvent::verified(['a' => 1], 'evt_1', 't', new Acknowledgement(200, '[accepted]'));
-        $unverified = WebhookEvent::unverified(['b' => 2]);
+        $verified = WebhookEvent::verified([
+            'a' => 1,
+        ], 'evt_1', 't', new Acknowledgement(200, '[accepted]'));
+        $unverified = WebhookEvent::unverified([
+            'b' => 2,
+        ]);
 
         $copy = unserialize(serialize($verified));
-        $this->assertSame(['a' => 1], $copy->payload);
+        $this->assertSame([
+            'a' => 1,
+        ], $copy->payload);
         $this->assertSame('evt_1', $copy->id);
         $this->assertSame('t', $copy->type);
         $this->assertTrue($copy->isVerified());
@@ -66,7 +74,9 @@ final class WebhookEventTest extends TestCase
         $this->assertSame('[accepted]', $copy->acknowledgement->body);
 
         $copy = unserialize(serialize($unverified));
-        $this->assertSame(['b' => 2], $copy->payload);
+        $this->assertSame([
+            'b' => 2,
+        ], $copy->payload);
         $this->assertNull($copy->id);
         $this->assertNull($copy->type);
         $this->assertFalse($copy->isVerified());

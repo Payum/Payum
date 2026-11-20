@@ -404,21 +404,6 @@ class Gateway implements GatewayInterface
         return $this->verifyReporting($handler, $request);
     }
 
-    /**
-     * @throws WebhookNotVerifiedException after reporting it as {@see WebhookRejected}
-     */
-    private function verifyReporting(NotifyHandlerInterface $handler, ServerRequestInterface $request): WebhookEvent
-    {
-        try {
-            return $handler->verify($request);
-        } catch (WebhookNotVerifiedException $e) {
-            // ponytail: a gateway built by hand has no name; the event reports it as empty.
-            $this->events()->dispatch(new WebhookRejected($this->name ?? '', $request, $e));
-
-            throw $e;
-        }
-    }
-
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -513,6 +498,21 @@ class Gateway implements GatewayInterface
         }
 
         return false;
+    }
+
+    /**
+     * @throws WebhookNotVerifiedException after reporting it as {@see WebhookRejected}
+     */
+    private function verifyReporting(NotifyHandlerInterface $handler, ServerRequestInterface $request): WebhookEvent
+    {
+        try {
+            return $handler->verify($request);
+        } catch (WebhookNotVerifiedException $e) {
+            // ponytail: a gateway built by hand has no name; the event reports it as empty.
+            $this->events()->dispatch(new WebhookRejected($this->name ?? '', $request, $e));
+
+            throw $e;
+        }
     }
 
     /**
