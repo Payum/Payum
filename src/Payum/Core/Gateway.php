@@ -580,7 +580,8 @@ class Gateway implements GatewayInterface
 
             // Verification runs here rather than during dispatch so that middleware wraps it: a message
             // that fails the check is something an application will want to see.
-            $webhook = $handler->verify($context->httpRequest());
+            // An event verified elsewhere (the HTTP request, before a worker took over) is not verified twice.
+            $webhook = $command->event() ?? $handler->verify($context->httpRequest());
 
             $this->events()->dispatch(new WebhookReceived($command, $context, $webhook));
 

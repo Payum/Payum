@@ -6,6 +6,7 @@ namespace Payum\Core\Tests\Command;
 
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Gateway\Capability;
+use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Security\TokenInterface;
@@ -60,5 +61,21 @@ final class NotifyCommandTest extends TestCase
         $this->assertNull($command->token());
         $this->assertNull($command->subject());
         $this->assertNull($command->payment());
+    }
+
+    public function testWithEventShouldKeepTokenAndSubject(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $payment = new Payment();
+        $event = WebhookEvent::verified(['id' => 'evt_1']);
+
+        $withToken = NotifyCommand::forToken($token)->withEvent($event);
+        $withPayment = NotifyCommand::forPayment($payment)->withEvent($event);
+
+        $this->assertSame($event, $withToken->event());
+        $this->assertSame($token, $withToken->token());
+        $this->assertSame($event, $withPayment->event());
+        $this->assertSame($payment, $withPayment->subject());
+        $this->assertNull(NotifyCommand::forGateway()->event());
     }
 }

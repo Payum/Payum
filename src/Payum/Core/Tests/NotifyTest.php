@@ -10,6 +10,7 @@ use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
+use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
@@ -31,6 +32,7 @@ use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -47,6 +49,7 @@ final class NotifyTest extends TestCase
 
         AcmeNotifyHandler::$signature = 'good-signature';
         VerificationRecordingMiddleware::$seen = null;
+        AcmeNotifyHandler::$verifications = 0;
     }
 
     public function testShouldHandleAVerifiedEvent(): void
@@ -215,6 +218,66 @@ final class NotifyTest extends TestCase
         $this->assertSame('', $response->getContent());
     }
 
+    public function testShouldHandleAPreVerifiedEventWithoutVerifyingAgain(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('forged'));
+        $event = $this->buildEvent();
+
+        $command = NotifyCommand::forPayment($this->buildPayment())->withEvent($event);
+        $result = $payum->getGateway('acme')->execute($command);
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
+        $this->assertSame(0, AcmeNotifyHandler::$verifications);
+    }
+
+    public function testShouldStillDispatchWebhookReceivedForAPreVerifiedEvent(): void
+    {
+        $seen = [];
+        $events = new class($seen) implements EventDispatcherInterface {
+            /**
+             * @param list<object> $seen
+             */
+            public function __construct(private array &$seen)
+            {
+            }
+
+            public function dispatch(object $event): object
+            {
+                $this->seen[] = $event;
+
+                return $event;
+            }
+        };
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+        $event = $this->buildEvent();
+
+        $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment())->withEvent($event));
+
+        $received = array_values(array_filter($seen, static fn (object $e): bool => $e instanceof WebhookReceived));
+        $this->assertCount(1, $received);
+        $this->assertSame($event, $received[0]->webhook);
+    }
+
+    public function testShouldNotReadTheHttpRequestForAPreVerifiedEvent(): void
+    {
+        $throwing = $this->createStub(ServerRequestInterface::class);
+        foreach (['getHeaderLine', 'getHeaders', 'getBody', 'getMethod', 'getUri', 'getParsedBody'] as $method) {
+            $throwing->method($method)->willThrowException(new \LogicException($method . ' was called.'));
+        }
+        $payum = $this->buildPayum($throwing);
+        $event = $this->buildEvent();
+
+        $command = NotifyCommand::forPayment($this->buildPayment())->withEvent($event);
+        $result = $payum->getGateway('acme')->execute($command);
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
+    }
+
     /**
      * @param Payum<object> $payum
      */
@@ -224,6 +287,11 @@ final class NotifyTest extends TestCase
         $payum->getStorage($payment::class)->update($payment);
 
         return $payum->getTokenFactory()->createNotifyToken('acme', $payment);
+    }
+
+    private function buildEvent(): WebhookEvent
+    {
+        return WebhookEvent::verified(['transaction' => 'txn_1'], 'evt_1', 'payment.captured');
     }
 
     private function buildPayment(): Payment
@@ -305,6 +373,8 @@ final class AcmeNotifyHandler implements NotifyHandlerInterface
 {
     public static string $signature = 'good-signature';
 
+    public static int $verifications = 0;
+
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
         if ('payment.captured' !== $event->type) {
@@ -323,6 +393,8 @@ final class AcmeNotifyHandler implements NotifyHandlerInterface
 
     public function verify(ServerRequestInterface $request): WebhookEvent
     {
+        ++self::$verifications;
+
         if (! hash_equals(self::$signature, $request->getHeaderLine('Acme-Signature'))) {
             throw new WebhookNotVerifiedException('The signature does not match.');
         }
