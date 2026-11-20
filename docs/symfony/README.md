@@ -10,4 +10,5 @@ run the payment pages for you. The bundle works with Payum 1 and Payum 2. These 
   moved to Payum 2.
 - [Use your services in Payum](services.md) shows how gateways get your services and how to listen to
   Payum's events.
+- [Receive webhooks](webhooks.md) sets up the notify URLs and, optionally, a queue for the PSP's messages.
 - [Configuration reference](configuration-reference.md) lists every configuration key.
