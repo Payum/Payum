@@ -208,7 +208,11 @@ on the result only when it depends on what the handler found.
 Some messages are about the account, not a payment: a payout was sent, a dispute was opened against a
 charge. The application routes the PSP's one webhook endpoint to `NotifyCommand::forGateway()`, so
 `$context->payment()` is null. Find the payment from what the PSP put in the message, then run a
-payment notification for it, so Payum records the status as it does for any other:
+payment notification for it, so Payum records the status as it does for any other.
+
+The same handler therefore runs twice. With no subject it is the gateway-level call: it finds the
+payment and executes `NotifyCommand::forPayment($payment)->withEvent($event)`. With a subject it is the
+per-payment call, and it returns the status:
 
 ```php
 public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
@@ -217,6 +221,12 @@ public function handle(NotifyCommand $command, WebhookEvent $event, Context $con
         return NotifyResult::ignored();
     }
 
+    // Per-payment call: the status is recorded from what this returns.
+    if (null !== $context->payment()) {
+        return NotifyResult::handled(PaymentStatus::Disputed);
+    }
+
+    // Gateway-level call: find the payment, then run the per-payment call for it.
     $payment = $this->payments->findByCheckoutId($event->payload['checkout_id']);
 
     if (null === $payment) {
@@ -229,10 +239,9 @@ public function handle(NotifyCommand $command, WebhookEvent $event, Context $con
 }
 ```
 
-`$this->payments` stands for your own lookup, such as a Payum storage. `withEvent()` hands the command the
-verified event, so it is not verified a second time, and the handler runs again with
-`$context->payment()` set and returns the status. Check the event type before the lookup, or the handler
-calls itself without end for an event it does not use.
+`$this->payments` stands for your own lookup, such as a Payum storage. `withEvent()` hands the command
+the verified event, so it is not verified a second time. The check on `$context->payment()` is what ends
+the recursion: without it the per-payment call would look the payment up and execute again.
 
 ## Give the PSP a notify URL
 

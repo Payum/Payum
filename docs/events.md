@@ -107,13 +107,16 @@ The two events cover different problems:
 ### `WebhookReceived` fires only for verified messages
 
 A notification that fails the gateway's check never reaches `WebhookReceived`. The gateway throws
-`Payum\Core\Exception\WebhookNotVerifiedException` and you get `CommandFailed` instead. When the application verifies with `Gateway::verifyWebhook()`, there is
-no command yet, so you get `WebhookRejected` instead. It has no `command` or `context`, and so does not
-extend `Event`.
+`Payum\Core\Exception\WebhookNotVerifiedException` and you get `CommandFailed` instead.
 
 Check `$event->webhook->isVerified()` all the same. Some providers do not sign their notifications, and
 the gateway then marks them as unverified. Do not trust what an unverified message says about a payment.
 See [Payment notifications](instant-payment-notification.md).
+
+### `WebhookRejected`
+
+`Gateway::verifyWebhook()` dispatches `WebhookRejected` when a message fails verification. It carries no
+command or context, so it does not extend `Event`.
 
 ## Examples
 
