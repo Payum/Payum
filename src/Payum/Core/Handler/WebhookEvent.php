@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Payum\Core\Handler;
 
+use Payum\Core\Result\Acknowledgement;
+
 /**
  * A message a PSP sent to say something happened, after a gateway has decided what to make of it.
  *
  * Produced by {@see NotifyHandlerInterface::verify()} and handed straight to handle(), so a handler
  * cannot reach the payload without that decision having been made.
+ *
+ * It is plain data, so it can be serialized and handled elsewhere, such as on a queue. The acknowledgement
+ * is what to answer the PSP with in the meantime, when the handler that would normally name it has not run.
  */
 final class WebhookEvent
 {
@@ -20,6 +25,7 @@ final class WebhookEvent
         public readonly array $payload,
         public readonly ?string $id = null,
         public readonly ?string $type = null,
+        public readonly ?Acknowledgement $acknowledgement = null,
     ) {
     }
 
@@ -29,10 +35,11 @@ final class WebhookEvent
      * @param array<string, mixed> $payload
      * @param string|null $id the PSP's own event id, which is how a redelivery is recognised
      * @param string|null $type the PSP's own event name, such as 'payment_intent.succeeded'
+     * @param Acknowledgement|null $acknowledgement what to answer the PSP with when handling happens elsewhere
      */
-    public static function verified(array $payload, ?string $id = null, ?string $type = null): self
+    public static function verified(array $payload, ?string $id = null, ?string $type = null, ?Acknowledgement $acknowledgement = null): self
     {
-        return new self(true, $payload, $id, $type);
+        return new self(true, $payload, $id, $type, $acknowledgement);
     }
 
     /**
@@ -43,9 +50,9 @@ final class WebhookEvent
      *
      * @param array<string, mixed> $payload
      */
-    public static function unverified(array $payload, ?string $id = null, ?string $type = null): self
+    public static function unverified(array $payload, ?string $id = null, ?string $type = null, ?Acknowledgement $acknowledgement = null): self
     {
-        return new self(false, $payload, $id, $type);
+        return new self(false, $payload, $id, $type, $acknowledgement);
     }
 
     public function isVerified(): bool
