@@ -15,6 +15,7 @@ use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\WebhookNotVerifiedException;
+use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Handler\Context;
@@ -237,23 +238,7 @@ final class NotifyTest extends TestCase
 
     public function testShouldStillDispatchWebhookReceivedForAPreVerifiedEvent(): void
     {
-        $seen = [];
-        $events = new class($seen) implements EventDispatcherInterface {
-            /**
-             * @param list<object> $seen
-             */
-            public function __construct(
-                private array &$seen
-            ) {
-            }
-
-            public function dispatch(object $event): object
-            {
-                $this->seen[] = $event;
-
-                return $event;
-            }
-        };
+        $events = new RecordingEventDispatcher();
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
@@ -264,7 +249,7 @@ final class NotifyTest extends TestCase
 
         $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment())->withEvent($event));
 
-        $received = array_values(array_filter($seen, static fn (object $e): bool => $e instanceof WebhookReceived));
+        $received = array_values(array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookReceived));
         $this->assertCount(1, $received);
         $this->assertSame($event, $received[0]->webhook);
     }
@@ -288,7 +273,7 @@ final class NotifyTest extends TestCase
     {
         $payum = $this->buildPayum($this->buildRequest('good-signature'));
 
-        $event = $payum->getGateway('acme')->verifyWebhook($this->buildRequest('good-signature'));
+        $event = $this->coreGateway($payum->getGateway('acme'))->verifyWebhook($this->buildRequest('good-signature'));
 
         $this->assertTrue($event->isVerified());
         $this->assertSame('txn_1', $event->payload['transaction']);
@@ -296,8 +281,7 @@ final class NotifyTest extends TestCase
 
     public function testVerifyWebhookShouldDispatchWebhookRejectedAndRethrow(): void
     {
-        $seen = [];
-        $events = $this->recordingDispatcher($seen);
+        $events = new RecordingEventDispatcher();
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
@@ -306,20 +290,19 @@ final class NotifyTest extends TestCase
             ->getPayum();
 
         try {
-            $payum->getGateway('acme')->verifyWebhook($this->buildRequest('forged'));
+            $this->coreGateway($payum->getGateway('acme'))->verifyWebhook($this->buildRequest('forged'));
             $this->fail('Expected WebhookNotVerifiedException.');
         } catch (WebhookNotVerifiedException) {
         }
 
-        $rejected = array_values(array_filter($seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $rejected = array_values(array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookRejected));
         $this->assertCount(1, $rejected);
         $this->assertSame('acme', $rejected[0]->gatewayName);
     }
 
     public function testNotifyShouldDispatchWebhookRejectedWhenVerificationFailsInThePipeline(): void
     {
-        $seen = [];
-        $events = $this->recordingDispatcher($seen);
+        $events = new RecordingEventDispatcher();
         $payum = (new PayumBuilder())
             ->addDefaultStorages()
             ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
@@ -333,8 +316,8 @@ final class NotifyTest extends TestCase
         } catch (WebhookNotVerifiedException) {
         }
 
-        $this->assertCount(1, array_filter($seen, static fn (object $e): bool => $e instanceof WebhookRejected));
-        $this->assertCount(1, array_filter($seen, static fn (object $e): bool => $e instanceof CommandFailed));
+        $this->assertCount(1, array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $this->assertCount(1, array_filter($events->seen, static fn (object $e): bool => $e instanceof CommandFailed));
     }
 
     public function testVerifyWebhookShouldRefuseAGatewayWithoutWebhooks(): void
@@ -346,7 +329,7 @@ final class NotifyTest extends TestCase
 
         $this->expectException(LogicException::class);
 
-        $payum->getGateway('mute')->verifyWebhook($this->buildRequest('good-signature'));
+        $this->coreGateway($payum->getGateway('mute'))->verifyWebhook($this->buildRequest('good-signature'));
     }
 
     public function testVerifyWebhookShouldRefuseALegacyNotifyAction(): void
@@ -359,7 +342,7 @@ final class NotifyTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('1.x');
 
-        $payum->getGateway('old')->verifyWebhook($this->buildRequest('good-signature'));
+        $this->coreGateway($payum->getGateway('old'))->verifyWebhook($this->buildRequest('good-signature'));
     }
 
     public function testNotifyShouldAnswerWithTheEventsAcknowledgementWhenTheHandlerNamesNone(): void
@@ -402,32 +385,16 @@ final class NotifyTest extends TestCase
             ->registerGateway('aware', new AwareNotifyConfig())
             ->getPayum();
 
-        $event = $payum->getGateway('aware')->verifyWebhook($this->buildRequest('good-signature'));
+        $event = $this->coreGateway($payum->getGateway('aware'))->verifyWebhook($this->buildRequest('good-signature'));
 
         $this->assertSame('evt_aware', $event->id);
     }
 
-    /**
-     * @param list<object> $seen
-     */
-    private function recordingDispatcher(array &$seen): EventDispatcherInterface
+    private function coreGateway(object $gateway): Gateway
     {
-        return new class($seen) implements EventDispatcherInterface {
-            /**
-             * @param list<object> $seen
-             */
-            public function __construct(
-                private array &$seen
-            ) {
-            }
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
-            public function dispatch(object $event): object
-            {
-                $this->seen[] = $event;
-
-                return $event;
-            }
-        };
+        return $gateway;
     }
 
     /**
@@ -877,5 +844,20 @@ final class AwareNotifyHandler implements NotifyHandlerInterface, GatewayAwareIn
         }
 
         return WebhookEvent::verified([], 'evt_aware');
+    }
+}
+
+final class RecordingEventDispatcher implements EventDispatcherInterface
+{
+    /**
+     * @var list<object>
+     */
+    public array $seen = [];
+
+    public function dispatch(object $event): object
+    {
+        $this->seen[] = $event;
+
+        return $event;
     }
 }

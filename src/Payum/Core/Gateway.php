@@ -383,7 +383,7 @@ class Gateway implements GatewayInterface
             throw new LogicException(sprintf('The gateway "%s" has no webhook handler.', $this->name ?? ''));
         }
 
-        $handler = $serviceId instanceof HandlerInterface ? $serviceId : $this->container->get($serviceId);
+        $handler = $this->container->get($serviceId);
 
         if ($handler instanceof NotifyActionHandler) {
             throw new LogicException(sprintf(
@@ -647,7 +647,7 @@ class Gateway implements GatewayInterface
             $result = $handler->handle($command, $webhook, $context);
 
             // A handler that names no acknowledgement leaves the PSP to be answered the way verification asked.
-            if ($result instanceof NotifyResult && null === $result->acknowledgement && null !== $webhook->acknowledgement) {
+            if (null === $result->acknowledgement && null !== $webhook->acknowledgement) {
                 $result = new NotifyResult(
                     $result->status,
                     $result->transactionId,
