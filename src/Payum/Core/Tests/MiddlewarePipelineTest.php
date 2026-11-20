@@ -19,6 +19,7 @@ use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
+use Payum\Core\Middleware\IdempotencyMiddleware;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Payum;
@@ -97,7 +98,7 @@ final class MiddlewarePipelineTest extends TestCase
 
         // the application's sits outside the gateway's own
         $this->assertLessThan(array_search(GatewayMiddleware::class, $names, true), array_search('global', $names, true));
-        $this->assertContains(\Payum\Core\Middleware\IdempotencyMiddleware::class, $names);
+        $this->assertContains(IdempotencyMiddleware::class, $names);
     }
 
     public function testShouldStillWriteStateOntoThePayment(): void
