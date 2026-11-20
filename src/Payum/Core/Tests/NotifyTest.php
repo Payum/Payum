@@ -11,6 +11,9 @@ use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Event\WebhookReceived;
+use Payum\Core\Event\WebhookRejected;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Legacy\Handler\NotifyActionHandler;
 use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
@@ -278,6 +281,114 @@ final class NotifyTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $result->status);
     }
 
+    public function testVerifyWebhookShouldReturnTheHandlersEvent(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('good-signature'));
+
+        $event = $payum->getGateway('acme')->verifyWebhook($this->buildRequest('good-signature'));
+
+        $this->assertTrue($event->isVerified());
+        $this->assertSame('txn_1', $event->payload['transaction']);
+    }
+
+    public function testVerifyWebhookShouldDispatchWebhookRejectedAndRethrow(): void
+    {
+        $seen = [];
+        $events = $this->recordingDispatcher($seen);
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+
+        try {
+            $payum->getGateway('acme')->verifyWebhook($this->buildRequest('forged'));
+            $this->fail('Expected WebhookNotVerifiedException.');
+        } catch (WebhookNotVerifiedException) {
+        }
+
+        $rejected = array_values(array_filter($seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $this->assertCount(1, $rejected);
+        $this->assertSame('acme', $rejected[0]->gatewayName);
+    }
+
+    public function testVerifyWebhookShouldRefuseAGatewayWithoutWebhooks(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('mute', new MuteNotifyConfig())
+            ->getPayum();
+
+        $this->expectException(LogicException::class);
+
+        $payum->getGateway('mute')->verifyWebhook($this->buildRequest('good-signature'));
+    }
+
+    public function testVerifyWebhookShouldRefuseALegacyNotifyAction(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('old', new LegacyNotifyConfig())
+            ->getPayum();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('1.x');
+
+        $payum->getGateway('old')->verifyWebhook($this->buildRequest('good-signature'));
+    }
+
+    public function testNotifyShouldAnswerWithTheEventsAcknowledgementWhenTheHandlerNamesNone(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('good-signature'))
+            ->registerGateway('acme', new AckFromEventConfig())
+            ->getPayum();
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify(['payum_token' => $token]);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('[accepted]', $response->getContent());
+    }
+
+    public function testNotifyShouldPreferTheHandlersAcknowledgement(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('good-signature'))
+            ->registerGateway('acme', new AckBothConfig())
+            ->getPayum();
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify(['payum_token' => $token]);
+
+        $this->assertSame('[from-handler]', $response->getContent());
+    }
+
+    /**
+     * @param list<object> $seen
+     */
+    private function recordingDispatcher(array &$seen): EventDispatcherInterface
+    {
+        return new class($seen) implements EventDispatcherInterface {
+            /**
+             * @param list<object> $seen
+             */
+            public function __construct(private array &$seen)
+            {
+            }
+
+            public function dispatch(object $event): object
+            {
+                $this->seen[] = $event;
+
+                return $event;
+            }
+        };
+    }
+
     /**
      * @param Payum<object> $payum
      */
@@ -493,4 +604,172 @@ final class VerificationRecordingMiddleware implements MiddlewareInterface
 
 class TrackedNotifyPayment extends Payment
 {
+}
+
+final class MuteNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return MuteNotifyGateway::class;
+    }
+}
+
+final class MuteNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return MuteNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://mute.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Mute';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://mute.test');
+    }
+}
+
+final class LegacyNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return LegacyNotifyGateway::class;
+    }
+}
+
+final class LegacyNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return LegacyNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [NotifyActionHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://old.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Old';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://old.test');
+    }
+}
+
+final class AckFromEventConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AckFromEventGateway::class;
+    }
+}
+
+final class AckFromEventGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AckFromEventConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AckFromEventHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://ack.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Ack';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://ack.test');
+    }
+}
+
+/**
+ * Verification names the acknowledgement; handling names none.
+ */
+class AckFromEventHandler implements NotifyHandlerInterface
+{
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::handled();
+    }
+
+    public function verify(ServerRequestInterface $request): WebhookEvent
+    {
+        return WebhookEvent::verified([], 'evt_1', 'payment.captured', Acknowledgement::ok('[accepted]'));
+    }
+}
+
+final class AckBothConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AckBothGateway::class;
+    }
+}
+
+final class AckBothGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AckBothConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AckBothHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://ack.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'AckBoth';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://ack.test');
+    }
+}
+
+final class AckBothHandler extends AckFromEventHandler
+{
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::handled(null, Acknowledgement::ok('[from-handler]'));
+    }
 }
