@@ -33,6 +33,10 @@ https://example.com/payment/notify/unsafe/stripe
 "Unsafe" means the URL says nothing about the payment. The gateway has to verify the message itself and
 find the payment from what it says.
 
+Symfony's own `/webhook/{type}` route is not a supported entry point: the bundle's parser takes the
+gateway from the `payum_token` or `gateway` request attribute, which that route does not set. Use the
+notify routes above.
+
 ## Keep the signing secret in the gateway options
 
 The secret the PSP signs its messages with is an ordinary gateway option. Read it from the environment:
@@ -86,6 +90,15 @@ Messenger needs a bus, which `framework.messenger` gives you. With the packages 
 `framework.remote_event`, the bundle does not use Messenger: it handles the webhook in the request, as if
 the packages were missing.
 
+## Which acknowledgement the PSP gets
+
+Whenever Messenger and `framework.remote_event` are enabled, with or without queue routing, the
+controller answers the PSP before the handler runs. It sends only the acknowledgement set in the
+gateway's `verify()`, on the verified event. The `NotifyResult::$acknowledgement` the handler returns is
+not sent: with routing it runs later and nobody reads it, and without routing the response is already
+decided. A gateway whose PSP wants a particular answer must set it in `verify()`; see
+[What handle() may read](../gateways/webhooks.md#what-handle-may-read).
+
 ## Handle webhooks on a queue
 
 Without routing, Messenger handles the message in the request, before the response. To queue it, route
@@ -108,8 +121,6 @@ bin/console messenger:consume async
 ```
 
 The controller verifies the message while the PSP waits, so a forged webhook never reaches your queue.
-It answers with the acknowledgement of the verified message. The acknowledgement the handler returns
-when it runs later has nobody to read it, so it is not used on this path.
 
 A message that fails in the worker follows your Messenger retry and failure transport settings. A
 webhook whose token has since been deleted is not retried.
@@ -137,8 +148,19 @@ The bundle registers one consumer, `Payum\Bundle\PayumBundle\Webhook\PayumWebhoo
 `payum` remote event consumer (`remote_event.consumer` tag, `consumer: payum`). It runs the gateway's
 notify handler with the verified message.
 
-To do something else, replace it by defining your own service with the id `payum.webhook.consumer`. To do something in
-addition, decorate it:
+To do something else, replace it by defining your own service with the id `payum.webhook.consumer`.
+Your definition replaces the bundle's, tag included, so it must carry the tag itself:
+
+```yaml
+# config/services.yaml
+services:
+    payum.webhook.consumer:
+        class: App\Webhook\MyConsumer
+        tags:
+            - { name: remote_event.consumer, consumer: payum }
+```
+
+To do something in addition, decorate it:
 
 ```php
 <?php

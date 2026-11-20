@@ -139,6 +139,8 @@ Then do not act on what the message says. Treat it as a hint and ask the PSP for
 `SyncCommand`:
 
 ```php
+use Payum\Core\Command\SyncCommand;
+
 public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
 {
     $payment = $context->payment();
@@ -203,6 +205,13 @@ return WebhookEvent::verified($event, $event['id'], $event['type'], Acknowledgem
 A handler's own `NotifyResult::$acknowledgement` wins, then the event's, then `204 No Content`. Set one
 on the result only when it depends on what the handler found.
 
+{% hint style="warning" %}
+PayumBundle with Messenger and `framework.remote_event` enabled sends only the acknowledgement set in
+`verify()`, on the event. The handler's `NotifyResult::$acknowledgement` is not sent there, whether
+the message is queued or handled in the request, because the response goes out before `handle()` has
+run. Put the acknowledgement in `verify()` whenever it does not depend on what `handle()` finds.
+{% endhint %}
+
 ## Events that belong to no payment
 
 Some messages are about the account, not a payment: a payout was sent, a dispute was opened against a
@@ -215,6 +224,8 @@ payment and executes `NotifyCommand::forPayment($payment)->withEvent($event)`. W
 per-payment call, and it returns the status:
 
 ```php
+use Payum\Core\Result\PaymentStatus;
+
 public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
 {
     if ('charge.disputed' !== $event->type) {

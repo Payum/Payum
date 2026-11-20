@@ -10,6 +10,7 @@ use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
+use Payum\Core\Event\CommandFailed;
 use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\LogicException;
@@ -312,6 +313,27 @@ final class NotifyTest extends TestCase
         $rejected = array_values(array_filter($seen, static fn (object $e): bool => $e instanceof WebhookRejected));
         $this->assertCount(1, $rejected);
         $this->assertSame('acme', $rejected[0]->gatewayName);
+    }
+
+    public function testNotifyShouldDispatchWebhookRejectedWhenVerificationFailsInThePipeline(): void
+    {
+        $seen = [];
+        $events = $this->recordingDispatcher($seen);
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+
+        try {
+            $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment()));
+            $this->fail('Expected WebhookNotVerifiedException.');
+        } catch (WebhookNotVerifiedException) {
+        }
+
+        $this->assertCount(1, array_filter($seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $this->assertCount(1, array_filter($seen, static fn (object $e): bool => $e instanceof CommandFailed));
     }
 
     public function testVerifyWebhookShouldRefuseAGatewayWithoutWebhooks(): void
