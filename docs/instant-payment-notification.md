@@ -112,6 +112,66 @@ for the `Payum\Core\Event\CommandFailed` event, whose `exception` property holds
 A run of `400` answers usually means a configuration problem: the wrong webhook secret in the gateway's
 config, or a request whose body was read before the gateway saw it.
 
+## Verify now, handle later
+
+A provider wants its answer within seconds, and the work a notification starts may take longer. Verify
+the message on the request, answer, and let a worker do the rest. `verifyWebhook()` runs only the
+gateway's check and returns the verified event:
+
+```php
+<?php
+
+use Payum\Core\Exception\WebhookNotVerifiedException;
+use Payum\Core\Result\Acknowledgement;
+
+try {
+    $event = $payum->getGateway($token->getGatewayName())->verifyWebhook(ServerRequest::fromGlobals());
+} catch (WebhookNotVerifiedException) {
+    http_response_code(400);
+
+    return;
+}
+
+$queue->push(serialize([$token->getHash(), $event]));
+
+$acknowledgement = $event->acknowledgement ?? Acknowledgement::noContent();
+http_response_code($acknowledgement->status);
+echo $acknowledgement->body;
+```
+
+`$queue` stands for your own queue. A `WebhookEvent` serializes, so it travels in a job. In the worker,
+pass it to the command with `withEvent()`:
+
+```php
+$command = NotifyCommand::forToken($token)->withEvent($event);
+
+$payum->getGateway($token->getGatewayName())->execute($command);
+```
+
+A command that carries an event skips verification, and does everything else: it runs the middleware,
+dispatches `WebhookReceived`, calls the handler and records the status. The worker does not need the
+PSP's request, and nothing is verified twice.
+
+`verifyWebhook()` throws a `LogicException` for a gateway that has no notify handler, or one written for
+Payum 1.x.
+
+### When the message is rejected
+
+A message that fails verification dispatches `Payum\Core\Event\WebhookRejected` before the exception is
+thrown. It has the `gatewayName`, the `request` and the `exception`, and no command or context, because
+none exists yet. Listen for it to log a probe or alert on a run of them:
+
+```php
+use Payum\Core\Event\WebhookRejected;
+
+$dispatcher->addListener(WebhookRejected::class, function (WebhookRejected $event) use ($logger): void {
+    $logger->warning('Rejected a {gateway} webhook: {reason}', [
+        'gateway' => $event->gatewayName,
+        'reason' => $event->exception->getMessage(),
+    ]);
+});
+```
+
 ## React to a notification
 
 Do not put order logic in the notify script. Listen for the status change instead, which also covers

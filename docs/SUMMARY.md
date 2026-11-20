@@ -127,6 +127,7 @@
   * [Register gateways](symfony/gateways.md)
   * [Use your services in Payum](symfony/services.md)
   * [Stop double captures](symfony/concurrency-and-idempotency.md)
+  * [Receive webhooks](symfony/webhooks.md)
   * [Authorize Payment](symfony/authorize.md)
   * [Configure payment in backend](symfony/configure-payment-in-backend.md)
   * [Console commands](symfony/console-commands.md)

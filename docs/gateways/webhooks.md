@@ -139,6 +139,8 @@ Then do not act on what the message says. Treat it as a hint and ask the PSP for
 `SyncCommand`:
 
 ```php
+use Payum\Core\Command\SyncCommand;
+
 public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
 {
     $payment = $context->payment();
@@ -179,6 +181,78 @@ new Acknowledgement(200, '{"ok":true}', ['Content-Type' => 'application/json']);
 
 Return `NotifyResult::ignored()` for an event type your gateway does not use. Rejecting a message the
 gateway does not recognise makes the PSP send it again and again.
+
+## What handle() may read
+
+`handle()` acts on the event it is given and nothing else. An application may verify a message on the
+request, answer the PSP, and run `handle()` later in a queue worker, where `$context->httpRequest()` is
+not the PSP's request. Anything you need from the headers, such as a timestamp or an account id, goes
+into the payload in `verify()`:
+
+```php
+$event['account'] = $request->getHeaderLine('Acme-Account');
+
+return WebhookEvent::verified($event, $event['id'], $event['type']);
+```
+
+The same goes for the answer. A PSP that wants a constant reply, such as a fixed body, gets it from
+`verify()`, because the application has to send it before `handle()` has run:
+
+```php
+return WebhookEvent::verified($event, $event['id'], $event['type'], Acknowledgement::ok('[accepted]'));
+```
+
+A handler's own `NotifyResult::$acknowledgement` wins, then the event's, then `204 No Content`. Set one
+on the result only when it depends on what the handler found.
+
+{% hint style="warning" %}
+PayumBundle with Messenger and `framework.remote_event` enabled sends only the acknowledgement set in
+`verify()`, on the event. The handler's `NotifyResult::$acknowledgement` is not sent there, whether
+the message is queued or handled in the request, because the response goes out before `handle()` has
+run. Put the acknowledgement in `verify()` whenever it does not depend on what `handle()` finds.
+{% endhint %}
+
+## Events that belong to no payment
+
+Some messages are about the account, not a payment: a payout was sent, a dispute was opened against a
+charge. The application routes the PSP's one webhook endpoint to `NotifyCommand::forGateway()`, so
+`$context->payment()` is null. Find the payment from what the PSP put in the message, then run a
+payment notification for it, so Payum records the status as it does for any other.
+
+The same handler therefore runs twice. With no subject it is the gateway-level call: it finds the
+payment and executes `NotifyCommand::forPayment($payment)->withEvent($event)`. With a subject it is the
+per-payment call, and it returns the status:
+
+```php
+use Payum\Core\Result\PaymentStatus;
+
+public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+{
+    if ('charge.disputed' !== $event->type) {
+        return NotifyResult::ignored();
+    }
+
+    // Per-payment call: the status is recorded from what this returns.
+    if (null !== $context->payment()) {
+        return NotifyResult::handled(PaymentStatus::Disputed);
+    }
+
+    // Gateway-level call: find the payment, then run the per-payment call for it.
+    $payment = $this->payments->findByCheckoutId($event->payload['checkout_id']);
+
+    if (null === $payment) {
+        return NotifyResult::ignored();
+    }
+
+    $context->execute(NotifyCommand::forPayment($payment)->withEvent($event));
+
+    return NotifyResult::ignored();
+}
+```
+
+`$this->payments` stands for your own lookup, such as a Payum storage. `withEvent()` hands the command
+the verified event, so it is not verified a second time. The check on `$context->payment()` is what ends
+the recursion: without it the per-payment call would look the payment up and execute again.
 
 ## Give the PSP a notify URL
 

@@ -29,5 +29,9 @@ interface NotifyHandlerInterface extends HandlerInterface
      */
     public function verify(ServerRequestInterface $request): WebhookEvent;
 
+    /**
+     * Act only on `$event`. This may run in a worker, where `$context->httpRequest()` is not the PSP's
+     * request. Put anything needed from the headers into the payload in {@see self::verify()}.
+     */
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult;
 }

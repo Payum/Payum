@@ -10,12 +10,19 @@ use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Config\GatewayConfig;
+use Payum\Core\Event\CommandFailed;
+use Payum\Core\Event\WebhookReceived;
+use Payum\Core\Event\WebhookRejected;
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\WebhookNotVerifiedException;
+use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Handler\SyncHandlerInterface;
 use Payum\Core\Handler\WebhookEvent;
+use Payum\Core\Legacy\Handler\NotifyActionHandler;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Middleware\MiddlewareInterface;
@@ -31,6 +38,7 @@ use Payum\Core\Result\Result;
 use Payum\Core\Result\SyncResult;
 use Payum\Core\Security\TokenInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -47,6 +55,7 @@ final class NotifyTest extends TestCase
 
         AcmeNotifyHandler::$signature = 'good-signature';
         VerificationRecordingMiddleware::$seen = null;
+        AcmeNotifyHandler::$verifications = 0;
     }
 
     public function testShouldHandleAVerifiedEvent(): void
@@ -215,6 +224,179 @@ final class NotifyTest extends TestCase
         $this->assertSame('', $response->getContent());
     }
 
+    public function testShouldHandleAPreVerifiedEventWithoutVerifyingAgain(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('forged'));
+        $event = $this->buildEvent();
+
+        $command = NotifyCommand::forPayment($this->buildPayment())->withEvent($event);
+        $result = $payum->getGateway('acme')->execute($command);
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
+        $this->assertSame(0, AcmeNotifyHandler::$verifications);
+    }
+
+    public function testShouldStillDispatchWebhookReceivedForAPreVerifiedEvent(): void
+    {
+        $events = new RecordingEventDispatcher();
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+        $event = $this->buildEvent();
+
+        $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment())->withEvent($event));
+
+        $received = array_values(array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookReceived));
+        $this->assertCount(1, $received);
+        $this->assertSame($event, $received[0]->webhook);
+    }
+
+    public function testShouldNotReadTheHttpRequestForAPreVerifiedEvent(): void
+    {
+        $throwing = $this->createStub(ServerRequestInterface::class);
+        foreach (['getHeaderLine', 'getHeaders', 'getBody', 'getMethod', 'getUri', 'getParsedBody'] as $method) {
+            $throwing->method($method)->willThrowException(new \LogicException($method . ' was called.'));
+        }
+        $payum = $this->buildPayum($throwing);
+        $event = $this->buildEvent();
+
+        $command = NotifyCommand::forPayment($this->buildPayment())->withEvent($event);
+        $result = $payum->getGateway('acme')->execute($command);
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
+    }
+
+    public function testVerifyWebhookShouldReturnTheHandlersEvent(): void
+    {
+        $payum = $this->buildPayum($this->buildRequest('good-signature'));
+
+        $event = $this->coreGateway($payum->getGateway('acme'))->verifyWebhook($this->buildRequest('good-signature'));
+
+        $this->assertTrue($event->isVerified());
+        $this->assertSame('txn_1', $event->payload['transaction']);
+    }
+
+    public function testVerifyWebhookShouldDispatchWebhookRejectedAndRethrow(): void
+    {
+        $events = new RecordingEventDispatcher();
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+
+        try {
+            $this->coreGateway($payum->getGateway('acme'))->verifyWebhook($this->buildRequest('forged'));
+            $this->fail('Expected WebhookNotVerifiedException.');
+        } catch (WebhookNotVerifiedException) {
+        }
+
+        $rejected = array_values(array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $this->assertCount(1, $rejected);
+        $this->assertSame('acme', $rejected[0]->gatewayName);
+    }
+
+    public function testNotifyShouldDispatchWebhookRejectedWhenVerificationFailsInThePipeline(): void
+    {
+        $events = new RecordingEventDispatcher();
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('forged'))
+            ->addGlobalService(EventDispatcherInterface::class, $events)
+            ->registerGateway('acme', new AcmeNotifyConfig())
+            ->getPayum();
+
+        try {
+            $payum->getGateway('acme')->execute(NotifyCommand::forPayment($this->buildPayment()));
+            $this->fail('Expected WebhookNotVerifiedException.');
+        } catch (WebhookNotVerifiedException) {
+        }
+
+        $this->assertCount(1, array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookRejected));
+        $this->assertCount(1, array_filter($events->seen, static fn (object $e): bool => $e instanceof CommandFailed));
+    }
+
+    public function testVerifyWebhookShouldRefuseAGatewayWithoutWebhooks(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('mute', new MuteNotifyConfig())
+            ->getPayum();
+
+        $this->expectException(LogicException::class);
+
+        $this->coreGateway($payum->getGateway('mute'))->verifyWebhook($this->buildRequest('good-signature'));
+    }
+
+    public function testVerifyWebhookShouldRefuseALegacyNotifyAction(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('old', new LegacyNotifyConfig())
+            ->getPayum();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('1.x');
+
+        $this->coreGateway($payum->getGateway('old'))->verifyWebhook($this->buildRequest('good-signature'));
+    }
+
+    public function testNotifyShouldAnswerWithTheEventsAcknowledgementWhenTheHandlerNamesNone(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('good-signature'))
+            ->registerGateway('acme', new AckFromEventConfig())
+            ->getPayum();
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('[accepted]', $response->getContent());
+    }
+
+    public function testNotifyShouldPreferTheHandlersAcknowledgement(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->addGlobalService(ServerRequestInterface::class, $this->buildRequest('good-signature'))
+            ->registerGateway('acme', new AckBothConfig())
+            ->getPayum();
+        $token = $this->mintNotifyToken($payum);
+
+        $response = $payum->notify([
+            'payum_token' => $token,
+        ]);
+
+        $this->assertSame('[from-handler]', $response->getContent());
+    }
+
+    public function testVerifyWebhookShouldGiveAGatewayAwareHandlerItsGateway(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('aware', new AwareNotifyConfig())
+            ->getPayum();
+
+        $event = $this->coreGateway($payum->getGateway('aware'))->verifyWebhook($this->buildRequest('good-signature'));
+
+        $this->assertSame('evt_aware', $event->id);
+    }
+
+    private function coreGateway(object $gateway): Gateway
+    {
+        $this->assertInstanceOf(Gateway::class, $gateway);
+
+        return $gateway;
+    }
+
     /**
      * @param Payum<object> $payum
      */
@@ -224,6 +406,13 @@ final class NotifyTest extends TestCase
         $payum->getStorage($payment::class)->update($payment);
 
         return $payum->getTokenFactory()->createNotifyToken('acme', $payment);
+    }
+
+    private function buildEvent(): WebhookEvent
+    {
+        return WebhookEvent::verified([
+            'transaction' => 'txn_1',
+        ], 'evt_1', 'payment.captured');
     }
 
     private function buildPayment(): Payment
@@ -305,6 +494,8 @@ final class AcmeNotifyHandler implements NotifyHandlerInterface
 {
     public static string $signature = 'good-signature';
 
+    public static int $verifications = 0;
+
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
         if ('payment.captured' !== $event->type) {
@@ -323,6 +514,8 @@ final class AcmeNotifyHandler implements NotifyHandlerInterface
 
     public function verify(ServerRequestInterface $request): WebhookEvent
     {
+        ++self::$verifications;
+
         if (! hash_equals(self::$signature, $request->getHeaderLine('Acme-Signature'))) {
             throw new WebhookNotVerifiedException('The signature does not match.');
         }
@@ -421,4 +614,250 @@ final class VerificationRecordingMiddleware implements MiddlewareInterface
 
 class TrackedNotifyPayment extends Payment
 {
+}
+
+final class MuteNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return MuteNotifyGateway::class;
+    }
+}
+
+final class MuteNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return MuteNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://mute.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Mute';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://mute.test');
+    }
+}
+
+final class LegacyNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return LegacyNotifyGateway::class;
+    }
+}
+
+final class LegacyNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return LegacyNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [NotifyActionHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://old.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Old';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://old.test');
+    }
+}
+
+final class AckFromEventConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AckFromEventGateway::class;
+    }
+}
+
+final class AckFromEventGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AckFromEventConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AckFromEventHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://ack.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Ack';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://ack.test');
+    }
+}
+
+/**
+ * Verification names the acknowledgement; handling names none.
+ */
+class AckFromEventHandler implements NotifyHandlerInterface
+{
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::handled();
+    }
+
+    public function verify(ServerRequestInterface $request): WebhookEvent
+    {
+        return WebhookEvent::verified([], 'evt_1', 'payment.captured', Acknowledgement::ok('[accepted]'));
+    }
+}
+
+final class AckBothConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AckBothGateway::class;
+    }
+}
+
+final class AckBothGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AckBothConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AckBothHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://ack.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'AckBoth';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://ack.test');
+    }
+}
+
+final class AckBothHandler extends AckFromEventHandler
+{
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::handled(null, Acknowledgement::ok('[from-handler]'));
+    }
+}
+
+final class AwareNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AwareNotifyGateway::class;
+    }
+}
+
+final class AwareNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AwareNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AwareNotifyHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://aware.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Aware';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://aware.test');
+    }
+}
+
+/**
+ * Uses its gateway while verifying, so verification fails unless the gateway was handed over first.
+ */
+final class AwareNotifyHandler implements NotifyHandlerInterface, GatewayAwareInterface
+{
+    private ?\Payum\Core\GatewayInterface $gateway = null;
+
+    public function setGateway(\Payum\Core\GatewayInterface $gateway): void
+    {
+        $this->gateway = $gateway;
+    }
+
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::ignored();
+    }
+
+    public function verify(ServerRequestInterface $request): WebhookEvent
+    {
+        if (null === $this->gateway) {
+            throw new WebhookNotVerifiedException('No gateway.');
+        }
+
+        return WebhookEvent::verified([], 'evt_aware');
+    }
+}
+
+final class RecordingEventDispatcher implements EventDispatcherInterface
+{
+    /**
+     * @var list<object>
+     */
+    public array $seen = [];
+
+    public function dispatch(object $event): object
+    {
+        $this->seen[] = $event;
+
+        return $event;
+    }
 }

@@ -13,10 +13,12 @@ use Payum\Core\Event\HandlerResolved;
 use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Event\ResultReturned;
 use Payum\Core\Event\WebhookReceived;
+use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
@@ -25,7 +27,9 @@ use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
 use Payum\Core\Handler\HandlerMap;
 use Payum\Core\Handler\NotifyHandlerInterface;
+use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Legacy\ActionToHandlerAdapter;
+use Payum\Core\Legacy\Handler\NotifyActionHandler;
 use Payum\Core\Legacy\HandlerToActionAdapter;
 use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Legacy\RequestToCommand;
@@ -44,6 +48,7 @@ use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\NextAction;
 use Payum\Core\Result\NextAction\RenderTemplate;
+use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\IdentityInterface;
@@ -360,6 +365,45 @@ class Gateway implements GatewayInterface
         array_pop($this->stack);
     }
 
+    /**
+     * Checks that a message is from the PSP, and returns what it says, without running a command.
+     *
+     * What an application calls on the HTTP request to answer the PSP at once, before queueing the event for
+     * a worker to handle with {@see NotifyCommand::withEvent()}. A message that fails the check is reported
+     * as {@see WebhookRejected} and the exception is rethrown.
+     *
+     * @throws WebhookNotVerifiedException when the message is not genuine
+     * @throws LogicException when the gateway cannot verify a webhook on its own
+     */
+    public function verifyWebhook(ServerRequestInterface $request): WebhookEvent
+    {
+        $serviceId = $this->handlerMap?->serviceIdFor(NotifyCommand::class);
+
+        if (null === $serviceId) {
+            throw new LogicException(sprintf('The gateway "%s" has no webhook handler.', $this->name ?? ''));
+        }
+
+        $handler = $this->container->get($serviceId);
+
+        if ($handler instanceof NotifyActionHandler) {
+            throw new LogicException(sprintf(
+                'The gateway "%s" handles webhooks with a 1.x notify action, which verifies the message itself while handling it. Port it to a %s before verifying a webhook on its own.',
+                $this->name ?? '',
+                NotifyHandlerInterface::class,
+            ));
+        }
+
+        if (! $handler instanceof NotifyHandlerInterface) {
+            throw new LogicException(sprintf('%s must implement %s.', get_debug_type($handler), NotifyHandlerInterface::class));
+        }
+
+        if ($handler instanceof GatewayAwareInterface) {
+            $handler->setGateway($this);
+        }
+
+        return $this->verifyReporting($handler, $request);
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -454,6 +498,21 @@ class Gateway implements GatewayInterface
         }
 
         return false;
+    }
+
+    /**
+     * @throws WebhookNotVerifiedException after reporting it as {@see WebhookRejected}
+     */
+    private function verifyReporting(NotifyHandlerInterface $handler, ServerRequestInterface $request): WebhookEvent
+    {
+        try {
+            return $handler->verify($request);
+        } catch (WebhookNotVerifiedException $e) {
+            // ponytail: a gateway built by hand has no name; the event reports it as empty.
+            $this->events()->dispatch(new WebhookRejected($this->name ?? '', $request, $e));
+
+            throw $e;
+        }
     }
 
     /**
@@ -580,11 +639,23 @@ class Gateway implements GatewayInterface
 
             // Verification runs here rather than during dispatch so that middleware wraps it: a message
             // that fails the check is something an application will want to see.
-            $webhook = $handler->verify($context->httpRequest());
+            // An event verified elsewhere (the HTTP request, before a worker took over) is not verified twice.
+            $webhook = $command->event() ?? $this->verifyReporting($handler, $context->httpRequest());
 
             $this->events()->dispatch(new WebhookReceived($command, $context, $webhook));
 
             $result = $handler->handle($command, $webhook, $context);
+
+            // A handler that names no acknowledgement leaves the PSP to be answered the way verification asked.
+            if (null === $result->acknowledgement && null !== $webhook->acknowledgement) {
+                $result = new NotifyResult(
+                    $result->status,
+                    $result->transactionId,
+                    $result->failure,
+                    $result->raw,
+                    $webhook->acknowledgement,
+                );
+            }
         } else {
             $result = $handler->handle($command, $context);
         }
