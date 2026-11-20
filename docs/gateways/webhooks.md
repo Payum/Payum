@@ -180,6 +180,60 @@ new Acknowledgement(200, '{"ok":true}', ['Content-Type' => 'application/json']);
 Return `NotifyResult::ignored()` for an event type your gateway does not use. Rejecting a message the
 gateway does not recognise makes the PSP send it again and again.
 
+## What handle() may read
+
+`handle()` acts on the event it is given and nothing else. An application may verify a message on the
+request, answer the PSP, and run `handle()` later in a queue worker, where `$context->httpRequest()` is
+not the PSP's request. Anything you need from the headers, such as a timestamp or an account id, goes
+into the payload in `verify()`:
+
+```php
+$event['account'] = $request->getHeaderLine('Acme-Account');
+
+return WebhookEvent::verified($event, $event['id'], $event['type']);
+```
+
+The same goes for the answer. A PSP that wants a constant reply, such as a fixed body, gets it from
+`verify()`, because the application has to send it before `handle()` has run:
+
+```php
+return WebhookEvent::verified($event, $event['id'], $event['type'], Acknowledgement::ok('[accepted]'));
+```
+
+A handler's own `NotifyResult::$acknowledgement` wins, then the event's, then `204 No Content`. Set one
+on the result only when it depends on what the handler found.
+
+## Events that belong to no payment
+
+Some messages are about the account, not a payment: a payout was sent, a dispute was opened against a
+charge. The application routes the PSP's one webhook endpoint to `NotifyCommand::forGateway()`, so
+`$context->payment()` is null. Find the payment from what the PSP put in the message, then run a
+payment notification for it, so Payum records the status as it does for any other:
+
+```php
+public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+{
+    if ('charge.disputed' !== $event->type) {
+        return NotifyResult::ignored();
+    }
+
+    $payment = $this->payments->findByCheckoutId($event->payload['checkout_id']);
+
+    if (null === $payment) {
+        return NotifyResult::ignored();
+    }
+
+    $context->execute(NotifyCommand::forPayment($payment)->withEvent($event));
+
+    return NotifyResult::ignored();
+}
+```
+
+`$this->payments` stands for your own lookup, such as a Payum storage. `withEvent()` hands the command the
+verified event, so it is not verified a second time, and the handler runs again with
+`$context->payment()` set and returns the status. Check the event type before the lookup, or the handler
+calls itself without end for an event it does not use.
+
 ## Give the PSP a notify URL
 
 PSPs that take a notification address per payment ask for it when the checkout is created. Get it from
