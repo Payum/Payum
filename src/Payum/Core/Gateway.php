@@ -17,8 +17,8 @@ use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\CommandNotSupportedException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
@@ -395,6 +395,10 @@ class Gateway implements GatewayInterface
 
         if (! $handler instanceof NotifyHandlerInterface) {
             throw new LogicException(sprintf('%s must implement %s.', get_debug_type($handler), NotifyHandlerInterface::class));
+        }
+
+        if ($handler instanceof GatewayAwareInterface) {
+            $handler->setGateway($this);
         }
 
         try {

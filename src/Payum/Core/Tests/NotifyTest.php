@@ -13,13 +13,14 @@ use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Legacy\Handler\NotifyActionHandler;
 use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Handler\SyncHandlerInterface;
 use Payum\Core\Handler\WebhookEvent;
+use Payum\Core\Legacy\Handler\NotifyActionHandler;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Middleware\MiddlewareInterface;
@@ -365,6 +366,18 @@ final class NotifyTest extends TestCase
         $response = $payum->notify(['payum_token' => $token]);
 
         $this->assertSame('[from-handler]', $response->getContent());
+    }
+
+    public function testVerifyWebhookShouldGiveAGatewayAwareHandlerItsGateway(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('aware', new AwareNotifyConfig())
+            ->getPayum();
+
+        $event = $payum->getGateway('aware')->verifyWebhook($this->buildRequest('good-signature'));
+
+        $this->assertSame('evt_aware', $event->id);
     }
 
     /**
@@ -771,5 +784,68 @@ final class AckBothHandler extends AckFromEventHandler
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
         return NotifyResult::handled(null, Acknowledgement::ok('[from-handler]'));
+    }
+}
+
+final class AwareNotifyConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AwareNotifyGateway::class;
+    }
+}
+
+final class AwareNotifyGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AwareNotifyConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AwareNotifyHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://aware.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Aware';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://aware.test');
+    }
+}
+
+/**
+ * Uses its gateway while verifying, so verification fails unless the gateway was handed over first.
+ */
+final class AwareNotifyHandler implements NotifyHandlerInterface, GatewayAwareInterface
+{
+    private ?\Payum\Core\GatewayInterface $gateway = null;
+
+    public function setGateway(\Payum\Core\GatewayInterface $gateway)
+    {
+        $this->gateway = $gateway;
+    }
+
+    public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+    {
+        return NotifyResult::ignored();
+    }
+
+    public function verify(ServerRequestInterface $request): WebhookEvent
+    {
+        if (null === $this->gateway) {
+            throw new WebhookNotVerifiedException('No gateway.');
+        }
+
+        return WebhookEvent::verified([], 'evt_aware');
     }
 }
