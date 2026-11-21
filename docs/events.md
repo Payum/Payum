@@ -73,6 +73,7 @@ All events are in the `Payum\Core\Event` namespace:
 | `WebhookReceived` | A payment provider's notification passed verification, before the gateway acts on it | `$webhook` |
 | `WebhookRejected` | A notification failed verification in `Gateway::verifyWebhook()` | `$gatewayName`, `$request`, `$exception` |
 | `StatusChanged` | The payment moved from one status to another | `$subject`, `$from`, `$to` |
+| `PaymentMethodStatusChanged` | A stored payment method moved from one status to another, such as `Pending` to `Active` | `$method`, `$from`, `$to` |
 | `ResultReturned` | The command finished and returned a result | `$result` |
 | `FailureRaised` | The result is a failure, such as a declined card | `$failure`, `$result` |
 | `CommandFailed` | The command threw an exception | `$exception` |
@@ -92,6 +93,13 @@ therefore ships it once.
 
 Payum only tracks a status for a payment model that implements `Payum\Core\Model\StatusAwareInterface`.
 A model that does not implement it never fires `StatusChanged`. See [Payment status](payment-status.md).
+
+### `PaymentMethodStatusChanged`
+
+Payum dispatches it when a saved card or account is saved, deleted, expires or is cancelled by the
+customer's bank. Like `StatusChanged`, it fires only on a change, so a webhook delivered twice is silent.
+Listen to it to ask the customer for a new payment method. See
+[Save a payment method and charge it later](stored-payment-methods.md#know-when-a-method-changes).
 
 ### `FailureRaised` and `CommandFailed`
 

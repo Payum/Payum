@@ -98,6 +98,12 @@ for any other gateway, which [Payment operations](../payment-operations.md) desc
 | `CancelCommand` | Cancels a new, pending or authorized payment. |
 | `SyncCommand` | Reports the status stored in the payment's details. |
 | `PayoutCommand` | `PaidOut`, unless the payout's `payout` detail is `false`, which leaves it `Pending`. |
+| `SavePaymentMethodCommand` | Saves the method at once with an `offline_` reference. |
+| `DeletePaymentMethodCommand` | Marks the method `Revoked`. |
+
+A capture or authorization of a payment that carries a stored method without a reference saves it too,
+and a later one charges it, so you can try
+[Save a payment method and charge it later](../stored-payment-methods.md) without a PSP account.
 
 A refund with an amount is a partial refund, and the payment becomes `PartiallyRefunded`. A refund with
 no amount refunds what is left:

@@ -14,11 +14,15 @@ immutable object with no services on it. A gateway supports a command by shippin
 | `Payum\Core\Command\PayoutCommand` | `Payout` | `PayoutResult` | `idempotencyKey` |
 | `Payum\Core\Command\SyncCommand` | `Sync` | `SyncResult` | |
 | `Payum\Core\Command\NotifyCommand` | `Webhooks` | `NotifyResult` | |
+| `Payum\Core\Command\SavePaymentMethodCommand` | `SavePaymentMethod` | `SavePaymentMethodResult` | `idempotencyKey` |
+| `Payum\Core\Command\DeletePaymentMethodCommand` | `DeletePaymentMethod` | `DeletePaymentMethodResult` | `idempotencyKey` |
 
 Capture takes the money. Authorize holds it on the customer's card without taking it, and a later
 capture takes what was held. Refund gives back money already taken. Cancel calls a payment or payout off
 before the money moves, such as voiding an authorization, so it carries no amount. Payout sends money
-to a recipient. Sync asks the PSP for the current state. Notify carries a message the PSP sent.
+to a recipient. Sync asks the PSP for the current state. Notify carries a message the PSP sent. Save
+and delete act on a stored payment method instead of a payment; see
+[Stored payment methods](stored-payment-methods.md).
 
 ## How a command is built
 

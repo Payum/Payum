@@ -111,7 +111,7 @@ disagree.
 
 | Capability | Where it comes from |
 | :--- | :--- |
-| `Authorize`, `Cancel`, `Capture`, `Payout`, `Refund`, `Sync` | The handler for that command |
+| `Authorize`, `Cancel`, `Capture`, `DeletePaymentMethod`, `Payout`, `Refund`, `SavePaymentMethod`, `Sync` | The handler for that command |
 | `Webhooks` | A notify handler. See [Webhooks](webhooks.md) |
 | `MultiCurrency`, `PartialCapture`, `PartialRefund`, `Recurring`, `StoredPaymentMethods`, `ThreeDSecure` | Declared by the gateway |
 
@@ -147,8 +147,10 @@ Return only capabilities that no handler implies. Listing `Capability::Capture` 
 places to keep in step, and they drift.
 
 Capabilities tell an application what to offer, for example whether to show a "refund part of this
-order" button. Payum does not enforce them: a caller can still ask for a partial refund from a gateway
-that does not declare `PartialRefund`, so a handler for a PSP that cannot do one should throw. The enum is
+order" button. Payum enforces only `StoredPaymentMethods` and `Recurring`, which
+[Stored payment methods](stored-payment-methods.md) describes. A caller can still ask for a partial
+refund from a gateway that does not declare `PartialRefund`, so a handler for a PSP that cannot do one
+should throw. The enum is
 string-backed, so an application can store a capability list or send it as JSON.
 
 An application reads the capabilities a gateway's handlers imply with `HandlerMap`, and the declared ones

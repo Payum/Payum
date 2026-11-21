@@ -73,6 +73,8 @@ Every command lives in `Payum\Core\Command`:
 | `PayoutCommand` | Send money from you to a recipient. |
 | `SyncCommand` | Ask the provider for the current state and record it. |
 | `NotifyCommand` | Read a notification the provider sent. [Payment notifications](instant-payment-notification.md) covers it. |
+| `SavePaymentMethodCommand` | Save a card or account at the provider without taking a payment. |
+| `DeletePaymentMethodCommand` | Remove a saved card or account at the provider. |
 
 ### Build a command from a payment or from a token
 
@@ -630,13 +632,17 @@ and a case for each finer point, which it declares:
 
 | Capability | Means |
 | :--- | :--- |
-| `Authorize`, `Capture`, `Refund`, `Cancel`, `Payout`, `Sync` | The gateway runs that command. Check with `supportsCommand()`. |
+| `Authorize`, `Capture`, `Refund`, `Cancel`, `Payout`, `Sync`, `SavePaymentMethod`, `DeletePaymentMethod` | The gateway runs that command. Check with `supportsCommand()`. |
 | `Webhooks` | The gateway reads the provider's notifications. Check with `supportsCommand(NotifyCommand::class)`. |
 | `PartialCapture`, `PartialRefund` | An amount below the total works on capture or refund. |
 | `MultiCurrency` | The gateway takes more than one currency. |
-| `Recurring` | The gateway supports recurring payments. |
-| `StoredPaymentMethods` | The gateway can charge a saved card or account again. |
+| `StoredPaymentMethods` | The gateway saves a card or account while the customer pays. |
+| `Recurring` | The gateway charges a saved card or account while the customer is not there. |
 | `ThreeDSecure` | The gateway supports 3-D Secure. |
+
+Payum checks `StoredPaymentMethods` and `Recurring` before a charge on a saved method, and throws
+`Payum\Core\Exception\UnsupportedOperationException` when the gateway lacks the one it needs.
+[Save a payment method and charge it later](stored-payment-methods.md) shows the whole flow.
 
 The gateway's own documentation lists what it supports. A gateway still written for Payum 1.x answers no
 commands at all. See [Upgrade from 1.x](upgrading.md) if you still use one.

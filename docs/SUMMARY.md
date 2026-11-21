@@ -17,6 +17,7 @@
 * [Money and currencies](money.md)
 * [Use your own payment model](your-order-integration.md)
 * [Concurrent requests and idempotency](concurrency-and-idempotency.md)
+* [Save a payment method and charge it later](stored-payment-methods.md)
 
 ## Configuring Payum
 
@@ -48,6 +49,7 @@
   * [Services](gateways/services.md)
   * [Gateway middleware](gateways/middleware.md)
   * [Webhooks](gateways/webhooks.md)
+  * [Stored payment methods](gateways/stored-payment-methods.md)
 
 ## Upgrading
 

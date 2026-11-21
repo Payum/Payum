@@ -12,6 +12,8 @@ typed on both sides: it takes that command and returns that command's result.
 | `PayoutCommand` | `Payum\Core\Handler\PayoutHandlerInterface` |
 | `SyncCommand` | `Payum\Core\Handler\SyncHandlerInterface` |
 | `NotifyCommand` | `Payum\Core\Handler\NotifyHandlerInterface` |
+| `SavePaymentMethodCommand` | `Payum\Core\Handler\SavePaymentMethodHandlerInterface` |
+| `DeletePaymentMethodCommand` | `Payum\Core\Handler\DeletePaymentMethodHandlerInterface` |
 
 ## Write a handler
 

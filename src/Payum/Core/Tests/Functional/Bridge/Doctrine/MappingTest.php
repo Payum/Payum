@@ -10,6 +10,7 @@ use Payum\Core\Tests\Mocks\Entity\Customer;
 use Payum\Core\Tests\Mocks\Entity\Payment;
 use Payum\Core\Tests\Mocks\Entity\PaymentWithLinks;
 use Payum\Core\Tests\Mocks\Entity\StoredPaymentMethod;
+use Payum\Core\Tests\Mocks\Entity\User;
 
 final class MappingTest extends OrmTest
 {
@@ -69,6 +70,23 @@ final class MappingTest extends OrmTest
 
         $this->assertNull($found->getCustomer());
         $this->assertNull($found->getStoredPaymentMethod());
+    }
+
+    public function testShouldPersistTheGatewayCustomerIdsOfAUserEntity(): void
+    {
+        $user = new User();
+        $user->setGatewayCustomerId('stripe', 'cus_1');
+        $user->setGatewayCustomerId('mollie', 'cst_1');
+
+        $this->em->persist($user);
+        $this->em->flush();
+        $this->em->clear();
+
+        $found = $this->em->find(User::class, (int) $user->getCustomerId());
+        $this->assertInstanceOf(User::class, $found);
+
+        $this->assertSame('cus_1', $found->getGatewayCustomerId('stripe'));
+        $this->assertSame('cst_1', $found->getGatewayCustomerId('mollie'));
     }
 
     public function testOdmMappingsShouldBeWellFormed(): void

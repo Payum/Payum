@@ -37,6 +37,8 @@ final class AuthorizeHandler implements AuthorizeHandlerInterface
             Constants::FIELD_PAID => $this->config->paid,
         ]);
 
-        return $state[Constants::FIELD_PAID] ? AuthorizeResult::authorized() : AuthorizeResult::pending();
+        $result = $state[Constants::FIELD_PAID] ? AuthorizeResult::authorized() : AuthorizeResult::pending();
+
+        return true === $context->storedCredential()?->isFirst ? $result->withStoredPaymentMethod(OfflineDetails::storedPaymentMethod()) : $result;
     }
 }

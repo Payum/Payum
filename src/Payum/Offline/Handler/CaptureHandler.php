@@ -37,6 +37,8 @@ final class CaptureHandler implements CaptureHandlerInterface
             Constants::FIELD_PAID => $this->config->paid,
         ]);
 
-        return $state[Constants::FIELD_PAID] ? CaptureResult::captured() : CaptureResult::pending();
+        $result = $state[Constants::FIELD_PAID] ? CaptureResult::captured() : CaptureResult::pending();
+
+        return true === $context->storedCredential()?->isFirst ? $result->withStoredPaymentMethod(OfflineDetails::storedPaymentMethod()) : $result;
     }
 }
