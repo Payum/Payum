@@ -9,7 +9,9 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Reference\ReferenceNamespace;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\Result;
+use Payum\Core\Result\SubscriptionResult;
 use Payum\Core\Storage\IdentityInterface;
 
 /**
@@ -43,6 +45,13 @@ final class IndexReferencesMiddleware implements MiddlewareInterface, HasPriorit
         $gatewayName = $context->gatewayName();
 
         if (null === $gatewayName || null === $result->transactionId || '' === $result->transactionId) {
+            return $result;
+        }
+
+        $renewal = $result instanceof SubscriptionResult || $result instanceof NotifyResult ? $result->renewal() : null;
+
+        // RecordRenewalMiddleware has indexed the renewal's id against the renewal payment, not this subject.
+        if ($renewal?->transactionId === $result->transactionId) {
             return $result;
         }
 

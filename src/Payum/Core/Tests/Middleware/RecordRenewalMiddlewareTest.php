@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Middleware;
 
+use DateTimeImmutable;
 use DI\Container;
 use Http\Discovery\Psr17FactoryDiscovery;
 use League\Uri\Uri;
@@ -13,6 +14,9 @@ use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Event\StatusChanged;
+use Payum\Core\Event\SubscriptionPaymentFailed;
+use Payum\Core\Event\SubscriptionPaymentSucceeded;
+use Payum\Core\Event\SubscriptionStatusChanged;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -74,6 +78,8 @@ final class RecordRenewalMiddlewareTest extends TestCase
         $this->events = new RecordingEventDispatcher();
         $this->index = new InMemoryReferenceIndex();
         AcmeRenewalCreateHandler::$renewal = null;
+        AcmeRenewalNotifyHandler::$namesTheRenewal = false;
+        AcmeRenewalNotifyHandler::$result = null;
     }
 
     protected function tearDown(): void
@@ -142,6 +148,63 @@ final class RecordRenewalMiddlewareTest extends TestCase
         $this->assertCount(2, $events);
         $this->assertSame(PaymentStatus::Failed, $events[1]->from);
         $this->assertSame(PaymentStatus::Captured, $events[1]->to);
+    }
+
+    public function testARedeliveredRenewalThatNamesItsTransactionShouldNotCreateASecondPayment(): void
+    {
+        $payum = $this->subscribed();
+        AcmeRenewalNotifyHandler::$namesTheRenewal = true;
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_2', Money::EUR(1500), PaymentStatus::Captured);
+
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $this->assertCount(1, $this->payments());
+        $this->assertCount(1, $this->events->ofType(StatusChanged::class));
+        $this->assertCount(1, $this->events->ofType(SubscriptionPaymentSucceeded::class));
+    }
+
+    public function testAPaidRetryThatNamesItsTransactionShouldUpdateTheFailedRenewal(): void
+    {
+        $payum = $this->subscribed();
+        AcmeRenewalNotifyHandler::$namesTheRenewal = true;
+
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_1', Money::EUR(1500), PaymentStatus::Failed);
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured);
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $payments = $this->payments();
+        $this->assertCount(1, $payments);
+        $this->assertSame(PaymentStatus::Captured, $payments[0]->getStatus());
+        $this->assertCount(2, $this->events->ofType(StatusChanged::class));
+        $this->assertCount(1, $this->events->ofType(SubscriptionPaymentFailed::class));
+        $this->assertCount(1, $this->events->ofType(SubscriptionPaymentSucceeded::class));
+    }
+
+    public function testOneNotificationShouldRecordTheSubscriptionAndItsRenewalTogether(): void
+    {
+        $payum = $this->subscribed();
+        $periodEnd = new DateTimeImmutable('2026-12-21');
+        AcmeRenewalNotifyHandler::$result = NotifyResult::handled(PaymentStatus::Captured, transactionId: 'in_1')
+            ->withSubscription(new SubscriptionDetails(SubscriptionStatus::PastDue, 'sub_1', $periodEnd))
+            ->withRenewal(new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured));
+
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $payments = $this->payments();
+        $this->assertCount(1, $payments);
+        $this->assertSame(PaymentStatus::Captured, $payments[0]->getStatus());
+        $subscription = $payments[0]->getSubscription();
+        $this->assertInstanceOf(SubscriptionInterface::class, $subscription);
+        $this->assertSame(SubscriptionStatus::PastDue, $subscription->getStatus());
+        $this->assertEquals($periodEnd, $subscription->getCurrentPeriodEnd());
+        $this->assertSame(Payment::class, $this->index->find(AcmeRenewalGateway::class, 'in_1')?->getIdentity()->getClass());
+        $this->assertSame(Subscription::class, $this->index->find(AcmeRenewalGateway::class, 'sub_1')?->getIdentity()->getClass());
+        $this->assertCount(1, $this->events->ofType(StatusChanged::class));
+        $this->assertCount(1, $this->events->ofType(SubscriptionPaymentSucceeded::class));
+        $this->assertCount(1, $this->events->ofType(SubscriptionStatusChanged::class));
     }
 
     public function testTheApplicationCanSupplyTheFactory(): void
@@ -377,9 +440,19 @@ final class AcmeRenewalCreateHandler implements CreateSubscriptionHandlerInterfa
 
 final class AcmeRenewalNotifyHandler implements NotifyHandlerInterface
 {
+    public static bool $namesTheRenewal = false;
+
+    public static ?NotifyResult $result = null;
+
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
-        return NotifyResult::handled()->withRenewal(AcmeRenewalCreateHandler::$renewal ?? throw new LogicException('No renewal to report.'));
+        if (self::$result instanceof NotifyResult) {
+            return self::$result;
+        }
+
+        $renewal = AcmeRenewalCreateHandler::$renewal ?? throw new LogicException('No renewal to report.');
+
+        return NotifyResult::handled(transactionId: self::$namesTheRenewal ? $renewal->transactionId : null)->withRenewal($renewal);
     }
 
     public function verify(ServerRequestInterface $request): WebhookEvent
