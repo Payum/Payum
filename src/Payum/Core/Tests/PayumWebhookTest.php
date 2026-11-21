@@ -17,11 +17,13 @@ use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Handler\WebhookEvent;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\ReferenceRecord;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Reference\InMemoryReferenceIndex;
+use Payum\Core\Reference\MerchantReference;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Reference\StorageReferenceIndex;
 use Payum\Core\Result\Acknowledgement;
@@ -134,20 +136,57 @@ final class PayumWebhookTest extends TestCase
         $this->assertSame(1, WebhookNotifyHandler::$verifications);
     }
 
+    public function testShouldStayOnTheReceivingGatewayWhenTheOwnerIsAnotherPsp(): void
+    {
+        $payum = $this->buildPayum(others: ['other_psp']);
+        $payment = $this->savedPayment($payum);
+
+        // Retried on another PSP, which recorded the merchant reference last.
+        $payum->getGateway('other_psp')->execute(CaptureCommand::forPayment($payment));
+        WebhookNotifyHandler::$merchantReference = WebhookCaptureHandler::$sent;
+        WebhookNotifyHandler::$type = 'payment.captured';
+
+        $response = $payum->webhook('acme');
+
+        $this->assertSame(204, $response->getStatusCode());
+        $this->assertSame('acme', WebhookNotifyHandler::$gatewayName);
+        $this->assertSame($payment->getNumber(), WebhookNotifyHandler::$seen?->getNumber());
+    }
+
+    public function testShouldStayOnTheReceivingGatewayWhenTheOwnerIsNoLongerRegistered(): void
+    {
+        $index = new InMemoryReferenceIndex();
+        $payum = $this->buildPayum(index: $index);
+        $payment = $this->savedPayment($payum);
+        $identity = new Identity($payment->getNumber(), Payment::class);
+        $index->record(MerchantReference::NAMESPACE, MerchantReference::of($identity), 'acme_removed', $identity);
+        WebhookNotifyHandler::$merchantReference = MerchantReference::of($identity);
+
+        $payum->webhook('acme');
+
+        $this->assertSame('acme', WebhookNotifyHandler::$gatewayName);
+        $this->assertSame($payment->getNumber(), WebhookNotifyHandler::$seen?->getNumber());
+    }
+
     public function testShouldKeepReferencesInAStorage(): void
     {
         $dir = sys_get_temp_dir() . '/payum-references-' . uniqid();
         mkdir($dir);
 
-        $payum = $this->buildPayum(index: new StorageReferenceIndex(new FilesystemStorage($dir, ReferenceRecord::class, 'key')));
-        $payment = $this->savedPayment($payum);
+        try {
+            $payum = $this->buildPayum(index: new StorageReferenceIndex(new FilesystemStorage($dir, ReferenceRecord::class, 'key')));
+            $payment = $this->savedPayment($payum);
 
-        $payum->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
-        WebhookNotifyHandler::$merchantReference = WebhookCaptureHandler::$sent;
+            $payum->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
+            WebhookNotifyHandler::$merchantReference = WebhookCaptureHandler::$sent;
 
-        $payum->webhook('acme');
+            $payum->webhook('acme');
 
-        $this->assertSame($payment->getNumber(), WebhookNotifyHandler::$seen?->getNumber());
+            $this->assertSame($payment->getNumber(), WebhookNotifyHandler::$seen?->getNumber());
+        } finally {
+            array_map(unlink(...), glob($dir . '/*') ?: []);
+            rmdir($dir);
+        }
     }
 
     /**
@@ -167,10 +206,11 @@ final class PayumWebhookTest extends TestCase
 
     /**
      * @param list<string> $names
+     * @param list<string> $others gateway names on another PSP
      *
      * @return Payum<object>
      */
-    private function buildPayum(array $names = ['acme'], ?ReferenceIndexInterface $index = null): Payum
+    private function buildPayum(array $names = ['acme'], ?ReferenceIndexInterface $index = null, array $others = []): Payum
     {
         $builder = (new PayumBuilder())
             ->addDefaultStorages()
@@ -180,6 +220,10 @@ final class PayumWebhookTest extends TestCase
 
         foreach ($names as $name) {
             $builder->registerGateway($name, new WebhookConfig());
+        }
+
+        foreach ($others as $name) {
+            $builder->registerGateway($name, new OtherPspConfig());
         }
 
         return $builder->getPayum();
@@ -219,6 +263,42 @@ final class WebhookGateway implements PaymentGateway
     public function websiteUrl(): Uri
     {
         return Uri::new('https://acme.test');
+    }
+}
+
+final class OtherPspConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return OtherPspGateway::class;
+    }
+}
+
+final class OtherPspGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return OtherPspConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [WebhookCaptureHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://other.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Other PSP';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://other.test');
     }
 }
 

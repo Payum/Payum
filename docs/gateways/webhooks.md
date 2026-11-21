@@ -286,12 +286,14 @@ reference matters for the messages that arrive before that, while the capture is
 
 `merchantReference()` throws a `LogicException` when the gateway was not registered with
 `PayumBuilder::registerGateway()`, because the reference records which gateway name owns the payment, and
-when the payment has not been saved yet. Payum records the references in an index that, by default,
-forgets them when the PHP process ends. The application keeps them in a database, as
+when the payment has not been saved yet. By default Payum keeps the references in memory, so it forgets
+them at the end of each request, or when the worker process exits under a worker server such as
+RoadRunner. The application keeps them in a database, as
 [Payment notifications](../instant-payment-notification.md#receive-webhooks-on-a-route-you-own) shows.
 
 When several gateway names share one PSP account and one webhook route, the message runs on the gateway
-name that recorded the reference, whichever name the route used.
+name that recorded the reference, whichever name the route used. It never moves to a gateway of another
+PSP: a payment retried on another PSP is handled by the gateway the message arrived on.
 
 ## When nothing matches
 
@@ -317,7 +319,6 @@ Return `NotifyResult::retry()` for an event type that needs a payment. It answer
 the message again later, by which time the payment is usually recorded. Pass an `Acknowledgement` to
 answer with another status. Return `NotifyResult::ignored()` for everything else, or the PSP keeps
 sending messages your gateway never acts on.
-
 
 ## Events that belong to no payment
 
@@ -363,7 +364,8 @@ the recursion: without it the per-payment call would look the payment up and exe
 
 ## The request the handler reads
 
-`verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`. By
+`verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`.
+`Payum::webhook()` is the exception: given a request, it verifies that request instead. By
 default Payum builds it from PHP's globals and reads the body from `php://input`. In a worker server
 such as RoadRunner or FrankenPHP, or after a framework has already read the body, that read is empty:
 every signature check fails and every message gets a 400.

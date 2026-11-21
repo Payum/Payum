@@ -84,6 +84,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Twig\Environment;
@@ -194,9 +195,12 @@ class PayumBuilder
     private ?Closure $storedGatewayBuilder = null;
 
     /**
-     * @var ?RegistryInterface<object>
+     * Where the global container being built finds the gateways, once getPayum() has assembled them. A
+     * new one per build, so a second build leaves the first one's gateways where they are.
+     *
+     * @var ?\ArrayObject<string, GatewayRegistryInterface>
      */
-    private ?RegistryInterface $builtRegistry = null;
+    private ?\ArrayObject $builtGateways = null;
 
     public function __construct()
     {
@@ -441,6 +445,7 @@ class PayumBuilder
     public function getPayum(): Payum
     {
         $globalContainer = $this->buildGlobalContainer();
+        $builtGateways = $this->builtGateways;
 
         $genericTokenFactory = $globalContainer->get(GenericTokenFactoryInterface::class);
         $httpRequestVerifier = $globalContainer->get(HttpRequestVerifierInterface::class);
@@ -553,7 +558,11 @@ class PayumBuilder
             }
         }
 
-        $registry = $this->builtRegistry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+        $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+
+        if ($builtGateways instanceof \ArrayObject) {
+            $builtGateways['registry'] = $registry;
+        }
 
         return new Payum(
             $registry,
@@ -562,6 +571,8 @@ class PayumBuilder
             $tokenStorage,
             $globalContainer->get(RendererInterface::class),
             $globalContainer->get(TokenIssuerInterface::class),
+            $globalContainer->get(ServerRequestFactoryInterface::class),
+            $globalContainer->get(StreamFactoryInterface::class),
         );
     }
 
@@ -631,6 +642,9 @@ class PayumBuilder
      */
     protected function buildGlobalContainer(): ContainerInterface
     {
+        /** @var \ArrayObject<string, GatewayRegistryInterface> $builtGateways */
+        $builtGateways = new \ArrayObject();
+        $this->builtGateways = $builtGateways;
         $tokenStorage = $this->resolveTokenStorage();
 
         $storageRegistry = $this->buildRegistry([], $this->storages);
@@ -677,6 +691,7 @@ class PayumBuilder
             StorageRegistryInterface::class => $storageRegistry,
             ClientInterface::class => Psr18ClientDiscovery::find(...),
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
+            ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
             ResponseFactoryInterface::class => Psr17FactoryDiscovery::findResponseFactory(...),
             UriFactoryInterface::class => Psr17FactoryDiscovery::findUriFactory(...),
@@ -697,9 +712,8 @@ class PayumBuilder
             ReferenceIndexInterface::class => static fn (): ReferenceIndexInterface => new InMemoryReferenceIndex(),
 
             // Resolved only when a webhook names a subject recorded by another gateway name, by which time
-            // getPayum() has built the registry.
-            GatewayRegistryInterface::class => fn (): GatewayRegistryInterface => $this->builtRegistry
-                ?? throw new PayumLogicException('The gateways are reachable only once PayumBuilder::getPayum() has built them.'),
+            // getPayum() has built the registry. Before that there are no gateways to hand it to.
+            GatewayRegistryInterface::class => static fn (): GatewayRegistryInterface => $builtGateways['registry'] ?? new SimpleRegistry(),
 
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),

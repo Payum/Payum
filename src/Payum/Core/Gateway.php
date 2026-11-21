@@ -821,7 +821,8 @@ class Gateway implements GatewayInterface
     /**
      * The gateway registered under the name that recorded the reference, which is where its subject's
      * credentials and state belong. One PSP account often serves several gateway names behind a single
-     * webhook route.
+     * webhook route. A gateway of another PSP is never the owner: the merchant reference names whichever
+     * gateway the payment was last tried on, and this message was verified as one of this PSP's.
      */
     private function owningGateway(?ReferenceRecord $record): self
     {
@@ -838,7 +839,9 @@ class Gateway implements GatewayInterface
             return $this;
         }
 
-        return $owner instanceof self ? $owner : $this;
+        return $owner instanceof self && ReferenceNamespace::forGateway($owner->descriptor()) === ReferenceNamespace::forGateway($this->descriptor())
+            ? $owner
+            : $this;
     }
 
     /**

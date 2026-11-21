@@ -106,7 +106,7 @@ the same way as a notification on a notify URL. It answers like `Payum::notify()
 | What happened | The provider gets |
 | :--- | :--- |
 | the message was handled or ignored | 204 No Content, or the answer the gateway chose |
-| the message names a payment Payum has not recorded yet | 503, so the provider sends it again later |
+| the gateway found no payment and asked for the message again | 503, so the provider sends it again later |
 | the message failed verification | 400 with an empty body |
 
 In a framework, pass the request. The gateway then verifies that request instead of reading its
@@ -127,8 +127,8 @@ be in place:
 - Register the gateway by name with `PayumBuilder::registerGateway()`. The references record which gateway
   name owns each payment.
 - Keep the references somewhere that outlives the request. Payum configures an index by default, but it
-  keeps the references in memory and forgets them when the request ends, so a webhook that arrives later
-  finds nothing.
+  keeps the references in memory. It forgets them at the end of each request, or when the worker process
+  exits under a worker server such as RoadRunner, so a webhook that arrives later finds nothing.
 
 To keep the references in Doctrine, extend Payum's `ReferenceRecord` model:
 

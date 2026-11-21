@@ -3,7 +3,7 @@
 namespace Payum\Core;
 
 use Exception;
-use Http\Discovery\Psr17Factory;
+use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -33,7 +33,9 @@ use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Security\TokenPurpose;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,6 +65,10 @@ class Payum implements RegistryInterface
 
     protected TokenIssuerInterface $tokenIssuer;
 
+    private ServerRequestFactoryInterface $serverRequestFactory;
+
+    private StreamFactoryInterface $streamFactory;
+
     /**
      * @param RegistryInterface<TModel> $registry
      * @param StorageInterface<TokenInterface> $tokenStorage
@@ -75,6 +81,8 @@ class Payum implements RegistryInterface
         StorageInterface $tokenStorage,
         ?RendererInterface $renderer = null,
         ?TokenIssuerInterface $tokenIssuer = null,
+        ?ServerRequestFactoryInterface $serverRequestFactory = null,
+        ?StreamFactoryInterface $streamFactory = null,
     ) {
         $this->registry = $registry;
         $this->httpRequestVerifier = $httpRequestVerifier;
@@ -82,6 +90,8 @@ class Payum implements RegistryInterface
         $this->tokenStorage = $tokenStorage;
         $this->renderer = $renderer;
         $this->tokenIssuer = $tokenIssuer ?? GenericTokenFactoryIssuer::wrap($tokenFactory);
+        $this->serverRequestFactory = $serverRequestFactory ?? Psr17FactoryDiscovery::findServerRequestFactory();
+        $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
     }
 
     /**
@@ -275,11 +285,9 @@ class Payum implements RegistryInterface
      * The gateway finds what the message is about from the references it carries. Without a request the
      * gateway reads its own ServerRequestInterface service; with one, that request is verified instead.
      *
-     * @param Request|array<string, mixed>|null $request an array is taken as the request's POST fields
-     *
      * @throws Exception
      */
-    public function webhook(string $gatewayName, Request | array | null $request = null): Response
+    public function webhook(string $gatewayName, ?Request $request = null): Response
     {
         $gateway = $this->getGateway($gatewayName);
 
@@ -292,7 +300,7 @@ class Payum implements RegistryInterface
         }
 
         try {
-            $event = $gateway->verifyWebhook($this->toServerRequest(is_array($request) ? Request::create('/', 'POST', $request, content: '') : $request));
+            $event = $gateway->verifyWebhook($this->toServerRequest($request));
         } catch (WebhookNotVerifiedException) {
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
@@ -375,9 +383,8 @@ class Payum implements RegistryInterface
 
     private function toServerRequest(Request $request): ServerRequestInterface
     {
-        $factory = new Psr17Factory();
-        $serverRequest = $factory->createServerRequest($request->getMethod(), $request->getUri(), $request->server->all())
-            ->withBody($factory->createStream($request->getContent()))
+        $serverRequest = $this->serverRequestFactory->createServerRequest($request->getMethod(), $request->getUri(), $request->server->all())
+            ->withBody($this->streamFactory->createStream($request->getContent()))
             ->withQueryParams($request->query->all())
             ->withParsedBody($request->request->all())
             ->withCookieParams($request->cookies->all());
