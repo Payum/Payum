@@ -12,6 +12,7 @@ use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Result\StoredPaymentMethodDetails;
 use Payum\Core\Result\StoredPaymentMethodStatus;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 final class StoredPaymentMethodTest extends TestCase
 {
@@ -28,6 +29,16 @@ final class StoredPaymentMethodTest extends TestCase
         $this->assertNull($method->getReference());
         $this->assertNull($method->getType());
         $this->assertNull($method->getCustomer());
+    }
+
+    public function testShouldReadAnUnknownStoredValueAsPendingWithNoType(): void
+    {
+        $method = new StoredPaymentMethod();
+        (new ReflectionProperty(StoredPaymentMethod::class, 'status'))->setValue($method, 'bogus');
+        (new ReflectionProperty(StoredPaymentMethod::class, 'type'))->setValue($method, 'bogus');
+
+        $this->assertSame(StoredPaymentMethodStatus::Pending, $method->getStatus());
+        $this->assertNull($method->getType());
     }
 
     public function testApplyShouldWriteEveryGivenField(): void

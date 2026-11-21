@@ -24,7 +24,5 @@
 
         <field name="details" type="object" />
 
-        <reference-one field="customer" target-document="Payum\Core\Model\CustomerInterface" store-as="id" />
-
     </mapped-superclass>
 </doctrine-mongo-mapping>

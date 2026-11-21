@@ -64,12 +64,12 @@ class StoredPaymentMethod implements StoredPaymentMethodInterface
 
     public function getType(): ?PaymentMethodType
     {
-        return null === $this->type ? null : PaymentMethodType::from($this->type);
+        return PaymentMethodType::tryFrom($this->type ?? '');
     }
 
     public function getStatus(): StoredPaymentMethodStatus
     {
-        return StoredPaymentMethodStatus::from($this->status);
+        return StoredPaymentMethodStatus::tryFrom($this->status) ?? StoredPaymentMethodStatus::Pending;
     }
 
     public function getBrand(): ?string

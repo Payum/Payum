@@ -225,9 +225,6 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
         $this->customer = $customer;
     }
 
-    /**
-     * Without a reference the method is saved during the charge; with one, it is charged.
-     */
     public function getStoredPaymentMethod(): ?StoredPaymentMethodInterface
     {
         return $this->storedPaymentMethod;

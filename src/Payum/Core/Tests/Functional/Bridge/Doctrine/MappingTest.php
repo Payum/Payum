@@ -8,6 +8,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
 use DOMDocument;
 use Payum\Core\Tests\Mocks\Entity\Customer;
 use Payum\Core\Tests\Mocks\Entity\Payment;
+use Payum\Core\Tests\Mocks\Entity\PaymentWithLinks;
 use Payum\Core\Tests\Mocks\Entity\StoredPaymentMethod;
 
 final class MappingTest extends OrmTest
@@ -15,6 +16,15 @@ final class MappingTest extends OrmTest
     public function testMappingsShouldValidate(): void
     {
         $this->assertSame([], (new SchemaValidator($this->em))->validateMapping());
+    }
+
+    public function testShouldValidateTheShippedPaymentMappingWithoutLinks(): void
+    {
+        $metadata = $this->em->getClassMetadata(Payment::class);
+
+        $this->assertFalse($metadata->hasAssociation('customer'));
+        $this->assertFalse($metadata->hasAssociation('storedPaymentMethod'));
+        $this->assertSame([], (new SchemaValidator($this->em))->validateClass($metadata));
     }
 
     public function testShouldPersistAPaymentWithItsCustomerAndStoredMethod(): void
@@ -26,7 +36,7 @@ final class MappingTest extends OrmTest
         $method->setGatewayName('stripe');
         $method->setCustomer($customer);
 
-        $payment = new Payment();
+        $payment = new PaymentWithLinks();
         $payment->setCustomer($customer);
         $payment->setStoredPaymentMethod($method);
 
@@ -36,8 +46,8 @@ final class MappingTest extends OrmTest
         $this->em->flush();
         $this->em->clear();
 
-        $found = $this->em->find(Payment::class, $payment->getId());
-        $this->assertInstanceOf(Payment::class, $found);
+        $found = $this->em->find(PaymentWithLinks::class, $payment->getId());
+        $this->assertInstanceOf(PaymentWithLinks::class, $found);
 
         $foundMethod = $found->getStoredPaymentMethod();
         $this->assertInstanceOf(StoredPaymentMethod::class, $foundMethod);
@@ -49,13 +59,13 @@ final class MappingTest extends OrmTest
 
     public function testShouldPersistAPaymentWithoutLinks(): void
     {
-        $payment = new Payment();
+        $payment = new PaymentWithLinks();
         $this->em->persist($payment);
         $this->em->flush();
         $this->em->clear();
 
-        $found = $this->em->find(Payment::class, $payment->getId());
-        $this->assertInstanceOf(Payment::class, $found);
+        $found = $this->em->find(PaymentWithLinks::class, $payment->getId());
+        $this->assertInstanceOf(PaymentWithLinks::class, $found);
 
         $this->assertNull($found->getCustomer());
         $this->assertNull($found->getStoredPaymentMethod());
