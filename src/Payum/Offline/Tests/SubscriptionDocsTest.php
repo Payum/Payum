@@ -126,6 +126,8 @@ final class SubscriptionDocsTest extends TestCase
 
         $this->payum->getGateway('offline')->execute(CreateSubscriptionCommand::forSubscription($subscription));
 
+        $this->payum->getStorage(Subscription::class)->update($subscription);
+
         $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
     }
 

@@ -151,14 +151,20 @@ if (SubscriptionStatus::Active === $subscription->getStatus()) {
 ```
 
 Payum writes what the PSP reports onto the subscription and saves it: the PSP's id for it, its status
-and the end of the current period. When the customer does not have to approve anything, create the subscription
-from your own code:
+and the end of the current period. When the customer does not have to approve anything, create the
+subscription from your own code:
 
 ```php
 use Payum\Core\Command\CreateSubscriptionCommand;
+use Payum\Core\Model\Subscription;
 
 $result = $payum->getGateway('offline')->execute(CreateSubscriptionCommand::forSubscription($subscription));
+
+$payum->getStorage(Subscription::class)->update($subscription);
 ```
+
+Save the subscription after the command returns. Payum saves what the PSP reports about it, but anything
+else the gateway writes onto a subscription you handed it is yours to save.
 
 ### Receive the renewals
 
