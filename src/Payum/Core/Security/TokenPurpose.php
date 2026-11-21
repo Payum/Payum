@@ -12,4 +12,5 @@ enum TokenPurpose: string
     case Payout = 'payout';
     case Notify = 'notify';
     case SavePaymentMethod = 'save_payment_method';
+    case CreateSubscription = 'create_subscription';
 }

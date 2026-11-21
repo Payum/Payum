@@ -9,9 +9,11 @@ use Money\Money;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CancelCommand;
+use Payum\Core\Command\CancelSubscriptionCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\ChargeReason;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Command\DeletePaymentMethodCommand;
 use Payum\Core\Command\HasAmount;
 use Payum\Core\Command\Initiator;
@@ -171,7 +173,9 @@ final class Context
             $command instanceof CancelCommand,
             $command instanceof PayoutCommand,
             $command instanceof SavePaymentMethodCommand,
-            $command instanceof DeletePaymentMethodCommand => $command->idempotencyKey,
+            $command instanceof DeletePaymentMethodCommand,
+            $command instanceof CreateSubscriptionCommand,
+            $command instanceof CancelSubscriptionCommand => $command->idempotencyKey,
             default => null,
         };
     }

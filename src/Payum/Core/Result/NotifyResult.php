@@ -12,6 +12,10 @@ namespace Payum\Core\Result;
  */
 final class NotifyResult extends Result
 {
+    private ?SubscriptionDetails $subscription = null;
+
+    private ?Renewal $renewal = null;
+
     /**
      * @param array<string, mixed> $raw
      */
@@ -68,5 +72,37 @@ final class NotifyResult extends Result
     public function isRetry(): bool
     {
         return $this->retry;
+    }
+
+    /**
+     * What the event reports about the subscription it names, for core to record.
+     */
+    public function subscription(): ?SubscriptionDetails
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * The charge the PSP made on the subscription the event names, for core to record.
+     */
+    public function renewal(): ?Renewal
+    {
+        return $this->renewal;
+    }
+
+    public function withSubscription(SubscriptionDetails $details): self
+    {
+        $result = clone $this;
+        $result->subscription = $details;
+
+        return $result;
+    }
+
+    public function withRenewal(Renewal $renewal): self
+    {
+        $result = clone $this;
+        $result->renewal = $renewal;
+
+        return $result;
     }
 }

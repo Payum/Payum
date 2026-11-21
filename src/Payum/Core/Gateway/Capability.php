@@ -21,7 +21,11 @@ enum Capability: string
 
     case Cancel = 'cancel';
 
+    case CancelSubscription = 'cancel_subscription';
+
     case Capture = 'capture';
+
+    case CreateSubscription = 'create_subscription';
 
     case DeletePaymentMethod = 'delete_payment_method';
 
@@ -33,9 +37,13 @@ enum Capability: string
 
     case Sync = 'sync';
 
+    case SyncSubscription = 'sync_subscription';
+
     case Webhooks = 'webhooks';
 
     // Nuance -- declared, because no handler list implies them.
+    case CancelAtPeriodEnd = 'cancel_at_period_end';
+
     case MultiCurrency = 'multi_currency';
 
     case PartialCapture = 'partial_capture';

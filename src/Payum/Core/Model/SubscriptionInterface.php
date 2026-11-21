@@ -6,6 +6,7 @@ namespace Payum\Core\Model;
 
 use DateTimeImmutable;
 use Money\Money;
+use Payum\Core\Result\SubscriptionDetails;
 use Payum\Core\Result\SubscriptionStatus;
 
 interface SubscriptionInterface extends SubjectInterface, CustomerAwareInterface, StoredPaymentMethodAwareInterface
@@ -49,4 +50,9 @@ interface SubscriptionInterface extends SubjectInterface, CustomerAwareInterface
     public function getCancelAt(): ?DateTimeImmutable;
 
     public function getCanceledAt(): ?DateTimeImmutable;
+
+    /**
+     * Writes every non-null field of the details.
+     */
+    public function apply(SubscriptionDetails $details): void;
 }

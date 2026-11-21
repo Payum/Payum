@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Model;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Payum\Core\Model\BillingInterval;
 use Payum\Core\Model\IntervalUnit;
 use Payum\Core\Model\Subscription;
 use Payum\Core\Model\SubscriptionSchedule;
+use Payum\Core\Result\SubscriptionDetails;
 use Payum\Core\Result\SubscriptionStatus;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -76,5 +78,26 @@ final class SubscriptionTest extends TestCase
         $subscription->setCurrencyCode('EUR');
 
         $this->assertSame('1000', $subscription->getMoney()?->getAmount());
+    }
+
+    public function testApplyShouldWriteOnlyTheFieldsTheDetailsCarry(): void
+    {
+        $periodEnd = new DateTimeImmutable('2026-12-01');
+        $cancelAt = new DateTimeImmutable('2026-12-31');
+        $subscription = new Subscription();
+        $subscription->apply(new SubscriptionDetails(SubscriptionStatus::Active, 'sub_1', $periodEnd, $cancelAt));
+
+        $subscription->apply(new SubscriptionDetails(canceledAt: $cancelAt));
+
+        $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
+        $this->assertSame('sub_1', $subscription->getReference());
+        $this->assertSame($periodEnd, $subscription->getCurrentPeriodEnd());
+        $this->assertSame($cancelAt, $subscription->getCancelAt());
+        $this->assertSame($cancelAt, $subscription->getCanceledAt());
+
+        $subscription->apply(new SubscriptionDetails());
+
+        $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
+        $this->assertSame('sub_1', $subscription->getReference());
     }
 }

@@ -5,6 +5,7 @@ namespace Payum\Core;
 use Exception;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -258,6 +259,25 @@ class Payum implements RegistryInterface
         }
 
         return $this->respondTo($gateway->execute(SavePaymentMethodCommand::forToken($token)), $token);
+    }
+
+    /**
+     * Runs the create flow a {@see TokenPurpose::CreateSubscription} token starts, the twin of {@see capture()}.
+     *
+     * @param Request|array<string, mixed>|null $request
+     *
+     * @throws Exception
+     */
+    public function subscribe(Request | array | null $request = null): Response
+    {
+        $token = $this->httpRequestVerifier->verify($request ?: Request::createFromGlobals());
+        $gateway = $this->getGateway($token->getGatewayName());
+
+        if (! $gateway instanceof Gateway || ! $gateway->supportsCommand(CreateSubscriptionCommand::class)) {
+            throw new UnsupportedOperationException(sprintf('Gateway "%s" has no handler for %s, so it cannot create a subscription.', $token->getGatewayName(), CreateSubscriptionCommand::class));
+        }
+
+        return $this->respondTo($gateway->execute(CreateSubscriptionCommand::forToken($token)), $token);
     }
 
     /**

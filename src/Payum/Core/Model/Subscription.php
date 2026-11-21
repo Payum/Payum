@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Money\Money;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Money\Amount;
+use Payum\Core\Result\SubscriptionDetails;
 use Payum\Core\Result\SubscriptionStatus;
 use Traversable;
 
@@ -227,6 +228,15 @@ class Subscription implements SubscriptionInterface, MoneyAwareInterface
     public function setCanceledAt(?DateTimeImmutable $canceledAt): void
     {
         $this->canceledAt = $canceledAt;
+    }
+
+    public function apply(SubscriptionDetails $details): void
+    {
+        $this->status = $details->status->value ?? $this->status;
+        $this->reference = $details->reference ?? $this->reference;
+        $this->currentPeriodEnd = $details->currentPeriodEnd ?? $this->currentPeriodEnd;
+        $this->cancelAt = $details->cancelAt ?? $this->cancelAt;
+        $this->canceledAt = $details->canceledAt ?? $this->canceledAt;
     }
 
     public function getDetails()
