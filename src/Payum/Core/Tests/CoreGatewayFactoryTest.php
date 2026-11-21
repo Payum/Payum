@@ -31,6 +31,7 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Result\Result;
 use Payum\Core\Storage\StorageInterface;
@@ -419,6 +420,7 @@ final class CoreGatewayFactoryTest extends TestCase
             LegacyExtensionMiddleware::class,
             PersistStateMiddleware::class,
             IndexReferencesMiddleware::class,
+            RecordStoredPaymentMethodMiddleware::class,
             RecordPaymentStatusMiddleware::class,
         ], array_map(static fn (object $middleware): string => $middleware::class, $resolved));
     }

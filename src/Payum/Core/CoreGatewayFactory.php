@@ -65,6 +65,7 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
@@ -313,6 +314,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->get(ReferenceIndexInterface::class),
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
+                RecordStoredPaymentMethodMiddleware::class => static fn (ContainerInterface $c): RecordStoredPaymentMethodMiddleware => new RecordStoredPaymentMethodMiddleware(
+                    $c->get(ReferenceIndexInterface::class),
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                    $c->get(EventDispatcherInterface::class),
+                ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),
                 ),
@@ -429,6 +435,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
             ->with(IndexReferencesMiddleware::class)
+            ->with(RecordStoredPaymentMethodMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)
         ;
     }
