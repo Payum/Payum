@@ -108,7 +108,7 @@ Listen to it to ask the customer for a new payment method. See
 
 `SubscriptionPaymentSucceeded` and `SubscriptionPaymentFailed` fire for each charge of a subscription, in
 both scheduling modes, next to the `StatusChanged` of the payment. `$isFirst` is true for the charge that
-started the subscription. `SubscriptionStatusChanged` fires when Payum records a new status on a
+started the subscription: in application mode, the first charge on the stored method. `SubscriptionStatusChanged` fires when Payum records a new status on a
 subscription. All three fire only on a change, so a webhook delivered twice is silent. See
 [Charge a customer on a schedule](subscriptions.md#know-about-each-charge).
 

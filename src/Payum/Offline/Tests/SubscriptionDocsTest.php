@@ -132,13 +132,13 @@ final class SubscriptionDocsTest extends TestCase
     public function testShouldCancelNowAndAtThePeriodEnd(): void
     {
         $subscription = $this->activeSubscription();
-        $subscription->setCurrentPeriodEnd(new DateTimeImmutable('2026-12-21'));
         $gateway = $this->payum->getGateway($subscription->getGatewayName());
 
         $gateway->execute(CancelSubscriptionCommand::forSubscription($subscription, atPeriodEnd: true));
 
         $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
-        $this->assertEquals(new DateTimeImmutable('2026-12-21'), $subscription->getCancelAt());
+        $this->assertNotNull($subscription->getCurrentPeriodEnd());
+        $this->assertEquals($subscription->getCurrentPeriodEnd(), $subscription->getCancelAt());
 
         $gateway->execute(CancelSubscriptionCommand::forSubscription($subscription));
 
@@ -201,6 +201,19 @@ final class SubscriptionDocsTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $result->status);
         $this->assertSame(['customer-42'], $this->mailer->welcomed);
         $this->assertEquals($firstPeriodEnd->modify('+1 month'), $subscription->getCurrentPeriodEnd());
+    }
+
+    public function testTheListenerShouldSetNoPeriodEndWithoutAnInterval(): void
+    {
+        $this->listen();
+        $subscription = $this->subscription(SubscriptionSchedule::Application);
+        $subscription->setInterval(null);
+
+        $token = $this->payum->prepare('offline', $this->payment($subscription));
+        $this->payum->capture(Request::create($token->getTargetUrl()));
+
+        $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
+        $this->assertNull($subscription->getCurrentPeriodEnd());
     }
 
     public function testShouldNotLetTheGatewayCreateAnApplicationScheduledSubscription(): void
@@ -317,9 +330,10 @@ final class SubscriptionDocsTest extends TestCase
             $subscription = $event->subscription;
 
             if ($subscription instanceof Subscription && SubscriptionSchedule::Application === $subscription->getSchedule()) {
+                $interval = $subscription->getInterval();
                 $periodStart = $subscription->getCurrentPeriodEnd() ?? new DateTimeImmutable();
                 $subscription->setStatus(SubscriptionStatus::Active);
-                $subscription->setCurrentPeriodEnd($periodStart->modify('+' . $subscription->getInterval()?->toString()));
+                $subscription->setCurrentPeriodEnd(null === $interval ? null : $periodStart->modify('+' . $interval->toString()));
                 $payum->getStorage(Subscription::class)->update($subscription);
             }
 

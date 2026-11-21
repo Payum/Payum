@@ -6,7 +6,8 @@ application keeps the schedule and charges a payment method the customer saved. 
 as a payment linked to the subscription and tells your listeners about it, the same way in both modes.
 
 This page uses the Offline gateway, which runs both modes without talking to any PSP, so you can try every
-step before you have an account. The Offline gateway never renews a subscription by itself.
+step before you have an account. The Offline gateway gives a new subscription its first period, from the
+start date or from today, but never renews it by itself.
 
 ## Choose who schedules the charges
 
@@ -201,8 +202,9 @@ $gateway->execute(CancelSubscriptionCommand::forSubscription($subscription, atPe
 ```
 
 A cancel now sets the status to `Canceled` and records `getCanceledAt()`. A cancel at the period end keeps
-the subscription `Active` and records the date in `getCancelAt()`. The PSP reports `Canceled` by webhook
-when that date comes.
+the subscription `Active` and records the end of the current period in `getCancelAt()`. The PSP reports
+`Canceled` by webhook when that date comes. A subscription without an interval has no period end, so a
+cancel at the period end on the Offline gateway then records no date.
 
 Cancelling at the period end needs `Capability::CancelAtPeriodEnd`. On a gateway without it, Payum throws
 `Payum\Core\Exception\UnsupportedOperationException` and sends nothing to the PSP. Keep the customer's
@@ -354,7 +356,8 @@ The customer pays through `capture.php` like the first payment.
 
 Payum dispatches `Payum\Core\Event\SubscriptionPaymentSucceeded` when a payment of a subscription is
 captured or authorized, and `Payum\Core\Event\SubscriptionPaymentFailed` when one fails. Both carry the
-subscription, the payment and `isFirst`, which is true for the charge that started the subscription. This
+subscription, the payment and `isFirst`, which is true for the charge that started the subscription: in
+application mode, the first charge on the stored method. This
 listener extends an application-scheduled subscription by one period after each charge:
 
 ```php
@@ -370,9 +373,10 @@ $dispatcher->addListener(SubscriptionPaymentSucceeded::class, function (Subscrip
     $subscription = $event->subscription;
 
     if ($subscription instanceof Subscription && SubscriptionSchedule::Application === $subscription->getSchedule()) {
+        $interval = $subscription->getInterval();
         $periodStart = $subscription->getCurrentPeriodEnd() ?? new DateTimeImmutable();
         $subscription->setStatus(SubscriptionStatus::Active);
-        $subscription->setCurrentPeriodEnd($periodStart->modify('+'.$subscription->getInterval()?->toString()));
+        $subscription->setCurrentPeriodEnd(null === $interval ? null : $periodStart->modify('+'.$interval->toString()));
         $payum->getStorage(Subscription::class)->update($subscription);
     }
 

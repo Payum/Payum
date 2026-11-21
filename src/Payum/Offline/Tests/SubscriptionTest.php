@@ -100,13 +100,35 @@ final class SubscriptionTest extends TestCase
         $this->assertSame(SubscriptionStatus::Active, $result->subscription()?->status);
         $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
         $this->assertMatchesRegularExpression('/^offline_sub_[0-9a-f]{16}$/', (string) $subscription->getReference());
+        $this->assertEquals(new DateTimeImmutable('2026-12-21 10:00:00'), $subscription->getCurrentPeriodEnd());
+    }
+
+    public function testCreateStartsTheFirstPeriodAtTheStartDate(): void
+    {
+        $subscription = $this->subscription(SubscriptionSchedule::Gateway);
+        $subscription->setStartAt(new DateTimeImmutable('2027-01-05 00:00:00'));
+        $subscription->setInterval(BillingInterval::fromString('2 week'));
+
+        $this->payum->getGateway('offline')->execute(CreateSubscriptionCommand::forSubscription($subscription));
+
+        $this->assertEquals(new DateTimeImmutable('2027-01-19 00:00:00'), $subscription->getCurrentPeriodEnd());
+    }
+
+    public function testCreateWithoutAnIntervalHasNoPeriodEnd(): void
+    {
+        $subscription = $this->subscription(SubscriptionSchedule::Gateway);
+        $subscription->setInterval(null);
+
+        $this->payum->getGateway('offline')->execute(CreateSubscriptionCommand::forSubscription($subscription));
+
+        $this->assertSame(SubscriptionStatus::Active, $subscription->getStatus());
+        $this->assertNull($subscription->getCurrentPeriodEnd());
     }
 
     public function testCancelAtPeriodEndKeepsItActive(): void
     {
         $subscription = $this->activeSubscription();
         $periodEnd = new DateTimeImmutable('2026-12-21 10:00:00');
-        $subscription->setCurrentPeriodEnd($periodEnd);
 
         $this->payum->getGateway('offline')->execute(CancelSubscriptionCommand::forSubscription($subscription, atPeriodEnd: true));
 
