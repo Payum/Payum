@@ -245,6 +245,7 @@ public function handle(NotifyCommand $command, WebhookEvent $event, Context $con
             new Money($invoice['amount'], new Currency($invoice['currency'])),
             $paid ? PaymentStatus::Captured : PaymentStatus::Failed,
             failure: $paid ? null : new Failure(FailureReason::Declined, $invoice['decline_code']),
+            isFirst: 'subscription_create' === $invoice['billing_reason'],
         ));
 }
 ```
@@ -261,8 +262,10 @@ when the payment reaches `Failed`, so an application that chases failed payments
 decline you report with another status.
 {% endhint %}
 
-Set `isFirst: true` on a renewal that is the subscription's first charge but reaches you by webhook, for
-PSPs that report it that way. A renewal returned from the create handler is always first.
+Set `isFirst` from the PSP's own marker for the subscription's first charge, as the sample does with
+Stripe's `billing_reason` of `subscription_create`. The first charge's webhook can arrive before the call
+that creates the subscription returns, and Payum cannot tell it from a later charge then. A renewal
+returned from the create handler is always first.
 
 ## Supporting Payum
 

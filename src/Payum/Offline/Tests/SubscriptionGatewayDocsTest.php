@@ -217,6 +217,17 @@ final class SubscriptionGatewayDocsTest extends TestCase
         $this->assertSame($subscription, $renewal->getSubscription());
     }
 
+    public function testAWebhookShouldMarkTheChargeThePspCallsFirst(): void
+    {
+        $this->activeSubscription();
+        $this->events = [];
+
+        $this->notify('invoice.paid', 'in_9', 'subscription_create');
+
+        $this->assertCount(1, $this->events);
+        $this->assertTrue($this->events[0]->isFirst);
+    }
+
     public function testRenewalsShouldUseTheApplicationsPaymentClass(): void
     {
         $builder = (new PayumBuilder())
@@ -252,7 +263,7 @@ final class SubscriptionGatewayDocsTest extends TestCase
             ->getPayum();
     }
 
-    private function notify(string $type, string $invoiceId): void
+    private function notify(string $type, string $invoiceId, string $billingReason = 'subscription_cycle'): void
     {
         DocsSubscriptionApi::$webhook = [
             'id' => 'evt_' . uniqid(),
@@ -264,6 +275,7 @@ final class SubscriptionGatewayDocsTest extends TestCase
                 'currency' => 'EUR',
                 'period_end' => 1800000000,
                 'decline_code' => 'card_declined',
+                'billing_reason' => $billingReason,
                 'metadata' => [],
             ],
         ];
@@ -559,6 +571,7 @@ final class DocsSubscriptionNotifyHandler implements NotifyHandlerInterface
                 new Money($invoice['amount'], new Currency($invoice['currency'])),
                 $paid ? PaymentStatus::Captured : PaymentStatus::Failed,
                 failure: $paid ? null : new Failure(FailureReason::Declined, $invoice['decline_code']),
+                isFirst: 'subscription_create' === $invoice['billing_reason'],
             ));
     }
 }
