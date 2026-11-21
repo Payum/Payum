@@ -214,10 +214,12 @@ Payum registers these on every gateway. You do not register them yourself:
 | `LegacyExtensionMiddleware` | 500 | Runs the extensions registered on the gateway |
 | `PersistStateMiddleware` | 100 | Writes the gateway's state onto the payment and saves it |
 | `IndexReferencesMiddleware` | 75 | Records each result's transaction id against the payment, so a webhook that carries only that id finds it. See [Receive webhooks on a route you own](instant-payment-notification.md#receive-webhooks-on-a-route-you-own) |
+| `RecordRenewalMiddleware` | 70 | Creates a payment for each charge the PSP makes on a subscription, or updates the one it already created. See [Charge a customer on a schedule](subscriptions.md#receive-the-renewals) |
+| `RecordSubscriptionMiddleware` | 65 | Records what the PSP reports about a subscription onto it and saves it. See [Charge a customer on a schedule](subscriptions.md) |
 | `RecordStoredPaymentMethodMiddleware` | 60 | Records what the PSP stored onto the stored payment method and its customer, and saves both. See [Save a payment method and charge it later](stored-payment-methods.md) |
 | `RecordPaymentStatusMiddleware` | 50 | Records the result's status on a payment that implements `StatusAwareInterface`. See [Payment status](payment-status.md) |
 
-All nine are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
+All eleven are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
 inside all of them, closest to the handler. It therefore sees the payment before Payum has saved the
 state or recorded the status. Give it a priority above 100 to run outside them and see the payment after
 both.
