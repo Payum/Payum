@@ -60,6 +60,7 @@ final class Context
      *                                                                   first asked for
      * @param list<self> $previous the enclosing executions, when a handler dispatches a sub-command
      * @param StorageRegistryInterface<object>|null $storages
+     * @param bool $subjectResolved whether core found the subject from what a webhook named
      */
     public function __construct(
         private readonly Executor $executor,
@@ -73,6 +74,7 @@ final class Context
         private readonly ?string $gatewayName = null,
         private readonly ?ReferenceIndexInterface $references = null,
         private readonly ?StorageRegistryInterface $storages = null,
+        private readonly bool $subjectResolved = false,
     ) {
     }
 
@@ -265,6 +267,15 @@ final class Context
     public function token(): ?TokenInterface
     {
         return $this->token;
+    }
+
+    /**
+     * Whether core loaded the subject itself, from the token or from what a webhook named, rather than
+     * the caller handing it over. Core saves only what it loaded.
+     */
+    public function isSubjectLoadedByCore(): bool
+    {
+        return $this->token instanceof TokenInterface || $this->subjectResolved;
     }
 
     /**

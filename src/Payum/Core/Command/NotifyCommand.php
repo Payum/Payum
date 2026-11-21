@@ -56,6 +56,11 @@ final class NotifyCommand implements CommandInterface
         return new self(subject: $payout);
     }
 
+    public static function forSubject(SubjectInterface $subject): self
+    {
+        return new self(subject: $subject);
+    }
+
     public static function forToken(TokenInterface $token): self
     {
         return new self(token: $token);

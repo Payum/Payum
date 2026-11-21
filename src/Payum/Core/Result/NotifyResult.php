@@ -21,6 +21,7 @@ final class NotifyResult extends Result
         ?Failure $failure = null,
         array $raw = [],
         public readonly ?Acknowledgement $acknowledgement = null,
+        private readonly bool $retry = false,
     ) {
         parent::__construct($status, null, $transactionId, $failure, $raw);
     }
@@ -53,5 +54,19 @@ final class NotifyResult extends Result
     public static function ignored(?Acknowledgement $acknowledgement = null): self
     {
         return new self(null, acknowledgement: $acknowledgement);
+    }
+
+    /**
+     * An event that needs a subject arrived before one could be found, so the PSP is answered with an
+     * error and delivers it again later. Answers 503 unless told otherwise.
+     */
+    public static function retry(?Acknowledgement $acknowledgement = null): self
+    {
+        return new self(null, acknowledgement: $acknowledgement ?? new Acknowledgement(503), retry: true);
+    }
+
+    public function isRetry(): bool
+    {
+        return $this->retry;
     }
 }

@@ -26,6 +26,8 @@ final class WebhookEvent
         public readonly ?string $id = null,
         public readonly ?string $type = null,
         public readonly ?Acknowledgement $acknowledgement = null,
+        public readonly ?string $reference = null,
+        public readonly ?string $merchantReference = null,
     ) {
     }
 
@@ -36,23 +38,38 @@ final class WebhookEvent
      * @param string|null $id the PSP's own event id, which is how a redelivery is recognised
      * @param string|null $type the PSP's own event name, such as 'payment_intent.succeeded'
      * @param Acknowledgement|null $acknowledgement what to answer the PSP with when handling happens elsewhere
+     * @param string|null $reference the PSP's id for what the message is about, such as 'pi_…' or 'sub_…'
+     * @param string|null $merchantReference what the gateway sent the PSP as metadata, echoed back
      */
-    public static function verified(array $payload, ?string $id = null, ?string $type = null, ?Acknowledgement $acknowledgement = null): self
-    {
-        return new self(true, $payload, $id, $type, $acknowledgement);
+    public static function verified(
+        array $payload,
+        ?string $id = null,
+        ?string $type = null,
+        ?Acknowledgement $acknowledgement = null,
+        ?string $reference = null,
+        ?string $merchantReference = null,
+    ): self {
+        return new self(true, $payload, $id, $type, $acknowledgement, $reference, $merchantReference);
     }
 
     /**
      * The PSP offers nothing to check, so the payload is taken on trust.
      *
      * A handler returning this should not act on what the message says. Re-read the state from the PSP
-     * instead, by dispatching a {@see \Payum\Core\Command\SyncCommand}.
+     * instead, by dispatching a {@see \Payum\Core\Command\SyncCommand}. Its references are still used to
+     * find the payment it is about.
      *
      * @param array<string, mixed> $payload
      */
-    public static function unverified(array $payload, ?string $id = null, ?string $type = null, ?Acknowledgement $acknowledgement = null): self
-    {
-        return new self(false, $payload, $id, $type, $acknowledgement);
+    public static function unverified(
+        array $payload,
+        ?string $id = null,
+        ?string $type = null,
+        ?Acknowledgement $acknowledgement = null,
+        ?string $reference = null,
+        ?string $merchantReference = null,
+    ): self {
+        return new self(false, $payload, $id, $type, $acknowledgement, $reference, $merchantReference);
     }
 
     public function isVerified(): bool
