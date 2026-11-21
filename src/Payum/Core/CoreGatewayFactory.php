@@ -59,6 +59,7 @@ use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\IdempotencyMiddleware;
+use Payum\Core\Middleware\IndexReferencesMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
@@ -304,6 +305,10 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                     events: $c->get(EventDispatcherInterface::class),
                 ),
+                IndexReferencesMiddleware::class => static fn (ContainerInterface $c): IndexReferencesMiddleware => new IndexReferencesMiddleware(
+                    $c->get(ReferenceIndexInterface::class),
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),
                 ),
@@ -418,6 +423,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             ->with(IdempotencyMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
+            ->with(IndexReferencesMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)
         ;
     }
