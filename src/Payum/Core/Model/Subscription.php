@@ -6,6 +6,7 @@ namespace Payum\Core\Model;
 
 use DateTimeImmutable;
 use Money\Money;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Money\Amount;
 use Payum\Core\Result\SubscriptionStatus;
 use Traversable;
@@ -132,7 +133,15 @@ class Subscription implements SubscriptionInterface, MoneyAwareInterface
 
     public function getInterval(): ?BillingInterval
     {
-        return null === $this->interval ? null : BillingInterval::fromString($this->interval);
+        if (null === $this->interval) {
+            return null;
+        }
+
+        try {
+            return BillingInterval::fromString($this->interval);
+        } catch (InvalidArgumentException) {
+            return null;
+        }
     }
 
     public function setInterval(?BillingInterval $interval): void

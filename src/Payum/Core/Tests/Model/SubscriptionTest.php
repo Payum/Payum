@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Model;
 
-use DateTimeImmutable;
 use InvalidArgumentException;
 use Payum\Core\Model\BillingInterval;
 use Payum\Core\Model\IntervalUnit;
@@ -53,12 +52,28 @@ final class SubscriptionTest extends TestCase
         new BillingInterval(IntervalUnit::Day, 0);
     }
 
+    public function testAMalformedStoredIntervalReadsAsNone(): void
+    {
+        foreach (['bogus', '1 months', '0 day'] as $stored) {
+            $subscription = new Subscription();
+            (new ReflectionProperty(Subscription::class, 'interval'))->setValue($subscription, $stored);
+
+            $this->assertNull($subscription->getInterval(), $stored);
+        }
+    }
+
+    public function testFromStringIsStrict(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        BillingInterval::fromString('abc');
+    }
+
     public function testMoneyComesFromTheAmountAndCurrency(): void
     {
         $subscription = new Subscription();
         $subscription->setTotalAmount(1000);
         $subscription->setCurrencyCode('EUR');
-        $subscription->setStartAt(new DateTimeImmutable('2026-01-01'));
 
         $this->assertSame('1000', $subscription->getMoney()?->getAmount());
     }
