@@ -235,7 +235,7 @@ has four forms:
 
 | Result | Use it when |
 | :--- | :--- |
-| `SavePaymentMethodResult::saved($details)` | The PSP saved the method. |
+| `SavePaymentMethodResult::saved($details, $transactionId)` | The PSP saved the method. The transaction id is optional: pass the PSP's id for the setup when a later webhook names it. |
 | `SavePaymentMethodResult::pending($next)` | The customer has to do something first, such as confirm with their bank. |
 | `SavePaymentMethodResult::accepted($transactionId)` | The PSP confirms later by webhook, as for a direct debit mandate. |
 | `SavePaymentMethodResult::failed($failure)` | The PSP refused. The method is left as it was. |

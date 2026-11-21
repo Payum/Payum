@@ -145,8 +145,8 @@ sample does. Register a storage for `User::class`.
 
 ## Save the method during the first payment
 
-Create a stored method with no reference, link it to the payment, and take the payment as usual. Add
-this to the `prepare.php` from [Get started](get-it-started.md):
+Create a stored method with no reference, link it to the payment, and take the payment as usual. This
+`prepare.php` replaces the one from [Get started](get-it-started.md):
 
 ```php
 <?php
@@ -176,6 +176,9 @@ $captureToken = $payum->prepare('offline', $payment);
 
 header('Location: '.$captureToken->getTargetUrl());
 ```
+
+`find('customer-42')` works because the file storage identifies a `Customer` by its `customerId`. With a
+database, look the customer up by your own id, the way you load any other entity.
 
 A method without a reference tells the gateway to save it during this payment. `capture.php` stays as it
 is. When the PSP confirms the payment, Payum writes the PSP's reference, the display details and the
@@ -264,10 +267,9 @@ use Payum\Core\Command\Initiator;
 $result = $gateway->execute(CaptureCommand::forPayment($payment, initiator: Initiator::Customer));
 ```
 
-Card networks also want to know why you charge. The gateway reports `Unscheduled` unless you pass a
-`Payum\Core\Command\ChargeReason`, such as `reason: ChargeReason::Installment` for a purchase split into
-parts.
-`AuthorizeCommand` takes the same two arguments.
+Card networks also want to know why you charge. Payum classifies the charge as `Unscheduled` unless you
+pass a `Payum\Core\Command\ChargeReason`, such as `reason: ChargeReason::Installment` for a purchase split
+into parts. `AuthorizeCommand` takes the same two arguments.
 
 The result is the same as for any capture. Check `$result->isFailed()` and read `$result->failure`, as
 [Payment operations](payment-operations.md#declines-and-errors) describes. A declined charge leaves the
@@ -340,12 +342,17 @@ To save a method from your own code, with no customer redirect, execute the comm
 
 ```php
 use Payum\Core\Command\SavePaymentMethodCommand;
+use Payum\Core\Model\StoredPaymentMethod;
 
 $result = $payum->getGateway('offline')->execute(SavePaymentMethodCommand::forMethod($method));
+
+$payum->getStorage(StoredPaymentMethod::class)->update($method);
 ```
 
-The result has no payment status. Read the method's status instead, and act on `$result->next` when the
-customer has to do something, as for a capture.
+Payum saves the method when the PSP reports what it stored, but anything else the gateway writes onto a
+method you handed it is yours to save, so save it after the command returns. The result has no payment
+status. Read the method's status instead, and act on `$result->next` when the customer has to do
+something, as for a capture.
 
 ## Delete a saved method
 

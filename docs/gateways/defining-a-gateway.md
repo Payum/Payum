@@ -150,8 +150,8 @@ Capabilities tell an application what to offer, for example whether to show a "r
 order" button. Payum enforces only `StoredPaymentMethods` and `Recurring`, which
 [Stored payment methods](stored-payment-methods.md) describes. A caller can still ask for a partial
 refund from a gateway that does not declare `PartialRefund`, so a handler for a PSP that cannot do one
-should throw. The enum is
-string-backed, so an application can store a capability list or send it as JSON.
+should throw. The enum is string-backed, so an application can store a capability list or send it as
+JSON.
 
 An application reads the capabilities a gateway's handlers imply with `HandlerMap`, and the declared ones
 from the gateway itself:

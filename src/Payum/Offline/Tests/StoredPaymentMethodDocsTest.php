@@ -195,6 +195,8 @@ final class StoredPaymentMethodDocsTest extends TestCase
 
         $result = $this->payum->getGateway('offline')->execute(SavePaymentMethodCommand::forMethod($method));
 
+        $this->payum->getStorage(StoredPaymentMethod::class)->update($method);
+
         $this->assertNull($result->status);
         $this->assertNull($result->next);
         $this->assertSame(StoredPaymentMethodStatus::Active, $method->getStatus());
