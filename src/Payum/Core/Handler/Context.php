@@ -327,17 +327,21 @@ final class Context
      */
     public function merchantReference(): string
     {
-        $identity = SubjectIdentity::identityOf($this->subject(), $this->storages);
-
-        if (null === $identity || null === $identity->getId() || '' === (string) $identity->getId()) {
-            throw new LogicException('The subject has no identity to build a reference from; save the subject before dispatching.');
+        if (! $this->references instanceof ReferenceIndexInterface) {
+            throw new LogicException('This gateway has no reference index to record the merchant reference in.');
         }
 
+        if (null === $this->gatewayName) {
+            throw new LogicException(
+                'This gateway is not registered under a name, so a merchant reference cannot be recorded against it. Register it with PayumBuilder::registerGateway().'
+            );
+        }
+
+        $identity = SubjectIdentity::identityOf($this->subject(), $this->storages)
+            ?? throw new LogicException('The subject has no identity to build a reference from; save the subject before dispatching.');
         $reference = MerchantReference::of($identity);
 
-        if ($this->references instanceof ReferenceIndexInterface && null !== $this->gatewayName) {
-            $this->references->record(MerchantReference::NAMESPACE, $reference, $this->gatewayName, $identity);
-        }
+        $this->references->record(MerchantReference::NAMESPACE, $reference, $this->gatewayName, $identity);
 
         return $reference;
     }

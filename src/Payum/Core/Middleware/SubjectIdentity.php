@@ -29,7 +29,15 @@ final class SubjectIdentity
     {
         $identity = $command->token()?->getDetails() ?? self::identityOf($command->subject(), $storages);
 
-        if (! $identity instanceof IdentityInterface || null === $identity->getId() || '' === (string) $identity->getId()) {
+        return $identity instanceof IdentityInterface ? self::key($identity) : null;
+    }
+
+    /**
+     * @return string|null `class:id` with a proxy class resolved to its parent, or null when there is no id
+     */
+    public static function key(IdentityInterface $identity): ?string
+    {
+        if (null === $identity->getId() || '' === (string) $identity->getId()) {
             return null;
         }
 

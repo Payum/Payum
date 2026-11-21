@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Payum\Core\Reference;
 
-use Doctrine\Persistence\Proxy;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Middleware\SubjectIdentity;
 use Payum\Core\Storage\IdentityInterface;
 
 final class MerchantReference
 {
     public const NAMESPACE = 'payum';
 
+    /**
+     * @throws LogicException when the identity has no id
+     */
     public static function of(IdentityInterface $identity): string
     {
-        $class = $identity->getClass();
+        $key = SubjectIdentity::key($identity)
+            ?? throw new LogicException('The subject has no identity to build a reference from; save the subject before dispatching.');
 
-        if (is_a($class, Proxy::class, true)) {
-            $class = (string) get_parent_class($class);
-        }
-
-        return 'py_' . substr(hash('sha256', $class . ':' . $identity->getId()), 0, 32);
+        return 'py_' . substr(hash('sha256', $key), 0, 32);
     }
 }

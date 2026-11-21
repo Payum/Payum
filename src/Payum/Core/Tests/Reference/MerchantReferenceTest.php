@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Reference;
 
+use Doctrine\Persistence\Proxy;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
@@ -18,8 +20,12 @@ use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\MerchantReference;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
+use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Storage\FilesystemStorage;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class MerchantReferenceTest extends TestCase
 {
@@ -47,6 +53,35 @@ final class MerchantReferenceTest extends TestCase
         $this->assertTrue(str_starts_with($reference, 'py_'));
     }
 
+    public function testShouldTreatAProxyAsItsParent(): void
+    {
+        $this->assertSame(
+            MerchantReference::of(new Identity('7', Payment::class)),
+            MerchantReference::of(new Identity('7', ProxiedPayment::class)),
+        );
+    }
+
+    public function testShouldRefuseAnIdentityWithoutAnId(): void
+    {
+        $this->expectException(LogicException::class);
+
+        MerchantReference::of(new Identity('', Payment::class));
+    }
+
+    public function testContextShouldRefuseWhenThereIsNoIndex(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $this->context(null, 'acme')->merchantReference();
+    }
+
+    public function testContextShouldRefuseWhenTheGatewayHasNoName(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $this->context(new InMemoryReferenceIndex(), null)->merchantReference();
+    }
+
     public function testContextShouldRecordItInTheIndex(): void
     {
         $index = new InMemoryReferenceIndex();
@@ -71,6 +106,28 @@ final class MerchantReferenceTest extends TestCase
         $this->expectException(LogicException::class);
 
         $this->payum()->getGateway('acme')->execute(CaptureCommand::forPayment($payment));
+    }
+
+    private function context(?InMemoryReferenceIndex $index, ?string $name): Context
+    {
+        $payment = new Payment();
+        $payment->setNumber(uniqid());
+        $storages = $this->createMock(StorageRegistryInterface::class);
+        $storages->method('getStorages')->willReturn([new FilesystemStorage(sys_get_temp_dir(), Payment::class, 'number')]);
+
+        return new Context(
+            $this->createMock(Executor::class),
+            CaptureCommand::forPayment($payment),
+            $this->createMock(PaymentGateway::class),
+            $this->createMock(ServerRequestInterface::class),
+            $this->createMock(TokenIssuerInterface::class),
+            $payment,
+            null,
+            [],
+            $name,
+            $index,
+            $storages,
+        );
     }
 
     /**
@@ -131,5 +188,20 @@ final class ReferencingHandler implements CaptureHandlerInterface
         self::$reference = $context->merchantReference();
 
         return CaptureResult::captured('txn_1');
+    }
+}
+
+/**
+ * @implements Proxy<Payment>
+ */
+final class ProxiedPayment extends Payment implements Proxy
+{
+    public function __load(): void
+    {
+    }
+
+    public function __isInitialized(): bool
+    {
+        return true;
     }
 }
