@@ -23,9 +23,13 @@ enum Capability: string
 
     case Capture = 'capture';
 
+    case DeletePaymentMethod = 'delete_payment_method';
+
     case Payout = 'payout';
 
     case Refund = 'refund';
+
+    case SavePaymentMethod = 'save_payment_method';
 
     case Sync = 'sync';
 

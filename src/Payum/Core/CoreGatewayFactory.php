@@ -57,6 +57,7 @@ use Payum\Core\Idempotency\InMemoryIdempotencyStore;
 use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\Psr18HttpClient;
+use Payum\Core\Middleware\CapabilityGuardMiddleware;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\IdempotencyMiddleware;
 use Payum\Core\Middleware\IndexReferencesMiddleware;
@@ -295,6 +296,9 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 MiddlewareCollection::class => self::defaultMiddleware(...),
                 EndlessCycleDetectorMiddleware::class => static fn (): EndlessCycleDetectorMiddleware => new EndlessCycleDetectorMiddleware(),
                 LegacyExtensionMiddleware::class => static fn (): LegacyExtensionMiddleware => new LegacyExtensionMiddleware(),
+                CapabilityGuardMiddleware::class => static fn (ContainerInterface $c): CapabilityGuardMiddleware => new CapabilityGuardMiddleware(
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                ),
                 IdempotencyStoreInterface::class => static fn (ContainerInterface $c): IdempotencyStoreInterface => new InMemoryIdempotencyStore(
                     $c->get(ClockInterface::class),
                 ),
@@ -420,6 +424,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
         return (new MiddlewareCollection())
             ->with(TemplateRenderMiddleware::class)
             ->with(EndlessCycleDetectorMiddleware::class)
+            ->with(CapabilityGuardMiddleware::class)
             ->with(IdempotencyMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
