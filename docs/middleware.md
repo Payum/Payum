@@ -212,9 +212,10 @@ Payum registers these on every gateway. You do not register them yourself:
 | `IdempotencyMiddleware` | 800 | Answers a command that repeats an idempotency key with the first result. See [Concurrent requests and idempotency](concurrency-and-idempotency.md#replay-a-repeated-key) |
 | `LegacyExtensionMiddleware` | 500 | Runs the extensions registered on the gateway |
 | `PersistStateMiddleware` | 100 | Writes the gateway's state onto the payment and saves it |
+| `IndexReferencesMiddleware` | 75 | Records each result's transaction id against the payment, so a webhook that carries only that id finds it. See [Receive webhooks on a route you own](instant-payment-notification.md#receive-webhooks-on-a-route-you-own) |
 | `RecordPaymentStatusMiddleware` | 50 | Records the result's status on a payment that implements `StatusAwareInterface`. See [Payment status](payment-status.md) |
 
-All six are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
+All seven are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
 inside all of them, closest to the handler. It therefore sees the payment before Payum has saved the
 state or recorded the status. Give it a priority above 100 to run outside them and see the payment after
 both.
