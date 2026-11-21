@@ -45,6 +45,8 @@ use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\Token;
+use Payum\Core\Reference\InMemoryReferenceIndex;
+use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
 use Payum\Core\Registry\RegistryInterface;
@@ -401,6 +403,11 @@ class PayumBuilder
         return $this;
     }
 
+    public function setReferenceIndex(ReferenceIndexInterface $index): static
+    {
+        return $this->addGlobalService(ReferenceIndexInterface::class, $index);
+    }
+
     public function setLayout(string $layout): static
     {
         $this->layout = $layout;
@@ -681,6 +688,8 @@ class PayumBuilder
                 $c->get(ClockInterface::class),
             ),
 
+            ReferenceIndexInterface::class => static fn (): ReferenceIndexInterface => new InMemoryReferenceIndex(),
+
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
                 $this->layout,
@@ -752,6 +761,7 @@ class PayumBuilder
             ClockInterface::class,
             EventDispatcherInterface::class,
             IdempotencyStoreInterface::class,
+            ReferenceIndexInterface::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {
