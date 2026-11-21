@@ -105,5 +105,4 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
 
         return $payment instanceof PaymentInterface ? $payment : null;
     }
-
 }

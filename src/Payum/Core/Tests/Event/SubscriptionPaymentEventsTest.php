@@ -7,6 +7,7 @@ namespace Payum\Core\Tests\Event;
 use Http\Discovery\Psr17FactoryDiscovery;
 use League\Uri\Uri;
 use Money\Money;
+use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Command\NotifyCommand;
@@ -16,6 +17,7 @@ use Payum\Core\Event\SubscriptionPaymentFailed;
 use Payum\Core\Event\SubscriptionPaymentSucceeded;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
+use Payum\Core\Handler\AuthorizeHandlerInterface;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\CreateSubscriptionHandlerInterface;
@@ -30,6 +32,7 @@ use Payum\Core\Model\SubscriptionSchedule;
 use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Payum\Core\Result\AuthorizeResult;
 use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
@@ -122,6 +125,23 @@ final class SubscriptionPaymentEventsTest extends TestCase
         $this->assertTrue($events[0]->isFirst);
         $this->assertInstanceOf(Payment::class, $events[0]->payment);
         $this->assertSame('pm_1', $events[0]->payment->getStoredPaymentMethod()?->getReference());
+    }
+
+    public function testAnAuthorizedChargeIsAnnouncedOnceWhenCaptured(): void
+    {
+        $payment = $this->paymentOf($this->applicationSubscription(), new StoredPaymentMethod());
+        $token = $this->payum->getTokenIssuer()->create(TokenPurpose::Authorize, 'acme', $payment, 'https://payum.dev/done');
+        AcmeChargesAuthorizeHandler::$result = AuthorizeResult::authorized('pi_1')->withStoredPaymentMethod(StoredPaymentMethodDetails::active('pm_1'));
+
+        $this->payum->getGateway('acme')->execute(AuthorizeCommand::forToken($token));
+        $authorized = $this->events->ofType(StatusChanged::class)[0]->subject;
+        $this->assertInstanceOf(Payment::class, $authorized);
+        $this->payum->getGateway('acme')->execute(CaptureCommand::forPayment($authorized));
+
+        $this->assertCount(2, $this->events->ofType(StatusChanged::class));
+        $events = $this->events->ofType(SubscriptionPaymentSucceeded::class);
+        $this->assertCount(1, $events);
+        $this->assertTrue($events[0]->isFirst);
     }
 
     public function testAFailedChargeAnnouncesFailureWithItsReason(): void
@@ -244,7 +264,7 @@ final class AcmeChargesGateway implements PaymentGateway
 
     public function handlers(): array
     {
-        return [AcmeChargesCaptureHandler::class, AcmeChargesCreateHandler::class, AcmeChargesNotifyHandler::class];
+        return [AcmeChargesAuthorizeHandler::class, AcmeChargesCaptureHandler::class, AcmeChargesCreateHandler::class, AcmeChargesNotifyHandler::class];
     }
 
     public function logo(): Logo
@@ -260,6 +280,16 @@ final class AcmeChargesGateway implements PaymentGateway
     public function websiteUrl(): Uri
     {
         return Uri::new('https://acme.test');
+    }
+}
+
+final class AcmeChargesAuthorizeHandler implements AuthorizeHandlerInterface
+{
+    public static AuthorizeResult $result;
+
+    public function handle(AuthorizeCommand $command, Context $context): AuthorizeResult
+    {
+        return self::$result;
     }
 }
 

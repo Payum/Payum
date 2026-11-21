@@ -23,11 +23,12 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 final class SubscriptionPaymentEvents
 {
     /**
-     * Announces a payment of a subscription that reached a final status.
+     * Announces a payment of a subscription that succeeded or failed.
      *
      * @param CommandInterface<Result> $command
+     * @param PaymentStatus|null $from an authorization already announced the charge it is later captured for
      */
-    public static function dispatch(EventDispatcherInterface $events, CommandInterface $command, Context $context, SubjectInterface $payment, PaymentStatus $to, ?Failure $failure, bool $isFirst): void
+    public static function dispatch(EventDispatcherInterface $events, CommandInterface $command, Context $context, SubjectInterface $payment, ?PaymentStatus $from, PaymentStatus $to, ?Failure $failure, bool $isFirst): void
     {
         $subscription = $payment instanceof SubscriptionPaymentInterface ? $payment->getSubscription() : null;
 
@@ -35,9 +36,11 @@ final class SubscriptionPaymentEvents
             return;
         }
 
-        $event = match ($to) {
-            PaymentStatus::Captured, PaymentStatus::Authorized => new SubscriptionPaymentSucceeded($command, $context, $subscription, $payment, $isFirst),
-            PaymentStatus::Failed => new SubscriptionPaymentFailed($command, $context, $subscription, $payment, $failure, $isFirst),
+        $succeededBefore = in_array($from, [PaymentStatus::Authorized, PaymentStatus::Captured], true);
+
+        $event = match (true) {
+            ! $succeededBefore && in_array($to, [PaymentStatus::Captured, PaymentStatus::Authorized], true) => new SubscriptionPaymentSucceeded($command, $context, $subscription, $payment, $isFirst),
+            PaymentStatus::Failed === $to => new SubscriptionPaymentFailed($command, $context, $subscription, $payment, $failure, $isFirst),
             default => null,
         };
 

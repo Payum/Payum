@@ -47,6 +47,6 @@ final class PaymentStatusChange
     public function announce(EventDispatcherInterface $events, CommandInterface $command, Context $context, ?Failure $failure, bool $isFirst): void
     {
         $events->dispatch(new StatusChanged($command, $context, $this->payment, $this->from, $this->to));
-        SubscriptionPaymentEvents::dispatch($events, $command, $context, $this->payment, $this->to, $failure, $isFirst);
+        SubscriptionPaymentEvents::dispatch($events, $command, $context, $this->payment, $this->from, $this->to, $failure, $isFirst);
     }
 }
