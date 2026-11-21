@@ -209,13 +209,15 @@ Payum registers these on every gateway. You do not register them yourself:
 | :--- | :--- | :--- |
 | `TemplateRenderMiddleware` | 2000 | Adds the gateway, the subject, the token and the command to every template a gateway renders. See [Customize payment pages](payment-pages.md) |
 | `EndlessCycleDetectorMiddleware` | 1000 | Stops a chain of nested commands 100 levels deep |
+| `CapabilityGuardMiddleware` | 850 | Refuses a charge on a stored payment method that the gateway does not declare the capability for, before anything is sent to the PSP. See [Save a payment method and charge it later](stored-payment-methods.md#check-that-the-gateway-supports-it) |
 | `IdempotencyMiddleware` | 800 | Answers a command that repeats an idempotency key with the first result. See [Concurrent requests and idempotency](concurrency-and-idempotency.md#replay-a-repeated-key) |
 | `LegacyExtensionMiddleware` | 500 | Runs the extensions registered on the gateway |
 | `PersistStateMiddleware` | 100 | Writes the gateway's state onto the payment and saves it |
 | `IndexReferencesMiddleware` | 75 | Records each result's transaction id against the payment, so a webhook that carries only that id finds it. See [Receive webhooks on a route you own](instant-payment-notification.md#receive-webhooks-on-a-route-you-own) |
+| `RecordStoredPaymentMethodMiddleware` | 60 | Records what the PSP stored onto the stored payment method and its customer, and saves both. See [Save a payment method and charge it later](stored-payment-methods.md) |
 | `RecordPaymentStatusMiddleware` | 50 | Records the result's status on a payment that implements `StatusAwareInterface`. See [Payment status](payment-status.md) |
 
-All seven are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
+All nine are in the `Payum\Core\Middleware` namespace. Your middleware at the default priority of 0 runs
 inside all of them, closest to the handler. It therefore sees the payment before Payum has saved the
 state or recorded the status. Give it a priority above 100 to run outside them and see the payment after
 both.
