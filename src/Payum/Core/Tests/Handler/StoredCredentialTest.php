@@ -17,6 +17,7 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Model\Customer;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\StoredPaymentMethodInterface;
+use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -67,6 +68,15 @@ final class StoredCredentialTest extends TestCase
         $this->assertNull($context->customer());
 
         $this->assertNull($this->contextFor(new SyncCommand(subject: new Payment()), null, 'pm_1')->storedCredential());
+    }
+
+    public function testCapturingAnAuthorizationIsNoStoredCredentialCharge(): void
+    {
+        $payment = new Payment();
+        $payment->setStoredPaymentMethod($this->method('pm_1'));
+        $payment->setStatus(PaymentStatus::Authorized);
+
+        $this->assertNull($this->build(CaptureCommand::forPayment($payment), $payment)->storedCredential());
     }
 
     public function testTheReasonDefaultsToUnscheduled(): void

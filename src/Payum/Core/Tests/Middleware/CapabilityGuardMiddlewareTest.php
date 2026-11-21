@@ -34,6 +34,7 @@ use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\CaptureResult;
+use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Result\StoredPaymentMethodDetails;
 use Payum\Core\Security\TokenInterface;
@@ -107,6 +108,14 @@ final class CapabilityGuardMiddlewareTest extends TestCase
         $payment = $this->paymentWith('pm_1');
 
         $this->assertTrue($this->charge(CaptureCommand::forPayment($payment), new GuardedGateway([Capability::Recurring]), $payment));
+    }
+
+    public function testShouldPassACaptureOfAnAuthorizationOnAGatewayWithoutRecurring(): void
+    {
+        $payment = $this->paymentWith('pm_1');
+        $payment->setStatus(PaymentStatus::Authorized);
+
+        $this->assertTrue($this->charge(CaptureCommand::forPayment($payment), new GuardedGateway([Capability::StoredPaymentMethods]), $payment));
     }
 
     public function testShouldPassACustomerChargeOnASavedMethodWithNothingDeclared(): void

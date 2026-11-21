@@ -26,6 +26,7 @@ use Payum\Core\Model\CustomerAwareInterface;
 use Payum\Core\Model\CustomerInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Model\StoredPaymentMethodAwareInterface;
 use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Model\SubjectInterface;
@@ -33,6 +34,7 @@ use Payum\Core\Money\Amount;
 use Payum\Core\Reference\MerchantReference;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -322,6 +324,13 @@ final class Context
         }
 
         if (! ($command instanceof CaptureCommand || $command instanceof AuthorizeCommand)) {
+            return null;
+        }
+
+        $subject = $this->subject();
+
+        // Capturing an authorization settles a charge that already happened, so no new credential use.
+        if ($command instanceof CaptureCommand && $subject instanceof StatusAwareInterface && PaymentStatus::Authorized === $subject->getStatus()) {
             return null;
         }
 
