@@ -64,6 +64,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Subscription\RenewalPaymentFactoryInterface;
 use Payum\Core\Template\RendererInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
@@ -422,6 +423,11 @@ class PayumBuilder
     public function setReferenceIndex(ReferenceIndexInterface $index): static
     {
         return $this->addGlobalService(ReferenceIndexInterface::class, $index);
+    }
+
+    public function setRenewalPaymentFactory(RenewalPaymentFactoryInterface $factory): static
+    {
+        return $this->addGlobalService(RenewalPaymentFactoryInterface::class, $factory);
     }
 
     public function setLayout(string $layout): static

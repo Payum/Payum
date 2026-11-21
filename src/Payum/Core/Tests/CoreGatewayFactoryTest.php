@@ -31,6 +31,7 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\RecordRenewalMiddleware;
 use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
 use Payum\Core\Middleware\RecordSubscriptionMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
@@ -421,6 +422,7 @@ final class CoreGatewayFactoryTest extends TestCase
             LegacyExtensionMiddleware::class,
             PersistStateMiddleware::class,
             IndexReferencesMiddleware::class,
+            RecordRenewalMiddleware::class,
             RecordSubscriptionMiddleware::class,
             RecordStoredPaymentMethodMiddleware::class,
             RecordPaymentStatusMiddleware::class,
