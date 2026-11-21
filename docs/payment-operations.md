@@ -632,17 +632,20 @@ and a case for each finer point, which it declares:
 
 | Capability | Means |
 | :--- | :--- |
-| `Authorize`, `Capture`, `Refund`, `Cancel`, `Payout`, `Sync`, `SavePaymentMethod`, `DeletePaymentMethod` | The gateway runs that command. Check with `supportsCommand()`. |
+| `Authorize`, `Capture`, `Refund`, `Cancel`, `Payout`, `Sync`, `SavePaymentMethod`, `DeletePaymentMethod`, `CreateSubscription`, `CancelSubscription`, `SyncSubscription` | The gateway runs that command. Check with `supportsCommand()`. |
 | `Webhooks` | The gateway reads the provider's notifications. Check with `supportsCommand(NotifyCommand::class)`. |
 | `PartialCapture`, `PartialRefund` | An amount below the total works on capture or refund. |
 | `MultiCurrency` | The gateway takes more than one currency. |
 | `StoredPaymentMethods` | The gateway saves a card or account while the customer pays. |
 | `Recurring` | The gateway charges a saved card or account while the customer is not there. |
+| `CancelAtPeriodEnd` | The gateway cancels a subscription at the end of the paid period. |
 | `ThreeDSecure` | The gateway supports 3-D Secure. |
 
 Payum checks `StoredPaymentMethods` and `Recurring` before a charge on a saved method, and throws
 `Payum\Core\Exception\UnsupportedOperationException` when the gateway lacks the one it needs.
-[Save a payment method and charge it later](stored-payment-methods.md) shows the whole flow.
+[Save a payment method and charge it later](stored-payment-methods.md) shows the whole flow. It also
+throws one for a subscription cancel at the period end on a gateway without `CancelAtPeriodEnd`, as
+[Charge a customer on a schedule](subscriptions.md#cancel-the-subscription) describes.
 
 The gateway's own documentation lists what it supports. A gateway still written for Payum 1.x answers no
 commands at all. See [Upgrade from 1.x](upgrading.md) if you still use one.

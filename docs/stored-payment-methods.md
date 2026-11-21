@@ -402,6 +402,12 @@ Payum does not fetch a customer's saved methods from the PSP. Your storage is th
 customer's `Active` methods to show them. Payum does not renew expiring cards either. When a PSP updates a
 card itself and sends a webhook about it, Payum records the new details and status.
 
+## Charge on a schedule
+
+To charge a saved method every month, link the payments to a subscription. Payum then tells your
+listeners about each charge and whether it was the first. Your cron job can do the charging, or a PSP that
+runs subscriptions can. See [Charge a customer on a schedule](subscriptions.md).
+
 ## Advanced: write a gateway that stores methods
 
 A gateway supports stored methods by declaring the capabilities and returning what the PSP stored from

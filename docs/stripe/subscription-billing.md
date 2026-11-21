@@ -1,6 +1,12 @@
-# Subscription Billing
+# Subscription billing
 
 In this chapter we show how to create subscription plan and use it in future to charge a customer.
+
+{% hint style="info" %}
+This page describes the 1.x way. Payum 2.x runs subscriptions the same way for every gateway, with a
+`Subscription` model and the `CreateSubscriptionCommand`, `CancelSubscriptionCommand` and
+`SyncSubscriptionCommand`. See [Charge a customer on a schedule](../subscriptions.md).
+{% endhint %}
 
 ### Create a plan
 
@@ -24,7 +30,7 @@ $plan = new \ArrayObject([
 $payum->getGateway('gatewayName')->execute(new CreatePlan($plan));
 ```
 
-or with existing product, for example [Stripe API - Create a Plan](https://stripe.com/docs/api/plans/create)
+or with existing product, for example [Stripe API: Create a Plan](https://stripe.com/docs/api/plans/create)
 
 ```php
 <?php

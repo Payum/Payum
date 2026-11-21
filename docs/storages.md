@@ -256,7 +256,74 @@ $payum = (new PayumBuilder())
 ```
 
 Payum saves the stored method and the customer itself when a gateway reports what the PSP stored. With
-Doctrine MongoDB ODM, map the same three links with `#[ODM\ReferenceOne]` on your documents.
+Doctrine MongoDB ODM, map the same links with `#[ODM\ReferenceOne]` on your documents.
+
+### Store subscriptions
+
+An application that runs subscriptions, as [Charge a customer on a schedule](subscriptions.md)
+describes, stores one more model. Payum's XML mapping covers the columns of `Payum\Core\Model\Subscription`.
+It does not map the subscription's links to its customer and stored method, or the payment's link to its
+subscription, so you map those on your entities, as for customers and payment methods above.
+
+Extend the model:
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\CustomerInterface;
+use Payum\Core\Model\StoredPaymentMethodInterface;
+use Payum\Core\Model\Subscription as BaseSubscription;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'subscription')]
+class Subscription extends BaseSubscription
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: true)]
+    protected ?CustomerInterface $customer = null;
+
+    #[ORM\ManyToOne(targetEntity: StoredPaymentMethod::class)]
+    #[ORM\JoinColumn(name: 'stored_payment_method_id', nullable: true)]
+    protected ?StoredPaymentMethodInterface $storedPaymentMethod = null;
+}
+```
+
+Then add the link to your payment entity, next to the customer and stored method links:
+
+```php
+use Payum\Core\Model\SubscriptionInterface;
+
+#[ORM\ManyToOne(targetEntity: Subscription::class)]
+#[ORM\JoinColumn(name: 'subscription_id', nullable: true)]
+protected ?SubscriptionInterface $subscription = null;
+```
+
+With Doctrine MongoDB ODM, map these links with `#[ODM\ReferenceOne]` as well.
+
+Register a storage for `Subscription::class`, and tell Payum to create renewal payments of your payment
+class:
+
+```php
+$payum = (new PayumBuilder())
+    ->addStorage(Payment::class, new DoctrineStorage($entityManager, Payment::class))
+    ->addStorage(Subscription::class, new DoctrineStorage($entityManager, Subscription::class))
+    ->setRenewalPaymentClass(Payment::class)
+    // the token, customer and stored method storages as above
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
+```
+
+Store the reference index in the database too, as
+[Payment notifications](instant-payment-notification.md#receive-webhooks-on-a-route-you-own) shows. Payum
+finds a renewal it already recorded through the index, so with the in-memory default a webhook sent again
+in a later request records the same charge twice.
 
 ### Store token details as JSON
 

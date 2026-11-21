@@ -1,6 +1,12 @@
-# Recurring Payments Basics
+# Recurring payments basics
 
 In this chapter we describe the basic steps you have to follow to set up recurring payments. We will use weather subscription as example. Subscription costs $0.05 per day and would last for 7 days.
+
+{% hint style="info" %}
+This page describes the 1.x way. Payum 2.x runs subscriptions the same way for every gateway, with a
+`Subscription` model and the `CreateSubscriptionCommand`, `CancelSubscriptionCommand` and
+`SyncSubscriptionCommand`. See [Charge a customer on a schedule](../../subscriptions.md).
+{% endhint %}
 
 ### Configuration
 
@@ -82,7 +88,7 @@ This script is pretty similar to an ordinary purchase. The only difference here 
 
 ### Create recurring payment
 
-After capture has done it's job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script. Here we will check the status of the agreement and if it has been accepted: create a recurring payment. After everything is complete we should redirect the user to a safe page - the page that shows payment details could be a good starting place.
+After capture has done its job and the agreement has been created we are redirected back to the `create_recurring_payment.php` script. Here we will check the status of the agreement and if it has been accepted: create a recurring payment. After everything is complete we should redirect the user to a safe page, such as the page that shows the payment details.
 
 ```php
 <?php

@@ -74,6 +74,9 @@ All events are in the `Payum\Core\Event` namespace:
 | `WebhookRejected` | A notification failed verification in `Gateway::verifyWebhook()` | `$gatewayName`, `$request`, `$exception` |
 | `StatusChanged` | The payment moved from one status to another | `$subject`, `$from`, `$to` |
 | `PaymentMethodStatusChanged` | A stored payment method moved from one status to another, such as `Pending` to `Active` | `$method`, `$from`, `$to` |
+| `SubscriptionStatusChanged` | A subscription moved from one status to another, such as `Active` to `PastDue` | `$subscription`, `$from`, `$to` |
+| `SubscriptionPaymentSucceeded` | A payment of a subscription was captured or authorized | `$subscription`, `$payment`, `$isFirst` |
+| `SubscriptionPaymentFailed` | A payment of a subscription failed | `$subscription`, `$payment`, `$failure`, `$isFirst` |
 | `ResultReturned` | The command finished and returned a result | `$result` |
 | `FailureRaised` | The result is a failure, such as a declined card | `$failure`, `$result` |
 | `CommandFailed` | The command threw an exception | `$exception` |
@@ -100,6 +103,14 @@ Payum dispatches it when a saved card or account is saved, deleted, expires or i
 customer's bank. Like `StatusChanged`, it fires only on a change, so a webhook delivered twice is silent.
 Listen to it to ask the customer for a new payment method. See
 [Save a payment method and charge it later](stored-payment-methods.md#know-when-a-method-changes).
+
+### Subscription events
+
+`SubscriptionPaymentSucceeded` and `SubscriptionPaymentFailed` fire for each charge of a subscription, in
+both scheduling modes, next to the `StatusChanged` of the payment. `$isFirst` is true for the charge that
+started the subscription. `SubscriptionStatusChanged` fires when Payum records a new status on a
+subscription. All three fire only on a change, so a webhook delivered twice is silent. See
+[Charge a customer on a schedule](subscriptions.md#know-about-each-charge).
 
 ### `FailureRaised` and `CommandFailed`
 

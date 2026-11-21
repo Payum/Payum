@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Payum\Offline\Handler;
+
+use Payum\Core\Command\CreateSubscriptionCommand;
+use Payum\Core\Handler\Context;
+use Payum\Core\Handler\CreateSubscriptionHandlerInterface;
+use Payum\Core\Result\SubscriptionDetails;
+use Payum\Core\Result\SubscriptionResult;
+use Payum\Core\Result\SubscriptionStatus;
+
+final class CreateSubscriptionHandler implements CreateSubscriptionHandlerInterface
+{
+    public function handle(CreateSubscriptionCommand $command, Context $context): SubscriptionResult
+    {
+        return SubscriptionResult::active(new SubscriptionDetails(
+            status: SubscriptionStatus::Active,
+            reference: 'offline_sub_' . bin2hex(random_bytes(8)),
+        ));
+    }
+}
