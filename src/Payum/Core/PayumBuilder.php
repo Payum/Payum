@@ -659,6 +659,7 @@ class PayumBuilder
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
             'payout' => 'payout.php',
+            'save_payment_method' => 'save-payment-method.php',
             'done' => 'done.php',
         ], $this->genericTokenFactoryPaths);
 

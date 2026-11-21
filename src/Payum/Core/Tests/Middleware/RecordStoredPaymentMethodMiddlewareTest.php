@@ -8,6 +8,7 @@ use DI\Container;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Event\PaymentMethodStatusChanged;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway;
 use Payum\Core\Handler\Context;
@@ -91,6 +92,25 @@ final class RecordStoredPaymentMethodMiddlewareTest extends TestCase
         $this->assertNotContains($customer, $this->saved);
     }
 
+    public function testShouldSaveNothingWhenTheCustomerHasNoStorage(): void
+    {
+        $customer = new Customer();
+        $method = new StoredPaymentMethod();
+        $method->setCustomer($customer);
+
+        try {
+            $this->dispatch($this->paymentWith($method), CaptureResult::captured('pi_1')->withStoredPaymentMethod(
+                StoredPaymentMethodDetails::active('pm_1', gatewayCustomerId: 'cus_1'),
+            ), withCustomerStorage: false);
+            $this->fail('Expected InvalidArgumentException.');
+        } catch (InvalidArgumentException) {
+        }
+
+        $this->assertSame([], $this->saved);
+        $this->assertSame(StoredPaymentMethodStatus::Pending, $method->getStatus());
+        $this->assertNull($customer->getGatewayCustomerId('acme'));
+    }
+
     public function testShouldIndexTheMethodsReference(): void
     {
         $this->dispatch($this->paymentWith(new StoredPaymentMethod()), CaptureResult::captured('pi_1')->withStoredPaymentMethod(
@@ -153,7 +173,7 @@ final class RecordStoredPaymentMethodMiddlewareTest extends TestCase
         return $payment;
     }
 
-    private function dispatch(Payment $payment, CaptureResult $result): void
+    private function dispatch(Payment $payment, CaptureResult $result, bool $withCustomerStorage = true): void
     {
         $identity = $this->createMock(IdentityInterface::class);
         $identity->method('getId')->willReturn(42);
@@ -169,7 +189,13 @@ final class RecordStoredPaymentMethodMiddlewareTest extends TestCase
         });
         $registry = $this->createMock(StorageRegistryInterface::class);
         $registry->method('getStorages')->willReturn([$storage]);
-        $registry->method('getStorage')->willReturn($storage);
+        $registry->method('getStorage')->willReturnCallback(static function (object|string $class) use ($storage, $withCustomerStorage): StorageInterface {
+            if (! $withCustomerStorage && $class instanceof Customer) {
+                throw new InvalidArgumentException('No storage for the customer.');
+            }
+
+            return $storage;
+        });
 
         $command = CaptureCommand::forToken($this->createMock(TokenInterface::class));
 

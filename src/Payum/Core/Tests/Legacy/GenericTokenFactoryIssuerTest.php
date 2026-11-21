@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Legacy;
 
+use Payum\Core\Exception\LogicException;
 use Payum\Core\Legacy\GenericTokenFactoryIssuer;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
@@ -59,6 +60,15 @@ final class GenericTokenFactoryIssuerTest extends TestCase
         $this->assertSame($token, $issuer->create($purpose, 'aGateway', $arguments[1], 'after.php', [
             'a' => 'b',
         ]));
+    }
+
+    public function testShouldRefuseAPurposeA1xFactoryCannotMint(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('has no method for a SavePaymentMethod token');
+
+        GenericTokenFactoryIssuer::wrap($this->createMock(GenericTokenFactoryInterface::class))
+            ->create(TokenPurpose::SavePaymentMethod, 'aGateway', new stdClass(), 'after.php');
     }
 
     public function testShouldPassAFinalPathOnToTheFactory(): void

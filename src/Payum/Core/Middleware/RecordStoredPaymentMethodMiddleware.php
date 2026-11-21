@@ -61,14 +61,24 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
             throw new LogicException('the handler reported a stored payment method but the payment carries none to record it on; give the payment a StoredPaymentMethod before dispatching');
         }
 
+        $gatewayName = $context->gatewayName();
+        $customer = $this->customerToUpdate($method->getCustomer() ?? $context->customer(), $gatewayName, $details->gatewayCustomerId);
+
+        // Both storages are resolved before either save, so a missing one fails before the method is
+        // recorded as changed and a redelivery still sees the status change.
+        $methodStorage = $this->storages?->getStorage($method);
+        $customerStorage = $customer instanceof CustomerInterface ? $this->storages?->getStorage($customer) : null;
+
         $from = $method->getStatus();
         $method->apply($details);
-        $this->save($method);
+        $methodStorage?->update($method);
 
-        $gatewayName = $context->gatewayName();
+        if ($customer instanceof CustomerInterface && null !== $gatewayName && null !== $details->gatewayCustomerId) {
+            $customer->setGatewayCustomerId($gatewayName, $details->gatewayCustomerId);
+            $customerStorage?->update($customer);
+        }
 
         if (null !== $gatewayName) {
-            $this->recordGatewayCustomerId($method->getCustomer() ?? $context->customer(), $gatewayName, $details->gatewayCustomerId);
             $this->index($context, $method, $gatewayName);
         }
 
@@ -79,14 +89,16 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         return $result;
     }
 
-    private function recordGatewayCustomerId(?CustomerInterface $customer, string $gatewayName, ?string $id): void
+    /**
+     * The customer whose gateway id the details change, or null when there is nothing to write.
+     */
+    private function customerToUpdate(?CustomerInterface $customer, ?string $gatewayName, ?string $id): ?CustomerInterface
     {
-        if (! $customer instanceof CustomerInterface || null === $id || $customer->getGatewayCustomerId($gatewayName) === $id) {
-            return;
+        if (! $customer instanceof CustomerInterface || null === $gatewayName || null === $id || $customer->getGatewayCustomerId($gatewayName) === $id) {
+            return null;
         }
 
-        $customer->setGatewayCustomerId($gatewayName, $id);
-        $this->save($customer);
+        return $customer;
     }
 
     private function index(Context $context, StoredPaymentMethodInterface $method, string $gatewayName): void
@@ -102,10 +114,5 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         if ($identity instanceof IdentityInterface && null !== SubjectIdentity::key($identity)) {
             $this->references->record(ReferenceNamespace::of($context), $reference, $gatewayName, $identity);
         }
-    }
-
-    private function save(object $model): void
-    {
-        $this->storages?->getStorage($model)->update($model);
     }
 }

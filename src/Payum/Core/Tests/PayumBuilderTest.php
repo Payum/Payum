@@ -252,6 +252,7 @@ final class PayumBuilderTest extends TestCase
                     'authorize' => 'authorize.php',
                     'refund' => 'refund.php',
                     'payout' => 'payout.php',
+                    'save_payment_method' => 'save-payment-method.php',
                     'done' => 'done.php',
                 ], $paths);
 
@@ -272,6 +273,7 @@ final class PayumBuilderTest extends TestCase
             'authorize' => 'authorize_custom.php',
             'refund' => 'refund_custom.php',
             'payout' => 'payout_custom.php',
+            'save_payment_method' => 'save_payment_method_custom.php',
             'done' => 'done_custom.php',
         ];
 

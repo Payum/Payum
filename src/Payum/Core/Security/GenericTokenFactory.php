@@ -63,7 +63,7 @@ class GenericTokenFactory implements GenericTokenFactoryInterface, TokenIssuerIn
 
         $afterUrl = match ($purpose) {
             TokenPurpose::Capture => $after($afterPath ?? $this->getPath('done')),
-            TokenPurpose::Authorize, TokenPurpose::Payout => $after($afterPath),
+            TokenPurpose::Authorize, TokenPurpose::Payout, TokenPurpose::SavePaymentMethod => $after($afterPath),
             TokenPurpose::Refund => $afterPath ? $after($afterPath) : null,
             TokenPurpose::Notify => null,
         };
