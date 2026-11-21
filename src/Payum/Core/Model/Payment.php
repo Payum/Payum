@@ -7,7 +7,7 @@ use Payum\Core\Money\Amount;
 use Payum\Core\Result\PaymentStatus;
 use Traversable;
 
-class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface, StatusAwareInterface
+class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface, StatusAwareInterface, CustomerAwareInterface, StoredPaymentMethodAwareInterface
 {
     /**
      * @var string
@@ -60,6 +60,10 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
      * @var string|null
      */
     protected $status = 'new';
+
+    protected ?CustomerInterface $customer = null;
+
+    protected ?StoredPaymentMethodInterface $storedPaymentMethod = null;
 
     public function __construct()
     {
@@ -209,5 +213,28 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
     public function setStatus(PaymentStatus $status): void
     {
         $this->status = $status->value;
+    }
+
+    public function getCustomer(): ?CustomerInterface
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?CustomerInterface $customer): void
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * Without a reference the method is saved during the charge; with one, it is charged.
+     */
+    public function getStoredPaymentMethod(): ?StoredPaymentMethodInterface
+    {
+        return $this->storedPaymentMethod;
+    }
+
+    public function setStoredPaymentMethod(?StoredPaymentMethodInterface $storedPaymentMethod): void
+    {
+        $this->storedPaymentMethod = $storedPaymentMethod;
     }
 }

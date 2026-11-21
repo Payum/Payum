@@ -7,14 +7,28 @@ namespace Payum\Core\Tests\Functional\Bridge\Doctrine;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
+use Doctrine\ODM\MongoDB\Tools\ResolveTargetDocumentListener;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Payum\Core\Bridge\Doctrine\ResolveTargets;
 use Payum\Core\Tests\Mocks\Document\TestModel;
 use ReflectionClass;
 use RuntimeException;
 
 abstract class MongoTest extends BaseMongoTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $listener = new ResolveTargetDocumentListener();
+        foreach (ResolveTargets::DEFAULTS as $interface => $model) {
+            $listener->addResolveTargetDocument($interface, 'Payum\\Core\\Tests\\Mocks\\Document\\' . (new ReflectionClass($model))->getShortName(), []);
+        }
+
+        $this->dm->getEventManager()->addEventSubscriber($listener);
+    }
+
     /**
      * @throws RuntimeException
      *

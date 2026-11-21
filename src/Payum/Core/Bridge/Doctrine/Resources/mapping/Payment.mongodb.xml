@@ -18,5 +18,9 @@
 
         <field name="details" type="object" />
 
+        <reference-one field="customer" target-document="Payum\Core\Model\CustomerInterface" store-as="id" />
+
+        <reference-one field="storedPaymentMethod" target-document="Payum\Core\Model\StoredPaymentMethodInterface" store-as="id" />
+
     </mapped-superclass>
 </doctrine-mongo-mapping>

@@ -18,5 +18,13 @@
 
         <field name="details" column="details" type="json" />
 
+        <many-to-one field="customer" target-entity="Payum\Core\Model\CustomerInterface">
+            <join-column name="customer_id" nullable="true" />
+        </many-to-one>
+
+        <many-to-one field="storedPaymentMethod" target-entity="Payum\Core\Model\StoredPaymentMethodInterface">
+            <join-column name="stored_payment_method_id" nullable="true" />
+        </many-to-one>
+
     </mapped-superclass>
 </doctrine-mapping>
