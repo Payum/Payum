@@ -69,6 +69,7 @@ use Payum\Core\Middleware\RecordRenewalMiddleware;
 use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
 use Payum\Core\Middleware\RecordSubscriptionMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
+use Payum\Core\Model\Payment;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -323,9 +324,11 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                     $c->get(EventDispatcherInterface::class),
                 ),
+                // The class must be one the application gave a storage: storages match the exact class.
+                'payum.renewal_payment_class' => Payment::class,
                 // Null without storages: there is nowhere to create a renewal payment, and nowhere to save it.
                 RenewalPaymentFactoryInterface::class => static fn (ContainerInterface $c): ?RenewalPaymentFactoryInterface => $c->has(StorageRegistryInterface::class)
-                    ? new StorageRenewalPaymentFactory($c->get(StorageRegistryInterface::class))
+                    ? new StorageRenewalPaymentFactory($c->get(StorageRegistryInterface::class), $c->get('payum.renewal_payment_class'))
                     : null,
                 RecordRenewalMiddleware::class => static fn (ContainerInterface $c): RecordRenewalMiddleware => new RecordRenewalMiddleware(
                     $c->get(ReferenceIndexInterface::class),

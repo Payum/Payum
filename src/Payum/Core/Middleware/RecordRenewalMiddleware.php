@@ -6,17 +6,15 @@ namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Event\NullEventDispatcher;
-use Payum\Core\Event\StatusChanged;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Handler\Context;
 use Payum\Core\Model\PaymentInterface;
-use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubscriptionInterface;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Reference\ReferenceNamespace;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\NotifyResult;
-use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Renewal;
 use Payum\Core\Result\Result;
 use Payum\Core\Result\SubscriptionResult;
@@ -56,13 +54,18 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
         $result = $next($command, $context);
 
         $renewal = $result instanceof SubscriptionResult || $result instanceof NotifyResult ? $result->renewal() : null;
-        $gatewayName = $context->gatewayName();
 
-        // Without a storage or a gateway name the payment could be neither saved nor found again, and every
-        // redelivery would make another one.
-        if (! $renewal instanceof Renewal || ! $this->storages instanceof StorageRegistryInterface || ! $this->payments instanceof RenewalPaymentFactoryInterface || null === $gatewayName) {
+        if (! $renewal instanceof Renewal) {
             return $result;
         }
+
+        if (! $this->storages instanceof StorageRegistryInterface || ! $this->payments instanceof RenewalPaymentFactoryInterface) {
+            throw new LogicException('the handler reported a renewal but this gateway has no storage to record the renewal payment in; build it with PayumBuilder and give the payment class a storage');
+        }
+
+        // Without a name the renewal cannot be indexed, and every redelivery would record another payment.
+        $gatewayName = $context->gatewayName()
+            ?? throw new LogicException('the handler reported a renewal but this gateway is not registered under a name, so the renewal payment cannot be found again; register it with PayumBuilder::registerGateway()');
 
         $subscription = $context->subscription();
 
@@ -73,14 +76,13 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
         $payment = $this->recorded($context, $renewal) ?? $this->payments->create($subscription, $renewal);
         $storage = $this->storages->getStorage($payment);
 
-        $from = PaymentStatuses::of($payment);
-        $moved = PaymentStatuses::set($payment, $renewal->status) && $from !== $renewal->status;
+        $change = PaymentStatusChange::record($payment, $renewal->status);
         $storage->update($payment);
 
         SubjectIdentity::record($this->references, $this->storages, $context, $payment, $renewal->transactionId, $gatewayName);
 
-        if ($moved) {
-            $this->statusChanged($command, $context, $payment, $from, $renewal->status);
+        if ($change instanceof PaymentStatusChange) {
+            $this->statusChanged($command, $context, $change);
         }
 
         return $result;
@@ -95,7 +97,12 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
         }
 
         $identity = $record->getIdentity();
-        $payment = $this->storages?->getStorage($identity->getClass())->find($identity);
+
+        try {
+            $payment = $this->storages?->getStorage($identity->getClass())->find($identity);
+        } catch (InvalidArgumentException) {
+            return null;
+        }
 
         return $payment instanceof PaymentInterface ? $payment : null;
     }
@@ -103,8 +110,8 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
     /**
      * @param CommandInterface<Result> $command
      */
-    private function statusChanged(CommandInterface $command, Context $context, PaymentInterface $payment, ?PaymentStatus $from, PaymentStatus $to): void
+    private function statusChanged(CommandInterface $command, Context $context, PaymentStatusChange $change): void
     {
-        $this->events->dispatch(new StatusChanged($command, $context, $payment, $from, $to));
+        $change->announce($this->events, $command, $context);
     }
 }

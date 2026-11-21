@@ -44,6 +44,7 @@ use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Customer;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Model\Subscription;
@@ -428,6 +429,17 @@ class PayumBuilder
     public function setRenewalPaymentFactory(RenewalPaymentFactoryInterface $factory): static
     {
         return $this->addGlobalService(RenewalPaymentFactoryInterface::class, $factory);
+    }
+
+    /**
+     * The payment class the default renewal factory creates, when the application's payments are not
+     * the shipped Payment. It needs a storage of its own.
+     *
+     * @param class-string<PaymentInterface> $class
+     */
+    public function setRenewalPaymentClass(string $class): static
+    {
+        return $this->addGlobalService('payum.renewal_payment_class', $class);
     }
 
     public function setLayout(string $layout): static

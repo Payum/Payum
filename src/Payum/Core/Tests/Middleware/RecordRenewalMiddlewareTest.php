@@ -7,36 +7,46 @@ namespace Payum\Core\Tests\Middleware;
 use DI\Container;
 use Http\Discovery\Psr17FactoryDiscovery;
 use League\Uri\Uri;
-use LogicException;
 use Money\Money;
 use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\CoreGatewayFactory;
 use Payum\Core\Event\StatusChanged;
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Gateway;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
 use Payum\Core\Handler\CreateSubscriptionHandlerInterface;
 use Payum\Core\Handler\NotifyHandlerInterface;
 use Payum\Core\Handler\WebhookEvent;
+use Payum\Core\Legacy\UndescribedGateway;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
+use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Middleware\RecordRenewalMiddleware;
 use Payum\Core\Model\Customer;
+use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Subscription;
 use Payum\Core\Model\SubscriptionInterface;
+use Payum\Core\Model\Token;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Payum\Core\Reference\InMemoryReferenceIndex;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\NotifyResult;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Renewal;
 use Payum\Core\Result\SubscriptionDetails;
 use Payum\Core\Result\SubscriptionResult;
 use Payum\Core\Result\SubscriptionStatus;
+use Payum\Core\Security\TokenInterface;
+use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Subscription\RenewalPaymentFactoryInterface;
+use Payum\Core\Subscription\StorageRenewalPaymentFactory;
 use Payum\Core\Tests\Mocks\Event\RecordingEventDispatcher;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -49,6 +59,8 @@ final class RecordRenewalMiddlewareTest extends TestCase
 
     private RecordingEventDispatcher $events;
 
+    private InMemoryReferenceIndex $index;
+
     protected function setUp(): void
     {
         $_SERVER = [
@@ -60,6 +72,7 @@ final class RecordRenewalMiddlewareTest extends TestCase
         $this->dir = sys_get_temp_dir() . '/payum-renewal-' . bin2hex(random_bytes(6));
         mkdir($this->dir);
         $this->events = new RecordingEventDispatcher();
+        $this->index = new InMemoryReferenceIndex();
         AcmeRenewalCreateHandler::$renewal = null;
     }
 
@@ -153,6 +166,74 @@ final class RecordRenewalMiddlewareTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $payments[0]->getStatus());
     }
 
+    public function testShouldUseThePaymentClassTheApplicationChose(): void
+    {
+        $payum = $this->subscribed(static fn (PayumBuilder $builder): PayumBuilder => $builder->setRenewalPaymentClass(AcmeRenewalPayment::class), AcmeRenewalPayment::class);
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured);
+
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $payments = $this->payments();
+        $this->assertCount(1, $payments);
+        $this->assertInstanceOf(AcmeRenewalPayment::class, $payments[0]);
+        $this->assertSame(PaymentStatus::Captured, $payments[0]->getStatus());
+    }
+
+    public function testShouldReplaceAPaymentThatNoLongerLoads(): void
+    {
+        $payum = $this->subscribed();
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured);
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+        $storage = $payum->getStorage(Payment::class);
+        $deleted = $this->index->find(AcmeRenewalGateway::class, 'in_1')?->getIdentity();
+        $this->assertNotNull($deleted);
+        $storage->delete($storage->find($deleted));
+
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $this->assertCount(1, $this->payments());
+        $identity = $this->index->find(AcmeRenewalGateway::class, 'in_1')?->getIdentity();
+        $this->assertNotNull($identity);
+        $this->assertNotSame($deleted->getId(), $identity->getId());
+        $this->assertInstanceOf(Payment::class, $storage->find($identity));
+    }
+
+    public function testShouldReplaceAPaymentWhoseClassHasNoStorageAnyMore(): void
+    {
+        $payum = $this->subscribed();
+        $this->index->record(AcmeRenewalGateway::class, 'in_1', 'acme', new Identity('gone', Customer::class));
+        AcmeRenewalCreateHandler::$renewal = new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured);
+
+        $payum->webhook('acme', Request::create('https://payum.dev/webhooks/acme', 'POST'));
+
+        $this->assertCount(1, $this->payments());
+        $this->assertSame(Payment::class, $this->index->find(AcmeRenewalGateway::class, 'in_1')?->getIdentity()->getClass());
+    }
+
+    public function testShouldRefuseARenewalWithNoSubscription(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('no subscription');
+
+        $this->process(null, 'acme', true);
+    }
+
+    public function testShouldRefuseARenewalOnAGatewayWithoutAName(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('not registered under a name');
+
+        $this->process(new Subscription(), null, true);
+    }
+
+    public function testShouldRefuseARenewalOnAGatewayWithoutStorage(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('no storage');
+
+        $this->process(new Subscription(), 'acme', false);
+    }
+
     public function testShouldBeInTheDefaultPipeline(): void
     {
         $resolved = CoreGatewayFactory::defaultMiddleware()->resolve(
@@ -169,9 +250,9 @@ final class RecordRenewalMiddlewareTest extends TestCase
      *
      * @return Payum<object>
      */
-    private function subscribed(?callable $configure = null): Payum
+    private function subscribed(?callable $configure = null, string $paymentClass = Payment::class): Payum
     {
-        $payum = $this->payum($configure);
+        $payum = $this->payum($configure, $paymentClass);
         $subscription = new Subscription();
         $payum->getStorage(Subscription::class)->update($subscription);
         $payum->getGateway('acme')->execute(CreateSubscriptionCommand::forSubscription($subscription));
@@ -182,14 +263,19 @@ final class RecordRenewalMiddlewareTest extends TestCase
 
     /**
      * @param (callable(PayumBuilder): PayumBuilder)|null $configure
+     * @param class-string<Payment> $paymentClass the only payment class given a storage
      *
      * @return Payum<object>
      */
-    private function payum(?callable $configure = null): Payum
+    private function payum(?callable $configure = null, string $paymentClass = Payment::class): Payum
     {
+        /** @var FilesystemStorage<TokenInterface> $tokens */
+        $tokens = new FilesystemStorage(sys_get_temp_dir(), Token::class, 'hash');
         $builder = (new PayumBuilder())
-            ->addStorage(Payment::class, new FilesystemStorage($this->dir, Payment::class))
-            ->addDefaultStorages()
+            ->addStorage($paymentClass, new FilesystemStorage($this->dir, $paymentClass))
+            ->addStorage(Subscription::class, new FilesystemStorage(sys_get_temp_dir(), Subscription::class))
+            ->setTokenStorage($tokens)
+            ->setReferenceIndex($this->index)
             ->addGlobalService(EventDispatcherInterface::class, $this->events)
             ->addGlobalService(ServerRequestInterface::class, Psr17FactoryDiscovery::findServerRequestFactory()
                 ->createServerRequest('POST', 'https://payum.dev/webhooks/acme'))
@@ -205,6 +291,40 @@ final class RecordRenewalMiddlewareTest extends TestCase
     {
         return array_map(static fn (string $file): Payment => unserialize((string) file_get_contents($file)), glob($this->dir . '/*') ?: []);
     }
+
+    private function process(?Subscription $subscription, ?string $gatewayName, bool $withStorages): void
+    {
+        $storages = $withStorages ? $this->createMock(StorageRegistryInterface::class) : null;
+        $command = null === $subscription
+            ? CreateSubscriptionCommand::forToken($this->createMock(TokenInterface::class))
+            : CreateSubscriptionCommand::forSubscription($subscription);
+        $middleware = new RecordRenewalMiddleware(
+            $this->index,
+            $storages,
+            null === $storages ? null : new StorageRenewalPaymentFactory($storages),
+        );
+
+        (new Pipeline([$middleware]))->process(
+            $command,
+            new Context(
+                $this->createMock(Gateway::class),
+                $command,
+                new UndescribedGateway('acme'),
+                $this->createMock(ServerRequestInterface::class),
+                $this->createMock(TokenIssuerInterface::class),
+                $subscription,
+                null,
+                [],
+                $gatewayName,
+            ),
+            static fn (): SubscriptionResult => SubscriptionResult::active(new SubscriptionDetails(SubscriptionStatus::Active, 'sub_1'))
+                ->withRenewal(new Renewal('in_1', Money::EUR(1500), PaymentStatus::Captured)),
+        );
+    }
+}
+
+class AcmeRenewalPayment extends Payment
+{
 }
 
 final class AcmeRenewalConfig implements GatewayConfig
