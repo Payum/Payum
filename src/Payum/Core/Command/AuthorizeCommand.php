@@ -41,6 +41,8 @@ final class AuthorizeCommand implements CommandInterface, HasAmount
         private readonly ?PaymentInterface $payment = null,
         int|Money|null $amount = null,
         public readonly ?string $idempotencyKey = null,
+        public readonly ?Initiator $initiator = null,
+        public readonly ?ChargeReason $reason = null,
     ) {
         if (! $this->token instanceof TokenInterface && ! $this->payment instanceof PaymentInterface) {
             throw new LogicException(sprintf(
@@ -58,14 +60,14 @@ final class AuthorizeCommand implements CommandInterface, HasAmount
         return Capability::Authorize;
     }
 
-    public static function forPayment(PaymentInterface $payment, int|Money|null $amount = null, ?string $idempotencyKey = null): self
+    public static function forPayment(PaymentInterface $payment, int|Money|null $amount = null, ?string $idempotencyKey = null, ?Initiator $initiator = null, ?ChargeReason $reason = null): self
     {
-        return new self(payment: $payment, amount: $amount, idempotencyKey: $idempotencyKey);
+        return new self(payment: $payment, amount: $amount, idempotencyKey: $idempotencyKey, initiator: $initiator, reason: $reason);
     }
 
-    public static function forToken(TokenInterface $token, int|Money|null $amount = null, ?string $idempotencyKey = null): self
+    public static function forToken(TokenInterface $token, int|Money|null $amount = null, ?string $idempotencyKey = null, ?Initiator $initiator = null, ?ChargeReason $reason = null): self
     {
-        return new self(token: $token, amount: $amount, idempotencyKey: $idempotencyKey);
+        return new self(token: $token, amount: $amount, idempotencyKey: $idempotencyKey, initiator: $initiator, reason: $reason);
     }
 
     public function money(?Currency $currency = null): ?Money

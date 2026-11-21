@@ -10,16 +10,22 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\ChargeReason;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\HasAmount;
+use Payum\Core\Command\Initiator;
 use Payum\Core\Command\PayoutCommand;
 use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
 use Payum\Core\Middleware\SubjectIdentity;
+use Payum\Core\Model\CustomerAwareInterface;
+use Payum\Core\Model\CustomerInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\StoredPaymentMethodAwareInterface;
+use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Money\Amount;
 use Payum\Core\Reference\MerchantReference;
@@ -268,6 +274,49 @@ final class Context
     public function token(): ?TokenInterface
     {
         return $this->token;
+    }
+
+    public function customer(): ?CustomerInterface
+    {
+        $subject = $this->subject();
+
+        return match (true) {
+            $subject instanceof CustomerInterface => $subject,
+            $subject instanceof CustomerAwareInterface => $subject->getCustomer(),
+            default => null,
+        };
+    }
+
+    public function storedPaymentMethod(): ?StoredPaymentMethodInterface
+    {
+        $subject = $this->subject();
+
+        return match (true) {
+            $subject instanceof StoredPaymentMethodInterface => $subject,
+            $subject instanceof StoredPaymentMethodAwareInterface => $subject->getStoredPaymentMethod(),
+            default => null,
+        };
+    }
+
+    /**
+     * How a charge on a stored payment method is classified for the card networks. Null when there is no
+     * stored method, or the command does not charge.
+     */
+    public function storedCredential(): ?StoredCredential
+    {
+        $method = $this->storedPaymentMethod();
+        $command = $this->command;
+
+        if (! $method instanceof StoredPaymentMethodInterface || ! ($command instanceof CaptureCommand || $command instanceof AuthorizeCommand)) {
+            return null;
+        }
+
+        return new StoredCredential(
+            $command->initiator ?? ($this->token instanceof TokenInterface || $command->token() instanceof TokenInterface ? Initiator::Customer : Initiator::Merchant),
+            $command->reason ?? ChargeReason::Unscheduled,
+            null === $method->getReference(),
+            $method->getNetworkTransactionId(),
+        );
     }
 
     /**
