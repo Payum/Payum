@@ -30,6 +30,7 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Customer;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Payum;
@@ -122,10 +123,11 @@ final class PayumBuilderTest extends TestCase
         $this->assertIsArray($payum->getGateways());
         $this->assertCount(0, $payum->getGateways());
 
-        $this->assertCount(3, $payum->getStorages());
+        $this->assertCount(4, $payum->getStorages());
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
         $this->assertArrayHasKey(Payout::class, $payum->getStorages());
+        $this->assertArrayHasKey(Customer::class, $payum->getStorages());
 
         $factories = $payum->getGatewayFactories();
         $this->assertIsArray($factories);

@@ -41,6 +41,7 @@ use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Customer;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
@@ -223,6 +224,7 @@ class PayumBuilder
             Payment::class => 'number',
             ArrayObject::class => 'payum_id',
             Payout::class => 'payum_id',
+            Customer::class => 'customerId',
         ];
 
         foreach ($defaults as $modelClass => $idProperty) {
