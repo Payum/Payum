@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests\Reference;
 
+use Doctrine\Persistence\Proxy;
 use Payum\Core\Model\Identity;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\ReferenceRecord;
 use Payum\Core\Reference\StorageReferenceIndex;
 use Payum\Core\Storage\FilesystemStorage;
+use Payum\Core\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 
 final class StorageReferenceIndexTest extends TestCase
@@ -64,6 +66,38 @@ final class StorageReferenceIndexTest extends TestCase
         $index->record('Acme', 'sub_1', 'acme', new Identity('7', Payment::class));
 
         $this->assertCount(1, glob($this->dir . '/*'));
+    }
+
+    public function testShouldNotRewriteARecordThatAlreadyHoldsTheSameSubject(): void
+    {
+        $record = new ReferenceRecord();
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('create')->willReturn($record);
+        $storage->method('find')->willReturnOnConsecutiveCalls(null, $record);
+        $storage->expects($this->once())->method('update');
+
+        $index = new StorageReferenceIndex($storage);
+        $index->record('Acme', 'sub_1', 'acme', new Identity('7', Payment::class));
+        $index->record('Acme', 'sub_1', 'acme', new Identity('7', Payment::class));
+    }
+
+    public function testShouldRecordAProxyAsTheClassItStandsFor(): void
+    {
+        $proxy = new class() extends Payment implements Proxy {
+            public function __load(): void
+            {
+            }
+
+            public function __isInitialized(): bool
+            {
+                return true;
+            }
+        };
+
+        $index = $this->index();
+        $index->record('Acme', 'sub_1', 'acme', new Identity('7', $proxy::class));
+
+        $this->assertSame(Payment::class, $index->find('Acme', 'sub_1')?->getSubjectClass());
     }
 
     private function index(): StorageReferenceIndex

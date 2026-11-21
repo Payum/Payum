@@ -27,13 +27,20 @@ final class StorageReferenceIndex implements ReferenceIndexInterface
      */
     public function record(string $namespace, string $reference, string $gatewayName, IdentityInterface $subject): void
     {
-        $model = $this->find($namespace, $reference) ?? $this->storage->create();
+        $existing = $this->find($namespace, $reference);
+        $model = $existing ?? $this->storage->create();
 
         if (! $model instanceof ReferenceRecord) {
             throw new LogicException(sprintf('%s needs a storage of %s, but this one creates %s.', self::class, ReferenceRecord::class, $model::class));
         }
 
+        $held = $existing ? self::heldBy($existing) : null;
+
         $model->populate($namespace, $reference, $gatewayName, $subject);
+
+        if ($held === self::heldBy($model)) {
+            return;
+        }
 
         $this->storage->update($model);
     }
@@ -43,5 +50,13 @@ final class StorageReferenceIndex implements ReferenceIndexInterface
         $record = $this->storage->find(ReferenceRecord::keyFor($namespace, $reference));
 
         return $record instanceof ReferenceRecord ? $record : null;
+    }
+
+    /**
+     * @return array{string, string, string}
+     */
+    private static function heldBy(ReferenceRecord $record): array
+    {
+        return [$record->getGatewayName(), $record->getSubjectClass(), $record->getSubjectId()];
     }
 }

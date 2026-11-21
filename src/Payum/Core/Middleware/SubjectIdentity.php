@@ -41,13 +41,17 @@ final class SubjectIdentity
             return null;
         }
 
+        return self::className($identity) . ':' . $identity->getId();
+    }
+
+    /**
+     * @return string the identity's class with a proxy class resolved to its parent
+     */
+    public static function className(IdentityInterface $identity): string
+    {
         $class = $identity->getClass();
 
-        if (is_a($class, Proxy::class, true)) {
-            $class = (string) get_parent_class($class);
-        }
-
-        return $class . ':' . $identity->getId();
+        return is_a($class, Proxy::class, true) ? (string) get_parent_class($class) : $class;
     }
 
     /**

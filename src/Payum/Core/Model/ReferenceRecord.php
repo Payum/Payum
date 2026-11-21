@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Payum\Core\Model;
 
+use Payum\Core\Middleware\SubjectIdentity;
 use Payum\Core\Storage\IdentityInterface;
 
 /**
@@ -34,7 +35,7 @@ class ReferenceRecord
         $this->namespace = $namespace;
         $this->reference = $reference;
         $this->gatewayName = $gatewayName;
-        $this->subjectClass = $subject->getClass();
+        $this->subjectClass = SubjectIdentity::className($subject);
         $this->subjectId = (string) $subject->getId();
     }
 
