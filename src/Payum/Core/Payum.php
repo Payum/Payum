@@ -3,6 +3,7 @@
 namespace Payum\Core;
 
 use Exception;
+use Http\Discovery\Psr17Factory;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -32,6 +33,7 @@ use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Security\TokenPurpose;
 use Payum\Core\Storage\StorageInterface;
 use Payum\Core\Template\RendererInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -261,11 +263,47 @@ class Payum implements RegistryInterface
         $gateway = $this->getGateway($token->getGatewayName());
 
         if ($gateway instanceof Gateway && $gateway->supportsCommand(NotifyCommand::class)) {
-            return $this->acknowledge($gateway, $token);
+            return $this->acknowledge($gateway, NotifyCommand::forToken($token));
+        }
+
+        return $this->notifyLegacy($gateway, new Notify($token));
+    }
+
+    /**
+     * Receives a webhook on a route the application owns, such as the one URL set in a PSP's dashboard.
+     *
+     * The gateway finds what the message is about from the references it carries. Without a request the
+     * gateway reads its own ServerRequestInterface service; with one, that request is verified instead.
+     *
+     * @param Request|array<string, mixed>|null $request an array is taken as the request's POST fields
+     *
+     * @throws Exception
+     */
+    public function webhook(string $gatewayName, Request | array | null $request = null): Response
+    {
+        $gateway = $this->getGateway($gatewayName);
+
+        if (! $gateway instanceof Gateway || ! $gateway->supportsCommand(NotifyCommand::class)) {
+            return $this->notifyLegacy($gateway, new Notify(null));
+        }
+
+        if (null === $request) {
+            return $this->acknowledge($gateway, NotifyCommand::forGateway());
         }
 
         try {
-            $gateway->execute(new Notify($token));
+            $event = $gateway->verifyWebhook($this->toServerRequest(is_array($request) ? Request::create('/', 'POST', $request, content: '') : $request));
+        } catch (WebhookNotVerifiedException) {
+            return new Response('', Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->acknowledge($gateway, NotifyCommand::forGateway()->withEvent($event));
+    }
+
+    private function notifyLegacy(GatewayInterface $gateway, Notify $notify): Response
+    {
+        try {
+            $gateway->execute($notify);
 
             return new Response('', Response::HTTP_NO_CONTENT);
         } catch (HttpResponse $reply) {
@@ -320,10 +358,10 @@ class Payum implements RegistryInterface
      * verification gets 400 with nothing in it; the exception carries the reason, for the application to
      * log.
      */
-    private function acknowledge(Gateway $gateway, TokenInterface $token): Response
+    private function acknowledge(Gateway $gateway, NotifyCommand $command): Response
     {
         try {
-            $result = $gateway->execute(NotifyCommand::forToken($token));
+            $result = $gateway->execute($command);
         } catch (WebhookNotVerifiedException) {
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
@@ -333,6 +371,22 @@ class Payum implements RegistryInterface
             : Acknowledgement::noContent();
 
         return new Response($acknowledgement->body, $acknowledgement->status, $acknowledgement->headers);
+    }
+
+    private function toServerRequest(Request $request): ServerRequestInterface
+    {
+        $factory = new Psr17Factory();
+        $serverRequest = $factory->createServerRequest($request->getMethod(), $request->getUri(), $request->server->all())
+            ->withBody($factory->createStream($request->getContent()))
+            ->withQueryParams($request->query->all())
+            ->withParsedBody($request->request->all())
+            ->withCookieParams($request->cookies->all());
+
+        foreach ($request->headers->all() as $name => $values) {
+            $serverRequest = $serverRequest->withHeader($name, $values);
+        }
+
+        return $serverRequest;
     }
 
     private function redirectToAfterUrl(TokenInterface $token): RedirectResponse

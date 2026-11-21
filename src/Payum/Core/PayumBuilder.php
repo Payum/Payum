@@ -49,6 +49,7 @@ use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
+use Payum\Core\Registry\GatewayRegistryInterface;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -191,6 +192,11 @@ class PayumBuilder
      * @var (Closure(string, GatewayConfig): Gateway)|null
      */
     private ?Closure $storedGatewayBuilder = null;
+
+    /**
+     * @var ?RegistryInterface<object>
+     */
+    private ?RegistryInterface $builtRegistry = null;
 
     public function __construct()
     {
@@ -547,7 +553,7 @@ class PayumBuilder
             }
         }
 
-        $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
+        $registry = $this->builtRegistry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
 
         return new Payum(
             $registry,
@@ -689,6 +695,11 @@ class PayumBuilder
             ),
 
             ReferenceIndexInterface::class => static fn (): ReferenceIndexInterface => new InMemoryReferenceIndex(),
+
+            // Resolved only when a webhook names a subject recorded by another gateway name, by which time
+            // getPayum() has built the registry.
+            GatewayRegistryInterface::class => fn (): GatewayRegistryInterface => $this->builtRegistry
+                ?? throw new PayumLogicException('The gateways are reachable only once PayumBuilder::getPayum() has built them.'),
 
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),

@@ -15,6 +15,7 @@ use Payum\Core\Event\ResultReturned;
 use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\CommandNotSupportedException;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -40,10 +41,12 @@ use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentStatuses;
+use Payum\Core\Model\ReferenceRecord;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Reference\MerchantReference;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Reference\ReferenceNamespace;
+use Payum\Core\Registry\GatewayRegistryInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
@@ -593,7 +596,13 @@ class Gateway implements GatewayInterface
             && ($notifyHandler = $this->webhookHandler($serviceId)) instanceof NotifyHandlerInterface) {
             $event = $command->event() ?? $this->verifyReporting($notifyHandler, $this->container->get(ServerRequestInterface::class));
             $command = $command->withEvent($event);
-            $resolvedIdentity = $this->identityNamedBy($event);
+            $record = $this->recordNamedBy($event);
+            $resolvedIdentity = $record?->getIdentity();
+            $owner = $this->owningGateway($record);
+
+            if ($owner !== $this) {
+                return $owner->dispatch($command, null, null, $resolvedIdentity);
+            }
         }
 
         $context = $this->buildContext($command, $subject, $resolvedIdentity);
@@ -782,11 +791,11 @@ class Gateway implements GatewayInterface
     }
 
     /**
-     * The stored subject a webhook names: by the merchant reference the gateway sent as metadata, then by
-     * the PSP's own reference indexed against it. Nothing is loaded here; the subject is read once it is
-     * locked, and a subject gone by then leaves the handler with none.
+     * The record of the stored subject a webhook names: by the merchant reference the gateway sent as
+     * metadata, then by the PSP's own reference indexed against it. Nothing is loaded here; the subject is
+     * read once it is locked, and a subject gone by then leaves the handler with none.
      */
-    private function identityNamedBy(WebhookEvent $event): ?IdentityInterface
+    private function recordNamedBy(WebhookEvent $event): ?ReferenceRecord
     {
         if (! $this->container->has(ReferenceIndexInterface::class)) {
             return null;
@@ -802,11 +811,34 @@ class Gateway implements GatewayInterface
             $record = null === $reference ? null : $index->find($namespace, $reference);
 
             if (null !== $record) {
-                return $record->getIdentity();
+                return $record;
             }
         }
 
         return null;
+    }
+
+    /**
+     * The gateway registered under the name that recorded the reference, which is where its subject's
+     * credentials and state belong. One PSP account often serves several gateway names behind a single
+     * webhook route.
+     */
+    private function owningGateway(?ReferenceRecord $record): self
+    {
+        $name = $record?->getGatewayName();
+
+        if (null === $name || $name === $this->name || ! $this->container->has(GatewayRegistryInterface::class)) {
+            return $this;
+        }
+
+        try {
+            $owner = $this->container->get(GatewayRegistryInterface::class)->getGateway($name);
+        } catch (InvalidArgumentException) {
+            // A gateway name since removed from the configuration leaves the message to the one it arrived on.
+            return $this;
+        }
+
+        return $owner instanceof self ? $owner : $this;
     }
 
     /**

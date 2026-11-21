@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Tests\Reference;
 
 use Doctrine\Persistence\Proxy;
+use League\Uri\Uri;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\LogicException;
@@ -173,9 +174,9 @@ final class ReferencingGateway implements PaymentGateway
         return 'Acme';
     }
 
-    public function websiteUrl(): \League\Uri\Uri
+    public function websiteUrl(): Uri
     {
-        return \League\Uri\Uri::new('https://acme.test');
+        return Uri::new('https://acme.test');
     }
 }
 

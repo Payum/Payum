@@ -12,7 +12,8 @@ This page covers the application side. If you are writing a gateway, see [Webhoo
 A notification arrives on a notify URL, which is a token URL that points at `notify.php` and names the
 gateway and the payment. You do not create it. A gateway whose provider takes a notification URL per
 payment creates the token while it runs the capture and sends its URL to the provider. Some providers
-instead take one URL that you enter in their dashboard; the gateway's documentation says what to enter.
+instead take one URL that you enter in their dashboard. That URL carries no token, so you route it
+yourself, as [Receive webhooks on a route you own](#receive-webhooks-on-a-route-you-own) shows.
 
 A notify token is not deleted after use, because the provider may call the same URL many times for one
 payment. [Tokens and payment URLs](tokens.md) explains tokens and how to move `notify.php` to another
@@ -84,6 +85,84 @@ Register the framework's request, converted to PSR-7, as the `ServerRequestInter
 `Payum::notify()` only reads the token from the request you pass it. The gateway verifies the signature
 against the `ServerRequestInterface` service. The request Payum builds by default reads its body from
 `php://input`, which is empty under RoadRunner or FrankenPHP and once a framework has read the body. See [Integrate with a framework](di/framework-integration.md).
+
+## Receive webhooks on a route you own
+
+A provider that sends every event to one URL in its dashboard, such as `https://shop.example/webhooks/acme`,
+needs a route that names the gateway. `Payum::webhook()` takes the gateway name and answers the provider:
+
+```php
+<?php
+// webhooks/acme.php
+
+require __DIR__.'/config.php';
+
+$payum->webhook('acme')->send();
+```
+
+The gateway verifies the message, finds the payment from the references in it, and records the status
+the same way as a notification on a notify URL. It answers like `Payum::notify()`:
+
+| What happened | The provider gets |
+| :--- | :--- |
+| the message was handled or ignored | 204 No Content, or the answer the gateway chose |
+| the message names a payment Payum has not recorded yet | 503, so the provider sends it again later |
+| the message failed verification | 400 with an empty body |
+
+In a framework, pass the request. The gateway then verifies that request instead of reading its
+`ServerRequestInterface` service:
+
+```php
+return $payum->webhook('acme', $request);
+```
+
+`Payum::webhook()` returns a `Symfony\Component\HttpFoundation\Response` and needs
+`symfony/http-foundation`, as `Payum::notify()` does.
+
+### Keep the references in a database
+
+Payum finds the payment from references it recorded when the payment was created, so two things need to
+be in place:
+
+- Register the gateway by name with `PayumBuilder::registerGateway()`. The references record which gateway
+  name owns each payment.
+- Keep the references somewhere that outlives the request. Payum configures an index by default, but it
+  keeps the references in memory and forgets them when the request ends, so a webhook that arrives later
+  finds nothing.
+
+To keep the references in Doctrine, extend Payum's `ReferenceRecord` model:
+
+```php
+<?php
+
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\ReferenceRecord as BaseReferenceRecord;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'payum_reference_record')]
+class ReferenceRecord extends BaseReferenceRecord
+{
+}
+```
+
+Its columns come from Payum's XML mapping, which you register the way
+[Storages](storages.md#create-the-entity-manager) shows. Then pass the index to the builder:
+
+```php
+use Acme\Entity\ReferenceRecord;
+use Payum\Core\Bridge\Doctrine\Storage\DoctrineStorage;
+use Payum\Core\Reference\StorageReferenceIndex;
+
+$builder->setReferenceIndex(
+    new StorageReferenceIndex(new DoctrineStorage($entityManager, ReferenceRecord::class)),
+);
+```
+
+`StorageReferenceIndex` takes any Payum storage of `ReferenceRecord` models identified by their `key`
+field, and Payum ships a Doctrine MongoDB ODM mapping for the model too. Never delete the rows: a provider
+can send a message about a payment months after it was made.
 
 ## What Payum does with a notification
 
