@@ -363,8 +363,8 @@ The customer pays through `capture.php` like the first payment.
 Payum dispatches `Payum\Core\Event\SubscriptionPaymentSucceeded` when a payment of a subscription is
 captured or authorized, and `Payum\Core\Event\SubscriptionPaymentFailed` when one fails. Both carry the
 subscription, the payment and `isFirst`, which is true for the charge that started the subscription: in
-application mode, the first charge on the stored method. This
-listener extends an application-scheduled subscription by one period after each charge:
+application mode, the first charge on the stored method. This listener extends an application-scheduled
+subscription by one period after each charge:
 
 ```php
 <?php
