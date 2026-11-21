@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Event\NullEventDispatcher;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
@@ -81,9 +82,7 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
 
         SubjectIdentity::record($this->references, $this->storages, $context, $payment, $renewal->transactionId, $gatewayName);
 
-        if ($change instanceof PaymentStatusChange) {
-            $this->statusChanged($command, $context, $change);
-        }
+        $change?->announce($this->events, $command, $context, $renewal->failure, $command instanceof CreateSubscriptionCommand || $renewal->isFirst);
 
         return $result;
     }
@@ -107,11 +106,4 @@ final class RecordRenewalMiddleware implements MiddlewareInterface, HasPriority
         return $payment instanceof PaymentInterface ? $payment : null;
     }
 
-    /**
-     * @param CommandInterface<Result> $command
-     */
-    private function statusChanged(CommandInterface $command, Context $context, PaymentStatusChange $change): void
-    {
-        $change->announce($this->events, $command, $context);
-    }
 }

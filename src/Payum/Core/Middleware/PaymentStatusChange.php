@@ -9,8 +9,10 @@ use Payum\Core\Event\StatusChanged;
 use Payum\Core\Handler\Context;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Result\Failure;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
+use Payum\Core\Subscription\SubscriptionPaymentEvents;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,9 +42,11 @@ final class PaymentStatusChange
 
     /**
      * @param CommandInterface<Result> $command
+     * @param bool $isFirst the charge that started its subscription, for a payment that has one
      */
-    public function announce(EventDispatcherInterface $events, CommandInterface $command, Context $context): void
+    public function announce(EventDispatcherInterface $events, CommandInterface $command, Context $context, ?Failure $failure, bool $isFirst): void
     {
         $events->dispatch(new StatusChanged($command, $context, $this->payment, $this->from, $this->to));
+        SubscriptionPaymentEvents::dispatch($events, $command, $context, $this->payment, $this->to, $failure, $isFirst);
     }
 }

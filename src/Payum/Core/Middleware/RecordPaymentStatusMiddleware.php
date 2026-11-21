@@ -49,7 +49,10 @@ final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPri
             return $result;
         }
 
-        PaymentStatusChange::record($subject, $result->status)?->announce($this->events, $command, $context);
+        // Read before RecordStoredPaymentMethodMiddleware, further out, gives the method its reference.
+        $isFirst = true === $context->storedCredential()?->isFirst;
+
+        PaymentStatusChange::record($subject, $result->status)?->announce($this->events, $command, $context, $result->failure, $isFirst);
 
         return $result;
     }
