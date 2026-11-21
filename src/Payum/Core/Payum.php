@@ -65,9 +65,9 @@ class Payum implements RegistryInterface
 
     protected TokenIssuerInterface $tokenIssuer;
 
-    private ServerRequestFactoryInterface $serverRequestFactory;
+    private ?ServerRequestFactoryInterface $serverRequestFactory;
 
-    private StreamFactoryInterface $streamFactory;
+    private ?StreamFactoryInterface $streamFactory;
 
     /**
      * @param RegistryInterface<TModel> $registry
@@ -90,8 +90,8 @@ class Payum implements RegistryInterface
         $this->tokenStorage = $tokenStorage;
         $this->renderer = $renderer;
         $this->tokenIssuer = $tokenIssuer ?? GenericTokenFactoryIssuer::wrap($tokenFactory);
-        $this->serverRequestFactory = $serverRequestFactory ?? Psr17FactoryDiscovery::findServerRequestFactory();
-        $this->streamFactory = $streamFactory ?? Psr17FactoryDiscovery::findStreamFactory();
+        $this->serverRequestFactory = $serverRequestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -383,6 +383,9 @@ class Payum implements RegistryInterface
 
     private function toServerRequest(Request $request): ServerRequestInterface
     {
+        $this->serverRequestFactory ??= Psr17FactoryDiscovery::findServerRequestFactory();
+        $this->streamFactory ??= Psr17FactoryDiscovery::findStreamFactory();
+
         $serverRequest = $this->serverRequestFactory->createServerRequest($request->getMethod(), $request->getUri(), $request->server->all())
             ->withBody($this->streamFactory->createStream($request->getContent()))
             ->withQueryParams($request->query->all())
