@@ -128,6 +128,19 @@ final class StoredPaymentMethodCommandsTest extends TestCase
         $this->assertSame($token->getAfterUrl(), $response->getTargetUrl());
     }
 
+    public function testShouldRunASaveAgainOnARepeatedKey(): void
+    {
+        $payum = $this->buildPayum();
+        $method = $this->savedMethod($payum);
+        AcmeSaveHandler::$setupDone = true;
+
+        $payum->getGateway('acme')->execute(SavePaymentMethodCommand::forMethod($method, 'key-1'));
+        $payum->getGateway('acme')->execute(SavePaymentMethodCommand::forMethod($method, 'key-1'));
+
+        // The idempotency store keeps only results it knows how to replay, which a save is not.
+        $this->assertSame(['key-1', 'key-1'], AcmeSaveHandler::$keys);
+    }
+
     public function testDeletedShouldRevokeTheMethod(): void
     {
         $payum = $this->buildPayum();
@@ -190,6 +203,7 @@ final class StoredPaymentMethodCommandsTest extends TestCase
     private function buildPayum(): Payum
     {
         AcmeSaveHandler::$setupDone = false;
+        AcmeSaveHandler::$keys = [];
         AcmeMethodNotifyHandler::$reference = null;
         AcmeMethodNotifyHandler::$seen = null;
 
@@ -243,8 +257,15 @@ final class AcmeSaveHandler implements SavePaymentMethodHandlerInterface
 {
     public static bool $setupDone = false;
 
+    /**
+     * @var list<string|null>
+     */
+    public static array $keys = [];
+
     public function handle(SavePaymentMethodCommand $command, Context $context): SavePaymentMethodResult
     {
+        self::$keys[] = $context->idempotencyKey();
+
         if (! self::$setupDone) {
             return SavePaymentMethodResult::pending(new Redirect('https://acme.test/setup'));
         }

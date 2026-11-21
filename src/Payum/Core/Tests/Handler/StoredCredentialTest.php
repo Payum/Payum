@@ -9,6 +9,7 @@ use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\ChargeReason;
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Command\Initiator;
+use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
@@ -73,6 +74,24 @@ final class StoredCredentialTest extends TestCase
         $credential = $this->contextFor(CaptureCommand::forPayment(new Payment()), null, 'pm_1')->storedCredential();
 
         $this->assertSame(ChargeReason::Unscheduled, $credential->reason);
+    }
+
+    public function testSavingAMethodIsItsFirstUse(): void
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $method = $this->method('pm_1');
+
+        $present = $this->build(SavePaymentMethodCommand::forToken($token), $method, $token)->storedCredential();
+        $absent = $this->build(SavePaymentMethodCommand::forMethod($method), $method)->storedCredential();
+
+        $this->assertNotNull($present);
+        $this->assertTrue($present->isFirst);
+        $this->assertSame(Initiator::Customer, $present->initiator);
+        $this->assertSame(ChargeReason::Unscheduled, $present->reason);
+        $this->assertNotNull($absent);
+        $this->assertTrue($absent->isFirst);
+        $this->assertSame(Initiator::Merchant, $absent->initiator);
+        $this->assertSame(ChargeReason::Unscheduled, $absent->reason);
     }
 
     public function testTheCustomerComesFromTheSubjectOrItsMethod(): void

@@ -65,7 +65,7 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         $customer = $this->customerToUpdate($method->getCustomer() ?? $context->customer(), $gatewayName, $details->gatewayCustomerId);
 
         // Both storages are resolved before either save, so a missing one fails before the method is
-        // recorded as changed and a redelivery still sees the status change.
+        // changed or saved and a redelivery still sees the status change.
         $methodStorage = $this->storages?->getStorage($method);
         $customerStorage = $customer instanceof CustomerInterface ? $this->storages?->getStorage($customer) : null;
 
@@ -73,7 +73,7 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         $method->apply($details);
         $methodStorage?->update($method);
 
-        if ($customer instanceof CustomerInterface && null !== $gatewayName && null !== $details->gatewayCustomerId) {
+        if ($customer instanceof CustomerInterface) {
             $customer->setGatewayCustomerId($gatewayName, $details->gatewayCustomerId);
             $customerStorage?->update($customer);
         }
