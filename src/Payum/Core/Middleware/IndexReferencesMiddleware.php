@@ -28,8 +28,8 @@ final class IndexReferencesMiddleware implements MiddlewareInterface, HasPriorit
     }
 
     /**
-     * Inside PersistStateMiddleware, so a subject saved for the first time has an identity by now, and
-     * outside RecordPaymentStatusMiddleware.
+     * Inside PersistStateMiddleware, so it runs before the subject is saved and indexes only a subject that
+     * already has an identity; outside RecordPaymentStatusMiddleware.
      */
     public static function priority(): int
     {
