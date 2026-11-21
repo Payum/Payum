@@ -28,6 +28,7 @@ use Payum\Core\Model\Subscription;
 use Payum\Core\Model\SubscriptionSchedule;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
+use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\Failure;
 use Payum\Core\Result\FailureReason;
 use Payum\Core\Result\NextAction\Redirect;
@@ -221,6 +222,51 @@ final class SubscriptionCommandsTest extends TestCase
         $this->assertNull($result->renewal()->periodEnd);
         $this->assertNull($handled->subscription());
         $this->assertNull($handled->renewal());
+
+        $acknowledgement = new Acknowledgement(409);
+        $retry = NotifyResult::retry($acknowledgement)->withSubscription($details)->withRenewal($renewal);
+
+        $this->assertTrue($retry->isRetry());
+        $this->assertSame($acknowledgement, $retry->acknowledgement);
+    }
+
+    public function testCancelAtPeriodEndIsRefusedOnAGatewayThatDeclaresNothing(): void
+    {
+        $payum = (new PayumBuilder())
+            ->addDefaultStorages()
+            ->registerGateway('plain', new AcmeUndeclaredSubscriptionsConfig())
+            ->getPayum();
+        $subscription = $this->savedSubscription($payum);
+
+        try {
+            $payum->getGateway('plain')->execute(CancelSubscriptionCommand::forSubscription($subscription, true));
+            $this->fail('A cancellation at period end went through on a gateway that declares no capabilities.');
+        } catch (UnsupportedOperationException $e) {
+            $this->assertStringContainsString('Gateway "plain" does not declare Capability::CancelAtPeriodEnd', $e->getMessage());
+        }
+
+        $this->assertNull(AcmeCancelSubscriptionHandler::$atPeriodEnd);
+
+        $payum->getGateway('plain')->execute(CancelSubscriptionCommand::forSubscription($subscription));
+        $this->assertFalse(AcmeCancelSubscriptionHandler::$atPeriodEnd);
+    }
+
+    public function testSubscribeShouldRefuseAnApplicationScheduledSubscriptionItLoadsFromTheToken(): void
+    {
+        $payum = $this->buildPayum();
+        $subscription = $this->savedSubscription($payum);
+        $subscription->setSchedule(SubscriptionSchedule::Application);
+        $payum->getStorage(Subscription::class)->update($subscription);
+        $token = $payum->getTokenIssuer()->create(TokenPurpose::CreateSubscription, 'acme', $subscription, 'subscribed.php');
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('an application-scheduled subscription is charged with CaptureCommand');
+
+        try {
+            $payum->subscribe(Request::create($token->getTargetUrl()));
+        } finally {
+            $this->assertSame([], AcmeCreateSubscriptionHandler::$keys);
+        }
     }
 
     /**
@@ -336,5 +382,41 @@ final class AcmeSyncSubscriptionHandler implements SyncSubscriptionHandlerInterf
     public function handle(SyncSubscriptionCommand $command, Context $context): SubscriptionResult
     {
         return SubscriptionResult::updated(new SubscriptionDetails(SubscriptionStatus::Active));
+    }
+}
+
+final class AcmeUndeclaredSubscriptionsConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return AcmeUndeclaredSubscriptionsGateway::class;
+    }
+}
+
+final class AcmeUndeclaredSubscriptionsGateway implements PaymentGateway
+{
+    public function configClass(): string
+    {
+        return AcmeUndeclaredSubscriptionsConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [AcmeCancelSubscriptionHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme Undeclared Subscriptions';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
     }
 }

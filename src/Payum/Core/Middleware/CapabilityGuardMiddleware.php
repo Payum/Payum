@@ -24,7 +24,9 @@ use function sprintf;
 
 /**
  * Refuses a charge on a stored payment method, or a subscription operation, that the gateway has not
- * declared it can make. A gateway that declares no capabilities at all, as every 1.x one, is let through.
+ * declared it can make. A charge on a gateway that declares no capabilities at all, as every 1.x one, is
+ * let through; a cancellation at period end is not, since cancelling at once instead would cost the
+ * subscriber the period they paid for.
  */
 final class CapabilityGuardMiddleware implements MiddlewareInterface, HasPriority
 {
@@ -54,7 +56,7 @@ final class CapabilityGuardMiddleware implements MiddlewareInterface, HasPriorit
             ));
         }
 
-        if ($command instanceof CancelSubscriptionCommand && $command->atPeriodEnd && ! $this->declares($context, Capability::CancelAtPeriodEnd)) {
+        if ($command instanceof CancelSubscriptionCommand && $command->atPeriodEnd && ! $this->declares($context->gateway(), Capability::CancelAtPeriodEnd)) {
             throw new UnsupportedOperationException(sprintf(
                 'Gateway "%s" does not declare Capability::CancelAtPeriodEnd, so it cannot cancel a subscription at the end of its period. Nothing was sent to the PSP.',
                 $context->gatewayName() ?? $context->gateway()->name(),
@@ -101,10 +103,8 @@ final class CapabilityGuardMiddleware implements MiddlewareInterface, HasPriorit
         return $next($command, $context);
     }
 
-    private function declares(Context $context, Capability $capability): bool
+    private function declares(object $gateway, Capability $capability): bool
     {
-        $gateway = $context->gateway();
-
-        return ! $gateway instanceof DeclaresCapabilities || in_array($capability, $gateway->capabilities(), true);
+        return $gateway instanceof DeclaresCapabilities && in_array($capability, $gateway->capabilities(), true);
     }
 }
