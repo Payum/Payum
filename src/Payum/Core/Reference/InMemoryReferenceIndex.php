@@ -21,23 +21,13 @@ final class InMemoryReferenceIndex implements ReferenceIndexInterface
     public function record(string $namespace, string $reference, string $gatewayName, IdentityInterface $subject): void
     {
         $record = new ReferenceRecord();
-        $record->setKey(self::key($namespace, $reference));
-        $record->setNamespace($namespace);
-        $record->setReference($reference);
-        $record->setGatewayName($gatewayName);
-        $record->setSubjectClass($subject->getClass());
-        $record->setSubjectId((string) $subject->getId());
+        $record->populate($namespace, $reference, $gatewayName, $subject);
 
         $this->records[$record->getKey()] = $record;
     }
 
     public function find(string $namespace, string $reference): ?ReferenceRecord
     {
-        return $this->records[self::key($namespace, $reference)] ?? null;
-    }
-
-    private static function key(string $namespace, string $reference): string
-    {
-        return hash('sha256', $namespace . "\0" . $reference);
+        return $this->records[ReferenceRecord::keyFor($namespace, $reference)] ?? null;
     }
 }

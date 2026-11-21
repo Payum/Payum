@@ -23,6 +23,21 @@ class ReferenceRecord
 
     protected string $subjectId;
 
+    public static function keyFor(string $namespace, string $reference): string
+    {
+        return hash('sha256', $namespace . "\0" . $reference);
+    }
+
+    public function populate(string $namespace, string $reference, string $gatewayName, IdentityInterface $subject): void
+    {
+        $this->key = self::keyFor($namespace, $reference);
+        $this->namespace = $namespace;
+        $this->reference = $reference;
+        $this->gatewayName = $gatewayName;
+        $this->subjectClass = $subject->getClass();
+        $this->subjectId = (string) $subject->getId();
+    }
+
     public function getKey(): string
     {
         return $this->key;
