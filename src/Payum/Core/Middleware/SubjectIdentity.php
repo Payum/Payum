@@ -6,7 +6,10 @@ namespace Payum\Core\Middleware;
 
 use Doctrine\Persistence\Proxy;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Handler\Context;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Reference\ReferenceIndexInterface;
+use Payum\Core\Reference\ReferenceNamespace;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Storage\IdentityInterface;
@@ -79,5 +82,23 @@ final class SubjectIdentity
         }
 
         return null;
+    }
+
+    /**
+     * Indexes the PSP's reference for a saved subject so a later webhook naming it finds the subject.
+     *
+     * @param StorageRegistryInterface<object>|null $storages
+     */
+    public static function record(ReferenceIndexInterface $references, ?StorageRegistryInterface $storages, Context $context, SubjectInterface $subject, ?string $reference, string $gatewayName): void
+    {
+        if (null === $reference || '' === $reference) {
+            return;
+        }
+
+        $identity = self::identityOf($subject, $storages);
+
+        if ($identity instanceof IdentityInterface && null !== self::key($identity)) {
+            $references->record(ReferenceNamespace::of($context), $reference, $gatewayName, $identity);
+        }
     }
 }
