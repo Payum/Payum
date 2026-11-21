@@ -16,7 +16,8 @@ use Payum\Core\Storage\IdentityInterface;
 use Throwable;
 
 /**
- * The stored payment or payout a command is about, read without loading it.
+ * The stored subject a command is about, such as a payment, payout, payment method or subscription, read
+ * without loading it.
  *
  * @internal
  */
