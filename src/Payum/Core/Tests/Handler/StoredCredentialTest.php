@@ -17,6 +17,7 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Model\Customer;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\StoredPaymentMethodInterface;
+use Payum\Core\Model\Subscription;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
@@ -84,6 +85,20 @@ final class StoredCredentialTest extends TestCase
         $credential = $this->contextFor(CaptureCommand::forPayment(new Payment()), null, 'pm_1')->storedCredential();
 
         $this->assertSame(ChargeReason::Unscheduled, $credential->reason);
+    }
+
+    public function testAPaymentOfASubscriptionIsRecurring(): void
+    {
+        $payment = new Payment();
+        $payment->setStoredPaymentMethod($this->method('pm_1'));
+        $payment->setSubscription(new Subscription());
+
+        $context = $this->build(CaptureCommand::forPayment($payment), $payment);
+        $this->assertSame(ChargeReason::Recurring, $context->storedCredential()?->reason);
+        $this->assertNotNull($context->subscription());
+
+        $override = CaptureCommand::forPayment($payment, reason: ChargeReason::Installment);
+        $this->assertSame(ChargeReason::Installment, $this->build($override, $payment)->storedCredential()?->reason);
     }
 
     public function testSavingAMethodIsItsFirstUse(): void

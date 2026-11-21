@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\CustomerInterface;
 use Payum\Core\Model\Payment as BasePayment;
 use Payum\Core\Model\StoredPaymentMethodInterface;
+use Payum\Core\Model\SubscriptionInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'payments_with_links')]
@@ -25,6 +26,10 @@ class PaymentWithLinks extends BasePayment
     #[ORM\ManyToOne(targetEntity: StoredPaymentMethod::class)]
     #[ORM\JoinColumn(name: 'stored_payment_method_id', nullable: true)]
     protected ?StoredPaymentMethodInterface $storedPaymentMethod = null;
+
+    #[ORM\ManyToOne(targetEntity: Subscription::class)]
+    #[ORM\JoinColumn(name: 'subscription_id', nullable: true)]
+    protected ?SubscriptionInterface $subscription = null;
 
     public function getId(): ?int
     {

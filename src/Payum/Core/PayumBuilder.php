@@ -46,6 +46,7 @@ use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\StoredPaymentMethod;
+use Payum\Core\Model\Subscription;
 use Payum\Core\Model\Token;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
@@ -227,6 +228,7 @@ class PayumBuilder
             Payout::class => 'payum_id',
             Customer::class => 'customerId',
             StoredPaymentMethod::class => 'payum_id',
+            Subscription::class => 'payum_id',
         ];
 
         foreach ($defaults as $modelClass => $idProperty) {

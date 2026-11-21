@@ -30,6 +30,8 @@ use Payum\Core\Model\StatusAwareInterface;
 use Payum\Core\Model\StoredPaymentMethodAwareInterface;
 use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Model\SubscriptionInterface;
+use Payum\Core\Model\SubscriptionPaymentInterface;
 use Payum\Core\Money\Amount;
 use Payum\Core\Reference\MerchantReference;
 use Payum\Core\Reference\ReferenceIndexInterface;
@@ -293,6 +295,17 @@ final class Context
         };
     }
 
+    public function subscription(): ?SubscriptionInterface
+    {
+        $subject = $this->subject();
+
+        return match (true) {
+            $subject instanceof SubscriptionInterface => $subject,
+            $subject instanceof SubscriptionPaymentInterface => $subject->getSubscription(),
+            default => null,
+        };
+    }
+
     public function storedPaymentMethod(): ?StoredPaymentMethodInterface
     {
         $subject = $this->subject();
@@ -336,7 +349,7 @@ final class Context
 
         return new StoredCredential(
             $command->initiator ?? $initiator,
-            $command->reason ?? ChargeReason::Unscheduled,
+            $command->reason ?? ($this->subscription() instanceof SubscriptionInterface ? ChargeReason::Recurring : ChargeReason::Unscheduled),
             null === $method->getReference(),
             $method->getNetworkTransactionId(),
         );

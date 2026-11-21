@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\Subscription">
+
+        <field name="gatewayName" column="gateway_name" type="string" />
+
+        <field name="schedule" column="schedule" type="string" length="32" />
+
+        <field name="totalAmount" column="total_amount" type="integer" nullable="true" />
+
+        <field name="currencyCode" column="currency_code" type="string" nullable="true" />
+
+        <field name="description" column="description" type="string" nullable="true" />
+
+        <field name="interval" column="billing_interval" type="string" length="32" nullable="true" />
+
+        <field name="planReference" column="plan_reference" type="string" nullable="true" />
+
+        <field name="startAt" column="start_at" type="datetime_immutable" nullable="true" />
+
+        <field name="cycles" column="cycles" type="integer" nullable="true" />
+
+        <field name="reference" column="reference" type="string" nullable="true" />
+
+        <field name="status" column="status" type="string" length="32" />
+
+        <field name="currentPeriodEnd" column="current_period_end" type="datetime_immutable" nullable="true" />
+
+        <field name="cancelAt" column="cancel_at" type="datetime_immutable" nullable="true" />
+
+        <field name="canceledAt" column="canceled_at" type="datetime_immutable" nullable="true" />
+
+        <field name="details" column="details" type="json" />
+
+    </mapped-superclass>
+</doctrine-mapping>

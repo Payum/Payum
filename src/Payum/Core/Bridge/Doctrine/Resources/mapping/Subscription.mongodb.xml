@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\Subscription">
+
+        <field name="gatewayName" type="string" />
+
+        <field name="schedule" type="string" />
+
+        <field name="totalAmount" type="int" nullable="true" />
+
+        <field name="currencyCode" type="string" nullable="true" />
+
+        <field name="description" type="string" nullable="true" />
+
+        <field name="interval" type="string" nullable="true" />
+
+        <field name="planReference" type="string" nullable="true" />
+
+        <field name="startAt" type="date_immutable" nullable="true" />
+
+        <field name="cycles" type="int" nullable="true" />
+
+        <field name="reference" type="string" nullable="true" />
+
+        <field name="status" type="string" />
+
+        <field name="currentPeriodEnd" type="date_immutable" nullable="true" />
+
+        <field name="cancelAt" type="date_immutable" nullable="true" />
+
+        <field name="canceledAt" type="date_immutable" nullable="true" />
+
+        <field name="details" type="object" />
+
+    </mapped-superclass>
+</doctrine-mongo-mapping>
