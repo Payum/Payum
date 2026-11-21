@@ -159,12 +159,12 @@ An application that saves payment methods for later charges, as
 the customer and the stored payment method. Payum's XML mapping covers their columns. Their links to each
 other, and the payment's links to them, point at your own classes, so you map those on your entities.
 
-`Payment` declares `$customer` and `$storedPaymentMethod`, with their getters and setters, whether you
-use them or not. If your payment entity already has a member of one of those names, PHP refuses to load
-it. Rename yours, or give the property exactly `Payment`'s type. Your own customer class, such as a `User`
+`Payment` declares `$customer`, `$storedPaymentMethod` and `$subscription`, with their getters and
+setters, whether you use them or not. If your payment entity already has a member of one of those names,
+PHP refuses to load it. Rename yours, or give the property exactly `Payment`'s type. Your own customer class, such as a `User`
 entity, can implement `Payum\Core\Model\CustomerInterface`, and then `getCustomer()` may return it, but
-`setCustomer()` must still accept any `?CustomerInterface`. If you do not store payment methods, that is
-all this section asks of you.
+`setCustomer()` must still accept any `?CustomerInterface`. If you store neither payment methods nor
+subscriptions, that is all this section asks of you.
 
 Extend the two models:
 
