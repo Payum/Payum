@@ -27,7 +27,7 @@ final class SubjectIdentity
      */
     public static function of(CommandInterface $command, ?StorageRegistryInterface $storages): ?string
     {
-        $identity = $command->token()?->getDetails() ?? self::identify($command->subject(), $storages);
+        $identity = $command->token()?->getDetails() ?? self::identityOf($command->subject(), $storages);
 
         if (! $identity instanceof IdentityInterface || null === $identity->getId() || '' === (string) $identity->getId()) {
             return null;
@@ -48,7 +48,7 @@ final class SubjectIdentity
      *
      * @param StorageRegistryInterface<object>|null $storages
      */
-    private static function identify(?SubjectInterface $subject, ?StorageRegistryInterface $storages): ?IdentityInterface
+    public static function identityOf(?SubjectInterface $subject, ?StorageRegistryInterface $storages): ?IdentityInterface
     {
         if (! $subject instanceof SubjectInterface || ! $storages instanceof StorageRegistryInterface) {
             return null;

@@ -41,6 +41,7 @@ use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
@@ -731,6 +732,8 @@ class Gateway implements GatewayInterface
             $command->token(),
             $this->commandStack,
             $this->name,
+            $this->container->has(ReferenceIndexInterface::class) ? $this->container->get(ReferenceIndexInterface::class) : null,
+            $this->container->has(StorageRegistryInterface::class) ? $this->container->get(StorageRegistryInterface::class) : null,
         );
     }
 
