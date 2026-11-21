@@ -9,6 +9,8 @@ use League\Uri\Uri;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Config\GatewayConfig;
+use Payum\Core\Event\WebhookRejected;
+use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\CaptureHandlerInterface;
 use Payum\Core\Handler\Context;
@@ -32,9 +34,11 @@ use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Storage\FilesystemStorage;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
+use Symfony\Component\Lock\PersistingStoreInterface;
 use Symfony\Component\Lock\Store\InMemoryStore;
 
 /**
@@ -55,6 +59,7 @@ final class WebhookSubjectResolutionTest extends TestCase
         ResolvingNotifyHandler::$seen = null;
         ResolvingNotifyHandler::$handled = false;
         ResolvingNotifyHandler::$verifications = 0;
+        ResolvingNotifyHandler::$forged = false;
         ResolvingCaptureHandler::$whilePending = null;
     }
 
@@ -154,6 +159,63 @@ final class WebhookSubjectResolutionTest extends TestCase
         $this->assertSame($payment, ResolvingNotifyHandler::$seen);
     }
 
+    public function testShouldLoadTheResolvedSubjectOnlyOnceItIsLocked(): void
+    {
+        $log = new ResolutionLog();
+        $payments = new CopyingPaymentStorage($log);
+        $payum = $this->buildPayum(locks: new RecordingLockFactory(new InMemoryStore(), $log), payments: $payments);
+        $payment = $this->savedPayment($payum);
+        $this->recordMerchantReference($payment);
+
+        $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
+
+        // Found before the lock to know there is something to lock, read again once it is held.
+        $this->assertSame(['find', 'lock', 'find'], $log->entries);
+        $this->assertSame($payments->last, ResolvingNotifyHandler::$seen);
+    }
+
+    public function testShouldRefuseAForgedWebhookWithoutHandlingIt(): void
+    {
+        ResolvingNotifyHandler::$forged = true;
+        $events = new ResolutionEvents();
+        $payum = $this->buildPayum(events: $events);
+
+        try {
+            $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
+            $this->fail('Expected WebhookNotVerifiedException.');
+        } catch (WebhookNotVerifiedException) {
+        }
+
+        $rejected = array_filter($events->seen, static fn (object $e): bool => $e instanceof WebhookRejected);
+        $this->assertCount(1, $rejected);
+        $this->assertFalse(ResolvingNotifyHandler::$handled);
+    }
+
+    public function testShouldFallThroughToThePspReferenceWhenTheMerchantReferenceNamesNothingStored(): void
+    {
+        $payum = $this->buildPayum(reference: 'pi_9');
+        $payment = $this->savedPayment($payum);
+        $gone = new Identity(uniqid('gone', true), Payment::class);
+        $this->index->record(MerchantReference::NAMESPACE, MerchantReference::of($gone), 'acme', $gone);
+        ResolvingNotifyHandler::$merchantReference = MerchantReference::of($gone);
+        $this->index->record(ResolvingGateway::class, 'pi_9', 'acme', new Identity($payment->getNumber(), Payment::class));
+
+        $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
+
+        $this->assertSame($payment, ResolvingNotifyHandler::$seen);
+    }
+
+    public function testShouldRunWithNoSubjectWhenTheEventNamesNoReference(): void
+    {
+        $payum = $this->buildPayum();
+        $this->savedPayment($payum);
+
+        $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
+
+        $this->assertTrue(ResolvingNotifyHandler::$handled);
+        $this->assertNull(ResolvingNotifyHandler::$seen);
+    }
+
     public function testRetryShouldAnswer503(): void
     {
         $retry = NotifyResult::retry();
@@ -192,14 +254,31 @@ final class WebhookSubjectResolutionTest extends TestCase
     }
 
     /**
+     * @param FilesystemStorage<object>|null $payments
+     *
      * @return Payum<object>
      */
-    private function buildPayum(?string $reference = null, ?string $merchantReference = null, ?LockFactory $locks = null): Payum
-    {
+    private function buildPayum(
+        ?string $reference = null,
+        ?string $merchantReference = null,
+        ?LockFactory $locks = null,
+        ?FilesystemStorage $payments = null,
+        ?EventDispatcherInterface $events = null,
+    ): Payum {
         ResolvingNotifyHandler::$reference = $reference;
         ResolvingNotifyHandler::$merchantReference = $merchantReference;
 
-        $builder = (new PayumBuilder())
+        $builder = new PayumBuilder();
+
+        if ($payments instanceof FilesystemStorage) {
+            $builder->addStorage(Payment::class, $payments);
+        }
+
+        if ($events instanceof EventDispatcherInterface) {
+            $builder->addGlobalService(EventDispatcherInterface::class, $events);
+        }
+
+        $builder
             ->addDefaultStorages()
             ->setReferenceIndex($this->index)
             ->addGlobalService(ServerRequestInterface::class, Psr17FactoryDiscovery::findServerRequestFactory()
@@ -269,6 +348,8 @@ final class ResolvingNotifyHandler implements NotifyHandlerInterface
 
     public static int $verifications = 0;
 
+    public static bool $forged = false;
+
     public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
     {
         self::$handled = true;
@@ -280,6 +361,10 @@ final class ResolvingNotifyHandler implements NotifyHandlerInterface
     public function verify(ServerRequestInterface $request): WebhookEvent
     {
         ++self::$verifications;
+
+        if (self::$forged) {
+            throw new WebhookNotVerifiedException('The signature does not match.');
+        }
 
         return WebhookEvent::verified([], 'evt_1', 'payment.captured', null, self::$reference, self::$merchantReference);
     }
@@ -309,10 +394,68 @@ final class RecordingLockFactory extends LockFactory
      */
     public array $resources = [];
 
+    public function __construct(
+        PersistingStoreInterface $store,
+        private readonly ?ResolutionLog $log = null,
+    ) {
+        parent::__construct($store);
+    }
+
     public function createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true): LockInterface
     {
         $this->resources[] = $resource;
 
+        if ($this->log instanceof ResolutionLog) {
+            $this->log->entries[] = 'lock';
+        }
+
         return parent::createLock($resource, $ttl, $autoRelease);
+    }
+}
+
+final class ResolutionLog
+{
+    /**
+     * @var list<string>
+     */
+    public array $entries = [];
+}
+
+/**
+ * Hands out a fresh copy on every read, as a storage without an identity map does.
+ *
+ * @extends FilesystemStorage<object>
+ */
+final class CopyingPaymentStorage extends FilesystemStorage
+{
+    public ?object $last = null;
+
+    public function __construct(
+        private readonly ResolutionLog $log
+    ) {
+        parent::__construct(sys_get_temp_dir(), Payment::class, 'number');
+    }
+
+    protected function doFind(mixed $id): ?object
+    {
+        $this->log->entries[] = 'find';
+        $model = parent::doFind($id);
+
+        return $this->last = null === $model ? null : clone $model;
+    }
+}
+
+final class ResolutionEvents implements EventDispatcherInterface
+{
+    /**
+     * @var list<object>
+     */
+    public array $seen = [];
+
+    public function dispatch(object $event): object
+    {
+        $this->seen[] = $event;
+
+        return $event;
     }
 }

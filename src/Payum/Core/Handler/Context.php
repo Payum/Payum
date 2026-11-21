@@ -29,6 +29,7 @@ use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Security\TokenPurpose;
+use Payum\Core\Storage\IdentityInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -60,7 +61,7 @@ final class Context
      *                                                                   first asked for
      * @param list<self> $previous the enclosing executions, when a handler dispatches a sub-command
      * @param StorageRegistryInterface<object>|null $storages
-     * @param bool $subjectResolved whether core found the subject from what a webhook named
+     * @param IdentityInterface|null $resolvedIdentity the stored subject a webhook named, loaded through $subject
      */
     public function __construct(
         private readonly Executor $executor,
@@ -74,7 +75,7 @@ final class Context
         private readonly ?string $gatewayName = null,
         private readonly ?ReferenceIndexInterface $references = null,
         private readonly ?StorageRegistryInterface $storages = null,
-        private readonly bool $subjectResolved = false,
+        private readonly ?IdentityInterface $resolvedIdentity = null,
     ) {
     }
 
@@ -275,7 +276,15 @@ final class Context
      */
     public function isSubjectLoadedByCore(): bool
     {
-        return $this->token instanceof TokenInterface || $this->subjectResolved;
+        return $this->token instanceof TokenInterface || $this->resolvedIdentity instanceof IdentityInterface;
+    }
+
+    /**
+     * The stored subject a token-less webhook named, known before the subject itself is loaded.
+     */
+    public function resolvedIdentity(): ?IdentityInterface
+    {
+        return $this->resolvedIdentity;
     }
 
     /**

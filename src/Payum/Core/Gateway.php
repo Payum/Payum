@@ -565,7 +565,7 @@ class Gateway implements GatewayInterface
      * @param CommandInterface<Result> $command
      * @param HandlerInterface|null $handler one the handler map does not name, run in its place
      * @param SubjectInterface|null $subject what the command is about, when the caller has already loaded it
-     * @param bool $subjectResolved whether $subject is one core found from what a webhook named
+     * @param IdentityInterface|null $resolvedIdentity the stored subject a token-less webhook named
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -574,7 +574,7 @@ class Gateway implements GatewayInterface
         CommandInterface $command,
         ?HandlerInterface $handler = null,
         ?SubjectInterface $subject = null,
-        bool $subjectResolved = false,
+        ?IdentityInterface $resolvedIdentity = null,
     ): Result {
         $serviceId = $handler ?? $this->handlerMap?->serviceIdFor($command::class);
 
@@ -589,19 +589,14 @@ class Gateway implements GatewayInterface
 
         // A webhook pointing at nothing is read here, before the pipeline, so that the subject it names is
         // locked and saved like one loaded from a token.
-        if ($command instanceof NotifyCommand && null === $subject && null === $command->token() && null === $command->subject()
+        if ($command instanceof NotifyCommand && null === $subject && null === $resolvedIdentity && null === $command->token() && null === $command->subject()
             && ($notifyHandler = $this->webhookHandler($serviceId)) instanceof NotifyHandlerInterface) {
             $event = $command->event() ?? $this->verifyReporting($notifyHandler, $this->container->get(ServerRequestInterface::class));
-            $resolved = $this->subjectNamedBy($event);
-
-            if ($resolved instanceof SubjectInterface) {
-                return $this->dispatch(NotifyCommand::forSubject($resolved)->withEvent($event), $handler, $resolved, true);
-            }
-
             $command = $command->withEvent($event);
+            $resolvedIdentity = $this->identityNamedBy($event);
         }
 
-        $context = $this->buildContext($command, $subject, $subjectResolved);
+        $context = $this->buildContext($command, $subject, $resolvedIdentity);
         $events = $this->events();
 
         $events->dispatch(new CommandDispatched($command, $context));
@@ -659,9 +654,9 @@ class Gateway implements GatewayInterface
                 ));
             }
 
-            // Verification runs here rather than during dispatch so that middleware wraps it: a message
-            // that fails the check is something an application will want to see.
-            // An event verified elsewhere (the HTTP request, before a worker took over) is not verified twice.
+            // A notify with a token or a subject is verified here, inside the middleware: a message that fails
+            // the check is something an application will want to see. One with neither was verified in
+            // dispatch() and carries its event, as does one verified elsewhere (before a worker took over).
             $webhook = $command->event() ?? $this->verifyReporting($handler, $context->httpRequest());
 
             $this->events()->dispatch(new WebhookReceived($command, $context, $webhook));
@@ -738,7 +733,7 @@ class Gateway implements GatewayInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function buildContext(CommandInterface $command, ?SubjectInterface $subject = null, bool $subjectResolved = false): HandlerContext
+    private function buildContext(CommandInterface $command, ?SubjectInterface $subject = null, ?IdentityInterface $resolvedIdentity = null): HandlerContext
     {
         return new HandlerContext(
             $this,
@@ -748,13 +743,13 @@ class Gateway implements GatewayInterface
             $this->container->get(TokenIssuerInterface::class),
             // Loaded on first use rather than here, which is before LockingMiddleware runs: a payment read
             // before the lock is taken can be one another execution is about to change.
-            $subject ?? fn (): ?SubjectInterface => $this->resolveSubject($command),
+            $subject ?? fn (): ?SubjectInterface => null === $resolvedIdentity ? $this->resolveSubject($command) : $this->loadSubject($resolvedIdentity),
             $command->token(),
             $this->commandStack,
             $this->name,
             $this->container->has(ReferenceIndexInterface::class) ? $this->container->get(ReferenceIndexInterface::class) : null,
             $this->container->has(StorageRegistryInterface::class) ? $this->container->get(StorageRegistryInterface::class) : null,
-            $subjectResolved,
+            $resolvedIdentity,
         );
     }
 
@@ -788,9 +783,10 @@ class Gateway implements GatewayInterface
 
     /**
      * The stored subject a webhook names: by the merchant reference the gateway sent as metadata, then by
-     * the PSP's own reference indexed against it.
+     * the PSP's own reference indexed against it. Only the identity is kept; the subject is read again
+     * once it is locked.
      */
-    private function subjectNamedBy(WebhookEvent $event): ?SubjectInterface
+    private function identityNamedBy(WebhookEvent $event): ?IdentityInterface
     {
         if (! $this->container->has(ReferenceIndexInterface::class)) {
             return null;
@@ -803,11 +799,10 @@ class Gateway implements GatewayInterface
         ];
 
         foreach ($lookups as [$namespace, $reference]) {
-            $record = null === $reference ? null : $index->find($namespace, $reference);
-            $subject = null === $record ? null : $this->loadSubject($record->getIdentity());
+            $identity = null === $reference ? null : $index->find($namespace, $reference)?->getIdentity();
 
-            if ($subject instanceof SubjectInterface) {
-                return $subject;
+            if ($identity instanceof IdentityInterface && $this->loadSubject($identity) instanceof SubjectInterface) {
+                return $identity;
             }
         }
 
