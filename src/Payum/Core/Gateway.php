@@ -783,8 +783,8 @@ class Gateway implements GatewayInterface
 
     /**
      * The stored subject a webhook names: by the merchant reference the gateway sent as metadata, then by
-     * the PSP's own reference indexed against it. Only the identity is kept; the subject is read again
-     * once it is locked.
+     * the PSP's own reference indexed against it. Nothing is loaded here; the subject is read once it is
+     * locked, and a subject gone by then leaves the handler with none.
      */
     private function identityNamedBy(WebhookEvent $event): ?IdentityInterface
     {
@@ -799,10 +799,10 @@ class Gateway implements GatewayInterface
         ];
 
         foreach ($lookups as [$namespace, $reference]) {
-            $identity = null === $reference ? null : $index->find($namespace, $reference)?->getIdentity();
+            $record = null === $reference ? null : $index->find($namespace, $reference);
 
-            if ($identity instanceof IdentityInterface && $this->loadSubject($identity) instanceof SubjectInterface) {
-                return $identity;
+            if (null !== $record) {
+                return $record->getIdentity();
             }
         }
 

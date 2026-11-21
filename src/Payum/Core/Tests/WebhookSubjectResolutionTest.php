@@ -169,8 +169,8 @@ final class WebhookSubjectResolutionTest extends TestCase
 
         $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
 
-        // Found before the lock to know there is something to lock, read again once it is held.
-        $this->assertSame(['find', 'lock', 'find'], $log->entries);
+        $this->assertSame('lock', $log->entries[0] ?? null);
+        $this->assertSame(['lock', 'find'], $log->entries);
         $this->assertSame($payments->last, ResolvingNotifyHandler::$seen);
     }
 
@@ -191,9 +191,10 @@ final class WebhookSubjectResolutionTest extends TestCase
         $this->assertFalse(ResolvingNotifyHandler::$handled);
     }
 
-    public function testShouldFallThroughToThePspReferenceWhenTheMerchantReferenceNamesNothingStored(): void
+    public function testShouldRunWithNoSubjectWhenTheNamedSubjectIsGoneOnceLocked(): void
     {
-        $payum = $this->buildPayum(reference: 'pi_9');
+        $locks = new RecordingLockFactory(new InMemoryStore());
+        $payum = $this->buildPayum(reference: 'pi_9', locks: $locks);
         $payment = $this->savedPayment($payum);
         $gone = new Identity(uniqid('gone', true), Payment::class);
         $this->index->record(MerchantReference::NAMESPACE, MerchantReference::of($gone), 'acme', $gone);
@@ -202,7 +203,9 @@ final class WebhookSubjectResolutionTest extends TestCase
 
         $payum->getGateway('acme')->execute(NotifyCommand::forGateway());
 
-        $this->assertSame($payment, ResolvingNotifyHandler::$seen);
+        $this->assertTrue(ResolvingNotifyHandler::$handled);
+        $this->assertNull(ResolvingNotifyHandler::$seen);
+        $this->assertSame(['payum:' . Payment::class . ':' . $gone->getId()], $locks->resources);
     }
 
     public function testShouldRunWithNoSubjectWhenTheEventNamesNoReference(): void
