@@ -5,11 +5,18 @@ namespace Payum\Stripe;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
+use Payum\Stripe\Action\Api\CancelSubscriptionAction;
 use Payum\Stripe\Action\Api\CreateChargeAction;
 use Payum\Stripe\Action\Api\CreateCustomerAction;
 use Payum\Stripe\Action\Api\CreatePlanAction;
+use Payum\Stripe\Action\Api\CreatePriceAction;
+use Payum\Stripe\Action\Api\CreateProductAction;
 use Payum\Stripe\Action\Api\CreateSubscriptionAction;
 use Payum\Stripe\Action\Api\CreateTokenAction;
+use Payum\Stripe\Action\Api\GetCustomersAction;
+use Payum\Stripe\Action\Api\GetPricesAction;
+use Payum\Stripe\Action\Api\GetProductsAction;
+use Payum\Stripe\Action\Api\GetSubscriptionsAction;
 use Payum\Stripe\Action\Api\ObtainTokenAction;
 use Payum\Stripe\Action\CaptureAction;
 use Payum\Stripe\Action\ConvertPaymentAction;
@@ -42,6 +49,14 @@ class StripeCheckoutGatewayFactory extends GatewayFactory
             'payum.action.create_plan' => new CreatePlanAction(),
             'payum.action.create_token' => new CreateTokenAction(),
             'payum.action.create_subscription' => new CreateSubscriptionAction(),
+
+            'payum.action.cancel_subscription' => new CancelSubscriptionAction(),
+            'payum.action.create_price' => new CreatePriceAction(),
+            'payum.action.create_product' => new CreateProductAction(),
+            'payum.action.get_customers' => new GetCustomersAction(),
+            'payum.action.get_prices' => new GetPricesAction(),
+            'payum.action.get_products' => new GetProductsAction(),
+            'payum.action.get_subscriptions' => new GetSubscriptionsAction(),
 
             'payum.extension.create_customer' => new CreateCustomerExtension(),
         ]);
