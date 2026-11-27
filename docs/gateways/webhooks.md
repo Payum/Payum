@@ -164,7 +164,7 @@ A PSP sends a message again until it gets an answer it counts as success, so the
 | :--- | :--- |
 | returns `NotifyResult::handled(...)` | 204 No Content |
 | returns `NotifyResult::ignored()` | 204 No Content |
-| returns `NotifyResult::handled($status, Acknowledgement::ok('[accepted]'))` | 200 with the body `[accepted]` |
+| returns `NotifyResult::handled($status, Acknowledgement::ok('OK'))` | 200 with the body `OK` |
 | throws `WebhookNotVerifiedException` | 400 with an empty body |
 
 Most PSPs accept any 2xx. Set an acknowledgement only when yours wants a particular answer:
@@ -173,7 +173,7 @@ Most PSPs accept any 2xx. Set an acknowledgement only when yours wants a particu
 use Payum\Core\Result\Acknowledgement;
 
 Acknowledgement::noContent();       // 204
-Acknowledgement::ok('[accepted]');  // 200 with a body
+Acknowledgement::ok('OK');          // 200 with a body
 new Acknowledgement(200, '{"ok":true}', ['Content-Type' => 'application/json']);
 ```
 
