@@ -218,7 +218,7 @@ use Payum\Core\Result\Acknowledgement;
 use Payum\Core\Result\NotifyResult;
 
 NotifyResult::handled(PaymentStatus::Captured, transactionId: 'ch_1');
-NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('[accepted]'));
+NotifyResult::handled(PaymentStatus::Captured, Acknowledgement::ok('OK'));
 NotifyResult::ignored();
 ```
 
