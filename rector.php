@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
+use Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector;
 use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
+use Rector\Instanceof_\Rector\Ternary\FlipNegatedTernaryInstanceofRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
@@ -16,9 +18,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAsse
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\NarrowIdenticalWithConsecutiveRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\SingleWithConsecutiveToWithRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\ClassLike\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\ValueObject\PhpVersion;
 
@@ -28,12 +28,8 @@ return RectorConfig::configure()
     ])
     ->withImportNames()
     ->withPhpVersion(PhpVersion::PHP_81)
+    ->withPhpSets()
     ->withSets([
-        LevelSetList::UP_TO_PHP_85,
-
-        // Code Quality
-        SetList::INSTANCEOF,
-
         // PHPUnit
         PHPUnitSetList::COMPOSER_BASED,
         PHPUnitSetList::PHPUNIT_MOCK_TO_STUB,
@@ -42,12 +38,14 @@ return RectorConfig::configure()
     ])
     ->withRules([
         SimplifyUselessVariableRector::class,
-        ShortenElseIfRector::class,
         SimplifyIfReturnBoolRector::class,
         ChangeArrayPushToArrayAssignRector::class,
         UnwrapSprintfOneArgumentRector::class,
         InlineConstructorDefaultToPropertyRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
+        InlineIsAInstanceOfRector::class,
+        RemoveDeadInstanceOfRector::class,
+        FlipNegatedTernaryInstanceofRector::class,
     ])
     ->withSkip([
         ClassPropertyAssignToConstructorPromotionRector::class,
