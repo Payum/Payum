@@ -2,6 +2,12 @@
 
 In this chapter we show how to store a credit card safely and use in future. A customer enter the card once and billed later without the need to reenter it again.
 
+{% hint style="info" %}
+This page describes the 1.x way. Payum 2.x stores payment methods the same way for every gateway, with a
+`StoredPaymentMethod` linked to the payment. See
+[Save a payment method and charge it later](../stored-payment-methods.md).
+{% endhint %}
+
 ### Store card
 
 This is a usual charge as we showed it in [Stripe.js](js.md) with only these additions:

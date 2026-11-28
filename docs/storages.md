@@ -44,7 +44,8 @@ and the token storage with `$payum->getTokenStorage()`.
 {% hint style="warning" %}
 Always set a token storage in production. Without one, Payum calls `addDefaultStorages()`, which keeps
 tokens in files in the system temp directory. It also adds a file storage for each of
-`Payum\Core\Model\Payment`, `Payout` and `ArrayObject` that you did not register a storage for.
+`Payum\Core\Model\Payment`, `Payout`, `ArrayObject`, `Customer` and `StoredPaymentMethod` that you did not
+register a storage for.
 {% endhint %}
 
 ## Storages Payum ships
@@ -150,6 +151,112 @@ Call `DbalObjectType::register()` before you create the entity manager. The toke
 details in an `object` column, a type DBAL 4 removed. `DbalObjectType` brings it back with the same format,
 so tokens stored on DBAL 3 read back unchanged. On DBAL 3 the call does nothing, so it is safe on either
 version.
+
+### Store customers and payment methods
+
+An application that saves payment methods for later charges, as
+[Save a payment method and charge it later](stored-payment-methods.md) describes, stores two more models:
+the customer and the stored payment method. Payum's XML mapping covers their columns. Their links to each
+other, and the payment's links to them, point at your own classes, so you map those on your entities.
+
+`Payment` declares `$customer` and `$storedPaymentMethod`, with their getters and setters, whether you
+use them or not. If your payment entity already has a member of one of those names, PHP refuses to load
+it. Rename yours, or give the property exactly `Payment`'s type. Your own customer class, such as a `User`
+entity, can implement `Payum\Core\Model\CustomerInterface`, and then `getCustomer()` may return it, but
+`setCustomer()` must still accept any `?CustomerInterface`. If you do not store payment methods, that is
+all this section asks of you.
+
+Extend the two models:
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\Customer as BaseCustomer;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'customer')]
+class Customer extends BaseCustomer
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected ?int $id = null;
+}
+```
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\CustomerInterface;
+use Payum\Core\Model\StoredPaymentMethod as BaseStoredPaymentMethod;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'stored_payment_method')]
+class StoredPaymentMethod extends BaseStoredPaymentMethod
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: true)]
+    protected ?CustomerInterface $customer = null;
+}
+```
+
+Then add the two links to your payment entity. Redeclare each property with the attributes, and keep its
+type and default as they are:
+
+```php
+<?php
+namespace Acme\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Payum\Core\Model\CustomerInterface;
+use Payum\Core\Model\Payment as BasePayment;
+use Payum\Core\Model\StoredPaymentMethodInterface;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'payment')]
+class Payment extends BasePayment
+{
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected $id;
+
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: true)]
+    protected ?CustomerInterface $customer = null;
+
+    #[ORM\ManyToOne(targetEntity: StoredPaymentMethod::class)]
+    #[ORM\JoinColumn(name: 'stored_payment_method_id', nullable: true)]
+    protected ?StoredPaymentMethodInterface $storedPaymentMethod = null;
+}
+```
+
+Point `targetEntity` at your own `User` class instead of `Customer` when the user is the customer. Keep the
+join columns nullable: most payments have no stored method.
+
+Register a storage for each class:
+
+```php
+$payum = (new PayumBuilder())
+    ->setTokenStorage(new DoctrineStorage($entityManager, PaymentToken::class))
+    ->addStorage(Payment::class, new DoctrineStorage($entityManager, Payment::class))
+    ->addStorage(Customer::class, new DoctrineStorage($entityManager, Customer::class))
+    ->addStorage(StoredPaymentMethod::class, new DoctrineStorage($entityManager, StoredPaymentMethod::class))
+    ->registerGateway('acme', new AcmeConfig(apiKey: 'sk_test_123', sandbox: true))
+    ->getPayum();
+```
+
+Payum saves the stored method and the customer itself when a gateway reports what the PSP stored. With
+Doctrine MongoDB ODM, map the same three links with `#[ODM\ReferenceOne]` on your documents.
 
 ### Store token details as JSON
 

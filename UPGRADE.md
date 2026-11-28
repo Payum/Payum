@@ -212,6 +212,14 @@
 * `Payum\Core\Model\CreditCard` no longer fills its protected `$number`, `$holder`, `$securityCode` and
   `$expireAt` properties, so `serialize()` and `var_export()` leave the card out. They are always `null`
   and are removed in 3.0. A subclass or Doctrine mapping that reads them must use the getters instead.
+* `Payum\Core\Model\Payment` has two new properties, `protected ?CustomerInterface $customer` and
+  `protected ?StoredPaymentMethodInterface $storedPaymentMethod`, with `getCustomer()`, `setCustomer()`,
+  `getStoredPaymentMethod()` and `setStoredPaymentMethod()` typed the same way. A subclass that already
+  declares one of those names no longer loads unless its declaration is compatible. Rename yours, or:
+  * declare the property with exactly the parent's type, or drop your declaration and keep only its mapping;
+  * implement `Payum\Core\Model\CustomerInterface` on your own customer class, such as a `User` entity.
+    A getter may then return it (`getCustomer(): ?User`), but a setter must still accept
+    `?CustomerInterface`.
 
 ## 1.5.0
 

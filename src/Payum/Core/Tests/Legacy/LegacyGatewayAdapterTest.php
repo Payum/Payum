@@ -30,6 +30,7 @@ use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Reply\HttpPostRedirect;
@@ -83,6 +84,17 @@ final class LegacyGatewayAdapterTest extends TestCase
         $this->assertSame(PaymentStatus::Captured, $result->status);
         $this->assertNull($result->next);
         $this->assertTrue($result->isSuccessful());
+    }
+
+    public function testShouldLetA1xGatewayThrough(): void
+    {
+        $method = new StoredPaymentMethod();
+        $payment = $this->buildPayment();
+        $payment->setStoredPaymentMethod($method);
+
+        $result = $this->wrap()->execute(CaptureCommand::forPayment($payment));
+
+        $this->assertSame(PaymentStatus::Captured, $result->status);
     }
 
     public function testShouldTurnAThrownRedirectIntoTheNextActionThatMeansTheSameThing(): void

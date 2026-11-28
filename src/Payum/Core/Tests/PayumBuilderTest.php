@@ -30,8 +30,10 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Metadata\Logo;
 use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Customer;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
+use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Payum;
 use Payum\Core\PayumBuilder;
 use Payum\Core\Registry\RegistryInterface;
@@ -122,10 +124,12 @@ final class PayumBuilderTest extends TestCase
         $this->assertIsArray($payum->getGateways());
         $this->assertCount(0, $payum->getGateways());
 
-        $this->assertCount(3, $payum->getStorages());
+        $this->assertCount(5, $payum->getStorages());
         $this->assertArrayHasKey(Payment::class, $payum->getStorages());
         $this->assertArrayHasKey(ArrayObject::class, $payum->getStorages());
         $this->assertArrayHasKey(Payout::class, $payum->getStorages());
+        $this->assertArrayHasKey(Customer::class, $payum->getStorages());
+        $this->assertArrayHasKey(StoredPaymentMethod::class, $payum->getStorages());
 
         $factories = $payum->getGatewayFactories();
         $this->assertIsArray($factories);
@@ -248,6 +252,7 @@ final class PayumBuilderTest extends TestCase
                     'authorize' => 'authorize.php',
                     'refund' => 'refund.php',
                     'payout' => 'payout.php',
+                    'save_payment_method' => 'save-payment-method.php',
                     'done' => 'done.php',
                 ], $paths);
 
@@ -268,6 +273,7 @@ final class PayumBuilderTest extends TestCase
             'authorize' => 'authorize_custom.php',
             'refund' => 'refund_custom.php',
             'payout' => 'payout_custom.php',
+            'save_payment_method' => 'save_payment_method_custom.php',
             'done' => 'done_custom.php',
         ];
 

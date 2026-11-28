@@ -23,6 +23,8 @@ use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionCollection;
 use Payum\Core\Extension\ExtensionInterface;
+use Payum\Core\Gateway\Capability;
+use Payum\Core\Gateway\DeclaresCapabilities;
 use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
@@ -69,6 +71,7 @@ use ReflectionProperty;
 use Throwable;
 use function func_num_args;
 use function get_debug_type;
+use function in_array;
 use function is_object;
 use function preg_match;
 use function preg_replace;
@@ -420,6 +423,34 @@ class Gateway implements GatewayInterface
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * What its handlers can do, plus the nuance its descriptor declares.
+     *
+     * @return list<Capability>
+     */
+    public function capabilities(): array
+    {
+        $descriptor = $this->descriptor();
+        $capabilities = [];
+
+        foreach ([...$this->handlerMap?->capabilities() ?? [], ...($descriptor instanceof DeclaresCapabilities ? $descriptor->capabilities() : [])] as $capability) {
+            if (! in_array($capability, $capabilities, true)) {
+                $capabilities[] = $capability;
+            }
+        }
+
+        return $capabilities;
+    }
+
+    /**
+     * False for a gateway that predates declaring capabilities, which core lets do anything it has a
+     * handler or action for.
+     */
+    public function declaresCapabilities(): bool
+    {
+        return $this->descriptor() instanceof DeclaresCapabilities;
     }
 
     public function setHandlerMap(HandlerMap $handlerMap): self

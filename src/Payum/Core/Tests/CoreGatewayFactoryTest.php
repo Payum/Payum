@@ -23,6 +23,7 @@ use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Handler\Context;
+use Payum\Core\Middleware\CapabilityGuardMiddleware;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\IdempotencyMiddleware;
 use Payum\Core\Middleware\IndexReferencesMiddleware;
@@ -30,6 +31,7 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
 use Payum\Core\Result\Result;
 use Payum\Core\Storage\StorageInterface;
@@ -413,10 +415,12 @@ final class CoreGatewayFactoryTest extends TestCase
         $this->assertSame([
             TemplateRenderMiddleware::class,
             EndlessCycleDetectorMiddleware::class,
+            CapabilityGuardMiddleware::class,
             IdempotencyMiddleware::class,
             LegacyExtensionMiddleware::class,
             PersistStateMiddleware::class,
             IndexReferencesMiddleware::class,
+            RecordStoredPaymentMethodMiddleware::class,
             RecordPaymentStatusMiddleware::class,
         ], array_map(static fn (object $middleware): string => $middleware::class, $resolved));
     }

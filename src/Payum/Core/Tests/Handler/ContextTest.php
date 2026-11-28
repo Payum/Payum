@@ -8,7 +8,9 @@ use Money\Money;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\DeletePaymentMethodCommand;
 use Payum\Core\Command\RefundCommand;
+use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Command\SyncCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
@@ -16,6 +18,7 @@ use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\Handler\Context;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -160,6 +163,14 @@ final class ContextTest extends TestCase
         $this->assertSame('order-1', $this->buildContextFor(CaptureCommand::forPayment(new Payment(), null, 'order-1'))->idempotencyKey());
         $this->assertNull($this->buildContextFor(CaptureCommand::forPayment(new Payment()))->idempotencyKey());
         $this->assertNull($this->buildContextFor(SyncCommand::forPayment(new Payment()))->idempotencyKey());
+    }
+
+    public function testShouldReturnTheIdempotencyKeyOfAStoredMethodCommand(): void
+    {
+        $method = new StoredPaymentMethod();
+
+        $this->assertSame('key-1', $this->buildContextFor(SavePaymentMethodCommand::forMethod($method, 'key-1'))->idempotencyKey());
+        $this->assertSame('key-2', $this->buildContextFor(DeletePaymentMethodCommand::forMethod($method, 'key-2'))->idempotencyKey());
     }
 
     private function buildContext(

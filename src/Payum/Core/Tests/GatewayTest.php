@@ -4,24 +4,37 @@ declare(strict_types=1);
 
 namespace Payum\Core\Tests;
 
+use DI\Container;
 use Exception;
 use InvalidArgumentException;
+use League\Uri\Uri;
 use LogicException;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Config\GatewayConfig;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Gateway;
+use Payum\Core\Gateway\Capability;
+use Payum\Core\Gateway\DeclaresCapabilities;
+use Payum\Core\Gateway\GatewayInterface as PaymentGateway;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayInterface;
+use Payum\Core\Handler\CaptureHandlerInterface;
+use Payum\Core\Handler\Context as HandlerContext;
 use Payum\Core\Handler\HandlerInterface;
+use Payum\Core\Handler\HandlerMap;
+use Payum\Core\Metadata\Logo;
+use Payum\Core\Metadata\Logo\Url;
 use Payum\Core\Reply\Base;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Core\Result\CaptureResult;
 use Payum\Core\Result\NextAction\Redirect;
 use Payum\Core\Result\PaymentStatus;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,6 +44,27 @@ use stdClass;
 
 final class GatewayTest extends TestCase
 {
+    public function testShouldReportWhatItsHandlersDoAndWhatItsDescriptorDeclaresOnce(): void
+    {
+        $gateway = new Gateway();
+        $gateway->setContainer(new Container([
+            PaymentGateway::class => new CapabilityDeclaringGateway(),
+        ]));
+        $gateway->setHandlerMap(HandlerMap::fromHandlers([CapabilityCaptureHandler::class]));
+
+        $this->assertTrue($gateway->declaresCapabilities());
+        $this->assertSame([Capability::Capture, Capability::Recurring], $gateway->capabilities());
+    }
+
+    public function testShouldNotDeclareCapabilitiesWhenUndescribed(): void
+    {
+        $gateway = new Gateway();
+        $gateway->setContainer(new Container([]));
+
+        $this->assertFalse($gateway->declaresCapabilities());
+        $this->assertSame([], $gateway->capabilities());
+    }
+
     public function testShouldImplementGatewayInterface(): void
     {
         $rc = new ReflectionClass(Gateway::class);
@@ -982,5 +1016,54 @@ class ThrowReplyAction implements ActionInterface
     public function supports($request)
     {
         return $this->supportedRequest === $request;
+    }
+}
+
+final class CapabilityDeclaringGateway implements PaymentGateway, DeclaresCapabilities
+{
+    public function capabilities(): array
+    {
+        return [Capability::Recurring, Capability::Capture];
+    }
+
+    public function configClass(): string
+    {
+        return CapabilityDeclaringConfig::class;
+    }
+
+    public function handlers(): array
+    {
+        return [CapabilityCaptureHandler::class];
+    }
+
+    public function logo(): Logo
+    {
+        return Url::create('https://acme.test/logo.svg');
+    }
+
+    public function name(): string
+    {
+        return 'Acme';
+    }
+
+    public function websiteUrl(): Uri
+    {
+        return Uri::new('https://acme.test');
+    }
+}
+
+final class CapabilityDeclaringConfig implements GatewayConfig
+{
+    public function getGatewayClass(): string
+    {
+        return CapabilityDeclaringGateway::class;
+    }
+}
+
+final class CapabilityCaptureHandler implements CaptureHandlerInterface
+{
+    public function handle(CaptureCommand $command, HandlerContext $context): CaptureResult
+    {
+        return CaptureResult::captured();
     }
 }

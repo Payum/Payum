@@ -22,6 +22,8 @@ abstract class Result
      */
     protected bool $accepted = false;
 
+    protected ?StoredPaymentMethodDetails $storedPaymentMethod = null;
+
     /**
      * @param PaymentStatus|null $status the payment's state after this operation. Null when the operation
      *                                  concluded nothing about it — a refund that was declined leaves the
@@ -78,5 +80,21 @@ abstract class Result
     public function requiresInteraction(): bool
     {
         return $this->next instanceof NextAction;
+    }
+
+    /**
+     * What the PSP stored about a payment method during this operation, for core to record.
+     */
+    public function storedPaymentMethod(): ?StoredPaymentMethodDetails
+    {
+        return $this->storedPaymentMethod;
+    }
+
+    public function withStoredPaymentMethod(StoredPaymentMethodDetails $details): static
+    {
+        $result = clone $this;
+        $result->storedPaymentMethod = $details;
+
+        return $result;
     }
 }

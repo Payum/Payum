@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Payum\Core\Legacy;
 
+use Payum\Core\Exception\LogicException;
+use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -53,6 +55,13 @@ final class GenericTokenFactoryIssuer implements TokenIssuerInterface
             TokenPurpose::Refund => $this->factory->createRefundToken(...$arguments),
             TokenPurpose::Payout => $this->factory->createPayoutToken(...$arguments),
             TokenPurpose::Notify => $this->factory->createNotifyToken($gatewayName, $subject),
+            TokenPurpose::SavePaymentMethod => throw new LogicException(sprintf(
+                '%s has no method for a %s token. Use %s, or implement %s.',
+                $this->factory::class,
+                $purpose->name,
+                GenericTokenFactory::class,
+                TokenIssuerInterface::class,
+            )),
         };
     }
 }

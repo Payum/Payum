@@ -43,6 +43,8 @@ final class OfflineGatewayTest extends TestCase
             Capability::Cancel,
             Capability::Sync,
             Capability::Payout,
+            Capability::SavePaymentMethod,
+            Capability::DeletePaymentMethod,
         ], HandlerMap::fromHandlers((new OfflineGateway())->handlers())->capabilities());
     }
 

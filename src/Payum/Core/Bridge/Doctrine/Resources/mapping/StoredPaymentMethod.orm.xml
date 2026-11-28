@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\StoredPaymentMethod">
+
+        <field name="gatewayName" column="gateway_name" type="string" />
+
+        <field name="reference" column="reference" type="string" nullable="true" />
+
+        <field name="type" column="type" type="string" length="32" nullable="true" />
+
+        <field name="status" column="status" type="string" length="32" />
+
+        <field name="brand" column="brand" type="string" nullable="true" />
+
+        <field name="last4" column="last4" type="string" length="4" nullable="true" />
+
+        <field name="expiryMonth" column="expiry_month" type="integer" nullable="true" />
+
+        <field name="expiryYear" column="expiry_year" type="integer" nullable="true" />
+
+        <field name="label" column="label" type="string" nullable="true" />
+
+        <field name="networkTransactionId" column="network_transaction_id" type="string" nullable="true" />
+
+        <field name="details" column="details" type="json" />
+
+    </mapped-superclass>
+</doctrine-mapping>

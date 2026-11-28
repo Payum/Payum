@@ -275,6 +275,9 @@ return WebhookEvent::verified(
 );
 ```
 
+The PSP's id can also be a stored payment method's reference, such as `pm_…`, which
+[Stored payment methods](stored-payment-methods.md#webhooks-about-a-method) covers.
+
 `unverified()` takes the same two arguments. Payum looks the merchant reference up first, then the PSP's
 id, then locks the payment and runs `handle()` with it as `$context->payment()`, like a message that
 arrived on a notify token. The message is verified once, and the handler never looks the payment up

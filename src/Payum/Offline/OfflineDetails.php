@@ -6,9 +6,13 @@ namespace Payum\Offline;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Model\PaymentMethodType;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Result\PaymentStatus;
+use Payum\Core\Result\StoredPaymentMethodDetails;
+use function bin2hex;
 use function is_string;
+use function random_bytes;
 
 final class OfflineDetails
 {
@@ -49,5 +53,10 @@ final class OfflineDetails
         $details['description'] = $payout->getDescription();
         $details['recipient_email'] = $payout->getRecipientEmail();
         $details['recipient_id'] = $payout->getRecipientId();
+    }
+
+    public static function storedPaymentMethod(): StoredPaymentMethodDetails
+    {
+        return StoredPaymentMethodDetails::active('offline_' . bin2hex(random_bytes(8)), type: PaymentMethodType::Other);
     }
 }

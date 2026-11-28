@@ -41,9 +41,11 @@ use Payum\Core\Legacy\LegacyFactoryScope;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Customer;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
+use Payum\Core\Model\StoredPaymentMethod;
 use Payum\Core\Model\Token;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
@@ -223,6 +225,8 @@ class PayumBuilder
             Payment::class => 'number',
             ArrayObject::class => 'payum_id',
             Payout::class => 'payum_id',
+            Customer::class => 'customerId',
+            StoredPaymentMethod::class => 'payum_id',
         ];
 
         foreach ($defaults as $modelClass => $idProperty) {
@@ -655,6 +659,7 @@ class PayumBuilder
             'authorize' => 'authorize.php',
             'refund' => 'refund.php',
             'payout' => 'payout.php',
+            'save_payment_method' => 'save-payment-method.php',
             'done' => 'done.php',
         ], $this->genericTokenFactoryPaths);
 

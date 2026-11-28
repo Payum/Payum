@@ -6,8 +6,10 @@ use Exception;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Command\NotifyCommand;
+use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
+use Payum\Core\Exception\UnsupportedOperationException;
 use Payum\Core\Exception\WebhookNotVerifiedException;
 use Payum\Core\Legacy\GenericTokenFactoryIssuer;
 use Payum\Core\Model\PaymentInterface;
@@ -237,6 +239,25 @@ class Payum implements RegistryInterface
         }
 
         return $this->redirectToAfterUrl($token);
+    }
+
+    /**
+     * Runs the save flow a {@see TokenPurpose::SavePaymentMethod} token starts, the twin of {@see capture()}.
+     *
+     * @param Request|array<string, mixed>|null $request
+     *
+     * @throws Exception
+     */
+    public function savePaymentMethod(Request | array | null $request = null): Response
+    {
+        $token = $this->httpRequestVerifier->verify($request ?: Request::createFromGlobals());
+        $gateway = $this->getGateway($token->getGatewayName());
+
+        if (! $gateway instanceof Gateway || ! $gateway->supportsCommand(SavePaymentMethodCommand::class)) {
+            throw new UnsupportedOperationException(sprintf('Gateway "%s" has no handler for %s, so it cannot save a payment method.', $token->getGatewayName(), SavePaymentMethodCommand::class));
+        }
+
+        return $this->respondTo($gateway->execute(SavePaymentMethodCommand::forToken($token)), $token);
     }
 
     /**

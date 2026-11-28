@@ -10,21 +10,31 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Command\AuthorizeCommand;
 use Payum\Core\Command\CancelCommand;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\ChargeReason;
 use Payum\Core\Command\CommandInterface;
+use Payum\Core\Command\DeletePaymentMethodCommand;
 use Payum\Core\Command\HasAmount;
+use Payum\Core\Command\Initiator;
 use Payum\Core\Command\PayoutCommand;
 use Payum\Core\Command\RefundCommand;
+use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
 use Payum\Core\Middleware\SubjectIdentity;
+use Payum\Core\Model\CustomerAwareInterface;
+use Payum\Core\Model\CustomerInterface;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PayoutInterface;
+use Payum\Core\Model\StatusAwareInterface;
+use Payum\Core\Model\StoredPaymentMethodAwareInterface;
+use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Money\Amount;
 use Payum\Core\Reference\MerchantReference;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
+use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
@@ -157,7 +167,9 @@ final class Context
             $command instanceof AuthorizeCommand,
             $command instanceof RefundCommand,
             $command instanceof CancelCommand,
-            $command instanceof PayoutCommand => $command->idempotencyKey,
+            $command instanceof PayoutCommand,
+            $command instanceof SavePaymentMethodCommand,
+            $command instanceof DeletePaymentMethodCommand => $command->idempotencyKey,
             default => null,
         };
     }
@@ -268,6 +280,66 @@ final class Context
     public function token(): ?TokenInterface
     {
         return $this->token;
+    }
+
+    public function customer(): ?CustomerInterface
+    {
+        $subject = $this->subject();
+
+        return match (true) {
+            $subject instanceof CustomerInterface => $subject,
+            $subject instanceof CustomerAwareInterface => $subject->getCustomer(),
+            default => null,
+        };
+    }
+
+    public function storedPaymentMethod(): ?StoredPaymentMethodInterface
+    {
+        $subject = $this->subject();
+
+        return match (true) {
+            $subject instanceof StoredPaymentMethodInterface => $subject,
+            $subject instanceof StoredPaymentMethodAwareInterface => $subject->getStoredPaymentMethod(),
+            default => null,
+        };
+    }
+
+    /**
+     * How a charge on a stored payment method is classified for the card networks. Null when there is no
+     * stored method, or the command neither charges nor saves one.
+     */
+    public function storedCredential(): ?StoredCredential
+    {
+        $method = $this->storedPaymentMethod();
+        $command = $this->command;
+
+        if (! $method instanceof StoredPaymentMethodInterface) {
+            return null;
+        }
+
+        $initiator = $this->token instanceof TokenInterface || $command->token() instanceof TokenInterface ? Initiator::Customer : Initiator::Merchant;
+
+        if ($command instanceof SavePaymentMethodCommand) {
+            return new StoredCredential($initiator, ChargeReason::Unscheduled, true, $method->getNetworkTransactionId());
+        }
+
+        if (! ($command instanceof CaptureCommand || $command instanceof AuthorizeCommand)) {
+            return null;
+        }
+
+        $subject = $this->subject();
+
+        // Capturing an authorization settles a charge that already happened, so no new credential use.
+        if ($command instanceof CaptureCommand && $subject instanceof StatusAwareInterface && PaymentStatus::Authorized === $subject->getStatus()) {
+            return null;
+        }
+
+        return new StoredCredential(
+            $command->initiator ?? $initiator,
+            $command->reason ?? ChargeReason::Unscheduled,
+            null === $method->getReference(),
+            $method->getNetworkTransactionId(),
+        );
     }
 
     /**
