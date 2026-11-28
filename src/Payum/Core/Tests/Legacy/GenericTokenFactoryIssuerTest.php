@@ -62,13 +62,25 @@ final class GenericTokenFactoryIssuerTest extends TestCase
         ]));
     }
 
-    public function testShouldRefuseAPurposeA1xFactoryCannotMint(): void
+    /**
+     * @return iterable<string, array{TokenPurpose}>
+     */
+    public static function providePurposesA1xFactoryCannotMint(): iterable
+    {
+        yield 'save payment method' => [TokenPurpose::SavePaymentMethod];
+        yield 'create subscription' => [TokenPurpose::CreateSubscription];
+    }
+
+    /**
+     * @dataProvider providePurposesA1xFactoryCannotMint
+     */
+    public function testShouldRefuseAPurposeA1xFactoryCannotMint(TokenPurpose $purpose): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('has no method for a SavePaymentMethod token');
+        $this->expectExceptionMessage(sprintf('has no method for a %s token', $purpose->name));
 
         GenericTokenFactoryIssuer::wrap($this->createMock(GenericTokenFactoryInterface::class))
-            ->create(TokenPurpose::SavePaymentMethod, 'aGateway', new stdClass(), 'after.php');
+            ->create($purpose, 'aGateway', new stdClass(), 'after.php');
     }
 
     public function testShouldPassAFinalPathOnToTheFactory(): void

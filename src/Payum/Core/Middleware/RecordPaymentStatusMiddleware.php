@@ -6,9 +6,7 @@ namespace Payum\Core\Middleware;
 
 use Payum\Core\Command\CommandInterface;
 use Payum\Core\Event\NullEventDispatcher;
-use Payum\Core\Event\StatusChanged;
 use Payum\Core\Handler\Context;
-use Payum\Core\Model\PaymentStatuses;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
@@ -51,13 +49,10 @@ final class RecordPaymentStatusMiddleware implements MiddlewareInterface, HasPri
             return $result;
         }
 
-        $from = PaymentStatuses::of($subject);
+        // Read before RecordStoredPaymentMethodMiddleware, further out, gives the method its reference.
+        $isFirst = true === $context->storedCredential()?->isFirst;
 
-        // Nothing moved, so there is nothing to announce: a webhook redelivered after a capture would
-        // otherwise fulfil the order twice.
-        if (PaymentStatuses::set($subject, $result->status) && $from !== $result->status) {
-            $this->events->dispatch(new StatusChanged($command, $context, $subject, $from, $result->status));
-        }
+        PaymentStatusChange::record($subject, $result->status)?->announce($this->events, $command, $context, $result->failure, $isFirst);
 
         return $result;
     }

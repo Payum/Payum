@@ -776,6 +776,7 @@ final class GenericTokenFactoryTest extends TestCase
         yield 'refund' => [TokenPurpose::Refund];
         yield 'payout' => [TokenPurpose::Payout];
         yield 'save payment method' => [TokenPurpose::SavePaymentMethod];
+        yield 'create subscription' => [TokenPurpose::CreateSubscription];
     }
 
     /**
@@ -900,6 +901,7 @@ final class GenericTokenFactoryTest extends TestCase
             'payout' => 'payout.php',
             'notify' => 'notify.php',
             'save_payment_method' => 'save-payment-method.php',
+            'create_subscription' => 'subscribe.php',
             'cancel' => 'cancel.php',
             'done' => 'done.php',
         ]);

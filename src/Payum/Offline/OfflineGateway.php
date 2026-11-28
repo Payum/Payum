@@ -20,12 +20,15 @@ use Payum\Core\Metadata\Logo\Path;
 use Payum\Offline\Action\StatusAction;
 use Payum\Offline\Handler\AuthorizeHandler;
 use Payum\Offline\Handler\CancelHandler;
+use Payum\Offline\Handler\CancelSubscriptionHandler;
 use Payum\Offline\Handler\CaptureHandler;
+use Payum\Offline\Handler\CreateSubscriptionHandler;
 use Payum\Offline\Handler\DeletePaymentMethodHandler;
 use Payum\Offline\Handler\PayoutHandler;
 use Payum\Offline\Handler\RefundHandler;
 use Payum\Offline\Handler\SavePaymentMethodHandler;
 use Payum\Offline\Handler\SyncHandler;
+use Payum\Offline\Handler\SyncSubscriptionHandler;
 use Payum\Offline\Middleware\StatusToDetailsMiddleware;
 use Psr\Container\ContainerInterface;
 use function get_debug_type;
@@ -64,12 +67,15 @@ class OfflineGateway implements GatewayInterface, DeclaresActions, DeclaresCapab
             PayoutHandler::class,
             SavePaymentMethodHandler::class,
             DeletePaymentMethodHandler::class,
+            CreateSubscriptionHandler::class,
+            CancelSubscriptionHandler::class,
+            SyncSubscriptionHandler::class,
         ];
     }
 
     public function capabilities(): array
     {
-        return [Capability::PartialRefund, Capability::MultiCurrency, Capability::StoredPaymentMethods, Capability::Recurring];
+        return [Capability::PartialRefund, Capability::MultiCurrency, Capability::StoredPaymentMethods, Capability::Recurring, Capability::CancelAtPeriodEnd];
     }
 
     public function middleware(): array

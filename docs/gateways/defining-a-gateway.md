@@ -111,9 +111,9 @@ disagree.
 
 | Capability | Where it comes from |
 | :--- | :--- |
-| `Authorize`, `Cancel`, `Capture`, `DeletePaymentMethod`, `Payout`, `Refund`, `SavePaymentMethod`, `Sync` | The handler for that command |
+| `Authorize`, `Cancel`, `CancelSubscription`, `Capture`, `CreateSubscription`, `DeletePaymentMethod`, `Payout`, `Refund`, `SavePaymentMethod`, `Sync`, `SyncSubscription` | The handler for that command |
 | `Webhooks` | A notify handler. See [Webhooks](webhooks.md) |
-| `MultiCurrency`, `PartialCapture`, `PartialRefund`, `Recurring`, `StoredPaymentMethods`, `ThreeDSecure` | Declared by the gateway |
+| `CancelAtPeriodEnd`, `MultiCurrency`, `PartialCapture`, `PartialRefund`, `Recurring`, `StoredPaymentMethods`, `ThreeDSecure` | Declared by the gateway |
 
 To declare the rest, implement `Payum\Core\Gateway\DeclaresCapabilities`:
 
@@ -148,7 +148,8 @@ places to keep in step, and they drift.
 
 Capabilities tell an application what to offer, for example whether to show a "refund part of this
 order" button. Payum enforces only `StoredPaymentMethods` and `Recurring`, which
-[Stored payment methods](stored-payment-methods.md) describes. A caller can still ask for a partial
+[Stored payment methods](stored-payment-methods.md) describes, and `CancelAtPeriodEnd`, which
+[Subscriptions](subscriptions.md) describes. A caller can still ask for a partial
 refund from a gateway that does not declare `PartialRefund`, so a handler for a PSP that cannot do one
 should throw. The enum is string-backed, so an application can store a capability list or send it as
 JSON.

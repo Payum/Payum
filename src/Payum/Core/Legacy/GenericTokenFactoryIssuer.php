@@ -55,7 +55,7 @@ final class GenericTokenFactoryIssuer implements TokenIssuerInterface
             TokenPurpose::Refund => $this->factory->createRefundToken(...$arguments),
             TokenPurpose::Payout => $this->factory->createPayoutToken(...$arguments),
             TokenPurpose::Notify => $this->factory->createNotifyToken($gatewayName, $subject),
-            TokenPurpose::SavePaymentMethod => throw new LogicException(sprintf(
+            TokenPurpose::SavePaymentMethod, TokenPurpose::CreateSubscription => throw new LogicException(sprintf(
                 '%s has no method for a %s token. Use %s, or implement %s.',
                 $this->factory::class,
                 $purpose->name,

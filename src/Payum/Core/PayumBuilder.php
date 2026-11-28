@@ -44,8 +44,10 @@ use Payum\Core\Model\ArrayObject;
 use Payum\Core\Model\Customer;
 use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
+use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\StoredPaymentMethod;
+use Payum\Core\Model\Subscription;
 use Payum\Core\Model\Token;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
@@ -63,6 +65,7 @@ use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Storage\FilesystemStorage;
 use Payum\Core\Storage\StorageInterface;
+use Payum\Core\Subscription\RenewalPaymentFactoryInterface;
 use Payum\Core\Template\RendererInterface;
 use Payum\Klarna\Checkout\KlarnaCheckoutGatewayFactory;
 use Payum\Klarna\Invoice\KlarnaInvoiceGatewayFactory;
@@ -227,6 +230,7 @@ class PayumBuilder
             Payout::class => 'payum_id',
             Customer::class => 'customerId',
             StoredPaymentMethod::class => 'payum_id',
+            Subscription::class => 'payum_id',
         ];
 
         foreach ($defaults as $modelClass => $idProperty) {
@@ -420,6 +424,22 @@ class PayumBuilder
     public function setReferenceIndex(ReferenceIndexInterface $index): static
     {
         return $this->addGlobalService(ReferenceIndexInterface::class, $index);
+    }
+
+    public function setRenewalPaymentFactory(RenewalPaymentFactoryInterface $factory): static
+    {
+        return $this->addGlobalService(RenewalPaymentFactoryInterface::class, $factory);
+    }
+
+    /**
+     * The payment class the default renewal factory creates, when the application's payments are not
+     * the shipped Payment. It needs a storage of its own.
+     *
+     * @param class-string<PaymentInterface> $class
+     */
+    public function setRenewalPaymentClass(string $class): static
+    {
+        return $this->addGlobalService('payum.renewal_payment_class', $class);
     }
 
     public function setLayout(string $layout): static
@@ -660,6 +680,7 @@ class PayumBuilder
             'refund' => 'refund.php',
             'payout' => 'payout.php',
             'save_payment_method' => 'save-payment-method.php',
+            'create_subscription' => 'subscribe.php',
             'done' => 'done.php',
         ], $this->genericTokenFactoryPaths);
 

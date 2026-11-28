@@ -5,6 +5,7 @@ namespace Payum\Core;
 use Exception;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Payum\Core\Command\CaptureCommand;
+use Payum\Core\Command\CreateSubscriptionCommand;
 use Payum\Core\Command\NotifyCommand;
 use Payum\Core\Command\SavePaymentMethodCommand;
 use Payum\Core\Exception\InvalidArgumentException;
@@ -250,14 +251,19 @@ class Payum implements RegistryInterface
      */
     public function savePaymentMethod(Request | array | null $request = null): Response
     {
-        $token = $this->httpRequestVerifier->verify($request ?: Request::createFromGlobals());
-        $gateway = $this->getGateway($token->getGatewayName());
+        return $this->runTokenFlow($request, SavePaymentMethodCommand::class, 'save a payment method');
+    }
 
-        if (! $gateway instanceof Gateway || ! $gateway->supportsCommand(SavePaymentMethodCommand::class)) {
-            throw new UnsupportedOperationException(sprintf('Gateway "%s" has no handler for %s, so it cannot save a payment method.', $token->getGatewayName(), SavePaymentMethodCommand::class));
-        }
-
-        return $this->respondTo($gateway->execute(SavePaymentMethodCommand::forToken($token)), $token);
+    /**
+     * Runs the create flow a {@see TokenPurpose::CreateSubscription} token starts, the twin of {@see capture()}.
+     *
+     * @param Request|array<string, mixed>|null $request
+     *
+     * @throws Exception
+     */
+    public function subscribe(Request | array | null $request = null): Response
+    {
+        return $this->runTokenFlow($request, CreateSubscriptionCommand::class, 'create a subscription');
     }
 
     /**
@@ -327,6 +333,22 @@ class Payum implements RegistryInterface
         }
 
         return $this->acknowledge($gateway, NotifyCommand::forGateway()->withEvent($event));
+    }
+
+    /**
+     * @param Request|array<string, mixed>|null $request
+     * @param class-string<SavePaymentMethodCommand|CreateSubscriptionCommand> $commandClass
+     */
+    private function runTokenFlow(Request | array | null $request, string $commandClass, string $operation): Response
+    {
+        $token = $this->httpRequestVerifier->verify($request ?: Request::createFromGlobals());
+        $gateway = $this->getGateway($token->getGatewayName());
+
+        if (! $gateway instanceof Gateway || ! $gateway->supportsCommand($commandClass)) {
+            throw new UnsupportedOperationException(sprintf('Gateway "%s" has no handler for %s, so it cannot %s.', $token->getGatewayName(), $commandClass, $operation));
+        }
+
+        return $this->respondTo($gateway->execute($commandClass::forToken($token)), $token);
     }
 
     private function notifyLegacy(GatewayInterface $gateway, Notify $notify): Response

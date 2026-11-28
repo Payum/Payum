@@ -65,12 +65,17 @@ use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
+use Payum\Core\Middleware\RecordRenewalMiddleware;
 use Payum\Core\Middleware\RecordStoredPaymentMethodMiddleware;
+use Payum\Core\Middleware\RecordSubscriptionMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
+use Payum\Core\Model\Payment;
 use Payum\Core\Reference\InMemoryReferenceIndex;
 use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\TokenIssuerInterface;
+use Payum\Core\Subscription\RenewalPaymentFactoryInterface;
+use Payum\Core\Subscription\StorageRenewalPaymentFactory;
 use Payum\Core\Template\RendererInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -319,6 +324,23 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                     $c->get(EventDispatcherInterface::class),
                 ),
+                // The class must be one the application gave a storage: storages match the exact class.
+                'payum.renewal_payment_class' => Payment::class,
+                // Null without storages: there is nowhere to create a renewal payment, and nowhere to save it.
+                RenewalPaymentFactoryInterface::class => static fn (ContainerInterface $c): ?RenewalPaymentFactoryInterface => $c->has(StorageRegistryInterface::class)
+                    ? new StorageRenewalPaymentFactory($c->get(StorageRegistryInterface::class), $c->get('payum.renewal_payment_class'))
+                    : null,
+                RecordRenewalMiddleware::class => static fn (ContainerInterface $c): RecordRenewalMiddleware => new RecordRenewalMiddleware(
+                    $c->get(ReferenceIndexInterface::class),
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                    $c->get(RenewalPaymentFactoryInterface::class),
+                    $c->get(EventDispatcherInterface::class),
+                ),
+                RecordSubscriptionMiddleware::class => static fn (ContainerInterface $c): RecordSubscriptionMiddleware => new RecordSubscriptionMiddleware(
+                    $c->get(ReferenceIndexInterface::class),
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
+                    $c->get(EventDispatcherInterface::class),
+                ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),
                 ),
@@ -435,6 +457,8 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
             ->with(IndexReferencesMiddleware::class)
+            ->with(RecordRenewalMiddleware::class)
+            ->with(RecordSubscriptionMiddleware::class)
             ->with(RecordStoredPaymentMethodMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)
         ;

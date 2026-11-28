@@ -7,7 +7,7 @@ use Payum\Core\Money\Amount;
 use Payum\Core\Result\PaymentStatus;
 use Traversable;
 
-class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface, StatusAwareInterface, CustomerAwareInterface, StoredPaymentMethodAwareInterface
+class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwareInterface, StatusAwareInterface, CustomerAwareInterface, StoredPaymentMethodAwareInterface, SubscriptionPaymentInterface
 {
     /**
      * @var string
@@ -64,6 +64,8 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
     protected ?CustomerInterface $customer = null;
 
     protected ?StoredPaymentMethodInterface $storedPaymentMethod = null;
+
+    protected ?SubscriptionInterface $subscription = null;
 
     public function __construct()
     {
@@ -233,5 +235,15 @@ class Payment implements PaymentInterface, DirectDebitPaymentInterface, MoneyAwa
     public function setStoredPaymentMethod(?StoredPaymentMethodInterface $storedPaymentMethod): void
     {
         $this->storedPaymentMethod = $storedPaymentMethod;
+    }
+
+    public function getSubscription(): ?SubscriptionInterface
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?SubscriptionInterface $subscription): void
+    {
+        $this->subscription = $subscription;
     }
 }

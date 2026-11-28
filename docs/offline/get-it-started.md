@@ -100,10 +100,14 @@ for any other gateway, which [Payment operations](../payment-operations.md) desc
 | `PayoutCommand` | `PaidOut`, unless the payout's `payout` detail is `false`, which leaves it `Pending`. |
 | `SavePaymentMethodCommand` | Saves the method at once with an `offline_` reference. |
 | `DeletePaymentMethodCommand` | Marks the method `Revoked`. |
+| `CreateSubscriptionCommand` | Makes the subscription `Active` with an `offline_sub_` reference, and ends its first period one interval after the start date, or after today. It never charges a renewal. |
+| `CancelSubscriptionCommand` | `Canceled` now, or records the current period end as `cancelAt` when cancelling at the period end. A subscription without an interval has no period end to record. |
+| `SyncSubscriptionCommand` | Reports what is stored on the subscription. |
 
 A capture or authorization of a payment that carries a stored method without a reference saves it too,
 and a later one charges it, so you can try
-[Save a payment method and charge it later](../stored-payment-methods.md) without a PSP account.
+[Save a payment method and charge it later](../stored-payment-methods.md) and
+[Charge a customer on a schedule](../subscriptions.md) without a PSP account.
 
 A refund with an amount is a partial refund, and the payment becomes `PartiallyRefunded`. A refund with
 no amount refunds what is left:

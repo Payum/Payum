@@ -12,11 +12,9 @@ use Payum\Core\Handler\Context;
 use Payum\Core\Model\CustomerInterface;
 use Payum\Core\Model\StoredPaymentMethodInterface;
 use Payum\Core\Reference\ReferenceIndexInterface;
-use Payum\Core\Reference\ReferenceNamespace;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Result\StoredPaymentMethodDetails;
-use Payum\Core\Storage\IdentityInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -79,7 +77,7 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         }
 
         if (null !== $gatewayName) {
-            $this->index($context, $method, $gatewayName);
+            SubjectIdentity::record($this->references, $this->storages, $context, $method, $method->getReference(), $gatewayName);
         }
 
         if ($from !== $method->getStatus()) {
@@ -99,20 +97,5 @@ final class RecordStoredPaymentMethodMiddleware implements MiddlewareInterface, 
         }
 
         return $customer;
-    }
-
-    private function index(Context $context, StoredPaymentMethodInterface $method, string $gatewayName): void
-    {
-        $reference = $method->getReference();
-
-        if (null === $reference || '' === $reference) {
-            return;
-        }
-
-        $identity = SubjectIdentity::identityOf($method, $this->storages);
-
-        if ($identity instanceof IdentityInterface && null !== SubjectIdentity::key($identity)) {
-            $this->references->record(ReferenceNamespace::of($context), $reference, $gatewayName, $identity);
-        }
     }
 }
