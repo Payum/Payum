@@ -130,6 +130,7 @@
         }
     },
     "autoload": {
-        "psr-4": { "Payum\\": "src/Payum/" }
+        "psr-4": { "Payum\\": "src/Payum/" },
+        "exclude-from-classmap": ["**/Tests/"]
     }
 }
