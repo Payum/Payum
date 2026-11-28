@@ -49,7 +49,8 @@ final class LockingMiddleware implements MiddlewareInterface, HasPriority
 
     public function process(CommandInterface $command, Context $context, callable $next): Result
     {
-        $identity = SubjectIdentity::of($command, $this->storages);
+        $resolved = $context->resolvedIdentity();
+        $identity = null === $resolved ? SubjectIdentity::of($command, $this->storages) : SubjectIdentity::key($resolved);
         $key = null === $identity ? null : 'payum:' . $identity;
 
         // A handler dispatching a sub-command about the same payment already holds the lock.

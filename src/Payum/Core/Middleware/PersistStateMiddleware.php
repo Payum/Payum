@@ -12,11 +12,10 @@ use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\PaymentStatus;
 use Payum\Core\Result\Result;
-use Payum\Core\Security\TokenInterface;
 
 /**
- * Writes the PSP state a handler produced back onto the payment, and saves a payment loaded from a token
- * when its state or its status changed.
+ * Writes the PSP state a handler produced back onto the payment, and saves a payment core loaded (from a
+ * token or a webhook) when its state or its status changed.
  */
 final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
 {
@@ -45,14 +44,11 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
         } finally {
             // In finally rather than on success: a PSP token written before a later failure still has to
             // survive, or the retry opens a second checkout.
-            $this->persist($command, $context, $statusBefore);
+            $this->persist($context, $statusBefore);
         }
     }
 
-    /**
-     * @param CommandInterface<Result> $command
-     */
-    private function persist(CommandInterface $command, Context $context, ?PaymentStatus $statusBefore): void
+    private function persist(Context $context, ?PaymentStatus $statusBefore): void
     {
         $subject = $context->subject();
 
@@ -70,7 +66,7 @@ final class PersistStateMiddleware implements MiddlewareInterface, HasPriority
 
         // Core writes back only what it loaded. A model handed to the command directly belongs to the
         // caller, who persists it on their own terms.
-        if (! $command->token() instanceof TokenInterface || ! $this->storages instanceof StorageRegistryInterface) {
+        if (! $context->isSubjectLoadedByCore() || ! $this->storages instanceof StorageRegistryInterface) {
             return;
         }
 

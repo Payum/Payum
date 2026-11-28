@@ -45,8 +45,11 @@ use Payum\Core\Model\GatewayConfigInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\Model\Payout;
 use Payum\Core\Model\Token;
+use Payum\Core\Reference\InMemoryReferenceIndex;
+use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\DynamicRegistry;
 use Payum\Core\Registry\FallbackRegistry;
+use Payum\Core\Registry\GatewayRegistryInterface;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Registry\SimpleRegistry;
 use Payum\Core\Registry\StorageRegistryInterface;
@@ -81,6 +84,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Twig\Environment;
@@ -189,6 +193,14 @@ class PayumBuilder
      * @var (Closure(string, GatewayConfig): Gateway)|null
      */
     private ?Closure $storedGatewayBuilder = null;
+
+    /**
+     * Where the global container being built finds the gateways, once getPayum() has assembled them. A
+     * new one per build, so a second build leaves the first one's gateways where they are.
+     *
+     * @var ?\ArrayObject<string, GatewayRegistryInterface>
+     */
+    private ?\ArrayObject $builtGateways = null;
 
     public function __construct()
     {
@@ -401,6 +413,11 @@ class PayumBuilder
         return $this;
     }
 
+    public function setReferenceIndex(ReferenceIndexInterface $index): static
+    {
+        return $this->addGlobalService(ReferenceIndexInterface::class, $index);
+    }
+
     public function setLayout(string $layout): static
     {
         $this->layout = $layout;
@@ -428,6 +445,7 @@ class PayumBuilder
     public function getPayum(): Payum
     {
         $globalContainer = $this->buildGlobalContainer();
+        $builtGateways = $this->builtGateways;
 
         $genericTokenFactory = $globalContainer->get(GenericTokenFactoryInterface::class);
         $httpRequestVerifier = $globalContainer->get(HttpRequestVerifierInterface::class);
@@ -542,6 +560,10 @@ class PayumBuilder
 
         $registry = $this->buildRegistry($gateways, $this->storages, $gatewayFactories);
 
+        if ($builtGateways instanceof \ArrayObject) {
+            $builtGateways['registry'] = $registry;
+        }
+
         return new Payum(
             $registry,
             $httpRequestVerifier,
@@ -549,6 +571,8 @@ class PayumBuilder
             $tokenStorage,
             $globalContainer->get(RendererInterface::class),
             $globalContainer->get(TokenIssuerInterface::class),
+            $globalContainer->get(ServerRequestFactoryInterface::class),
+            $globalContainer->get(StreamFactoryInterface::class),
         );
     }
 
@@ -618,6 +642,9 @@ class PayumBuilder
      */
     protected function buildGlobalContainer(): ContainerInterface
     {
+        /** @var \ArrayObject<string, GatewayRegistryInterface> $builtGateways */
+        $builtGateways = new \ArrayObject();
+        $this->builtGateways = $builtGateways;
         $tokenStorage = $this->resolveTokenStorage();
 
         $storageRegistry = $this->buildRegistry([], $this->storages);
@@ -664,6 +691,7 @@ class PayumBuilder
             StorageRegistryInterface::class => $storageRegistry,
             ClientInterface::class => Psr18ClientDiscovery::find(...),
             StreamFactoryInterface::class => Psr17FactoryDiscovery::findStreamFactory(...),
+            ServerRequestFactoryInterface::class => Psr17FactoryDiscovery::findServerRequestFactory(...),
             RequestFactoryInterface::class => Psr17FactoryDiscovery::findRequestFactory(...),
             ResponseFactoryInterface::class => Psr17FactoryDiscovery::findResponseFactory(...),
             UriFactoryInterface::class => Psr17FactoryDiscovery::findUriFactory(...),
@@ -680,6 +708,12 @@ class PayumBuilder
             IdempotencyStoreInterface::class => static fn (ContainerInterface $c): IdempotencyStoreInterface => new InMemoryIdempotencyStore(
                 $c->get(ClockInterface::class),
             ),
+
+            ReferenceIndexInterface::class => static fn (): ReferenceIndexInterface => new InMemoryReferenceIndex(),
+
+            // Resolved only when a webhook names a subject recorded by another gateway name, by which time
+            // getPayum() has built the registry. Before that there are no gateways to hand it to.
+            GatewayRegistryInterface::class => static fn (): GatewayRegistryInterface => $builtGateways['registry'] ?? new SimpleRegistry(),
 
             RendererInterface::class => fn (ContainerInterface $c): RendererInterface => new TwigRenderer(
                 $this->resolveTwigEnvironment($c),
@@ -752,6 +786,7 @@ class PayumBuilder
             ClockInterface::class,
             EventDispatcherInterface::class,
             IdempotencyStoreInterface::class,
+            ReferenceIndexInterface::class,
         ];
 
         foreach (array_keys($this->storages) as $modelClass) {

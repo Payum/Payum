@@ -17,14 +17,19 @@ use Payum\Core\Command\RefundCommand;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Gateway as Executor;
 use Payum\Core\Gateway\GatewayInterface;
+use Payum\Core\Middleware\SubjectIdentity;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Model\PayoutInterface;
 use Payum\Core\Model\SubjectInterface;
 use Payum\Core\Money\Amount;
+use Payum\Core\Reference\MerchantReference;
+use Payum\Core\Reference\ReferenceIndexInterface;
+use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Result\Result;
 use Payum\Core\Security\TokenInterface;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Security\TokenPurpose;
+use Payum\Core\Storage\IdentityInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -55,6 +60,8 @@ final class Context
      * @param SubjectInterface|(Closure(): ?SubjectInterface)|null $subject a closure is called once, when the subject is
      *                                                                   first asked for
      * @param list<self> $previous the enclosing executions, when a handler dispatches a sub-command
+     * @param StorageRegistryInterface<object>|null $storages
+     * @param IdentityInterface|null $resolvedIdentity the stored subject a webhook named, loaded through $subject
      */
     public function __construct(
         private readonly Executor $executor,
@@ -66,6 +73,9 @@ final class Context
         private readonly ?TokenInterface $token = null,
         private readonly array $previous = [],
         private readonly ?string $gatewayName = null,
+        private readonly ?ReferenceIndexInterface $references = null,
+        private readonly ?StorageRegistryInterface $storages = null,
+        private readonly ?IdentityInterface $resolvedIdentity = null,
     ) {
     }
 
@@ -261,6 +271,23 @@ final class Context
     }
 
     /**
+     * Whether core loaded the subject itself, from the token or from what a webhook named, rather than
+     * the caller handing it over. Core saves only what it loaded.
+     */
+    public function isSubjectLoadedByCore(): bool
+    {
+        return $this->token instanceof TokenInterface || $this->resolvedIdentity instanceof IdentityInterface;
+    }
+
+    /**
+     * The stored subject a token-less webhook named, known before the subject itself is loaded.
+     */
+    public function resolvedIdentity(): ?IdentityInterface
+    {
+        return $this->resolvedIdentity;
+    }
+
+    /**
      * Mints tokens, for gateways that need a notify URL or a second hop.
      *
      * Replaces v1's GenericTokenFactoryAwareInterface / GenericTokenFactoryExtension pair.
@@ -310,5 +337,32 @@ final class Context
     public function notifyUrl(): string
     {
         return $this->notifyToken()->getTargetUrl();
+    }
+
+    /**
+     * A stable reference for this execution's subject, to send to the PSP as metadata so that a webhook
+     * carrying it finds its way back to the subject.
+     *
+     * @throws LogicException when the subject has not been saved yet
+     */
+    public function merchantReference(): string
+    {
+        if (! $this->references instanceof ReferenceIndexInterface) {
+            throw new LogicException('This gateway has no reference index to record the merchant reference in.');
+        }
+
+        if (null === $this->gatewayName) {
+            throw new LogicException(
+                'This gateway is not registered under a name, so a merchant reference cannot be recorded against it. Register it with PayumBuilder::registerGateway().'
+            );
+        }
+
+        $identity = SubjectIdentity::identityOf($this->subject(), $this->storages)
+            ?? throw new LogicException('The subject has no identity to build a reference from; save the subject before dispatching.');
+        $reference = MerchantReference::of($identity);
+
+        $this->references->record(MerchantReference::NAMESPACE, $reference, $this->gatewayName, $identity);
+
+        return $reference;
     }
 }

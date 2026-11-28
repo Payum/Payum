@@ -15,6 +15,7 @@ use Payum\Core\Event\ResultReturned;
 use Payum\Core\Event\WebhookReceived;
 use Payum\Core\Event\WebhookRejected;
 use Payum\Core\Exception\CommandNotSupportedException;
+use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
@@ -40,7 +41,12 @@ use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\MiddlewareInterface;
 use Payum\Core\Middleware\Pipeline;
 use Payum\Core\Model\PaymentStatuses;
+use Payum\Core\Model\ReferenceRecord;
 use Payum\Core\Model\SubjectInterface;
+use Payum\Core\Reference\MerchantReference;
+use Payum\Core\Reference\ReferenceIndexInterface;
+use Payum\Core\Reference\ReferenceNamespace;
+use Payum\Core\Registry\GatewayRegistryInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Reply\ReplyInterface;
 use Payum\Core\Request\Generic;
@@ -562,12 +568,17 @@ class Gateway implements GatewayInterface
      * @param CommandInterface<Result> $command
      * @param HandlerInterface|null $handler one the handler map does not name, run in its place
      * @param SubjectInterface|null $subject what the command is about, when the caller has already loaded it
+     * @param IdentityInterface|null $resolvedIdentity the stored subject a token-less webhook named
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function dispatch(CommandInterface $command, ?HandlerInterface $handler = null, ?SubjectInterface $subject = null): Result
-    {
+    private function dispatch(
+        CommandInterface $command,
+        ?HandlerInterface $handler = null,
+        ?SubjectInterface $subject = null,
+        ?IdentityInterface $resolvedIdentity = null,
+    ): Result {
         $serviceId = $handler ?? $this->handlerMap?->serviceIdFor($command::class);
 
         if (null === $serviceId) {
@@ -579,7 +590,22 @@ class Gateway implements GatewayInterface
             );
         }
 
-        $context = $this->buildContext($command, $subject);
+        // A webhook pointing at nothing is read here, before the pipeline, so that the subject it names is
+        // locked and saved like one loaded from a token.
+        if ($command instanceof NotifyCommand && null === $subject && null === $resolvedIdentity && null === $command->token() && null === $command->subject()
+            && ($notifyHandler = $this->webhookHandler($serviceId)) instanceof NotifyHandlerInterface) {
+            $event = $command->event() ?? $this->verifyReporting($notifyHandler, $this->container->get(ServerRequestInterface::class));
+            $command = $command->withEvent($event);
+            $record = $this->recordNamedBy($event);
+            $resolvedIdentity = $record?->getIdentity();
+            $owner = $this->owningGateway($record);
+
+            if ($owner !== $this) {
+                return $owner->dispatch($command, null, null, $resolvedIdentity);
+            }
+        }
+
+        $context = $this->buildContext($command, $subject, $resolvedIdentity);
         $events = $this->events();
 
         $events->dispatch(new CommandDispatched($command, $context));
@@ -637,9 +663,9 @@ class Gateway implements GatewayInterface
                 ));
             }
 
-            // Verification runs here rather than during dispatch so that middleware wraps it: a message
-            // that fails the check is something an application will want to see.
-            // An event verified elsewhere (the HTTP request, before a worker took over) is not verified twice.
+            // A notify with a token or a subject is verified here, inside the middleware: a message that fails
+            // the check is something an application will want to see. One with neither was verified in
+            // dispatch() and carries its event, as does one verified elsewhere (before a worker took over).
             $webhook = $command->event() ?? $this->verifyReporting($handler, $context->httpRequest());
 
             $this->events()->dispatch(new WebhookReceived($command, $context, $webhook));
@@ -654,6 +680,7 @@ class Gateway implements GatewayInterface
                     $result->failure,
                     $result->raw,
                     $webhook->acknowledgement,
+                    $result->isRetry(),
                 );
             }
         } else {
@@ -715,23 +742,106 @@ class Gateway implements GatewayInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function buildContext(CommandInterface $command, ?SubjectInterface $subject = null): HandlerContext
+    private function buildContext(CommandInterface $command, ?SubjectInterface $subject = null, ?IdentityInterface $resolvedIdentity = null): HandlerContext
     {
         return new HandlerContext(
             $this,
             $command,
-            $this->container->has(PaymentGateway::class)
-                ? $this->container->get(PaymentGateway::class)
-                : new UndescribedGateway($this->name),
+            $this->descriptor(),
             $this->container->get(ServerRequestInterface::class),
             $this->container->get(TokenIssuerInterface::class),
             // Loaded on first use rather than here, which is before LockingMiddleware runs: a payment read
             // before the lock is taken can be one another execution is about to change.
-            $subject ?? fn (): ?SubjectInterface => $this->resolveSubject($command),
+            $subject ?? fn (): ?SubjectInterface => null === $resolvedIdentity ? $this->resolveSubject($command) : $this->loadSubject($resolvedIdentity),
             $command->token(),
             $this->commandStack,
             $this->name,
+            $this->container->has(ReferenceIndexInterface::class) ? $this->container->get(ReferenceIndexInterface::class) : null,
+            $this->container->has(StorageRegistryInterface::class) ? $this->container->get(StorageRegistryInterface::class) : null,
+            $resolvedIdentity,
         );
+    }
+
+    private function descriptor(): PaymentGateway
+    {
+        return $this->container->has(PaymentGateway::class)
+            ? $this->container->get(PaymentGateway::class)
+            : new UndescribedGateway($this->name);
+    }
+
+    /**
+     * The handler that verifies this gateway's webhooks, or null when a 1.x notify action reads the
+     * message itself while handling it.
+     *
+     * @param class-string<HandlerInterface>|HandlerInterface $serviceId
+     */
+    private function webhookHandler(string|HandlerInterface $serviceId): ?NotifyHandlerInterface
+    {
+        $handler = $serviceId instanceof HandlerInterface ? $serviceId : $this->container->get($serviceId);
+
+        if (! $handler instanceof NotifyHandlerInterface || $handler instanceof NotifyActionHandler) {
+            return null;
+        }
+
+        if ($handler instanceof GatewayAwareInterface) {
+            $handler->setGateway($this);
+        }
+
+        return $handler;
+    }
+
+    /**
+     * The record of the stored subject a webhook names: by the merchant reference the gateway sent as
+     * metadata, then by the PSP's own reference indexed against it. Nothing is loaded here; the subject is
+     * read once it is locked, and a subject gone by then leaves the handler with none.
+     */
+    private function recordNamedBy(WebhookEvent $event): ?ReferenceRecord
+    {
+        if (! $this->container->has(ReferenceIndexInterface::class)) {
+            return null;
+        }
+
+        $index = $this->container->get(ReferenceIndexInterface::class);
+        $lookups = [
+            [MerchantReference::NAMESPACE, $event->merchantReference],
+            [ReferenceNamespace::forGateway($this->descriptor()), $event->reference],
+        ];
+
+        foreach ($lookups as [$namespace, $reference]) {
+            $record = null === $reference ? null : $index->find($namespace, $reference);
+
+            if (null !== $record) {
+                return $record;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The gateway registered under the name that recorded the reference, which is where its subject's
+     * credentials and state belong. One PSP account often serves several gateway names behind a single
+     * webhook route. A gateway of another PSP is never the owner: the merchant reference names whichever
+     * gateway the payment was last tried on, and this message was verified as one of this PSP's.
+     */
+    private function owningGateway(?ReferenceRecord $record): self
+    {
+        $name = $record?->getGatewayName();
+
+        if (null === $name || $name === $this->name || ! $this->container->has(GatewayRegistryInterface::class)) {
+            return $this;
+        }
+
+        try {
+            $owner = $this->container->get(GatewayRegistryInterface::class)->getGateway($name);
+        } catch (InvalidArgumentException) {
+            // A gateway name since removed from the configuration leaves the message to the one it arrived on.
+            return $this;
+        }
+
+        return $owner instanceof self && ReferenceNamespace::forGateway($owner->descriptor()) === ReferenceNamespace::forGateway($this->descriptor())
+            ? $owner
+            : $this;
     }
 
     /**
@@ -840,15 +950,7 @@ class Gateway implements GatewayInterface
 
         $identity = $request->getToken()?->getDetails();
 
-        if (null === $identity || ! $this->container->has(StorageRegistryInterface::class)) {
-            return null;
-        }
-
-        $model = $this->container->get(StorageRegistryInterface::class)
-            ->getStorage($identity->getClass())
-            ->find($identity);
-
-        return $model instanceof SubjectInterface ? $model : null;
+        return null === $identity ? null : $this->loadSubject($identity);
     }
 
     /**
@@ -862,7 +964,12 @@ class Gateway implements GatewayInterface
 
         $identity = $command->token()?->getDetails();
 
-        if (null === $identity || ! $this->container->has(StorageRegistryInterface::class)) {
+        return null === $identity ? null : $this->loadSubject($identity);
+    }
+
+    private function loadSubject(IdentityInterface $identity): ?SubjectInterface
+    {
+        if (! $this->container->has(StorageRegistryInterface::class)) {
             return null;
         }
 

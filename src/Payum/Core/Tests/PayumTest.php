@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payum\Core\Tests;
 
 use Exception;
+use Http\Discovery\ClassDiscovery;
 use Payum\Core\Command\CaptureCommand;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
@@ -72,6 +73,20 @@ final class PayumTest extends TestCase
         $rc = new ReflectionClass(Payum::class);
 
         $this->assertTrue($rc->implementsInterface(RegistryInterface::class));
+    }
+
+    public function testShouldNotDiscoverHttpFactoriesWhenConstructed(): void
+    {
+        $strategies = ClassDiscovery::getStrategies();
+        ClassDiscovery::setStrategies([]);
+
+        try {
+            $payum = new Payum(new SimpleRegistry(), $this->httpRequestVerifierMock, $this->tokenFactoryMock, $this->storageMock);
+        } finally {
+            ClassDiscovery::setStrategies($strategies);
+        }
+
+        $this->assertInstanceOf(Payum::class, $payum);
     }
 
     public function testShouldReturnTheRendererItWasBuiltWith(): void

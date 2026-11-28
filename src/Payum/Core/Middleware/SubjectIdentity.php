@@ -27,19 +27,31 @@ final class SubjectIdentity
      */
     public static function of(CommandInterface $command, ?StorageRegistryInterface $storages): ?string
     {
-        $identity = $command->token()?->getDetails() ?? self::identify($command->subject(), $storages);
+        $identity = $command->token()?->getDetails() ?? self::identityOf($command->subject(), $storages);
 
-        if (! $identity instanceof IdentityInterface || null === $identity->getId() || '' === (string) $identity->getId()) {
+        return $identity instanceof IdentityInterface ? self::key($identity) : null;
+    }
+
+    /**
+     * @return string|null `class:id` with a proxy class resolved to its parent, or null when there is no id
+     */
+    public static function key(IdentityInterface $identity): ?string
+    {
+        if (null === $identity->getId() || '' === (string) $identity->getId()) {
             return null;
         }
 
+        return self::className($identity) . ':' . $identity->getId();
+    }
+
+    /**
+     * @return string the identity's class with a proxy class resolved to its parent
+     */
+    public static function className(IdentityInterface $identity): string
+    {
         $class = $identity->getClass();
 
-        if (is_a($class, Proxy::class, true)) {
-            $class = (string) get_parent_class($class);
-        }
-
-        return $class . ':' . $identity->getId();
+        return is_a($class, Proxy::class, true) ? (string) get_parent_class($class) : $class;
     }
 
     /**
@@ -48,7 +60,7 @@ final class SubjectIdentity
      *
      * @param StorageRegistryInterface<object>|null $storages
      */
-    private static function identify(?SubjectInterface $subject, ?StorageRegistryInterface $storages): ?IdentityInterface
+    public static function identityOf(?SubjectInterface $subject, ?StorageRegistryInterface $storages): ?IdentityInterface
     {
         if (! $subject instanceof SubjectInterface || ! $storages instanceof StorageRegistryInterface) {
             return null;

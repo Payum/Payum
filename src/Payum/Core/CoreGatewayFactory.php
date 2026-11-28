@@ -59,11 +59,14 @@ use Payum\Core\Legacy\NoTokenIssuer;
 use Payum\Core\Legacy\Psr18HttpClient;
 use Payum\Core\Middleware\EndlessCycleDetectorMiddleware;
 use Payum\Core\Middleware\IdempotencyMiddleware;
+use Payum\Core\Middleware\IndexReferencesMiddleware;
 use Payum\Core\Middleware\LegacyExtensionMiddleware;
 use Payum\Core\Middleware\MiddlewareCollection;
 use Payum\Core\Middleware\PersistStateMiddleware;
 use Payum\Core\Middleware\RecordPaymentStatusMiddleware;
 use Payum\Core\Middleware\TemplateRenderMiddleware;
+use Payum\Core\Reference\InMemoryReferenceIndex;
+use Payum\Core\Reference\ReferenceIndexInterface;
 use Payum\Core\Registry\StorageRegistryInterface;
 use Payum\Core\Security\TokenIssuerInterface;
 use Payum\Core\Template\RendererInterface;
@@ -295,11 +298,16 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
                 IdempotencyStoreInterface::class => static fn (ContainerInterface $c): IdempotencyStoreInterface => new InMemoryIdempotencyStore(
                     $c->get(ClockInterface::class),
                 ),
+                ReferenceIndexInterface::class => static fn (): ReferenceIndexInterface => new InMemoryReferenceIndex(),
                 IdempotencyMiddleware::class => static fn (ContainerInterface $c): IdempotencyMiddleware => new IdempotencyMiddleware(
                     $c->get(IdempotencyStoreInterface::class),
                     $c->get(ClockInterface::class),
                     $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                     events: $c->get(EventDispatcherInterface::class),
+                ),
+                IndexReferencesMiddleware::class => static fn (ContainerInterface $c): IndexReferencesMiddleware => new IndexReferencesMiddleware(
+                    $c->get(ReferenceIndexInterface::class),
+                    $c->has(StorageRegistryInterface::class) ? $c->get(StorageRegistryInterface::class) : null,
                 ),
                 RecordPaymentStatusMiddleware::class => static fn (ContainerInterface $c): RecordPaymentStatusMiddleware => new RecordPaymentStatusMiddleware(
                     $c->get(EventDispatcherInterface::class),
@@ -415,6 +423,7 @@ class CoreGatewayFactory implements GatewayFactoryInterface, ContainerConfigurat
             ->with(IdempotencyMiddleware::class)
             ->with(LegacyExtensionMiddleware::class)
             ->with(PersistStateMiddleware::class)
+            ->with(IndexReferencesMiddleware::class)
             ->with(RecordPaymentStatusMiddleware::class)
         ;
     }

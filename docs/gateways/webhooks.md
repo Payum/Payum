@@ -167,6 +167,7 @@ A PSP sends a message again until it gets an answer it counts as success, so the
 | returns `NotifyResult::handled(...)` | 204 No Content |
 | returns `NotifyResult::ignored()` | 204 No Content |
 | returns `NotifyResult::handled($status, Acknowledgement::ok('[accepted]'))` | 200 with the body `[accepted]` |
+| returns `NotifyResult::retry()` | 503 Service Unavailable, so the PSP sends it again later |
 | throws `WebhookNotVerifiedException` | 400 with an empty body |
 
 Most PSPs accept any 2xx. Set an acknowledgement only when yours wants a particular answer:
@@ -212,12 +213,119 @@ the message is queued or handled in the request, because the response goes out b
 run. Put the acknowledgement in `verify()` whenever it does not depend on what `handle()` finds.
 {% endhint %}
 
+## Give the PSP a notify URL
+
+PSPs that take a notification address per payment ask for it when the checkout is created. Get it from
+the context:
+
+```php
+$checkout = $this->api->createCheckout([
+    'amount' => (int) $amount->getAmount(),
+    'currency' => $amount->getCurrency()->getCode(),
+    'return_url' => $context->token()->getTargetUrl(),
+    'notify_url' => $context->notifyUrl(),
+]);
+```
+
+`notifyUrl()` creates a long-lived notify token that points at this payment and returns its URL.
+`notifyToken()` returns the token itself. Both throw a `LogicException` for a gateway that was not
+registered with `PayumBuilder::registerGateway()`, because a token needs the gateway's name.
+
+It creates a new token on every execution. Keep the first one in the state, so a customer who starts
+the checkout again does not get a second token:
+
+```php
+$state = $context->state();
+
+$state['notify_url'] ??= $context->notifyUrl();
+```
+
+A PSP with one webhook endpoint set in its dashboard sends no notify URL back to you. The next section
+covers how its messages find their payment.
+
+## Naming what the message is about
+
+A message sent to a dashboard URL carries no token, so the application receives it on a route of its
+own with `Payum::webhook()`. Payum then finds the payment from two references in the message:
+
+- the merchant reference, which your gateway sent the PSP as metadata and the PSP echoes back,
+- the PSP's own id for what the message is about, such as `pi_…` or `sub_…`.
+
+Send the merchant reference wherever the PSP takes metadata. `$context->merchantReference()` returns it
+for the payment the command is about:
+
+```php
+$checkout = $this->api->createCheckout([
+    'amount' => (int) $amount->getAmount(),
+    'currency' => $amount->getCurrency()->getCode(),
+    'return_url' => $context->token()->getTargetUrl(),
+    'metadata' => ['payum_reference' => $context->merchantReference()],
+]);
+```
+
+Then return both references from `verify()`:
+
+```php
+return WebhookEvent::verified(
+    $event,
+    $event['id'],
+    $event['type'],
+    reference: $event['data']['checkout_id'],
+    merchantReference: $event['data']['metadata']['payum_reference'] ?? null,
+);
+```
+
+`unverified()` takes the same two arguments. Payum looks the merchant reference up first, then the PSP's
+id, then locks the payment and runs `handle()` with it as `$context->payment()`, like a message that
+arrived on a notify token. The message is verified once, and the handler never looks the payment up
+itself.
+
+Payum records the PSP's id for you: the `transactionId` a handler returns, such as the one in
+`CaptureResult::captured('pi_9')`, is stored against the payment after every command. The merchant
+reference matters for the messages that arrive before that, while the capture is still running.
+
+`merchantReference()` throws a `LogicException` when the gateway was not registered with
+`PayumBuilder::registerGateway()`, because the reference records which gateway name owns the payment, and
+when the payment has not been saved yet. By default Payum keeps the references in memory, so it forgets
+them at the end of each request, or when the worker process exits under a worker server such as
+RoadRunner. The application keeps them in a database, as
+[Payment notifications](../instant-payment-notification.md#receive-webhooks-on-a-route-you-own) shows.
+
+When several gateway names share one PSP account and one webhook route, the message runs on the gateway
+name that recorded the reference, whichever name the route used. It never moves to a gateway of another
+PSP: a payment retried on another PSP is handled by the gateway the message arrived on.
+
+## When nothing matches
+
+A message can name a payment that Payum has not recorded yet, or none at all. `handle()` then still runs,
+with `$context->payment()` null and `$context->state()` throwing. Decide by the event type:
+
+```php
+public function handle(NotifyCommand $command, WebhookEvent $event, Context $context): NotifyResult
+{
+    if ('checkout.paid' !== $event->type) {
+        return NotifyResult::ignored();
+    }
+
+    if (null === $context->payment()) {
+        return NotifyResult::retry();
+    }
+
+    return NotifyResult::handled(PaymentStatus::Captured, transactionId: $event->payload['charge_id']);
+}
+```
+
+Return `NotifyResult::retry()` for an event type that needs a payment. It answers 503, so the PSP sends
+the message again later, by which time the payment is usually recorded. Pass an `Acknowledgement` to
+answer with another status. Return `NotifyResult::ignored()` for everything else, or the PSP keeps
+sending messages your gateway never acts on.
+
 ## Events that belong to no payment
 
-Some messages are about the account, not a payment: a payout was sent, a dispute was opened against a
-charge. The application routes the PSP's one webhook endpoint to `NotifyCommand::forGateway()`, so
-`$context->payment()` is null. Find the payment from what the PSP put in the message, then run a
-payment notification for it, so Payum records the status as it does for any other.
+Some messages name no reference Payum recorded: a dispute opened against a charge made outside Payum,
+or an id the PSP puts in a field your `verify()` does not read. `$context->payment()` is then null. When
+you can find the payment from what the PSP put in the message, run a payment notification for it, so
+Payum records the status as it does for any other.
 
 The same handler therefore runs twice. With no subject it is the gateway-level call: it finds the
 payment and executes `NotifyCommand::forPayment($payment)->withEvent($event)`. With a subject it is the
@@ -254,45 +362,10 @@ public function handle(NotifyCommand $command, WebhookEvent $event, Context $con
 the verified event, so it is not verified a second time. The check on `$context->payment()` is what ends
 the recursion: without it the per-payment call would look the payment up and execute again.
 
-## Give the PSP a notify URL
-
-PSPs that take a notification address per payment ask for it when the checkout is created. Get it from
-the context:
-
-```php
-$checkout = $this->api->createCheckout([
-    'amount' => (int) $amount->getAmount(),
-    'currency' => $amount->getCurrency()->getCode(),
-    'return_url' => $context->token()->getTargetUrl(),
-    'notify_url' => $context->notifyUrl(),
-]);
-```
-
-`notifyUrl()` creates a long-lived notify token that points at this payment and returns its URL.
-`notifyToken()` returns the token itself. Both throw a `LogicException` for a gateway that was not
-registered with `PayumBuilder::registerGateway()`, because a token needs the gateway's name.
-
-It creates a new token on every execution. Keep the first one in the state, so a customer who starts
-the checkout again does not get a second token:
-
-```php
-$state = $context->state();
-
-$state['notify_url'] ??= $context->notifyUrl();
-```
-
-For a PSP with one webhook endpoint set in its dashboard, the application routes that endpoint itself
-and dispatches `NotifyCommand::forGateway()`. The command then points at no payment:
-`$context->payment()` is null and `$context->state()` throws, so the handler has to find the payment
-from the message itself.
-
-An application that has already found what the message is about dispatches `NotifyCommand::forPayment()`
-or, for a payout, `NotifyCommand::forPayout()`. The handler then reads it from `$context->payment()` or
-`$context->payout()`.
-
 ## The request the handler reads
 
-`verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`. By
+`verify()` gets the request from the gateway's container, not the one passed to `Payum::notify()`.
+`Payum::webhook()` is the exception: given a request, it verifies that request instead. By
 default Payum builds it from PHP's globals and reads the body from `php://input`. In a worker server
 such as RoadRunner or FrankenPHP, or after a framework has already read the body, that read is empty:
 every signature check fails and every message gets a 400.

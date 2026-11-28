@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Payum\Core\Model\ReferenceRecord">
+
+        <id name="key" column="reference_key" type="string" length="64" />
+
+        <field name="namespace" column="namespace" type="string" />
+
+        <field name="reference" column="reference" type="string" />
+
+        <field name="gatewayName" column="gateway_name" type="string" />
+
+        <field name="subjectClass" column="subject_class" type="string" />
+
+        <field name="subjectId" column="subject_id" type="string" />
+
+    </mapped-superclass>
+</doctrine-mapping>
